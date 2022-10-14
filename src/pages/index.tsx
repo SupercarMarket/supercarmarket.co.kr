@@ -1,4 +1,5 @@
-import Typography from "components/common/typography";
+import Button from 'components/common/button';
+import Typography from 'components/common/typography';
 
 const Home = () => {
   return (
@@ -6,6 +7,9 @@ const Home = () => {
       <Typography as="h1" fontSize="header-36" fontWeight="bold" space>
         {`Hello World\nSupercar Market`}
       </Typography>
+      <Button border="rounded" disabled>
+        보러가기
+      </Button>
     </div>
   );
 };
