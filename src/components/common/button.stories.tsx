@@ -47,4 +47,38 @@ Primary.argTypes = {
 
 Primary.args = {
   children: 'Button',
+  variant: 'Primary',
+};
+
+export const PrimaryLine = Template.bind({});
+
+PrimaryLine.argTypes = {
+  ...Primary.argTypes,
+};
+
+PrimaryLine.args = {
+  ...Primary.args,
+  variant: 'Primary-Line',
+};
+
+export const Line = Template.bind({});
+
+Line.argTypes = {
+  ...Primary.argTypes,
+};
+
+Line.args = {
+  ...Primary.args,
+  variant: 'Line',
+};
+
+export const Black = Template.bind({});
+
+Black.argTypes = {
+  ...Primary.argTypes,
+};
+
+Black.args = {
+  ...Primary.args,
+  variant: 'Black',
 };
