@@ -123,9 +123,6 @@ const Logo = (props: LogoProps) => {
       <style jsx>{`
         .logo {
           display: flex;
-          align-items: center;
-          justify-content: center;
-          align-items: center;
           gap: 12px;
         }
         .logo-horizontal {
