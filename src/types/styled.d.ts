@@ -18,5 +18,19 @@ declare module 'styled-components' {
       bold: 700;
       regular: 400;
     };
+    color: {
+      primary: '#B79F7B';
+      'primary-darken': '#725B30';
+      'primary-lighten': '#EBE6DE';
+      'greyScale-1': '#FFFFFF';
+      'greyScale-2': '#F7F7F8';
+      'greyScale-3': '#EAEAEC';
+      'greyScale-4': '#C3C3C7';
+      'greyScale-5': '#8E8E95';
+      'greyScale-6': '#1E1E20';
+      'system-1': '#ED7474';
+      black: '#000';
+      white: '#fff';
+    };
   }
 }
