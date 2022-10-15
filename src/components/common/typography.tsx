@@ -1,12 +1,12 @@
-import { forwardRef } from "react";
-import theme from "constants/theme";
-import type { AllHTMLAttributes, CSSProperties, ReactNode, Ref } from "react";
+import theme from 'constants/theme';
+import type { AllHTMLAttributes, CSSProperties, ReactNode, Ref } from 'react';
+import { forwardRef } from 'react';
 
 type FontSize = keyof typeof theme.fontSize;
 
 type FontWeight = keyof typeof theme.fontWeight;
 
-type LineHeight = "120%" | "150%";
+type LineHeight = '120%' | '150%';
 
 export interface BaseProps {
   children?: ReactNode;
@@ -15,8 +15,8 @@ export interface BaseProps {
   fontWeight?: FontWeight;
   lineHeight?: LineHeight;
   color?: string;
-  display?: CSSProperties["display"];
-  textAlign?: CSSProperties["textAlign"];
+  display?: CSSProperties['display'];
+  textAlign?: CSSProperties['textAlign'];
   /**
    * @description 줄바꿈을 허용할지 말지를 결정합니다. white-space: pre-wrap
    * @default false
@@ -24,21 +24,21 @@ export interface BaseProps {
   space?: boolean;
 }
 
-type TypographyProps<Element extends keyof JSX.IntrinsicElements = "span"> =
+type TypographyProps<Element extends keyof JSX.IntrinsicElements = 'span'> =
   BaseProps & {
     as?: Element;
-  } & Omit<AllHTMLAttributes<Element>, "as">;
+  } & Omit<AllHTMLAttributes<Element>, 'as'>;
 
-const Typography = <Element extends keyof JSX.IntrinsicElements = "span">(
+const Typography = <Element extends keyof JSX.IntrinsicElements = 'span'>(
   props: TypographyProps<Element>,
   ref: Ref<HTMLElement>
 ) => {
   const {
-    as: Component = "span",
+    as: Component = 'span',
     fontSize,
     fontWeight,
     lineHeight,
-    display = "inline-block",
+    display = 'inline-block',
     textAlign,
     children,
     color,
@@ -48,15 +48,15 @@ const Typography = <Element extends keyof JSX.IntrinsicElements = "span">(
   return (
     <Component
       ref={ref}
-      role={role ?? (Component === "span" ? "text" : undefined)}
+      role={role ?? (Component === 'span' ? 'text' : undefined)}
       style={{
         color,
         fontSize: fontSize && theme.fontSize[fontSize],
-        fontWeight,
+        fontWeight: fontWeight && theme.fontWeight[fontWeight],
         lineHeight,
         display,
         textAlign,
-        whiteSpace: space ? "pre-wrap" : "normal",
+        whiteSpace: space ? 'pre-wrap' : 'normal',
       }}
     >
       {children}
