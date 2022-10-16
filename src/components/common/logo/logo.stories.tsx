@@ -1,8 +1,9 @@
-import Logo from './logo';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
+import Logo from './logo';
+
 export default {
-  title: 'Logo',
+  title: 'Design System/Common/Logo',
   component: Logo,
 } as ComponentMeta<typeof Logo>;
 

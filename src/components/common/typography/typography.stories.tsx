@@ -4,7 +4,7 @@ import theme from 'constants/theme';
 import Typography from './typography';
 
 export default {
-  title: 'Typography',
+  title: 'Design System/Common/Typography',
   component: Typography,
 } as ComponentMeta<typeof Typography>;
 
