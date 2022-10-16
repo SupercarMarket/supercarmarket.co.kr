@@ -5,7 +5,7 @@ import { userEvent, within } from '@storybook/testing-library';
 import Header from './header';
 
 export default {
-  title: 'Header',
+  title: 'Design System/Layout/Header',
   component: Header,
 } as ComponentMeta<typeof Header>;
 
