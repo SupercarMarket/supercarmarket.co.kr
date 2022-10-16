@@ -1,5 +1,6 @@
 import Button from 'components/common/button';
 import Typography from 'components/common/typography';
+import Layout from 'components/layout';
 
 const Home = () => {
   return (
@@ -15,3 +16,5 @@ const Home = () => {
 };
 
 export default Home;
+
+Home.Layout = Layout;

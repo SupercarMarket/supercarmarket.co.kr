@@ -4,8 +4,8 @@ type DeviceQuery = {
 };
 
 export const deviceQuery: DeviceQuery = {
-  desktop: '(max-width: 1139px)',
-  wideDesktop: '(min-width: 1200px)',
+  desktop: '(max-width: 1200px)',
+  wideDesktop: '(min-width: 1201px)',
 };
 
 export const applyMediaQuery = (...deviceList: Device[]) =>

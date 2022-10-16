@@ -3,7 +3,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import Button from './button';
 
 export default {
-  title: 'Button',
+  title: 'Design System/Common/Button',
   component: Button,
 } as ComponentMeta<typeof Button>;
 
