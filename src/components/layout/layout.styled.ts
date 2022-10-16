@@ -8,6 +8,7 @@ const availableWidth = {
 };
 
 const Container = styled.div`
+  padding-top: 1.25rem;
   margin: 0 auto;
   ${DEVICE_LIST.map(
     (device) => `${applyMediaQuery(device)} {
