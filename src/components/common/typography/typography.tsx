@@ -6,6 +6,8 @@ type FontSize = keyof typeof theme.fontSize;
 
 type FontWeight = keyof typeof theme.fontWeight;
 
+type FontColor = keyof typeof theme.color;
+
 type LineHeight = '120%' | '150%';
 
 export interface BaseProps {
@@ -14,7 +16,7 @@ export interface BaseProps {
   fontSize?: FontSize;
   fontWeight?: FontWeight;
   lineHeight?: LineHeight;
-  color?: string;
+  color?: FontColor;
   display?: CSSProperties['display'];
   textAlign?: CSSProperties['textAlign'];
   /**
@@ -44,19 +46,21 @@ const Typography = <Element extends keyof JSX.IntrinsicElements = 'span'>(
     color,
     space = false,
     role,
+    style,
   } = props as TypographyProps;
   return (
     <Component
       ref={ref}
       role={role ?? (Component === 'span' ? 'text' : undefined)}
       style={{
-        color,
+        color: color && theme.color[color],
         fontSize: fontSize && theme.fontSize[fontSize],
         fontWeight: fontWeight && theme.fontWeight[fontWeight],
         lineHeight,
         display,
         textAlign,
         whiteSpace: space ? 'pre-wrap' : 'normal',
+        ...style,
       }}
     >
       {children}
