@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import Typography from 'components/common/typography';
-import { memo } from 'react';
-import css from 'styled-jsx/css';
+import { useRouter } from 'next/router';
+import { memo, useState } from 'react';
 
 import * as Styled from './navbar.styled';
 import NavbarItem from './navbarItem';
@@ -16,9 +16,15 @@ interface NavbarProps {
   navlinks: NavbarLinks[];
 }
 
-const NavLink = memo(function NavLink({ title, subMenu }: NavbarLinks) {
+const NavLink = memo(function NavLink({ title, subMenu, link }: NavbarLinks) {
+  const [active, setActive] = useState<boolean>(false);
+  const { pathname } = useRouter();
   return (
-    <div className={clsx('navlink')}>
+    <div
+      className={clsx('navlink')}
+      onMouseOver={() => setActive(true)}
+      onMouseOut={() => setActive(false)}
+    >
       <label htmlFor={title} hidden>
         {title}
       </label>
@@ -33,7 +39,8 @@ const NavLink = memo(function NavLink({ title, subMenu }: NavbarLinks) {
           {title}
         </Typography>
       </button>
-      <NavbarItem subMenu={subMenu} />
+      <Styled.Divider data-active={pathname.includes(link)} />
+      <NavbarItem subMenu={subMenu} link={link} active={active} />
       <style jsx>{`
         .navlink {
           padding-top: 20px;
