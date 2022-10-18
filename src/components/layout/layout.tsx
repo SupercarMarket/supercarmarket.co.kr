@@ -14,23 +14,23 @@ const navlinks: NavbarLinks[] = [
     subMenu: [
       {
         title: '스포츠카',
-        link: '스포츠카',
+        link: 'sports-car',
       },
       {
         title: '세단',
-        link: '세단',
+        link: 'saloon',
       },
       {
         title: 'SUV',
-        link: 'SUV',
+        link: 'suv',
       },
       {
         title: '픽업트럭',
-        link: '픽업트럭',
+        link: 'pickup-truck',
       },
       {
         title: '클래식카&올드카',
-        link: '클래식카&올드카',
+        link: 'classic-car&old-car',
       },
     ],
   },
@@ -44,11 +44,11 @@ const navlinks: NavbarLinks[] = [
     subMenu: [
       {
         title: '파파라치',
-        link: '파파라치',
+        link: 'paparazzo',
       },
       {
         title: '자료실',
-        link: '자료실',
+        link: 'reference-room',
       },
     ],
   },
@@ -58,23 +58,23 @@ const navlinks: NavbarLinks[] = [
     subMenu: [
       {
         title: '자동차매장',
-        link: '자동차매장',
+        link: 'automobile-store',
       },
       {
         title: '공업사',
-        link: '공업사',
+        link: 'industries',
       },
       {
         title: '디테일링',
-        link: '디테일링',
+        link: 'detail-ring',
       },
       {
         title: '도색',
-        link: '도색',
+        link: 'painting',
       },
       {
         title: '기타',
-        link: '기타',
+        link: 'misc',
       },
     ],
   },
