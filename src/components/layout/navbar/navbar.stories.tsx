@@ -17,7 +17,7 @@ Default.args = {
   navlinks: [
     {
       title: '매장',
-      link: 'shops',
+      link: 'market',
       subMenu: [
         {
           title: '스포츠카',
