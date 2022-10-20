@@ -47,6 +47,7 @@ const Typography = <Element extends keyof JSX.IntrinsicElements = 'span'>(
     space = false,
     role,
     style,
+    className,
   } = props as TypographyProps;
   return (
     <Component
@@ -62,6 +63,7 @@ const Typography = <Element extends keyof JSX.IntrinsicElements = 'span'>(
         whiteSpace: space ? 'pre-wrap' : 'normal',
         ...style,
       }}
+      className={className}
     >
       {children}
     </Component>

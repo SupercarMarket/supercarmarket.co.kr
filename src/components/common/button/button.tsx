@@ -120,6 +120,11 @@ const Button = (props: ButtonProps, ref: Ref<HTMLButtonElement>) => {
         .button-Black:hover {
           background-color: #000;
         }
+        .button-suffix {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
         .button-disabled {
           cursor: not-allowed;
         }
