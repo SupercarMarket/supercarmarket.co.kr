@@ -3,12 +3,20 @@ import NextLink from 'next/link';
 
 interface LinkProps extends NextLinkProps {
   children?: React.ReactNode;
+  width?: string;
 }
 
-const Link = ({ href, children, ...props }: LinkProps) => {
+const Link = ({ href, children, width, ...props }: LinkProps) => {
   return (
     <NextLink href={href}>
-      <a {...props}>{children}</a>
+      <a
+        style={{
+          width,
+        }}
+        {...props}
+      >
+        {children}
+      </a>
     </NextLink>
   );
 };

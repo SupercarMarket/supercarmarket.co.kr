@@ -2,6 +2,14 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
+  compiler: {
+    styledComponents: {
+      ssr: true,
+      displayName: true,
+      pure: true,
+      fileName: true,
+    },
+  },
   webpack(config) {
     const prod = process.env.NODE_ENV === 'production';
     const plugins = [...config.plugins];

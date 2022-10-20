@@ -1,3 +1,5 @@
+const path = require('path');
+
 module.exports = {
   stories: ['../src/**/*.stories.mdx', '../src/**/*.stories.@(js|jsx|ts|tsx)'],
   addons: [
@@ -6,6 +8,13 @@ module.exports = {
     '@storybook/addon-actions',
     '@storybook/addon-interactions',
     '@storybook/addon-controls',
+    {
+      name: 'storybook-addon-next',
+      options: {
+        nextConfigPath: path.resolve(__dirname, '../next.config.js'),
+      },
+    },
+    'storybook-addon-styled-component-theme/dist/preset',
   ],
   framework: '@storybook/react',
   core: {

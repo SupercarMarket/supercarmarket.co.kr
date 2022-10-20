@@ -21,6 +21,10 @@ const GlobalStyle = createGlobalStyle`
     width: 100%;
     font-family: 'Pretendard';
   }
+
+  a {
+    all: unset;
+  }
 `;
 
 export default GlobalStyle;
