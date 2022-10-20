@@ -10,6 +10,9 @@ const nextConfig = {
       fileName: true,
     },
   },
+  images: {
+    domains: ['user-images.githubusercontent.com'],
+  },
   webpack(config) {
     const prod = process.env.NODE_ENV === 'production';
     const plugins = [...config.plugins];
