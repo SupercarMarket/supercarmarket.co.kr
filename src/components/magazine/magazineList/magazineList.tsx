@@ -1,0 +1,40 @@
+import Container from 'components/common/container';
+import Searchbar from 'components/common/searchbar';
+import { useMemo } from 'react';
+import {
+  MagazineDto,
+  MagazineResponse,
+  WithBlurredImage,
+} from 'types/magazine';
+
+import MagazineCard from './magazineCard';
+import * as Styled from './magazineList.styled';
+
+interface MagazineListProps {
+  data: MagazineResponse<WithBlurredImage<MagazineDto>>;
+  page: number;
+}
+
+const MagazineList = ({ data, page }: MagazineListProps) => {
+  const magazine = useMemo(
+    () => data.data.slice(page, data.pageSize),
+    [data.data, data.pageSize, page]
+  );
+  return (
+    <Container
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      margin="80px 0"
+    >
+      <Searchbar width="880px" variant="Line" border="normal" />
+      <Styled.CardPack>
+        {magazine.map((m) => (
+          <MagazineCard key={m.id} {...m} />
+        ))}
+      </Styled.CardPack>
+    </Container>
+  );
+};
+
+export default MagazineList;
