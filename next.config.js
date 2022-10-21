@@ -13,6 +13,9 @@ const nextConfig = {
   images: {
     domains: ['user-images.githubusercontent.com'],
   },
+  experimental: {
+    esmExternals: false,
+  },
   webpack(config) {
     const prod = process.env.NODE_ENV === 'production';
     const plugins = [...config.plugins];

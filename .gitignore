@@ -40,3 +40,6 @@ build-storybook.log
 
 yarn.lock
 package-lock.json
+
+# mock
+/public/mockServiceWorker.js
