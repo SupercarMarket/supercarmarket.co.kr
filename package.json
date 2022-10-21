@@ -45,6 +45,7 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-simple-import-sort": "^8.0.0",
     "eslint-plugin-storybook": "^0.6.6",
+    "msw": "^0.47.3",
     "prettier": "^2.7.1",
     "sb": "^6.5.12",
     "storybook-addon-next": "^1.6.9",
@@ -53,5 +54,8 @@
     "webpack": "^5.74.0"
   },
   "readme": "ERROR: No README data found!",
-  "_id": "supercar-market@0.1.0"
+  "_id": "supercar-market@0.1.0",
+  "msw": {
+    "workerDirectory": "public"
+  }
 }
