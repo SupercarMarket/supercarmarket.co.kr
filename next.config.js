@@ -16,6 +16,14 @@ const nextConfig = {
   experimental: {
     esmExternals: false,
   },
+  async rewrites() {
+    return [
+      {
+        source: '/server/:path*',
+        destination: 'https://server/:path*',
+      },
+    ];
+  },
   webpack(config) {
     const prod = process.env.NODE_ENV === 'production';
     const plugins = [...config.plugins];
