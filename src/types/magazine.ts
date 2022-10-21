@@ -2,7 +2,12 @@ interface MagazineDto {
   id: string;
   title: string;
   contents: string;
+  imgSrc: string;
 }
+
+type WithBlurredImage<T> = {
+  base64: string;
+} & T;
 
 interface MagazineResponse<T> {
   data: T[];
@@ -14,4 +19,4 @@ interface MagazineResponse<T> {
   isFirstPage: boolean;
 }
 
-export type { MagazineDto, MagazineResponse };
+export type { MagazineDto, MagazineResponse, WithBlurredImage };
