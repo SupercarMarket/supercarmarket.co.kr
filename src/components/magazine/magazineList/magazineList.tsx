@@ -1,4 +1,5 @@
 import Container from 'components/common/container';
+import Pagination from 'components/common/pagination';
 import Searchbar from 'components/common/searchbar';
 import { useMemo } from 'react';
 import {
@@ -17,9 +18,14 @@ interface MagazineListProps {
 
 const MagazineList = ({ data, page }: MagazineListProps) => {
   const magazine = useMemo(
-    () => data.data.slice(page, data.pageSize),
+    () =>
+      data.data.slice(
+        page * data.pageSize,
+        page * data.pageSize + data.pageSize
+      ),
     [data.data, data.pageSize, page]
   );
+
   return (
     <Container
       display="flex"
@@ -33,6 +39,12 @@ const MagazineList = ({ data, page }: MagazineListProps) => {
           <MagazineCard key={m.id} {...m} />
         ))}
       </Styled.CardPack>
+      <Pagination
+        page={page}
+        pageSize={data.pageSize}
+        totalCount={data.totalCount}
+        totalPages={data.totalPages}
+      />
     </Container>
   );
 };
