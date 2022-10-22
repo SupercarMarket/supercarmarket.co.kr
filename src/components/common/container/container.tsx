@@ -14,6 +14,7 @@ interface ContainerProps {
   flexDirection?: CSSProperties['flexDirection'];
   justifyContent?: CSSProperties['justifyContent'];
   alignItems?: CSSProperties['alignItems'];
+  gap?: CSSProperties['gap'];
 }
 
 const Container = (props: ContainerProps) => {
@@ -28,6 +29,7 @@ const Container = (props: ContainerProps) => {
     justifyContent,
     flexDirection,
     alignItems,
+    gap,
     className,
     children,
   } = props;
@@ -46,6 +48,7 @@ const Container = (props: ContainerProps) => {
         flexDirection,
         justifyContent,
         alignItems,
+        gap,
         maxWidth: '100%',
       }}
     >
