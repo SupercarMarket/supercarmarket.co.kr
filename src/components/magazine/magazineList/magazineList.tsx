@@ -17,14 +17,7 @@ interface MagazineListProps {
 }
 
 const MagazineList = ({ data, page }: MagazineListProps) => {
-  const magazine = useMemo(
-    () =>
-      data.data.slice(
-        page * data.pageSize,
-        page * data.pageSize + data.pageSize
-      ),
-    [data.data, data.pageSize, page]
-  );
+  const magazine = useMemo(() => data.data, [data.data]);
 
   return (
     <Container
