@@ -19,7 +19,10 @@ const GlobalStyle = createGlobalStyle`
 
   html, body ,#__next  {
     width: 100%;
-    font-family: 'Pretendard';
+
+    * {
+      font-family: 'Pretendard';
+    }
   }
 
   a {
