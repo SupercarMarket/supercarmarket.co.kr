@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
-export const MarketSelectWrapperContainer = styled.div``;
+export const MarketSelectContainer = styled.div``;
 
-export const SelectWrapper = styled.div`
+export const FilterBox = styled.div`
   display: flex;
   align-items: center;
   gap: 4px;

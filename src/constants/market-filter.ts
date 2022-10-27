@@ -1,7 +1,4 @@
-export type DefaultSelectOptionType = {
-  option: string;
-  value: string;
-};
+import { OptionType } from '../types/market';
 
 /**
  *
@@ -12,8 +9,8 @@ export type DefaultSelectOptionType = {
 export const CAR_FILTER_DATE = (
   startYear: number,
   endYear: number
-): DefaultSelectOptionType[] => {
-  const arr: DefaultSelectOptionType[] = [];
+): OptionType[] => {
+  const arr: OptionType[] = [];
 
   for (let i = startYear; i >= endYear; i--) {
     arr.push({ option: `${i}년`, value: i + '' });
@@ -34,7 +31,7 @@ export const CAR_FILTER_PRICE = (
   endPrice: number,
   step: number
 ) => {
-  const arr: DefaultSelectOptionType[] = [];
+  const arr: OptionType[] = [];
 
   for (let i = startPrice; i <= endPrice; i += step) {
     if (i >= 10000) {
@@ -65,7 +62,7 @@ export const CAR_FILTER_MILEAGE = (
   endMileage: number,
   step: number
 ) => {
-  const arr: DefaultSelectOptionType[] = [];
+  const arr: OptionType[] = [];
 
   for (let i = startMileage; i <= endMileage; i += step) {
     if (i >= 10000) {
@@ -88,32 +85,40 @@ export const CAR_FILTER_MILEAGE = (
 
 export const FIRST_MARKET_FILTER = [
   {
-    subject: '연식',
-    dataName: 'year',
+    label: {
+      subject: '연식',
+      dataName: 'year',
+    },
     firstLabel: '최소',
     secondLabel: '최대',
-    dataSet: CAR_FILTER_DATE(2023, 2010),
+    optionSet: CAR_FILTER_DATE(2023, 2010),
   },
   {
-    subject: '가격',
-    dataName: 'price',
+    label: {
+      subject: '가격',
+      dataName: 'price',
+    },
     firstLabel: '최소',
     secondLabel: '최대',
-    dataSet: CAR_FILTER_PRICE(2000, 20000, 2000),
+    optionSet: CAR_FILTER_PRICE(2000, 20000, 2000),
   },
   {
-    subject: '주행거리',
-    dataName: 'mileage',
+    label: {
+      subject: '주행거리',
+      dataName: 'mileage',
+    },
     firstLabel: '최소',
     secondLabel: '최대',
-    dataSet: CAR_FILTER_MILEAGE(2000, 10000, 2000),
+    optionSet: CAR_FILTER_MILEAGE(2000, 10000, 2000),
   },
   {
-    subject: '연료',
-    dataName: 'fuel',
+    label: {
+      subject: '연료',
+      dataName: 'fuel',
+    },
     firstLabel: '선택',
     secondLabel: undefined,
-    dataSet: [
+    optionSet: [
       { option: '경유', value: 'diesel' },
       { option: '가솔린', value: 'gasoline' },
     ],
@@ -122,21 +127,25 @@ export const FIRST_MARKET_FILTER = [
 
 export const SECOND_MARKET_FILTER = [
   {
-    subject: '색상',
-    dataName: 'color',
+    label: {
+      subject: '색상',
+      dataName: 'color',
+    },
     firstLabel: '선택',
     secondLabel: undefined,
-    dataSet: [
+    optionSet: [
       { option: '빨간색', value: 'red' },
       { option: '파란색', value: 'blue' },
     ],
   },
   {
-    subject: '사고여부',
-    dataName: 'accident',
+    label: {
+      subject: '사고여부',
+      dataName: 'accident',
+    },
     firstLabel: '최소',
     secondLabel: undefined,
-    dataSet: [
+    optionSet: [
       { option: '유', value: 'true' },
       { option: '무', value: 'false' },
     ],
@@ -144,5 +153,5 @@ export const SECOND_MARKET_FILTER = [
 ];
 
 export const FILTER_DATANAMES = FIRST_MARKET_FILTER.map(
-  ({ dataName }) => dataName
-).concat(SECOND_MARKET_FILTER.map(({ dataName }) => dataName));
+  ({ label }) => label
+).concat(SECOND_MARKET_FILTER.map(({ label }) => label));
