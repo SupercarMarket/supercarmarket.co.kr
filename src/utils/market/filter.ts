@@ -1,4 +1,4 @@
-import { FILTER_DATANAMES } from 'constants/market-filter';
+import { FILTER_DATANAMES } from 'constants/market';
 
 export const makeFilter = () => {
   let forms;

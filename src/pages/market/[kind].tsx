@@ -1,4 +1,6 @@
+import MarketCarKind from 'components/market/market-car-kind/market-car-kind';
 import MarketFilter from 'components/market/market-filter/market-filter';
+import { CATEGORY_VALUES } from 'constants/market';
 import { NextPageContext } from 'next';
 import React from 'react';
 
@@ -8,7 +10,8 @@ interface MarketFilterPageProps {
 
 const MarketFilterPage = ({ kind }: MarketFilterPageProps) => {
   return (
-    <div>
+    <div style={{ width: '1200px' }}>
+      <MarketCarKind kind={kind} />
       <MarketFilter />
     </div>
   );
@@ -16,16 +19,8 @@ const MarketFilterPage = ({ kind }: MarketFilterPageProps) => {
 
 export const getServerSideProps = (ctx: NextPageContext) => {
   const { kind } = ctx.query;
-  const category = [
-    'all',
-    'sports-car',
-    'saloon',
-    'suv',
-    'pickup-truck',
-    'classic-car&old-car',
-  ];
 
-  if (!kind || !category.includes(kind as string)) {
+  if (!kind || !CATEGORY_VALUES.includes(kind as string)) {
     return { notFound: true };
   }
 

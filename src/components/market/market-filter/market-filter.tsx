@@ -3,7 +3,7 @@ import MarketSelect from 'components/market/market-select';
 import {
   FIRST_MARKET_FILTER,
   SECOND_MARKET_FILTER,
-} from 'constants/market-filter';
+} from 'constants/market';
 import theme from 'constants/theme';
 import React, { FormEvent, useState } from 'react';
 import { makeFilter } from 'utils/market/filter';
@@ -19,6 +19,7 @@ interface FilterType {
 
 const MarketFilter = () => {
   const [filterList, setFilterList] = useState<FilterType[]>([]);
+  
   const submitHandler = (e: FormEvent) => {
     e.preventDefault();
     const filters = makeFilter();

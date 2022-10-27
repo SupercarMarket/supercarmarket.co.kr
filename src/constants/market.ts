@@ -1,5 +1,16 @@
 import { OptionType } from '../types/market';
 
+export const CATEGORY: OptionType[] = [
+  { option: '전체', value: 'all' },
+  { option: '스포츠카', value: 'sports-car' },
+  { option: '세단', value: 'saloon' },
+  { option: 'SUV', value: 'suv' },
+  { option: '픽업트럭', value: 'pickup-truck' },
+  { option: '클래식카&올드카', value: 'classic-car&old-car' },
+];
+
+export const CATEGORY_VALUES = CATEGORY.map(({ value }) => value);
+
 /**
  *
  * @param startYear 연식 시작할 년도
