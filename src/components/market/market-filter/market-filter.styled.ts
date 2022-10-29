@@ -4,7 +4,7 @@ export const MarketFilterContainer = styled.div`
   width: 1200px;
 `;
 
-export const MarketFilterForm = styled.form`
+export const MarketFilterArea = styled.div`
   box-sizing: border-box;
   display: flex;
   width: 100%;

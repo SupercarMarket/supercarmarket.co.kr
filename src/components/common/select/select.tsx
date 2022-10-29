@@ -1,6 +1,6 @@
 import Typography from 'components/common/typography';
 import React, { useState } from 'react';
-import { OptionType } from 'types/market';
+import { MarketOptionType } from 'types/market';
 
 import ArrowBottom from '../../../assets/svg/arrow-bottom.svg';
 import * as S from './select.styled';
@@ -12,9 +12,9 @@ interface SelectProps {
     subject?: string;
     dataName: string;
   };
-  select: OptionType | null;
-  changeSelect: (o: OptionType) => void;
-  optionSet: OptionType[];
+  select: MarketOptionType | null;
+  changeSelect: (o: MarketOptionType) => void;
+  optionSet: MarketOptionType[];
 }
 
 const Select = ({
@@ -30,7 +30,7 @@ const Select = ({
   const onToggle = () => setToggle(!toggle);
   const closeToggle = () => setToggle(false);
 
-  const changeCurrent = (option: OptionType) => {
+  const changeCurrent = (option: MarketOptionType) => {
     changeSelect(option);
     closeToggle();
   };

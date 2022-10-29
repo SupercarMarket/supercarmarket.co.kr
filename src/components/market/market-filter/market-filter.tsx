@@ -2,8 +2,8 @@ import Typography from 'components/common/typography';
 import MarketSelect from 'components/market/market-select';
 import { FIRST_MARKET_FILTER, SECOND_MARKET_FILTER } from 'constants/market';
 import theme from 'constants/theme';
-import React, { FormEvent, useState } from 'react';
-import { makeFilter } from 'utils/market/filter';
+import React, { useState } from 'react';
+import { MarketFormTarget } from 'types/market';
 
 import Close from '../../../assets/svg/close.svg';
 import Refresh from '../../../assets/svg/refresh.svg';
@@ -17,12 +17,44 @@ interface FilterType {
 
 const MarketFilter = () => {
   const [filterList, setFilterList] = useState<FilterType[]>([]);
-  const [reset, setReset] = useState<boolean>(false);
 
-  const submitHandler = (e: FormEvent) => {
+  const submitHander = (
+    e: MarketFormTarget,
+    { subject, dataName }: { subject: string; dataName: string }
+  ) => {
     e.preventDefault();
-    const filters = makeFilter();
-    setFilterList(filters);
+    const filters = [...filterList.filter((f) => f.subject !== subject)];
+    const form = e.target[dataName];
+
+    if (form.value) {
+      const { value, ariaLabel } = form;
+      filters.push({
+        subject,
+        value,
+        option: ariaLabel,
+      });
+      setFilterList(filters);
+    } else {
+      const [
+        { ariaLabel: firstLabel, value: firstValue },
+        { ariaLabel: secondLabel, value: secondValue },
+      ] = form;
+
+      if (firstValue && secondValue) {
+        filters.push({
+          subject,
+          option:
+            +firstValue > +secondValue
+              ? `${secondLabel}~${secondLabel}`
+              : `${firstLabel}~${secondLabel}`,
+          value:
+            +firstValue > +secondValue
+              ? `${secondValue} ${secondValue}`
+              : `${firstValue} ${secondValue}`,
+        });
+        setFilterList(filters);
+      }
+    }
   };
 
   const removeFilter = (idx: number) => {
@@ -31,13 +63,11 @@ const MarketFilter = () => {
 
   const resetfilter = () => {
     setFilterList([]);
-    setReset(true);
-    setTimeout(() => setReset(false), 100);
   };
 
   return (
     <S.MarketFilterContainer>
-      <S.MarketFilterForm id="market-filter" onSubmit={submitHandler}>
+      <S.MarketFilterArea>
         <S.MarketFilterBox>
           {FIRST_MARKET_FILTER.map(
             ({ label, optionSet, firstLabel, secondLabel }) => (
@@ -47,7 +77,7 @@ const MarketFilter = () => {
                 firstLabel={firstLabel}
                 secondLabel={secondLabel}
                 optionSet={optionSet}
-                reset={reset}
+                formHandler={submitHander}
               />
             )
           )}
@@ -61,12 +91,12 @@ const MarketFilter = () => {
                 firstLabel={firstLabel}
                 secondLabel={secondLabel}
                 optionSet={optionSet}
-                reset={reset}
+                formHandler={submitHander}
               />
             )
           )}
         </S.MarketFilterBox>
-      </S.MarketFilterForm>
+      </S.MarketFilterArea>
       <S.FilterListArea>
         <S.MarketFilterList>
           {filterList.map(({ subject, option }, idx) => (

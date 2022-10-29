@@ -1,7 +1,7 @@
 import Select from 'components/common/select';
 import Typography from 'components/common/typography';
 import React, { useEffect, useState } from 'react';
-import { OptionType } from 'types/market';
+import { MarketFormTarget, MarketOptionType } from 'types/market';
 
 import * as S from './market-select.styled';
 
@@ -12,8 +12,11 @@ interface MarketSelectProps {
   };
   firstLabel: string;
   secondLabel?: string;
-  optionSet: OptionType[];
-  reset: boolean;
+  optionSet: MarketOptionType[];
+  formHandler: (
+    e: MarketFormTarget,
+    label: { subject: string; dataName: string }
+  ) => void;
 }
 
 const MarketSelect = ({
@@ -21,24 +24,19 @@ const MarketSelect = ({
   firstLabel,
   secondLabel,
   optionSet,
-  reset,
+  formHandler,
 }: MarketSelectProps) => {
-  const [firstSelect, setFirstSelect] = useState<OptionType | null>(null);
-  const [secondSelect, setSecondSelect] = useState<OptionType | null>(null);
+  const [firstSelect, setFirstSelect] = useState<MarketOptionType | null>(null);
+  const [secondSelect, setSecondSelect] = useState<MarketOptionType | null>(
+    null
+  );
 
-  const changeFirstSelect = (option: OptionType) => {
+  const changeFirstSelect = (option: MarketOptionType) => {
     setFirstSelect(option);
   };
-  const changeSecondSelect = (option: OptionType) => {
+  const changeSecondSelect = (option: MarketOptionType) => {
     setSecondSelect(option);
   };
-
-  useEffect(() => {
-    if (reset) {
-      setFirstSelect(null);
-      setSecondSelect(null);
-    }
-  }, [reset]);
 
   useEffect(() => {
     if (
@@ -52,29 +50,34 @@ const MarketSelect = ({
 
   return (
     <S.MarketSelectContainer>
-      <Typography lineHeight="150%">{label.subject}</Typography>
-      <S.FilterBox>
-        <Select
-          width={secondLabel ? undefined : '270'}
-          defaultLabel={firstLabel}
-          label={label}
-          select={firstSelect}
-          changeSelect={changeFirstSelect}
-          optionSet={optionSet}
-        />
-        {secondLabel && (
-          <>
-            <S.Hyphen />
-            <Select
-              defaultLabel={secondLabel}
-              label={label}
-              select={secondSelect}
-              changeSelect={changeSecondSelect}
-              optionSet={optionSet}
-            />
-          </>
-        )}
-      </S.FilterBox>
+      <form
+        name={label.dataName}
+        onSubmit={(e: MarketFormTarget) => formHandler(e, label)}
+      >
+        <Typography lineHeight="150%">{label.subject}</Typography>
+        <S.FilterBox>
+          <Select
+            width={secondLabel ? undefined : '270'}
+            defaultLabel={firstLabel}
+            label={label}
+            select={firstSelect}
+            changeSelect={changeFirstSelect}
+            optionSet={optionSet}
+          />
+          {secondLabel && (
+            <>
+              <S.Hyphen />
+              <Select
+                defaultLabel={secondLabel}
+                label={label}
+                select={secondSelect}
+                changeSelect={changeSecondSelect}
+                optionSet={optionSet}
+              />
+            </>
+          )}
+        </S.FilterBox>
+      </form>
     </S.MarketSelectContainer>
   );
 };
