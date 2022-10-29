@@ -24,11 +24,11 @@ export const makeFilter = () => {
         filters.push({
           subject,
           option:
-            firstValue > secondValue
+            +firstValue > +secondValue
               ? `${secondLabel}~${secondLabel}`
               : `${firstLabel}~${secondLabel}`,
           value:
-            firstValue > secondValue
+            +firstValue > +secondValue
               ? `${secondValue} ${secondValue}`
               : `${firstValue} ${secondValue}`,
         });

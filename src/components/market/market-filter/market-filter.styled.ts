@@ -21,12 +21,19 @@ export const MarketFilterBox = styled.div`
   gap: 24px;
 `;
 
+export const FilterListArea = styled.div`
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+`;
+
 export const MarketFilterList = styled.ul`
   display: flex;
+  flex-wrap: wrap;
   gap: 9px;
 `;
 
-export const MArketFilterItem = styled.li`
+export const MarketFilterItem = styled.li`
   box-sizing: border-box;
   display: flex;
   align-items: center;
@@ -37,5 +44,16 @@ export const MArketFilterItem = styled.li`
   background: ${({ theme }) => theme.color.white};
   border: 1px solid ${({ theme }) => theme.color['greyScale-4']};
   border-radius: 20px;
+  cursor: pointer;
+`;
+
+export const ResetButton = styled.button`
+  width: 75px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  background: none;
+  border: none;
+  color: ${({ theme }) => theme.color['greyScale-5']};
   cursor: pointer;
 `;

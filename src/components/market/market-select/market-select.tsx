@@ -13,6 +13,7 @@ interface MarketSelectProps {
   firstLabel: string;
   secondLabel?: string;
   optionSet: OptionType[];
+  reset: boolean;
 }
 
 const MarketSelect = ({
@@ -20,6 +21,7 @@ const MarketSelect = ({
   firstLabel,
   secondLabel,
   optionSet,
+  reset,
 }: MarketSelectProps) => {
   const [firstSelect, setFirstSelect] = useState<OptionType | null>(null);
   const [secondSelect, setSecondSelect] = useState<OptionType | null>(null);
@@ -30,6 +32,13 @@ const MarketSelect = ({
   const changeSecondSelect = (option: OptionType) => {
     setSecondSelect(option);
   };
+
+  useEffect(() => {
+    if (reset) {
+      setFirstSelect(null);
+      setSecondSelect(null);
+    }
+  }, [reset]);
 
   useEffect(() => {
     if (

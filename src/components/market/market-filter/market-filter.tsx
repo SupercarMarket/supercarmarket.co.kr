@@ -1,14 +1,12 @@
 import Typography from 'components/common/typography';
 import MarketSelect from 'components/market/market-select';
-import {
-  FIRST_MARKET_FILTER,
-  SECOND_MARKET_FILTER,
-} from 'constants/market';
+import { FIRST_MARKET_FILTER, SECOND_MARKET_FILTER } from 'constants/market';
 import theme from 'constants/theme';
 import React, { FormEvent, useState } from 'react';
 import { makeFilter } from 'utils/market/filter';
 
 import Close from '../../../assets/svg/close.svg';
+import Refresh from '../../../assets/svg/refresh.svg';
 import * as S from './market-filter.styled';
 
 interface FilterType {
@@ -19,7 +17,8 @@ interface FilterType {
 
 const MarketFilter = () => {
   const [filterList, setFilterList] = useState<FilterType[]>([]);
-  
+  const [reset, setReset] = useState<boolean>(false);
+
   const submitHandler = (e: FormEvent) => {
     e.preventDefault();
     const filters = makeFilter();
@@ -28,6 +27,12 @@ const MarketFilter = () => {
 
   const removeFilter = (idx: number) => {
     setFilterList((prev) => prev.filter((_, index) => index !== idx));
+  };
+
+  const resetfilter = () => {
+    setFilterList([]);
+    setReset(true);
+    setTimeout(() => setReset(false), 100);
   };
 
   return (
@@ -42,6 +47,7 @@ const MarketFilter = () => {
                 firstLabel={firstLabel}
                 secondLabel={secondLabel}
                 optionSet={optionSet}
+                reset={reset}
               />
             )
           )}
@@ -55,26 +61,37 @@ const MarketFilter = () => {
                 firstLabel={firstLabel}
                 secondLabel={secondLabel}
                 optionSet={optionSet}
+                reset={reset}
               />
             )
           )}
         </S.MarketFilterBox>
       </S.MarketFilterForm>
-      <S.MarketFilterList>
-        {filterList.map(({ subject, option }, idx) => (
-          <S.MArketFilterItem key={subject} onClick={() => removeFilter(idx)}>
-            <Typography
-              fontSize="body-16"
-              lineHeight="150%"
-            >{`${subject} ${option}`}</Typography>
-            <Close
-              width="16px"
-              height="16px"
-              fill={theme.color['greyScale-5']}
-            />
-          </S.MArketFilterItem>
-        ))}
-      </S.MarketFilterList>
+      <S.FilterListArea>
+        <S.MarketFilterList>
+          {filterList.map(({ subject, option }, idx) => (
+            <S.MarketFilterItem key={subject} onClick={() => removeFilter(idx)}>
+              <Typography
+                fontSize="body-16"
+                lineHeight="150%"
+              >{`${subject} ${option}`}</Typography>
+              <Close
+                width="16px"
+                height="16px"
+                fill={theme.color['greyScale-5']}
+              />
+            </S.MarketFilterItem>
+          ))}
+        </S.MarketFilterList>
+        <S.ResetButton onClick={resetfilter}>
+          <Refresh
+            width="16px"
+            height="16px"
+            fill={theme.color['greyScale-5']}
+          />
+          <Typography fontSize="body-16">초기화</Typography>
+        </S.ResetButton>
+      </S.FilterListArea>
     </S.MarketFilterContainer>
   );
 };
