@@ -47,7 +47,7 @@ const getMagazineList: Parameters<typeof rest.get>[1] = (req, res, ctx) => {
   return res(
     ctx.status(200),
     ctx.json<MagazineResponse<MagazineDto>>({
-      data: magazineList.slice(page * size, (page + 1) * size),
+      data: magazineList.slice(page * 12, page * 12 + 12),
       page,
       pageSize: size,
       totalCount,

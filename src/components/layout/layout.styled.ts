@@ -8,13 +8,14 @@ const availableWidth = {
 };
 
 const Container = styled.div`
-  padding-top: 1.25rem;
   margin: 0 auto;
+  padding-top: 1.25rem;
   ${DEVICE_LIST.map(
     (device) => `${applyMediaQuery(device)} {
     width: ${availableWidth[device]};
   }`
   ).join('')}
+  min-height: calc(100vh - 1.25rem);
 `;
 
 const Main = styled.main``;
