@@ -1,5 +1,6 @@
 import MarketCarKind from 'components/market/market-car-kind/market-car-kind';
 import MarketFilter from 'components/market/market-filter/market-filter';
+import MarketList from 'components/market/market-list';
 import { CATEGORY_VALUES } from 'constants/market';
 import { NextPageContext } from 'next';
 import React from 'react';
@@ -13,6 +14,7 @@ const MarketFilterPage = ({ kind }: MarketFilterPageProps) => {
     <div style={{ width: '1200px' }}>
       <MarketCarKind kind={kind} />
       <MarketFilter />
+      <MarketList />
     </div>
   );
 };

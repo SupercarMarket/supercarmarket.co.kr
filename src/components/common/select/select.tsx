@@ -8,13 +8,15 @@ import * as S from './select.styled';
 interface SelectProps {
   width?: string;
   defaultLabel: string;
+  select: MarketOptionType | null;
+  optionSet: MarketOptionType[];
+  changeSelect: (o: MarketOptionType) => void;
+  overflow?: boolean;
+  align?: 'left' | 'center' | 'right';
   label: {
     subject?: string;
     dataName: string;
   };
-  select: MarketOptionType | null;
-  changeSelect: (o: MarketOptionType) => void;
-  optionSet: MarketOptionType[];
 }
 
 const Select = ({
@@ -23,6 +25,8 @@ const Select = ({
   defaultLabel,
   select,
   changeSelect,
+  overflow,
+  align = 'left',
   optionSet,
 }: SelectProps) => {
   const [toggle, setToggle] = useState<boolean>(false);
@@ -45,19 +49,19 @@ const Select = ({
         aria-label={(select && select.option) || ''}
       />
       <S.Backdrop toggle={toggle} onClick={closeToggle} />
-      <S.SelectCurrentButton type="button" onClick={onToggle}>
+      <S.SelectCurrentButton type="button" onClick={onToggle} align={align}>
         <Typography fontSize="body-16">
           {select !== null ? select.option : defaultLabel}
         </Typography>
         <ArrowBottom width="13px" height="13px" />
       </S.SelectCurrentButton>
-      <S.SelectOptionList width={width} toggle={toggle}>
+      <S.SelectOptionList width={width} toggle={toggle} over={overflow}>
         {optionSet.map((option) => (
           <S.SelectOptionItem
             key={option.option}
             onClick={() => changeCurrent(option)}
           >
-            <S.SelectOptionButton>
+            <S.SelectOptionButton align={align}>
               <Typography fontSize="body-16">{option.option}</Typography>
             </S.SelectOptionButton>
           </S.SelectOptionItem>
