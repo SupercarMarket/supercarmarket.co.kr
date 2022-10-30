@@ -1,6 +1,6 @@
-import { OptionType } from '../types/market';
+import { MarketOptionType } from '../types/market';
 
-export const CATEGORY: OptionType[] = [
+export const CATEGORY: MarketOptionType[] = [
   { option: '전체', value: 'all' },
   { option: '스포츠카', value: 'sports-car' },
   { option: '세단', value: 'saloon' },
@@ -12,7 +12,6 @@ export const CATEGORY: OptionType[] = [
 export const CATEGORY_VALUES = CATEGORY.map(({ value }) => value);
 
 /**
- *
  * @param startYear 연식 시작할 년도
  * @param endYear 연식 마지막 년도
  * @returns [{option: '년도', value: 숫자 값 }];
@@ -20,8 +19,8 @@ export const CATEGORY_VALUES = CATEGORY.map(({ value }) => value);
 export const CAR_FILTER_DATE = (
   startYear: number,
   endYear: number
-): OptionType[] => {
-  const arr: OptionType[] = [];
+): MarketOptionType[] => {
+  const arr: MarketOptionType[] = [];
 
   for (let i = startYear; i >= endYear; i--) {
     arr.push({ option: `${i}년`, value: i + '' });
@@ -31,7 +30,6 @@ export const CAR_FILTER_DATE = (
 };
 
 /**
- *
  * @param startPrice 시작 가격
  * @param endPrice 끝 가격
  * @param step 가격 간 격차
@@ -42,7 +40,7 @@ export const CAR_FILTER_PRICE = (
   endPrice: number,
   step: number
 ) => {
-  const arr: OptionType[] = [];
+  const arr: MarketOptionType[] = [];
 
   for (let i = startPrice; i <= endPrice; i += step) {
     if (i >= 10000) {
@@ -62,7 +60,6 @@ export const CAR_FILTER_PRICE = (
 };
 
 /**
- *
  * @param startMileage 시작 주행거리
  * @param endMileage 마지막 주행거리
  * @param step 주행거리 간 격차
@@ -73,7 +70,7 @@ export const CAR_FILTER_MILEAGE = (
   endMileage: number,
   step: number
 ) => {
-  const arr: OptionType[] = [];
+  const arr: MarketOptionType[] = [];
 
   for (let i = startMileage; i <= endMileage; i += step) {
     if (i >= 10000) {
@@ -84,9 +81,13 @@ export const CAR_FILTER_MILEAGE = (
             : `${Math.floor(i / 10000)}만${(i % 10000) / 1000}천km`,
         value: i + '',
       });
-    } else if (i >= 1000) {
+      continue;
+    }
+    if (i >= 1000) {
       arr.push({ option: `${i / 1000}천km`, value: i + '' });
-    } else {
+      continue;
+    }
+    if (i < 1000) {
       arr.push({ option: `${i}km`, value: i + '' });
     }
   }

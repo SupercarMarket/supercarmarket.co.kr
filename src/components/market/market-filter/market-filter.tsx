@@ -3,7 +3,7 @@ import MarketSelect from 'components/market/market-select';
 import { FIRST_MARKET_FILTER, SECOND_MARKET_FILTER } from 'constants/market';
 import theme from 'constants/theme';
 import React, { useState } from 'react';
-import { MarketFormTarget } from 'types/market';
+import { MarketFormTarget, MarketLabelType } from 'types/market';
 
 import Close from '../../../assets/svg/close.svg';
 import Refresh from '../../../assets/svg/refresh.svg';
@@ -20,27 +20,24 @@ const MarketFilter = () => {
 
   const submitHander = (
     e: MarketFormTarget,
-    { subject, dataName }: { subject: string; dataName: string }
+    { subject, dataName }: MarketLabelType
   ) => {
     e.preventDefault();
     const filters = [...filterList.filter((f) => f.subject !== subject)];
     const form = e.target[dataName];
 
     if (form.value) {
-      const { value, ariaLabel } = form;
-      filters.push({
-        subject,
-        value,
-        option: ariaLabel,
-      });
-      setFilterList(filters);
-    } else {
+      const { value, ariaLabel: option } = form;
+      filters.push({ subject, value, option });
+    }
+
+    if (!form.value) {
       const [
         { ariaLabel: firstLabel, value: firstValue },
         { ariaLabel: secondLabel, value: secondValue },
       ] = form;
 
-      if (firstValue && secondValue) {
+      if (firstValue && secondValue)
         filters.push({
           subject,
           option:
@@ -52,9 +49,8 @@ const MarketFilter = () => {
               ? `${secondValue} ${secondValue}`
               : `${firstValue} ${secondValue}`,
         });
-        setFilterList(filters);
-      }
     }
+    setFilterList(filters);
   };
 
   const removeFilter = (idx: number) => {

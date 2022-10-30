@@ -1,7 +1,7 @@
 import MarketCarKind from 'components/market/market-car-kind/market-car-kind';
 import MarketFilter from 'components/market/market-filter/market-filter';
 import { CATEGORY_VALUES } from 'constants/market';
-import { NextPageContext } from 'next';
+import { GetStaticPropsContext } from 'next';
 import React from 'react';
 
 interface MarketFilterPageProps {
@@ -17,8 +17,18 @@ const MarketFilterPage = ({ kind }: MarketFilterPageProps) => {
   );
 };
 
-export const getServerSideProps = (ctx: NextPageContext) => {
-  const { kind } = ctx.query;
+export const getStaticPaths = async () => {
+  const paths = CATEGORY_VALUES.map((kind) => ({ params: { kind } }));
+  return {
+    paths,
+    fallback: false,
+  };
+};
+
+export const getStaticProps = async ({
+  params,
+}: GetStaticPropsContext<{ kind: string }>) => {
+  const kind = params?.kind;
 
   if (!kind || !CATEGORY_VALUES.includes(kind as string)) {
     return { notFound: true };
