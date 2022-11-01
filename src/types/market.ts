@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import { FormEvent } from 'react';
 
 export interface MarketOptionType {
@@ -14,7 +13,6 @@ export interface MarketLabelType {
 export interface MarketFormTarget extends FormEvent<HTMLFormElement> {
   target: HTMLFormElement;
 }
-=======
 interface MarketDto {
   id: string;
   title: string;
@@ -40,4 +38,3 @@ interface MarketResponse<T> {
 }
 
 export type { MarketDto, MarketResponse, WithBlurredImage };
->>>>>>> 899fe5c (feat: add home market api logic)
