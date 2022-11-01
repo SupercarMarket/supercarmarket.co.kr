@@ -38,6 +38,7 @@ const NavbarItem = memo(function NavbarItem({
           border-radius: 4px;
           left: 50%;
           transform: translateX(-50%);
+          z-index: 9999;
         }
         .navbarItem[data-active='false'] {
           display: none;
