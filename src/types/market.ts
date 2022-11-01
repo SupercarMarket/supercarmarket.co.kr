@@ -13,7 +13,6 @@ export interface MarketLabelType {
 export interface MarketFormTarget extends FormEvent<HTMLFormElement> {
   target: HTMLFormElement;
 }
-
 interface MarketDto {
   id: string;
   title: string;
