@@ -50,7 +50,7 @@ export function handlers() {
     /**
      * 마켓
      */
-    rest.get('http://server/api/v1/market', getMarketList),
+    rest.get('https://server/api/v1/market', getMarketList),
     /**
      * 매거진 리스트를 불러옵니다.
      */
@@ -62,7 +62,7 @@ const getMarketList: Parameters<typeof rest.get>[1] = (req, res, ctx) => {
   const { searchParams } = req.url;
   const size = Number(searchParams.get('pageSize')) || 12;
   const page = Number(searchParams.get('page')) || 1;
-  const totalCount = magazineList.length;
+  const totalCount = marketList.length;
   const totalPages = Math.round(totalCount / size);
   return res(
     ctx.status(200),
