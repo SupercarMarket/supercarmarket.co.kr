@@ -55,12 +55,17 @@ export function handlers() {
      * 매거진 리스트를 불러옵니다.
      */
     rest.get('https://server/api/v1/magazine', getMagazineList),
+    /**
+     * 커뮤니티 인기글.
+     */
+    rest.get('https://server/api/v1/community-best', getCommunity),
   ];
 }
 
 const getMarketList: Parameters<typeof rest.get>[1] = (req, res, ctx) => {
   const { searchParams } = req.url;
   const size = Number(searchParams.get('pageSize')) || 12;
+  const category = Number(searchParams.get('category')) || 12;
   const page = Number(searchParams.get('page')) || 1;
   const totalCount = marketList.length;
   const totalPages = Math.round(totalCount / size);
@@ -94,6 +99,19 @@ const getMagazineList: Parameters<typeof rest.get>[1] = (req, res, ctx) => {
       totalPages,
       isLastPage: totalPages <= page,
       isFirstPage: page === 0,
+    })
+  );
+};
+
+const getCommunity: Parameters<typeof rest.get>[1] = (req, res, ctx) => {
+  const { searchParams } = req.url;
+  const size = Number(searchParams.get('pageSize')) || 4;
+  const page = Number(searchParams.get('page')) || 1;
+  return res(
+    ctx.status(200),
+    ctx.json({
+      data: magazineList.slice(page * size, page * size + size),
+      page,
     })
   );
 };
