@@ -84,9 +84,13 @@ export const CAR_FILTER_MILEAGE = (
             : `${Math.floor(i / 10000)}만${(i % 10000) / 1000}천km`,
         value: i + '',
       });
-    } else if (i >= 1000) {
+      continue;
+    }
+    if (i >= 1000) {
       arr.push({ option: `${i / 1000}천km`, value: i + '' });
-    } else {
+      continue;
+    }
+    if (i < 1000) {
       arr.push({ option: `${i}km`, value: i + '' });
     }
   }
@@ -162,6 +166,10 @@ export const SECOND_MARKET_FILTER = [
     ],
   },
 ];
+
+export const FILTER_DATANAMES = FIRST_MARKET_FILTER.map(
+  ({ label }) => label
+).concat(SECOND_MARKET_FILTER.map(({ label }) => label));
 
 export const ORDER_OPTIONSET: MarketOptionType[] = [
   {
