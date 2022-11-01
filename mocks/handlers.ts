@@ -83,14 +83,22 @@ export function handlers() {
     /**
      * 커뮤니티 인기글.
      */
+<<<<<<< HEAD
     rest.get('https://server/api/v1/community-best', getCommunityBestList),
+=======
+    rest.get('https://server/api/v1/community-best', getCommunity),
+>>>>>>> 376c568 (chore: update msw api logic)
   ];
 }
 
 const getMarketList: Parameters<typeof rest.get>[1] = (req, res, ctx) => {
   const { searchParams } = req.url;
   const size = Number(searchParams.get('pageSize')) || 12;
+<<<<<<< HEAD
   // const category = Number(searchParams.get('category')) || 12;
+=======
+  const category = Number(searchParams.get('category')) || 12;
+>>>>>>> 376c568 (chore: update msw api logic)
   const page = Number(searchParams.get('page')) || 1;
   const totalCount = marketList.length;
   const totalPages = Math.round(totalCount / size);
@@ -128,18 +136,26 @@ const getMagazineList: Parameters<typeof rest.get>[1] = (req, res, ctx) => {
   );
 };
 
+<<<<<<< HEAD
 const getCommunityBestList: Parameters<typeof rest.get>[1] = (
   req,
   res,
   ctx
 ) => {
+=======
+const getCommunity: Parameters<typeof rest.get>[1] = (req, res, ctx) => {
+>>>>>>> 376c568 (chore: update msw api logic)
   const { searchParams } = req.url;
   const size = Number(searchParams.get('pageSize')) || 4;
   const page = Number(searchParams.get('page')) || 1;
   return res(
     ctx.status(200),
     ctx.json({
+<<<<<<< HEAD
       data: communityList.slice(page * size, page * size + size),
+=======
+      data: magazineList.slice(page * size, page * size + size),
+>>>>>>> 376c568 (chore: update msw api logic)
       page,
     })
   );
