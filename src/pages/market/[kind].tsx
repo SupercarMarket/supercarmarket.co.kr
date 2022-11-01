@@ -1,3 +1,4 @@
+import Container from 'components/common/container';
 import MarketCarKind from 'components/market/market-car-kind/market-car-kind';
 import MarketFilter from 'components/market/market-filter/market-filter';
 import MarketList from 'components/market/market-list';
@@ -11,11 +12,18 @@ interface MarketFilterPageProps {
 
 const MarketFilterPage = ({ kind }: MarketFilterPageProps) => {
   return (
-    <div style={{ width: '1200px' }}>
-      <MarketCarKind kind={kind} />
-      <MarketFilter />
-      <MarketList />
-    </div>
+    <Container
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      margin="20px 0 0 0"
+    >
+      <div>
+        <MarketCarKind kind={kind} />
+        <MarketFilter />
+        <MarketList />
+      </div>
+    </Container>
   );
 };
 

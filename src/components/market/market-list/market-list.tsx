@@ -1,5 +1,11 @@
 import Select from 'components/common/select';
-import { HOW_MANY_RESULT, ORDER_OPTIONSET } from 'constants/market';
+import Typography from 'components/common/typography';
+import {
+  HOW_MANY_RESULT,
+  MARKET_LIST_TABLE_HEAD,
+  ORDER_OPTIONSET,
+} from 'constants/market';
+import Image from 'next/image';
 import React, { useState } from 'react';
 import { MarketOptionType } from 'types/market';
 
@@ -28,31 +34,87 @@ const MarketList = () => {
 
   return (
     <S.MarketListContainer>
-      <S.ButtonBox>
-        <Select
-          select={orderSelect}
-          label={{ subject: '', dataName: 'order' }}
-          changeSelect={changeOrderSelect}
-          optionSet={ORDER_OPTIONSET}
-          defaultLabel={orderSelect.option}
-          align="center"
-        />
-        <Select
-          select={viewCount}
-          label={{ subject: '', dataName: 'viewCount' }}
-          changeSelect={changeViewCount}
-          optionSet={VIEW_COUNT}
-          defaultLabel={viewCount.option}
-          width="112"
-          align="center"
-        />
-        <S.ViewButton disabled={listView} onClick={onListView}>
-          <ListIcon width="20px" height="20px" />
-        </S.ViewButton>
-        <S.ViewButton disabled={!listView} onClick={onCardView}>
-          <ViewCardIcon width="20px" height="20px" />
-        </S.ViewButton>
-      </S.ButtonBox>
+      <S.ListFilter>
+        <S.ButtonBox>
+          <Select
+            select={orderSelect}
+            label={{ subject: '', dataName: 'order' }}
+            changeSelect={changeOrderSelect}
+            optionSet={ORDER_OPTIONSET}
+            defaultLabel={orderSelect.option}
+            align="center"
+          />
+          <Select
+            select={viewCount}
+            label={{ subject: '', dataName: 'viewCount' }}
+            changeSelect={changeViewCount}
+            optionSet={VIEW_COUNT}
+            defaultLabel={viewCount.option}
+            width="112"
+            align="center"
+          />
+          <S.ViewButton disabled={listView} onClick={onListView}>
+            <ListIcon width="20px" height="20px" />
+          </S.ViewButton>
+          <S.ViewButton disabled={!listView} onClick={onCardView}>
+            <ViewCardIcon width="20px" height="20px" />
+          </S.ViewButton>
+        </S.ButtonBox>
+      </S.ListFilter>
+
+      <S.MarketTable>
+        <S.MarketTHead>
+          <S.MarketTableRow>
+            {MARKET_LIST_TABLE_HEAD.map(({ title, width }) => (
+              <S.MarketTableHead width={width} key={title}>
+                <Typography fontSize="body-14">{title}</Typography>
+              </S.MarketTableHead>
+            ))}
+          </S.MarketTableRow>
+        </S.MarketTHead>
+        <S.MarketTBody>
+          <S.MarketTableRow>
+            <S.MarketTableData>
+              <Image
+                width="196"
+                height="124"
+                layout="responsive"
+                src={
+                  'https://user-images.githubusercontent.com/59536977/199271635-41da7db0-ba03-4154-b9be-b7d6ca4ca73a.png'
+                }
+                alt="thumbnail"
+              />
+            </S.MarketTableData>
+            <S.MarketTableData>
+              <S.CarInformation>
+                <Typography fontSize="body-24" fontWeight="bold">
+                  람보르기니 우라칸 스파이더 LP640-4
+                </Typography>
+                <Typography fontSize="body-14" color="greyScale-5">
+                  무사고 | 짧은 주행
+                </Typography>
+              </S.CarInformation>
+            </S.MarketTableData>
+            <S.MarketTableData>
+              <Typography fontSize="body-14">20/03</Typography>
+            </S.MarketTableData>
+            <S.MarketTableData>
+              <Typography fontSize="body-14">가솔린</Typography>
+            </S.MarketTableData>
+            <S.MarketTableData>
+              <Typography fontSize="body-14">3천km</Typography>
+            </S.MarketTableData>
+            <S.MarketTableData>
+              <Typography fontSize="body-14" style={{ color: '#ED7474' }}>
+                상담
+              </Typography>
+            </S.MarketTableData>
+            <S.MarketTableData>
+              <Typography fontSize="body-14">슈퍼카마켓</Typography>
+            </S.MarketTableData>
+          </S.MarketTableRow>
+        </S.MarketTBody>
+      </S.MarketTable>
     </S.MarketListContainer>
   );
 };

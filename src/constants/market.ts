@@ -206,9 +206,40 @@ export const ORDER_OPTIONSET: MarketOptionType[] = [
 export const HOW_MANY_RESULT = (start: number, end: number) => {
   const options: MarketOptionType[] = [];
 
-  for (let i = start; i < end; i += 10) {
+  for (let i = start; i <= end; i += 10) {
     options.push({ option: `${i}개씩`, value: `${i}` });
   }
 
   return options;
 };
+
+export const MARKET_LIST_TABLE_HEAD = [
+  {
+    title: '사진',
+    width: '196',
+  },
+  {
+    title: '차량정보',
+    width: '564',
+  },
+  {
+    title: '연식',
+    width: undefined,
+  },
+  {
+    title: '연료',
+    width: undefined,
+  },
+  {
+    title: '주행',
+    width: undefined,
+  },
+  {
+    title: '가격',
+    width: undefined,
+  },
+  {
+    title: '판매자',
+    width: undefined,
+  },
+];
