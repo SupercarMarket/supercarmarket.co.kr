@@ -1,8 +1,9 @@
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import Container from 'components/common/container';
 import layout from 'components/layout';
-import MarketCarKind from 'components/market/market-car-category/market-car-category';
-import MarketFilter from 'components/market/market-filter/market-filter';
+import MarketBanner from 'components/market/market-banner';
+import MarketCarKind from 'components/market/market-car-category';
+import MarketFilter from 'components/market/market-filter';
 import MarketList from 'components/market/market-list';
 import { CATEGORY_VALUES } from 'constants/market';
 import queries from 'constants/queries';
@@ -38,6 +39,7 @@ const MarketFilterPage = ({ category }: MarketFilterPageProps) => {
       margin="20px 0 0 0"
     >
       <div style={{ width: '1200px' }}>
+        <MarketBanner />
         <MarketCarKind category={category} />
         <MarketFilter
           filterList={states.filterList}
