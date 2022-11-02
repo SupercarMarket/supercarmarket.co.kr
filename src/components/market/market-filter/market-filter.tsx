@@ -25,7 +25,7 @@ const MarketFilter = ({ filterList, changeFilters }: MarketFilterProps) => {
 
     if (form.value) {
       const { value, ariaLabel: option } = form;
-      filters.push({ subject, value, option });
+      filters.push({ subject, value, option, dataName });
     }
 
     if (!form.value) {
@@ -37,6 +37,7 @@ const MarketFilter = ({ filterList, changeFilters }: MarketFilterProps) => {
       if (firstValue && secondValue)
         filters.push({
           subject,
+          dataName,
           option:
             +firstValue > +secondValue
               ? `${secondLabel}~${secondLabel}`

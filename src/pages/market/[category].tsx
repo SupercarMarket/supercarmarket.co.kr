@@ -1,26 +1,24 @@
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import Container from 'components/common/container';
 import layout from 'components/layout';
-import MarketCarKind from 'components/market/market-car-kind/market-car-kind';
+import MarketCarKind from 'components/market/market-car-category/market-car-category';
 import MarketFilter from 'components/market/market-filter/market-filter';
 import MarketList from 'components/market/market-list';
 import { CATEGORY_VALUES } from 'constants/market';
 import queries from 'constants/queries';
+import useMarketFilter from 'hooks/market/useMarketFilter';
 import useMarket from 'hooks/queries/useMarket';
 import { NextPageContext } from 'next/types';
-import React, { useState } from 'react';
-import { FilterType } from 'types/market';
+import React from 'react';
+import makeMarketQueries from 'utils/market/makeMarketQuery';
 
 interface MarketFilterPageProps {
-  kind: string;
+  category: string;
 }
 
-const MarketFilterPage = ({ kind }: MarketFilterPageProps) => {
-  const { data: markets } = useMarket();
-  const [filterList, setFilterList] = useState<FilterType[]>([]);
-  const changeFilters = (f: FilterType[]) => {
-    setFilterList(f);
-  };
+const MarketFilterPage = ({ category }: MarketFilterPageProps) => {
+  const [states, actions] = useMarketFilter();
+  const { data: markets, isFetching } = useMarket(makeMarketQueries(states, category));
 
   return (
     <Container
@@ -30,9 +28,18 @@ const MarketFilterPage = ({ kind }: MarketFilterPageProps) => {
       margin="20px 0 0 0"
     >
       <div style={{ width: '1200px' }}>
-        <MarketCarKind kind={kind} />
-        <MarketFilter filterList={filterList} changeFilters={changeFilters} />
-        {markets && <MarketList data={markets} />}
+        <MarketCarKind category={category} />
+        <MarketFilter
+          filterList={states.filterList}
+          changeFilters={actions.changeFilters}
+        />
+        {isFetching ? (
+          <div>데이터 불러오는 중...</div>
+        ) : (
+          markets && (
+            <MarketList data={markets} states={states} actions={actions} />
+          )
+        )}
       </div>
     </Container>
   );
@@ -43,9 +50,9 @@ MarketFilterPage.Layout = layout;
 const queryClient = new QueryClient();
 
 export const getServerSideProps = async (ctx: NextPageContext) => {
-  const { kind } = ctx.query;
+  const { category } = ctx.query;
 
-  if (!kind || !CATEGORY_VALUES.includes(kind as string)) {
+  if (!category || !CATEGORY_VALUES.includes(category as string)) {
     return {
       redirect: {
         destination: '/market/all',
@@ -54,7 +61,7 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
     };
   }
 
-  queryClient.prefetchQuery(queries.market.lists(), () =>
+  queryClient.prefetchQuery(queries.market.lists([]), () =>
     fetch('http://localhost:3000/api/magazine', {
       method: 'GET',
     }).then((res) => res.json())
@@ -62,7 +69,7 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
 
   return {
     props: {
-      kind,
+      category,
       dehydratedState: dehydrate(queryClient),
     },
   };

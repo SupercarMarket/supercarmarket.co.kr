@@ -12,7 +12,7 @@ const MarketRow = ({
   id,
   base64,
   carName,
-  comment,
+  description,
   fuel,
   imgSrc,
   mileage,
@@ -40,7 +40,7 @@ const MarketRow = ({
             {carName}
           </Typography>
           <Typography fontSize="body-14" color="greyScale-5">
-            {comment}
+            {description}
           </Typography>
         </S.CarInformation>
       </S.MarketTableData>
@@ -56,7 +56,7 @@ const MarketRow = ({
         </Typography>
       </S.MarketTableData>
       <S.MarketTableData>
-        <Typography fontSize="body-14" style={{ color: '#ED7474' }}>
+        <Typography fontSize="body-14" color="system-1">
           {price ? price : '상담'}
         </Typography>
       </S.MarketTableData>

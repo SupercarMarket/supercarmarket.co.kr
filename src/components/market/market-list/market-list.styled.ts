@@ -61,9 +61,9 @@ export const MarketTableHead = styled.th<TableHeadProps>`
     `}
 `;
 
-export const MarketCardList = styled.div``;
-
-export const MarketCard = styled.div`
-  width: 285px;
-  height: 302px;
+export const MarketCardList = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 40px;
+  column-gap: 20px;
 `;

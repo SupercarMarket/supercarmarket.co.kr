@@ -14,20 +14,16 @@ export interface MarketFormTarget extends FormEvent<HTMLFormElement> {
   target: HTMLFormElement;
 }
 
-export interface FilterType {
-  subject: string;
-  option: string;
-  value: string;
-}
+export type FilterType = MarketOptionType & MarketLabelType;
 
 export interface MarketDto {
   id: string;
   carName: string;
-  comment: string;
+  description: string;
   year: string;
   fuel: string;
-  mileage: string;
-  price: string;
+  mileage: number;
+  price: number;
   seller: string;
   imgSrc: string;
 }

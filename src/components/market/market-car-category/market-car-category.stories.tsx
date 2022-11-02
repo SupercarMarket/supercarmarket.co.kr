@@ -1,5 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import MarketCarKind from 'components/market/market-car-kind';
+import MarketCarKind from 'components/market/market-car-category';
 import { CATEGORY_VALUES } from 'constants/market';
 
 export default {

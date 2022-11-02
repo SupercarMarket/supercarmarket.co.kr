@@ -1,15 +1,19 @@
 import Select from 'components/common/select';
 import Typography from 'components/common/typography';
+import MarketCard from 'components/market/market-card';
 import MarketRow from 'components/market/market-row/market-row';
 import {
   HOW_MANY_RESULT,
   MARKET_LIST_TABLE_HEAD,
   ORDER_OPTIONSET,
 } from 'constants/market';
-import Image from 'next/image';
+import {
+  UseMarketFilterActions,
+  UseMarketFilterStates,
+} from 'hooks/market/useMarketFilter';
 import React, { useMemo, useState } from 'react';
 import { WithBlurredImage } from 'types/magazine';
-import { MarketDto, MarketOptionType, MarketResponse } from 'types/market';
+import { MarketDto, MarketResponse } from 'types/market';
 
 import ListIcon from '../../../assets/svg/menu.svg';
 import ViewCardIcon from '../../../assets/svg/sqaure.svg';
@@ -17,25 +21,19 @@ import * as S from './market-list.styled';
 
 interface MarketListProps {
   data: MarketResponse<WithBlurredImage<MarketDto>>;
+  states: UseMarketFilterStates;
+  actions: UseMarketFilterActions;
 }
 
-const MarketList = ({ data }: MarketListProps) => {
+const MarketList = ({
+  data,
+  states: { viewCount, orderSelect },
+  actions: { changeOrderSelect, changeViewCount },
+}: MarketListProps) => {
   const VIEW_COUNT = HOW_MANY_RESULT(20, 70);
   const [listView, setListView] = useState(false);
-  const [orderSelect, setOrderSelect] = useState<MarketOptionType>(
-    ORDER_OPTIONSET[0]
-  );
-  const [viewCount, setViewCount] = useState<MarketOptionType>(VIEW_COUNT[0]);
 
   const markets = useMemo(() => data.data, [data.data]);
-
-  const changeOrderSelect = (option: MarketOptionType) => {
-    setOrderSelect(option);
-  };
-
-  const changeViewCount = (option: MarketOptionType) => {
-    setViewCount(option);
-  };
 
   const onListView = () => setListView(true);
   const onCardView = () => setListView(false);
@@ -89,37 +87,9 @@ const MarketList = ({ data }: MarketListProps) => {
         </S.MarketTable>
       ) : (
         <S.MarketCardList>
-          <S.MarketCard>
-            <Image
-              width={285}
-              height={180}
-              // placeholder="blur"
-              // blurDataURL={base64}
-              layout="fixed"
-              src={markets[0].imgSrc}
-              alt="thumbnail"
-              style={{ borderRadius: '4px' }}
-            />
-            <Typography fontSize="header-16" fontWeight="bold">
-              람보르기니 우라칸 스파이더
-            </Typography>
-            <Typography
-              fontSize="body-14"
-              lineHeight="150%"
-              color="greyScale-5"
-            >
-              무사고 | 짧은 주행
-            </Typography>
-            <Typography fontSize="body-14">22/06</Typography>
-            <Typography fontSize="body-16" color="greyScale-4">
-              |
-            </Typography>
-            <Typography fontSize="body-14">가솔린</Typography>
-            <Typography fontSize="body-16" color="greyScale-4">
-              |
-            </Typography>
-            <Typography fontSize="body-14">3천km</Typography>
-          </S.MarketCard>
+          {markets.map((m) => (
+            <MarketCard key={m.id} {...m} />
+          ))}
         </S.MarketCardList>
       )}
     </S.MarketListContainer>

@@ -3,13 +3,13 @@ import { CATEGORY } from 'constants/market';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import * as S from './market-car-kind.styled';
+import * as S from './market-car-category.styled';
 
 interface MarketCarKindProps {
-  kind: string;
+  category: string;
 }
 
-const MarketCarKind = ({ kind }: MarketCarKindProps) => {
+const MarketCarKind = ({ category }: MarketCarKindProps) => {
   const { push } = useRouter();
 
   const selectCarKind = (value: string) => {
@@ -21,7 +21,7 @@ const MarketCarKind = ({ kind }: MarketCarKindProps) => {
       {CATEGORY.map(({ option, value }) => (
         <S.MarketCarKindItem
           key={option}
-          active={kind === value}
+          active={category === value}
           onClick={() => selectCarKind(value)}
         >
           <Typography>{option}</Typography>

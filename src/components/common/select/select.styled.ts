@@ -62,13 +62,12 @@ export const SelectCurrentButton = styled.button<AlignProps>`
 interface SelectOptionListProps {
   width?: string;
   toggle: boolean;
-  over: boolean | undefined;
+  over?: boolean;
 }
 
 export const SelectOptionList = styled.ul<SelectOptionListProps>`
   box-sizing: border-box;
   width: ${({ width }) => width}px;
-  max-height: 200px;
   display: none;
   position: absolute;
   overflow: scroll;

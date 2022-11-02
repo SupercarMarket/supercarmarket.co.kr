@@ -174,35 +174,35 @@ export const FILTER_DATANAMES = FIRST_MARKET_FILTER.map(
 export const ORDER_OPTIONSET: MarketOptionType[] = [
   {
     option: '최근 등록순',
-    value: 'reg-new',
+    value: 'created_date DESC',
   },
   {
     option: '이전 등록순',
-    value: 'reg-old',
+    value: 'created_date ASC',
   },
   {
     option: '가격 낮은순',
-    value: 'price-asc',
+    value: 'pdt_price ASC',
   },
   {
     option: '가격 높은순',
-    value: 'price-desc',
+    value: 'pdt_price DESC',
   },
   {
     option: '주행 짧은순',
-    value: 'mileage-asc',
+    value: 'pinf_mileage ASC',
   },
   {
     option: '주행 많은순',
-    value: 'mileage-desc',
+    value: 'pinf_mileage DESC',
   },
   {
     option: '연식 최신순',
-    value: 'year-asc',
+    value: 'pinf_year DESC',
   },
   {
     option: '연식 오래된순',
-    value: 'year-desc',
+    value: 'pinf_year ASC',
   },
 ];
 
@@ -215,7 +215,7 @@ export const HOW_MANY_RESULT = (start: number, end: number) => {
   const options: MarketOptionType[] = [];
 
   for (let i = start; i <= end; i += 10) {
-    options.push({ option: `${i}개씩`, value: `${i}` });
+    options.push({ option: `${i}개씩`, value: `viewSize ${i}` });
   }
 
   return options;

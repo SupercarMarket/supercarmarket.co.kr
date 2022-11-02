@@ -23,11 +23,11 @@ const marketList = Array.from(Array(1024)).map(() => ({
   id: randomId(),
   imgSrc: magazineImages[Math.round(Math.random() * 1)],
   carName: '람보르기니 우라칸 스파이더 LP640-4',
-  comment: '무사고 | 짧은 주행',
+  description: '무사고 | 짧은 주행',
   year: '20/03',
   fuel: 'gasoline',
-  mileage: '3000',
-  price: '',
+  mileage: 3000,
+  price: 0,
   seller: '슈퍼카마켓',
 }));
 
