@@ -27,6 +27,6 @@ export default function makeMarketQueries(
   const vList = `${viewCountName}=${viewCountValue}`;
 
   const merged = `${fList}&${oList}&${vList}&category=${kind}&page=${page}`;
-  console.log('merged', merged);
+
   return merged;
 }

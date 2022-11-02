@@ -25,8 +25,9 @@ const MarketFilterPage = ({ category }: MarketFilterPageProps) => {
   );
 
   const [states, actions] = useMarketFilter();
-  const { data: markets } = useMarket(
-    makeMarketQueries(states, category, +page)
+  const { data: markets, isFetching } = useMarket(
+    makeMarketQueries(states, category, page),
+    { keepPreviousData: true }
   );
 
   return (
@@ -35,7 +36,6 @@ const MarketFilterPage = ({ category }: MarketFilterPageProps) => {
       flexDirection="column"
       alignItems="center"
       margin="20px 0 0 0"
-      position="relative"
     >
       <div style={{ width: '1200px' }}>
         <MarketCarKind category={category} />

@@ -33,10 +33,8 @@ const MarketList = ({
   actions: { changeOrderSelect, changeViewCount },
   page,
 }: MarketListProps) => {
-  const VIEW_COUNT = HOW_MANY_RESULT(20, 70);
-  const [listView, setListView] = useState(false);
-
   const markets = useMemo(() => data.data, [data.data]);
+  const [listView, setListView] = useState(false);
 
   const onListView = () => setListView(true);
   const onCardView = () => setListView(false);
@@ -57,7 +55,7 @@ const MarketList = ({
             select={viewCount}
             label={{ subject: '', dataName: 'viewCount' }}
             changeSelect={changeViewCount}
-            optionSet={VIEW_COUNT}
+            optionSet={HOW_MANY_RESULT(20, 70)}
             defaultLabel={viewCount.option}
             width="112"
             align="center"
