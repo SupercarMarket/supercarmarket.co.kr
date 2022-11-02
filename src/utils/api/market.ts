@@ -4,12 +4,16 @@ import { MarketDto, MarketResponse } from 'types/market';
 import { getErrorMessage } from 'utils/misc';
 
 const marketApi: NextApiHandler = async (req, res) => {
-  const query = req.query;
+  const query = req.url?.split('?')[1];
+  console.log(query);
 
   try {
-    const response = await fetch('http://localhost:3000/server/api/v1/market', {
-      method: 'GET',
-    });
+    const response = await fetch(
+      `http://localhost:3000/server/api/v1/market?${query}`,
+      {
+        method: 'GET',
+      }
+    );
 
     if (!response.ok) throw new Error('invalid api');
 

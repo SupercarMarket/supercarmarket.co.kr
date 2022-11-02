@@ -8,8 +8,9 @@ import { CATEGORY_VALUES } from 'constants/market';
 import queries from 'constants/queries';
 import useMarketFilter from 'hooks/market/useMarketFilter';
 import useMarket from 'hooks/queries/useMarket';
+import { useRouter } from 'next/router';
 import { NextPageContext } from 'next/types';
-import React from 'react';
+import React, { useMemo } from 'react';
 import makeMarketQueries from 'utils/market/makeMarketQuery';
 
 interface MarketFilterPageProps {
@@ -17,8 +18,16 @@ interface MarketFilterPageProps {
 }
 
 const MarketFilterPage = ({ category }: MarketFilterPageProps) => {
+  const { query } = useRouter();
+  const page = useMemo(
+    () => (query.page && query.page ? +query.page : 0),
+    [query.page]
+  );
+
   const [states, actions] = useMarketFilter();
-  const { data: markets, isFetching } = useMarket(makeMarketQueries(states, category));
+  const { data: markets } = useMarket(
+    makeMarketQueries(states, category, +page)
+  );
 
   return (
     <Container
@@ -26,6 +35,7 @@ const MarketFilterPage = ({ category }: MarketFilterPageProps) => {
       flexDirection="column"
       alignItems="center"
       margin="20px 0 0 0"
+      position="relative"
     >
       <div style={{ width: '1200px' }}>
         <MarketCarKind category={category} />
@@ -33,12 +43,13 @@ const MarketFilterPage = ({ category }: MarketFilterPageProps) => {
           filterList={states.filterList}
           changeFilters={actions.changeFilters}
         />
-        {isFetching ? (
-          <div>데이터 불러오는 중...</div>
-        ) : (
-          markets && (
-            <MarketList data={markets} states={states} actions={actions} />
-          )
+        {markets && (
+          <MarketList
+            data={markets}
+            states={states}
+            actions={actions}
+            page={page}
+          />
         )}
       </div>
     </Container>

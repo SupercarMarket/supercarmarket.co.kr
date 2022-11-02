@@ -1,3 +1,4 @@
+import Pagination from 'components/common/pagination';
 import Select from 'components/common/select';
 import Typography from 'components/common/typography';
 import MarketCard from 'components/market/market-card';
@@ -23,12 +24,14 @@ interface MarketListProps {
   data: MarketResponse<WithBlurredImage<MarketDto>>;
   states: UseMarketFilterStates;
   actions: UseMarketFilterActions;
+  page: number;
 }
 
 const MarketList = ({
   data,
   states: { viewCount, orderSelect },
   actions: { changeOrderSelect, changeViewCount },
+  page,
 }: MarketListProps) => {
   const VIEW_COUNT = HOW_MANY_RESULT(20, 70);
   const [listView, setListView] = useState(false);
@@ -92,6 +95,12 @@ const MarketList = ({
           ))}
         </S.MarketCardList>
       )}
+      <Pagination
+        page={page}
+        pageSize={data.pageSize}
+        totalCount={data.totalCount}
+        totalPages={data.totalPages}
+      />
     </S.MarketListContainer>
   );
 };

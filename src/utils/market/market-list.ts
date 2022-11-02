@@ -1,4 +1,4 @@
-export const convertMileagePlusKilometers = (mileage: number) => {
+export const convertMileageToKilometers = (mileage: number) => {
   if (mileage > 10000)
     return `${Math.floor(mileage / 10000)}만${(mileage % 10000) / 1000}천km`;
 

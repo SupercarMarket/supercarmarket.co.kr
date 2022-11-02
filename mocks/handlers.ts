@@ -78,14 +78,14 @@ const getMagazineList: Parameters<typeof rest.get>[1] = (req, res, ctx) => {
 const getMarketList: Parameters<typeof rest.get>[1] = (req, res, ctx) => {
   const { searchParams } = req.url;
   console.log(searchParams);
-  const size = Number(searchParams.get('pageSize')) || 20;
+  const size = Number(searchParams.get('viewSize')) || 20;
   const page = Number(searchParams.get('page')) || 1;
   const totalCount = marketList.length;
   const totalPages = Math.round(totalCount / size);
   return res(
     ctx.status(200),
     ctx.json<MarketResponse<MarketDto>>({
-      data: marketList.slice(page * 20, page * 20 + 20),
+      data: marketList.slice(page * size, page * size + size),
       page,
       pageSize: size,
       totalCount,

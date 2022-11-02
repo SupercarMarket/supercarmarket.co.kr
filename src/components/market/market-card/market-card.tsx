@@ -4,14 +4,14 @@ import Image from 'next/image';
 import React from 'react';
 import { WithBlurredImage } from 'types/magazine';
 import { MarketDto } from 'types/market';
-import { convertMileagePlusKilometers } from 'utils/market/market-list';
+import { convertMileageToKilometers } from 'utils/market/market-list';
 
 import * as S from './market-card.styled';
 
 const MarketCard = ({
   id,
   carName,
-  comment,
+  description,
   fuel,
   base64,
   imgSrc,
@@ -40,7 +40,7 @@ const MarketCard = ({
       </S.DivideArea>
       <S.DivideArea style={{ marginBottom: '12.5px' }}>
         <Typography fontSize="body-14" lineHeight="150%" color="greyScale-5">
-          {comment}
+          {description}
         </Typography>
       </S.DivideArea>
       <S.DivideArea
@@ -56,7 +56,7 @@ const MarketCard = ({
         <Typography fontSize="body-14">{FUEL_KIND[fuel]}</Typography>
         <S.Divider />
         <Typography fontSize="body-14">
-          {convertMileagePlusKilometers(mileage)}
+          {convertMileageToKilometers(mileage)}
         </Typography>
       </S.DivideArea>
       <S.DivideArea>

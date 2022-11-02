@@ -2,7 +2,8 @@ import { UseMarketFilterStates } from 'hooks/market/useMarketFilter';
 
 export default function makeMarketQueries(
   queries: UseMarketFilterStates,
-  kind: string
+  kind: string,
+  page: number
 ) {
   const { filterList, orderSelect, viewCount } = queries;
   const fList = filterList
@@ -18,13 +19,14 @@ export default function makeMarketQueries(
       return `${dataName}=${value}`;
     })
     .join('&');
+
   const [orderName, orderValue] = orderSelect.value.split(' ');
   const oList = `filter=${orderName}&orderBy=${orderValue}`;
 
   const [viewCountName, viewCountValue] = viewCount.value.split(' ');
   const vList = `${viewCountName}=${viewCountValue}`;
 
-  const merged = `${fList}&${oList}&${vList}&kind=${kind}`;
+  const merged = `${fList}&${oList}&${vList}&category=${kind}&page=${page}`;
   console.log('merged', merged);
   return merged;
 }

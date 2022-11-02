@@ -4,7 +4,7 @@ import Image from 'next/image';
 import React from 'react';
 import { WithBlurredImage } from 'types/magazine';
 import { MarketDto } from 'types/market';
-import { convertMileagePlusKilometers } from 'utils/market/market-list';
+import { convertMileageToKilometers } from 'utils/market/market-list';
 
 import * as S from './market-row.styled';
 
@@ -52,7 +52,7 @@ const MarketRow = ({
       </S.MarketTableData>
       <S.MarketTableData>
         <Typography fontSize="body-14">
-          {convertMileagePlusKilometers(mileage)}
+          {convertMileageToKilometers(mileage)}
         </Typography>
       </S.MarketTableData>
       <S.MarketTableData>

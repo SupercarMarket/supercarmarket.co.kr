@@ -1,6 +1,8 @@
 import styled, { css } from 'styled-components';
 
-export const MarketListContainer = styled.div``;
+export const MarketListContainer = styled.div`
+  margin-bottom: 80px;
+`;
 
 export const ButtonBox = styled.div`
   display: flex;
@@ -35,6 +37,7 @@ export const ListFilter = styled.div`
 
 export const MarketTable = styled.table`
   width: 100%;
+  margin-bottom: 80px;
 `;
 
 export const MarketTHead = styled.thead`
@@ -66,4 +69,5 @@ export const MarketCardList = styled.div`
   flex-wrap: wrap;
   row-gap: 40px;
   column-gap: 20px;
+  margin-bottom: 80px;
 `;
