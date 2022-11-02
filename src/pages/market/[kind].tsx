@@ -1,16 +1,27 @@
+import { dehydrate, QueryClient } from '@tanstack/react-query';
 import Container from 'components/common/container';
+import layout from 'components/layout';
 import MarketCarKind from 'components/market/market-car-kind/market-car-kind';
 import MarketFilter from 'components/market/market-filter/market-filter';
 import MarketList from 'components/market/market-list';
 import { CATEGORY_VALUES } from 'constants/market';
-import { GetStaticPropsContext } from 'next';
-import React from 'react';
+import queries from 'constants/queries';
+import useMarket from 'hooks/queries/useMarket';
+import { NextPageContext } from 'next/types';
+import React, { useState } from 'react';
+import { FilterType } from 'types/market';
 
 interface MarketFilterPageProps {
   kind: string;
 }
 
 const MarketFilterPage = ({ kind }: MarketFilterPageProps) => {
+  const { data: markets } = useMarket();
+  const [filterList, setFilterList] = useState<FilterType[]>([]);
+  const changeFilters = (f: FilterType[]) => {
+    setFilterList(f);
+  };
+
   return (
     <Container
       display="flex"
@@ -20,33 +31,39 @@ const MarketFilterPage = ({ kind }: MarketFilterPageProps) => {
     >
       <div style={{ width: '1200px' }}>
         <MarketCarKind kind={kind} />
-        <MarketFilter />
-        <MarketList />
+        <MarketFilter filterList={filterList} changeFilters={changeFilters} />
+        {markets && <MarketList data={markets} />}
       </div>
     </Container>
   );
 };
 
-export const getStaticPaths = async () => {
-  const paths = CATEGORY_VALUES.map((kind) => ({ params: { kind } }));
-  return {
-    paths,
-    fallback: false,
-  };
-};
+MarketFilterPage.Layout = layout;
 
-export const getStaticProps = async ({
-  params,
-}: GetStaticPropsContext<{ kind: string }>) => {
-  const kind = params?.kind;
+const queryClient = new QueryClient();
+
+export const getServerSideProps = async (ctx: NextPageContext) => {
+  const { kind } = ctx.query;
 
   if (!kind || !CATEGORY_VALUES.includes(kind as string)) {
-    return { notFound: true };
+    return {
+      redirect: {
+        destination: '/market/all',
+        permanent: false,
+      },
+    };
   }
+
+  queryClient.prefetchQuery(queries.market.lists(), () =>
+    fetch('http://localhost:3000/api/magazine', {
+      method: 'GET',
+    }).then((res) => res.json())
+  );
 
   return {
     props: {
       kind,
+      dehydratedState: dehydrate(queryClient),
     },
   };
 };

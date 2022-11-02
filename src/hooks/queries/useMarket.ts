@@ -6,6 +6,6 @@ const fetcher = async () =>
     method: 'GET',
   }).then((res) => res.json());
 
-export default function useMagazine(marketKey: string[], options = {}) {
-  return useQuery(queries.market.lists(marketKey), fetcher, options);
+export default function useMarket(marketKey?: string[], options = {}) {
+  return useQuery(queries.market.lists(), fetcher, options);
 }

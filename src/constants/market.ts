@@ -251,3 +251,8 @@ export const MARKET_LIST_TABLE_HEAD = [
     width: undefined,
   },
 ];
+
+export const FUEL_KIND: { [key: string]: string } = {
+  gasoline: '가솔린',
+  diesel: '디젤',
+};

@@ -2,22 +2,19 @@ import Typography from 'components/common/typography';
 import MarketSelect from 'components/market/market-select';
 import { FIRST_MARKET_FILTER, SECOND_MARKET_FILTER } from 'constants/market';
 import theme from 'constants/theme';
-import React, { useState } from 'react';
-import { MarketFormTarget, MarketLabelType } from 'types/market';
+import React from 'react';
+import { FilterType, MarketFormTarget, MarketLabelType } from 'types/market';
 
 import Close from '../../../assets/svg/close.svg';
 import Refresh from '../../../assets/svg/refresh.svg';
 import * as S from './market-filter.styled';
 
-interface FilterType {
-  subject: string;
-  option: string;
-  value: string;
+interface MarketFilterProps {
+  filterList: FilterType[];
+  changeFilters: (f: FilterType[]) => void;
 }
 
-const MarketFilter = () => {
-  const [filterList, setFilterList] = useState<FilterType[]>([]);
-
+const MarketFilter = ({ filterList, changeFilters }: MarketFilterProps) => {
   const submitHander = (
     e: MarketFormTarget,
     { subject, dataName }: MarketLabelType
@@ -50,15 +47,15 @@ const MarketFilter = () => {
               : `${firstValue} ${secondValue}`,
         });
     }
-    setFilterList(filters);
+    changeFilters(filters);
   };
 
   const removeFilter = (idx: number) => {
-    setFilterList((prev) => prev.filter((_, index) => index !== idx));
+    changeFilters(filterList.filter((_, index) => index !== idx));
   };
 
   const resetfilter = () => {
-    setFilterList([]);
+    changeFilters([]);
   };
 
   return (

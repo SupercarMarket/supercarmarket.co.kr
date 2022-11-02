@@ -11,8 +11,7 @@ const queries = {
    */
   market: {
     all: ['market'] as const,
-    lists: (marketKeys: string[]) =>
-      [...queries.market.all, 'list', ...marketKeys] as const,
+    lists: () => [...queries.market.all, 'list'] as const,
   },
 };
 

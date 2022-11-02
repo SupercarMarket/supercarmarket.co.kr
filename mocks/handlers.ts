@@ -1,5 +1,6 @@
 import { rest } from 'msw';
 import { MagazineDto, MagazineResponse } from 'types/magazine';
+import { MarketDto, MarketResponse } from 'types/market';
 
 /**
  * API Constants
@@ -16,6 +17,18 @@ const magazineList = Array.from(Array(1024)).map(() => ({
   contents:
     '오늘 소개해드릴 차량은 첫 등장부터 모두의 관심을 받았고, 지금도 관심을 받고 있는 슈퍼 SUV입니다. 그것도 엄청난 단어를 붙여 등장합니다. 바로 람보르기니 우루스 퍼포만테 차량...',
   imgSrc: magazineImages[Math.round(Math.random() * 1)],
+}));
+
+const marketList = Array.from(Array(1024)).map(() => ({
+  id: randomId(),
+  imgSrc: magazineImages[Math.round(Math.random() * 1)],
+  carName: '람보르기니 우라칸 스파이더 LP640-4',
+  comment: '무사고 | 짧은 주행',
+  year: '20/03',
+  fuel: 'gasoline',
+  mileage: '3000',
+  price: '',
+  seller: '슈퍼카마켓',
 }));
 
 /**
@@ -35,6 +48,10 @@ export function handlers() {
      * 매거진 리스트를 불러옵니다.
      */
     rest.get('https://server/api/v1/magazine', getMagazineList),
+    /**
+     * 마켓 리스트를 불러옵니다.
+     */
+    rest.get('https://server/api/v1/market', getMarketList),
   ];
 }
 
@@ -48,6 +65,27 @@ const getMagazineList: Parameters<typeof rest.get>[1] = (req, res, ctx) => {
     ctx.status(200),
     ctx.json<MagazineResponse<MagazineDto>>({
       data: magazineList.slice(page * 12, page * 12 + 12),
+      page,
+      pageSize: size,
+      totalCount,
+      totalPages,
+      isLastPage: totalPages <= page,
+      isFirstPage: page === 0,
+    })
+  );
+};
+
+const getMarketList: Parameters<typeof rest.get>[1] = (req, res, ctx) => {
+  const { searchParams } = req.url;
+  console.log(searchParams);
+  const size = Number(searchParams.get('pageSize')) || 20;
+  const page = Number(searchParams.get('page')) || 1;
+  const totalCount = marketList.length;
+  const totalPages = Math.round(totalCount / size);
+  return res(
+    ctx.status(200),
+    ctx.json<MarketResponse<MarketDto>>({
+      data: marketList.slice(page * 20, page * 20 + 20),
       page,
       pageSize: size,
       totalCount,
