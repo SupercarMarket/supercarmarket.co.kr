@@ -15,6 +15,14 @@ const queries = {
     all: ['magazine'] as const,
     lists: () => [...queries.magazine.all, 'list'] as const,
   },
+  /**
+   * Community Query Keys
+   */
+  community: {
+    all: ['community'] as const,
+    lists: () => [...queries.community.all, 'list'] as const,
+    best: () => [...queries.community.lists(), 'best'] as const,
+  },
 };
 
 export default queries;
