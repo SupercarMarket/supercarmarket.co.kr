@@ -6,7 +6,7 @@ interface CommunityDto {
   view: number;
   like: number;
   profileImgSrc: string | null;
-  thumbnailImgSrc: string;
+  imgSrc: string;
 }
 
 interface CommunityBestResponse<T> {

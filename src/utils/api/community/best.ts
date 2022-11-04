@@ -17,7 +17,7 @@ const communityBestApi: NextApiHandler = async (_, res) => {
 
     const communityWithBluredImage = await Promise.all(
       community.data.map(async (m) => {
-        const { base64 } = await getPlaiceholder(m.thumbnailImgSrc);
+        const { base64 } = await getPlaiceholder(m.imgSrc);
         return {
           ...m,
           base64,
