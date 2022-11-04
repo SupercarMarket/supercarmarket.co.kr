@@ -1,10 +1,27 @@
 const queries = {
   /**
+   * Market Query Keys
+   */
+  market: {
+    all: ['market'] as const,
+    lists: () => [...queries.market.all, 'list'] as const,
+    best: () => [...queries.market.lists(), 'best'] as const,
+    new: () => [...queries.market.lists(), 'new'] as const,
+  },
+  /**
    * Magazine Query Keys
    */
   magazine: {
     all: ['magazine'] as const,
     lists: () => [...queries.magazine.all, 'list'] as const,
+  },
+  /**
+   * Community Query Keys
+   */
+  community: {
+    all: ['community'] as const,
+    lists: () => [...queries.community.all, 'list'] as const,
+    best: () => [...queries.community.lists(), 'best'] as const,
   },
 };
 

@@ -14,11 +14,11 @@ const marketImages = [
 const marketList = Array.from(Array(1024)).map(() => ({
   id: randomId(),
   title: '람보르기니 우라칸 스파이더 LP640-4',
-  accident: [true, false],
-  mileage: [3000, 1000, 6000],
+  accident: [true, false][randomIndex(1)],
+  mileage: [3000, 1000, 6000][randomIndex(2)],
   year: new Date(),
   fuel: ['가솔린', '경유', '전기', '하이브리드'],
-  imgSrc: marketImages[Math.round(Math.random() * 2)],
+  imgSrc: marketImages[randomIndex(2)],
 }));
 
 const magazineImages = [
@@ -31,7 +31,32 @@ const magazineList = Array.from(Array(1024)).map(() => ({
   title: '람보르기니 우루스 퍼포만테 더 슈퍼 SUV하다.',
   contents:
     '오늘 소개해드릴 차량은 첫 등장부터 모두의 관심을 받았고, 지금도 관심을 받고 있는 슈퍼 SUV입니다. 그것도 엄청난 단어를 붙여 등장합니다. 바로 람보르기니 우루스 퍼포만테 차량...',
-  imgSrc: magazineImages[Math.round(Math.random() * 1)],
+  imgSrc: magazineImages[randomIndex(1)],
+}));
+
+const communityImages = [
+  'https://user-images.githubusercontent.com/66871265/199372921-d7f5fb08-3950-4d36-b154-4c13de3ccc1e.png',
+];
+
+const communityList = Array.from(Array(1024)).map(() => ({
+  id: randomId(),
+  nickName: [
+    'blan19',
+    'minssu86',
+    'epikoding',
+    'eank0108',
+    'biolkj28',
+    'doyupK',
+    'jigomgom',
+    'sunysty',
+  ][randomIndex(7)],
+  title:
+    '혹시 브레이크 오일 안갈면 어찌 되나요?혹시 브레이크 오일 안갈면 어찌 되나요?...',
+  date: new Date(),
+  view: 999,
+  like: 999,
+  profileImgSrc: '',
+  thumbnailImgSrc: communityImages[randomIndex(0)],
 }));
 
 /**
@@ -50,19 +75,24 @@ export function handlers() {
     /**
      * 마켓
      */
-    rest.get('http://server/api/v1/market', getMarketList),
+    rest.get('https://server/api/v1/market', getMarketList),
     /**
      * 매거진 리스트를 불러옵니다.
      */
     rest.get('https://server/api/v1/magazine', getMagazineList),
+    /**
+     * 커뮤니티 인기글.
+     */
+    rest.get('https://server/api/v1/community-best', getCommunityBestList),
   ];
 }
 
 const getMarketList: Parameters<typeof rest.get>[1] = (req, res, ctx) => {
   const { searchParams } = req.url;
   const size = Number(searchParams.get('pageSize')) || 12;
+  // const category = Number(searchParams.get('category')) || 12;
   const page = Number(searchParams.get('page')) || 1;
-  const totalCount = magazineList.length;
+  const totalCount = marketList.length;
   const totalPages = Math.round(totalCount / size);
   return res(
     ctx.status(200),
@@ -98,6 +128,23 @@ const getMagazineList: Parameters<typeof rest.get>[1] = (req, res, ctx) => {
   );
 };
 
+const getCommunityBestList: Parameters<typeof rest.get>[1] = (
+  req,
+  res,
+  ctx
+) => {
+  const { searchParams } = req.url;
+  const size = Number(searchParams.get('pageSize')) || 4;
+  const page = Number(searchParams.get('page')) || 1;
+  return res(
+    ctx.status(200),
+    ctx.json({
+      data: communityList.slice(page * size, page * size + size),
+      page,
+    })
+  );
+};
+
 /**
  * API Helper
  * 각 API 로직에 도움을 주는 헬퍼 함수들
@@ -108,6 +155,10 @@ function randomId() {
     Math.random().toString(36).substring(2, 12) +
     Math.random().toString(36).substring(2, 12)
   );
+}
+
+function randomIndex(length: number) {
+  return Math.round(Math.random() * length);
 }
 
 // function seconds(s: number) {
