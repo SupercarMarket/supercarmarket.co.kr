@@ -38,18 +38,23 @@ const queryClient = new QueryClient();
 
 export const getServerSideProps: GetServerSideProps = async () => {
   await Promise.all([
-    queryClient.prefetchQuery(queries.magazine.lists(), () =>
-      fetch(`${process.env.NEXT_PULBIC_URL}/api/magazine`, {
+    queryClient.prefetchQuery(queries.home.magazine(), () =>
+      fetch(`${process.env.NEXT_PULBIC_URL}/api/home?category=magazine`, {
         method: 'GET',
       }).then((res) => res.json())
     ),
-    queryClient.prefetchQuery(queries.market.best(), () =>
-      fetch(`${process.env.NEXT_PULBIC_URL}/api/market`, {
+    queryClient.prefetchQuery(queries.home.best(), () =>
+      fetch(`${process.env.NEXT_PULBIC_URL}/api/home?category=best`, {
         method: 'GET',
       }).then((res) => res.json())
     ),
-    queryClient.prefetchQuery(queries.community.best(), () =>
-      fetch(`${process.env.NEXT_PULBIC_URL}/api/community/best`, {
+    queryClient.prefetchQuery(queries.home.new(), () =>
+      fetch(`${process.env.NEXT_PULBIC_URL}/api/home?category=new`, {
+        method: 'GET',
+      }).then((res) => res.json())
+    ),
+    queryClient.prefetchQuery(queries.home.community(), () =>
+      fetch(`${process.env.NEXT_PULBIC_URL}/api/home?category=community`, {
         method: 'GET',
       }).then((res) => res.json())
     ),

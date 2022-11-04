@@ -6,7 +6,7 @@ import { getErrorMessage } from 'utils/misc';
 const magazineApi: NextApiHandler = async (_, res) => {
   try {
     const response = await fetch(
-      'http://localhost:3000/server/api/v1/magazine',
+      `${process.env.NEXT_PUBLIC_URL}/server/api/v1/magazine`,
       { method: 'GET' }
     );
 

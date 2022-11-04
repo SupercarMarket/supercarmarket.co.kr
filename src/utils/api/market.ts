@@ -5,9 +5,12 @@ import { getErrorMessage } from 'utils/misc';
 
 const marketApi: NextApiHandler = async (_, res) => {
   try {
-    const response = await fetch('http://localhost:3000/server/api/v1/market', {
-      method: 'GET',
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_URL}/server/api/v1/market`,
+      {
+        method: 'GET',
+      }
+    );
 
     if (!response.ok) throw new Error('invalid api');
 
