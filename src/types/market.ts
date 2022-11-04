@@ -1,25 +1,30 @@
 import { FormEvent } from 'react';
 
-export interface MarketOptionType {
+interface MarketOptionType {
   option: string;
   value: string;
 }
 
-export interface MarketLabelType {
+interface MarketLabelType {
   subject: string;
   dataName: string;
 }
 
-export interface MarketFormTarget extends FormEvent<HTMLFormElement> {
+interface MarketFormTarget extends FormEvent<HTMLFormElement> {
   target: HTMLFormElement;
 }
+
+type FilterType = MarketOptionType & MarketLabelType;
+
 interface MarketDto {
   id: string;
-  title: string;
-  accident: boolean;
-  mileage: number;
-  year: Date;
+  carName: string;
+  description: string;
+  year: string;
   fuel: string;
+  mileage: number;
+  price: number;
+  dealer: string;
   imgSrc: string;
 }
 
@@ -37,4 +42,12 @@ interface MarketResponse<T> {
   isFirstPage: boolean;
 }
 
-export type { MarketDto, MarketResponse, WithBlurredImage };
+export type {
+  FilterType,
+  MarketDto,
+  MarketFormTarget,
+  MarketLabelType,
+  MarketOptionType,
+  MarketResponse,
+  WithBlurredImage,
+};

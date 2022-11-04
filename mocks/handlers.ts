@@ -1,5 +1,6 @@
 import { rest } from 'msw';
 import { MagazineDto, MagazineResponse } from 'types/magazine';
+import { MarketDto, MarketResponse } from 'types/market';
 
 /**
  * API Constants
@@ -13,12 +14,14 @@ const marketImages = [
 
 const marketList = Array.from(Array(1024)).map(() => ({
   id: randomId(),
-  title: '람보르기니 우라칸 스파이더 LP640-4',
-  accident: [true, false][randomIndex(1)],
-  mileage: [3000, 1000, 6000][randomIndex(2)],
-  year: new Date(),
-  fuel: ['가솔린', '경유', '전기', '하이브리드'],
   imgSrc: marketImages[randomIndex(2)],
+  carName: '람보르기니 우라칸 스파이더 LP640-4',
+  description: '무사고 | 짧은 주행',
+  year: '20/03',
+  fuel: ['gasoline', 'diesel', 'eletric'][randomIndex(2)],
+  mileage: [3000, 1000, 6000][randomIndex(2)],
+  price: 0,
+  dealer: '슈퍼카마켓',
 }));
 
 const magazineImages = [
@@ -87,27 +90,6 @@ export function handlers() {
   ];
 }
 
-const getMarketList: Parameters<typeof rest.get>[1] = (req, res, ctx) => {
-  const { searchParams } = req.url;
-  const size = Number(searchParams.get('pageSize')) || 12;
-  // const category = Number(searchParams.get('category')) || 12;
-  const page = Number(searchParams.get('page')) || 1;
-  const totalCount = marketList.length;
-  const totalPages = Math.round(totalCount / size);
-  return res(
-    ctx.status(200),
-    ctx.json({
-      data: marketList.slice(page * size, page * size + size),
-      page,
-      pageSize: size,
-      totalCount,
-      totalPages,
-      isLastPage: totalPages <= page,
-      isFirstPage: page === 0,
-    })
-  );
-};
-
 const getMagazineList: Parameters<typeof rest.get>[1] = (req, res, ctx) => {
   const { searchParams } = req.url;
   const size = Number(searchParams.get('pageSize')) || 12;
@@ -118,6 +100,27 @@ const getMagazineList: Parameters<typeof rest.get>[1] = (req, res, ctx) => {
     ctx.status(200),
     ctx.json<MagazineResponse<MagazineDto>>({
       data: magazineList.slice(page * size, page * size + size),
+      page,
+      pageSize: size,
+      totalCount,
+      totalPages,
+      isLastPage: totalPages <= page,
+      isFirstPage: page === 0,
+    })
+  );
+};
+
+const getMarketList: Parameters<typeof rest.get>[1] = (req, res, ctx) => {
+  const { searchParams } = req.url;
+  console.log(searchParams);
+  const size = Number(searchParams.get('viewSize')) || 20;
+  const page = Number(searchParams.get('page')) || 1;
+  const totalCount = marketList.length;
+  const totalPages = Math.round(totalCount / size);
+  return res(
+    ctx.status(200),
+    ctx.json<MarketResponse<MarketDto>>({
+      data: marketList.slice(page * size, page * size + size),
       page,
       pageSize: size,
       totalCount,

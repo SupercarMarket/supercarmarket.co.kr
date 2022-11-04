@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 export const MarketFilterContainer = styled.div`
   width: 1200px;
+  height: 350px;
 `;
 
 export const MarketFilterArea = styled.div`

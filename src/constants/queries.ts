@@ -16,9 +16,9 @@ const queries = {
    */
   market: {
     all: ['market'] as const,
-    lists: () => [...queries.market.all, 'list'] as const,
-    best: () => [...queries.market.lists(), 'best'] as const,
-    new: () => [...queries.market.lists(), 'new'] as const,
+    lists: (marketKey: string[]) => [...queries.market.all, 'list', ...marketKey] as const,
+    best: () => [...queries.market.lists([]), 'best'] as const,
+    new: () => [...queries.market.lists([]), 'new'] as const,
   },
   /**
    * Magazine Query Keys

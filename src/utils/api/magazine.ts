@@ -12,6 +12,8 @@ const magazineApi: NextApiHandler = async (_, res) => {
 
     if (!response.ok) throw new Error('invalid api');
 
+    console.log('response', response);
+
     const magazine: MagazineResponse<MagazineDto> = await response.json();
 
     const magazineWithBluredImage = await Promise.all(

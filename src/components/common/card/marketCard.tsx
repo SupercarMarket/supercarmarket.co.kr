@@ -4,7 +4,7 @@ import { MarketDto, WithBlurredImage } from 'types/market';
 import Container from '../container';
 import Typography from '../typography';
 
-const MarketCard = ({ title, imgSrc, base64 }: WithBlurredImage<MarketDto>) => {
+const MarketCard = ({ carName, imgSrc, base64 }: WithBlurredImage<MarketDto>) => {
   return (
     <Container
       position="relative"
@@ -33,7 +33,7 @@ const MarketCard = ({ title, imgSrc, base64 }: WithBlurredImage<MarketDto>) => {
           marginTop: '20px',
         }}
       >
-        {title}
+        {carName}
       </Typography>
       <Typography
         fontSize="body-14"

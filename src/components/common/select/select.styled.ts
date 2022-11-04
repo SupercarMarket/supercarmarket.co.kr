@@ -26,7 +26,11 @@ export const Backdrop = styled.div<{ toggle: boolean }>`
     `}
 `;
 
-export const SelectCurrentButton = styled.button`
+interface AlignProps {
+  align?: 'left' | 'center' | 'right';
+}
+
+export const SelectCurrentButton = styled.button<AlignProps>`
   box-sizing: border-box;
   position: relative;
   width: 100%;
@@ -39,17 +43,31 @@ export const SelectCurrentButton = styled.button`
   border: 1px solid ${({ theme }) => theme.color['greyScale-4']};
   border-radius: 4px;
   cursor: pointer;
+
+  ${({ align }) =>
+    align &&
+    css`
+      justify-content: ${align === 'left'
+        ? 'space-between'
+        : align === 'center'
+        ? 'center'
+        : 'flex-end'};
+    `};
+
+  svg {
+    margin-left: 5px;
+  }
 `;
 
 interface SelectOptionListProps {
   width?: string;
   toggle: boolean;
+  over?: boolean;
 }
 
 export const SelectOptionList = styled.ul<SelectOptionListProps>`
   box-sizing: border-box;
   width: ${({ width }) => width}px;
-  max-height: 200px;
   display: none;
   position: absolute;
   overflow: scroll;
@@ -64,6 +82,13 @@ export const SelectOptionList = styled.ul<SelectOptionListProps>`
     css`
       display: block;
     `}
+
+  ${({ over }) =>
+    over &&
+    css`
+      max-height: 200px;
+      overflow: scroll;
+    `}
 `;
 
 export const SelectOptionItem = styled.li``;
@@ -75,4 +100,14 @@ export const SelectOptionButton = styled(SelectCurrentButton)`
     color: #b79f7b;
     background: ${({ theme }) => theme.color['greyScale-2']};
   }
+
+  ${({ align }) =>
+    align &&
+    css`
+      justify-content: ${align === 'left'
+        ? 'space-between'
+        : align === 'center'
+        ? 'center'
+        : 'flex-end'};
+    `};
 `;

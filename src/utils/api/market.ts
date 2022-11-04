@@ -3,10 +3,13 @@ import { getPlaiceholder } from 'plaiceholder';
 import { MarketDto, MarketResponse } from 'types/market';
 import { getErrorMessage } from 'utils/misc';
 
-const marketApi: NextApiHandler = async (_, res) => {
+const marketApi: NextApiHandler = async (req, res) => {
+  const query = req.url?.split('?')[1];
+  console.log('query', query);
+
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_URL}/server/api/v1/market`,
+     `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/shop?${query}`,
       {
         method: 'GET',
       }
@@ -14,10 +17,10 @@ const marketApi: NextApiHandler = async (_, res) => {
 
     if (!response.ok) throw new Error('invalid api');
 
-    const market: MarketResponse<MarketDto> = await response.json();
+    const markets: MarketResponse<MarketDto> = await response.json();
 
-    const marketWithBluredImage = await Promise.all(
-      market.data.map(async (m) => {
+    const marketsWithBluredImage = await Promise.all(
+      markets.data.map(async (m) => {
         const { base64 } = await getPlaiceholder(m.imgSrc);
         return {
           ...m,
@@ -27,8 +30,8 @@ const marketApi: NextApiHandler = async (_, res) => {
     ).then((v) => v);
 
     return res.status(200).json({
-      ...market,
-      data: marketWithBluredImage,
+      ...markets,
+      data: marketsWithBluredImage,
     });
   } catch (e) {
     throw new Error(getErrorMessage(e));

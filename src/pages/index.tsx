@@ -17,7 +17,7 @@ const Home = () => {
   const { data: marketBest } = useHome<MarketDto>('best');
   const { data: marketNew } = useHome<MarketDto>('new');
   const { data: communityBest } = useHome<CommunityDto>('community');
-
+  
   return (
     <Container>
       <Title>슈마매거진</Title>

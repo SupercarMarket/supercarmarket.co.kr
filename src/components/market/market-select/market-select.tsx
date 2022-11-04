@@ -63,6 +63,7 @@ const MarketSelect = ({
             select={firstSelect}
             changeSelect={changeFirstSelect}
             optionSet={optionSet}
+            overflow={true}
           />
           {secondLabel && (
             <>
@@ -73,6 +74,7 @@ const MarketSelect = ({
                 select={secondSelect}
                 changeSelect={changeSecondSelect}
                 optionSet={optionSet}
+                overflow={true}
               />
             </>
           )}
