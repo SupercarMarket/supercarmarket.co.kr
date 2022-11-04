@@ -24,7 +24,7 @@ export interface MarketDto {
   fuel: string;
   mileage: number;
   price: number;
-  seller: string;
+  dealer: string;
   imgSrc: string;
 }
 

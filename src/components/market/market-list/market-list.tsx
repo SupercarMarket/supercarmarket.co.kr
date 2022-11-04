@@ -68,7 +68,6 @@ const MarketList = ({
           </S.ViewButton>
         </S.ButtonBox>
       </S.ListFilter>
-
       {listView ? (
         <S.MarketTable>
           <S.MarketTHead>

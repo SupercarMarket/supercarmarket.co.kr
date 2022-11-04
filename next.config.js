@@ -11,7 +11,10 @@ const nextConfig = {
     },
   },
   images: {
-    domains: ['user-images.githubusercontent.com'],
+    domains: [
+      'user-images.githubusercontent.com',
+      'supercarmarket-bucket.s3.ap-northeast-2.amazonaws.com',
+    ],
   },
   experimental: {
     esmExternals: false,
@@ -20,7 +23,8 @@ const nextConfig = {
     return [
       {
         source: '/server/:path*',
-        destination: 'https://server/:path*',
+        destination: 'http://15.164.104.63/:path*',
+        // destination: 'https://server/:path*',
       },
     ];
   },

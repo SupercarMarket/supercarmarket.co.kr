@@ -102,7 +102,7 @@ export const FIRST_MARKET_FILTER = [
   {
     label: {
       subject: '연식',
-      dataName: 'year',
+      dataName: 'date',
     },
     firstLabel: '최소',
     secondLabel: '최대',
@@ -124,7 +124,7 @@ export const FIRST_MARKET_FILTER = [
     },
     firstLabel: '최소',
     secondLabel: '최대',
-    optionSet: CAR_FILTER_MILEAGE(2000, 10000, 2000),
+    optionSet: CAR_FILTER_MILEAGE(2000, 30000, 2000),
   },
   {
     label: {
@@ -134,8 +134,9 @@ export const FIRST_MARKET_FILTER = [
     firstLabel: '선택',
     secondLabel: undefined,
     optionSet: [
-      { option: '경유', value: 'diesel' },
+      { option: '디젤', value: 'diesel' },
       { option: '가솔린', value: 'gasoline' },
+      { option: '전기', value: 'electric' },
     ],
   },
 ];

@@ -5,11 +5,12 @@ import { getErrorMessage } from 'utils/misc';
 
 const marketApi: NextApiHandler = async (req, res) => {
   const query = req.url?.split('?')[1];
-  console.log(query);
+  console.log('query', query);
 
   try {
     const response = await fetch(
-      `http://localhost:3000/server/api/v1/market?${query}`,
+      // `http://localhost:3000/server/api/v1/market?${query}`,
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/shop?${query}`,
       {
         method: 'GET',
       }
@@ -18,6 +19,7 @@ const marketApi: NextApiHandler = async (req, res) => {
     if (!response.ok) throw new Error('invalid api');
 
     const markets: MarketResponse<MarketDto> = await response.json();
+
 
     const marketsWithBluredImage = await Promise.all(
       markets.data.map(async (m) => {
@@ -28,6 +30,8 @@ const marketApi: NextApiHandler = async (req, res) => {
         };
       })
     ).then((v) => v);
+
+    console.log('marketsWithBluredImage', marketsWithBluredImage);
 
     return res.status(200).json({
       ...markets,

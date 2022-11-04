@@ -4,7 +4,10 @@ import Image from 'next/image';
 import React from 'react';
 import { WithBlurredImage } from 'types/magazine';
 import { MarketDto } from 'types/market';
-import { convertMileageToKilometers } from 'utils/market/market-list';
+import {
+  convertMileageToKilometers,
+  convertPriceToWon,
+} from 'utils/market/market-list';
 
 import * as S from './market-row.styled';
 
@@ -17,7 +20,7 @@ const MarketRow = ({
   imgSrc,
   mileage,
   price,
-  seller,
+  dealer,
   year,
 }: WithBlurredImage<MarketDto>) => {
   return (
@@ -56,14 +59,14 @@ const MarketRow = ({
         </Typography>
       </S.MarketTableData>
       <S.MarketTableData>
-        <Typography fontSize="body-14" color="system-1">
-          {price ? price : '상담'}
+        <Typography fontSize="body-14" fontWeight="bold" color="system-1">
+          {price ? convertPriceToWon(price) : '상담'}
         </Typography>
       </S.MarketTableData>
       <S.MarketTableData
         style={{ width: '120px', wordBreak: 'break-all', padding: '15px' }}
       >
-        <Typography fontSize="body-14">{seller}</Typography>
+        <Typography fontSize="body-14">{dealer}</Typography>
       </S.MarketTableData>
     </S.MarketTableRow>
   );

@@ -1,6 +1,6 @@
 import Button from 'components/common/button';
 import Typography from 'components/common/typography';
-import React from 'react';
+import React, { memo } from 'react';
 
 import ArrowRight from '../../../assets/svg/arrow-right.svg';
 import * as S from './market-banner.styled';
@@ -17,7 +17,11 @@ const MarketBanner = () => {
         </Typography>
       </S.Paragraph>
       <S.BannerButtonArea>
-        <Button variant="Black" border="rounded" suffix={<ArrowRight fill='white' />}>
+        <Button
+          variant="Black"
+          border="rounded"
+          suffix={<ArrowRight fill="white" />}
+        >
           등록 문의하기
         </Button>
       </S.BannerButtonArea>
@@ -25,4 +29,4 @@ const MarketBanner = () => {
   );
 };
 
-export default MarketBanner;
+export default memo(MarketBanner);

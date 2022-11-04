@@ -1,3 +1,4 @@
+import Container from 'components/common/container/container';
 import Typography from 'components/common/typography';
 import { FUEL_KIND } from 'constants/market';
 import Image from 'next/image';
@@ -20,7 +21,7 @@ const MarketCard = ({
   year,
 }: WithBlurredImage<MarketDto>) => {
   return (
-    <S.MarketCard key={id}>
+    <Container width="285px" display="flex" flexDirection="column" key={id}>
       <S.DivideArea style={{ marginBottom: '20px' }}>
         <Image
           width={285}
@@ -33,16 +34,21 @@ const MarketCard = ({
           style={{ borderRadius: '4px' }}
         />
       </S.DivideArea>
-      <S.DivideArea style={{ marginBottom: '4px' }}>
-        <Typography fontSize="header-16" fontWeight="bold">
-          {carName}
-        </Typography>
-      </S.DivideArea>
-      <S.DivideArea style={{ marginBottom: '12.5px' }}>
-        <Typography fontSize="body-14" lineHeight="150%" color="greyScale-5">
-          {description}
-        </Typography>
-      </S.DivideArea>
+      <Typography
+        fontSize="header-16"
+        fontWeight="bold"
+        style={{ marginBottom: '4px' }}
+      >
+        {carName}
+      </Typography>
+      <Typography
+        fontSize="body-14"
+        lineHeight="150%"
+        color="greyScale-5"
+        style={{ marginBottom: '12.5px' }}
+      >
+        {description}
+      </Typography>
       <S.DivideArea
         style={{
           display: 'flex',
@@ -51,7 +57,7 @@ const MarketCard = ({
           marginBottom: '12.5px',
         }}
       >
-        <Typography fontSize="body-14">{year}</Typography>
+        <Typography fontSize="body-14">{`${year}`}</Typography>
         <S.Divider />
         <Typography fontSize="body-14">{FUEL_KIND[fuel]}</Typography>
         <S.Divider />
@@ -59,12 +65,10 @@ const MarketCard = ({
           {convertMileageToKilometers(mileage)}
         </Typography>
       </S.DivideArea>
-      <S.DivideArea>
-        <Typography fontSize="body-14" color="system-1">
-          {price ? price : '상담'}
-        </Typography>
-      </S.DivideArea>
-    </S.MarketCard>
+      <Typography fontSize="body-14" fontWeight="bold" color="system-1">
+        {price ? price : '상담'}
+      </Typography>
+    </Container>
   );
 };
 

@@ -1,20 +1,30 @@
 import { UseMarketFilterStates } from 'hooks/market/useMarketFilter';
 
-export default function makeMarketQueries(
-  queries: UseMarketFilterStates,
-  kind: string,
-  page: number
-) {
-  const { filterList, orderSelect, viewCount } = queries;
+interface MakeMarketQueriesProps {
+  states: UseMarketFilterStates;
+  page: number;
+  category: string;
+}
+
+export default function makeMarketQueries({
+  states,
+  page,
+  category,
+}: MakeMarketQueriesProps) {
+  const { filterList, orderSelect, viewCount } = states;
   const fList = filterList
     .map(({ dataName, value }) => {
       if (
         dataName === 'price' ||
-        dataName === 'year' ||
+        dataName === 'date' ||
         dataName === 'mileage'
       ) {
         const [rowValue, highValue] = value.split(' ');
-        return `low_${dataName}=${rowValue}&high_${dataName}=${highValue}`;
+        return `min${dataName.replace(/^[a-z]/, (char) =>
+          char.toUpperCase()
+        )}=${rowValue}&max${dataName.replace(/^[a-z]/, (char) =>
+          char.toUpperCase()
+        )}=${highValue}`;
       }
       return `${dataName}=${value}`;
     })
@@ -26,7 +36,10 @@ export default function makeMarketQueries(
   const [viewCountName, viewCountValue] = viewCount.value.split(' ');
   const vList = `${viewCountName}=${viewCountValue}`;
 
-  const merged = `${fList}&${oList}&${vList}&category=${kind}&page=${page}`;
+  // const merged = `category=${category}&page=${page}&${fList}&${oList}&${vList}`;
+  const merged = `category=슈퍼카&${fList}&${oList}&${vList}&page=${page}`;
+
+  console.log(merged);
 
   return merged;
 }

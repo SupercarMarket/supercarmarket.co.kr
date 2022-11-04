@@ -1,5 +1,6 @@
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import Container from 'components/common/container';
+import Searchbar from 'components/common/searchbar';
 import layout from 'components/layout';
 import MarketBanner from 'components/market/market-banner';
 import MarketCarKind from 'components/market/market-car-category';
@@ -26,34 +27,39 @@ const MarketFilterPage = ({ category }: MarketFilterPageProps) => {
   );
 
   const [states, actions] = useMarketFilter();
-  const { data: markets, isFetching } = useMarket(
-    makeMarketQueries(states, category, page),
+  const { data: markets } = useMarket(
+    makeMarketQueries({ states, category, page }),
     { keepPreviousData: true }
   );
 
   return (
-    <Container
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-      margin="20px 0 0 0"
-    >
-      <div style={{ width: '1200px' }}>
-        <MarketBanner />
-        <MarketCarKind category={category} />
-        <MarketFilter
-          filterList={states.filterList}
-          changeFilters={actions.changeFilters}
+    <Container display="flex" flexDirection="column" margin="20px 0 0 0">
+      <MarketBanner />
+      <Container
+        height="212px"
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <Searchbar
+          variant="Line"
+          width="880px"
+          placeholder="원하는 차량을 검색하세요"
         />
-        {markets && (
-          <MarketList
-            data={markets}
-            states={states}
-            actions={actions}
-            page={page}
-          />
-        )}
-      </div>
+      </Container>
+      <MarketCarKind category={category} />
+      <MarketFilter
+        filterList={states.filterList}
+        changeFilters={actions.changeFilters}
+      />
+      {markets && (
+        <MarketList
+          data={markets}
+          states={states}
+          actions={actions}
+          page={page}
+        />
+      )}
     </Container>
   );
 };
@@ -65,19 +71,21 @@ const queryClient = new QueryClient();
 export const getServerSideProps = async (ctx: NextPageContext) => {
   const { category } = ctx.query;
 
-  if (!category || !CATEGORY_VALUES.includes(category as string)) {
+  if (!category || !CATEGORY_VALUES.includes(category as string))
     return {
       redirect: {
         destination: '/market/all',
         permanent: false,
       },
     };
-  }
 
   queryClient.prefetchQuery(queries.market.lists([]), () =>
-    fetch('http://localhost:3000/api/magazine', {
-      method: 'GET',
-    }).then((res) => res.json())
+    fetch(
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/shop?category=슈퍼카`,
+      {
+        method: 'GET',
+      }
+    ).then((res) => res.json())
   );
 
   return {

@@ -28,7 +28,7 @@ const marketList = Array.from(Array(1024)).map(() => ({
   fuel: 'gasoline',
   mileage: 3000,
   price: 0,
-  seller: '슈퍼카마켓',
+  dealer: '슈퍼카마켓',
 }));
 
 /**
