@@ -11,7 +11,10 @@ const nextConfig = {
     },
   },
   images: {
-    domains: ['user-images.githubusercontent.com'],
+    domains: [
+      'user-images.githubusercontent.com',
+      'supercarmarket-bucket.s3.ap-northeast-2.amazonaws.com',
+    ],
   },
   experimental: {
     esmExternals: false,
