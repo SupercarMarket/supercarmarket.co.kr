@@ -6,16 +6,18 @@ import Magazine from 'components/home/magazine/magazine';
 import { MarketBest, MarketNew } from 'components/home/market';
 import Layout from 'components/layout';
 import queries from 'constants/queries';
-import useCommunityBest from 'hooks/queries/useCommunityBest';
-import useMagazine from 'hooks/queries/useMagazine';
-import useMarket from 'hooks/queries/useMarket';
+import useHome from 'hooks/queries/home/userHomeMagazine';
 import { GetServerSideProps } from 'next';
+import { CommunityDto } from 'types/community';
+import { MagazineDto } from 'types/magazine';
+import { MarketDto } from 'types/market';
 
 const Home = () => {
-  const { data: magazine } = useMagazine();
-  const { data: marketBest } = useMarket();
-  const { data: marketNew } = useMarket();
-  const { data: communityBest } = useCommunityBest();
+  const { data: magazine } = useHome<MagazineDto>('magazine');
+  const { data: marketBest } = useHome<MarketDto>('best');
+  const { data: marketNew } = useHome<MarketDto>('new');
+  const { data: communityBest } = useHome<CommunityDto>('community');
+
   return (
     <Container>
       <Title>슈마매거진</Title>
