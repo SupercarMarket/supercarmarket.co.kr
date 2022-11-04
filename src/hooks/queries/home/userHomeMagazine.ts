@@ -6,7 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 import queries from 'constants/queries';
 import { MagazineResponse, WithBlurredImage } from 'types/magazine';
 
-const getServerCategoryQuery = (query: keyof typeof queries.home) => {
+export const getServerCategoryQuery = (query: keyof typeof queries.home) => {
   if (query === 'best') return 'interestProduct';
   if (query === 'new') return 'latestProduct';
   return query;

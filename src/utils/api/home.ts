@@ -1,3 +1,4 @@
+import { getServerCategoryQuery } from 'hooks/queries/home/userHomeMagazine';
 import type { NextApiHandler } from 'next/types';
 import { getPlaiceholder } from 'plaiceholder';
 import { CommunityDto } from 'types/community';
@@ -14,7 +15,9 @@ const homeApi: NextApiHandler = async (req, res) => {
 
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/main?category=${category}`,
+      `${
+        process.env.NEXT_PUBLIC_SERVER_URL
+      }/supercar/v1/main?category=${getServerCategoryQuery(category as any)}`,
       {
         method: 'GET',
       }
