@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import Avvvatars from 'avvvatars-react';
 import Image from 'next/image';
 import type { CommunityDto } from 'types/community';
@@ -71,13 +70,6 @@ const CommunityCard = ({
       </Styled.CommunityTitleWrapper>
       <Styled.CommunityInfoWrapper></Styled.CommunityInfoWrapper>
     </Container>
-=======
-const CommunityCard = () => {
-  return (
-    <div>
-      <h1></h1>
-    </div>
->>>>>>> b1e228b (feat: add home market components)
   );
 };
 
