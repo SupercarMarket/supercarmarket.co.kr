@@ -9,7 +9,7 @@ import * as Styled from './card.styled';
 
 const CommunityCard = ({
   profileImgSrc,
-  thumbnailImgSrc,
+  imgSrc,
   title,
   nickName,
   base64,
@@ -20,7 +20,7 @@ const CommunityCard = ({
   return (
     <Container>
       <Image
-        src={thumbnailImgSrc}
+        src={imgSrc}
         alt="thumbnail"
         width={285}
         height={180}

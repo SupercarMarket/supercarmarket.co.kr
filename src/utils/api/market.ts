@@ -9,8 +9,7 @@ const marketApi: NextApiHandler = async (req, res) => {
 
   try {
     const response = await fetch(
-      // `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/shop?${query}`,
-      `http://localhost:3000/server/api/v1/market?${query}`,
+     `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/shop?${query}`,
       {
         method: 'GET',
       }
