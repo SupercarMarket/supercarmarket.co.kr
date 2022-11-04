@@ -1,5 +1,17 @@
 const queries = {
   /**
+   * Home Query Keys
+   */
+  home: {
+    all: ['home'] as const,
+    magazine: () => [...queries.home.all, 'magazine'] as const,
+    market: () => [...queries.home.all, 'market'] as const,
+    community: () => [...queries.home.all, 'community'] as const,
+    partnership: () => [...queries.home.all, 'partnership'] as const,
+    new: () => [...queries.home.all, 'new'] as const,
+    best: () => [...queries.home.all, 'best'] as const,
+  },
+  /**
    * Market Query Keys
    */
   market: {
