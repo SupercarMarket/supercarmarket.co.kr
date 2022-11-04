@@ -1,22 +1,22 @@
 import { FormEvent } from 'react';
 
-export interface MarketOptionType {
+interface MarketOptionType {
   option: string;
   value: string;
 }
 
-export interface MarketLabelType {
+interface MarketLabelType {
   subject: string;
   dataName: string;
 }
 
-export interface MarketFormTarget extends FormEvent<HTMLFormElement> {
+interface MarketFormTarget extends FormEvent<HTMLFormElement> {
   target: HTMLFormElement;
 }
 
-export type FilterType = MarketOptionType & MarketLabelType;
+type FilterType = MarketOptionType & MarketLabelType;
 
-export interface MarketDto {
+interface MarketDto {
   id: string;
   carName: string;
   description: string;
@@ -28,7 +28,11 @@ export interface MarketDto {
   imgSrc: string;
 }
 
-export interface MarketResponse<T> {
+type WithBlurredImage<T> = {
+  base64: string;
+} & T;
+
+interface MarketResponse<T> {
   data: T[];
   page: number;
   pageSize: number;
@@ -37,3 +41,13 @@ export interface MarketResponse<T> {
   isLastPage: boolean;
   isFirstPage: boolean;
 }
+
+export type {
+  FilterType,
+  MarketDto,
+  MarketFormTarget,
+  MarketLabelType,
+  MarketOptionType,
+  MarketResponse,
+  WithBlurredImage,
+};
