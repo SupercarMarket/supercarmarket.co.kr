@@ -35,7 +35,6 @@ const CommunityCard = ({
             alt="profile"
             width={24}
             height={24}
-            layout="fixed"
             style={{
               borderRadius: '12px',
             }}
