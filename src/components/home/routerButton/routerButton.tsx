@@ -1,5 +1,5 @@
 import Button from 'components/common/button';
-import Link from 'components/common/link';
+import Link from 'next/link';
 import type { ReactNode } from 'react';
 
 import Arrow from '../../../assets/svg/arrow-right.svg';
