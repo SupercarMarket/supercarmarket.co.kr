@@ -1,8 +1,8 @@
 import Button from 'components/common/button';
-import Link from 'components/common/link';
 import Logo from 'components/common/logo';
 import Searchbar from 'components/common/searchbar';
 import Typography from 'components/common/typography';
+import Link from 'next/link';
 
 import * as Styled from './header.styled';
 

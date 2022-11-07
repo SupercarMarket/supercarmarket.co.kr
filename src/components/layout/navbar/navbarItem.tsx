@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import Link from 'components/common/link';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { memo } from 'react';
 
@@ -17,7 +17,13 @@ const NavbarItem = memo(function NavbarItem({
       {subMenu?.length && (
         <ul data-active={active} className={clsx('navbarItem')}>
           {subMenu.map((s) => (
-            <Link key={s.title} width="100%" href={'/' + link + '/' + s.link}>
+            <Link
+              key={s.title}
+              style={{
+                width: '100%',
+              }}
+              href={'/' + link + '/' + s.link}
+            >
               <li
                 data-active={pathname.includes(s.link)}
                 className={clsx('navbarItem-li')}

@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { ReactNode, useMemo } from 'react';
 import { memo } from 'react';
@@ -7,7 +8,6 @@ import ArrowLeft from '../../../assets/svg/arrow-left.svg';
 import ArrowLeftTwo from '../../../assets/svg/arrow-left-two.svg';
 import ArrowRight from '../../../assets/svg/arrow-right.svg';
 import Container from '../container';
-import Link from '../link';
 import { PaginationButton, PaginationItemContainer } from './pagination.styled';
 
 interface PaginationItemProps {
