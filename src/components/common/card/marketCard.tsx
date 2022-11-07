@@ -4,7 +4,11 @@ import { MarketDto, WithBlurredImage } from 'types/market';
 import Container from '../container';
 import Typography from '../typography';
 
-const MarketCard = ({ carName, imgSrc, base64 }: WithBlurredImage<MarketDto>) => {
+const MarketCard = ({
+  carName,
+  imgSrc,
+  base64,
+}: WithBlurredImage<MarketDto>) => {
   return (
     <Container
       position="relative"
@@ -17,7 +21,6 @@ const MarketCard = ({ carName, imgSrc, base64 }: WithBlurredImage<MarketDto>) =>
         alt="thumbnail"
         width={280}
         height={180}
-        layout="fixed"
         placeholder="blur"
         blurDataURL={base64}
         style={{

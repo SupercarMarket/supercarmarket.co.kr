@@ -31,7 +31,6 @@ const MarketRow = ({
           height={124}
           placeholder="blur"
           blurDataURL={base64}
-          layout="fixed"
           src={imgSrc}
           alt="thumbnail"
           style={{ borderRadius: '4px' }}
