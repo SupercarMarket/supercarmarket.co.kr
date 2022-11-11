@@ -1,4 +1,7 @@
+const { withPlaiceholder } = require('@plaiceholder/next');
+
 /** @type {import('next').NextConfig} */
+
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
@@ -27,22 +30,25 @@ const nextConfig = {
       },
     ];
   },
-  webpack(config) {
+  webpack(config, { dev, isServer }) {
     const prod = process.env.NODE_ENV === 'production';
     const plugins = [...config.plugins];
+
     config.module.rules.push({
       test: /\.svg$/i,
       issuer: /\.[jt]sx?$/,
       use: ['@svgr/webpack'],
     });
 
+    if (!dev) config.devtool = isServer ? false : 'nosources-source-map';
+    if (!isServer) config.resolve.fallback = { fs: false };
+
     return {
       ...config,
       mode: prod ? 'production' : 'development',
-      devtool: prod ? 'hidden-source-map' : 'eval',
       plugins,
     };
   },
 };
 
-module.exports = nextConfig;
+module.exports = withPlaiceholder(nextConfig);

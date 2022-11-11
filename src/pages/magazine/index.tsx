@@ -39,7 +39,7 @@ export const getStaticProps: GetStaticProps = async () => {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery(queries.magazine.lists(), () =>
-    fetch('http://localhost:3000/api/magazine', {
+    fetch(`${process.env.NEXT_PUBLIC_URL}/api/magazine`, {
       method: 'GET',
     }).then((res) => res.json())
   );
