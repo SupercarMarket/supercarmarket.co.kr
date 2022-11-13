@@ -1,7 +1,12 @@
 import Container from 'components/common/container';
-import React from 'react';
+import theme from 'constants/theme';
+import Image from 'next/image';
+import React, { useState } from 'react';
 import { WithBlurredImage } from 'types/market';
 
+import ArrowLeftIcon from '../../../../assets/svg/arrow-left.svg';
+import ArrowRightIcon from '../../../../assets/svg/arrow-right.svg';
+import CheckIcon from '../../../../assets/svg/check.svg';
 import * as S from './market-detail-carousel.styled';
 
 interface MarketDetailCarouselProps {
@@ -9,8 +14,73 @@ interface MarketDetailCarouselProps {
 }
 
 const MarketDetailCarousel = ({ imgSrc }: MarketDetailCarouselProps) => {
-  console.log(imgSrc);
-  return <Container>MarketDetailCarousel</Container>;
+  const [current, setCurrent] = useState<number>(0);
+  const [page, setPage] = useState<number>(1);
+  const isFirst = page === 1;
+  const isLast = page === Math.ceil(imgSrc.length / 8);
+
+  const selectImage = (idx: number) => setCurrent(idx);
+
+  const prev = () => {
+    if (!isFirst) setPage(page - 1);
+  };
+
+  const next = () => {
+    if (!isLast) setPage(page + 1);
+  };
+
+  return (
+    <Container>
+      <S.MainImageWrapper key={current}>
+        <Image
+          width="1200px"
+          height="757px"
+          alt="image1"
+          layout="intrinsic"
+          placeholder="blur"
+          src={imgSrc[current].imgSrc}
+          blurDataURL={imgSrc[current].base64}
+        />
+      </S.MainImageWrapper>
+      <S.CarouselWrapper>
+        <S.ArrowButton position="left" onClick={prev} disabled={isFirst}>
+          <ArrowLeftIcon width="30px" height="30px" />
+        </S.ArrowButton>
+        <S.CarouselArea>
+          <S.CarouselBox page={page}>
+            {imgSrc.map(({ imgSrc, base64 }, idx) => (
+              <S.CarouselImageWrapper
+                key={imgSrc}
+                onClick={() => selectImage(idx)}
+              >
+                <Image
+                  width="141px"
+                  height="89px"
+                  layout="fixed"
+                  alt="image"
+                  placeholder="blur"
+                  src={imgSrc}
+                  blurDataURL={base64}
+                />
+                {current === idx && (
+                  <S.CheckBox>
+                    <CheckIcon
+                      width="30px"
+                      height="30px"
+                      fill={theme.color['greyScale-1']}
+                    />
+                  </S.CheckBox>
+                )}
+              </S.CarouselImageWrapper>
+            ))}
+          </S.CarouselBox>
+        </S.CarouselArea>
+        <S.ArrowButton position="right" onClick={next} disabled={isLast}>
+          <ArrowRightIcon width="30px" height="30px" />
+        </S.ArrowButton>
+      </S.CarouselWrapper>
+    </Container>
+  );
 };
 
 export default MarketDetailCarousel;
