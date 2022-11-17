@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 export const MarketListContainer = styled.div`
   margin-bottom: 80px;
@@ -33,35 +33,6 @@ export const ListFilter = styled.div`
   display: flex;
   justify-content: flex-end;
   margin-bottom: 20px;
-`;
-
-export const MarketTable = styled.table`
-  width: 100%;
-  margin-bottom: 80px;
-`;
-
-export const MarketTHead = styled.thead`
-  height: 41px;
-  background: ${({ theme }) => theme.color['greyScale-2']};
-`;
-
-export const MarketTBody = styled.tbody``;
-
-interface TableHeadProps {
-  width?: string;
-}
-
-export const MarketTableRow = styled.tr`
-  border-bottom: 1px solid ${({ theme }) => theme.color['greyScale-3']};
-`;
-
-export const MarketTableHead = styled.th<TableHeadProps>`
-  vertical-align: middle;
-  ${({ width }) =>
-    width &&
-    css`
-      width: ${width}px;
-    `}
 `;
 
 export const MarketCardList = styled.div`

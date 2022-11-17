@@ -1,13 +1,8 @@
 import Pagination from 'components/common/pagination';
 import Select from 'components/common/select';
-import Typography from 'components/common/typography';
 import MarketCard from 'components/market/market-card';
-import MarketRow from 'components/market/market-row/market-row';
-import {
-  HOW_MANY_RESULT,
-  MARKET_LIST_TABLE_HEAD,
-  ORDER_OPTIONSET,
-} from 'constants/market';
+import MarketTable from 'components/market/market-table';
+import { HOW_MANY_RESULT, ORDER_OPTIONSET } from 'constants/market';
 import {
   UseMarketFilterActions,
   UseMarketFilterStates,
@@ -69,22 +64,7 @@ const MarketList = ({
         </S.ButtonBox>
       </S.ListFilter>
       {listView ? (
-        <S.MarketTable>
-          <S.MarketTHead>
-            <S.MarketTableRow>
-              {MARKET_LIST_TABLE_HEAD.map(({ title, width }) => (
-                <S.MarketTableHead width={width} key={title}>
-                  <Typography fontSize="body-14">{title}</Typography>
-                </S.MarketTableHead>
-              ))}
-            </S.MarketTableRow>
-          </S.MarketTHead>
-          <S.MarketTBody>
-            {markets.map((m) => (
-              <MarketRow key={m.id} {...m} />
-            ))}
-          </S.MarketTBody>
-        </S.MarketTable>
+        <MarketTable markets={markets} />
       ) : (
         <S.MarketCardList>
           {markets.map((m) => (
