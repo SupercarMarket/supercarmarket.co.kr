@@ -27,7 +27,7 @@ const MarketDetailCar = ({
 }: MarketDetailCarProps) => {
   const [y, m] = year.split('/');
   return (
-    <Container>
+    <Container margin="0 0 80px 0">
       <Typography fontSize="header-24" fontWeight="bold">
         차량정보
       </Typography>

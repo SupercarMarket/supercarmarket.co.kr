@@ -5,7 +5,7 @@ const CarInfoCard = styled.div`
   align-items: center;
   flex-wrap: wrap;
   margin-top: 20px;
-  padding: 30px 40px 20px 30px;
+  padding: 30px 40px 20px 40px;
   border: 1px solid ${({ theme }) => theme.color['greyScale-3']};
   border-radius: 4px;
   box-sizing: border-box;

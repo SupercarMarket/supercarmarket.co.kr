@@ -7,8 +7,8 @@ import {
   convertPriceToWon,
 } from 'utils/market/market-list';
 
-import EyeIcon from '../../../../assets/svg/eye.svg';
-import FavoriteBorderIcon from '../../../../assets/svg/favorite-border.svg';
+import EyeIcon from '../../../../../assets/svg/eye.svg';
+import FavoriteBorderIcon from '../../../../../assets/svg/favorite-border.svg';
 import * as S from './market-detail-header.styled';
 
 interface MarketDetailHeaderProps {

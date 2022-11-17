@@ -4,9 +4,9 @@ import Image from 'next/image';
 import React, { useState } from 'react';
 import { WithBlurredImage } from 'types/market';
 
-import ArrowLeftIcon from '../../../../assets/svg/arrow-left.svg';
-import ArrowRightIcon from '../../../../assets/svg/arrow-right.svg';
-import CheckIcon from '../../../../assets/svg/check.svg';
+import ArrowLeftIcon from '../../../../../assets/svg/arrow-left.svg';
+import ArrowRightIcon from '../../../../../assets/svg/arrow-right.svg';
+import CheckIcon from '../../../../../assets/svg/check.svg';
 import * as S from './market-detail-carousel.styled';
 
 interface MarketDetailCarouselProps {

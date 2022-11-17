@@ -5,7 +5,7 @@ import Image from 'next/image';
 import React from 'react';
 import { DealerDto } from 'types/market';
 
-import CallIcon from '../../../../assets/svg/call.svg';
+import CallIcon from '../../../../../assets/svg/call.svg';
 import * as S from './market-detail-dealer.styled';
 
 interface MarketDetailDealerProps {
