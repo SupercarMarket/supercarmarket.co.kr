@@ -1,3 +1,4 @@
+import MarketDetailCar from 'components/market/market-detail/market-detail-car/market-detail-car';
 import MarketDetailCarousel from 'components/market/market-detail/market-detail-carousel/market-detail-carousel';
 import MarketDetailDealer from 'components/market/market-detail/market-detail-dealer/market-detail-dealer';
 import MarketDetailHeader from 'components/market/market-detail/market-detail-header/market-detail-header';
@@ -22,6 +23,10 @@ const MarketDetail = ({ data }: MarketDetailProps) => {
     likeCount,
     imgSrc,
     dealer,
+    color,
+    accident,
+    cc,
+    trasmissionType,
   } = data;
 
   return (
@@ -38,6 +43,15 @@ const MarketDetail = ({ data }: MarketDetailProps) => {
       />
       <MarketDetailCarousel imgSrc={imgSrc} />
       <MarketDetailDealer dealer={dealer} />
+      <MarketDetailCar
+        year={year}
+        mileage={mileage}
+        fuel={fuel}
+        color={color}
+        accident={accident}
+        cc={cc}
+        transmissionType={trasmissionType}
+      />
     </>
   );
 };
