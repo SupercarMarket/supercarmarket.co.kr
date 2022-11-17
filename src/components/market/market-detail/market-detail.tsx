@@ -1,4 +1,5 @@
 import MarketDetailCarousel from 'components/market/market-detail/market-detail-carousel/market-detail-carousel';
+import MarketDetailDealer from 'components/market/market-detail/market-detail-dealer/market-detail-dealer';
 import MarketDetailHeader from 'components/market/market-detail/market-detail-header/market-detail-header';
 import React from 'react';
 import { MarketDetailDto, WithBlurredImage } from 'types/market';
@@ -20,6 +21,7 @@ const MarketDetail = ({ data }: MarketDetailProps) => {
     viewCount,
     likeCount,
     imgSrc,
+    dealer,
   } = data;
 
   return (
@@ -35,6 +37,7 @@ const MarketDetail = ({ data }: MarketDetailProps) => {
         viewCount={viewCount}
       />
       <MarketDetailCarousel imgSrc={imgSrc} />
+      <MarketDetailDealer dealer={dealer} />
     </>
   );
 };

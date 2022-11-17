@@ -78,6 +78,7 @@ interface MarketDetailResponse<T> {
 }
 
 export type {
+  DealerDto,
   FilterType,
   MarketDetailDto,
   MarketDetailResponse,

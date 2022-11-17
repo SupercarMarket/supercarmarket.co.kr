@@ -30,7 +30,7 @@ const MarketDetailCarousel = ({ imgSrc }: MarketDetailCarouselProps) => {
   };
 
   return (
-    <Container>
+    <Container margin="0 0 60px 0">
       <S.MainImageWrapper key={current}>
         <Image
           width="1200px"
