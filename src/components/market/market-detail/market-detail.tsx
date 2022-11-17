@@ -1,4 +1,5 @@
 import {
+  MarketDetailAttached,
   MarketDetailCar,
   MarketDetailCarousel,
   MarketDetailDealer,
@@ -29,6 +30,7 @@ const MarketDetail = ({ data }: MarketDetailProps) => {
     cc,
     trasmissionType,
     introduction,
+    registration,
   } = data;
 
   return (
@@ -55,6 +57,7 @@ const MarketDetail = ({ data }: MarketDetailProps) => {
         transmissionType={trasmissionType}
       />
       <MarketDetailIntroduction introduction={introduction} />
+      <MarketDetailAttached registration={registration} />
     </>
   );
 };
