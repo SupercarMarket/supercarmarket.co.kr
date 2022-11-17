@@ -3,6 +3,7 @@ import {
   MarketDetailCarousel,
   MarketDetailDealer,
   MarketDetailHeader,
+  MarketDetailIntroduction,
 } from 'components/market/market-detail/components';
 import React from 'react';
 import { MarketDetailDto, WithBlurredImage } from 'types/market';
@@ -27,6 +28,7 @@ const MarketDetail = ({ data }: MarketDetailProps) => {
     accident,
     cc,
     trasmissionType,
+    introduction,
   } = data;
 
   return (
@@ -52,6 +54,7 @@ const MarketDetail = ({ data }: MarketDetailProps) => {
         cc={cc}
         transmissionType={trasmissionType}
       />
+      <MarketDetailIntroduction introduction={introduction} />
     </>
   );
 };
