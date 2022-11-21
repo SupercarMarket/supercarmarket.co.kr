@@ -1,8 +1,8 @@
-import styled, { css } from "styled-components";
-
+import styled, { css } from 'styled-components';
 
 export const MarketTableRow = styled.tr`
   border-bottom: 1px solid ${({ theme }) => theme.color['greyScale-3']};
+  cursor: pointer;
 `;
 
 interface TableHeadProps {

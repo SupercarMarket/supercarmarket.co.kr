@@ -2,6 +2,7 @@ import { QueryClient } from '@tanstack/react-query';
 import Container from 'components/common/container';
 import layout from 'components/layout';
 import { MarketDetail } from 'components/market/market-detail';
+import MarketTable from 'components/market/market-table/market-table';
 import queries from 'constants/queries';
 import useMarketDetail from 'hooks/queries/useMarketDetail';
 import { NextPageContext } from 'next';
@@ -24,6 +25,7 @@ const MarketDetailPage = ({ id }: MarketDetailPageProps) => {
       margin="20px 0 0 0"
     >
       <MarketDetail data={data.data} />
+      <MarketTable markets={data.carList} />
     </Container>
   );
 };

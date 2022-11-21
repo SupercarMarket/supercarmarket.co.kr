@@ -1,6 +1,7 @@
 import Container from 'components/common/container/container';
 import Typography from 'components/common/typography';
 import { FUEL_KIND } from 'constants/market';
+import { useRouter } from 'next/dist/client/router';
 import Image from 'next/image';
 import React from 'react';
 import { WithBlurredImage } from 'types/magazine';
@@ -20,9 +21,18 @@ const MarketCard = ({
   price,
   year,
 }: WithBlurredImage<MarketDto>) => {
+  const { push } = useRouter();
+
+  const onClick = (id: string) => {
+    push(`/market/detail/${id}`);
+  };
+
   return (
     <Container width="285px" display="flex" flexDirection="column" key={id}>
-      <S.DivideArea style={{ marginBottom: '20px' }}>
+      <S.DivideArea
+        style={{ marginBottom: '20px' }}
+        onClick={() => onClick(id)}
+      >
         <Image
           width={285}
           height={180}

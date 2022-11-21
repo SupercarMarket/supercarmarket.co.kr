@@ -1,6 +1,7 @@
 import Typography from 'components/common/typography';
 import { FUEL_KIND } from 'constants/market';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import React from 'react';
 import { WithBlurredImage } from 'types/magazine';
 import { MarketDto } from 'types/market';
@@ -23,8 +24,14 @@ const MarketRow = ({
   dealer,
   year,
 }: WithBlurredImage<MarketDto>) => {
+  const { push } = useRouter();
+
+  const onClick = (id: string) => {
+    push(`/market/detail/${id}`);
+  };
+
   return (
-    <S.MarketTableRow key={id}>
+    <S.MarketTableRow key={id} onClick={() => onClick(id)}>
       <S.MarketTableData>
         <Image
           width={196}

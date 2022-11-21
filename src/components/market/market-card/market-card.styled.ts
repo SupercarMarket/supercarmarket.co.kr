@@ -5,7 +5,9 @@ export const MarketCard = styled.div`
   height: 302px;
 `;
 
-export const DivideArea = styled.div``;
+export const DivideArea = styled.div`
+  cursor: pointer;
+`;
 
 export const Divider = styled.div`
   display: inline-block;
