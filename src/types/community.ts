@@ -7,6 +7,7 @@ interface CommunityDto {
   like: number;
   profileSrc: string | null;
   imgSrc: string;
+  thumbnailImgSrc: string;
 }
 
 interface CommunityBestResponse<T> {

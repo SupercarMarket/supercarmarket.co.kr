@@ -20,7 +20,7 @@ const CommunityCard = ({
   return (
     <Container>
       <Image
-        src={imgSrc}
+        src={thumbnailImgSrc}
         alt="thumbnail"
         width={285}
         height={180}
