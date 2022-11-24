@@ -1,10 +1,13 @@
-import { getServerCategoryQuery } from 'hooks/queries/home/userHomeMagazine';
+import { getServerCategoryQuery } from 'hooks/queries/home/useHome';
 import type { NextApiHandler } from 'next/types';
 import { getPlaiceholder } from 'plaiceholder';
 import { CommunityDto } from 'types/community';
 import { MagazineDto, MagazineResponse } from 'types/magazine';
 import { MarketDto } from 'types/market';
+import { ServerApiError } from 'utils/error';
 import { getErrorMessage } from 'utils/misc';
+
+import fetcher, { FetcherRequestInit } from './fetcher';
 
 const homeApi: NextApiHandler = async (req, res) => {
   const { query } = req;
@@ -23,14 +26,15 @@ const homeApi: NextApiHandler = async (req, res) => {
       }
     );
 
-    if (!response.ok) throw new Error('invalid api');
+    if (!response.ok) throw new ServerApiError(response.url);
 
     const home: MagazineResponse<MagazineDto | MarketDto | CommunityDto> =
       await response.json();
 
     const homeWithBluredImage = await Promise.all(
       home.data.map(async (m) => {
-        const { base64 } = await getPlaiceholder(m.imgSrc);
+        const imgSrc = category === 'community' ? m.thumbnailImgSrc : m.imgSrc;
+        const { base64 } = await getPlaiceholder(imgSrc);
         return {
           ...m,
           base64,
@@ -47,4 +51,16 @@ const homeApi: NextApiHandler = async (req, res) => {
   }
 };
 
-export { homeApi };
+const homeApiFetcher = async (url: string, options: FetcherRequestInit) => {
+  try {
+    const response = await fetcher(url, options);
+
+    if (!response.ok) throw new ServerApiError(response.url);
+
+    return await response.json();
+  } catch (error) {
+    getErrorMessage(error);
+  }
+};
+
+export { homeApi, homeApiFetcher };

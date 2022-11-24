@@ -5,11 +5,10 @@ import { getErrorMessage } from 'utils/misc';
 
 const marketApi: NextApiHandler = async (req, res) => {
   const query = req.url?.split('?')[1];
-  console.log('query', query);
 
   try {
     const response = await fetch(
-     `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/shop?${query}`,
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/shop?${query}`,
       {
         method: 'GET',
       }
