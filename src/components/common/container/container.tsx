@@ -15,6 +15,9 @@ interface ContainerProps {
   justifyContent?: CSSProperties['justifyContent'];
   alignItems?: CSSProperties['alignItems'];
   gap?: CSSProperties['gap'];
+  border?: CSSProperties['border'];
+  borderRadius?: CSSProperties['borderRadius'];
+  boxSizing?: CSSProperties['boxSizing'];
 }
 
 const Container = (props: ContainerProps) => {
@@ -30,6 +33,9 @@ const Container = (props: ContainerProps) => {
     flexDirection,
     alignItems,
     gap,
+    border,
+    borderRadius,
+    boxSizing = 'border-box',
     className,
     children,
   } = props;
@@ -45,10 +51,13 @@ const Container = (props: ContainerProps) => {
         margin,
         position,
         display,
+        boxSizing,
         flexDirection,
         justifyContent,
         alignItems,
         gap,
+        border,
+        borderRadius,
         maxWidth: '100%',
       }}
     >
