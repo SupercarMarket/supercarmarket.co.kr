@@ -33,8 +33,7 @@ const homeApi: NextApiHandler = async (req, res) => {
 
     const homeWithBluredImage = await Promise.all(
       home.data.map(async (m) => {
-        const imgSrc = category === 'community' ? m.thumbnailImgSrc : m.imgSrc;
-        const { base64 } = await getPlaiceholder(imgSrc);
+        const { base64 } = await getPlaiceholder(m.imgSrc);
         return {
           ...m,
           base64,

@@ -3,7 +3,6 @@ interface MagazineDto {
   title: string;
   contents: string;
   imgSrc: string;
-  thumbnailImgSrc: string;
 }
 
 type WithBlurredImage<T> = {
