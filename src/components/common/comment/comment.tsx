@@ -2,7 +2,10 @@ import Container from '../container';
 import Pagination from '../pagination';
 import CommentArea from './commentArea';
 import CommentBody from './commentBody';
+<<<<<<< HEAD
 import CommentHead from './commentHead';
+=======
+>>>>>>> 7be72e2 (feat: Comment Component 마크업)
 
 export interface Comment {
   nickname?: string;
@@ -31,7 +34,10 @@ const Comment = ({}: CommentProps) => {
       border="1px solid #EAEAEC"
       borderRadius="4px"
     >
+<<<<<<< HEAD
       <CommentHead totalCount={9999} />
+=======
+>>>>>>> 7be72e2 (feat: Comment Component 마크업)
       <CommentBody />
       <Pagination page={0} totalPages={1} totalCount={2} pageSize={10} />
       <CommentArea />
