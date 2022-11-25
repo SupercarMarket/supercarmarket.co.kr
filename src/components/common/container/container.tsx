@@ -16,6 +16,8 @@ interface ContainerProps {
   alignItems?: CSSProperties['alignItems'];
   gap?: CSSProperties['gap'];
   border?: CSSProperties['border'];
+  borderBottom?: CSSProperties['borderBottom'];
+  borderTop?: CSSProperties['borderTop'];
   borderRadius?: CSSProperties['borderRadius'];
   boxSizing?: CSSProperties['boxSizing'];
 }
@@ -34,6 +36,8 @@ const Container = (props: ContainerProps) => {
     alignItems,
     gap,
     border,
+    borderBottom,
+    borderTop,
     borderRadius,
     boxSizing = 'border-box',
     className,
@@ -57,6 +61,8 @@ const Container = (props: ContainerProps) => {
         alignItems,
         gap,
         border,
+        borderBottom,
+        borderTop,
         borderRadius,
         maxWidth: '100%',
       }}
