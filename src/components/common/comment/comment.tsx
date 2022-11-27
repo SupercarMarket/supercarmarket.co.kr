@@ -2,6 +2,7 @@ import Container from '../container';
 import Pagination from '../pagination';
 import CommentArea from './commentArea';
 import CommentBody from './commentBody';
+import CommentHead from './commentHead';
 
 export interface Comment {
   nickname?: string;
@@ -30,6 +31,7 @@ const Comment = ({}: CommentProps) => {
       border="1px solid #EAEAEC"
       borderRadius="4px"
     >
+      <CommentHead totalCount={9999} />
       <CommentBody />
       <Pagination page={0} totalPages={1} totalCount={2} pageSize={10} />
       <CommentArea />
