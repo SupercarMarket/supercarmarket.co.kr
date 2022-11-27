@@ -54,8 +54,8 @@ const MarketDetailCarousel = ({ imgSrc }: MarketDetailCarouselProps) => {
                 onClick={() => selectImage(idx)}
               >
                 <Image
-                  width="141px"
-                  height="89px"
+                  width={141}
+                  height={89}
                   layout="fixed"
                   alt="image"
                   placeholder="blur"

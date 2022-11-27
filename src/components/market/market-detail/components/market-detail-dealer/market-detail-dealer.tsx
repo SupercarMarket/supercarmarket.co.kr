@@ -27,8 +27,8 @@ const MarketDetailDealer = ({ dealer }: MarketDetailDealerProps) => {
               <Image
                 alt="profile"
                 src={profile}
-                width="80px"
-                height="80px"
+                width={80}
+                height={80}
                 layout="fixed"
               />
             )}
