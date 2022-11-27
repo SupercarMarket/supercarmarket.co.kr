@@ -8,7 +8,7 @@ import Typography from '../typography';
 import * as Styled from './card.styled';
 
 const CommunityCard = ({
-  profileImgSrc,
+  profileSrc,
   imgSrc,
   title,
   nickName,
@@ -24,14 +24,13 @@ const CommunityCard = ({
         alt="thumbnail"
         width={285}
         height={180}
-        layout="fixed"
         placeholder="blur"
         blurDataURL={base64}
       />
       <Styled.CommunityUserWrapper>
-        {profileImgSrc ? (
+        {profileSrc ? (
           <Image
-            src={profileImgSrc}
+            src={profileSrc}
             alt="profile"
             width={24}
             height={24}

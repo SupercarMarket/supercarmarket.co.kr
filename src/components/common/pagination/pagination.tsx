@@ -50,18 +50,19 @@ const PaginationItem = memo(function PaginationItem({
 
 const Pagination = memo(function Pagination({
   page,
+  pageSize = 10,
   totalPages,
   className = 'pagination',
 }: PaginationProps) {
   const { push } = useRouter();
   const currentPages = useMemo(() => {
     const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
-    return Array(Math.round(totalPages / 10))
+    return Array(totalPages)
       .fill(0)
-      .map(() => new Set(pages.splice(0, 10)))
+      .map(() => new Set(pages.splice(0, pageSize)))
       .filter((v) => v.has(page + 1))
       .shift();
-  }, [page, totalPages]);
+  }, [page, pageSize, totalPages]);
 
   return (
     <Container
@@ -72,12 +73,12 @@ const Pagination = memo(function Pagination({
     >
       <PaginationButton
         variant="Line"
-        disabled={page <= 10}
+        disabled={page <= pageSize}
         onClick={() =>
           push({
             pathname: '',
             query: {
-              page: page - 10,
+              page: page - pageSize,
             },
           })
         }
@@ -106,7 +107,7 @@ const Pagination = memo(function Pagination({
         ))}
       <PaginationButton
         variant="Line"
-        disabled={page >= totalPages}
+        disabled={page + 1 >= totalPages}
         onClick={() =>
           push({
             pathname: '',
