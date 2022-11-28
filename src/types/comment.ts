@@ -1,18 +1,21 @@
 interface Comment {
-  nickname?: string;
-  profileSrc?: string;
-  content?: string;
-  like?: number;
-  createAt?: Date;
-  updateAt?: Date;
+  nickName: string;
+  profileSrc: string;
+  content: string;
+  like: number;
+  createAt: Date;
+  updateAt: Date;
   children?: Comment[];
 }
 
-interface CommentProps {
-  comments?: Comment[];
-  totalPages?: number;
-  totalCount?: number;
-  isLast?: boolean;
+interface CommentResponse<T> {
+  data: T[];
+  page: number;
+  pageSize: number;
+  totalPages: number;
+  totalCount: number;
+  isLastPage: boolean;
+  isFirstPage: boolean;
 }
 
-export type { Comment, CommentProps };
+export type { Comment, CommentResponse };
