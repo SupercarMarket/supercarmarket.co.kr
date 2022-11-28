@@ -36,7 +36,7 @@ const MarketDetailCarousel = ({ imgSrc }: MarketDetailCarouselProps) => {
           width={1200}
           height={757}
           alt="image"
-          layout="intrinsic"
+          layout="fixed"
           placeholder="blur"
           src={imgSrc[current].imgSrc}
           blurDataURL={imgSrc[current].base64}
