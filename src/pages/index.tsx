@@ -6,18 +6,19 @@ import Magazine from 'components/home/magazine/magazine';
 import { MarketBest, MarketNew } from 'components/home/market';
 import Layout from 'components/layout';
 import queries from 'constants/queries';
-import useHome from 'hooks/queries/home/userHomeMagazine';
+import useHome from 'hooks/queries/home/useHome';
 import { GetServerSideProps } from 'next';
 import { CommunityDto } from 'types/community';
 import { MagazineDto } from 'types/magazine';
 import { MarketDto } from 'types/market';
+import { homeApiFetcher } from 'utils/api/home';
 
 const Home = () => {
   const { data: magazine } = useHome<MagazineDto>('magazine');
   const { data: marketBest } = useHome<MarketDto>('best');
   const { data: marketNew } = useHome<MarketDto>('new');
   const { data: communityBest } = useHome<CommunityDto>('community');
-  
+
   return (
     <Container>
       <Title>슈마매거진</Title>
@@ -39,24 +40,36 @@ const queryClient = new QueryClient();
 export const getServerSideProps: GetServerSideProps = async () => {
   await Promise.all([
     queryClient.prefetchQuery(queries.home.magazine(), () =>
-      fetch(`${process.env.NEXT_PULBIC_URL}/api/home?category=magazine`, {
+      homeApiFetcher(`${process.env.NEXT_PUBLIC_URL}/api/home`, {
         method: 'GET',
-      }).then((res) => res.json())
+        query: {
+          category: 'magazine',
+        },
+      })
     ),
     queryClient.prefetchQuery(queries.home.best(), () =>
-      fetch(`${process.env.NEXT_PULBIC_URL}/api/home?category=best`, {
+      homeApiFetcher(`${process.env.NEXT_PUBLIC_URL}/api/home`, {
         method: 'GET',
-      }).then((res) => res.json())
+        query: {
+          category: 'best',
+        },
+      })
     ),
     queryClient.prefetchQuery(queries.home.new(), () =>
-      fetch(`${process.env.NEXT_PULBIC_URL}/api/home?category=new`, {
+      homeApiFetcher(`${process.env.NEXT_PUBLIC_URL}/api/home`, {
         method: 'GET',
-      }).then((res) => res.json())
+        query: {
+          category: 'new',
+        },
+      })
     ),
     queryClient.prefetchQuery(queries.home.community(), () =>
-      fetch(`${process.env.NEXT_PULBIC_URL}/api/home?category=community`, {
+      homeApiFetcher(`${process.env.NEXT_PUBLIC_URL}/api/home`, {
         method: 'GET',
-      }).then((res) => res.json())
+        query: {
+          category: 'community',
+        },
+      })
     ),
   ]);
 

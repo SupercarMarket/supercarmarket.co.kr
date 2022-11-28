@@ -6,13 +6,11 @@ import { getErrorMessage } from 'utils/misc';
 const magazineApi: NextApiHandler = async (_, res) => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_URL}/server/api/v1/magazine`,
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/magazine`,
       { method: 'GET' }
     );
 
     if (!response.ok) throw new Error('invalid api');
-
-    console.log('response', response);
 
     const magazine: MagazineResponse<MagazineDto> = await response.json();
 
