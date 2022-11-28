@@ -5,6 +5,16 @@ interface MagazineDto {
   imgSrc: string;
 }
 
+interface MagazinePostDto {
+  title: string;
+  nickName: string;
+  profileSrc: string | null;
+  view: number;
+  contentHtml: string;
+  createAt: string;
+  updateAt: string | null;
+}
+
 type WithBlurredImage<T> = {
   base64: string;
 } & T;
@@ -19,4 +29,9 @@ interface MagazineResponse<T> {
   isFirstPage: boolean;
 }
 
-export type { MagazineDto, MagazineResponse, WithBlurredImage };
+export type {
+  MagazineDto,
+  MagazinePostDto,
+  MagazineResponse,
+  WithBlurredImage,
+};
