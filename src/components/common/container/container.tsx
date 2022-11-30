@@ -35,16 +35,22 @@ const Container = (props: ContainerProps) => {
     flexDirection,
     alignItems,
     gap,
-    border,
+    boxSizing = 'border-box',
     borderBottom,
     borderTop,
     borderRadius,
-    boxSizing = 'border-box',
+    border,
     className,
     children,
   } = props;
   const Component: React.ComponentType<React.HTMLAttributes<HTMLDivElement>> =
     element as any;
+  const borderAttr = border
+    ? { border }
+    : {
+        borderBottom,
+        borderTop,
+      };
   return (
     <Component
       className={clsx('container', className)}
@@ -60,11 +66,9 @@ const Container = (props: ContainerProps) => {
         justifyContent,
         alignItems,
         gap,
-        border,
-        borderBottom,
-        borderTop,
         borderRadius,
         maxWidth: '100%',
+        ...borderAttr,
       }}
     >
       {children}
