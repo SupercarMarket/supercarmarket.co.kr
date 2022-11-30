@@ -33,4 +33,11 @@ const magazineApi: NextApiHandler = async (_, res) => {
   }
 };
 
-export { magazineApi };
+const magazinePostApi: NextApiHandler = async () => {
+  try {
+  } catch (error) {
+    throw new Error(getErrorMessage(error));
+  }
+};
+
+export { magazineApi, magazinePostApi };

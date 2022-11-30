@@ -1,3 +1,5 @@
+import { Admin, Posting } from './base';
+
 interface MagazineDto {
   id: string;
   title: string;
@@ -5,14 +7,8 @@ interface MagazineDto {
   imgSrc: string;
 }
 
-interface MagazinePostDto {
-  title: string;
-  nickName: string;
-  profileSrc: string | null;
-  view: number;
-  contentHtml: string;
-  createAt: string;
-  updateAt: string | null;
+interface MagazinePostDto extends Posting {
+  admin: Admin;
 }
 
 type WithBlurredImage<T> = {

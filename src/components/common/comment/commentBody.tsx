@@ -1,8 +1,8 @@
 import Avvvatars from 'avvvatars-react';
+import { Comment } from 'types/comment';
 
 import Container from '../container';
 import Typography from '../typography';
-import { Comment } from './comment';
 import {
   CommentCardChildrenWrapper,
   CommentCardContent,
@@ -10,7 +10,13 @@ import {
   CommentCardWrapper,
 } from './comment.styled';
 
-const CommentCard = ({ children }: Comment) => {
+const CommentCard = ({
+  user,
+  content,
+  createAt,
+  updateAt,
+  children,
+}: Comment) => {
   return (
     <>
       <Container
@@ -28,7 +34,7 @@ const CommentCard = ({ children }: Comment) => {
               lineHeight="120%"
               color="greyScale-6"
             >
-              슈퍼카마켓슈퍼카마켓
+              {user.nickName}
             </Typography>
             <Typography
               fontSize="body-14"
@@ -36,16 +42,18 @@ const CommentCard = ({ children }: Comment) => {
               lineHeight="150%"
               color="greyScale-5"
             >
-              2022. 9. 14 16:24
+              {createAt.toString()}
             </Typography>
-            <Typography
-              fontSize="body-14"
-              fontWeight="regular"
-              lineHeight="150%"
-              color="greyScale-5"
-            >
-              수정됨
-            </Typography>
+            {updateAt && (
+              <Typography
+                fontSize="body-14"
+                fontWeight="regular"
+                lineHeight="150%"
+                color="greyScale-5"
+              >
+                수정됨
+              </Typography>
+            )}
             <Typography
               fontSize="body-14"
               fontWeight="regular"
@@ -59,17 +67,14 @@ const CommentCard = ({ children }: Comment) => {
             </Typography>
           </CommentCardInfo>
           <CommentCardContent>
-            <Typography>
-              댓글 내용 띄어쓰기 포함 총 2000자 댓글 내용 띄어쓰기 포함 총
-              2000자
-            </Typography>
+            <Typography>{content}</Typography>
           </CommentCardContent>
         </CommentCardWrapper>
       </Container>
       {children && (
         <CommentCardChildrenWrapper>
           {children.map((comment) => (
-            <CommentCard key={comment.nickname} {...comment} />
+            <CommentCard key={comment.id} {...comment} />
           ))}
         </CommentCardChildrenWrapper>
       )}
@@ -77,10 +82,12 @@ const CommentCard = ({ children }: Comment) => {
   );
 };
 
-const CommentBody = ({ comments }: { comments?: Comment[] }) => {
+const CommentBody = ({ comments }: { comments: Comment[] }) => {
   return (
     <Container display="flex" flexDirection="column">
-      <CommentCard />
+      {comments.map((comment) => (
+        <CommentCard key={comment.id} {...comment} />
+      ))}
     </Container>
   );
 };
