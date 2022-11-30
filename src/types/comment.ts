@@ -1,21 +1,20 @@
+import { ServerResponse, User } from './base';
+
 interface Comment {
-  nickName: string;
-  profileSrc: string;
+  id: string;
+  user: User;
   content: string;
   like: number;
   createAt: Date;
-  updateAt: Date;
+  updateAt?: Date;
   children?: Comment[];
 }
 
-interface CommentResponse<T> {
-  data: T[];
+interface CommentResponse extends ServerResponse<Comment[]> {
   page: number;
-  pageSize: number;
   totalPages: number;
   totalCount: number;
   isLastPage: boolean;
-  isFirstPage: boolean;
 }
 
 export type { Comment, CommentResponse };
