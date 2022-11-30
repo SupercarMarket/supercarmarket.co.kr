@@ -91,7 +91,7 @@ const communityList = Array.from(Array(1024)).map(() => ({
   thumbnailImgSrc: communityImages[randomIndex(0)],
 }));
 
-const comment = Array.from(Array(1024)).map(() => ({
+const comment = Array.from(Array(1)).map(() => ({
   id: randomId(),
   user,
   content:
@@ -231,14 +231,14 @@ const getCommunityBestList: Parameters<typeof rest.get>[1] = (
 const getComment: Parameters<typeof rest.get>[1] = (req, res, ctx) => {
   const { searchParams } = req.url;
   const size = Number(searchParams.get('pageSize')) || 20;
-  const page = Number(searchParams.get('page')) || 1;
+  const page = Number(searchParams.get('page')) || 0;
   const totalCount = comment.length;
   const totalPages = Math.round(totalCount / size);
   const isLastPage = false;
   return res(
     ctx.status(200),
     ctx.json<CommentResponse>({
-      data: comment.slice(0, 2),
+      data: comment.slice(page * size, page * size + size),
       page,
       totalCount,
       totalPages,

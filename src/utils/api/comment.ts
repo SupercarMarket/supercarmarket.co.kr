@@ -26,6 +26,13 @@ const commentApi: NextApiHandler = async (req, res) => {
   }
 };
 
+const commentCreateApi: NextApiHandler = async (req, res) => {
+  try {
+  } catch (error) {
+    throw new Error(getErrorMessage(error));
+  }
+};
+
 const commentApiFetcher = async (url: string, options: FetcherRequestInit) => {
   try {
     const response = await fetcher(url, options);
