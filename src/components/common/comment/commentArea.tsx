@@ -1,5 +1,9 @@
+import ModalContext from 'feature/modalContext';
+import { ChangeEvent, useCallback, useContext, useMemo, useState } from 'react';
+
 import Button from '../button';
 import Container from '../container';
+import AuthModal from '../modal';
 import Typography from '../typography';
 import {
   CommentAreaBottom,
@@ -8,6 +12,14 @@ import {
 } from './comment.styled';
 
 const CommentArea = () => {
+  const { onClick, onClose, onOpen } = useContext(ModalContext);
+  const [comment, setComment] = useState('');
+  const length = useMemo(() => comment.length, [comment.length]);
+
+  const onChange = useCallback((e: ChangeEvent<HTMLTextAreaElement>) => {
+    setComment(e.target.value);
+  }, []);
+
   return (
     <Container
       display="flex"
@@ -20,6 +32,8 @@ const CommentArea = () => {
     >
       <CommentAreaTop>
         <CommentAreaTextArea
+          value={comment}
+          onChange={onChange}
           placeholder="댓글을 남겨보세요."
           minLength={1}
           maxLength={2000}
@@ -38,11 +52,18 @@ const CommentArea = () => {
             color="system-1"
             lineHeight="120%"
           >
-            {0}
+            {length}
           </Typography>
           /2000자
         </Typography>
-        <Button variant="Line">
+        <Button
+          variant="Line"
+          onClick={() =>
+            onOpen(
+              <AuthModal onClick={onClick} onClose={onClose} onOpen={onOpen} />
+            )
+          }
+        >
           <Typography
             fontSize="body-16"
             fontWeight="regular"

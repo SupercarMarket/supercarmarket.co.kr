@@ -3,6 +3,7 @@ import Container from 'components/common/container';
 import Posting from 'components/common/posting';
 import layout from 'components/layout';
 import MagazineDealer from 'components/magazine/magazineDealer';
+import { ModalProvider } from 'feature/modalContext';
 import useComment from 'hooks/queries/useComment';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import type { ParsedUrlQuery } from 'querystring';
@@ -19,17 +20,19 @@ const MagazinePost = ({
   });
 
   return (
-    <Container
-      display="flex"
-      alignItems="center"
-      justifyContent="flex-start"
-      flexDirection="column"
-      gap="80px"
-    >
-      <Posting />
-      <MagazineDealer />
-      {comment && <Comment {...comment} />}
-    </Container>
+    <ModalProvider>
+      <Container
+        display="flex"
+        alignItems="center"
+        justifyContent="flex-start"
+        flexDirection="column"
+        gap="80px"
+      >
+        <Posting />
+        <MagazineDealer />
+        {comment && <Comment {...comment} />}
+      </Container>
+    </ModalProvider>
   );
 };
 
