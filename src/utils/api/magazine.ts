@@ -1,6 +1,12 @@
 import type { NextApiHandler } from 'next/types';
 import { getPlaiceholder } from 'plaiceholder';
-import { MagazineDto, MagazineResponse } from 'types/magazine';
+import type { ServerResponse } from 'types/base';
+import type {
+  MagazineDto,
+  MagazinePostDto,
+  MagazineResponse,
+} from 'types/magazine';
+import { ServerApiError } from 'utils/error';
 import { getErrorMessage } from 'utils/misc';
 
 const magazineApi: NextApiHandler = async (_, res) => {
@@ -10,7 +16,7 @@ const magazineApi: NextApiHandler = async (_, res) => {
       { method: 'GET' }
     );
 
-    if (!response.ok) throw new Error('invalid api');
+    if (!response.ok) throw new ServerApiError(response.url);
 
     const magazine: MagazineResponse<MagazineDto> = await response.json();
 
@@ -33,8 +39,22 @@ const magazineApi: NextApiHandler = async (_, res) => {
   }
 };
 
-const magazinePostApi: NextApiHandler = async () => {
+const magazinePostApi: NextApiHandler = async (req, res) => {
+  const { id } = req.query;
+
+  if (!id) throw new Error('invalid query');
+  if (typeof id !== 'string') throw new Error('invalid query');
+
   try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_URL}/server/api/v1/magazine/${id}`
+    );
+
+    if (!response.ok) throw new ServerApiError(response.url);
+
+    const magazinePost: ServerResponse<MagazinePostDto> = await response.json();
+
+    return res.status(200).json(magazinePost);
   } catch (error) {
     throw new Error(getErrorMessage(error));
   }
