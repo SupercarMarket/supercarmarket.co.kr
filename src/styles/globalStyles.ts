@@ -21,6 +21,7 @@ const GlobalStyle = createGlobalStyle`
     width: 100%;
 
     * {
+      box-sizing: "border-box";
       font-family: 'Pretendard';
     }
   }
