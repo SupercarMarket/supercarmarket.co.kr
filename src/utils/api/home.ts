@@ -1,13 +1,11 @@
-import { getServerCategoryQuery } from 'hooks/queries/home/useHome';
+import { getServerCategoryQuery } from 'hooks/queries/useHome';
 import type { NextApiHandler } from 'next/types';
 import { getPlaiceholder } from 'plaiceholder';
-import { CommunityDto } from 'types/community';
-import { MagazineDto, MagazineResponse } from 'types/magazine';
-import { MarketDto } from 'types/market';
+import type { CommunityDto } from 'types/community';
+import type { MagazineDto, MagazineResponse } from 'types/magazine';
+import type { MarketDto } from 'types/market';
 import { ServerApiError } from 'utils/error';
 import { getErrorMessage } from 'utils/misc';
-
-import fetcher, { FetcherRequestInit } from './fetcher';
 
 const homeApi: NextApiHandler = async (req, res) => {
   const { query } = req;
@@ -50,16 +48,4 @@ const homeApi: NextApiHandler = async (req, res) => {
   }
 };
 
-const homeApiFetcher = async (url: string, options: FetcherRequestInit) => {
-  try {
-    const response = await fetcher(url, options);
-
-    if (!response.ok) throw new ServerApiError(response.url);
-
-    return await response.json();
-  } catch (error) {
-    getErrorMessage(error);
-  }
-};
-
-export { homeApi, homeApiFetcher };
+export { homeApi };

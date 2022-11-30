@@ -27,6 +27,7 @@ const queries = {
   magazine: {
     all: ['magazine'] as const,
     lists: () => [...queries.magazine.all, 'list'] as const,
+    id: (id: string) => [...queries.magazine.lists(), id] as const,
   },
   /**
    * Community Query Keys

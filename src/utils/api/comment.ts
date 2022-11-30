@@ -1,9 +1,7 @@
-import { NextApiHandler } from 'next';
-import { CommentResponse } from 'types/comment';
+import type { NextApiHandler } from 'next';
+import type { CommentResponse } from 'types/comment';
 import { ServerApiError } from 'utils/error';
 import { getErrorMessage } from 'utils/misc';
-
-import fetcher, { FetcherRequestInit } from './fetcher';
 
 const commentApi: NextApiHandler = async (req, res) => {
   const { id } = req.query;
@@ -33,16 +31,4 @@ const commentCreateApi: NextApiHandler = async (req, res) => {
   }
 };
 
-const commentApiFetcher = async (url: string, options: FetcherRequestInit) => {
-  try {
-    const response = await fetcher(url, options);
-
-    if (!response.ok) throw new ServerApiError(response.url);
-
-    return await response.json();
-  } catch (error) {
-    getErrorMessage(error);
-  }
-};
-
-export { commentApi, commentApiFetcher };
+export { commentApi };

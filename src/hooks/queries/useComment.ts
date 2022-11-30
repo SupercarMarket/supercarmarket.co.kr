@@ -1,16 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
 import queries from 'constants/queries';
-import { CommentResponse } from 'types/comment';
-import { commentApiFetcher } from 'utils/api/comment';
+import type { CommentResponse } from 'types/comment';
+import { baseFetcher } from 'utils/api/fetcher';
 
 export default function useComment(id: string, options = {}) {
-  return useQuery<CommentResponse>(
-    queries.comment.id(id),
-    () =>
-      commentApiFetcher(`/api/comment`, {
-        method: 'GET',
-        params: id,
-      }),
-    options
-  );
+  return useQuery<CommentResponse>({
+    queryKey: queries.comment.id(id),
+    queryFn: () => baseFetcher('/api/comment', { method: 'GET', params: id }),
+    ...options,
+  });
 }
