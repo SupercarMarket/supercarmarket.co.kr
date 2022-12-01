@@ -9,6 +9,7 @@ interface MagazineDto {
 
 interface MagazinePostDto extends Posting {
   admin: Admin;
+  isScraped: boolean;
 }
 
 type WithBlurredImage<T> = {

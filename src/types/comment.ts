@@ -5,6 +5,8 @@ interface Comment {
   user: User;
   content: string;
   like: number;
+  isLiked: boolean;
+  isRemoved: boolean;
   createAt: Date;
   updateAt?: Date;
   children?: Comment[];
