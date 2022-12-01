@@ -63,6 +63,7 @@ const magazinePost = {
     '제목총100글자두줄제목총100글자두줄제목총100글자두줄제목총100글자두줄제목총100글자두줄제목총100글자두줄제목총100글자두줄제목총100글자두줄제목총100글자두줄제목총100글자두줄',
   view: 999,
   contentHtml: '<h1>안녕하세요..!</h1><p>본문 내용 무</p>',
+  isScraped: false,
   createAt: new Date(),
 };
 
@@ -97,6 +98,8 @@ const comment = Array.from(Array(1)).map(() => ({
   content:
     '댓글 내용 띄어쓰기 포함 총 2000자 댓글 내용 띄어쓰기 포함 총 2000자',
   like: 13,
+  isLiked: false,
+  isRemoved: false,
   createAt: new Date(),
   children: [
     {
@@ -105,6 +108,8 @@ const comment = Array.from(Array(1)).map(() => ({
       content:
         '댓글 내용 띄어쓰기 포함 총 2000자 댓글 내용 띄어쓰기 포함 총 2000자',
       like: 13,
+      isLiked: false,
+      isRemoved: false,
       createAt: new Date(),
     },
     {
@@ -113,6 +118,8 @@ const comment = Array.from(Array(1)).map(() => ({
       content:
         '댓글 내용 띄어쓰기 포함 총 2000자 댓글 내용 띄어쓰기 포함 총 2000자',
       like: 13,
+      isLiked: false,
+      isRemoved: false,
       createAt: new Date(),
     },
     {
@@ -121,6 +128,8 @@ const comment = Array.from(Array(1)).map(() => ({
       content:
         '댓글 내용 띄어쓰기 포함 총 2000자 댓글 내용 띄어쓰기 포함 총 2000자',
       like: 13,
+      isLiked: false,
+      isRemoved: false,
       createAt: new Date(),
     },
   ],
@@ -261,6 +270,8 @@ const createComment: Parameters<typeof rest.post>[1] = async (
     id: randomId(),
     user,
     like: 0,
+    isLiked: false,
+    isRemoved: false,
     content: contents,
     createAt: new Date(),
     children: [],
