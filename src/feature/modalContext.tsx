@@ -77,8 +77,9 @@ const ModalProvider = ({ children }: ModalProviderProps) => {
                 width: '390px',
                 padding: '34px 24px 24px 24px',
                 border: '1px solid #C3C3C7',
-                borderRadius: 'rpx',
+                borderRadius: '4px',
                 boxSizing: 'border-box',
+                background: '#fff',
               }}
             >
               {modalContents}
