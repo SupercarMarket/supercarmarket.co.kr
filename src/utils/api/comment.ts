@@ -25,10 +25,34 @@ const commentApi: NextApiHandler = async (req, res) => {
 };
 
 const commentCreateApi: NextApiHandler = async (req, res) => {
+  const { user, contents } = req.body;
+  const { id } = req.query;
+
+  if (!user || !contents) throw new Error('invalid data');
+  if (!id) throw new Error('invalid query');
+  if (typeof id !== 'string') throw new Error('invalid query');
+
   try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_URL}/server/api/v1/comment/${id}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.accessToken}`,
+        },
+        body: JSON.stringify({ contents }),
+      }
+    );
+
+    if (!response.ok) throw new ServerApiError(response.url);
+
+    const create = await response.json();
+
+    return res.status(200).json(create);
   } catch (error) {
     throw new Error(getErrorMessage(error));
   }
 };
 
-export { commentApi };
+export { commentApi, commentCreateApi };

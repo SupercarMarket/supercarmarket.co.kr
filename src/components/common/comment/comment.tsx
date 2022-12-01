@@ -6,7 +6,11 @@ import CommentArea from './commentArea';
 import CommentBody from './commentBody';
 import CommentHead from './commentHead';
 
-const Comment = ({ data, page, totalPages, totalCount }: CommentResponse) => {
+interface CommentProps extends CommentResponse {
+  id: string;
+}
+
+const Comment = ({ data, page, totalPages, totalCount, id }: CommentProps) => {
   return (
     <Container
       width="100%"
@@ -28,7 +32,7 @@ const Comment = ({ data, page, totalPages, totalCount }: CommentResponse) => {
         totalCount={totalCount}
         pageSize={10}
       />
-      <CommentArea />
+      <CommentArea id={id} />
     </Container>
   );
 };

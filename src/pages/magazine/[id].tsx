@@ -1,5 +1,4 @@
 import { dehydrate, QueryClient } from '@tanstack/react-query';
-import Button from 'components/common/button';
 import Comment from 'components/common/comment';
 import Container from 'components/common/container';
 import Posting from 'components/common/posting';
@@ -38,7 +37,7 @@ const MagazinePost = ({
       >
         <Posting />
         <MagazineDealer />
-        {comment && <Comment {...comment} />}
+        {comment && <Comment id={id} {...comment} />}
       </Container>
     </ModalProvider>
   );
