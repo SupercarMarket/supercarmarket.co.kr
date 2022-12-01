@@ -13,7 +13,11 @@ import CommentHead from './commentHead';
 import CommentHead from './commentHead';
 >>>>>>> 643580a (feat: Comment Head Component)
 
-const Comment = ({ data, page, totalPages, totalCount }: CommentResponse) => {
+interface CommentProps extends CommentResponse {
+  id: string;
+}
+
+const Comment = ({ data, page, totalPages, totalCount, id }: CommentProps) => {
   return (
     <Container
       width="100%"
@@ -46,8 +50,12 @@ const Comment = ({ data, page, totalPages, totalCount }: CommentResponse) => {
         totalCount={totalCount}
         pageSize={10}
       />
+<<<<<<< HEAD
 >>>>>>> 9ee969b (feat: magazine and comment api 추가)
       <CommentArea />
+=======
+      <CommentArea id={id} />
+>>>>>>> 0e662db (feat: 댓글 등록 Api 추가)
     </Container>
   );
 };

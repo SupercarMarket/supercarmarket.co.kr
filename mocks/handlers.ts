@@ -159,6 +159,10 @@ export function handlers() {
      * 댓글 조회.
      */
     rest.get('https://server/api/v1/comment/:postId', getComment),
+    /**
+     * 댓글 등록.
+     */
+    rest.post('https://server/api/v1/comment/:postId', createComment),
   ];
 }
 
@@ -244,6 +248,26 @@ const getComment: Parameters<typeof rest.get>[1] = (req, res, ctx) => {
       totalPages,
       isLastPage,
     })
+  );
+};
+
+const createComment: Parameters<typeof rest.post>[1] = async (
+  req,
+  res,
+  ctx
+) => {
+  const { contents } = await req.json();
+  comment.push({
+    id: randomId(),
+    user,
+    like: 0,
+    content: contents,
+    createAt: new Date(),
+    children: [],
+  });
+  return res(
+    ctx.status(200),
+    ctx.json({ message: '댓글 등록에 성공했습니다.' })
   );
 };
 

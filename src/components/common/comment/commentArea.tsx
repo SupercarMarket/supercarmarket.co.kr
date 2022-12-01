@@ -1,9 +1,8 @@
-import ModalContext from 'feature/modalContext';
-import { ChangeEvent, useCallback, useContext, useMemo, useState } from 'react';
+import useAddComment from 'hooks/mutations/comment/useAddComment';
+import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
 
 import Button from '../button';
 import Container from '../container';
-import AuthModal from '../modal';
 import Typography from '../typography';
 import {
   CommentAreaBottom,
@@ -11,14 +10,35 @@ import {
   CommentAreaTop,
 } from './comment.styled';
 
-const CommentArea = () => {
-  const { onClick, onClose, onOpen } = useContext(ModalContext);
+const user = {
+  id: 'qwjfkqnwfkjnqwkjfnqwkfnkqwnfk',
+  nickName: 'blan19',
+  email: 'blanzzxz@naver.com',
+  address: '서울특별시 청와대',
+  call: '01012341234',
+  accessToken: '12kqwnflknqwlkfnr123kln',
+};
+
+interface CommentAreaProps {
+  id: string;
+}
+
+const CommentArea = ({ id }: CommentAreaProps) => {
+  const { mutate, isSuccess } = useAddComment(id);
   const [comment, setComment] = useState('');
   const length = useMemo(() => comment.length, [comment.length]);
 
   const onChange = useCallback((e: ChangeEvent<HTMLTextAreaElement>) => {
     setComment(e.target.value);
   }, []);
+
+  const onSubmit = useCallback(() => {
+    mutate({ contents: comment, user });
+  }, [comment, mutate]);
+
+  useEffect(() => {
+    if (isSuccess) setComment('');
+  }, [isSuccess]);
 
   return (
     <Container
@@ -56,14 +76,7 @@ const CommentArea = () => {
           </Typography>
           /2000자
         </Typography>
-        <Button
-          variant="Line"
-          onClick={() =>
-            onOpen(
-              <AuthModal onClick={onClick} onClose={onClose} onOpen={onOpen} />
-            )
-          }
-        >
+        <Button variant="Line" onClick={onSubmit}>
           <Typography
             fontSize="body-16"
             fontWeight="regular"
