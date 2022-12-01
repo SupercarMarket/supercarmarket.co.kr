@@ -54,9 +54,10 @@ const CommentArea = ({ id }: CommentAreaProps) => {
         <CommentAreaTextArea
           value={comment}
           onChange={onChange}
-          placeholder="댓글을 남겨보세요."
+          placeholder={user ? '댓글을 남겨보세요.' : '로그인이 필요합니다.'}
           minLength={1}
           maxLength={2000}
+          disabled={!user}
         />
       </CommentAreaTop>
       <CommentAreaBottom>
@@ -76,7 +77,11 @@ const CommentArea = ({ id }: CommentAreaProps) => {
           </Typography>
           /2000자
         </Typography>
-        <Button variant="Line" onClick={onSubmit}>
+        <Button
+          variant="Line"
+          onClick={onSubmit}
+          disabled={!user || length < 1}
+        >
           <Typography
             fontSize="body-16"
             fontWeight="regular"
