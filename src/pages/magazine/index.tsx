@@ -8,6 +8,7 @@ import useMagazine from 'hooks/queries/useMagazine';
 import { useRouter } from 'next/router';
 import { GetStaticProps } from 'next/types';
 import { useMemo } from 'react';
+import { baseFetcher } from 'utils/api/fetcher';
 
 const Magazine = () => {
   const { data: magazine } = useMagazine();
@@ -39,9 +40,9 @@ export const getStaticProps: GetStaticProps = async () => {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery(queries.magazine.lists(), () =>
-    fetch(`${process.env.NEXT_PUBLIC_URL}/api/magazine`, {
+    baseFetcher(`${process.env.NEXT_PUBLIC_URL}/api/magazine`, {
       method: 'GET',
-    }).then((res) => res.json())
+    })
   );
 
   return {

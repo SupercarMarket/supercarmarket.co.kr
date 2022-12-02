@@ -13,6 +13,7 @@ const CommentHeadRight = styled.div`
 `;
 
 const CommentCardWrapper = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -23,6 +24,12 @@ const CommentCardChildrenWrapper = styled.div`
 `;
 
 const CommentCardInfo = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const CommentCardInfoWrapper = styled.div`
   display: flex;
   align-items: center;
   gap: 12px;
@@ -59,6 +66,7 @@ export {
   CommentCardChildrenWrapper,
   CommentCardContent,
   CommentCardInfo,
+  CommentCardInfoWrapper,
   CommentCardWrapper,
   CommentHeadLeft,
   CommentHeadRight,
