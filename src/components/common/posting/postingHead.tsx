@@ -4,13 +4,8 @@ import ChatIcon from '../../../assets/svg/chat.svg';
 import EyeIcon from '../../../assets/svg/remove-red-eye.svg';
 import Container from '../container';
 import Typography from '../typography';
-import {
-  PostingHeadBottom,
-  PostingHeadBottomLeft,
-  PostingHeadBottomRight,
-  PostingHeadBottomRightWrapper,
-  PostingHeadTop,
-} from './posting.styled';
+import Wrapper from '../wrapper';
+import * as style from './posting.styled';
 
 const PostingHead = () => {
   return (
@@ -21,7 +16,7 @@ const PostingHead = () => {
       borderBottom="1px solid #EAEAEC"
       boxSizing="border-box"
     >
-      <PostingHeadTop>
+      <Wrapper.Top>
         <Typography
           as="h2"
           fontSize="header-24"
@@ -31,9 +26,9 @@ const PostingHead = () => {
         >
           제목총100글자두줄제목총100글자두줄제목총100글자두줄제목총100글자두줄제목총100글자두줄제목총100글자두줄제목총100글자두줄제목총100글자두줄제목총100글자두줄제목총100글자두줄
         </Typography>
-      </PostingHeadTop>
-      <PostingHeadBottom>
-        <PostingHeadBottomLeft>
+      </Wrapper.Top>
+      <Wrapper.Bottom css={style.bottom}>
+        <Wrapper.Left css={style.left}>
           <Avvvatars value="금종선" size={40} />
           <Typography
             as="span"
@@ -53,9 +48,9 @@ const PostingHead = () => {
           >
             2022. 9. 14 16:24
           </Typography>
-        </PostingHeadBottomLeft>
-        <PostingHeadBottomRight>
-          <PostingHeadBottomRightWrapper>
+        </Wrapper.Left>
+        <Wrapper.Right css={style.right}>
+          <Wrapper css={style.wrapper}>
             <ChatIcon />
             <Typography
               as="span"
@@ -66,8 +61,8 @@ const PostingHead = () => {
             >
               15554
             </Typography>
-          </PostingHeadBottomRightWrapper>
-          <PostingHeadBottomRightWrapper>
+          </Wrapper>
+          <Wrapper css={style.wrapper}>
             <EyeIcon />
             <Typography
               as="span"
@@ -78,9 +73,9 @@ const PostingHead = () => {
             >
               12
             </Typography>
-          </PostingHeadBottomRightWrapper>
-        </PostingHeadBottomRight>
-      </PostingHeadBottom>
+          </Wrapper>
+        </Wrapper.Right>
+      </Wrapper.Bottom>
     </Container>
   );
 };

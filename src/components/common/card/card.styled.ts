@@ -1,16 +1,16 @@
-import styled from 'styled-components';
+'use client';
 
-const CommunityUserWrapper = styled.div`
+import { css } from 'styled-components';
+
+const communityUserWrapper = css`
   display: flex;
   align-items: center;
   gap: 8px;
   margin-top: 20px;
 `;
 
-const CommunityTitleWrapper = styled.div`
+const communityTitleWrapper = css`
   margin-top: 10px;
 `;
 
-const CommunityInfoWrapper = styled.div``;
-
-export { CommunityInfoWrapper, CommunityTitleWrapper, CommunityUserWrapper };
+export { communityTitleWrapper, communityUserWrapper };

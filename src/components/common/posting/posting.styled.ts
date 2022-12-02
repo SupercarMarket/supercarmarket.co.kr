@@ -1,36 +1,28 @@
-import styled from 'styled-components';
+import { css } from 'styled-components';
 
-const PostingHeadTop = styled.div``;
-
-const PostingHeadBottom = styled.div`
+const bottom = css`
   display: flex;
   align-items: center;
   justify-content: space-between;
 `;
 
-const PostingHeadBottomLeft = styled.div`
+const left = css`
   display: flex;
   align-items: center;
   gap: 10px;
   margin-bottom: 20px;
 `;
 
-const PostingHeadBottomRight = styled.div`
+const right = css`
   display: flex;
   align-items: center;
   gap: 12px;
 `;
 
-const PostingHeadBottomRightWrapper = styled.div`
+const wrapper = css`
   display: flex;
   align-items: center;
   gap: 4px;
 `;
 
-export {
-  PostingHeadBottom,
-  PostingHeadBottomLeft,
-  PostingHeadBottomRight,
-  PostingHeadBottomRightWrapper,
-  PostingHeadTop,
-};
+export { bottom, left, right, wrapper };

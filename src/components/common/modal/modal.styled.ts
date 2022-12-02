@@ -1,13 +1,15 @@
-import styled from 'styled-components';
+'use client';
 
-const ModalButtonWrapper = styled.div`
+import { css } from 'styled-components';
+
+const modalButtonWrapper = css`
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
 `;
 
-const ModalCallWrapper = styled.div`
+const modalCallWrapper = css`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -17,4 +19,4 @@ const ModalCallWrapper = styled.div`
   border-radius: 4px;
 `;
 
-export { ModalButtonWrapper, ModalCallWrapper };
+export { modalButtonWrapper, modalCallWrapper };
