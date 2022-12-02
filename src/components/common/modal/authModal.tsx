@@ -4,7 +4,8 @@ import { ModalProvider } from 'feature/modalContext';
 import Button from '../button';
 import Container from '../container';
 import Typography from '../typography';
-import { ModalButtonWrapper } from './modal.styled';
+import Wrapper from '../wrapper';
+import * as style from './modal.styled';
 
 const AuthModal = ({ onClose }: ModalContextProps) => {
   return (
@@ -34,7 +35,7 @@ const AuthModal = ({ onClose }: ModalContextProps) => {
         >
           로그인 후 상담 신청이 가능합니다
         </Typography>
-        <ModalButtonWrapper>
+        <Wrapper css={style.modalButtonWrapper}>
           <Button variant="Primary-Line" width="160px">
             <Typography
               as="span"
@@ -57,7 +58,7 @@ const AuthModal = ({ onClose }: ModalContextProps) => {
               로그인
             </Typography>
           </Button>
-        </ModalButtonWrapper>
+        </Wrapper>
       </Container>
     </ModalProvider>
   );
