@@ -37,7 +37,7 @@ export default function makeMarketQueries({
   const vList = `${viewCountName}=${viewCountValue}`;
 
   // const merged = `category=${category}&page=${page}&${fList}&${oList}&${vList}`;
-  const merged = `category=슈퍼카&${fList}&${oList}&${vList}&page=${page}`;
+  const merged = `category=슈퍼카&${fList}&${oList}&${vList}&page=${page}&keyword=페라리`;
 
   console.log(merged);
 

@@ -5,7 +5,8 @@ import {
   MarketDetailDealer,
   MarketDetailHeader,
   MarketDetailIntroduction,
-} from 'components/market/market-detail/components';
+  MarketLike,
+} from 'components/market/marketDetail/components';
 import React from 'react';
 import { MarketDetailDto, WithBlurredImage } from 'types/market';
 
@@ -14,6 +15,8 @@ interface MarketDetailProps {
 }
 
 const MarketDetail = ({ data }: MarketDetailProps) => {
+  console.log(data);
+
   const {
     carName,
     year,
@@ -49,6 +52,7 @@ const MarketDetail = ({ data }: MarketDetailProps) => {
       <MarketDetailDealer dealer={dealer} />
       <MarketDetailCar
         year={year}
+        regDate={regDate}
         mileage={mileage}
         fuel={fuel}
         color={color}
@@ -58,6 +62,7 @@ const MarketDetail = ({ data }: MarketDetailProps) => {
       />
       <MarketDetailIntroduction introduction={introduction} />
       <MarketDetailAttached registration={registration} />
+      <MarketLike isLike={false} />
     </>
   );
 };

@@ -7,6 +7,7 @@ type Variant = 'Primary' | 'Primary-Line' | 'Line' | 'Black';
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   fullWidth?: boolean;
   className?: string;
+  prefixx?: string | JSX.Element;
   suffix?: JSX.Element;
   variant?: Variant;
   border?: 'normal' | 'rounded';
@@ -27,6 +28,7 @@ const Button = (props: ButtonProps, ref: Ref<HTMLButtonElement>) => {
     disabled = false,
     style = {},
     active,
+    prefixx,
     suffix,
     width,
     ...rest
@@ -56,6 +58,15 @@ const Button = (props: ButtonProps, ref: Ref<HTMLButtonElement>) => {
         }}
         {...rest}
       >
+        {prefixx && (
+          <i
+            className={clsx({
+              'button-suffix': prefixx,
+            })}
+          >
+            {prefixx}
+          </i>
+        )}
         <span>{children}</span>
         {suffix && (
           <i

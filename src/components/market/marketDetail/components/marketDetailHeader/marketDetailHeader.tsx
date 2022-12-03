@@ -2,10 +2,7 @@ import Typography from 'components/common/typography';
 import { FUEL_KIND } from 'constants/market';
 import theme from 'constants/theme';
 import React from 'react';
-import {
-  convertMileageToKilometers,
-  convertPriceToWon,
-} from 'utils/market/marketList';
+import { convertPriceToWon } from 'utils/market/marketList';
 
 import EyeIcon from '../../../../../assets/svg/eye.svg';
 import FavoriteBorderIcon from '../../../../../assets/svg/favorite-border.svg';
@@ -32,8 +29,13 @@ const MarketDetailHeader = ({
   price,
   viewCount,
 }: MarketDetailHeaderProps) => {
-  const [y, m] = year.split('/');
   const [ry, rm] = regDate.split('/');
+  const formatter = Intl.NumberFormat('ko', { notation: 'compact' });
+  const currencyFormatter = Intl.NumberFormat('ko', {
+    currency: 'krw',
+    notation: 'compact',
+  });
+  
   return (
     <Styled.MarketDetailHeaderContainer>
       <div>
@@ -46,9 +48,11 @@ const MarketDetailHeader = ({
           {carName}
         </Typography>
         <br />
-        <Typography fontSize="header-14">{`${y}년 ${m}월식 (${y}년형) | ${
-          FUEL_KIND[fuel]
-        } | ${convertMileageToKilometers(mileage)}`}</Typography>
+        <Typography fontSize="header-14">
+          {`${ry}년 ${rm}월식 (${year}년형) | ${
+            FUEL_KIND[fuel]
+          } | ${formatter.format(mileage)}km`}
+        </Typography>
       </div>
       <div style={{ textAlign: 'right' }}>
         <Typography
@@ -58,7 +62,7 @@ const MarketDetailHeader = ({
           lineHeight="150%"
           style={{ marginBottom: '15px' }}
         >
-          {convertPriceToWon(price)}
+          {price ? `${currencyFormatter.format(price)}만원` : '상담'}
         </Typography>
         <br />
         <div
@@ -66,7 +70,6 @@ const MarketDetailHeader = ({
             display: 'flex',
             alignItems: 'center',
             gap: '5px',
-            color: theme.color['greyScale-5'],
           }}
         >
           <Typography color="greyScale-5">

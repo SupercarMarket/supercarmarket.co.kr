@@ -12,7 +12,7 @@ interface MarketDetailAttachedProps {
 
 const MarketDetailAttached = ({ registration }: MarketDetailAttachedProps) => {
   return (
-    <Container margin="0 0 80px 0">
+    <Container>
       <Typography fontSize="header-24" fontWeight="bold">
         첨부파일
       </Typography>

@@ -1,7 +1,7 @@
-import { QueryClient } from '@tanstack/react-query';
+import { dehydrate, QueryClient } from '@tanstack/react-query';
 import Container from 'components/common/container';
 import layout from 'components/layout';
-import { MarketDetail } from 'components/market/market-detail';
+import { MarketDetail } from 'components/market/marketDetail';
 import MarketTable from 'components/market/marketTable/marketTable';
 import queries from 'constants/queries';
 import useMarketDetail from 'hooks/queries/useMarketDetail';
@@ -37,11 +37,16 @@ const queryClient = new QueryClient();
 export const getServerSideProps = async (ctx: NextPageContext) => {
   const { id } = ctx.query;
 
-  await queryClient.prefetchQuery(queries.market.detail(id as string));
+  queryClient.prefetchQuery(queries.market.detail(id as string), () =>
+    fetch(`/api/market/${id}`, {
+      method: 'GET',
+    }).then((res) => res.json())
+  );
 
   return {
     props: {
       id,
+      dehydratedState: dehydrate(queryClient),
     },
   };
 };

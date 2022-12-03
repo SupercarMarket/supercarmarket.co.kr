@@ -2,12 +2,12 @@ import Container from 'components/common/container/container';
 import Typography from 'components/common/typography';
 import { FUEL_KIND } from 'constants/market';
 import React, { ReactNode } from 'react';
-import { convertMileageToKilometers } from 'utils/market/marketList';
 
 import * as Styled from './marketDetailCar.styled';
 
 interface MarketDetailCarProps {
   year: string;
+  regDate: string;
   mileage: number;
   fuel: string;
   color: string;
@@ -18,6 +18,7 @@ interface MarketDetailCarProps {
 
 const MarketDetailCar = ({
   year,
+  regDate,
   mileage,
   fuel,
   color,
@@ -25,20 +26,22 @@ const MarketDetailCar = ({
   cc,
   transmissionType,
 }: MarketDetailCarProps) => {
-  const [y, m] = year.split('/');
+  const [ry, rm] = regDate.split('/');
+  const formatter = Intl.NumberFormat('ko');
+
   return (
     <Container margin="0 0 80px 0">
       <Typography fontSize="header-24" fontWeight="bold">
         차량정보
       </Typography>
       <Styled.CarInfoCard>
-        <CarInfo subject="연식">{`${y}년형 ${m}월식`}</CarInfo>
-        <CarInfo subject="주행거리">{convertMileageToKilometers(mileage)}</CarInfo>
+        <CarInfo subject="연식">{`${ry}년형 ${rm}월식`}</CarInfo>
+        <CarInfo subject="주행거리">{`${formatter.format(mileage)}km`}</CarInfo>
         <CarInfo subject="연료">{FUEL_KIND[fuel]}</CarInfo>
         <CarInfo subject="색상">{color}</CarInfo>
         <CarInfo subject="사고여부">{accident ? '유' : '무'}</CarInfo>
-        <CarInfo subject="형식연도">{`${y}년형`}</CarInfo>
-        <CarInfo subject="배기량">{`${cc}cc`}</CarInfo>
+        <CarInfo subject="형식연도">{`${year}년형`}</CarInfo>
+        <CarInfo subject="배기량">{`${formatter.format(cc)}cc`}</CarInfo>
         <CarInfo subject="트랜스미션">{transmissionType}</CarInfo>
       </Styled.CarInfoCard>
     </Container>
