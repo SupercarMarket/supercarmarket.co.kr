@@ -5,7 +5,8 @@ import type { WithBlurredImage } from 'types/magazine';
 
 import Container from '../container';
 import Typography from '../typography';
-import * as Styled from './card.styled';
+import Wrapper from '../wrapper';
+import * as style from './card.styled';
 
 const CommunityCard = ({
   profileSrc,
@@ -27,7 +28,7 @@ const CommunityCard = ({
         placeholder="blur"
         blurDataURL={base64}
       />
-      <Styled.CommunityUserWrapper>
+      <Wrapper css={style.communityUserWrapper}>
         {profileSrc ? (
           <Image
             src={profileSrc}
@@ -49,8 +50,8 @@ const CommunityCard = ({
         >
           {nickName}
         </Typography>
-      </Styled.CommunityUserWrapper>
-      <Styled.CommunityTitleWrapper>
+      </Wrapper>
+      <Wrapper css={style.communityTitleWrapper}>
         <Typography
           as="h2"
           fontSize="header-16"
@@ -65,8 +66,8 @@ const CommunityCard = ({
           fontWeight="bold"
           color="system-1"
         ></Typography>
-      </Styled.CommunityTitleWrapper>
-      <Styled.CommunityInfoWrapper></Styled.CommunityInfoWrapper>
+      </Wrapper>
+      <Wrapper></Wrapper>
     </Container>
   );
 };

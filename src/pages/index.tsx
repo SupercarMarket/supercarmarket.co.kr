@@ -6,12 +6,12 @@ import Magazine from 'components/home/magazine/magazine';
 import { MarketBest, MarketNew } from 'components/home/market';
 import Layout from 'components/layout';
 import queries from 'constants/queries';
-import useHome from 'hooks/queries/home/useHome';
+import useHome from 'hooks/queries/useHome';
 import { GetServerSideProps } from 'next';
 import { CommunityDto } from 'types/community';
 import { MagazineDto } from 'types/magazine';
 import { MarketDto } from 'types/market';
-import { homeApiFetcher } from 'utils/api/home';
+import { baseFetcher } from 'utils/api/fetcher';
 
 const Home = () => {
   const { data: magazine } = useHome<MagazineDto>('magazine');
@@ -40,7 +40,7 @@ const queryClient = new QueryClient();
 export const getServerSideProps: GetServerSideProps = async () => {
   await Promise.all([
     queryClient.prefetchQuery(queries.home.magazine(), () =>
-      homeApiFetcher(`${process.env.NEXT_PUBLIC_URL}/api/home`, {
+      baseFetcher(`${process.env.NEXT_PUBLIC_URL}/api/home`, {
         method: 'GET',
         query: {
           category: 'magazine',
@@ -48,7 +48,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
       })
     ),
     queryClient.prefetchQuery(queries.home.best(), () =>
-      homeApiFetcher(`${process.env.NEXT_PUBLIC_URL}/api/home`, {
+      baseFetcher(`${process.env.NEXT_PUBLIC_URL}/api/home`, {
         method: 'GET',
         query: {
           category: 'best',
@@ -56,7 +56,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
       })
     ),
     queryClient.prefetchQuery(queries.home.new(), () =>
-      homeApiFetcher(`${process.env.NEXT_PUBLIC_URL}/api/home`, {
+      baseFetcher(`${process.env.NEXT_PUBLIC_URL}/api/home`, {
         method: 'GET',
         query: {
           category: 'new',
@@ -64,7 +64,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
       })
     ),
     queryClient.prefetchQuery(queries.home.community(), () =>
-      homeApiFetcher(`${process.env.NEXT_PUBLIC_URL}/api/home`, {
+      baseFetcher(`${process.env.NEXT_PUBLIC_URL}/api/home`, {
         method: 'GET',
         query: {
           category: 'community',

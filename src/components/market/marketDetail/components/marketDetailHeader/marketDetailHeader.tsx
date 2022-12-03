@@ -1,3 +1,4 @@
+import Container from 'components/common/container/container';
 import Typography from 'components/common/typography';
 import { FUEL_KIND } from 'constants/market';
 import theme from 'constants/theme';
@@ -35,9 +36,14 @@ const MarketDetailHeader = ({
     currency: 'krw',
     notation: 'compact',
   });
-  
+
   return (
-    <Styled.MarketDetailHeaderContainer>
+    <Container
+      display="flex"
+      alignItems="center"
+      justifyContent="space-between"
+      margin="0 0 40px 0"
+    >
       <div>
         <Typography
           fontSize="header-36"
@@ -65,27 +71,17 @@ const MarketDetailHeader = ({
           {price ? `${currencyFormatter.format(price)}만원` : '상담'}
         </Typography>
         <br />
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '5px',
-          }}
-        >
+        <Container display="flex" alignItems="center" gap="5px">
           <Typography color="greyScale-5">
             {new Date(+`20${ry}`, +rm).toLocaleDateString('us')}
           </Typography>
-          <EyeIcon width={20} height="100%" fill={theme.color['greyScale-5']} />
-          {viewCount}
-          <FavoriteBorderIcon
-            width={20}
-            height="100%"
-            fill={theme.color['greyScale-5']}
-          />
-          {likeCount}
-        </div>
+          <EyeIcon width={20} fill={theme.color['greyScale-5']} />
+          <Typography color="greyScale-5">{viewCount}</Typography>
+          <FavoriteBorderIcon width={20} fill={theme.color['greyScale-5']} />
+          <Typography color="greyScale-5">{likeCount}</Typography>
+        </Container>
       </div>
-    </Styled.MarketDetailHeaderContainer>
+    </Container>
   );
 };
 

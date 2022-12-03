@@ -27,6 +27,7 @@ const queries = {
   magazine: {
     all: ['magazine'] as const,
     lists: () => [...queries.magazine.all, 'list'] as const,
+    id: (id: string) => [...queries.magazine.lists(), id] as const,
   },
   /**
    * Community Query Keys
@@ -35,6 +36,14 @@ const queries = {
     all: ['community'] as const,
     lists: () => [...queries.community.all, 'list'] as const,
     best: () => [...queries.community.lists(), 'best'] as const,
+  },
+  /**
+   * Comment Query Keys
+   */
+  comment: {
+    all: ['comment'] as const,
+    lists: () => [...queries.comment.all, 'list'] as const,
+    id: (id: string) => [...queries.comment.lists(), id] as const,
   },
 };
 

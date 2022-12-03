@@ -1,11 +1,30 @@
 import { rest } from 'msw';
-import { MagazineDto, MagazineResponse } from 'types/magazine';
+import { ServerResponse } from 'types/base';
+import { CommentResponse } from 'types/comment';
+import { MagazineDto, MagazinePostDto, MagazineResponse } from 'types/magazine';
 import { MarketDto, MarketResponse } from 'types/market';
 
 /**
  * API Constants
  * API에 자주 사용되는 상수
  */
+const admin = {
+  id: randomId(),
+  email: 'abc123@naver.com',
+  nickName: '금기사 금종선',
+  address: '서울특별시 청와대',
+  call: '01012341234',
+  description: '금기사 금종선입니다!',
+};
+
+const user = {
+  id: randomId(),
+  nickName: 'blan19',
+  email: 'blanzzxz@naver.com',
+  address: '서울특별시 청와대',
+  call: '01012341234',
+};
+
 const marketImages = [
   'https://user-images.githubusercontent.com/66871265/199014391-0b9507b4-e320-4026-83d9-6d021ea490c2.png',
   'https://user-images.githubusercontent.com/66871265/199170644-a4b7114f-4d2d-4a74-85e3-74c5e28c8e22.png',
@@ -37,6 +56,17 @@ const magazineList = Array.from(Array(1024)).map(() => ({
   imgSrc: magazineImages[randomIndex(1)],
 }));
 
+const magazinePost = {
+  id: randomId(),
+  admin,
+  title:
+    '제목총100글자두줄제목총100글자두줄제목총100글자두줄제목총100글자두줄제목총100글자두줄제목총100글자두줄제목총100글자두줄제목총100글자두줄제목총100글자두줄제목총100글자두줄',
+  view: 999,
+  contentHtml: '<h1>안녕하세요..!</h1><p>본문 내용 무</p>',
+  isScraped: false,
+  createAt: new Date(),
+};
+
 const communityImages = [
   'https://user-images.githubusercontent.com/66871265/199372921-d7f5fb08-3950-4d36-b154-4c13de3ccc1e.png',
 ];
@@ -62,6 +92,49 @@ const communityList = Array.from(Array(1024)).map(() => ({
   thumbnailImgSrc: communityImages[randomIndex(0)],
 }));
 
+const comment = Array.from(Array(1)).map(() => ({
+  id: randomId(),
+  user,
+  content:
+    '댓글 내용 띄어쓰기 포함 총 2000자 댓글 내용 띄어쓰기 포함 총 2000자',
+  like: 13,
+  isLiked: false,
+  isRemoved: false,
+  createAt: new Date(),
+  children: [
+    {
+      id: randomId(),
+      user,
+      content:
+        '댓글 내용 띄어쓰기 포함 총 2000자 댓글 내용 띄어쓰기 포함 총 2000자',
+      like: 13,
+      isLiked: false,
+      isRemoved: false,
+      createAt: new Date(),
+    },
+    {
+      id: randomId(),
+      user,
+      content:
+        '댓글 내용 띄어쓰기 포함 총 2000자 댓글 내용 띄어쓰기 포함 총 2000자',
+      like: 13,
+      isLiked: false,
+      isRemoved: false,
+      createAt: new Date(),
+    },
+    {
+      id: randomId(),
+      user,
+      content:
+        '댓글 내용 띄어쓰기 포함 총 2000자 댓글 내용 띄어쓰기 포함 총 2000자',
+      like: 13,
+      isLiked: false,
+      isRemoved: false,
+      createAt: new Date(),
+    },
+  ],
+}));
+
 /**
  * API Endpoint
  * 각 API 모킹은 Notion API 스펙에 맞춰 만들어주세요.
@@ -84,9 +157,21 @@ export function handlers() {
      */
     rest.get('https://server/api/v1/magazine', getMagazineList),
     /**
+     * 매거진 포스트 조회
+     */
+    rest.get('https://server/api/v1/magazine/:postId', getMagazinePost),
+    /**
      * 커뮤니티 인기글.
      */
     rest.get('https://server/api/v1/community-best', getCommunityBestList),
+    /**
+     * 댓글 조회.
+     */
+    rest.get('https://server/api/v1/comment/:postId', getComment),
+    /**
+     * 댓글 등록.
+     */
+    rest.post('https://server/api/v1/comment/:postId', createComment),
   ];
 }
 
@@ -110,9 +195,17 @@ const getMagazineList: Parameters<typeof rest.get>[1] = (req, res, ctx) => {
   );
 };
 
+const getMagazinePost: Parameters<typeof rest.get>[1] = (req, res, ctx) => {
+  return res(
+    ctx.status(200),
+    ctx.json<ServerResponse<MagazinePostDto>>({
+      data: magazinePost,
+    })
+  );
+};
+
 const getMarketList: Parameters<typeof rest.get>[1] = (req, res, ctx) => {
   const { searchParams } = req.url;
-  console.log(searchParams);
   const size = Number(searchParams.get('viewSize')) || 20;
   const page = Number(searchParams.get('page')) || 1;
   const totalCount = marketList.length;
@@ -145,6 +238,47 @@ const getCommunityBestList: Parameters<typeof rest.get>[1] = (
       data: communityList.slice(page * size, page * size + size),
       page,
     })
+  );
+};
+
+const getComment: Parameters<typeof rest.get>[1] = (req, res, ctx) => {
+  const { searchParams } = req.url;
+  const size = Number(searchParams.get('pageSize')) || 20;
+  const page = Number(searchParams.get('page')) || 0;
+  const totalCount = comment.length;
+  const totalPages = Math.round(totalCount / size);
+  const isLastPage = false;
+  return res(
+    ctx.status(200),
+    ctx.json<CommentResponse>({
+      data: comment.slice(page * size, page * size + size),
+      page,
+      totalCount,
+      totalPages,
+      isLastPage,
+    })
+  );
+};
+
+const createComment: Parameters<typeof rest.post>[1] = async (
+  req,
+  res,
+  ctx
+) => {
+  const { contents } = await req.json();
+  comment.push({
+    id: randomId(),
+    user,
+    like: 0,
+    isLiked: false,
+    isRemoved: false,
+    content: contents,
+    createAt: new Date(),
+    children: [],
+  });
+  return res(
+    ctx.status(200),
+    ctx.json({ message: '댓글 등록에 성공했습니다.' })
   );
 };
 

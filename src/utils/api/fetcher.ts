@@ -1,3 +1,6 @@
+import { ServerApiError } from 'utils/error';
+import { getErrorMessage } from 'utils/misc';
+
 export interface FetcherRequestInit extends RequestInit {
   params?: number | string;
   query?: {
@@ -16,4 +19,17 @@ const fetcher = (url: string, options: FetcherRequestInit) => {
   return response;
 };
 
+const baseFetcher = async (url: string, options: FetcherRequestInit) => {
+  try {
+    const response = await fetcher(url, options);
+
+    if (!response.ok) throw new ServerApiError(response.url);
+
+    return await response.json();
+  } catch (error) {
+    getErrorMessage(error);
+  }
+};
+
+export { baseFetcher };
 export default fetcher;
