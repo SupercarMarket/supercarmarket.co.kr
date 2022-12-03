@@ -16,7 +16,7 @@ const right = css`
 const rightBottom = css`
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 10px;
   color: ${({ theme }) => theme.color['greyScale-5']};
 
   svg {
@@ -24,4 +24,10 @@ const rightBottom = css`
   }
 `;
 
-export { right, rightBottom, wrapper };
+const iconWrapper = css`
+  display: flex;
+  align-items: center;
+  gap: 5px;
+`;
+
+export { iconWrapper, right, rightBottom, wrapper };

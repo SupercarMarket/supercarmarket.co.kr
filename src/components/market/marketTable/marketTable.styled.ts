@@ -2,9 +2,9 @@
 
 import styled, { css } from 'styled-components';
 
-const MarketTable = styled.table`
+const MarketTable = styled.table<{ marginBottom: string }>`
   width: 100%;
-  margin-bottom: 80px;
+  margin-bottom: ${({ marginBottom }) => marginBottom};
 `;
 
 const MarketTHead = styled.thead`

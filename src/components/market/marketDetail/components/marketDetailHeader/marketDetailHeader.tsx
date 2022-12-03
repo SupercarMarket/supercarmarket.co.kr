@@ -65,13 +65,19 @@ const MarketDetailHeader = ({
           {price ? `${currencyFormatter.format(price)}만원` : '상담'}
         </Typography>
         <Wrapper.Bottom css={style.rightBottom}>
-          <Typography>
-            {new Date(+`20${ry}`, +rm).toLocaleDateString('us')}
-          </Typography>
-          <EyeIcon width={20} />
-          <Typography>{viewCount}</Typography>
-          <FavoriteBorderIcon width={20} />
-          <Typography>{likeCount}</Typography>
+          <Wrapper css={style.iconWrapper}>
+            <Typography>
+              {new Date(+`20${ry}`, +rm).toLocaleDateString('us')}
+            </Typography>
+          </Wrapper>
+          <Wrapper css={style.iconWrapper}>
+            <EyeIcon width={20} />
+            <Typography>{viewCount}</Typography>
+          </Wrapper>
+          <Wrapper css={style.iconWrapper}>
+            <FavoriteBorderIcon width={20} />
+            <Typography>{likeCount}</Typography>
+          </Wrapper>
         </Wrapper.Bottom>
       </Wrapper.Right>
     </Wrapper>

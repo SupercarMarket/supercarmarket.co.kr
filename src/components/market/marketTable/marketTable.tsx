@@ -8,11 +8,12 @@ import * as Styled from './marketTable.styled';
 
 interface MarketTableProps {
   markets: WithBlurredImage<MarketDto>[];
+  marginBottom: string;
 }
 
-const MarketTable = ({ markets }: MarketTableProps) => {
+const MarketTable = ({ markets, marginBottom = '80px' }: MarketTableProps) => {
   return (
-    <Styled.MarketTable>
+    <Styled.MarketTable marginBottom={marginBottom}>
       <Styled.MarketTHead>
         <Styled.MarketTableRow>
           {MARKET_LIST_TABLE_HEAD.map(({ title, width }) => (
