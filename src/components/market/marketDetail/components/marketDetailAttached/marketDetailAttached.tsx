@@ -1,5 +1,5 @@
-import Container from 'components/common/container';
 import Typography from 'components/common/typography';
+import Wrapper from 'components/common/wrapper/wrapper';
 import theme from 'constants/theme';
 import React, { ReactNode } from 'react';
 
@@ -12,16 +12,13 @@ interface MarketDetailAttachedProps {
 
 const MarketDetailAttached = ({ registration }: MarketDetailAttachedProps) => {
   return (
-    <Container>
-      <Typography fontSize="header-24" fontWeight="bold">
-        첨부파일
-      </Typography>
+    <Wrapper>
       <Styled.AttachedCard>
         <AttachedFile>성능검사표1.jpg</AttachedFile>
         <AttachedFile>성능검사표2.jpg</AttachedFile>
         <AttachedFile>보험이력.pdf</AttachedFile>
       </Styled.AttachedCard>
-    </Container>
+    </Wrapper>
   );
 };
 

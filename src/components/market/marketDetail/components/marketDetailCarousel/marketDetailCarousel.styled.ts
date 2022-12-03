@@ -3,7 +3,7 @@
 import styled, { css } from 'styled-components';
 import { fadeIn, popping } from 'styles/keyframes';
 
-const MainImageWrapper = styled.div`
+const top = css`
   width: 100%;
   height: 757px;
   margin-bottom: 10px;
@@ -11,7 +11,7 @@ const MainImageWrapper = styled.div`
   animation: ${fadeIn} 0.5s ease-in-out forwards;
 `;
 
-const CarouselWrapper = styled.div`
+const bottom = css`
   width: 100%;
   display: flex;
   position: relative;
@@ -82,15 +82,15 @@ const CheckBox = styled(CarouselImageWrapper)`
   position: absolute;
   left: 0;
   top: 0;
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7));
+  background: rgba(0, 0, 0, 0.7);
 `;
 
 export {
   ArrowButton,
+  bottom,
   CarouselArea,
   CarouselBox,
   CarouselImageWrapper,
-  CarouselWrapper,
   CheckBox,
-  MainImageWrapper,
+  top,
 };

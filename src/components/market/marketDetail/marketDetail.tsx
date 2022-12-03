@@ -1,3 +1,4 @@
+import Typography from 'components/common/typography';
 import {
   MarketDetailAttached,
   MarketDetailCar,
@@ -49,7 +50,13 @@ const MarketDetail = ({ data }: MarketDetailProps) => {
         viewCount={viewCount}
       />
       <MarketDetailCarousel imgSrc={imgSrc} />
+      <Typography fontSize="header-24" fontWeight="bold">
+        딜러정보
+      </Typography>
       <MarketDetailDealer dealer={dealer} />
+      <Typography fontSize="header-24" fontWeight="bold">
+        차량정보
+      </Typography>
       <MarketDetailCar
         year={year}
         regDate={regDate}
@@ -60,7 +67,13 @@ const MarketDetail = ({ data }: MarketDetailProps) => {
         cc={cc}
         transmissionType={trasmissionType}
       />
+      <Typography fontSize="header-24" fontWeight="bold">
+        차량소개
+      </Typography>
       <MarketDetailIntroduction introduction={introduction} />
+      <Typography fontSize="header-24" fontWeight="bold">
+        첨부파일
+      </Typography>
       <MarketDetailAttached registration={registration} />
       <MarketLike isLike={false} />
     </>

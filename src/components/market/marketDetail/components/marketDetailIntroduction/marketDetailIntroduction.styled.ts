@@ -1,10 +1,11 @@
 'use client';
 
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-const Introduction = styled.div`
+const wrapper = css`
   margin-top: 20px;
   height: 800px;
+  margin-bottom: 80px;
   padding: 30px 40px;
   border: 1px solid ${({ theme }) => theme.color['greyScale-3']};
   border-radius: 4px;
@@ -17,4 +18,4 @@ const Content = styled.div`
   word-wrap: break-word;
 `;
 
-export { Content, Introduction };
+export { Content, wrapper };

@@ -1,7 +1,8 @@
-import Container from 'components/common/container';
+import Wrapper from 'components/common/wrapper/wrapper';
 import theme from 'constants/theme';
 import Image from 'next/image';
 import React, { useState } from 'react';
+import { css } from 'styled-components';
 import { WithBlurredImage } from 'types/market';
 
 import ArrowLeftIcon from '../../../../../assets/svg/arrow-left.svg';
@@ -30,8 +31,12 @@ const MarketDetailCarousel = ({ imgSrc }: MarketDetailCarouselProps) => {
   };
 
   return (
-    <Container margin="0 0 60px 0">
-      <Styled.MainImageWrapper key={current}>
+    <Wrapper
+      css={css`
+        margin-bottom: 60px;
+      `}
+    >
+      <Wrapper.Top css={Styled.top} key={current}>
         <Image
           width={1200}
           height={757}
@@ -41,8 +46,8 @@ const MarketDetailCarousel = ({ imgSrc }: MarketDetailCarouselProps) => {
           src={imgSrc[current].imgSrc}
           blurDataURL={imgSrc[current].base64}
         />
-      </Styled.MainImageWrapper>
-      <Styled.CarouselWrapper>
+      </Wrapper.Top>
+      <Wrapper.Bottom css={Styled.bottom}>
         <Styled.ArrowButton position="left" onClick={prev} disabled={isFirst}>
           <ArrowLeftIcon width="30px" height="30px" />
         </Styled.ArrowButton>
@@ -78,8 +83,8 @@ const MarketDetailCarousel = ({ imgSrc }: MarketDetailCarouselProps) => {
         <Styled.ArrowButton position="right" onClick={next} disabled={isLast}>
           <ArrowRightIcon width="30px" height="30px" />
         </Styled.ArrowButton>
-      </Styled.CarouselWrapper>
-    </Container>
+      </Wrapper.Bottom>
+    </Wrapper>
   );
 };
 

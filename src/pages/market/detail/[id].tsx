@@ -1,5 +1,5 @@
 import { dehydrate, QueryClient } from '@tanstack/react-query';
-import Container from 'components/common/container';
+import Wrapper from 'components/common/wrapper/wrapper';
 import layout from 'components/layout';
 import { MarketDetail } from 'components/market/marketDetail';
 import MarketTable from 'components/market/marketTable/marketTable';
@@ -7,6 +7,7 @@ import queries from 'constants/queries';
 import useMarketDetail from 'hooks/queries/useMarketDetail';
 import { NextPageContext } from 'next';
 import React from 'react';
+import { css } from 'styled-components';
 
 interface MarketDetailPageProps {
   id: string;
@@ -18,15 +19,17 @@ const MarketDetailPage = ({ id }: MarketDetailPageProps) => {
   if (!data) return <div>로딩중?</div>;
 
   return (
-    <Container
-      width="1200px"
-      display="flex"
-      flexDirection="column"
-      margin="20px 0 0 0"
+    <Wrapper
+      css={css`
+        width: 1200px;
+        display: flex;
+        flex-direction: column;
+        margin: 20px 0 0 0;
+      `}
     >
       <MarketDetail data={data.data} />
       <MarketTable markets={data.carList} />
-    </Container>
+    </Wrapper>
   );
 };
 

@@ -1,13 +1,11 @@
-import Container from 'components/common/container/container';
 import Typography from 'components/common/typography';
+import Wrapper from 'components/common/wrapper';
 import { FUEL_KIND } from 'constants/market';
-import theme from 'constants/theme';
 import React from 'react';
-import { convertPriceToWon } from 'utils/market/marketList';
 
 import EyeIcon from '../../../../../assets/svg/eye.svg';
 import FavoriteBorderIcon from '../../../../../assets/svg/favorite-border.svg';
-import * as Styled from './marketDetailHeader.styled';
+import * as style from './marketDetailHeader.styled';
 
 interface MarketDetailHeaderProps {
   year: string;
@@ -38,13 +36,8 @@ const MarketDetailHeader = ({
   });
 
   return (
-    <Container
-      display="flex"
-      alignItems="center"
-      justifyContent="space-between"
-      margin="0 0 40px 0"
-    >
-      <div>
+    <Wrapper css={style.wrapper}>
+      <Wrapper.Left>
         <Typography
           fontSize="header-36"
           fontWeight="bold"
@@ -59,8 +52,9 @@ const MarketDetailHeader = ({
             FUEL_KIND[fuel]
           } | ${formatter.format(mileage)}km`}
         </Typography>
-      </div>
-      <div style={{ textAlign: 'right' }}>
+      </Wrapper.Left>
+
+      <Wrapper.Right css={style.right}>
         <Typography
           fontSize="header-24"
           fontWeight="bold"
@@ -70,18 +64,17 @@ const MarketDetailHeader = ({
         >
           {price ? `${currencyFormatter.format(price)}만원` : '상담'}
         </Typography>
-        <br />
-        <Container display="flex" alignItems="center" gap="5px">
-          <Typography color="greyScale-5">
+        <Wrapper.Bottom css={style.rightBottom}>
+          <Typography>
             {new Date(+`20${ry}`, +rm).toLocaleDateString('us')}
           </Typography>
-          <EyeIcon width={20} fill={theme.color['greyScale-5']} />
-          <Typography color="greyScale-5">{viewCount}</Typography>
-          <FavoriteBorderIcon width={20} fill={theme.color['greyScale-5']} />
-          <Typography color="greyScale-5">{likeCount}</Typography>
-        </Container>
-      </div>
-    </Container>
+          <EyeIcon width={20} />
+          <Typography>{viewCount}</Typography>
+          <FavoriteBorderIcon width={20} />
+          <Typography>{likeCount}</Typography>
+        </Wrapper.Bottom>
+      </Wrapper.Right>
+    </Wrapper>
   );
 };
 

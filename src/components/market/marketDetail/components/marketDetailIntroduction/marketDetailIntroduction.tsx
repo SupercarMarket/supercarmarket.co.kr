@@ -1,5 +1,4 @@
-import Container from 'components/common/container/container';
-import Typography from 'components/common/typography';
+import Wrapper from 'components/common/wrapper';
 import React from 'react';
 
 import * as Styled from './marketDetailIntroduction.styled';
@@ -12,14 +11,9 @@ const MarketDetailIntroduction = ({
   introduction,
 }: MarketDetailIntroductionProps) => {
   return (
-    <Container margin="0 0 80px 0">
-      <Typography fontSize="header-24" fontWeight="bold">
-        차량소개
-      </Typography>
-      <Styled.Introduction>
-        <Styled.Content>{introduction}</Styled.Content>
-      </Styled.Introduction>
-    </Container>
+    <Wrapper css={Styled.wrapper}>
+      <Styled.Content>{introduction}</Styled.Content>
+    </Wrapper>
   );
 };
 
