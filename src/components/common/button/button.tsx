@@ -54,6 +54,7 @@ const Button = (props: ButtonProps, ref: Ref<HTMLButtonElement>) => {
         disabled={disabled}
         style={{
           width,
+          whiteSpace: 'nowrap',
           ...style,
         }}
         {...rest}

@@ -24,6 +24,15 @@ const Wrapper = (props: PropsWithChildren<WrapperProps>) => {
   );
 };
 
+Wrapper.Item = function Top(props: PropsWithChildren<WrapperProps>) {
+  const { css, children, className = 'item' } = props;
+  return (
+    <Container css={css} className={className}>
+      {children}
+    </Container>
+  );
+};
+
 Wrapper.Top = function Top(props: PropsWithChildren<WrapperProps>) {
   const { css, children, className = 'top' } = props;
   return (
