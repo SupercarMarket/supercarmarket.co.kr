@@ -1,7 +1,11 @@
 import { rest } from 'msw';
 import { ServerResponse } from 'types/base';
 import { CommentResponse } from 'types/comment';
-import { MagazineDto, MagazinePostDto, MagazineResponse } from 'types/magazine';
+import {
+  MagazineDto,
+  MagazinePostingResponse,
+  MagazineResponse,
+} from 'types/magazine';
 import { MarketDto, MarketResponse } from 'types/market';
 
 /**
@@ -58,12 +62,12 @@ const magazineList = Array.from(Array(1024)).map(() => ({
 
 const magazinePost = {
   id: randomId(),
-  admin,
+  user: admin,
   title:
     '제목총100글자두줄제목총100글자두줄제목총100글자두줄제목총100글자두줄제목총100글자두줄제목총100글자두줄제목총100글자두줄제목총100글자두줄제목총100글자두줄제목총100글자두줄',
   view: 999,
+  totalCommentCount: 13335,
   contentHtml: '<h1>안녕하세요..!</h1><p>본문 내용 무</p>',
-  isScraped: false,
   createAt: new Date(),
 };
 
@@ -198,8 +202,9 @@ const getMagazineList: Parameters<typeof rest.get>[1] = (req, res, ctx) => {
 const getMagazinePost: Parameters<typeof rest.get>[1] = (req, res, ctx) => {
   return res(
     ctx.status(200),
-    ctx.json<ServerResponse<MagazinePostDto>>({
+    ctx.json<MagazinePostingResponse>({
       data: magazinePost,
+      isScraped: false,
     })
   );
 };
