@@ -5,9 +5,18 @@ import EyeIcon from '../../../assets/svg/remove-red-eye.svg';
 import Container from '../container';
 import Typography from '../typography';
 import Wrapper from '../wrapper';
+import { PostingProps } from './posting';
 import * as style from './posting.styled';
 
-const PostingHead = () => {
+type PostingHeadProps = Omit<PostingProps, 'contentHtml'>;
+
+const PostingHead = ({
+  title,
+  user,
+  view,
+  totalCommentCount,
+  createAt,
+}: PostingHeadProps) => {
   return (
     <Container
       display="flex"
@@ -24,12 +33,12 @@ const PostingHead = () => {
           color="greyScale-6"
           lineHeight="150%"
         >
-          제목총100글자두줄제목총100글자두줄제목총100글자두줄제목총100글자두줄제목총100글자두줄제목총100글자두줄제목총100글자두줄제목총100글자두줄제목총100글자두줄제목총100글자두줄
+          {title}
         </Typography>
       </Wrapper.Top>
       <Wrapper.Bottom css={style.bottom}>
         <Wrapper.Left css={style.left}>
-          <Avvvatars value="금종선" size={40} />
+          <Avvvatars value={user.nickName} size={40} />
           <Typography
             as="span"
             fontSize="body-14"
@@ -37,7 +46,7 @@ const PostingHead = () => {
             color="greyScale-6"
             lineHeight="120%"
           >
-            슈퍼카마켓슈퍼카마켓
+            {user.nickName}
           </Typography>
           <Typography
             as="span"
@@ -46,7 +55,7 @@ const PostingHead = () => {
             color="greyScale-5"
             lineHeight="120%"
           >
-            2022. 9. 14 16:24
+            {createAt.toString()}
           </Typography>
         </Wrapper.Left>
         <Wrapper.Right css={style.right}>
@@ -59,7 +68,7 @@ const PostingHead = () => {
               color="greyScale-5"
               lineHeight="120%"
             >
-              15554
+              {totalCommentCount}
             </Typography>
           </Wrapper>
           <Wrapper css={style.wrapper}>
@@ -71,7 +80,7 @@ const PostingHead = () => {
               color="greyScale-5"
               lineHeight="120%"
             >
-              12
+              {view}
             </Typography>
           </Wrapper>
         </Wrapper.Right>

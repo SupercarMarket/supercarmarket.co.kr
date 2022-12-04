@@ -17,6 +17,8 @@ interface Posting {
   view: number;
   contentHtml: string;
   createAt: Date;
+  user: User;
+  totalCommentCount: number;
   updateAt?: Date;
 }
 
