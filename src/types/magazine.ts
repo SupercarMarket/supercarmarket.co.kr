@@ -1,15 +1,10 @@
-import { Admin, Posting } from './base';
+import { Posting } from './base';
 
 interface MagazineDto {
   id: string;
   title: string;
   contents: string;
   imgSrc: string;
-}
-
-interface MagazinePostDto extends Posting {
-  admin: Admin;
-  isScraped: boolean;
 }
 
 type WithBlurredImage<T> = {
@@ -26,9 +21,14 @@ interface MagazineResponse<T> {
   isFirstPage: boolean;
 }
 
+interface MagazinePostingResponse {
+  data: Posting;
+  isScraped: boolean;
+}
+
 export type {
   MagazineDto,
-  MagazinePostDto,
+  MagazinePostingResponse,
   MagazineResponse,
   WithBlurredImage,
 };

@@ -1,9 +1,17 @@
 import Container from '../container';
 
-const PostingBody = () => {
+interface PostingBodyProps {
+  contentHtml: string;
+}
+
+const PostingBody = ({ contentHtml }: PostingBodyProps) => {
   return (
     <Container margin="40px 0">
-      <h1>html</h1>
+      <div
+        dangerouslySetInnerHTML={{
+          __html: contentHtml,
+        }}
+      />
     </Container>
   );
 };

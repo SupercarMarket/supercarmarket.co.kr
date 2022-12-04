@@ -3,12 +3,12 @@ import Comment from 'components/common/comment';
 import Container from 'components/common/container';
 import Posting from 'components/common/posting';
 import layout from 'components/layout';
-import MagazineDealer from 'components/magazine/magazineDealer';
+import { MagazineDealer, MagazineScrape } from 'components/magazine';
 import queries from 'constants/queries';
 import { ModalProvider } from 'feature/modalContext';
 import useComment from 'hooks/queries/useComment';
 import useMagazinePost from 'hooks/queries/useMagazinePost';
-import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import type { ParsedUrlQuery } from 'querystring';
 import { baseFetcher } from 'utils/api/fetcher';
 
@@ -19,7 +19,7 @@ interface IParams extends ParsedUrlQuery {
 const MagazinePost = ({
   id,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const { data: comment, refetch } = useComment(id, {
+  const { data: comment } = useComment(id, {
     enabled: !!id,
   });
   const { data: magazinePost } = useMagazinePost(id, {
@@ -35,7 +35,8 @@ const MagazinePost = ({
         flexDirection="column"
         gap="80px"
       >
-        <Posting />
+        {magazinePost && <Posting {...magazinePost.data} />}
+        <MagazineScrape />
         <MagazineDealer />
         {comment && <Comment id={id} {...comment} />}
       </Container>

@@ -1,4 +1,4 @@
-import { Posting, User } from './base';
+import { Posting } from './base';
 
 interface CommunityDto {
   id: string;
@@ -12,7 +12,6 @@ interface CommunityDto {
 }
 
 interface CommunityPostDto extends Posting {
-  user: User;
   like: number;
 }
 
