@@ -1,9 +1,8 @@
 import type { NextApiHandler } from 'next/types';
 import { getPlaiceholder } from 'plaiceholder';
-import type { ServerResponse } from 'types/base';
 import type {
   MagazineDto,
-  MagazinePostDto,
+  MagazinePostingResponse,
   MagazineResponse,
 } from 'types/magazine';
 import { ServerApiError } from 'utils/error';
@@ -47,12 +46,15 @@ const magazinePostApi: NextApiHandler = async (req, res) => {
 
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_URL}/server/api/v1/magazine/${id}`
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/magazine/${id}`,
+      {
+        method: 'GET',
+      }
     );
 
     if (!response.ok) throw new ServerApiError(response.url);
 
-    const magazinePost: ServerResponse<MagazinePostDto> = await response.json();
+    const magazinePost: MagazinePostingResponse = await response.json();
 
     return res.status(200).json(magazinePost);
   } catch (error) {

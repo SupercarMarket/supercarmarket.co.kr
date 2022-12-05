@@ -1,6 +1,7 @@
 import Container from 'components/common/container';
 import Typography from 'components/common/typography';
 import Image from 'next/image';
+import Link from 'next/link';
 import { memo } from 'react';
 import { MagazineDto, WithBlurredImage } from 'types/magazine';
 
@@ -9,6 +10,7 @@ interface MagazineCardProps extends WithBlurredImage<MagazineDto> {
 }
 
 const MagazineCard = memo(function MagazineCard({
+  id,
   title,
   base64,
   imgSrc,
@@ -22,63 +24,70 @@ const MagazineCard = memo(function MagazineCard({
   const bodyFontSize = type === 'normal' ? 'body-16' : 'body-14';
   const visible = type === 'normal';
   return (
-    <Container position="relative">
-      <Image
-        src={imgSrc}
-        width={imgWidth}
-        height={imgHeight}
-        placeholder="blur"
-        blurDataURL={base64}
-        alt="thumbnail"
-        layout="fixed"
-        style={{
-          borderRadius: '4px',
-        }}
-      />
-      <Typography
-        as="h2"
-        fontSize={headingFontSize}
-        fontWeight="bold"
-        color="greyScale-6"
-        lineHeight="120%"
-        style={{
-          marginTop: headingMarginTop,
-          marginBottom: '10px',
-        }}
-      >
-        {title}
-        {` `}
+    <Link
+      href={`/magazine/${id}`}
+      style={{
+        cursor: 'pointer',
+      }}
+    >
+      <Container position="relative">
+        <Image
+          src={imgSrc}
+          width={imgWidth}
+          height={imgHeight}
+          placeholder="blur"
+          blurDataURL={base64}
+          alt="thumbnail"
+          layout="fixed"
+          style={{
+            borderRadius: '4px',
+          }}
+        />
         <Typography
-          as="b"
-          color="system-1"
+          as="h2"
+          fontSize={headingFontSize}
+          fontWeight="bold"
+          color="greyScale-6"
           lineHeight="120%"
-        >{`(999)`}</Typography>
-      </Typography>
-      {visible && (
+          style={{
+            marginTop: headingMarginTop,
+            marginBottom: '10px',
+          }}
+        >
+          {title}
+          {` `}
+          <Typography
+            as="b"
+            color="system-1"
+            lineHeight="120%"
+          >{`(999)`}</Typography>
+        </Typography>
+        {visible && (
+          <Typography
+            as="p"
+            fontSize="body-16"
+            fontWeight="regular"
+            color="greyScale-5"
+            lineHeight="150%"
+            style={{
+              marginBottom: '10px',
+            }}
+          >
+            {contents}
+          </Typography>
+        )}
         <Typography
-          as="p"
-          fontSize="body-16"
+          as="span"
+          fontSize={bodyFontSize}
           fontWeight="regular"
           color="greyScale-5"
           lineHeight="150%"
           style={{
-            marginBottom: '10px',
+            lineHeight: '19.36px',
           }}
-        >
-          {contents}
-        </Typography>
-      )}
-      <Typography
-        as="span"
-        fontSize={bodyFontSize}
-        fontWeight="regular"
-        color="greyScale-5"
-        lineHeight="150%"
-        style={{
-          lineHeight: '19.36px',
-        }}
-      >{`2022.09.01`}</Typography>
-    </Container>
+        >{`2022.09.01`}</Typography>
+      </Container>
+    </Link>
   );
 });
 
