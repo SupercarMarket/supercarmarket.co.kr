@@ -2,7 +2,11 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import queries from 'constants/queries';
 import { baseFetcher } from 'utils/api/fetcher';
 
-export default function useAddComment(id: string, options = {}) {
+export default function useAddComment(
+  id: string,
+  parentId?: number,
+  options = {}
+) {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -14,6 +18,7 @@ export default function useAddComment(id: string, options = {}) {
         },
         query: {
           id,
+          parentId,
         },
         body: JSON.stringify(data),
       }),
