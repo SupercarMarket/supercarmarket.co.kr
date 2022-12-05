@@ -1,6 +1,5 @@
 import { rest } from 'msw';
-import { ServerResponse } from 'types/base';
-import { CommentResponse } from 'types/comment';
+import { Comment, CommentResponse } from 'types/comment';
 import {
   MagazineDto,
   MagazinePostingResponse,
@@ -46,6 +45,8 @@ const marketList = Array.from(Array(1024)).map(() => ({
   price: 0,
   dealer: '슈퍼카마켓',
 }));
+
+let isScraped = false;
 
 const magazineImages = [
   'https://user-images.githubusercontent.com/66871265/196571825-f136a62d-15f3-4d21-a709-8ea0fd77f98a.png',
@@ -96,7 +97,7 @@ const communityList = Array.from(Array(1024)).map(() => ({
   thumbnailImgSrc: communityImages[randomIndex(0)],
 }));
 
-const comment = Array.from(Array(1)).map(() => ({
+const comment: Comment[] = Array.from(Array(1)).map(() => ({
   id: randomId(),
   user,
   content:
@@ -165,6 +166,14 @@ export function handlers() {
      */
     rest.get('https://server/api/v1/magazine/:postId', getMagazinePost),
     /**
+     * 매거진 스크랩
+     */
+    rest.post('https://server/api/v1/magazine/:postId', scrapeMagazinePost),
+    /**
+     * 매거진 상담
+     */
+    rest.post('https://server/api/v1/magazine/:postId', counselingMagazinePost),
+    /**
      * 커뮤니티 인기글.
      */
     rest.get('https://server/api/v1/community-best', getCommunityBestList),
@@ -176,6 +185,24 @@ export function handlers() {
      * 댓글 등록.
      */
     rest.post('https://server/api/v1/comment/:postId', createComment),
+    /**
+     * 댓글 좋아요.
+     */
+    rest.patch('https://server/api/v1/:postId/comment/:commentId', likeComment),
+    /**
+     * 댓글 수정.
+     */
+    rest.patch(
+      'https://server/api/v1/:postId/comment/:commentId',
+      updateComment
+    ),
+    /**
+     * 댓글 삭제.
+     */
+    rest.delete(
+      'https://server/api/v1/:postId/comment/:commentId',
+      removeComment
+    ),
   ];
 }
 
@@ -204,9 +231,22 @@ const getMagazinePost: Parameters<typeof rest.get>[1] = (req, res, ctx) => {
     ctx.status(200),
     ctx.json<MagazinePostingResponse>({
       data: magazinePost,
-      isScraped: false,
+      isScraped,
     })
   );
+};
+
+const scrapeMagazinePost: Parameters<typeof rest.post>[1] = (req, res, ctx) => {
+  isScraped = !isScraped;
+  return res(ctx.status(200), ctx.json({ message: 'success' }));
+};
+
+const counselingMagazinePost: Parameters<typeof rest.post>[1] = (
+  req,
+  res,
+  ctx
+) => {
+  return res(ctx.status(200), ctx.json({ message: 'success' }));
 };
 
 const getMarketList: Parameters<typeof rest.get>[1] = (req, res, ctx) => {
@@ -272,12 +312,12 @@ const createComment: Parameters<typeof rest.post>[1] = async (
 ) => {
   const { searchParams } = req.url;
   const { contents } = await req.json();
-  const parentId = searchParams.get('page');
+  const parentId = searchParams.get('parentId');
 
   if (parentId) {
     comment.forEach((c) => {
       if (parentId === c.id) {
-        c.children.push({
+        c.children?.push({
           id: randomId(),
           user,
           like: 0,
@@ -305,6 +345,58 @@ const createComment: Parameters<typeof rest.post>[1] = async (
     ctx.status(200),
     ctx.json({ message: '댓글 등록에 성공했습니다.' })
   );
+};
+
+const likeComment: Parameters<typeof rest.patch>[1] = (req, res, ctx) => {
+  const { commentId } = req.params;
+
+  if (!commentId) res(ctx.status(500));
+
+  comment.forEach((c) => {
+    if (c.id === commentId) {
+      if (c.isLiked) {
+        c.isLiked = false;
+        c.like -= 1;
+      } else {
+        c.isLiked = true;
+        c.like += 1;
+      }
+    }
+  });
+
+  return res(ctx.status(200), ctx.json({ message: 'success' }));
+};
+
+const updateComment: Parameters<typeof rest.patch>[1] = async (
+  req,
+  res,
+  ctx
+) => {
+  const { contents } = await req.json();
+  const { commentId } = req.params;
+
+  if (!commentId || !contents) res(ctx.status(500));
+
+  comment.forEach((c) => {
+    if (c.id === commentId) {
+      c.content = contents;
+      c.updateAt = new Date();
+    }
+  });
+
+  return res(ctx.status(200), ctx.json({ message: 'success' }));
+};
+
+const removeComment: Parameters<typeof rest.delete>[1] = (req, res, ctx) => {
+  const { commentId } = req.params;
+
+  if (!commentId) res(ctx.status(500));
+
+  comment.forEach((c) => {
+    if (c.id === commentId) c.isRemoved = true;
+  });
+
+  return res(ctx.status(200), ctx.json({ message: 'success' }));
 };
 
 /**
