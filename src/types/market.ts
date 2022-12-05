@@ -42,8 +42,46 @@ interface MarketResponse<T> {
   isFirstPage: boolean;
 }
 
+interface DealerDto {
+  profile: string;
+  company: string;
+  dealerName: string;
+  address: string;
+  dealerNumber: string;
+  phone: string;
+}
+
+interface MarketDetailDto<T> {
+  dealer: DealerDto;
+  viewCount: number;
+  dirSeq: number;
+  likeCount: number;
+  registration: string;
+  carName: string;
+  introduction: string;
+  year: string;
+  fuel: string;
+  mileage: number;
+  price: number;
+  accident: boolean;
+  regDate: string;
+  cc: number;
+  color: string;
+  trasmissionType: string;
+  category: string;
+  imgSrc: T[];
+}
+
+interface MarketDetailResponse<T> {
+  data: T;
+  carList: WithBlurredImage<MarketDto>[];
+}
+
 export type {
+  DealerDto,
   FilterType,
+  MarketDetailDto,
+  MarketDetailResponse,
   MarketDto,
   MarketFormTarget,
   MarketLabelType,

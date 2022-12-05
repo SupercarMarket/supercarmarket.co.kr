@@ -1,16 +1,18 @@
+'use client';
+
 import styled, { css } from 'styled-components';
 
 interface SelectProps {
   width: string;
 }
 
-export const SelectContainer = styled.div<SelectProps>`
+const SelectContainer = styled.div<SelectProps>`
   box-sizing: border-box;
   position: relative;
   width: ${({ width }) => width}px;
 `;
 
-export const Backdrop = styled.div<{ toggle: boolean }>`
+const Backdrop = styled.div<{ toggle: boolean }>`
   display: none;
   position: fixed;
   top: 0;
@@ -30,7 +32,7 @@ interface AlignProps {
   align?: 'left' | 'center' | 'right';
 }
 
-export const SelectCurrentButton = styled.button<AlignProps>`
+const SelectCurrentButton = styled.button<AlignProps>`
   box-sizing: border-box;
   position: relative;
   width: 100%;
@@ -65,7 +67,7 @@ interface SelectOptionListProps {
   over?: boolean;
 }
 
-export const SelectOptionList = styled.ul<SelectOptionListProps>`
+const SelectOptionList = styled.ul<SelectOptionListProps>`
   box-sizing: border-box;
   width: ${({ width }) => width}px;
   display: none;
@@ -91,9 +93,9 @@ export const SelectOptionList = styled.ul<SelectOptionListProps>`
     `}
 `;
 
-export const SelectOptionItem = styled.li``;
+const SelectOptionItem = styled.li``;
 
-export const SelectOptionButton = styled(SelectCurrentButton)`
+const SelectOptionButton = styled(SelectCurrentButton)`
   border: none;
   border-radius: 0px;
   :hover {
@@ -111,3 +113,12 @@ export const SelectOptionButton = styled(SelectCurrentButton)`
         : 'flex-end'};
     `};
 `;
+
+export {
+  Backdrop,
+  SelectContainer,
+  SelectCurrentButton,
+  SelectOptionButton,
+  SelectOptionItem,
+  SelectOptionList,
+};
