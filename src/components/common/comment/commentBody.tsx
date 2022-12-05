@@ -1,16 +1,14 @@
 import Avvvatars from 'avvvatars-react';
+import { useCallback, useState } from 'react';
 import { Comment } from 'types/comment';
 
 import LikeIcon from '../../../assets/svg/thumb-up.svg';
+import Button from '../button';
 import Container from '../container';
 import Typography from '../typography';
-import {
-  CommentCardChildrenWrapper,
-  CommentCardContent,
-  CommentCardInfo,
-  CommentCardInfoWrapper,
-  CommentCardWrapper,
-} from './comment.styled';
+import Wrapper from '../wrapper';
+import * as style from './comment.styled';
+import CommentArea from './commentArea';
 
 const CommentCard = ({
   user,
@@ -20,6 +18,11 @@ const CommentCard = ({
   updateAt,
   children,
 }: Comment) => {
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = useCallback(() => {
+    setOpen((prev) => !prev);
+  }, []);
   return (
     <>
       <Container
@@ -28,10 +31,10 @@ const CommentCard = ({
         gap="12px"
         borderBottom="1px solid #EAEAEC"
       >
-        <Avvvatars value="금종선" size={40} radius={20} />
-        <CommentCardWrapper>
-          <CommentCardInfo>
-            <CommentCardInfoWrapper>
+        <Avvvatars value={user.nickName} size={40} radius={20} />
+        <Wrapper css={style.cardWrapper}>
+          <Wrapper.Top css={style.cardInfo}>
+            <Wrapper css={style.cardInfoWrapper}>
               <Typography
                 fontSize="header-14"
                 fontWeight="bold"
@@ -58,19 +61,23 @@ const CommentCard = ({
                   수정됨
                 </Typography>
               )}
-              <Typography
-                fontSize="body-14"
-                fontWeight="regular"
-                lineHeight="150%"
-                color="greyScale-5"
-                style={{
-                  cursor: 'pointer',
-                }}
-              >
-                답글쓰기
-              </Typography>
-            </CommentCardInfoWrapper>
-            <CommentCardInfoWrapper>
+              {children && (
+                <Button variant="Init" onClick={handleOpen}>
+                  <Typography
+                    fontSize="body-14"
+                    fontWeight="regular"
+                    lineHeight="150%"
+                    color="greyScale-5"
+                    style={{
+                      cursor: 'pointer',
+                    }}
+                  >
+                    답글쓰기
+                  </Typography>
+                </Button>
+              )}
+            </Wrapper>
+            <Wrapper css={style.cardInfoWrapper}>
               <LikeIcon />
               <Typography
                 fontSize="body-14"
@@ -80,19 +87,24 @@ const CommentCard = ({
               >
                 {like}
               </Typography>
-            </CommentCardInfoWrapper>
-          </CommentCardInfo>
-          <CommentCardContent>
+            </Wrapper>
+          </Wrapper.Top>
+          <Wrapper.Bottom>
             <Typography>{content}</Typography>
-          </CommentCardContent>
-        </CommentCardWrapper>
+          </Wrapper.Bottom>
+        </Wrapper>
       </Container>
+      {open && (
+        <Wrapper css={style.cardArea}>
+          <CommentArea id={'1'} />
+        </Wrapper>
+      )}
       {children && (
-        <CommentCardChildrenWrapper>
+        <Wrapper css={style.cardChildren}>
           {children.map((comment) => (
             <CommentCard key={comment.id} {...comment} />
           ))}
-        </CommentCardChildrenWrapper>
+        </Wrapper>
       )}
     </>
   );

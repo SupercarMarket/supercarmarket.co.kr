@@ -26,7 +26,7 @@ const commentApi: NextApiHandler = async (req, res) => {
 
 const commentCreateApi: NextApiHandler = async (req, res) => {
   const { user, contents } = req.body;
-  const { id } = req.query;
+  const { id, parentId } = req.query;
 
   if (!user || !contents) throw new Error('invalid data');
   if (!id) throw new Error('invalid query');
@@ -34,7 +34,9 @@ const commentCreateApi: NextApiHandler = async (req, res) => {
 
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_URL}/server/api/v1/comment/${id}`,
+      `${process.env.NEXT_PUBLIC_URL}/server/api/v1/comment/${id}${
+        parentId && `?parentId=${parentId}`
+      }`,
       {
         method: 'POST',
         headers: {

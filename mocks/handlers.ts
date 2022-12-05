@@ -270,17 +270,37 @@ const createComment: Parameters<typeof rest.post>[1] = async (
   res,
   ctx
 ) => {
+  const { searchParams } = req.url;
   const { contents } = await req.json();
-  comment.push({
-    id: randomId(),
-    user,
-    like: 0,
-    isLiked: false,
-    isRemoved: false,
-    content: contents,
-    createAt: new Date(),
-    children: [],
-  });
+  const parentId = searchParams.get('page');
+
+  if (parentId) {
+    comment.forEach((c) => {
+      if (parentId === c.id) {
+        c.children.push({
+          id: randomId(),
+          user,
+          like: 0,
+          isLiked: false,
+          isRemoved: false,
+          content: contents,
+          createAt: new Date(),
+        });
+      }
+    });
+  } else {
+    comment.push({
+      id: randomId(),
+      user,
+      like: 0,
+      isLiked: false,
+      isRemoved: false,
+      content: contents,
+      createAt: new Date(),
+      children: [],
+    });
+  }
+
   return res(
     ctx.status(200),
     ctx.json({ message: '댓글 등록에 성공했습니다.' })
