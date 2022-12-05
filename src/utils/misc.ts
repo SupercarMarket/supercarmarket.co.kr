@@ -33,4 +33,10 @@ const env = (key: string): string => {
   return value;
 };
 
-export { env, getErrorMessage };
+const catchNoExist = (...lists: unknown[]) => {
+  lists.forEach((list) => {
+    if (!list) throw new Error('No Exist Query or Data');
+  });
+};
+
+export { catchNoExist, env, getErrorMessage };

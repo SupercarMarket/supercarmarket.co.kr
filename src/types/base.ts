@@ -30,4 +30,8 @@ type WithBlurredImage<T> = {
   base64: string;
 } & T;
 
-export type { Admin, Posting, ServerResponse, User, WithBlurredImage };
+interface Params {
+  [key: string]: string;
+}
+
+export type { Admin, Params, Posting, ServerResponse, User, WithBlurredImage };
