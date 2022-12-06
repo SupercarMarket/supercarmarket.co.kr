@@ -5,6 +5,9 @@ import { catchNoExist, getErrorMessage } from 'utils/misc';
 
 import { baseFetcher } from './fetcher';
 
+const token =
+  'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhY2Nlc3NfdG9rZW4iLCJpYXQiOjE2NzAyNDYzMDMsImV4cCI6MTY3MDI4OTUwMywidXNlcklkIjoibWluc3UifQ.oglYTtlkyKFOxgoRpix2CAd3mLRjZft7nXol0Qyj0z0';
+
 const commentApi: NextApiHandler = async (req, res) => {
   const { id } = req.query as Params;
 
@@ -12,8 +15,16 @@ const commentApi: NextApiHandler = async (req, res) => {
 
   try {
     const comment: CommentResponse = await baseFetcher(
-      `${process.env.NEXT_PUBLIC_URL}/server/api/v1/comment/${id}`,
-      { method: 'GET' }
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/post/${id}/comment`,
+      {
+        headers: {
+          ACCESS_TOKEN: `Bearer ${token}`,
+        },
+        method: 'GET',
+        query: {
+          category: 'magazine',
+        },
+      }
     );
 
     return res.status(200).json(comment);
@@ -24,20 +35,22 @@ const commentApi: NextApiHandler = async (req, res) => {
 
 const commentCreateApi: NextApiHandler = async (req, res) => {
   const { user, contents } = req.body;
-  const { id, parentId } = req.query as Params;
+  const { postId, parentId } = req.query as Params;
 
-  catchNoExist(user, contents, id);
+  catchNoExist(user, contents, postId);
 
   try {
     const create = await baseFetcher(
-      `${process.env.NEXT_PUBLIC_URL}/server/api/v1/comment/${id}${
-        parentId && `?parentId=${parentId}`
-      }`,
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/post/${postId}/comment`,
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${user.accessToken}`,
+          ACCESS_TOKEN: `Bearer ${token}`,
+        },
+        query: {
+          parentId: parentId ? parentId : null,
+          category: 'magazine',
         },
         body: JSON.stringify({ contents }),
       }
@@ -80,9 +93,15 @@ const commentLikeApi: NextApiHandler = async (req, res) => {
 
   try {
     const like = await baseFetcher(
-      `${process.env.NEXT_PUBLIC_URL}/server/api/v1/${postId}/comment/${commentId}`,
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/post/${postId}/comment/${commentId}/like`,
       {
-        method: 'PATCH',
+        headers: {
+          ACCESS_TOKEN: `Bearer ${token}`,
+        },
+        query: {
+          category: 'magazine',
+        },
+        method: 'POST',
       }
     );
 
@@ -99,8 +118,14 @@ const commentRemoveApi: NextApiHandler = async (req, res) => {
 
   try {
     const remove = await baseFetcher(
-      `${process.env.NEXT_PUBLIC_URL}/server/api/v1/${postId}/comment/${commentId}`,
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/post/${postId}/comment/${commentId}`,
       {
+        headers: {
+          ACCESS_TOKEN: `Bearer ${token}`,
+        },
+        query: {
+          category: 'magazine',
+        },
         method: 'DELETE',
       }
     );

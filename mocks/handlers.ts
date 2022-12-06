@@ -47,6 +47,7 @@ const marketList = Array.from(Array(1024)).map(() => ({
 }));
 
 let isScraped = false;
+let isCounseling = false;
 
 const magazineImages = [
   'https://user-images.githubusercontent.com/66871265/196571825-f136a62d-15f3-4d21-a709-8ea0fd77f98a.png',
@@ -232,6 +233,7 @@ const getMagazinePost: Parameters<typeof rest.get>[1] = (req, res, ctx) => {
     ctx.json<MagazinePostingResponse>({
       data: magazinePost,
       isScraped,
+      isCounseling,
     })
   );
 };
@@ -246,6 +248,7 @@ const counselingMagazinePost: Parameters<typeof rest.post>[1] = (
   res,
   ctx
 ) => {
+  isCounseling = true;
   return res(ctx.status(200), ctx.json({ message: 'success' }));
 };
 
@@ -314,7 +317,7 @@ const createComment: Parameters<typeof rest.post>[1] = async (
   const { contents } = await req.json();
   const parentId = searchParams.get('parentId');
 
-  if (parentId) {
+  if (parentId !== 'undefined') {
     comment.forEach((c) => {
       if (parentId === c.id) {
         c.children?.push({

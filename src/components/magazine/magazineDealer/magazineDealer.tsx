@@ -5,6 +5,7 @@ import AuthModal from 'components/common/modal';
 import CounselingModal from 'components/common/modal/counselingModal';
 import Typography from 'components/common/typography';
 import ModalContext from 'feature/modalContext';
+import useMagazineCounseling from 'hooks/mutations/magazine/useMagazineCounseling';
 import { useCallback, useContext } from 'react';
 
 import {
@@ -12,6 +13,10 @@ import {
   MagazineDealerLeftWrapper,
   MagazineDealerRight,
 } from './magazine.styled';
+
+interface MagazineDealerProps {
+  postId: string;
+}
 
 const user = {
   id: 'qwjfkqnwfkjnqwkjfnqwkfnkqwnfk',
@@ -22,13 +27,20 @@ const user = {
   accessToken: '12kqwnflknqwlkfnr123kln',
 };
 
-const MagazineDealer = () => {
+const MagazineDealer = ({ postId }: MagazineDealerProps) => {
+  const { mutate } = useMagazineCounseling(postId);
   const { onOpen, onClose, onClick } = useContext(ModalContext);
+
+  const handleCounseling = useCallback(() => {
+    mutate();
+  }, [mutate]);
+
   const onModal = useCallback(() => {
     if (user)
       onOpen(
         <CounselingModal
           user={user}
+          handleCounseling={handleCounseling}
           onClose={onClose}
           onClick={onClick}
           onOpen={onOpen}
@@ -36,7 +48,7 @@ const MagazineDealer = () => {
       );
     else
       onOpen(<AuthModal onClose={onClose} onClick={onClick} onOpen={onOpen} />);
-  }, [onClick, onClose, onOpen]);
+  }, [handleCounseling, onClick, onClose, onOpen]);
 
   return (
     <Container

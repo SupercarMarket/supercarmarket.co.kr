@@ -24,6 +24,7 @@ interface MagazineResponse<T> {
 interface MagazinePostingResponse {
   data: Posting;
   isScraped: boolean;
+  isCounseling: boolean;
 }
 
 export type {
