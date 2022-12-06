@@ -1,10 +1,13 @@
 import Button from 'components/common/button';
 import Typography from 'components/common/typography';
 import Wrapper from 'components/common/wrapper';
+import useMagazineScrape from 'hooks/mutations/magazine/useMagazineScrape';
+import { useCallback } from 'react';
 import { css } from 'styled-components';
 
 interface MagazineScrapeProps {
   isScraped: boolean;
+  postId: string;
 }
 
 const Star = ({ isScraped }: MagazineScrapeProps) => {
@@ -31,9 +34,14 @@ const Star = ({ isScraped }: MagazineScrapeProps) => {
   );
 };
 
-const MagazineScrape = ({ isScraped }: MagazineScrapeProps) => {
+const MagazineScrape = ({ postId, isScraped }: MagazineScrapeProps) => {
+  const { mutate } = useMagazineScrape(postId);
+
+  const handleScrape = useCallback(() => {
+    mutate();
+  }, [mutate]);
   return (
-    <Button variant="Line">
+    <Button variant="Line" onClick={handleScrape}>
       <Wrapper
         css={css`
           display: flex;
@@ -41,7 +49,7 @@ const MagazineScrape = ({ isScraped }: MagazineScrapeProps) => {
           gap: 4px;
         `}
       >
-        <Star isScraped={false} />
+        <Star postId={postId} isScraped={isScraped} />
         <Typography
           as="span"
           fontSize="body-14"

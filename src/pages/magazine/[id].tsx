@@ -35,9 +35,11 @@ const MagazinePost = ({
         flexDirection="column"
         gap="80px"
       >
-        {/* {magazinePost && <Posting {...magazinePost.data} />} */}
-        <MagazineScrape isScraped={false} />
-        <MagazineDealer />
+        {magazinePost && <Posting {...magazinePost.data} />}
+        {magazinePost && (
+          <MagazineScrape postId={id} isScraped={magazinePost?.isScraped} />
+        )}
+        <MagazineDealer postId={id} />
         {comment && <Comment id={id} {...comment} />}
       </Container>
     </ModalProvider>
