@@ -9,6 +9,7 @@ const Signup = () => {
       display="flex"
       flexDirection="column"
       alignItems="center"
+      margin="80px 0"
       gap="60px"
     >
       <Typography

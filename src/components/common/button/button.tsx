@@ -82,6 +82,7 @@ const Button = (props: ButtonProps, ref: Ref<HTMLButtonElement>) => {
       <style jsx>{`
         .button {
           all: unset;
+          box-sizing: border-box;
           display: flex;
           align-items: center;
           justify-content: center;

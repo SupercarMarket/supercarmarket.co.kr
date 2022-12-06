@@ -10,7 +10,6 @@ import type { Provider } from 'next-auth/providers';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
 import KakaoProvider from 'next-auth/providers/kakao';
-import { env } from 'utils/misc';
 
 const providers: Provider[] = [
   CredentialsProvider({
@@ -30,8 +29,8 @@ const providers: Provider[] = [
     },
   }),
   GoogleProvider({
-    clientId: env('GOOGLE_ID'),
-    clientSecret: env('GOOGLE_SECRET'),
+    clientId: process.env.NEXT_PUBLIC_GOOGLE_ID,
+    clientSecret: process.env.NEXT_PUBLIC_GOOGLE_SECRET,
     authorization: {
       params: {
         prompt: 'consent',
@@ -41,8 +40,8 @@ const providers: Provider[] = [
     },
   }),
   KakaoProvider({
-    clientId: env('KAKAO_CLIENT_ID'),
-    clientSecret: env('KAKAO_CLIENT_SECRET'),
+    clientId: process.env.NEXT_PUBLIC_KAKAO_ID,
+    clientSecret: process.env.NEXT_PUBLIC_KAKAO_SECRET,
   }),
 ];
 
