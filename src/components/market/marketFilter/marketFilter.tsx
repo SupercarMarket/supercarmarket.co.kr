@@ -2,6 +2,7 @@ import Typography from 'components/common/typography';
 import MarketSelect from 'components/market/marketSelect';
 import { FIRST_MARKET_FILTER, SECOND_MARKET_FILTER } from 'constants/market';
 import theme from 'constants/theme';
+import { useRouter } from 'next/router';
 import React from 'react';
 import { FilterType, MarketFormTarget, MarketLabelType } from 'types/market';
 
@@ -9,91 +10,51 @@ import Close from '../../../assets/svg/close.svg';
 import Refresh from '../../../assets/svg/refresh.svg';
 import * as Styled from './marketFilter.styled';
 
-interface MarketFilterProps {
-  filterList: FilterType[];
-  changeFilters: (f: FilterType[]) => void;
-}
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+interface MarketFilterProps {}
 
-const MarketFilter = ({ filterList, changeFilters }: MarketFilterProps) => {
-  const submitHander = (
-    e: MarketFormTarget,
-    { subject, dataName }: MarketLabelType
-  ) => {
+const MarketFilter = ({}: MarketFilterProps) => {
+  const { push } = useRouter();
+  const submitHander = (e: MarketFormTarget) => {
     e.preventDefault();
-    const filters = [...filterList.filter((f) => f.subject !== subject)];
-    const form = e.target[dataName];
-
-    if (form.value) {
-      const { value, ariaLabel: option } = form;
-      filters.push({ subject, value, option, dataName });
-    }
-
-    if (!form.value) {
-      const [
-        { ariaLabel: firstLabel, value: firstValue },
-        { ariaLabel: secondLabel, value: secondValue },
-      ] = form;
-
-      if (firstValue && secondValue)
-        filters.push({
-          subject,
-          dataName,
-          option:
-            +firstValue > +secondValue
-              ? `${secondLabel}~${secondLabel}`
-              : `${firstLabel}~${secondLabel}`,
-          value:
-            +firstValue > +secondValue
-              ? `${secondValue} ${secondValue}`
-              : `${firstValue} ${secondValue}`,
-        });
-    }
-    changeFilters(filters);
+    console.log(e.target.minDate);
   };
 
   const removeFilter = (idx: number) => {
-    changeFilters(filterList.filter((_, index) => index !== idx));
+    // changeFilters(filterList.filter((_, index) => index !== idx));
   };
 
   const resetfilter = () => {
-    changeFilters([]);
+    push('/market/all');
   };
 
   return (
     <Styled.MarketFilterContainer>
       <Styled.MarketFilterArea>
         <Styled.MarketFilterBox>
-          {FIRST_MARKET_FILTER.map(
-            ({ label, optionSet, firstLabel, secondLabel }) => (
-              <MarketSelect
-                key={label.subject}
-                label={label}
-                firstLabel={firstLabel}
-                secondLabel={secondLabel}
-                optionSet={optionSet}
-                formHandler={submitHander}
-              />
-            )
-          )}
+          {FIRST_MARKET_FILTER.map(({ subject, label, optionSet }, idx) => (
+            <MarketSelect
+              key={idx}
+              subject={subject}
+              label={label}
+              optionSet={optionSet}
+            />
+          ))}
         </Styled.MarketFilterBox>
         <Styled.MarketFilterBox>
-          {SECOND_MARKET_FILTER.map(
-            ({ label, optionSet, firstLabel, secondLabel }) => (
-              <MarketSelect
-                key={label.subject}
-                label={label}
-                firstLabel={firstLabel}
-                secondLabel={secondLabel}
-                optionSet={optionSet}
-                formHandler={submitHander}
-              />
-            )
-          )}
+          {SECOND_MARKET_FILTER.map(({ subject, label, optionSet }, idx) => (
+            <MarketSelect
+              key={idx}
+              subject={subject}
+              label={label}
+              optionSet={optionSet}
+            />
+          ))}
         </Styled.MarketFilterBox>
       </Styled.MarketFilterArea>
       <Styled.FilterListArea>
         <Styled.MarketFilterList>
-          {filterList.map(({ subject, option }, idx) => (
+          {/* {filterList.map(({ subject, option }, idx) => (
             <Styled.MarketFilterItem key={subject} onClick={() => removeFilter(idx)}>
               <Typography
                 fontSize="body-16"
@@ -105,7 +66,7 @@ const MarketFilter = ({ filterList, changeFilters }: MarketFilterProps) => {
                 fill={theme.color['greyScale-5']}
               />
             </Styled.MarketFilterItem>
-          ))}
+          ))} */}
         </Styled.MarketFilterList>
         <Styled.ResetButton onClick={resetfilter}>
           <Refresh

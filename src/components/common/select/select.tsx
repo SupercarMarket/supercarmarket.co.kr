@@ -1,68 +1,62 @@
 import Typography from 'components/common/typography';
-import React, { useState } from 'react';
+import React, { PropsWithChildren, useState } from 'react';
 import { MarketOptionType } from 'types/market';
 
 import ArrowBottom from '../../../assets/svg/arrow-bottom.svg';
 import * as S from './select.styled';
-
-interface SelectProps {
+interface SelectLabelType {
+  name: string;
+  dataName: string;
+}
+interface SelectProps extends PropsWithChildren {
   width?: string;
-  defaultLabel: string;
-  select: MarketOptionType | null;
+  label: SelectLabelType;
+  select?: string;
   optionSet: MarketOptionType[];
-  changeSelect: (o: MarketOptionType) => void;
+  selectOption: (v: string, o: string, d: string) => void;
   overflow?: boolean;
   align?: 'left' | 'center' | 'right';
-  label: {
-    subject?: string;
-    dataName: string;
-  };
 }
 
 const Select = ({
   width = '127',
-  label: { subject, dataName },
-  defaultLabel,
-  select,
-  changeSelect,
+  label: { dataName },
+  children,
+  optionSet,
+  selectOption,
   overflow,
   align = 'left',
-  optionSet,
 }: SelectProps) => {
   const [toggle, setToggle] = useState<boolean>(false);
 
   const onToggle = () => setToggle(!toggle);
   const closeToggle = () => setToggle(false);
 
-  const changeCurrent = (option: MarketOptionType) => {
-    changeSelect(option);
+  const onClickSelectOption = (
+    value: string,
+    option: string,
+    selectedDataName: string
+  ) => {
+    selectOption(value, option, selectedDataName);
     closeToggle();
   };
 
   return (
     <S.SelectContainer width={width}>
-      <input
-        readOnly
-        hidden
-        name={dataName}
-        value={(select && select.value) || ''}
-        aria-label={(select && select.option) || ''}
-      />
       <S.Backdrop toggle={toggle} onClick={closeToggle} />
       <S.SelectCurrentButton type="button" onClick={onToggle} align={align}>
-        <Typography fontSize="body-16">
-          {select !== null ? select.option : defaultLabel}
-        </Typography>
+        <Typography fontSize="body-16">{children}</Typography>
         <ArrowBottom width="13px" height="13px" />
       </S.SelectCurrentButton>
       <S.SelectOptionList width={width} toggle={toggle} over={overflow}>
-        {optionSet.map((option) => (
+        {optionSet.map(({ option, value }) => (
           <S.SelectOptionItem
-            key={option.option}
-            onClick={() => changeCurrent(option)}
+            key={option}
+            onClick={() => onClickSelectOption(value, option, dataName)}
           >
-            <S.SelectOptionButton align={align}>
-              <Typography fontSize="body-16">{option.option}</Typography>
+            <S.SelectOptionButton active={children === option} align={align}>
+              <input name={dataName} defaultValue={value} hidden />
+              <Typography fontSize="body-16">{option}</Typography>
             </S.SelectOptionButton>
           </S.SelectOptionItem>
         ))}

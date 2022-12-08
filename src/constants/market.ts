@@ -100,39 +100,55 @@ export const CAR_FILTER_MILEAGE = (
 
 export const FIRST_MARKET_FILTER = [
   {
+    subject: '연식',
     label: {
-      subject: '연식',
-      dataName: 'date',
+      first: {
+        name: '최소',
+        dataName: 'minDate',
+      },
+      second: {
+        name: '최대',
+        dataName: 'maxDate',
+      },
     },
-    firstLabel: '최소',
-    secondLabel: '최대',
     optionSet: CAR_FILTER_DATE(2023, 2010),
   },
   {
+    subject: '가격',
     label: {
-      subject: '가격',
-      dataName: 'price',
+      first: {
+        name: '최소',
+        dataName: 'minPrice',
+      },
+      second: {
+        name: '최대',
+        dataName: 'maxPrice',
+      },
     },
-    firstLabel: '최소',
-    secondLabel: '최대',
     optionSet: CAR_FILTER_PRICE(2000, 20000, 2000),
   },
   {
+    subject: '주행거리',
     label: {
-      subject: '주행거리',
-      dataName: 'mileage',
+      first: {
+        name: '최소',
+        dataName: 'minMileage',
+      },
+      second: {
+        name: '최대',
+        dataName: 'maxMileage',
+      },
     },
-    firstLabel: '최소',
-    secondLabel: '최대',
     optionSet: CAR_FILTER_MILEAGE(2000, 30000, 2000),
   },
   {
+    subject: '연료',
     label: {
-      subject: '연료',
-      dataName: 'fuel',
+      first: {
+        name: '선택',
+        dataName: 'fuel',
+      },
     },
-    firstLabel: '선택',
-    secondLabel: undefined,
     optionSet: [
       { option: '디젤', value: 'diesel' },
       { option: '가솔린', value: 'gasoline' },
@@ -143,24 +159,13 @@ export const FIRST_MARKET_FILTER = [
 
 export const SECOND_MARKET_FILTER = [
   {
+    subject: '사고여부',
     label: {
-      subject: '색상',
-      dataName: 'color',
+      first: {
+        name: '선택',
+        dataName: 'accident',
+      },
     },
-    firstLabel: '선택',
-    secondLabel: undefined,
-    optionSet: [
-      { option: '빨간색', value: 'red' },
-      { option: '파란색', value: 'blue' },
-    ],
-  },
-  {
-    label: {
-      subject: '사고여부',
-      dataName: 'accident',
-    },
-    firstLabel: '최소',
-    secondLabel: undefined,
     optionSet: [
       { option: '유', value: 'true' },
       { option: '무', value: 'false' },
@@ -168,9 +173,9 @@ export const SECOND_MARKET_FILTER = [
   },
 ];
 
-export const FILTER_DATANAMES = FIRST_MARKET_FILTER.map(
-  ({ label }) => label
-).concat(SECOND_MARKET_FILTER.map(({ label }) => label));
+// export const FILTER_DATANAMES = FIRST_MARKET_FILTER.map(
+//   ({ label }) => label
+// ).concat(SECOND_MARKET_FILTER.map(({ label }) => label));
 
 export const ORDER_OPTIONSET: MarketOptionType[] = [
   {

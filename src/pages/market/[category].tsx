@@ -48,10 +48,7 @@ const MarketFilterPage = ({ category }: MarketFilterPageProps) => {
         />
       </Container>
       <MarketCarKind category={category} />
-      <MarketFilter
-        filterList={states.filterList}
-        changeFilters={actions.changeFilters}
-      />
+      <MarketFilter />
       {markets && (
         <MarketList
           data={markets}

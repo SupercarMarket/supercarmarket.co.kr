@@ -30,6 +30,7 @@ const Backdrop = styled.div<{ toggle: boolean }>`
 
 interface AlignProps {
   align?: 'left' | 'center' | 'right';
+  active?: boolean;
 }
 
 const SelectCurrentButton = styled.button<AlignProps>`
@@ -98,10 +99,18 @@ const SelectOptionItem = styled.li``;
 const SelectOptionButton = styled(SelectCurrentButton)`
   border: none;
   border-radius: 0px;
+
   :hover {
     color: #b79f7b;
     background: ${({ theme }) => theme.color['greyScale-2']};
   }
+
+  ${({ active }) =>
+    active &&
+    css`
+      color: #b79f7b;
+      background: ${({ theme }) => theme.color['greyScale-2']};
+    `}
 
   ${({ align }) =>
     align &&
