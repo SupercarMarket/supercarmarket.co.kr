@@ -27,7 +27,7 @@ const baseFetcher = async (url: string, options: FetcherRequestInit) => {
 
     return await response.json();
   } catch (error) {
-    getErrorMessage(error);
+    throw new Error(getErrorMessage(error));
   }
 };
 

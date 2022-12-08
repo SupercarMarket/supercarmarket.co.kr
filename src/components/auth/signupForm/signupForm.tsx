@@ -2,20 +2,24 @@ import Button from 'components/common/button';
 import Input from 'components/common/input';
 import Typography from 'components/common/typography';
 import Wrapper from 'components/common/wrapper';
-import type {
+import {
   HTMLInputTypeAttribute,
+  memo,
   PropsWithChildren,
   ReactNode,
 } from 'react';
-import type { RegisterOptions, UseFormRegister } from 'react-hook-form';
+import { useCallback, useState } from 'react';
+import { FormProvider, RegisterOptions, useFormContext } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
+import { DuplicationList } from 'types/auth';
+import { user } from 'utils/api/auth';
 
 import * as style from './signupForm.styled';
 import { Form } from './signupForm.styled';
 
 const forms: Forms[] = [
   {
-    htmlFor: 'userId',
+    htmlFor: 'id',
     label: '아이디',
     type: 'text',
     placeholder: '아이디를 입력해주세요',
@@ -24,6 +28,8 @@ const forms: Forms[] = [
     options: {
       required: true,
     },
+    errorMessage: '사용 불가능한 아이디입니다',
+    successMessage: '사용 가능한 아이디입니다',
   },
   {
     htmlFor: 'password',
@@ -54,7 +60,7 @@ const forms: Forms[] = [
     },
   },
   {
-    htmlFor: 'nickName',
+    htmlFor: 'nickname',
     label: '닉네임',
     type: 'text',
     placeholder: '닉네임을 입력해주세요 (최대 10자)',
@@ -64,9 +70,11 @@ const forms: Forms[] = [
     options: {
       required: true,
     },
+    errorMessage: '사용 불가능한 닉네임입니다',
+    successMessage: '사용 가능한 닉네임입니다',
   },
   {
-    htmlFor: 'call',
+    htmlFor: 'phone',
     label: '휴대폰',
     type: 'text',
     placeholder: '숫자만 입력해주세요',
@@ -97,6 +105,8 @@ const forms: Forms[] = [
     options: {
       required: true,
     },
+    errorMessage: '사용 불가능한 이메일입니다',
+    successMessage: '사용 가능한 이메일입니다',
   },
 ];
 
@@ -109,42 +119,60 @@ interface Forms {
   options?: RegisterOptions;
   button?: string;
   buttonWidth?: string;
+  successMessage?: string;
+  errorMessage?: string;
 }
 
 interface FormItemProps extends Forms {
-  regsiter: UseFormRegister<FormState>;
   children?: ReactNode;
 }
 
 interface FormWrapperProps extends PropsWithChildren {
   tooltip?: string;
   error?: string;
+  success?: string;
 }
 
 interface FormState {
-  userId: string;
+  id: string;
   password: string;
   passwordConfirm: string;
   name: string;
-  nickName: string;
-  call: string;
+  nickname: string;
+  phone: string;
   authentication: string;
   email: string;
 }
 
-const FormItem = (props: FormItemProps) => {
-  const {
-    htmlFor,
-    label,
-    button,
-    placeholder,
-    tooltip,
-    type = 'text',
-    regsiter,
-    options,
-    buttonWidth,
-    children,
-  } = props;
+const FormItem = memo(function FormItem({
+  htmlFor,
+  label,
+  button,
+  placeholder,
+  tooltip,
+  type = 'text',
+  options,
+  buttonWidth,
+  errorMessage,
+  successMessage,
+  children,
+}: FormItemProps) {
+  const { register, watch } = useFormContext();
+  const [error, setError] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const target = watch(htmlFor);
+
+  const handleCallback = useCallback(async () => {
+    if (!target) return;
+    setError(false);
+    setSuccess(false);
+    const result = await user.checkDuplication(
+      htmlFor as DuplicationList,
+      target
+    );
+    if (!result) setSuccess(true);
+    else setError(true);
+  }, [htmlFor, target]);
   return (
     <Wrapper css={style.label}>
       <Typography
@@ -160,15 +188,28 @@ const FormItem = (props: FormItemProps) => {
       >
         {label}
       </Typography>
-      <FormWrapper tooltip={tooltip}>
-        <Input
-          id={htmlFor}
-          type={type}
-          placeholder={placeholder}
-          {...regsiter(htmlFor, options)}
-        />
+      <FormWrapper
+        tooltip={tooltip}
+        success={success ? successMessage : undefined}
+        error={error ? errorMessage : undefined}
+      >
+        {success ? (
+          <Input defaultValue={target} disabled={success} />
+        ) : (
+          <Input
+            id={htmlFor}
+            type={type}
+            placeholder={placeholder}
+            {...register(htmlFor, { ...options })}
+          />
+        )}
         {button && (
-          <Button type="button" variant="Primary-Line" width={buttonWidth}>
+          <Button
+            type="button"
+            variant="Primary-Line"
+            width={buttonWidth}
+            onClick={handleCallback}
+          >
             {button}
           </Button>
         )}
@@ -176,9 +217,14 @@ const FormItem = (props: FormItemProps) => {
       </FormWrapper>
     </Wrapper>
   );
-};
+});
 
-const FormWrapper = ({ tooltip, error, children }: FormWrapperProps) => {
+const FormWrapper = ({
+  tooltip,
+  success,
+  error,
+  children,
+}: FormWrapperProps) => {
   return (
     <Wrapper css={style.wrapper}>
       <Wrapper.Item css={style.item}>{children}</Wrapper.Item>
@@ -210,31 +256,42 @@ const FormWrapper = ({ tooltip, error, children }: FormWrapperProps) => {
           {error}
         </Typography>
       )}
+      {success && (
+        <Typography
+          as="span"
+          fontSize="body-12"
+          fontWeight="regular"
+          color="primary"
+          lineHeight="150%"
+          style={{
+            paddingLeft: '14px',
+          }}
+        >
+          {success}
+        </Typography>
+      )}
     </Wrapper>
   );
 };
 
 const SignupForm = () => {
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm<FormState>();
+  const methods = useForm<FormState>();
 
-  const onSubmit = handleSubmit((data) => {
-    console.log(data);
+  const onSubmit = methods.handleSubmit(async (data) => {
+    await user.signUp(data);
   });
 
   return (
-    <Form onSubmit={onSubmit}>
-      {forms.map((props) => (
-        <FormItem key={props.label} regsiter={register} {...props} />
-      ))}
-      <Button width="340px" type="submit" variant="Primary">
-        가입하기
-      </Button>
-    </Form>
+    <FormProvider {...methods}>
+      <Form onSubmit={onSubmit}>
+        {forms.map((props) => (
+          <FormItem key={props.label} {...props} />
+        ))}
+        <Button width="340px" type="submit" variant="Primary">
+          가입하기
+        </Button>
+      </Form>
+    </FormProvider>
   );
 };
 

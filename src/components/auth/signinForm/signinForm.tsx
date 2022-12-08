@@ -12,7 +12,7 @@ import { Form } from './signinForm.styled';
 const oauth = [{ provider: 'google' }, { provider: 'kakao' }];
 
 interface FormState {
-  userId: string;
+  id: string;
   password: string;
 }
 
@@ -61,7 +61,7 @@ const LocalFormItem = () => {
             id="userId"
             type="text"
             placeholder="아이디를 입력해주세요"
-            {...register('userId', { required: true })}
+            {...register('id', { required: true })}
           />
         </label>
         <label>

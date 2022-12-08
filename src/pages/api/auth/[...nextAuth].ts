@@ -18,7 +18,8 @@ const providers: Provider[] = [
       username: { label: 'Username', type: 'text' },
       password: { label: 'Password', type: 'password' },
     },
-    async authorize() {
+    async authorize(credentials) {
+      console.log(credentials);
       const user = { id: '1', name: 'junseo', email: 'junseo@naver.com' };
 
       if (user) {

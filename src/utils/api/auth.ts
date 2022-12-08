@@ -1,3 +1,8 @@
+import type { DuplicationList, Signup } from 'types/auth';
+import { catchNoExist, getErrorMessage } from 'utils/misc';
+
+import { baseFetcher } from './fetcher';
+
 const token = {
   refreshToken: () => {
     return '';
@@ -8,8 +13,23 @@ const token = {
 };
 
 const user = {
-  signUp: () => {
-    return '';
+  signUp: async (props: Signup) => {
+    catchNoExist(props);
+    try {
+      const signUp = await baseFetcher(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/user/signup`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          method: 'POST',
+          body: JSON.stringify(props),
+        }
+      );
+      return signUp;
+    } catch (error) {
+      throw new Error(getErrorMessage(error));
+    }
   },
   signIn: () => {
     return '';
@@ -23,15 +43,26 @@ const user = {
   findPassword: () => {
     return '';
   },
-  checkId: () => {
-    return '';
-  },
-  checkEmail: () => {
-    return '';
-  },
-  checkNickName: () => {
-    return '';
+  checkDuplication: async (target: DuplicationList, data: string) => {
+    catchNoExist(target, data);
+    try {
+      const signUp = await baseFetcher(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/user/${target}chk`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          method: 'POST',
+          body: JSON.stringify({ [target]: data }),
+        }
+      );
+      return signUp;
+    } catch (error) {
+      return true;
+    }
   },
 };
+
+const phone = {};
 
 export { token, user };
