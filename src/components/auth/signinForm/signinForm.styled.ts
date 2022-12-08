@@ -17,4 +17,33 @@ const wrapper = css`
   gap: 10px;
 `;
 
-export { Form, wrapper };
+const kakao = css`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-sizing: border-box;
+  background: #fee500;
+  border-radius: 4px;
+  padding: 10px;
+  height: 50px;
+  cursor: pointer;
+`;
+
+const google = css`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-sizing: border-box;
+  background: #ffffff;
+  border: 1px solid #8e8e95;
+  border-radius: 4px;
+  padding: 10px;
+  height: 50px;
+  cursor: pointer;
+`;
+
+export { Form, google, kakao, wrapper };

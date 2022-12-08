@@ -1,15 +1,48 @@
 import Button from 'components/common/button';
 import Container from 'components/common/container';
 import Divider from 'components/common/divider';
-import Input from 'components/common/input';
+import Typography from 'components/common/typography';
 import Wrapper from 'components/common/wrapper';
 import Link from 'next/link';
-import { useForm } from 'react-hook-form';
+import { signIn } from 'next-auth/react';
+import { FormProvider, useForm } from 'react-hook-form';
 
+import GoogleIcon from '../../../assets/svg/google.svg';
+import KakaoIcon from '../../../assets/svg/kakao.svg';
+import type { Forms } from '../authFormItem/authFormItem';
+import AuthFormItem from '../authFormItem/authFormItem';
 import * as style from './signinForm.styled';
 import { Form } from './signinForm.styled';
 
-const oauth = [{ provider: 'google' }, { provider: 'kakao' }];
+const forms: Forms[] = [
+  {
+    variant: 'Default',
+    htmlFor: 'id',
+    label: '아이디',
+    type: 'text',
+    placeholder: '아이디를 입력해주세요',
+    options: {
+      required: true,
+    },
+    errorMessage: '사용 불가능한 아이디입니다',
+    successMessage: '사용 가능한 아이디입니다',
+  },
+  {
+    variant: 'Default',
+    htmlFor: 'password',
+    label: '비밀번호',
+    type: 'password',
+    placeholder: '비밀번호를 입력해주세요',
+    options: {
+      required: true,
+    },
+  },
+];
+
+const oauth = [
+  { provider: 'kakao', title: '카카오', icon: <KakaoIcon /> },
+  { provider: 'google', title: '구글', icon: <GoogleIcon /> },
+];
 
 interface FormState {
   id: string;
@@ -50,48 +83,67 @@ const Links = () => {
 };
 
 const LocalFormItem = () => {
-  const { register, handleSubmit } = useForm<FormState>();
+  const methods = useForm<FormState>();
 
-  const onSubmit = handleSubmit((data) => console.log(data));
+  const onSubmit = methods.handleSubmit((data) => {
+    const { id, password } = data;
+    signIn('credentials', { id, password, redirect: false });
+  });
   return (
-    <Form onSubmit={onSubmit}>
-      <Wrapper css={style.wrapper}>
-        <label>
-          <Input
-            id="userId"
-            type="text"
-            placeholder="아이디를 입력해주세요"
-            {...register('id', { required: true })}
-          />
-        </label>
-        <label>
-          <Input
-            id="password"
-            type="password"
-            placeholder="비밀번호를 입력해주세요"
-            {...register('password', { required: true })}
-          />
-        </label>
-      </Wrapper>
-      <Button type="submit" variant="Primary" fullWidth>
-        로그인
-      </Button>
-      <Links />
-    </Form>
+    <FormProvider {...methods}>
+      <Form onSubmit={onSubmit}>
+        <Wrapper css={style.wrapper}>
+          {forms.map((form) => (
+            <AuthFormItem key={form.htmlFor} {...form} />
+          ))}
+        </Wrapper>
+        <Button type="submit" variant="Primary" fullWidth>
+          로그인
+        </Button>
+        <Links />
+      </Form>
+    </FormProvider>
   );
 };
 
 const OauthFormItem = () => {
   return (
-    <div>
-      <h1></h1>
-    </div>
+    <Container display="flex" flexDirection="column" gap="10px">
+      {oauth.map((service) => (
+        <Button
+          key={service.provider}
+          variant="Init"
+          onClick={() => signIn(service.provider)}
+        >
+          <Wrapper
+            css={service.provider === 'kakao' ? style.kakao : style.google}
+          >
+            {service.icon}
+            <Typography
+              as="span"
+              fontSize="body-16"
+              fontWeight="regular"
+              lineHeight="150%"
+              color="greyScale-6"
+            >
+              {service.title}로 시작하기
+            </Typography>
+          </Wrapper>
+        </Button>
+      ))}
+    </Container>
   );
 };
 
 const SigninForm = () => {
   return (
-    <Container display="flex" flexDirection="column" alignItems="center">
+    <Container
+      width="340px"
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      gap="64px"
+    >
       <LocalFormItem />
       <OauthFormItem />
     </Container>
