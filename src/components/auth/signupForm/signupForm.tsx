@@ -1,20 +1,10 @@
 import Button from 'components/common/button';
-import Input from 'components/common/input';
-import Typography from 'components/common/typography';
-import Wrapper from 'components/common/wrapper';
-import {
-  HTMLInputTypeAttribute,
-  memo,
-  PropsWithChildren,
-  ReactNode,
-} from 'react';
-import { useCallback, useState } from 'react';
-import { FormProvider, RegisterOptions, useFormContext } from 'react-hook-form';
+import { FormProvider } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
-import { DuplicationList } from 'types/auth';
 import { user } from 'utils/api/auth';
 
-import * as style from './signupForm.styled';
+import type { Forms } from '../authFormItem/authFormItem';
+import AuthFormContainer from '../authFormItem/authFormItem';
 import { Form } from './signupForm.styled';
 
 const forms: Forms[] = [
@@ -110,29 +100,6 @@ const forms: Forms[] = [
   },
 ];
 
-interface Forms {
-  htmlFor: keyof FormState;
-  label?: string;
-  type?: HTMLInputTypeAttribute;
-  placeholder?: string;
-  tooltip?: string;
-  options?: RegisterOptions;
-  button?: string;
-  buttonWidth?: string;
-  successMessage?: string;
-  errorMessage?: string;
-}
-
-interface FormItemProps extends Forms {
-  children?: ReactNode;
-}
-
-interface FormWrapperProps extends PropsWithChildren {
-  tooltip?: string;
-  error?: string;
-  success?: string;
-}
-
 interface FormState {
   id: string;
   password: string;
@@ -143,136 +110,6 @@ interface FormState {
   authentication: string;
   email: string;
 }
-
-const FormItem = memo(function FormItem({
-  htmlFor,
-  label,
-  button,
-  placeholder,
-  tooltip,
-  type = 'text',
-  options,
-  buttonWidth,
-  errorMessage,
-  successMessage,
-  children,
-}: FormItemProps) {
-  const { register, watch } = useFormContext();
-  const [error, setError] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const target = watch(htmlFor);
-
-  const handleCallback = useCallback(async () => {
-    if (!target) return;
-    setError(false);
-    setSuccess(false);
-    const result = await user.checkDuplication(
-      htmlFor as DuplicationList,
-      target
-    );
-    if (!result) setSuccess(true);
-    else setError(true);
-  }, [htmlFor, target]);
-  return (
-    <Wrapper css={style.label}>
-      <Typography
-        as="label"
-        htmlFor={htmlFor}
-        fontSize="body-16"
-        fontWeight="regular"
-        color="greyScale-6"
-        lineHeight="150%"
-        style={{
-          paddingTop: '12px',
-        }}
-      >
-        {label}
-      </Typography>
-      <FormWrapper
-        tooltip={tooltip}
-        success={success ? successMessage : undefined}
-        error={error ? errorMessage : undefined}
-      >
-        {success ? (
-          <Input defaultValue={target} disabled={success} />
-        ) : (
-          <Input
-            id={htmlFor}
-            type={type}
-            placeholder={placeholder}
-            {...register(htmlFor, { ...options })}
-          />
-        )}
-        {button && (
-          <Button
-            type="button"
-            variant="Primary-Line"
-            width={buttonWidth}
-            onClick={handleCallback}
-          >
-            {button}
-          </Button>
-        )}
-        {children}
-      </FormWrapper>
-    </Wrapper>
-  );
-});
-
-const FormWrapper = ({
-  tooltip,
-  success,
-  error,
-  children,
-}: FormWrapperProps) => {
-  return (
-    <Wrapper css={style.wrapper}>
-      <Wrapper.Item css={style.item}>{children}</Wrapper.Item>
-      {tooltip && (
-        <Typography
-          as="span"
-          fontSize="body-12"
-          fontWeight="regular"
-          color="greyScale-5"
-          lineHeight="150%"
-          style={{
-            paddingLeft: '14px',
-          }}
-        >
-          {tooltip}
-        </Typography>
-      )}
-      {error && (
-        <Typography
-          as="span"
-          fontSize="body-12"
-          fontWeight="regular"
-          color="system-1"
-          lineHeight="150%"
-          style={{
-            paddingLeft: '14px',
-          }}
-        >
-          {error}
-        </Typography>
-      )}
-      {success && (
-        <Typography
-          as="span"
-          fontSize="body-12"
-          fontWeight="regular"
-          color="primary"
-          lineHeight="150%"
-          style={{
-            paddingLeft: '14px',
-          }}
-        >
-          {success}
-        </Typography>
-      )}
-    </Wrapper>
-  );
-};
 
 const SignupForm = () => {
   const methods = useForm<FormState>();
@@ -285,7 +122,7 @@ const SignupForm = () => {
     <FormProvider {...methods}>
       <Form onSubmit={onSubmit}>
         {forms.map((props) => (
-          <FormItem key={props.label} {...props} />
+          <AuthFormContainer key={props.label} {...props} />
         ))}
         <Button width="340px" type="submit" variant="Primary">
           가입하기
