@@ -2,6 +2,13 @@ type ErrorWithMessage = {
   message: string;
 };
 
+const isValidQuery = (query: string | null, ...values: string[]) => {
+  if (!query) return false;
+  if (!values) return false;
+  if (values.includes(query)) return false;
+  return true;
+};
+
 const isErrorWithMessage = (error: unknown): error is ErrorWithMessage => {
   return (
     typeof error === 'object' &&
@@ -39,4 +46,4 @@ const catchNoExist = (...lists: unknown[]) => {
   });
 };
 
-export { catchNoExist, env, getErrorMessage };
+export { catchNoExist, env, getErrorMessage, isValidQuery };
