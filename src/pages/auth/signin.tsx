@@ -1,6 +1,6 @@
 import { SigninForm } from 'components/auth';
 import Container from 'components/common/container';
-import Typography from 'components/common/typography';
+import Title from 'components/common/title';
 import layout from 'components/layout';
 
 const Signin = () => {
@@ -12,15 +12,7 @@ const Signin = () => {
       margin="80px 0"
       gap="60px"
     >
-      <Typography
-        as="h3"
-        fontSize="header-24"
-        fontWeight="bold"
-        color="greyScale-6"
-        lineHeight="120%"
-      >
-        로그인
-      </Typography>
+      <Title textAlign="center">로그인</Title>
       <SigninForm />
     </Container>
   );

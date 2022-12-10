@@ -15,12 +15,11 @@ const providers: Provider[] = [
   CredentialsProvider({
     name: 'Credentials',
     credentials: {
-      username: { label: 'Username', type: 'text' },
-      password: { label: 'Password', type: 'password' },
+      username: { label: 'id', type: 'text' },
+      password: { label: 'password', type: 'password' },
     },
     async authorize(credentials) {
-      console.log(credentials);
-      const user = { id: '1', name: 'junseo', email: 'junseo@naver.com' };
+      const user = { id: 'blan19', password: 'qweqweqwe' };
 
       if (user) {
         return user;
@@ -47,7 +46,8 @@ const providers: Provider[] = [
 ];
 
 const callbacks: Partial<CallbacksOptions<Profile, Account>> | undefined = {
-  jwt({ token }) {
+  jwt({ token, account }) {
+    console.log('token : ', token, 'account : ', account);
     return token;
   },
   session({ session, token, user }) {

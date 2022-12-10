@@ -21,13 +21,19 @@ const Home = () => {
 
   return (
     <Container>
-      <Title>슈마매거진</Title>
+      <Title marginBottom="20px">슈마매거진</Title>
       {magazine && <Magazine data={magazine.data.slice(0, 5)} />}
-      <Title marginTop="80px">매물 관심 베스트</Title>
+      <Title marginTop="80px" marginBottom="20px">
+        매물 관심 베스트
+      </Title>
       {marketBest && <MarketBest marketBest={marketBest.data} />}
-      <Title marginTop="40px">최신 매물</Title>
+      <Title marginTop="40px" marginBottom="20px">
+        최신 매물
+      </Title>
       {marketNew && <MarketNew marketNew={marketNew.data} />}
-      <Title marginTop="80px">커뮤니티 인기글</Title>
+      <Title marginTop="80px" marginBottom="20px">
+        커뮤니티 인기글
+      </Title>
       {communityBest && <Community data={communityBest.data} />}
     </Container>
   );

@@ -53,7 +53,7 @@ const Links = () => {
   return (
     <Container display="flex" alignItems="center" justifyContent="center">
       <Link
-        href="/auth"
+        href="/auth/find?type=id"
         style={{
           cursor: 'pointer',
         }}
@@ -62,7 +62,7 @@ const Links = () => {
       </Link>
       <Divider width="1px" height="10px" color="#C3C3C7" margin="0 10px" />
       <Link
-        href="/auth"
+        href="/auth/find?type=password"
         style={{
           cursor: 'pointer',
         }}
