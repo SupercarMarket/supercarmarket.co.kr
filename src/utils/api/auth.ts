@@ -63,6 +63,33 @@ const user = {
   },
 };
 
-const phone = {};
+const phone = {
+  requestAuthNumber: async (phone: string) => {
+    try {
+      const authNumber = await baseFetcher(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/message/auth/sendName/${phone}`,
+        {
+          method: 'GET',
+        }
+      );
+      return authNumber;
+    } catch (error) {
+      return true;
+    }
+  },
+  requestAuthNumberWithName: async (phone: string, name: string) => {
+    try {
+      const authNumber = await baseFetcher(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/message/auth/sendName/${phone}/${name}`,
+        {
+          method: 'GET',
+        }
+      );
+      return authNumber;
+    } catch (error) {
+      return true;
+    }
+  },
+};
 
-export { token, user };
+export { phone, token, user };
