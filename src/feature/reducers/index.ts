@@ -1,4 +1,4 @@
-import { Action, State } from 'feature';
+import type { Action } from 'feature';
 
 const loadingState = {
   loading: true,
@@ -18,11 +18,14 @@ const error = () => ({
   error: true,
 });
 
-function createAsyncHandler<State>(type: string, key: string) {
+function createAsyncHandler<ActionType extends string, State>(
+  type: ActionType,
+  key: string
+) {
   const SUCCESS = `${type}_SUCCESS`;
   const ERROR = `${type}_ERROR`;
 
-  return function handler(state: State, action: Action) {
+  return function handler(state: State, action: Action<ActionType>) {
     switch (action.type) {
       case type:
         return {

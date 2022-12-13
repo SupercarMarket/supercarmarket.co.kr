@@ -1,9 +1,10 @@
-import { createContext, useReducer } from 'react';
+import { Dispatch } from 'feature';
+import { createContext, useContext, useReducer } from 'react';
 
 import authReducer from './reducers/authReducer';
 
-type Action = { type: 'REQUEST_AUTH' };
-type Dispatch = (action: Action) => void;
+type AuthAction = 'REQUEST_AUTH' | 'CONFIRM_AUTH';
+type AuthDispatch = Dispatch<AuthAction>;
 interface AuthProviderProps {
   children: React.ReactNode;
 }
@@ -25,9 +26,9 @@ const initialState: AuthInitialState = {
 };
 
 const AuthStateContext = createContext<AuthInitialState | null>(null);
-const AuthDispatchContext = createContext<Dispatch | null>(null);
+const AuthDispatchContext = createContext<AuthDispatch | null>(null);
 
-const AuthenticationProvider = ({ children }: AuthProviderProps) => {
+const AuthProvider = ({ children }: AuthProviderProps) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
   return (
     <AuthStateContext.Provider value={state}>
@@ -38,5 +39,21 @@ const AuthenticationProvider = ({ children }: AuthProviderProps) => {
   );
 };
 
-export type { AuthInitialState };
-export { AuthenticationProvider };
+export function useAuthState() {
+  const state = useContext(AuthStateContext);
+  if (!state) {
+    throw new Error('Cannot find Provider');
+  }
+  return state;
+}
+
+export function useAuthDispatch() {
+  const dispatch = useContext(AuthDispatchContext);
+  if (!dispatch) {
+    throw new Error('Cannot find Provider');
+  }
+  return dispatch;
+}
+
+export type { AuthAction, AuthInitialState };
+export { AuthProvider };
