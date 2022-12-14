@@ -1,8 +1,8 @@
 'use client';
 
-import styled from 'styled-components';
+import { css } from 'styled-components';
 
-const Form = styled.form`
+const form = css`
   width: 800px;
   display: flex;
   flex-direction: column;
@@ -10,4 +10,4 @@ const Form = styled.form`
   gap: 26px;
 `;
 
-export { Form };
+export { form };

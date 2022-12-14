@@ -1,13 +1,8 @@
-import Button from 'components/common/button';
-import Input from 'components/common/input';
-import Typography from 'components/common/typography';
+import { FormInput, FormMessage } from 'components/common/form';
 import Wrapper from 'components/common/wrapper';
-import type {
-  HTMLInputTypeAttribute,
-  PropsWithChildren,
-  ReactNode,
-} from 'react';
-import { memo, useCallback, useState } from 'react';
+import { requestAuthNumber } from 'feature/actions/authActions';
+import { useAuthDispatch, useAuthState } from 'feature/authProvider';
+import * as React from 'react';
 import type {
   FieldValues,
   RegisterOptions,
@@ -20,10 +15,9 @@ import { user } from 'utils/api/auth';
 import * as style from './authFormItem.styled';
 
 export interface Forms {
-  variant?: 'Default' | 'Label';
   htmlFor: keyof FormState;
   label?: string;
-  type?: HTMLInputTypeAttribute;
+  type?: React.HTMLInputTypeAttribute;
   placeholder?: string;
   tooltip?: string;
   options?: RegisterOptions;
@@ -35,14 +29,8 @@ export interface Forms {
 
 interface AuthFormItemProps extends Forms {
   register: UseFormRegister<FieldValues>;
+  handleAuthNumber?: (phone: string) => Promise<void>;
   target: string;
-  children?: ReactNode;
-}
-
-interface AuthFormWrapperProps extends PropsWithChildren {
-  tooltip?: string;
-  error?: string;
-  success?: string;
 }
 
 interface FormState {
@@ -57,18 +45,25 @@ interface FormState {
 }
 
 const AuthFormItem = (props: Forms) => {
+  const state = useAuthState();
   const { htmlFor } = props;
   const { register } = useFormContext();
+  const disaptch = useAuthDispatch();
+  const handleAuthNumber = (phone: string) =>
+    requestAuthNumber(disaptch, phone);
   const target = useWatch({ name: htmlFor });
   return (
-    <AuthFormItemContainer register={register} target={target} {...props} />
+    <AuthFormItemContainer
+      register={register}
+      handleAuthNumber={htmlFor === 'phone' ? handleAuthNumber : undefined}
+      target={target}
+      {...props}
+    />
   );
 };
 
-const AuthFormItemContainer = memo(function AuthFormItem({
-  variant = 'Label',
+const AuthFormItemContainer = React.memo(function AuthFormItem({
   htmlFor,
-  label,
   button,
   placeholder,
   tooltip,
@@ -79,12 +74,12 @@ const AuthFormItemContainer = memo(function AuthFormItem({
   successMessage,
   target,
   register,
-  children,
+  handleAuthNumber,
 }: AuthFormItemProps) {
-  const [error, setError] = useState(false);
-  const [success, setSuccess] = useState(false);
+  const [error, setError] = React.useState(false);
+  const [success, setSuccess] = React.useState(false);
 
-  const handleCallback = useCallback(async () => {
+  const handleDuplicated = React.useCallback(async () => {
     if (!target) return;
     setError(false);
     setSuccess(false);
@@ -95,106 +90,34 @@ const AuthFormItemContainer = memo(function AuthFormItem({
     if (!result) setSuccess(true);
     else setError(true);
   }, [htmlFor, target]);
+
+  const handleCallback = React.useMemo(() => {
+    if (htmlFor === 'phone' && !!handleAuthNumber)
+      return () => handleAuthNumber(target);
+    return handleDuplicated;
+  }, [handleAuthNumber, handleDuplicated, htmlFor, target]);
   return (
     <Wrapper css={style.label}>
-      <Typography
-        as="label"
-        htmlFor={htmlFor}
-        fontSize="body-16"
-        fontWeight="regular"
-        color="greyScale-6"
-        lineHeight="150%"
-        style={{
-          display: variant === 'Default' ? 'none' : 'block',
-          paddingTop: '12px',
-        }}
-      >
-        {label}
-      </Typography>
-      <AuthFormItemWrapper
+      <FormInput
+        id={htmlFor}
+        type={type}
+        button={!!button}
+        buttonText={button}
+        buttonWidth={buttonWidth}
+        buttonVariant="Primary-Line"
+        buttonCallback={handleCallback}
+        placeholder={placeholder}
+        readOnly={success}
+        {...register(htmlFor, { ...options })}
+      />
+      <FormMessage
         tooltip={tooltip}
         success={success ? successMessage : undefined}
         error={error ? errorMessage : undefined}
-      >
-        {success ? (
-          <Input defaultValue={target} disabled={success} />
-        ) : (
-          <Input
-            id={htmlFor}
-            type={type}
-            placeholder={placeholder}
-            {...register(htmlFor, { ...options })}
-          />
-        )}
-        {button && (
-          <Button
-            type="button"
-            variant="Primary-Line"
-            width={buttonWidth}
-            onClick={handleCallback}
-          >
-            {button}
-          </Button>
-        )}
-        {children}
-      </AuthFormItemWrapper>
+        padding="0 0 0 14px"
+      />
     </Wrapper>
   );
 });
-
-const AuthFormItemWrapper = ({
-  tooltip,
-  success,
-  error,
-  children,
-}: AuthFormWrapperProps) => {
-  return (
-    <Wrapper css={style.wrapper}>
-      <Wrapper.Item css={style.item}>{children}</Wrapper.Item>
-      {tooltip && (
-        <Typography
-          as="span"
-          fontSize="body-12"
-          fontWeight="regular"
-          color="greyScale-5"
-          lineHeight="150%"
-          style={{
-            paddingLeft: '14px',
-          }}
-        >
-          {tooltip}
-        </Typography>
-      )}
-      {error && (
-        <Typography
-          as="span"
-          fontSize="body-12"
-          fontWeight="regular"
-          color="system-1"
-          lineHeight="150%"
-          style={{
-            paddingLeft: '14px',
-          }}
-        >
-          {error}
-        </Typography>
-      )}
-      {success && (
-        <Typography
-          as="span"
-          fontSize="body-12"
-          fontWeight="regular"
-          color="primary"
-          lineHeight="150%"
-          style={{
-            paddingLeft: '14px',
-          }}
-        >
-          {success}
-        </Typography>
-      )}
-    </Wrapper>
-  );
-};
 
 export default AuthFormItem;

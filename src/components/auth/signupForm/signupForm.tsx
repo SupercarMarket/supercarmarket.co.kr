@@ -1,11 +1,13 @@
 import Button from 'components/common/button';
+import { Form, FormLabel } from 'components/common/form';
+import { AuthProvider } from 'feature/authProvider';
 import { FormProvider } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
 import { user } from 'utils/api/auth';
 
 import type { Forms } from '../authFormItem/authFormItem';
-import AuthFormContainer from '../authFormItem/authFormItem';
-import { Form } from './signupForm.styled';
+import AuthFormItem from '../authFormItem/authFormItem';
+import * as style from './signupForm.styled';
 
 const forms: Forms[] = [
   {
@@ -14,7 +16,7 @@ const forms: Forms[] = [
     type: 'text',
     placeholder: '아이디를 입력해주세요',
     button: '중복 확인',
-    buttonWidth: '140px',
+    buttonWidth: '120px',
     options: {
       required: true,
     },
@@ -56,7 +58,7 @@ const forms: Forms[] = [
     placeholder: '닉네임을 입력해주세요 (최대 10자)',
     tooltip: '2~10자 한글, 영문 대소문자를 사용할 수 있습니다',
     button: '중복 확인',
-    buttonWidth: '140px',
+    buttonWidth: '120px',
     options: {
       required: true,
     },
@@ -66,7 +68,7 @@ const forms: Forms[] = [
   {
     htmlFor: 'phone',
     label: '휴대폰',
-    type: 'text',
+    type: 'tel',
     placeholder: '숫자만 입력해주세요',
     button: '인증번호 받기',
     buttonWidth: '120px',
@@ -91,7 +93,7 @@ const forms: Forms[] = [
     type: 'email',
     placeholder: '이메일을 입력해주세요',
     button: '중복 확인',
-    buttonWidth: '140px',
+    buttonWidth: '120px',
     options: {
       required: true,
     },
@@ -119,16 +121,24 @@ const SignupForm = () => {
   });
 
   return (
-    <FormProvider {...methods}>
-      <Form onSubmit={onSubmit}>
-        {forms.map((props) => (
-          <AuthFormContainer key={props.label} {...props} />
-        ))}
-        <Button width="340px" type="submit" variant="Primary">
-          가입하기
-        </Button>
-      </Form>
-    </FormProvider>
+    <AuthProvider>
+      <FormProvider {...methods}>
+        <Form css={style.form} onSubmit={onSubmit}>
+          {forms.map((props) => (
+            <FormLabel
+              key={props.htmlFor}
+              name={props.htmlFor}
+              label={props.label}
+            >
+              <AuthFormItem {...props} />
+            </FormLabel>
+          ))}
+          <Button width="340px" type="submit" variant="Primary">
+            가입하기
+          </Button>
+        </Form>
+      </FormProvider>
+    </AuthProvider>
   );
 };
 

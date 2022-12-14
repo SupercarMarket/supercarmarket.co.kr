@@ -1,8 +1,10 @@
 import Button from 'components/common/button';
+import { Form, FormLabel } from 'components/common/form';
+import { AuthProvider } from 'feature/authProvider';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import AuthFormItem, { Forms } from '../authFormItem/authFormItem';
-import { Form } from './findForm.style';
+import * as style from './findForm.style';
 
 interface FindForms {
   id: Forms[];
@@ -12,7 +14,6 @@ interface FindForms {
 const forms: FindForms = {
   id: [
     {
-      variant: 'Label',
       htmlFor: 'name',
       label: '이름',
       type: 'text',
@@ -22,7 +23,6 @@ const forms: FindForms = {
       },
     },
     {
-      variant: 'Label',
       htmlFor: 'phone',
       label: '휴대폰',
       type: 'text',
@@ -36,7 +36,6 @@ const forms: FindForms = {
       successMessage: '사용 가능한 아이디입니다',
     },
     {
-      variant: 'Label',
       htmlFor: 'authentication',
       label: '인증번호',
       type: 'text',
@@ -52,7 +51,6 @@ const forms: FindForms = {
   ],
   password: [
     {
-      variant: 'Label',
       htmlFor: 'id',
       label: '아이디',
       type: 'text',
@@ -64,7 +62,6 @@ const forms: FindForms = {
       successMessage: '사용 가능한 아이디입니다',
     },
     {
-      variant: 'Label',
       htmlFor: 'phone',
       label: '휴대폰',
       type: 'text',
@@ -76,7 +73,6 @@ const forms: FindForms = {
       successMessage: '사용 가능한 아이디입니다',
     },
     {
-      variant: 'Label',
       htmlFor: 'authentication',
       label: '인증번호',
       type: 'text',
@@ -106,16 +102,24 @@ const FindForm = ({ type }: FindFormProps) => {
 
   const onSubmit = methods.handleSubmit((data) => console.log(data));
   return (
-    <FormProvider {...methods}>
-      <Form onSubmit={onSubmit}>
-        {forms[type].map((form) => (
-          <AuthFormItem key={form.htmlFor} {...form} />
-        ))}
-      </Form>
-      <Button width="340px" type="submit" variant="Primary">
-        확인
-      </Button>
-    </FormProvider>
+    <AuthProvider>
+      <FormProvider {...methods}>
+        <Form css={style.form} onSubmit={onSubmit}>
+          {forms[type].map((form) => (
+            <FormLabel
+              key={form.htmlFor}
+              name={form.htmlFor}
+              label={form.label}
+            >
+              <AuthFormItem {...form} />
+            </FormLabel>
+          ))}
+        </Form>
+        <Button width="340px" type="submit" variant="Primary">
+          확인
+        </Button>
+      </FormProvider>
+    </AuthProvider>
   );
 };
 

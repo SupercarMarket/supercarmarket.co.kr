@@ -1,6 +1,6 @@
-import styled, { css } from 'styled-components';
+import { css } from 'styled-components';
 
-const Form = styled.form`
+const form = css`
   width: 800px;
   display: flex;
   flex-direction: column;
@@ -29,4 +29,4 @@ const item = css`
   gap: 20px;
 `;
 
-export { Form, item, label, wrapper };
+export { form, item, label, wrapper };

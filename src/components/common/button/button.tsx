@@ -68,7 +68,7 @@ const Button = (props: ButtonProps, ref: Ref<HTMLButtonElement>) => {
             {prefixx}
           </i>
         )}
-        <span>{children}</span>
+        {children}
         {suffix && (
           <i
             className={clsx({
