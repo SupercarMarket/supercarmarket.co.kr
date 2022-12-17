@@ -54,6 +54,7 @@ const Button = (props: ButtonProps, ref: Ref<HTMLButtonElement>) => {
         disabled={disabled}
         style={{
           width,
+          whiteSpace: 'nowrap',
           ...style,
         }}
         {...rest}
@@ -81,6 +82,7 @@ const Button = (props: ButtonProps, ref: Ref<HTMLButtonElement>) => {
       <style jsx>{`
         .button {
           all: unset;
+          box-sizing: border-box;
           display: flex;
           align-items: center;
           justify-content: center;
