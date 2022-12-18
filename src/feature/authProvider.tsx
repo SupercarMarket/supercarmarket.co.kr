@@ -3,7 +3,10 @@ import { createContext, useContext, useReducer } from 'react';
 
 import authReducer from './reducers/authReducer';
 
-type AuthAction = 'REQUEST_AUTH' | 'CONFIRM_AUTH';
+type AuthAction =
+  | 'REQUEST_PHONE_AUTH'
+  | 'CONFIRM_PHONE_AUTH'
+  | 'DUPLICATE_AUTH';
 type AuthDispatch = Dispatch<AuthAction>;
 interface AuthProviderProps {
   children: React.ReactNode;
@@ -15,10 +18,20 @@ interface AuthInitialState {
     data: null | number;
     loading: boolean;
   };
+  duplicate: {
+    error: boolean;
+    data: null | boolean;
+    loading: boolean;
+  };
 }
 
 const initialState: AuthInitialState = {
   authorization: {
+    error: false,
+    data: null,
+    loading: false,
+  },
+  duplicate: {
     error: false,
     data: null,
     loading: false,
@@ -55,5 +68,5 @@ export function useAuthDispatch() {
   return dispatch;
 }
 
-export type { AuthAction, AuthInitialState };
+export type { AuthAction, AuthDispatch, AuthInitialState };
 export { AuthProvider };
