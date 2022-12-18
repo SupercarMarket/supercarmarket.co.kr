@@ -12,7 +12,7 @@ interface FormInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   buttonText?: string;
   buttonVariant?: 'Primary-Line' | 'Line';
   buttonDisabled?: boolean;
-  buttonCallback?: () => Promise<void>;
+  buttonCallback?: () => void;
 }
 
 const FormInput = (props: FormInputProps, ref: React.Ref<HTMLInputElement>) => {
@@ -31,6 +31,7 @@ const FormInput = (props: FormInputProps, ref: React.Ref<HTMLInputElement>) => {
       <Input ref={ref} {...rest} />
       {button && (
         <Button
+          type="button"
           variant={buttonVariant}
           disabled={buttonDisabled}
           width={buttonWidth}

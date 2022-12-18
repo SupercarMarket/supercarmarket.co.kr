@@ -2,6 +2,7 @@ import { SignupForm } from 'components/auth';
 import Container from 'components/common/container';
 import Title from 'components/common/title';
 import layout from 'components/layout';
+import { AuthProvider } from 'feature/authProvider';
 
 const Signup = () => {
   return (
@@ -13,7 +14,9 @@ const Signup = () => {
       gap="60px"
     >
       <Title textAlign="center">회원가입</Title>
-      <SignupForm />
+      <AuthProvider>
+        <SignupForm />
+      </AuthProvider>
     </Container>
   );
 };

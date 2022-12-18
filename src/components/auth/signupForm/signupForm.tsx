@@ -1,6 +1,10 @@
 import Button from 'components/common/button';
 import { Form, FormLabel } from 'components/common/form';
-import { AuthProvider } from 'feature/authProvider';
+import {
+  AuthProvider,
+  useAuthDispatch,
+  useAuthState,
+} from 'feature/authProvider';
 import { FormProvider } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
 import { user } from 'utils/api/auth';
@@ -115,6 +119,8 @@ interface FormState {
 
 const SignupForm = () => {
   const methods = useForm<FormState>();
+  const state = useAuthState();
+  const dispatch = useAuthDispatch();
 
   const onSubmit = methods.handleSubmit(async (data) => {
     await user.signUp(data);
@@ -130,7 +136,7 @@ const SignupForm = () => {
               name={props.htmlFor}
               label={props.label}
             >
-              <AuthFormItem {...props} />
+              <AuthFormItem state={state} dispatch={dispatch} {...props} />
             </FormLabel>
           ))}
           <Button width="340px" type="submit" variant="Primary">
