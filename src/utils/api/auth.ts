@@ -46,22 +46,22 @@ const user = {
   findPassword: () => {
     return '';
   },
-  duplicateAuth: async (target: DuplicationList, data: string) => {
-    catchNoExist(target, data);
+  duplicateAuth: async (type: DuplicationList, target: string) => {
+    catchNoExist(type, target);
     try {
       const signUp = await baseFetcher(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/user/${target}chk`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/user/${type}chk`,
         {
           headers: {
             'Content-Type': 'application/json',
           },
           method: 'POST',
-          body: JSON.stringify({ [target]: data }),
+          body: JSON.stringify({ [type]: target }),
         }
       );
       return signUp;
     } catch (error) {
-      return true;
+      throw new Error(getErrorMessage(error));
     }
   },
   checkAlreadyMember: async (req: NextApiRequest, res: NextApiResponse) => {
@@ -93,7 +93,7 @@ const user = {
       throw new Error(getErrorMessage(error));
     }
   },
-  profile: async (req: NextApiRequest, res: NextApiResponse) => {
+  profile: async (req: NextApiRequest) => {
     const { provider, sub } = req.query as Params;
 
     catchNoExist(provider, sub);
@@ -122,7 +122,7 @@ const phone = {
   requestPhoneAuth: async (phone: string) => {
     try {
       const authNumber = await baseFetcher(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/message/auth/sendName/${phone}`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/message/auth/send/${phone}`,
         {
           method: 'GET',
         }
@@ -135,7 +135,7 @@ const phone = {
   requestPhoneAuthWithName: async (phone: string, name: string) => {
     try {
       const authNumber = await baseFetcher(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/message/auth/sendName/${phone}/${name}`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/message/auth/sendName/${phone}/${name}`,
         {
           method: 'GET',
         }
@@ -148,7 +148,7 @@ const phone = {
   confirmPhoneAuth: async (phone: string, authorization: string) => {
     try {
       const authNumber = await baseFetcher(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/message/auth/sendName/${phone}`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/message/auth/code/${phone}`,
         {
           method: 'GET',
           query: {
@@ -158,7 +158,7 @@ const phone = {
       );
       return authNumber;
     } catch (error) {
-      return true;
+      throw new Error(getErrorMessage(error));
     }
   },
 };

@@ -18,7 +18,7 @@ export default function createAsyncDispatcher<
     } catch (e) {
       dispatch({
         type: ERROR,
-        error: true,
+        error: e as unknown as Error,
       });
     }
   };

@@ -1,17 +1,17 @@
 type Action<ActionType extends string> =
   | {
       type: ActionType;
-      error?: boolean;
+      error?: null;
       data?: unknown;
     }
   | {
       type: `${ActionType}_SUCCESS`;
-      error?: boolean;
+      error?: null;
       data?: unknown;
     }
   | {
       type: `${ActionType}_ERROR`;
-      error?: boolean;
+      error?: Error;
       data?: unknown;
     };
 type Dispatch<ActionType extends string> = (action: Action<ActionType>) => void;

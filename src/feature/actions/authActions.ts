@@ -14,10 +14,15 @@ const confirmPhoneAuth = createAsyncDispatcher<
   [string, string]
 >('CONFIRM_PHONE_AUTH', phone.confirmPhoneAuth);
 
-const duplicateAuth = createAsyncDispatcher<
-  'DUPLICATE_AUTH',
+const duplicateIdAuth = createAsyncDispatcher<
+  'DUPLICATE_ID_AUTH',
   [DuplicationList, string]
->('DUPLICATE_AUTH', (type: DuplicationList, target: string) =>
+>('DUPLICATE_ID_AUTH', user.duplicateAuth);
+
+const duplicateEmailAuth = createAsyncDispatcher<
+  'DUPLICATE_EMAIL_AUTH',
+  [DuplicationList, string]
+>('DUPLICATE_EMAIL_AUTH', (type: DuplicationList, target: string) =>
   baseFetcher('/api/user/duplicate', {
     method: 'GET',
     query: {
@@ -27,4 +32,23 @@ const duplicateAuth = createAsyncDispatcher<
   })
 );
 
-export { confirmPhoneAuth, duplicateAuth, requestPhoneAuth };
+const duplicateNickanmeAuth = createAsyncDispatcher<
+  'DUPLICATE_NICKNAME_AUTH',
+  [DuplicationList, string]
+>('DUPLICATE_NICKNAME_AUTH', (type: DuplicationList, target: string) =>
+  baseFetcher('/api/user/duplicate', {
+    method: 'GET',
+    query: {
+      type,
+      target,
+    },
+  })
+);
+
+export {
+  confirmPhoneAuth,
+  duplicateEmailAuth,
+  duplicateIdAuth,
+  duplicateNickanmeAuth,
+  requestPhoneAuth,
+};

@@ -6,17 +6,27 @@ import { createAsyncHandler } from '.';
 const requestPhoneAuthHandler = createAsyncHandler<
   AuthAction,
   AuthInitialState
->('REQUEST_PHONE_AUTH', 'authorization');
+>('REQUEST_PHONE_AUTH', 'phone');
 
 const confirmPhoneAuthHandler = createAsyncHandler<
   AuthAction,
   AuthInitialState
->('CONFIRM_PHONE_AUTH', 'authorization');
+>('CONFIRM_PHONE_AUTH', 'authentication');
 
-const duplicateAuthHandler = createAsyncHandler<AuthAction, AuthInitialState>(
-  'DUPLICATE_AUTH',
-  'authorization'
+const duplicateIdAuthHandler = createAsyncHandler<AuthAction, AuthInitialState>(
+  'DUPLICATE_ID_AUTH',
+  'id'
 );
+
+const duplicateEmailAuthHandler = createAsyncHandler<
+  AuthAction,
+  AuthInitialState
+>('DUPLICATE_EMAIL_AUTH', 'email');
+
+const duplicateNicknameAuthHandler = createAsyncHandler<
+  AuthAction,
+  AuthInitialState
+>('DUPLICATE_NICKNAME_AUTH', 'nickname');
 
 export default function authReducer(
   state: AuthInitialState,
@@ -31,10 +41,18 @@ export default function authReducer(
     case 'CONFIRM_PHONE_AUTH_SUCCESS':
     case 'CONFIRM_PHONE_AUTH_ERROR':
       return confirmPhoneAuthHandler(state, action);
-    case 'DUPLICATE_AUTH':
-    case 'DUPLICATE_AUTH_SUCCESS':
-    case 'DUPLICATE_AUTH_ERROR':
-      return duplicateAuthHandler(state, action);
+    case 'DUPLICATE_ID_AUTH':
+    case 'DUPLICATE_ID_AUTH_SUCCESS':
+    case 'DUPLICATE_ID_AUTH_ERROR':
+      return duplicateIdAuthHandler(state, action);
+    case 'DUPLICATE_EMAIL_AUTH':
+    case 'DUPLICATE_EMAIL_AUTH_SUCCESS':
+    case 'DUPLICATE_EMAIL_AUTH_ERROR':
+      return duplicateEmailAuthHandler(state, action);
+    case 'DUPLICATE_NICKNAME_AUTH':
+    case 'DUPLICATE_NICKNAME_AUTH_SUCCESS':
+    case 'DUPLICATE_NICKNAME_AUTH_ERROR':
+      return duplicateNicknameAuthHandler(state, action);
     default:
       throw new Error(`Unhanded action type`);
   }
