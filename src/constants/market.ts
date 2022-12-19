@@ -1,6 +1,6 @@
 import { MarketOptionType } from '../types/market';
 
-export const CATEGORY: MarketOptionType[] = [
+const CATEGORY: MarketOptionType[] = [
   { option: '전체', value: 'all' },
   { option: '스포츠카', value: 'sports-car' },
   { option: '세단', value: 'saloon' },
@@ -9,7 +9,7 @@ export const CATEGORY: MarketOptionType[] = [
   { option: '클래식카&올드카', value: 'classic-car&old-car' },
 ];
 
-export const CATEGORY_VALUES = CATEGORY.map(({ value }) => value);
+const CATEGORY_VALUES = CATEGORY.map(({ value }) => value);
 
 /**
  *
@@ -17,7 +17,7 @@ export const CATEGORY_VALUES = CATEGORY.map(({ value }) => value);
  * @param endYear 연식 마지막 년도
  * @returns [{ option: '년도', value: 숫자 값 }];
  */
-export const CAR_FILTER_DATE = (
+const CAR_FILTER_DATE = (
   startYear: number,
   endYear: number
 ): MarketOptionType[] => {
@@ -37,7 +37,7 @@ export const CAR_FILTER_DATE = (
  * @param step 가격 간 격차
  * @returns [{ option: '${가격}만원 || 억', value: 숫자 값 }];
  */
-export const CAR_FILTER_PRICE = (
+const CAR_FILTER_PRICE = (
   startPrice: number,
   endPrice: number,
   step: number
@@ -68,7 +68,7 @@ export const CAR_FILTER_PRICE = (
  * @param step 주행거리 간 격차
  * @returns [{ option: `${주행거리}천km || 만km`, value: 숫자 값 }];
  */
-export const CAR_FILTER_MILEAGE = (
+const CAR_FILTER_MILEAGE = (
   startMileage: number,
   endMileage: number,
   step: number
@@ -98,7 +98,7 @@ export const CAR_FILTER_MILEAGE = (
   return arr;
 };
 
-export const FIRST_MARKET_FILTER = [
+const FIRST_MARKET_FILTER = [
   {
     subject: '연식',
     label: {
@@ -157,7 +157,7 @@ export const FIRST_MARKET_FILTER = [
   },
 ];
 
-export const SECOND_MARKET_FILTER = [
+const SECOND_MARKET_FILTER = [
   {
     subject: '사고여부',
     label: {
@@ -173,11 +173,21 @@ export const SECOND_MARKET_FILTER = [
   },
 ];
 
-// export const FILTER_DATANAMES = FIRST_MARKET_FILTER.map(
-//   ({ label }) => label
-// ).concat(SECOND_MARKET_FILTER.map(({ label }) => label));
+const concatSubject = FIRST_MARKET_FILTER.map(({ subject, label }) => ({
+  subject,
+  label,
+})).concat(
+  SECOND_MARKET_FILTER.map(({ subject, label }) => ({ subject, label }))
+);
 
-export const ORDER_OPTIONSET: MarketOptionType[] = [
+const FILTER_SUBJECT: { [key: string]: string } = {};
+concatSubject.forEach(({ subject, label }) => {
+  const { first, second } = label;
+  FILTER_SUBJECT[first.dataName] = subject;
+  if (second) FILTER_SUBJECT[second.dataName] = subject;
+});
+
+const ORDER_OPTIONSET: MarketOptionType[] = [
   {
     option: '최근 등록순',
     value: 'created_date DESC',
@@ -217,7 +227,7 @@ export const ORDER_OPTIONSET: MarketOptionType[] = [
  * @param end 마지막 개수
  * @returns [{ option: `${개수}개씩 || 만km`, value: 개수 }];
  */
-export const HOW_MANY_RESULT = (start: number, end: number) => {
+const HOW_MANY_RESULT = (start: number, end: number) => {
   const options: MarketOptionType[] = [];
 
   for (let i = start; i <= end; i += 10) {
@@ -227,7 +237,7 @@ export const HOW_MANY_RESULT = (start: number, end: number) => {
   return options;
 };
 
-export const MARKET_LIST_TABLE_HEAD = [
+const MARKET_LIST_TABLE_HEAD = [
   {
     title: '사진',
     width: '196',
@@ -258,7 +268,23 @@ export const MARKET_LIST_TABLE_HEAD = [
   },
 ];
 
-export const FUEL_KIND: { [key: string]: string } = {
+const FUEL_KIND: { [key: string]: string } = {
   gasoline: '가솔린',
   diesel: '디젤',
+  electric: '전기',
+};
+
+export {
+  CAR_FILTER_DATE,
+  CAR_FILTER_MILEAGE,
+  CAR_FILTER_PRICE,
+  CATEGORY,
+  CATEGORY_VALUES,
+  FILTER_SUBJECT,
+  FIRST_MARKET_FILTER,
+  FUEL_KIND,
+  HOW_MANY_RESULT,
+  MARKET_LIST_TABLE_HEAD,
+  ORDER_OPTIONSET,
+  SECOND_MARKET_FILTER,
 };

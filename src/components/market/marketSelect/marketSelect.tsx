@@ -67,10 +67,20 @@ const MarketSelect = ({ subject, label, optionSet }: MarketSelectProps) => {
     const selectedOption = { value, option };
 
     const firstConverted =
-      Number(secondSelect?.value) >= +value ? selectedOption : secondSelect;
+      Number(secondSelect?.value) >= +value
+        ? selectedOption
+        : secondSelect || selectedOption;
 
     const secondConverted =
       Number(firstSelect?.value) > +value ? selectedOption : firstSelect;
+
+    console.log(
+      firstConverted,
+      secondConverted,
+      firstSelect,
+      secondSelect,
+      dataName
+    );
 
     if (first.dataName === dataName) {
       pushQuery(firstConverted, secondSelect);

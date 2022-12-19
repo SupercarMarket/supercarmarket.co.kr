@@ -1,9 +1,13 @@
 import Typography from 'components/common/typography';
 import MarketSelect from 'components/market/marketSelect';
-import { FIRST_MARKET_FILTER, SECOND_MARKET_FILTER } from 'constants/market';
+import {
+  FILTER_SUBJECT,
+  FIRST_MARKET_FILTER,
+  SECOND_MARKET_FILTER,
+} from 'constants/market';
 import theme from 'constants/theme';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { FilterType, MarketFormTarget, MarketLabelType } from 'types/market';
 
 import Close from '../../../assets/svg/close.svg';
@@ -14,7 +18,12 @@ import * as Styled from './marketFilter.styled';
 interface MarketFilterProps {}
 
 const MarketFilter = ({}: MarketFilterProps) => {
-  const { push } = useRouter();
+  const { push, query } = useRouter();
+
+  const convertedQuery = useMemo(() => {
+    return Object.entries(query);
+  }, [query]);
+
   const submitHander = (e: MarketFormTarget) => {
     e.preventDefault();
     console.log(e.target.minDate);
@@ -54,19 +63,22 @@ const MarketFilter = ({}: MarketFilterProps) => {
       </Styled.MarketFilterArea>
       <Styled.FilterListArea>
         <Styled.MarketFilterList>
-          {/* {filterList.map(({ subject, option }, idx) => (
-            <Styled.MarketFilterItem key={subject} onClick={() => removeFilter(idx)}>
+          {convertedQuery.map(([key, value], idx) => (
+            <Styled.MarketFilterItem
+              key={key}
+              onClick={() => removeFilter(idx)}
+            >
               <Typography
                 fontSize="body-16"
                 lineHeight="150%"
-              >{`${subject} ${option}`}</Typography>
+              >{`${FILTER_SUBJECT[key]} ${value}`}</Typography>
               <Close
                 width="16px"
                 height="16px"
                 fill={theme.color['greyScale-5']}
               />
             </Styled.MarketFilterItem>
-          ))} */}
+          ))}
         </Styled.MarketFilterList>
         <Styled.ResetButton onClick={resetfilter}>
           <Refresh

@@ -27,10 +27,10 @@ const MarketFilterPage = ({ category }: MarketFilterPageProps) => {
   );
 
   const [states, actions] = useMarketFilter();
-  const { data: markets } = useMarket(
-    makeMarketQueries({ states, category, page }),
-    { keepPreviousData: true }
-  );
+  // const { data: markets } = useMarket(
+  //   makeMarketQueries({ states, category, page }),
+  //   { keepPreviousData: true }
+  // );
 
   return (
     <Container display="flex" flexDirection="column" margin="20px 0 0 0">
@@ -49,14 +49,14 @@ const MarketFilterPage = ({ category }: MarketFilterPageProps) => {
       </Container>
       <MarketCarKind category={category} />
       <MarketFilter />
-      {markets && (
+      {/* {markets && (
         <MarketList
           data={markets}
           states={states}
           actions={actions}
           page={page}
         />
-      )}
+      )} */}
     </Container>
   );
 };
