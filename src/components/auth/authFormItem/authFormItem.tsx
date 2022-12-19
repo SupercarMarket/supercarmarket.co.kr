@@ -188,6 +188,8 @@ const AuthFormPhoneItemContainer = React.memo(function AuthFormItem({
 
   const buttonDisabled = htmlFor === 'authentication' ? !phone : undefined;
   const buttonVariant = htmlFor === 'authentication' ? !phone : !!phone;
+  const count =
+    htmlFor === 'authentication' && phone && !success ? 179 : undefined;
   const buttonText = htmlFor === 'phone' && phone ? '재시도' : button;
 
   const handleCallback = React.useCallback(() => {
@@ -216,6 +218,7 @@ const AuthFormPhoneItemContainer = React.memo(function AuthFormItem({
         buttonDisabled={buttonDisabled}
         placeholder={placeholder}
         readOnly={success}
+        count={count}
         {...register(htmlFor, { ...options })}
       />
       <FormMessage

@@ -1,4 +1,5 @@
-import type {
+import {
+  css,
   DefaultTheme,
   FlattenInterpolation,
   FlattenSimpleInterpolation,
@@ -15,4 +16,15 @@ const Form = styled.form<{
   ${({ css }) => css}
 `;
 
-export { Form };
+const wrapper = css`
+  width: 100%;
+  position: relative;
+`;
+
+const item = css`
+  position: absolute;
+  right: 14px;
+  top: 8px;
+`;
+
+export { Form, item, wrapper };

@@ -3,12 +3,16 @@ import * as React from 'react';
 import Button from '../button';
 import Container from '../container';
 import Input from '../input';
+import Timer from '../timer';
 import Typography from '../typography';
+import Wrapper from '../wrapper';
+import * as style from './form.styled';
 
 interface FormInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   gap?: React.CSSProperties['gap'];
   button?: boolean;
   buttonWidth?: React.CSSProperties['width'];
+  count?: number;
   buttonText?: string;
   buttonVariant?: 'Primary-Line' | 'Line';
   buttonDisabled?: boolean;
@@ -17,6 +21,7 @@ interface FormInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 
 const FormInput = (props: FormInputProps, ref: React.Ref<HTMLInputElement>) => {
   const {
+    count,
     button = false,
     buttonText,
     buttonVariant,
@@ -28,7 +33,12 @@ const FormInput = (props: FormInputProps, ref: React.Ref<HTMLInputElement>) => {
   } = props;
   return (
     <Container display="flex" alignItems="center" gap={gap}>
-      <Input ref={ref} {...rest} />
+      <Wrapper css={style.wrapper}>
+        <Input ref={ref} {...rest} />
+        <Wrapper.Item css={style.item}>
+          {count && <Timer time={count} reset />}
+        </Wrapper.Item>
+      </Wrapper>
       {button && (
         <Button
           type="button"
