@@ -7,11 +7,7 @@ const id = (value: string) => {
 
 const password = (value: string) => {
   if (!value) return '비밀번호를 입력해주세요.';
-  if (
-    !/^(?=.*[A-Za-z])(?=.*d)(?=.*[$@$!%*#?&])[A-Za-zd$@$!%*#?&]{8,}$/.test(
-      value
-    )
-  )
+  if (!/^.*(?=^.{8,20}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/.test(value))
     return '영문/숫자/특수문자 중 2가지 이상, 8자 이상으로 입력해주세요.';
   return true;
 };
