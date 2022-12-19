@@ -1,6 +1,10 @@
 import Button from 'components/common/button';
 import { Form, FormLabel } from 'components/common/form';
-import { AuthProvider } from 'feature/authProvider';
+import {
+  AuthProvider,
+  useAuthDispatch,
+  useAuthState,
+} from 'feature/authProvider';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import AuthFormItem, { Forms } from '../authFormItem/authFormItem';
@@ -99,6 +103,8 @@ interface FindFormProps {
 
 const FindForm = ({ type }: FindFormProps) => {
   const methods = useForm<FormsState>();
+  const dispatch = useAuthDispatch();
+  const state = useAuthState();
 
   const onSubmit = methods.handleSubmit((data) => console.log(data));
   return (
@@ -111,7 +117,7 @@ const FindForm = ({ type }: FindFormProps) => {
               name={form.htmlFor}
               label={form.label}
             >
-              <AuthFormItem {...form} />
+              <AuthFormItem state={state} dispatch={dispatch} {...form} />
             </FormLabel>
           ))}
         </Form>

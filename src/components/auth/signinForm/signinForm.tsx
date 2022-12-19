@@ -4,7 +4,11 @@ import Divider from 'components/common/divider';
 import { Form, FormLabel } from 'components/common/form';
 import Typography from 'components/common/typography';
 import Wrapper from 'components/common/wrapper';
-import { AuthProvider } from 'feature/authProvider';
+import {
+  AuthProvider,
+  useAuthDispatch,
+  useAuthState,
+} from 'feature/authProvider';
 import Link from 'next/link';
 import { signIn } from 'next-auth/react';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -83,6 +87,8 @@ const Links = () => {
 
 const LocalFormItem = () => {
   const methods = useForm<FormState>();
+  const dispatch = useAuthDispatch();
+  const state = useAuthState();
 
   const onSubmit = methods.handleSubmit((data) => {
     const { id, password } = data;
@@ -100,7 +106,7 @@ const LocalFormItem = () => {
                 label={form.label}
                 hidden
               >
-                <AuthFormItem {...form} />
+                <AuthFormItem state={state} dispatch={dispatch} {...form} />
               </FormLabel>
             ))}
           </Wrapper>
@@ -152,7 +158,9 @@ const SigninForm = () => {
       alignItems="center"
       gap="64px"
     >
-      <LocalFormItem />
+      <AuthProvider>
+        <LocalFormItem />
+      </AuthProvider>
       <OauthFormItem />
     </Container>
   );
