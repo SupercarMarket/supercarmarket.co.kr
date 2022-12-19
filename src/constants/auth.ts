@@ -1,4 +1,13 @@
 import type { RegisterOptions } from 'react-hook-form';
+import {
+  authentication,
+  email,
+  id,
+  name,
+  nickname,
+  password,
+  phone,
+} from 'utils/validator';
 
 interface FormState {
   id: string;
@@ -31,14 +40,7 @@ const auth = {
     type: 'text',
     placeholder: '아이디를 입력해주세요',
     options: {
-      required: {
-        value: true,
-        message: '필수로 입력해주세요.',
-      },
-      pattern: {
-        value: /^[a-zA-Z][0-9a-zA-Z]{3,10}$/,
-        message: '영문/숫자/ 3자 이상 10자 미만으로 입력해주세요.',
-      },
+      validate: id,
     },
     errorMessage: '사용 불가능한 아이디입니다',
     successMessage: '사용 가능한 아이디입니다',
@@ -50,14 +52,7 @@ const auth = {
     placeholder: '비밀번호를 입력해주세요',
     tooltip: '영문/숫자/특수문자 중 2가지 이상, 8자 이상',
     options: {
-      required: {
-        value: true,
-        message: '필수로 입력해주세요.',
-      },
-      pattern: {
-        value: /^(?=.*[A-Za-z])(?=.*d)(?=.*[$@$!%*#?&])[A-Za-zd$@$!%*#?&]{8,}$/,
-        message: '영문/숫자/특수문자 중 2가지 이상, 8자 이상으로 입력해주세요.',
-      },
+      validate: password,
     },
   } as Forms,
   passwordConfirm: {
@@ -66,14 +61,7 @@ const auth = {
     type: 'password',
     placeholder: '비밀번호를 한번 더 입력해주세요',
     options: {
-      required: {
-        value: true,
-        message: '필수로 입력해주세요.',
-      },
-      pattern: {
-        value: /^(?=.*[A-Za-z])(?=.*d)(?=.*[$@$!%*#?&])[A-Za-zd$@$!%*#?&]{8,}$/,
-        message: '영문/숫자/특수문자 중 2가지 이상, 8자 이상으로 입력해주세요.',
-      },
+      validate: password,
     },
   } as Forms,
   name: {
@@ -82,14 +70,7 @@ const auth = {
     type: 'text',
     placeholder: '이름을 입력해주세요',
     options: {
-      required: {
-        value: true,
-        message: '필수로 입력해주세요.',
-      },
-      pattern: {
-        value: /^[가-힣]{2,6}$/,
-        message: '한글 2자 이상 6자 미만으로 입력해주세요',
-      },
+      validate: name,
     },
   } as Forms,
   nickname: {
@@ -101,14 +82,7 @@ const auth = {
     button: '중복 확인',
     buttonWidth: '120px',
     options: {
-      required: {
-        value: true,
-        message: '필수로 입력해주세요.',
-      },
-      pattern: {
-        value: /^([a-zA-Z0-9ㄱ-ㅎ|ㅏ-ㅣ|가-힣]).{2,10}$/,
-        message: '한글/영문/대소문자 2자 이상 10자 미만으로 입력해주세요',
-      },
+      validate: nickname,
     },
     errorMessage: '사용 불가능한 닉네임입니다',
     successMessage: '사용 가능한 닉네임입니다',
@@ -121,11 +95,7 @@ const auth = {
     button: '인증번호 받기',
     buttonWidth: '120px',
     options: {
-      required: {
-        value: true,
-        message: '필수로 입력해주세요.',
-      },
-      pattern: /^01(?:0|1|[6-9])-(?:\d{3}|\d{4})-\d{4}$/,
+      validate: phone,
     },
   } as Forms,
   authentication: {
@@ -136,10 +106,7 @@ const auth = {
     button: '인증번호 확인',
     buttonWidth: '120px',
     options: {
-      required: {
-        value: true,
-        message: '필수로 입력해주세요.',
-      },
+      validate: authentication,
     },
   } as Forms,
   email: {
@@ -150,15 +117,7 @@ const auth = {
     button: '중복 확인',
     buttonWidth: '120px',
     options: {
-      required: {
-        value: true,
-        message: '필수로 입력해주세요.',
-      },
-      pattern: {
-        value:
-          /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i,
-        message: '이메일 형식에 맞춰 입력해주세요.',
-      },
+      validate: email,
     },
     errorMessage: '사용 불가능한 이메일입니다',
     successMessage: '사용 가능한 이메일입니다',

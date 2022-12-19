@@ -10,8 +10,15 @@ import {
 } from 'feature/actions/authActions';
 import { AuthDispatch, AuthInitialState } from 'feature/authProvider';
 import * as React from 'react';
-import type { FieldValues, UseFormRegister } from 'react-hook-form';
+import type {
+  FieldError,
+  FieldErrorsImpl,
+  FieldValues,
+  Merge,
+  UseFormRegister,
+} from 'react-hook-form';
 import { useFormContext, useWatch } from 'react-hook-form';
+import * as validator from 'utils/validator';
 
 import * as style from './authFormItem.styled';
 
@@ -36,6 +43,7 @@ interface AuthFormItemContainerProps extends Omit<AuthFormItemProps, 'state'> {
         } | null;
         loading: boolean;
       };
+  patternError?: FieldError | Merge<FieldError, FieldErrorsImpl<any>>;
   target: string;
 }
 
@@ -56,7 +64,11 @@ const AuthFormItem = (props: AuthFormItemProps) => {
     )
       return state[htmlFor];
   }, [state, htmlFor]);
-  const { register } = useFormContext();
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext();
+  const patternError = errors[htmlFor];
   const target = useWatch({ name: htmlFor });
   return (
     <>
@@ -66,6 +78,7 @@ const AuthFormItem = (props: AuthFormItemProps) => {
           target={target}
           htmlFor={htmlFor}
           authState={authState}
+          patternError={patternError}
           phone={state['phone'].data}
           {...rest}
         />
@@ -75,6 +88,7 @@ const AuthFormItem = (props: AuthFormItemProps) => {
           target={target}
           htmlFor={htmlFor}
           authState={authState}
+          patternError={patternError}
           {...rest}
         />
       )}
@@ -94,14 +108,21 @@ const AuthFormItemContainer = React.memo(function AuthFormItem({
   successMessage,
   target,
   authState,
+  patternError,
   register,
   dispatch,
 }: AuthFormItemContainerProps) {
   const [error, setError] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
+  const fieldErrorMessage = React.useMemo(() => {
+    if (error) return errorMessage;
+    else if (patternError) return patternError.message as string;
+    else return undefined;
+  }, [error, errorMessage, patternError]);
 
   const handleCallback = React.useCallback(() => {
     if (!target) return;
+    if (validator[htmlFor](target) !== true) return;
 
     setError(false);
     setSuccess(false);
@@ -126,6 +147,7 @@ const AuthFormItemContainer = React.memo(function AuthFormItem({
         buttonWidth={buttonWidth}
         buttonVariant="Primary-Line"
         buttonCallback={handleCallback}
+        buttonDisabled={success}
         placeholder={placeholder}
         readOnly={success}
         {...register(htmlFor, { ...options })}
@@ -133,7 +155,7 @@ const AuthFormItemContainer = React.memo(function AuthFormItem({
       <FormMessage
         tooltip={tooltip}
         success={success ? successMessage : undefined}
-        error={error ? errorMessage : undefined}
+        error={fieldErrorMessage}
         padding="0 0 0 14px"
       />
     </Wrapper>
@@ -152,14 +174,24 @@ const AuthFormPhoneItemContainer = React.memo(function AuthFormItem({
   successMessage,
   target,
   authState,
+  patternError,
   phone,
   register,
   dispatch,
 }: AuthFormPhoneItemContainerProps) {
   const [error, setError] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
+  const fieldErrorMessage = React.useMemo(() => {
+    if (error) return errorMessage;
+    else if (patternError) return patternError.message as string;
+    else return undefined;
+  }, [error, errorMessage, patternError]);
 
-  const buttonDisabled = htmlFor === 'authentication' ? !phone : undefined;
+  const buttonDisabled = () => {
+    if (success) return true;
+    if (htmlFor === 'authentication') return !phone;
+    return undefined;
+  };
   const buttonVariant = htmlFor === 'authentication' ? !phone : !!phone;
   const count =
     htmlFor === 'authentication' && phone && !success ? 179 : undefined;
@@ -167,6 +199,7 @@ const AuthFormPhoneItemContainer = React.memo(function AuthFormItem({
 
   const handleCallback = React.useCallback(() => {
     if (!target) return;
+    if (validator[htmlFor](target) !== true) return;
     setError(false);
     setSuccess(false);
     if (htmlFor === 'phone') requestPhoneAuth(dispatch, target);
@@ -188,7 +221,7 @@ const AuthFormPhoneItemContainer = React.memo(function AuthFormItem({
         buttonWidth={buttonWidth}
         buttonVariant={buttonVariant ? 'Line' : 'Primary-Line'}
         buttonCallback={handleCallback}
-        buttonDisabled={buttonDisabled}
+        buttonDisabled={buttonDisabled()}
         placeholder={placeholder}
         readOnly={success}
         count={count}
@@ -197,7 +230,7 @@ const AuthFormPhoneItemContainer = React.memo(function AuthFormItem({
       <FormMessage
         tooltip={tooltip}
         success={success ? successMessage : undefined}
-        error={error ? errorMessage : undefined}
+        error={fieldErrorMessage}
         padding="0 0 0 14px"
       />
     </Wrapper>

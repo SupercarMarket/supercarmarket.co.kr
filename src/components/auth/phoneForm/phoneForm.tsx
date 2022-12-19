@@ -16,15 +16,18 @@ const PhoneForm = () => {
   const methods = useForm<FormState>();
   const state = useAuthState();
   const dispatch = useAuthDispatch();
+  const onSubmit = methods.handleSubmit((data) => console.log(data));
   return (
     <FormProvider {...methods}>
-      <Form css={style.form}>
+      <Form css={style.form} onSubmit={onSubmit}>
         {auth.phoneAuth().map((form) => (
           <FormLabel key={form.htmlFor} name={form.htmlFor} label={form.label}>
             <AuthFormItem {...form} state={state} dispatch={dispatch} />
           </FormLabel>
         ))}
-        <Button fullWidth>인증</Button>
+        <Button type="submit" fullWidth>
+          인증
+        </Button>
       </Form>
     </FormProvider>
   );
