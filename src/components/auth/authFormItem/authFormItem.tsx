@@ -1,5 +1,6 @@
 import { FormInput, FormMessage } from 'components/common/form';
 import Wrapper from 'components/common/wrapper';
+import { Forms } from 'constants/auth';
 import {
   confirmPhoneAuth,
   duplicateEmailAuth,
@@ -9,27 +10,10 @@ import {
 } from 'feature/actions/authActions';
 import { AuthDispatch, AuthInitialState } from 'feature/authProvider';
 import * as React from 'react';
-import type {
-  FieldValues,
-  RegisterOptions,
-  UseFormRegister,
-} from 'react-hook-form';
+import type { FieldValues, UseFormRegister } from 'react-hook-form';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import * as style from './authFormItem.styled';
-
-export interface Forms {
-  htmlFor: keyof FormState;
-  label?: string;
-  type?: React.HTMLInputTypeAttribute;
-  placeholder?: string;
-  tooltip?: string;
-  options?: RegisterOptions;
-  button?: string;
-  buttonWidth?: string;
-  successMessage?: string;
-  errorMessage?: string;
-}
 
 interface AuthFormItemProps extends Forms {
   state: AuthInitialState;
@@ -60,17 +44,6 @@ interface AuthFormPhoneItemContainerProps extends AuthFormItemContainerProps {
     code: string;
     phone: string;
   } | null;
-}
-
-interface FormState {
-  id: string;
-  password: string;
-  passwordConfirm: string;
-  name: string;
-  nickname: string;
-  phone: string;
-  authentication: string;
-  email: string;
 }
 
 const AuthFormItem = (props: AuthFormItemProps) => {

@@ -4,6 +4,7 @@ import Divider from 'components/common/divider';
 import { Form, FormLabel } from 'components/common/form';
 import Typography from 'components/common/typography';
 import Wrapper from 'components/common/wrapper';
+import auth from 'constants/auth';
 import {
   AuthProvider,
   useAuthDispatch,
@@ -15,32 +16,8 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import GoogleIcon from '../../../assets/svg/google.svg';
 import KakaoIcon from '../../../assets/svg/kakao.svg';
-import type { Forms } from '../authFormItem/authFormItem';
 import AuthFormItem from '../authFormItem/authFormItem';
 import * as style from './signinForm.styled';
-
-const forms: Forms[] = [
-  {
-    htmlFor: 'id',
-    label: '아이디',
-    type: 'text',
-    placeholder: '아이디를 입력해주세요',
-    options: {
-      required: true,
-    },
-    errorMessage: '사용 불가능한 아이디입니다',
-    successMessage: '사용 가능한 아이디입니다',
-  },
-  {
-    htmlFor: 'password',
-    label: '비밀번호',
-    type: 'password',
-    placeholder: '비밀번호를 입력해주세요',
-    options: {
-      required: true,
-    },
-  },
-];
 
 const oauth = [
   { provider: 'kakao', title: '카카오', icon: <KakaoIcon /> },
@@ -99,7 +76,7 @@ const LocalFormItem = () => {
       <FormProvider {...methods}>
         <Form css={style.form} onSubmit={onSubmit}>
           <Wrapper css={style.wrapper}>
-            {forms.map((form) => (
+            {auth.signin().map((form) => (
               <FormLabel
                 key={form.htmlFor}
                 name={form.htmlFor}
