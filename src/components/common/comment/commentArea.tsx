@@ -20,11 +20,12 @@ const user = {
 };
 
 interface CommentAreaProps {
-  id: string;
+  postId: string;
+  parentId?: string;
 }
 
-const CommentArea = ({ id }: CommentAreaProps) => {
-  const { mutate, isSuccess } = useAddComment(id);
+const CommentArea = ({ postId, parentId }: CommentAreaProps) => {
+  const { mutate, isSuccess } = useAddComment(postId, parentId);
   const [comment, setComment] = useState('');
   const length = useMemo(() => comment.length, [comment.length]);
 

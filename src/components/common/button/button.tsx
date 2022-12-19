@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import { ButtonHTMLAttributes, Ref, useId } from 'react';
 import { forwardRef } from 'react';
 
-type Variant = 'Primary' | 'Primary-Line' | 'Line' | 'Black';
+type Variant = 'Primary' | 'Primary-Line' | 'Line' | 'Black' | 'Init';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   fullWidth?: boolean;
@@ -54,6 +54,7 @@ const Button = (props: ButtonProps, ref: Ref<HTMLButtonElement>) => {
         disabled={disabled}
         style={{
           width,
+          whiteSpace: 'nowrap',
           ...style,
         }}
         {...rest}
@@ -81,6 +82,7 @@ const Button = (props: ButtonProps, ref: Ref<HTMLButtonElement>) => {
       <style jsx>{`
         .button {
           all: unset;
+          box-sizing: border-box;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -130,6 +132,9 @@ const Button = (props: ButtonProps, ref: Ref<HTMLButtonElement>) => {
         }
         .button-Black:hover {
           background-color: #000;
+        }
+        .button-Init {
+          all: unset;
         }
         .button-suffix {
           display: flex;

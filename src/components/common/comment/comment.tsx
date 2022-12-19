@@ -25,14 +25,14 @@ const Comment = ({ data, page, totalPages, totalCount, id }: CommentProps) => {
       boxSizing="border-box"
     >
       <CommentHead totalCount={9999} />
-      <CommentBody comments={data} />
+      <CommentBody postId={id} comments={data} />
       <Pagination
         page={page}
         totalPages={totalPages}
         totalCount={totalCount}
         pageSize={10}
       />
-      <CommentArea id={id} />
+      <CommentArea postId={id} />
     </Container>
   );
 };

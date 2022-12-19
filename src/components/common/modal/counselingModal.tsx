@@ -9,9 +9,14 @@ import * as style from './modal.styled';
 
 interface CounselingModalProps extends ModalContextProps {
   user: User;
+  handleCounseling: () => void;
 }
 
-const CounselingModal = ({ user, onClose }: CounselingModalProps) => {
+const CounselingModal = ({
+  user,
+  onClose,
+  handleCounseling,
+}: CounselingModalProps) => {
   return (
     <Container display="flex" flexDirection="column" alignItems="center">
       <Typography
@@ -61,7 +66,7 @@ const CounselingModal = ({ user, onClose }: CounselingModalProps) => {
             취소
           </Typography>
         </Button>
-        <Button variant="Primary" width="116px">
+        <Button variant="Primary" width="116px" onClick={handleCounseling}>
           <Typography
             as="span"
             fontSize="body-16"

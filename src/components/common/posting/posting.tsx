@@ -1,8 +1,19 @@
+import { memo, useMemo } from 'react';
+import type { Posting as PostingType } from 'types/base';
+
 import Container from '../container';
 import PostingBody from './postingBody';
 import PostingHead from './postingHead';
 
-const Posting = () => {
+export interface PostingProps extends PostingType {
+  like?: number;
+  isScraped?: boolean;
+}
+
+const Posting = memo(function Posting(props: PostingProps) {
+  const posting = useMemo(() => ({ ...props }), [props]);
+  const { contentHtml, ...rest } = posting;
+
   return (
     <Container
       width="100%"
@@ -13,10 +24,10 @@ const Posting = () => {
       borderRadius="4px"
       boxSizing="border-box"
     >
-      <PostingHead />
-      <PostingBody />
+      <PostingHead {...rest} />
+      <PostingBody contentHtml={contentHtml} />
     </Container>
   );
-};
+});
 
 export default Posting;

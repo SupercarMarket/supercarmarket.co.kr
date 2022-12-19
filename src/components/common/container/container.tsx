@@ -1,9 +1,8 @@
 import clsx from 'clsx';
-import type { CSSProperties, ReactNode } from 'react';
+import type { AllHTMLAttributes, CSSProperties, ReactNode } from 'react';
 
-interface ContainerProps {
+interface BaseProps {
   className?: string;
-  element?: HTMLElement;
   children?: ReactNode;
   width?: CSSProperties['width'];
   height?: CSSProperties['height'];
@@ -22,9 +21,16 @@ interface ContainerProps {
   boxSizing?: CSSProperties['boxSizing'];
 }
 
-const Container = (props: ContainerProps) => {
+type ContainerProps<Element extends keyof JSX.IntrinsicElements = 'div'> =
+  BaseProps & {
+    as?: Element;
+  } & Omit<AllHTMLAttributes<Element>, 'as'>;
+
+const Container = <Element extends keyof JSX.IntrinsicElements = 'div'>(
+  props: ContainerProps<Element>
+) => {
   const {
-    element = 'div',
+    as: Component = 'div',
     width = '100%',
     height,
     padding = '0',
@@ -42,9 +48,8 @@ const Container = (props: ContainerProps) => {
     border,
     className,
     children,
-  } = props;
-  const Component: React.ComponentType<React.HTMLAttributes<HTMLDivElement>> =
-    element as any;
+  } = props as ContainerProps;
+
   const borderAttr = border
     ? { border }
     : {

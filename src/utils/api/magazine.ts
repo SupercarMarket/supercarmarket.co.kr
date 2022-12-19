@@ -1,24 +1,20 @@
 import type { NextApiHandler } from 'next/types';
 import { getPlaiceholder } from 'plaiceholder';
-import type { ServerResponse } from 'types/base';
-import type {
-  MagazineDto,
-  MagazinePostDto,
-  MagazineResponse,
-} from 'types/magazine';
-import { ServerApiError } from 'utils/error';
-import { getErrorMessage } from 'utils/misc';
+import { Params } from 'types/base';
+import type { MagazineDto, MagazineResponse } from 'types/magazine';
+import { catchNoExist, getErrorMessage } from 'utils/misc';
+
+import { baseFetcher } from './fetcher';
+
+const token =
+  'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhY2Nlc3NfdG9rZW4iLCJpYXQiOjE2NzAyNDYzMDMsImV4cCI6MTY3MDI4OTUwMywidXNlcklkIjoibWluc3UifQ.oglYTtlkyKFOxgoRpix2CAd3mLRjZft7nXol0Qyj0z0';
 
 const magazineApi: NextApiHandler = async (_, res) => {
   try {
-    const response = await fetch(
+    const magazine: MagazineResponse<MagazineDto> = await baseFetcher(
       `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/magazine`,
       { method: 'GET' }
     );
-
-    if (!response.ok) throw new ServerApiError(response.url);
-
-    const magazine: MagazineResponse<MagazineDto> = await response.json();
 
     const magazineWithBluredImage = await Promise.all(
       magazine.data.map(async (m) => {
@@ -40,19 +36,20 @@ const magazineApi: NextApiHandler = async (_, res) => {
 };
 
 const magazinePostApi: NextApiHandler = async (req, res) => {
-  const { id } = req.query;
+  const { id } = req.query as Params;
 
-  if (!id) throw new Error('invalid query');
-  if (typeof id !== 'string') throw new Error('invalid query');
+  catchNoExist(id);
 
   try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_URL}/server/api/v1/magazine/${id}`
+    const magazinePost = await baseFetcher(
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/magazine/${id}`,
+      {
+        headers: {
+          ACCESS_TOKEN: `Bearer ${token}`,
+        },
+        method: 'GET',
+      }
     );
-
-    if (!response.ok) throw new ServerApiError(response.url);
-
-    const magazinePost: ServerResponse<MagazinePostDto> = await response.json();
 
     return res.status(200).json(magazinePost);
   } catch (error) {
@@ -60,4 +57,53 @@ const magazinePostApi: NextApiHandler = async (req, res) => {
   }
 };
 
-export { magazineApi, magazinePostApi };
+const magazinePostScrapeApi: NextApiHandler = async (req, res) => {
+  const { postId } = req.query as Params;
+
+  catchNoExist(postId);
+
+  try {
+    const scrape = await baseFetcher(
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/magazine/${postId}/scrap`,
+      {
+        headers: {
+          ACCESS_TOKEN: `Bearer ${token}`,
+        },
+        method: 'POST',
+      }
+    );
+
+    return res.status(200).json(scrape);
+  } catch (error) {
+    throw new Error(getErrorMessage(error));
+  }
+};
+
+const magazinePostCounselingApi: NextApiHandler = async (req, res) => {
+  const { postId } = req.query as Params;
+
+  catchNoExist(postId);
+
+  try {
+    const counseling = await baseFetcher(
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/magazine/${postId}/inquiry`,
+      {
+        headers: {
+          ACCESS_TOKEN: `Bearer ${token}`,
+        },
+        method: 'POST',
+      }
+    );
+
+    return res.status(200).json(counseling);
+  } catch (error) {
+    throw new Error(getErrorMessage(error));
+  }
+};
+
+export {
+  magazineApi,
+  magazinePostApi,
+  magazinePostCounselingApi,
+  magazinePostScrapeApi,
+};

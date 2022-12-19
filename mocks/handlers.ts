@@ -1,7 +1,10 @@
 import { rest } from 'msw';
-import { ServerResponse } from 'types/base';
-import { CommentResponse } from 'types/comment';
-import { MagazineDto, MagazinePostDto, MagazineResponse } from 'types/magazine';
+import { Comment, CommentResponse } from 'types/comment';
+import {
+  MagazineDto,
+  MagazinePostingResponse,
+  MagazineResponse,
+} from 'types/magazine';
 import { MarketDto, MarketResponse } from 'types/market';
 
 /**
@@ -43,6 +46,9 @@ const marketList = Array.from(Array(1024)).map(() => ({
   dealer: '슈퍼카마켓',
 }));
 
+let isScraped = false;
+let isCounseling = false;
+
 const magazineImages = [
   'https://user-images.githubusercontent.com/66871265/196571825-f136a62d-15f3-4d21-a709-8ea0fd77f98a.png',
   'https://user-images.githubusercontent.com/66871265/197127101-72a805b7-c9f1-4e1c-b464-73a01ca4f033.png',
@@ -58,12 +64,12 @@ const magazineList = Array.from(Array(1024)).map(() => ({
 
 const magazinePost = {
   id: randomId(),
-  admin,
+  user: admin,
   title:
     '제목총100글자두줄제목총100글자두줄제목총100글자두줄제목총100글자두줄제목총100글자두줄제목총100글자두줄제목총100글자두줄제목총100글자두줄제목총100글자두줄제목총100글자두줄',
   view: 999,
+  totalCommentCount: 13335,
   contentHtml: '<h1>안녕하세요..!</h1><p>본문 내용 무</p>',
-  isScraped: false,
   createAt: new Date(),
 };
 
@@ -92,7 +98,7 @@ const communityList = Array.from(Array(1024)).map(() => ({
   thumbnailImgSrc: communityImages[randomIndex(0)],
 }));
 
-const comment = Array.from(Array(1)).map(() => ({
+const comment: Comment[] = Array.from(Array(1)).map(() => ({
   id: randomId(),
   user,
   content:
@@ -161,6 +167,14 @@ export function handlers() {
      */
     rest.get('https://server/api/v1/magazine/:postId', getMagazinePost),
     /**
+     * 매거진 스크랩
+     */
+    rest.post('https://server/api/v1/magazine/:postId', scrapeMagazinePost),
+    /**
+     * 매거진 상담
+     */
+    rest.post('https://server/api/v1/magazine/:postId', counselingMagazinePost),
+    /**
      * 커뮤니티 인기글.
      */
     rest.get('https://server/api/v1/community-best', getCommunityBestList),
@@ -172,6 +186,24 @@ export function handlers() {
      * 댓글 등록.
      */
     rest.post('https://server/api/v1/comment/:postId', createComment),
+    /**
+     * 댓글 좋아요.
+     */
+    rest.patch('https://server/api/v1/:postId/comment/:commentId', likeComment),
+    /**
+     * 댓글 수정.
+     */
+    rest.patch(
+      'https://server/api/v1/:postId/comment/:commentId',
+      updateComment
+    ),
+    /**
+     * 댓글 삭제.
+     */
+    rest.delete(
+      'https://server/api/v1/:postId/comment/:commentId',
+      removeComment
+    ),
   ];
 }
 
@@ -198,10 +230,26 @@ const getMagazineList: Parameters<typeof rest.get>[1] = (req, res, ctx) => {
 const getMagazinePost: Parameters<typeof rest.get>[1] = (req, res, ctx) => {
   return res(
     ctx.status(200),
-    ctx.json<ServerResponse<MagazinePostDto>>({
+    ctx.json<MagazinePostingResponse>({
       data: magazinePost,
+      isScraped,
+      isCounseling,
     })
   );
+};
+
+const scrapeMagazinePost: Parameters<typeof rest.post>[1] = (req, res, ctx) => {
+  isScraped = !isScraped;
+  return res(ctx.status(200), ctx.json({ message: 'success' }));
+};
+
+const counselingMagazinePost: Parameters<typeof rest.post>[1] = (
+  req,
+  res,
+  ctx
+) => {
+  isCounseling = true;
+  return res(ctx.status(200), ctx.json({ message: 'success' }));
 };
 
 const getMarketList: Parameters<typeof rest.get>[1] = (req, res, ctx) => {
@@ -265,21 +313,93 @@ const createComment: Parameters<typeof rest.post>[1] = async (
   res,
   ctx
 ) => {
+  const { searchParams } = req.url;
   const { contents } = await req.json();
-  comment.push({
-    id: randomId(),
-    user,
-    like: 0,
-    isLiked: false,
-    isRemoved: false,
-    content: contents,
-    createAt: new Date(),
-    children: [],
-  });
+  const parentId = searchParams.get('parentId');
+
+  if (parentId !== 'undefined') {
+    comment.forEach((c) => {
+      if (parentId === c.id) {
+        c.children?.push({
+          id: randomId(),
+          user,
+          like: 0,
+          isLiked: false,
+          isRemoved: false,
+          content: contents,
+          createAt: new Date(),
+        });
+      }
+    });
+  } else {
+    comment.push({
+      id: randomId(),
+      user,
+      like: 0,
+      isLiked: false,
+      isRemoved: false,
+      content: contents,
+      createAt: new Date(),
+      children: [],
+    });
+  }
+
   return res(
     ctx.status(200),
     ctx.json({ message: '댓글 등록에 성공했습니다.' })
   );
+};
+
+const likeComment: Parameters<typeof rest.patch>[1] = (req, res, ctx) => {
+  const { commentId } = req.params;
+
+  if (!commentId) res(ctx.status(500));
+
+  comment.forEach((c) => {
+    if (c.id === commentId) {
+      if (c.isLiked) {
+        c.isLiked = false;
+        c.like -= 1;
+      } else {
+        c.isLiked = true;
+        c.like += 1;
+      }
+    }
+  });
+
+  return res(ctx.status(200), ctx.json({ message: 'success' }));
+};
+
+const updateComment: Parameters<typeof rest.patch>[1] = async (
+  req,
+  res,
+  ctx
+) => {
+  const { contents } = await req.json();
+  const { commentId } = req.params;
+
+  if (!commentId || !contents) res(ctx.status(500));
+
+  comment.forEach((c) => {
+    if (c.id === commentId) {
+      c.content = contents;
+      c.updateAt = new Date();
+    }
+  });
+
+  return res(ctx.status(200), ctx.json({ message: 'success' }));
+};
+
+const removeComment: Parameters<typeof rest.delete>[1] = (req, res, ctx) => {
+  const { commentId } = req.params;
+
+  if (!commentId) res(ctx.status(500));
+
+  comment.forEach((c) => {
+    if (c.id === commentId) c.isRemoved = true;
+  });
+
+  return res(ctx.status(200), ctx.json({ message: 'success' }));
 };
 
 /**

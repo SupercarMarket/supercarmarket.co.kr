@@ -2,7 +2,11 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import queries from 'constants/queries';
 import { baseFetcher } from 'utils/api/fetcher';
 
-export default function useAddComment(id: string, options = {}) {
+export default function useAddComment(
+  postId: string,
+  parentId?: string,
+  options = {}
+) {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -13,12 +17,13 @@ export default function useAddComment(id: string, options = {}) {
           'Content-Type': 'application/json',
         },
         query: {
-          id,
+          postId,
+          parentId,
         },
         body: JSON.stringify(data),
       }),
     onSuccess: () => {
-      queryClient.invalidateQueries(queries.comment.id(id));
+      queryClient.invalidateQueries(queries.comment.id(postId));
     },
     ...options,
   });

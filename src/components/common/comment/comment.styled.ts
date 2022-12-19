@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 const CommentHeadLeft = styled.div`
   display: flex;
@@ -12,30 +12,34 @@ const CommentHeadRight = styled.div`
   gap: 9px;
 `;
 
-const CommentCardWrapper = styled.div`
+const cardWrapper = css`
   width: 100%;
   display: flex;
   flex-direction: column;
   gap: 6px;
 `;
 
-const CommentCardChildrenWrapper = styled.div`
+const cardChildren = css`
   padding-left: 40px;
 `;
 
-const CommentCardInfo = styled.div`
+const cardArea = css`
+  padding-left: 40px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+`;
+
+const cardInfo = css`
   display: flex;
   align-items: center;
   justify-content: space-between;
 `;
 
-const CommentCardInfoWrapper = styled.div`
+const cardInfoWrapper = css`
   display: flex;
   align-items: center;
   gap: 12px;
 `;
-
-const CommentCardContent = styled.div``;
 
 const CommentAreaTextArea = styled.textarea`
   width: 100%;
@@ -60,14 +64,14 @@ const CommentAreaBottom = styled.div`
 `;
 
 export {
+  cardArea,
+  cardChildren,
+  cardInfo,
+  cardInfoWrapper,
+  cardWrapper,
   CommentAreaBottom,
   CommentAreaTextArea,
   CommentAreaTop,
-  CommentCardChildrenWrapper,
-  CommentCardContent,
-  CommentCardInfo,
-  CommentCardInfoWrapper,
-  CommentCardWrapper,
   CommentHeadLeft,
   CommentHeadRight,
 };

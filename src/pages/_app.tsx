@@ -1,4 +1,3 @@
-import type { DehydratedState } from '@tanstack/react-query';
 import {
   Hydrate,
   QueryClient,
@@ -6,9 +5,9 @@ import {
 } from '@tanstack/react-query';
 import theme from 'constants/theme';
 import type { AppProps } from 'next/app';
-import { Session } from 'next-auth';
-// import { SessionProvider } from 'next-auth/react';
-import { FC, ReactNode, useState } from 'react';
+import { SessionProvider } from 'next-auth/react';
+import type { FC, ReactNode } from 'react';
+import { useState } from 'react';
 import { ThemeProvider } from 'styled-components';
 import GlobalStyle from 'styles/globalStyles';
 
@@ -20,8 +19,8 @@ const Nope: FC<{ children?: ReactNode }> = ({ children }) => <>{children}</>;
 
 function MyApp({
   Component,
-  pageProps: { dehydratedState, ...pageProps },
-}: AppProps<{ session: Session; dehydratedState: DehydratedState }>) {
+  pageProps: { session, dehydratedState, ...pageProps },
+}: AppProps) {
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -39,16 +38,17 @@ function MyApp({
       })
   );
   const Layout = (Component as any).Layout || Nope;
+
   return (
     <ThemeProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
         <Hydrate state={dehydratedState}>
-          {/* <SessionProvider session={session}> */}
-          <GlobalStyle />
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-          {/* </SessionProvider> */}
+          <SessionProvider session={session}>
+            <GlobalStyle />
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </SessionProvider>
         </Hydrate>
       </QueryClientProvider>
     </ThemeProvider>

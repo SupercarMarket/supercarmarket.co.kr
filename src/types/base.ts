@@ -17,6 +17,8 @@ interface Posting {
   view: number;
   contentHtml: string;
   createAt: Date;
+  user: User;
+  totalCommentCount: number;
   updateAt?: Date;
 }
 
@@ -28,4 +30,8 @@ type WithBlurredImage<T> = {
   base64: string;
 } & T;
 
-export type { Admin, Posting, ServerResponse, User, WithBlurredImage };
+interface Params {
+  [key: string]: string;
+}
+
+export type { Admin, Params, Posting, ServerResponse, User, WithBlurredImage };
