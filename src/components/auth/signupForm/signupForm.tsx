@@ -1,14 +1,19 @@
+'use client';
+
 import Button from 'components/common/button';
 import { Form, FormLabel } from 'components/common/form';
 import auth from 'constants/auth';
+import { signUp } from 'feature/actions/authActions';
 import {
   AuthProvider,
   useAuthDispatch,
   useAuthState,
 } from 'feature/authProvider';
+import { useRouter } from 'next/navigation';
+import * as React from 'react';
 import { FormProvider } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
-import { user } from 'utils/api/auth';
+import { catchNoExist } from 'utils/misc';
 
 import AuthFormItem from '../authFormItem/authFormItem';
 import * as style from './signupForm.styled';
@@ -25,18 +30,40 @@ interface FormState {
 }
 
 const SignupForm = () => {
+  const { replace } = useRouter();
   const methods = useForm<FormState>();
   const state = useAuthState();
   const dispatch = useAuthDispatch();
 
-  const onSubmit = methods.handleSubmit(async (data) => {
-    await user.signUp(data);
-  });
+  const onSubmit = React.useCallback(
+    (data: FormState) => {
+      catchNoExist(
+        state.authentication.data,
+        state.email.data,
+        state.id.data,
+        state.nickname.data,
+        state.phone.data
+      );
+      signUp(dispatch, data);
+    },
+    [
+      dispatch,
+      state.authentication.data,
+      state.email.data,
+      state.id.data,
+      state.nickname.data,
+      state.phone.data,
+    ]
+  );
+
+  React.useEffect(() => {
+    if (state.signup.data) return replace('/');
+  }, [replace, state.signup.data]);
 
   return (
     <AuthProvider>
       <FormProvider {...methods}>
-        <Form css={style.form} onSubmit={onSubmit}>
+        <Form css={style.form} onSubmit={methods.handleSubmit(onSubmit)}>
           {auth.signup().map((props) => (
             <FormLabel
               key={props.htmlFor}

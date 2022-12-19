@@ -97,6 +97,8 @@ const auth = {
     options: {
       validate: phone,
     },
+    successMessage: '인증번호를 확인해주세요.',
+    errorMessage: '인증번호 요청에 실패했습니다. 재시도해주세요.',
   } as Forms,
   authentication: {
     htmlFor: 'authentication',
@@ -108,6 +110,8 @@ const auth = {
     options: {
       validate: authentication,
     },
+    successMessage: '인증이 완료되었습니다.',
+    errorMessage: '인증에 실패했습니다. 재시도해주세요.',
   } as Forms,
   email: {
     htmlFor: 'email',

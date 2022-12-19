@@ -3,6 +3,16 @@ import type { AuthAction, AuthInitialState } from 'feature/authProvider';
 
 import { createAsyncHandler } from '.';
 
+const signUpHandler = createAsyncHandler<AuthAction, AuthInitialState>(
+  'SIGNUP_AUTH',
+  'signup'
+);
+
+const signInHandler = createAsyncHandler<AuthAction, AuthInitialState>(
+  'SIGNIN_AUTH',
+  'signin'
+);
+
 const requestPhoneAuthHandler = createAsyncHandler<
   AuthAction,
   AuthInitialState
@@ -53,6 +63,14 @@ export default function authReducer(
     case 'DUPLICATE_NICKNAME_AUTH_SUCCESS':
     case 'DUPLICATE_NICKNAME_AUTH_ERROR':
       return duplicateNicknameAuthHandler(state, action);
+    case 'SIGNUP_AUTH':
+    case 'SIGNUP_AUTH_SUCCESS':
+    case 'SIGNUP_AUTH_ERROR':
+      return signUpHandler(state, action);
+    case 'SIGNIN_AUTH':
+    case 'SIGNIN_AUTH_SUCCESS':
+    case 'SIGNIN_AUTH_ERROR':
+      return signInHandler(state, action);
     default:
       throw new Error(`Unhanded action type`);
   }

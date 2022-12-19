@@ -10,19 +10,31 @@ import type { Provider } from 'next-auth/providers';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
 import KakaoProvider from 'next-auth/providers/kakao';
+import { baseFetcher } from 'utils/api/fetcher';
 
 const providers: Provider[] = [
   CredentialsProvider({
     name: 'Credentials',
     credentials: {
-      username: { label: 'id', type: 'text' },
+      id: { label: 'id', type: 'text' },
       password: { label: 'password', type: 'password' },
     },
     async authorize(credentials) {
-      const user = { id: 'blan19', password: 'qweqweqwe' };
+      if (!credentials) return null;
+      const { id, password } = credentials;
 
-      if (user) {
-        return user;
+      const signin = await baseFetcher('/auth/user/signin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id, password }),
+      });
+
+      if (signin) {
+        return {
+          ...credentials,
+        };
       } else {
         return null;
       }

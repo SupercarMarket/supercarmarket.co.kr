@@ -4,6 +4,8 @@ import { createContext, useContext, useReducer } from 'react';
 import authReducer from './reducers/authReducer';
 
 type AuthAction =
+  | 'SIGNUP_AUTH'
+  | 'SIGNIN_AUTH'
   | 'REQUEST_PHONE_AUTH'
   | 'CONFIRM_PHONE_AUTH'
   | 'DUPLICATE_ID_AUTH'
@@ -43,6 +45,16 @@ interface AuthInitialState {
     data: null | boolean;
     loading: boolean;
   };
+  signup: {
+    error: null | Error;
+    data: null | boolean;
+    loading: boolean;
+  };
+  signin: {
+    error: null | Error;
+    data: null | boolean;
+    loading: boolean;
+  };
 }
 
 const initialState: AuthInitialState = {
@@ -67,6 +79,16 @@ const initialState: AuthInitialState = {
     loading: false,
   },
   nickname: {
+    error: null,
+    data: null,
+    loading: false,
+  },
+  signup: {
+    error: null,
+    data: null,
+    loading: false,
+  },
+  signin: {
     error: null,
     data: null,
     loading: false,

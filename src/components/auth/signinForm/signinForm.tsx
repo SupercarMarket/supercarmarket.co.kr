@@ -13,6 +13,7 @@ import {
 import Link from 'next/link';
 import { signIn } from 'next-auth/react';
 import { FormProvider, useForm } from 'react-hook-form';
+import { catchNoExist } from 'utils/misc';
 
 import GoogleIcon from '../../../assets/svg/google.svg';
 import KakaoIcon from '../../../assets/svg/kakao.svg';
@@ -69,7 +70,8 @@ const LocalFormItem = () => {
 
   const onSubmit = methods.handleSubmit((data) => {
     const { id, password } = data;
-    signIn('credentials', { id, password, redirect: false });
+    catchNoExist(id, password);
+    signIn('credentials', { id, password });
   });
   return (
     <AuthProvider>
