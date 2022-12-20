@@ -13,7 +13,7 @@ import useMarket from 'hooks/queries/useMarket';
 import { useRouter } from 'next/router';
 import { NextPageContext } from 'next/types';
 import React, { useMemo } from 'react';
-import makeMarketQueries from 'utils/market/makeMarketQuery';
+import { makeQuery } from 'utils/market/marketFilter';
 
 interface MarketFilterPageProps {
   category: string;
@@ -26,9 +26,10 @@ const MarketFilterPage = ({ category }: MarketFilterPageProps) => {
     [query.page]
   );
 
+  console.log(page);
   const [states, actions] = useMarketFilter();
   // const { data: markets } = useMarket(
-  //   makeMarketQueries({ states, category, page }),
+  //   makeQuery(query as { [key: string]: string }),
   //   { keepPreviousData: true }
   // );
 

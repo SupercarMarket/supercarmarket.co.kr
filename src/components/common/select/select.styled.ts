@@ -9,7 +9,7 @@ interface SelectProps {
 const SelectContainer = styled.div<SelectProps>`
   box-sizing: border-box;
   position: relative;
-  width: ${({ width }) => width}px;
+  width: ${({ width }) => width};
 `;
 
 const Backdrop = styled.div<{ toggle: boolean }>`
@@ -70,13 +70,14 @@ interface SelectOptionListProps {
 
 const SelectOptionList = styled.ul<SelectOptionListProps>`
   box-sizing: border-box;
-  width: ${({ width }) => width}px;
+  width: ${({ width }) => width};
+  max-height: 200px;
   display: none;
   position: absolute;
-  overflow: scroll;
   background: ${({ theme }) => theme.color.white};
   border: 1px solid ${({ theme }) => theme.color['greyScale-4']};
   border-radius: 4px;
+  overflow: scroll;
   cursor: pointer;
   z-index: 20;
 
@@ -84,13 +85,6 @@ const SelectOptionList = styled.ul<SelectOptionListProps>`
     toggle &&
     css`
       display: block;
-    `}
-
-  ${({ over }) =>
-    over &&
-    css`
-      max-height: 200px;
-      overflow: scroll;
     `}
 `;
 

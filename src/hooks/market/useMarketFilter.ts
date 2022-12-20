@@ -1,6 +1,7 @@
-import { HOW_MANY_RESULT, ORDER_OPTIONSET } from 'constants/market';
+import { ORDER_OPTIONSET } from 'constants/market';
 import { useState } from 'react';
 import { FilterType, MarketOptionType } from 'types/market';
+import { makeHowManyResult } from 'utils/market/marketFilter';
 
 export interface UseMarketFilterStates {
   filterList: FilterType[];
@@ -15,13 +16,16 @@ export interface UseMarketFilterActions {
 }
 
 const useMarketFilter = (): [UseMarketFilterStates, UseMarketFilterActions] => {
-  const VIEW_COUNT = HOW_MANY_RESULT(20, 70);
   const [filterList, setFilterList] = useState<FilterType[]>([]);
-  const [orderSelect, setOrderSelect] = useState<MarketOptionType>(ORDER_OPTIONSET[0]);
+  const [orderSelect, setOrderSelect] = useState<MarketOptionType>(
+    ORDER_OPTIONSET[0]
+  );
+  const VIEW_COUNT = makeHowManyResult(20, 70);
   const [viewCount, setViewCount] = useState<MarketOptionType>(VIEW_COUNT[0]);
 
   const changeFilters = (f: FilterType[]) => setFilterList(f);
-  const changeOrderSelect = (option: MarketOptionType) => setOrderSelect(option);
+  const changeOrderSelect = (option: MarketOptionType) =>
+    setOrderSelect(option);
   const changeViewCount = (option: MarketOptionType) => setViewCount(option);
 
   const states = {

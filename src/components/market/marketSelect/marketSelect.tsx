@@ -1,128 +1,39 @@
 import Select from 'components/common/select';
-import Typography from 'components/common/typography';
-import { useRouter } from 'next/dist/client/router';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { MarketOptionType } from 'types/market';
+import { useRouter } from 'next/router';
+import React from 'react';
+import { SelectType } from 'types/market';
+import { makeSelectQuery } from 'utils/market/marketFilter';
 
 import * as Styled from './marketSelect.styled';
 
-interface SelectLabelType {
-  name: string;
-  dataName: string;
+interface SelectWrapperProps {
+  options1: SelectType;
+  options2?: SelectType;
 }
 
-interface SelectType {
-  firstSelect?: MarketOptionType;
-  secondSelect?: MarketOptionType;
-}
-
-interface MarketSelectProps {
-  subject: string;
-  label: {
-    first: SelectLabelType;
-    second?: SelectLabelType;
-  };
-  optionSet: MarketOptionType[];
-}
-
-const MarketSelect = ({ subject, label, optionSet }: MarketSelectProps) => {
+const MarketSelect = ({ options1, options2 }: SelectWrapperProps) => {
   const { push, query } = useRouter();
-  const { first, second } = label;
-  const queryToggle = useRef<boolean>(false);
 
-  const [selected, setSelected] = useState<SelectType>({
-    firstSelect: undefined,
-    secondSelect: undefined,
-  });
+  if (options1 && options2) {
+    const op1 = query[options1.dataName] as string;
+    const op2 = query[options2.dataName] as string;
 
-  useMemo(() => {
-    const f = optionSet.find(({ value }) => query[first.dataName] === value);
-    let s: MarketOptionType | undefined;
-
-    if (second) {
-      s = optionSet.find(({ value }) => query[second.dataName] === value);
+    if (+op1 > +op2) {
+      const url = makeSelectQuery(query, options1.dataName, op2);
+      push(`/market/all?${url}`, undefined, { scroll: false });
     }
-
-    setSelected({ firstSelect: f, secondSelect: s });
-  }, [query, first, second, optionSet]);
-
-  const pushQuery = (
-    firstSelect?: MarketOptionType,
-    secondSelect?: MarketOptionType
-  ) => {
-    const queryObj = { ...query };
-    if (firstSelect) queryObj[first.dataName] = firstSelect.value;
-    if (secondSelect && second) queryObj[second.dataName] = secondSelect.value;
-
-    const url = Object.entries(queryObj)
-      .map(([key, val]) => `${key}=${val}`)
-      .join('&');
-
-    push(`/market/all?${url}`);
-    queryToggle.current = true;
-  };
-
-  const twinOption = (value: string, option: string, dataName: string) => {
-    const { firstSelect, secondSelect } = selected;
-    const selectedOption = { value, option };
-
-    const firstConverted =
-      Number(secondSelect?.value) >= +value
-        ? selectedOption
-        : secondSelect || selectedOption;
-
-    const secondConverted =
-      Number(firstSelect?.value) > +value ? selectedOption : firstSelect;
-
-    console.log(
-      firstConverted,
-      secondConverted,
-      firstSelect,
-      secondSelect,
-      dataName
-    );
-
-    if (first.dataName === dataName) {
-      pushQuery(firstConverted, secondSelect);
-      return;
-    }
-
-    pushQuery(secondConverted, selectedOption);
-  };
-
-  const singleOption = (value: string, option: string) => {
-    const selectedOption = { value, option };
-    pushQuery(selectedOption);
-  };
+  }
 
   return (
-    <Styled.MarketSelectContainer>
-      <Typography lineHeight="150%">{subject}</Typography>
-      <Styled.FilterBox>
-        <Select
-          width={second ? undefined : '270'}
-          label={first}
-          optionSet={optionSet}
-          selectOption={second ? twinOption : singleOption}
-          overflow={true}
-        >
-          {selected?.firstSelect?.option || first.name}
-        </Select>
-        {second && (
-          <>
-            <Styled.Hyphen />
-            <Select
-              label={second}
-              optionSet={optionSet}
-              selectOption={second ? twinOption : singleOption}
-              overflow={true}
-            >
-              {selected?.secondSelect?.option || second.name}
-            </Select>
-          </>
-        )}
-      </Styled.FilterBox>
-    </Styled.MarketSelectContainer>
+    <Styled.SelectBox>
+      <Select options={options1} />
+      {options2 && (
+        <>
+          <Styled.Hyphen />
+          <Select options={options2} />
+        </>
+      )}
+    </Styled.SelectBox>
   );
 };
 

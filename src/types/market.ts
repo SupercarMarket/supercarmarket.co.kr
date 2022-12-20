@@ -6,8 +6,17 @@ interface MarketOptionType {
 }
 
 interface MarketLabelType {
-  subject: string;
+  label: string;
   dataName: string;
+  defaultLabel: string;
+  optionSet: MarketOptionType[];
+}
+
+interface SelectType {
+  label: string;
+  dataName: string;
+  defaultLabel: string;
+  optionSet: MarketOptionType[];
 }
 
 interface MarketFormTarget extends FormEvent<HTMLFormElement> {
@@ -87,5 +96,6 @@ export type {
   MarketLabelType,
   MarketOptionType,
   MarketResponse,
+  SelectType,
   WithBlurredImage,
 };

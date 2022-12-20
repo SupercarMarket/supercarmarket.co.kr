@@ -24,6 +24,12 @@ const MarketFilterBox = styled.div`
   gap: 24px;
 `;
 
+const MarketFilterWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+`;
+
 const FilterListArea = styled.div`
   display: flex;
   align-items: flex-start;
@@ -68,5 +74,6 @@ export {
   MarketFilterContainer,
   MarketFilterItem,
   MarketFilterList,
+  MarketFilterWrapper,
   ResetButton,
 };

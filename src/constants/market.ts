@@ -1,3 +1,9 @@
+import {
+  makeFilterDate,
+  makeFilterMileage,
+  makeFilterPrice,
+} from 'utils/market/marketFilter';
+
 import { MarketOptionType } from '../types/market';
 
 const CATEGORY: MarketOptionType[] = [
@@ -11,181 +17,106 @@ const CATEGORY: MarketOptionType[] = [
 
 const CATEGORY_VALUES = CATEGORY.map(({ value }) => value);
 
-/**
- *
- * @param startYear 연식 시작할 년도
- * @param endYear 연식 마지막 년도
- * @returns [{ option: '년도', value: 숫자 값 }];
- */
-const CAR_FILTER_DATE = (
-  startYear: number,
-  endYear: number
-): MarketOptionType[] => {
-  const arr: MarketOptionType[] = [];
-
-  for (let i = startYear; i >= endYear; i--) {
-    arr.push({ option: `${i}년`, value: i + '' });
-  }
-
-  return arr;
-};
-
-/**
- *
- * @param startPrice 시작 가격
- * @param endPrice 끝 가격
- * @param step 가격 간 격차
- * @returns [{ option: '${가격}만원 || 억', value: 숫자 값 }];
- */
-const CAR_FILTER_PRICE = (
-  startPrice: number,
-  endPrice: number,
-  step: number
-) => {
-  const arr: MarketOptionType[] = [];
-
-  for (let i = startPrice; i <= endPrice; i += step) {
-    if (i >= 10000) {
-      arr.push({
-        option:
-          i % 10000 === 0
-            ? `${Math.floor(i / 10000)}억원`
-            : `${Math.floor(i / 10000)}억${(i % 10000) / 1000}천만원`,
-        value: i + '',
-      });
-    } else {
-      arr.push({ option: `${i / 1000}천만원`, value: i + '' });
-    }
-  }
-
-  return arr;
-};
-
-/**
- *
- * @param startMileage 시작 주행거리
- * @param endMileage 마지막 주행거리
- * @param step 주행거리 간 격차
- * @returns [{ option: `${주행거리}천km || 만km`, value: 숫자 값 }];
- */
-const CAR_FILTER_MILEAGE = (
-  startMileage: number,
-  endMileage: number,
-  step: number
-) => {
-  const arr: MarketOptionType[] = [];
-
-  for (let i = startMileage; i <= endMileage; i += step) {
-    if (i >= 10000) {
-      arr.push({
-        option:
-          i % 10000 === 0
-            ? `${Math.floor(i / 10000)}만km`
-            : `${Math.floor(i / 10000)}만${(i % 10000) / 1000}천km`,
-        value: i + '',
-      });
-      continue;
-    }
-    if (i >= 1000) {
-      arr.push({ option: `${i / 1000}천km`, value: i + '' });
-      continue;
-    }
-    if (i < 1000) {
-      arr.push({ option: `${i}km`, value: i + '' });
-    }
-  }
-
-  return arr;
-};
-
 const FIRST_MARKET_FILTER = [
-  {
-    subject: '연식',
-    label: {
-      first: {
-        name: '최소',
-        dataName: 'minDate',
-      },
-      second: {
-        name: '최대',
-        dataName: 'maxDate',
-      },
+  [
+    {
+      label: '연식',
+      dataName: 'minDate',
+      defaultLabel: '최소',
+      optionSet: makeFilterDate(2023, 2010),
     },
-    optionSet: CAR_FILTER_DATE(2023, 2010),
-  },
-  {
-    subject: '가격',
-    label: {
-      first: {
-        name: '최소',
-        dataName: 'minPrice',
-      },
-      second: {
-        name: '최대',
-        dataName: 'maxPrice',
-      },
+    {
+      label: '연식',
+      dataName: 'maxDate',
+      defaultLabel: '최대',
+      optionSet: makeFilterDate(2023, 2010),
     },
-    optionSet: CAR_FILTER_PRICE(2000, 20000, 2000),
-  },
-  {
-    subject: '주행거리',
-    label: {
-      first: {
-        name: '최소',
-        dataName: 'minMileage',
-      },
-      second: {
-        name: '최대',
-        dataName: 'maxMileage',
-      },
+  ],
+  [
+    {
+      label: '연료',
+      dataName: 'fuel',
+      defaultLabel: '선택',
+      optionSet: [
+        {
+          option: '가솔린',
+          value: 'gasoline',
+        },
+        {
+          option: '경유',
+          value: 'diesel',
+        },
+        {
+          option: '전기',
+          value: 'electric',
+        },
+      ],
     },
-    optionSet: CAR_FILTER_MILEAGE(2000, 30000, 2000),
-  },
-  {
-    subject: '연료',
-    label: {
-      first: {
-        name: '선택',
-        dataName: 'fuel',
-      },
+  ],
+  [
+    {
+      label: '주행거리',
+      dataName: 'minMileage',
+      defaultLabel: '최소',
+      optionSet: makeFilterMileage(1000, 20000, 1000),
     },
-    optionSet: [
-      { option: '디젤', value: 'diesel' },
-      { option: '가솔린', value: 'gasoline' },
-      { option: '전기', value: 'electric' },
-    ],
-  },
+    {
+      label: '주행거리',
+      dataName: 'maxMileage',
+      defaultLabel: '최대',
+      optionSet: makeFilterMileage(1000, 20000, 1000),
+    },
+  ],
+  [
+    {
+      label: '가격',
+      dataName: 'minPrice',
+      defaultLabel: '최소',
+      optionSet: makeFilterPrice(2000, 30000, 2000),
+    },
+    {
+      label: '가격',
+      dataName: 'maxPrice',
+      defaultLabel: '최대',
+      optionSet: makeFilterPrice(2000, 30000, 2000),
+    },
+  ],
 ];
 
 const SECOND_MARKET_FILTER = [
-  {
-    subject: '사고여부',
-    label: {
-      first: {
-        name: '선택',
-        dataName: 'accident',
-      },
+  [
+    {
+      label: '사고여부',
+      dataName: 'accident',
+      defaultLabel: '선택',
+      optionSet: [
+        { option: '유', value: 'true' },
+        { option: '무', value: 'false' },
+      ],
     },
-    optionSet: [
-      { option: '유', value: 'true' },
-      { option: '무', value: 'false' },
-    ],
-  },
+  ],
+  [
+    {
+      label: '변속기',
+      dataName: 'transmission',
+      defaultLabel: '선택',
+      optionSet: [
+        { option: '자동', value: 'auto' },
+        { option: '수동', value: 'manual' },
+      ],
+    },
+  ],
 ];
 
-const concatSubject = FIRST_MARKET_FILTER.map(({ subject, label }) => ({
-  subject,
-  label,
-})).concat(
-  SECOND_MARKET_FILTER.map(({ subject, label }) => ({ subject, label }))
-);
-
-const FILTER_SUBJECT: { [key: string]: string } = {};
-concatSubject.forEach(({ subject, label }) => {
-  const { first, second } = label;
-  FILTER_SUBJECT[first.dataName] = subject;
-  if (second) FILTER_SUBJECT[second.dataName] = subject;
-});
+const FILTER_OPTION_DATANAMES = FIRST_MARKET_FILTER.map(([arr1, arr2]) => [
+  arr1.dataName,
+  arr2?.dataName,
+])
+  .concat(
+    SECOND_MARKET_FILTER.map(([arr1, arr2]) => [arr1.dataName, arr2?.dataName])
+  )
+  .flat(2)
+  .filter((v) => v);
 
 const ORDER_OPTIONSET: MarketOptionType[] = [
   {
@@ -221,21 +152,6 @@ const ORDER_OPTIONSET: MarketOptionType[] = [
     value: 'pinf_year ASC',
   },
 ];
-
-/**
- * @param start 시작 개수
- * @param end 마지막 개수
- * @returns [{ option: `${개수}개씩 || 만km`, value: 개수 }];
- */
-const HOW_MANY_RESULT = (start: number, end: number) => {
-  const options: MarketOptionType[] = [];
-
-  for (let i = start; i <= end; i += 10) {
-    options.push({ option: `${i}개씩`, value: `viewSize ${i}` });
-  }
-
-  return options;
-};
 
 const MARKET_LIST_TABLE_HEAD = [
   {
@@ -274,17 +190,19 @@ const FUEL_KIND: { [key: string]: string } = {
   electric: '전기',
 };
 
+const TRANSMISSION_KIND: { [key: string]: string } = {
+  auto: '자동',
+  manual: '수동',
+};
+
 export {
-  CAR_FILTER_DATE,
-  CAR_FILTER_MILEAGE,
-  CAR_FILTER_PRICE,
   CATEGORY,
   CATEGORY_VALUES,
-  FILTER_SUBJECT,
+  FILTER_OPTION_DATANAMES,
   FIRST_MARKET_FILTER,
   FUEL_KIND,
-  HOW_MANY_RESULT,
   MARKET_LIST_TABLE_HEAD,
   ORDER_OPTIONSET,
   SECOND_MARKET_FILTER,
+  TRANSMISSION_KIND,
 };

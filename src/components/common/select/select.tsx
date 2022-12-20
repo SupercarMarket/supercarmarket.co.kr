@@ -1,43 +1,40 @@
 import Typography from 'components/common/typography';
-import React, { PropsWithChildren, useState } from 'react';
-import { MarketOptionType } from 'types/market';
+import { useRouter } from 'next/router';
+import React from 'react';
+import { SelectType } from 'types/market';
+import { makeSelectQuery } from 'utils/market/marketFilter';
 
 import ArrowBottom from '../../../assets/svg/arrow-bottom.svg';
 import * as S from './select.styled';
-interface SelectLabelType {
-  name: string;
-  dataName: string;
-}
-interface SelectProps extends PropsWithChildren {
+
+interface SelectProps {
   width?: string;
-  label: SelectLabelType;
-  select?: string;
-  optionSet: MarketOptionType[];
-  selectOption: (v: string, o: string, d: string) => void;
-  overflow?: boolean;
   align?: 'left' | 'center' | 'right';
+  options: SelectType;
 }
 
-const Select = ({
-  width = '127',
-  label: { dataName },
-  children,
-  optionSet,
-  selectOption,
-  overflow,
-  align = 'left',
-}: SelectProps) => {
-  const [toggle, setToggle] = useState<boolean>(false);
+const Select = ({ options, width = '100%', align }: SelectProps) => {
+  const { optionSet, dataName, defaultLabel } = options;
+  const { push, query } = useRouter();
+  const [toggle, setToggle] = React.useState<boolean>(false);
+
+  const optionValue = React.useMemo(() => {
+    const value = query[dataName] as string;
+    const option = optionSet.find(({ value: v }) => v === value)?.option || '';
+    return { option, value };
+  }, [optionSet, query, dataName]);
 
   const onToggle = () => setToggle(!toggle);
   const closeToggle = () => setToggle(false);
 
-  const onClickSelectOption = (
-    value: string,
-    option: string,
-    selectedDataName: string
-  ) => {
-    selectOption(value, option, selectedDataName);
+  const selectOption = (value: string) => {
+    const url = makeSelectQuery(
+      query as { [key: string]: string },
+      dataName,
+      value
+    );
+
+    push(`/market/all?${url}`, undefined, { scroll: false });
     closeToggle();
   };
 
@@ -45,17 +42,19 @@ const Select = ({
     <S.SelectContainer width={width}>
       <S.Backdrop toggle={toggle} onClick={closeToggle} />
       <S.SelectCurrentButton type="button" onClick={onToggle} align={align}>
-        <Typography fontSize="body-16">{children}</Typography>
+        <Typography fontSize="body-16">
+          {optionValue.option || defaultLabel}
+        </Typography>
         <ArrowBottom width="13px" height="13px" />
       </S.SelectCurrentButton>
-      <S.SelectOptionList width={width} toggle={toggle} over={overflow}>
+      <S.SelectOptionList width={width} toggle={toggle}>
         {optionSet.map(({ option, value }) => (
-          <S.SelectOptionItem
-            key={option}
-            onClick={() => onClickSelectOption(value, option, dataName)}
-          >
-            <S.SelectOptionButton active={children === option} align={align}>
-              <input name={dataName} defaultValue={value} hidden />
+          <S.SelectOptionItem key={option} onClick={() => selectOption(value)}>
+            <S.SelectOptionButton
+              type="button"
+              active={optionValue.option === option}
+              align={align}
+            >
               <Typography fontSize="body-16">{option}</Typography>
             </S.SelectOptionButton>
           </S.SelectOptionItem>
@@ -65,4 +64,4 @@ const Select = ({
   );
 };
 
-export default Select;
+export default React.memo(Select);

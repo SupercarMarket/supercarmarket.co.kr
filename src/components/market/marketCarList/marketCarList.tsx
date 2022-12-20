@@ -2,7 +2,7 @@ import Pagination from 'components/common/pagination';
 import Select from 'components/common/select';
 import MarketCard from 'components/market/marketCard';
 import MarketTable from 'components/market/marketTable';
-import { HOW_MANY_RESULT, ORDER_OPTIONSET } from 'constants/market';
+import { ORDER_OPTIONSET } from 'constants/market';
 import {
   UseMarketFilterActions,
   UseMarketFilterStates,
@@ -10,6 +10,7 @@ import {
 import React, { useMemo, useState } from 'react';
 import { WithBlurredImage } from 'types/magazine';
 import { MarketDto, MarketResponse } from 'types/market';
+import { makeHowManyResult } from 'utils/market/marketFilter';
 
 import ListIcon from '../../../assets/svg/menu.svg';
 import ViewCardIcon from '../../../assets/svg/sqaure.svg';
@@ -50,7 +51,7 @@ const MarketCarList = ({
             select={viewCount}
             label={{ subject: '', dataName: 'viewCount' }}
             changeSelect={changeViewCount}
-            optionSet={HOW_MANY_RESULT(20, 70)}
+            optionSet={makeHowManyResult(20, 70)}
             defaultLabel={viewCount.option}
             width="112"
             align="center"
