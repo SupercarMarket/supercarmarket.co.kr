@@ -11,11 +11,12 @@ import queries from 'constants/queries';
 import useMarket from 'hooks/queries/useMarket';
 import { useRouter } from 'next/router';
 import { NextPageContext } from 'next/types';
-import React, { useMemo } from 'react';
+import React, { KeyboardEvent, useMemo, useRef } from 'react';
 import { makeQuery } from 'utils/market/marketFilter';
 
 const MarketFilterPage = () => {
-  const { query } = useRouter();
+  const { push, query } = useRouter();
+  const keywordRef = useRef<HTMLInputElement>(null);
   const page = useMemo(
     () => (query.page && query.page ? +query.page : 0),
     [query.page]
@@ -25,6 +26,20 @@ const MarketFilterPage = () => {
     makeQuery(query as { [key: string]: string }),
     { keepPreviousData: true }
   );
+
+  const keydownHandler = (e: KeyboardEvent) => {
+    if (e.key === 'Enter' && keywordRef.current !== null) {
+      const queries = { ...query };
+
+      queries.keyword = keywordRef.current.value;
+      keywordRef.current.value = '';
+
+      const queryString = Object.entries(queries)
+        .map(([key, value]) => `${key}=${value}`)
+        .join('&');
+      push(`/market/${query.category}?${queryString}`);
+    }
+  };
 
   return (
     <Container display="flex" flexDirection="column" margin="20px 0 0 0">
@@ -39,6 +54,8 @@ const MarketFilterPage = () => {
           variant="Line"
           width="880px"
           placeholder="원하는 차량을 검색하세요"
+          onKeyDown={keydownHandler}
+          ref={keywordRef}
         />
       </Container>
       <MarketCarKind />
