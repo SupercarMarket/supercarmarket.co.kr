@@ -4,34 +4,27 @@ import Searchbar from 'components/common/searchbar';
 import layout from 'components/layout';
 import MarketBanner from 'components/market/marketBanner';
 import MarketCarKind from 'components/market/marketCarCategory';
-import MarketList from 'components/market/marketCarList';
+import MarketCarList from 'components/market/marketCarList';
 import MarketFilter from 'components/market/marketFilter';
 import { CATEGORY_VALUES } from 'constants/market';
 import queries from 'constants/queries';
-import useMarketFilter from 'hooks/market/useMarketFilter';
 import useMarket from 'hooks/queries/useMarket';
 import { useRouter } from 'next/router';
 import { NextPageContext } from 'next/types';
 import React, { useMemo } from 'react';
 import { makeQuery } from 'utils/market/marketFilter';
 
-interface MarketFilterPageProps {
-  category: string;
-}
-
-const MarketFilterPage = ({ category }: MarketFilterPageProps) => {
+const MarketFilterPage = () => {
   const { query } = useRouter();
   const page = useMemo(
     () => (query.page && query.page ? +query.page : 0),
     [query.page]
   );
 
-  console.log(page);
-  const [states, actions] = useMarketFilter();
-  // const { data: markets } = useMarket(
-  //   makeQuery(query as { [key: string]: string }),
-  //   { keepPreviousData: true }
-  // );
+  const { data: markets } = useMarket(
+    makeQuery(query as { [key: string]: string }),
+    { keepPreviousData: true }
+  );
 
   return (
     <Container display="flex" flexDirection="column" margin="20px 0 0 0">
@@ -48,16 +41,9 @@ const MarketFilterPage = ({ category }: MarketFilterPageProps) => {
           placeholder="원하는 차량을 검색하세요"
         />
       </Container>
-      <MarketCarKind category={category} />
+      <MarketCarKind />
       <MarketFilter />
-      {/* {markets && (
-        <MarketList
-          data={markets}
-          states={states}
-          actions={actions}
-          page={page}
-        />
-      )} */}
+      {markets && <MarketCarList data={markets} page={page} />}
     </Container>
   );
 };
@@ -78,17 +64,13 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
     };
 
   queryClient.prefetchQuery(queries.market.lists([]), () =>
-    fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/shop?category=슈퍼카`,
-      {
-        method: 'GET',
-      }
-    ).then((res) => res.json())
+    fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/shop`, {
+      method: 'GET',
+    }).then((res) => res.json())
   );
 
   return {
     props: {
-      category,
       dehydratedState: dehydrate(queryClient),
     },
   };

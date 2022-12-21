@@ -1,9 +1,7 @@
 import {
   FILTER_OPTION_DATANAMES,
   FIRST_MARKET_FILTER,
-  FUEL_KIND,
   SECOND_MARKET_FILTER,
-  TRANSMISSION_KIND,
 } from 'constants/market';
 import { MarketOptionType, SelectType } from 'types/market';
 
@@ -15,16 +13,18 @@ const formatter = Intl.NumberFormat('ko-KR', {
  *
  * @param startYear 연식 시작할 년도
  * @param endYear 연식 마지막 년도
+ * @param dataName 데이터 이름 (쿼리 키 값)
  * @returns [{ option: '년도', value: 숫자 값 }];
  */
 const makeFilterDate = (
   startYear: number,
-  endYear: number
+  endYear: number,
+  dataName: string
 ): MarketOptionType[] => {
   const arr: MarketOptionType[] = [];
 
   for (let i = startYear; i >= endYear; i--) {
-    arr.push({ option: `${i}년`, value: i + '' });
+    arr.push({ option: `${i}년`, dataName, value: i + '' });
   }
 
   return arr;
@@ -35,17 +35,19 @@ const makeFilterDate = (
  * @param startPrice 시작 가격
  * @param endPrice 끝 가격
  * @param step 가격 간 격차
+ * @param dataName 데이터 이름 (쿼리 키 값)
  * @returns [{ option: '${가격}만원 || 억', value: 숫자 값 }];
  */
 const makeFilterPrice = (
   startPrice: number,
   endPrice: number,
-  step: number
+  step: number,
+  dataName: string
 ) => {
   const arr: MarketOptionType[] = [];
 
   for (let i = startPrice; i <= endPrice; i += step) {
-    arr.push({ option: `${formatter(i * 10000)}원`, value: i + '' });
+    arr.push({ option: `${formatter(i * 10000)}원`, dataName, value: i + '' });
   }
 
   return arr;
@@ -56,30 +58,49 @@ const makeFilterPrice = (
  * @param startMileage 시작 주행거리
  * @param endMileage 마지막 주행거리
  * @param step 주행거리 간 격차
+ * @param dataName 데이터 이름 (쿼리 키 값)
  * @returns [{ option: `${주행거리}천km || 만km`, value: 숫자 값 }];
  */
 const makeFilterMileage = (
   startMileage: number,
   endMileage: number,
-  step: number
+  step: number,
+  dataName: string
 ) => {
   const arr: MarketOptionType[] = [];
 
   for (let i = startMileage; i <= endMileage; i += step) {
-    arr.push({ option: `${formatter(i)}km`, value: i + '' });
+    arr.push({ option: `${formatter(i)}km`, dataName, value: i + '' });
   }
 
   return arr;
 };
 
-const makeQuery = (obj: { [key: string]: string }) =>
-  Object.entries(obj)
+const makeQuery = (obj: { [key: string]: string }) => {
+  const keys = Object.keys(obj);
+  if (
+    !keys.includes('filter') &&
+    !keys.includes('orderBy') &&
+    !keys.includes('page')
+  ) {
+    obj.filter = 'created_date';
+    obj.orderBy = 'DESC';
+    obj.page = '1';
+  }
+
+  return Object.entries(obj)
     .map(([k, v]) => `${k}=${v}`)
     .join('&');
+};
 
 const makeSelectQuery = (query: object, key: string, value: string) => {
   const queryCopy: { [key: string]: string } = { ...query };
-  queryCopy[key] = value;
+  const keys = key.split(' ');
+  const values = value.split(' ');
+
+  queryCopy[keys[0]] = values[0];
+  if (keys[1] && values[1]) queryCopy[keys[1]] = values[1];
+
   const converted = makeQuery(queryCopy);
   return converted;
 };
@@ -87,11 +108,11 @@ const makeSelectQuery = (query: object, key: string, value: string) => {
 const LABEL_OBJECT: { [key: string]: (s: string) => string } = {
   category: (s: string) => s,
   Date: (s: string) => `${s}년`,
-  fuel: (s: string) => FUEL_KIND[s],
+  fuel: (s: string) => s,
   Mileage: (s: string) => `${formatter(+s)}km`,
   Price: (s: string) => `${formatter(+s * 10000)}원`,
   accident: (s: string) => (s ? '유' : '무'),
-  transmission: (s: string) => TRANSMISSION_KIND[s],
+  transmission: (s: string) => s,
 };
 
 const makeFilterLabel = (
@@ -105,11 +126,11 @@ const makeFilterLabel = (
     const extractKey = (s: string) => s.replace(/min|max/, '');
 
     arr.forEach(([options1, options2]) => {
-      const o1Key = extractKey(options1.dataName);
+      const o1Key = extractKey(options1.optionSet[0].dataName);
       labelObject[o1Key] = options1.label;
 
       if (options2) {
-        const o2Key = extractKey(options2.dataName);
+        const o2Key = extractKey(options2.optionSet[0].dataName);
         labelObject[o2Key] = options2.label;
       }
     });
@@ -132,7 +153,6 @@ const convertQuery = (query: object, asPath: string) => {
   const con: { [key: string]: string[] } = {};
 
   converted.forEach(([key, val]) => {
-    console.log('key', key, FILTER_OPTION_DATANAMES.includes(key));
     if (!FILTER_OPTION_DATANAMES.includes(key)) return;
 
     const pattern = /min|max/;
@@ -140,10 +160,10 @@ const convertQuery = (query: object, asPath: string) => {
     const extractedKey = key.replace(pattern, '');
     const existed = con[extractedKey] || '';
 
-    console.log('test', test);
-
     if (test) {
-      const length = path.match(new RegExp(extractedKey, 'g'))?.length;
+      const length = decodeURI(path).match(
+        new RegExp(extractedKey, 'g')
+      )?.length;
       if (length === 2) {
         con[extractedKey] = [...existed, val].sort((a, b) => +a - +b);
       }
@@ -153,21 +173,20 @@ const convertQuery = (query: object, asPath: string) => {
     con[extractedKey] = [val];
   });
 
-  console.log(con);
-
   return Object.entries(con);
 };
 
 /**
  * @param start 시작 개수
  * @param end 마지막 개수
+ * @param dataName 데이터 이름 (쿼리 키 값)
  * @returns [{ option: `${개수}개씩 || 만km`, value: 개수 }];
  */
-const makeHowManyResult = (start: number, end: number) => {
+const makeHowManyResult = (start: number, end: number, dataName: string) => {
   const options: MarketOptionType[] = [];
 
   for (let i = start; i <= end; i += 10) {
-    options.push({ option: `${i}개씩`, value: `viewSize ${i}` });
+    options.push({ option: `${i}개씩`, dataName, value: `${i}` });
   }
 
   return options;

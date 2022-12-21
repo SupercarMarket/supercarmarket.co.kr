@@ -2,17 +2,16 @@ import {
   makeFilterDate,
   makeFilterMileage,
   makeFilterPrice,
+  makeHowManyResult,
 } from 'utils/market/marketFilter';
 
-import { MarketOptionType } from '../types/market';
-
-const CATEGORY: MarketOptionType[] = [
-  { option: '전체', value: 'all' },
-  { option: '스포츠카', value: 'sports-car' },
-  { option: '세단', value: 'saloon' },
-  { option: 'SUV', value: 'suv' },
-  { option: '픽업트럭', value: 'pickup-truck' },
-  { option: '클래식카&올드카', value: 'classic-car&old-car' },
+const CATEGORY = [
+  { option: '전체', value: '모두' },
+  { option: '스포츠카', value: '스포츠카' },
+  { option: '세단', value: '세단' },
+  { option: 'SUV', value: 'SUV' },
+  { option: '픽업트럭', value: '픽업트럭' },
+  { option: '클래식카&올드카', value: '클래식카&올드카' },
 ];
 
 const CATEGORY_VALUES = CATEGORY.map(({ value }) => value);
@@ -21,34 +20,34 @@ const FIRST_MARKET_FILTER = [
   [
     {
       label: '연식',
-      dataName: 'minDate',
       defaultLabel: '최소',
-      optionSet: makeFilterDate(2023, 2010),
+      optionSet: makeFilterDate(2023, 2010, 'minDate'),
     },
     {
       label: '연식',
-      dataName: 'maxDate',
       defaultLabel: '최대',
-      optionSet: makeFilterDate(2023, 2010),
+      optionSet: makeFilterDate(2023, 2010, 'maxDate'),
     },
   ],
   [
     {
       label: '연료',
-      dataName: 'fuel',
       defaultLabel: '선택',
       optionSet: [
         {
           option: '가솔린',
-          value: 'gasoline',
+          dataName: 'fuel',
+          value: '가솔린',
         },
         {
           option: '경유',
-          value: 'diesel',
+          dataName: 'fuel',
+          value: '경유',
         },
         {
           option: '전기',
-          value: 'electric',
+          dataName: 'fuel',
+          value: '전기',
         },
       ],
     },
@@ -56,29 +55,25 @@ const FIRST_MARKET_FILTER = [
   [
     {
       label: '주행거리',
-      dataName: 'minMileage',
       defaultLabel: '최소',
-      optionSet: makeFilterMileage(1000, 20000, 1000),
+      optionSet: makeFilterMileage(5000, 50000, 5000, 'minMileage'),
     },
     {
       label: '주행거리',
-      dataName: 'maxMileage',
       defaultLabel: '최대',
-      optionSet: makeFilterMileage(1000, 20000, 1000),
+      optionSet: makeFilterMileage(5000, 50000, 5000, 'maxMileage'),
     },
   ],
   [
     {
       label: '가격',
-      dataName: 'minPrice',
       defaultLabel: '최소',
-      optionSet: makeFilterPrice(2000, 30000, 2000),
+      optionSet: makeFilterPrice(5000, 100000, 5000, 'minPrice'),
     },
     {
       label: '가격',
-      dataName: 'maxPrice',
       defaultLabel: '최대',
-      optionSet: makeFilterPrice(2000, 30000, 2000),
+      optionSet: makeFilterPrice(5000, 100000, 5000, 'maxPrice'),
     },
   ],
 ];
@@ -87,71 +82,90 @@ const SECOND_MARKET_FILTER = [
   [
     {
       label: '사고여부',
-      dataName: 'accident',
       defaultLabel: '선택',
       optionSet: [
-        { option: '유', value: 'true' },
-        { option: '무', value: 'false' },
+        { option: '유', dataName: 'accident', value: 'true' },
+        { option: '무', dataName: 'accident', value: 'false' },
       ],
     },
   ],
   [
     {
       label: '변속기',
-      dataName: 'transmission',
       defaultLabel: '선택',
       optionSet: [
-        { option: '자동', value: 'auto' },
-        { option: '수동', value: 'manual' },
+        { option: '자동', dataName: 'transmission', value: '자동' },
+        { option: '수동', dataName: 'transmission', value: '수동' },
       ],
     },
   ],
 ];
 
 const FILTER_OPTION_DATANAMES = FIRST_MARKET_FILTER.map(([arr1, arr2]) => [
-  arr1.dataName,
-  arr2?.dataName,
+  arr1.optionSet[0].dataName,
+  arr2?.optionSet[0].dataName,
 ])
   .concat(
-    SECOND_MARKET_FILTER.map(([arr1, arr2]) => [arr1.dataName, arr2?.dataName])
+    SECOND_MARKET_FILTER.map(([arr1, arr2]) => [
+      arr1.optionSet[0].dataName,
+      arr2?.optionSet[0].dataName,
+    ])
   )
   .flat(2)
   .filter((v) => v);
 
-const ORDER_OPTIONSET: MarketOptionType[] = [
-  {
-    option: '최근 등록순',
-    value: 'created_date DESC',
-  },
-  {
-    option: '이전 등록순',
-    value: 'created_date ASC',
-  },
-  {
-    option: '가격 낮은순',
-    value: 'pdt_price ASC',
-  },
-  {
-    option: '가격 높은순',
-    value: 'pdt_price DESC',
-  },
-  {
-    option: '주행 짧은순',
-    value: 'pinf_mileage ASC',
-  },
-  {
-    option: '주행 많은순',
-    value: 'pinf_mileage DESC',
-  },
-  {
-    option: '연식 최신순',
-    value: 'pinf_year DESC',
-  },
-  {
-    option: '연식 오래된순',
-    value: 'pinf_year ASC',
-  },
-];
+const ORDER_OPTIONSET = {
+  label: '정렬',
+  defaultLabel: '최근 등록순',
+  optionSet: [
+    {
+      option: '최근 등록순',
+      dataName: 'filter orderBy',
+      value: 'created_date DESC',
+    },
+    {
+      option: '이전 등록순',
+      dataName: 'filter orderBy',
+      value: 'created_date ASC',
+    },
+    {
+      option: '가격 낮은순',
+      dataName: 'filter orderBy',
+      value: 'pdt_price ASC',
+    },
+    {
+      option: '가격 높은순',
+      dataName: 'filter orderBy',
+      value: 'pdt_price DESC',
+    },
+    {
+      option: '주행 짧은순',
+      dataName: 'filter orderBy',
+      value: 'pinf_mileage ASC',
+    },
+    {
+      option: '주행 많은순',
+      dataName: 'filter orderBy',
+      value: 'pinf_mileage DESC',
+    },
+    {
+      option: '연식 최신순',
+      dataName: 'filter orderBy',
+      value: 'pinf_year DESC',
+    },
+    {
+      option: '연식 오래된순',
+      dataName: 'filter orderBy',
+      value: 'pinf_year ASC',
+    },
+  ],
+};
+
+const SHOW_COUNT_OPTIONS = {
+  label: '리스트 개수',
+  defaultLabel: '20개씩',
+  optionSet: makeHowManyResult(20, 70, 'size'),
+};
 
 const MARKET_LIST_TABLE_HEAD = [
   {
@@ -190,11 +204,6 @@ const FUEL_KIND: { [key: string]: string } = {
   electric: '전기',
 };
 
-const TRANSMISSION_KIND: { [key: string]: string } = {
-  auto: '자동',
-  manual: '수동',
-};
-
 export {
   CATEGORY,
   CATEGORY_VALUES,
@@ -204,5 +213,5 @@ export {
   MARKET_LIST_TABLE_HEAD,
   ORDER_OPTIONSET,
   SECOND_MARKET_FILTER,
-  TRANSMISSION_KIND,
+  SHOW_COUNT_OPTIONS,
 };

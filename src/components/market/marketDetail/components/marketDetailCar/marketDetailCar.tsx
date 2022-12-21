@@ -1,6 +1,5 @@
 import Typography from 'components/common/typography';
 import Wrapper from 'components/common/wrapper';
-import { FUEL_KIND } from 'constants/market';
 import React, { ReactNode } from 'react';
 
 import * as Styled from './marketDetailCar.styled';
@@ -26,18 +25,16 @@ const MarketDetailCar = ({
   cc,
   transmissionType,
 }: MarketDetailCarProps) => {
-  const [ry, rm] = regDate.split('/');
-  const formatter = Intl.NumberFormat('ko');
+  const formatter = Intl.NumberFormat('ko').format;
 
   return (
     <Wrapper css={Styled.wrapper}>
-      <CarInfo subject="연식">{`${ry}년형 ${rm}월식`}</CarInfo>
-      <CarInfo subject="주행거리">{`${formatter.format(mileage)}km`}</CarInfo>
-      <CarInfo subject="연료">{FUEL_KIND[fuel]}</CarInfo>
+      <CarInfo subject="연식">{`${year}년형`}</CarInfo>
+      <CarInfo subject="주행거리">{`${formatter(mileage)}km`}</CarInfo>
+      <CarInfo subject="연료">{fuel}</CarInfo>
       <CarInfo subject="색상">{color}</CarInfo>
       <CarInfo subject="사고여부">{accident ? '유' : '무'}</CarInfo>
-      <CarInfo subject="형식연도">{`${year}년형`}</CarInfo>
-      <CarInfo subject="배기량">{`${formatter.format(cc)}cc`}</CarInfo>
+      <CarInfo subject="배기량">{`${formatter(cc)}cc`}</CarInfo>
       <CarInfo subject="트랜스미션">{transmissionType}</CarInfo>
     </Wrapper>
   );

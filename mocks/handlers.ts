@@ -254,6 +254,7 @@ const counselingMagazinePost: Parameters<typeof rest.post>[1] = (
 
 const getMarketList: Parameters<typeof rest.get>[1] = (req, res, ctx) => {
   const { searchParams } = req.url;
+  console.log('searchParams', searchParams);
   const size = Number(searchParams.get('viewSize')) || 20;
   const page = Number(searchParams.get('page')) || 1;
   const totalCount = marketList.length;

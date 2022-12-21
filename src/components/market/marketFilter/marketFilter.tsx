@@ -10,10 +10,7 @@ import Close from '../../../assets/svg/close.svg';
 import Refresh from '../../../assets/svg/refresh.svg';
 import * as Styled from './marketFilter.styled';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface MarketFilterProps {}
-
-const MarketFilter = ({}: MarketFilterProps) => {
+const MarketFilter = () => {
   const { push, query, asPath } = useRouter();
 
   const convertedQuery = useMemo(
@@ -26,11 +23,14 @@ const MarketFilter = ({}: MarketFilterProps) => {
     const queries = Object.entries(query as { [key: string]: string });
     const filtered = queries.filter(([key]) => !key.match(pattern));
     const url = filtered.map(([key, value]) => `${key}=${value}`).join('&');
-    push(`/market/all?${url}`, undefined, { scroll: false });
+
+    push(`/market/${query.category}?${url}`, undefined, { scroll: false });
   };
 
   const resetfilter = () => {
-    push('/market/all', undefined, { scroll: false });
+    push(`/market/${query.category}?category=${query.category}`, undefined, {
+      scroll: false,
+    });
   };
 
   return (
@@ -63,7 +63,7 @@ const MarketFilter = ({}: MarketFilterProps) => {
                 onClick={() => removeFilter(key)}
               >
                 <Typography fontSize="body-16" lineHeight="150%">
-                  {`${k} ${value1}${value2 && `~${value2}`}`}
+                  {value2 ? `${k} ${value1}~${value2}` : `${k} ${value1}`}
                 </Typography>
                 <Close
                   width="16px"

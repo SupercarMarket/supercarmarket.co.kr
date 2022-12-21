@@ -1,6 +1,5 @@
 import Typography from 'components/common/typography';
 import Wrapper from 'components/common/wrapper';
-import { FUEL_KIND } from 'constants/market';
 import React from 'react';
 
 import EyeIcon from '../../../../../assets/svg/eye.svg';
@@ -28,12 +27,7 @@ const MarketDetailHeader = ({
   price,
   viewCount,
 }: MarketDetailHeaderProps) => {
-  const [ry, rm] = regDate.split('/');
-  const formatter = Intl.NumberFormat('ko', { notation: 'compact' });
-  const currencyFormatter = Intl.NumberFormat('ko', {
-    currency: 'krw',
-    notation: 'compact',
-  });
+  const formatter = Intl.NumberFormat('ko-KR', { notation: 'compact' }).format;
 
   return (
     <Wrapper css={style.wrapper}>
@@ -48,9 +42,7 @@ const MarketDetailHeader = ({
         </Typography>
         <br />
         <Typography fontSize="header-14">
-          {`${ry}년 ${rm}월식 (${year}년형) | ${
-            FUEL_KIND[fuel]
-          } | ${formatter.format(mileage)}km`}
+          {`${year}년형 | ${fuel} | ${formatter(mileage)}km`}
         </Typography>
       </Wrapper.Left>
 
@@ -62,12 +54,12 @@ const MarketDetailHeader = ({
           lineHeight="150%"
           style={{ marginBottom: '15px' }}
         >
-          {price ? `${currencyFormatter.format(price)}만원` : '상담'}
+          {price ? `${formatter(price * 10000)}원` : '상담'}
         </Typography>
         <Wrapper.Bottom css={style.rightBottom}>
           <Wrapper css={style.iconWrapper}>
             <Typography>
-              {new Date(+`20${ry}`, +rm).toLocaleDateString('us')}
+              {new Date(regDate).toLocaleDateString('us')}
             </Typography>
           </Wrapper>
           <Wrapper css={style.iconWrapper}>

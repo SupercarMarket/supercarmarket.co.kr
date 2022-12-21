@@ -1,14 +1,9 @@
 import Typography from 'components/common/typography';
-import { FUEL_KIND } from 'constants/market';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { WithBlurredImage } from 'types/magazine';
 import { MarketDto } from 'types/market';
-import {
-  convertMileageToKilometers,
-  convertPriceToWon,
-} from 'utils/market/marketList';
 
 import * as Styled from './marketRow.styled';
 
@@ -25,6 +20,7 @@ const MarketRow = ({
   year,
 }: WithBlurredImage<MarketDto>) => {
   const { push } = useRouter();
+  const formatter = Intl.NumberFormat('ko-KR', { notation: 'compact' }).format;
 
   const onClick = (id: string) => {
     push(`/market/detail/${id}`);
@@ -57,16 +53,14 @@ const MarketRow = ({
         <Typography fontSize="body-14">{year}</Typography>
       </Styled.MarketTableData>
       <Styled.MarketTableData>
-        <Typography fontSize="body-14">{FUEL_KIND[fuel]}</Typography>
+        <Typography fontSize="body-14">{fuel}</Typography>
       </Styled.MarketTableData>
       <Styled.MarketTableData>
-        <Typography fontSize="body-14">
-          {convertMileageToKilometers(mileage)}
-        </Typography>
+        <Typography fontSize="body-14">{`${formatter(mileage)}km`}</Typography>
       </Styled.MarketTableData>
       <Styled.MarketTableData>
         <Typography fontSize="body-14" fontWeight="bold" color="system-1">
-          {price ? convertPriceToWon(price) : '상담'}
+          {price ? `${formatter(price * 10000)}원` : '상담'}
         </Typography>
       </Styled.MarketTableData>
       <Styled.MarketTableData

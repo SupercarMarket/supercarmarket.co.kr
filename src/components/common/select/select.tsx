@@ -14,27 +14,40 @@ interface SelectProps {
 }
 
 const Select = ({ options, width = '100%', align }: SelectProps) => {
-  const { optionSet, dataName, defaultLabel } = options;
+  const { optionSet, defaultLabel } = options;
   const { push, query } = useRouter();
   const [toggle, setToggle] = React.useState<boolean>(false);
 
   const optionValue = React.useMemo(() => {
-    const value = query[dataName] as string;
-    const option = optionSet.find(({ value: v }) => v === value)?.option || '';
-    return { option, value };
-  }, [optionSet, query, dataName]);
+    const check = (val: string, dat: string) => {
+      const [v1, v2] = val.split(' ');
+      const [d1, d2] = dat.split(' ');
+      return v1 === query[d1] && v2 === query[d2];
+    };
+
+    const options = optionSet.find(({ value, dataName }) =>
+      check(value, dataName)
+    );
+
+    return { option: options?.option, value: options?.value };
+  }, [optionSet, query]);
 
   const onToggle = () => setToggle(!toggle);
   const closeToggle = () => setToggle(false);
 
-  const selectOption = (value: string) => {
+  const selectOption = (dataName: string, value: string) => {
+    const queryObj = { ...query };
+
     const url = makeSelectQuery(
-      query as { [key: string]: string },
+      queryObj as { [key: string]: string },
       dataName,
       value
     );
 
-    push(`/market/all?${url}`, undefined, { scroll: false });
+    push(`/market/${queryObj.category}?${url}`, undefined, {
+      scroll: false,
+    });
+
     closeToggle();
   };
 
@@ -48,8 +61,11 @@ const Select = ({ options, width = '100%', align }: SelectProps) => {
         <ArrowBottom width="13px" height="13px" />
       </S.SelectCurrentButton>
       <S.SelectOptionList width={width} toggle={toggle}>
-        {optionSet.map(({ option, value }) => (
-          <S.SelectOptionItem key={option} onClick={() => selectOption(value)}>
+        {optionSet.map(({ option, dataName, value }) => (
+          <S.SelectOptionItem
+            key={option}
+            onClick={() => selectOption(dataName, value)}
+          >
             <S.SelectOptionButton
               type="button"
               active={optionValue.option === option}

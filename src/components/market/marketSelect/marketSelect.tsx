@@ -15,12 +15,12 @@ const MarketSelect = ({ options1, options2 }: SelectWrapperProps) => {
   const { push, query } = useRouter();
 
   if (options1 && options2) {
-    const op1 = query[options1.dataName] as string;
-    const op2 = query[options2.dataName] as string;
+    const op1 = query[options1.optionSet[0].dataName] as string;
+    const op2 = query[options2.optionSet[0].dataName] as string;
 
     if (+op1 > +op2) {
-      const url = makeSelectQuery(query, options1.dataName, op2);
-      push(`/market/all?${url}`, undefined, { scroll: false });
+      const url = makeSelectQuery(query, options1.optionSet[0].dataName, op2);
+      push(`/market/${query.category}?${url}`, undefined, { scroll: false });
     }
   }
 

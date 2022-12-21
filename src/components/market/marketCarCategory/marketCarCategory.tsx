@@ -2,18 +2,20 @@ import Typography from 'components/common/typography';
 import { CATEGORY } from 'constants/market';
 import { useRouter } from 'next/router';
 import React from 'react';
+import { makeQuery } from 'utils/market/marketFilter';
 
 import * as Styled from './marketCarCategory.styled';
 
-interface MarketCarKindProps {
-  category: string;
-}
-
-const MarketCarKind = ({ category }: MarketCarKindProps) => {
-  const { push } = useRouter();
+const MarketCarKind = () => {
+  const { query, push } = useRouter();
 
   const selectCarKind = (value: string) => {
-    push(`/market/${value}`);
+    const queries = { ...(query as { [key: string]: string }) };
+    queries.category = value;
+    const url = makeQuery(queries);
+    push(`/market/${value}?${url}`, undefined, {
+      scroll: false,
+    });
   };
 
   return (
@@ -21,7 +23,7 @@ const MarketCarKind = ({ category }: MarketCarKindProps) => {
       {CATEGORY.map(({ option, value }) => (
         <Styled.MarketCarKindItem
           key={option}
-          active={category === value}
+          active={query.category === value}
           onClick={() => selectCarKind(value)}
         >
           <Typography>{option}</Typography>
