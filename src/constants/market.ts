@@ -56,24 +56,24 @@ const FIRST_MARKET_FILTER = [
     {
       label: '주행거리',
       defaultLabel: '최소',
-      optionSet: makeFilterMileage(5000, 50000, 5000, 'minMileage'),
+      optionSet: makeFilterMileage(0, 50000, 5000, 'minMileage'),
     },
     {
       label: '주행거리',
       defaultLabel: '최대',
-      optionSet: makeFilterMileage(5000, 50000, 5000, 'maxMileage'),
+      optionSet: makeFilterMileage(0, 50000, 5000, 'maxMileage'),
     },
   ],
   [
     {
       label: '가격',
       defaultLabel: '최소',
-      optionSet: makeFilterPrice(5000, 100000, 5000, 'minPrice'),
+      optionSet: makeFilterPrice(0, 100000, 5000, 'minPrice'),
     },
     {
       label: '가격',
       defaultLabel: '최대',
-      optionSet: makeFilterPrice(5000, 100000, 5000, 'maxPrice'),
+      optionSet: makeFilterPrice(0, 100000, 5000, 'maxPrice'),
     },
   ],
 ];

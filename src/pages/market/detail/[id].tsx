@@ -9,7 +9,7 @@ import queries from 'constants/queries';
 import useMarketDetail from 'hooks/queries/useMarketDetail';
 import { NextPageContext } from 'next';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { KeyboardEvent, useRef } from 'react';
 import { css } from 'styled-components';
 
 interface MarketDetailPageProps {
@@ -17,8 +17,9 @@ interface MarketDetailPageProps {
 }
 
 const MarketDetailPage = ({ id }: MarketDetailPageProps) => {
+  const { push, query, back } = useRouter();
   const { data } = useMarketDetail(id);
-  const { back } = useRouter();
+  const keywordRef = useRef<HTMLInputElement>(null);
 
   if (!data) return <div>로딩중?</div>;
 
@@ -27,6 +28,21 @@ const MarketDetailPage = ({ id }: MarketDetailPageProps) => {
       behavior: 'smooth',
       top: 0,
     });
+
+  const keydownHandler = (e: KeyboardEvent) => {
+    if (e.key === 'Enter' && keywordRef.current !== null) {
+      const queries = { ...query };
+
+      queries.keyword = keywordRef.current.value;
+      keywordRef.current.value = '';
+
+      const queryString = Object.entries(queries)
+        .map(([key, value]) => `${key}=${value}`)
+        .join('&');
+
+      push(`/market/${query.category}?${queryString}`);
+    }
+  };
 
   return (
     <Wrapper
@@ -66,6 +82,8 @@ const MarketDetailPage = ({ id }: MarketDetailPageProps) => {
           variant="Line"
           width="540px"
           placeholder="검색어를 입력하세요"
+          onKeyDown={keydownHandler}
+          ref={keywordRef}
         />
       </Wrapper>
     </Wrapper>

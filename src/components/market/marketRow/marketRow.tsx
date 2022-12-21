@@ -19,11 +19,12 @@ const MarketRow = ({
   dealer,
   year,
 }: WithBlurredImage<MarketDto>) => {
-  const { push } = useRouter();
+  const { push, asPath } = useRouter();
   const formatter = Intl.NumberFormat('ko-KR', { notation: 'compact' }).format;
 
   const onClick = (id: string) => {
-    push(`/market/detail/${id}`);
+    const query = asPath.split('?')[1];
+    push(`/market/detail/${id}?${query}`);
   };
 
   return (

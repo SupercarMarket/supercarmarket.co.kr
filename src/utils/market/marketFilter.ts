@@ -87,6 +87,7 @@ const makeQuery = (obj: { [key: string]: string }) => {
     obj.orderBy = 'DESC';
     obj.page = '1';
   }
+  if (obj.id) delete obj.id;
 
   return Object.entries(obj)
     .map(([k, v]) => `${k}=${v}`)
