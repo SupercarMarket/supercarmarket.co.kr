@@ -3,7 +3,7 @@ import Container from 'components/common/container';
 import Searchbar from 'components/common/searchbar';
 import layout from 'components/layout';
 import MarketBanner from 'components/market/marketBanner';
-import MarketCarKind from 'components/market/marketCarCategory';
+import MarketCarKind from 'components/market/marketCarKind';
 import MarketCarList from 'components/market/marketCarList';
 import MarketFilter from 'components/market/marketFilter';
 import { CATEGORY_VALUES } from 'constants/market';

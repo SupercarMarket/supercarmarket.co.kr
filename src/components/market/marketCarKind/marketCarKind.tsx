@@ -3,7 +3,7 @@ import { CATEGORY } from 'constants/market';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import * as Styled from './marketCarCategory.styled';
+import * as Styled from './marketCarKind.styled';
 
 const MarketCarKind = () => {
   const { query, push } = useRouter();
