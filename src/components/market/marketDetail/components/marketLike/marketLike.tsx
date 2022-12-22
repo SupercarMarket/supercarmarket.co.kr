@@ -4,7 +4,7 @@ import Typography from 'components/common/typography';
 import theme from 'constants/theme';
 import useMarketLike from 'hooks/mutations/useMarketLike';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React from 'react';
 
 import FavoriteIcon from '../../../../../assets/svg/favorite.svg';
 import FavoriteBorderIcon from '../../../../../assets/svg/favorite-border.svg';
@@ -14,7 +14,7 @@ interface MarketLikeProps {
 }
 
 const MarketLike = ({ isLike }: MarketLikeProps) => {
-  const [like, setLike] = useState<boolean>(isLike);
+  const [like, setLike] = React.useState<boolean>(isLike);
 
   const {
     query: { id },

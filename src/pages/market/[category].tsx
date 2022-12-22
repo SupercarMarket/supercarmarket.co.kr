@@ -11,13 +11,13 @@ import queries from 'constants/queries';
 import useMarket from 'hooks/queries/useMarket';
 import { useRouter } from 'next/router';
 import { NextPageContext } from 'next/types';
-import React, { KeyboardEvent, useMemo, useRef } from 'react';
+import React from 'react';
 import { makeQuery } from 'utils/market/marketFilter';
 
 const MarketFilterPage = () => {
   const { push, query } = useRouter();
-  const keywordRef = useRef<HTMLInputElement>(null);
-  const page = useMemo(
+  const keywordRef = React.useRef<HTMLInputElement>(null);
+  const page = React.useMemo(
     () => (query.page && query.page ? +query.page : 0),
     [query.page]
   );
@@ -27,7 +27,7 @@ const MarketFilterPage = () => {
     { keepPreviousData: true }
   );
 
-  const keydownHandler = (e: KeyboardEvent) => {
+  const keydownHandler = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && keywordRef.current !== null) {
       const queries = { ...query };
 

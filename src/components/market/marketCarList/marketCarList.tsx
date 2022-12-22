@@ -3,7 +3,7 @@ import Select from 'components/common/select';
 import MarketCard from 'components/market/marketCard';
 import MarketTable from 'components/market/marketTable';
 import { ORDER_OPTIONSET, SHOW_COUNT_OPTIONS } from 'constants/market';
-import React, { useMemo, useState } from 'react';
+import React from 'react';
 import { WithBlurredImage } from 'types/magazine';
 import { MarketDto, MarketResponse } from 'types/market';
 
@@ -17,8 +17,8 @@ interface MarketCarListProps {
 }
 
 const MarketCarList = ({ data, page }: MarketCarListProps) => {
-  const markets = useMemo(() => data.data, [data.data]);
-  const [listView, setListView] = useState(false);
+  const markets = React.useMemo(() => data.data, [data.data]);
+  const [listView, setListView] = React.useState(false);
 
   const onListView = () => setListView(true);
   const onCardView = () => setListView(false);

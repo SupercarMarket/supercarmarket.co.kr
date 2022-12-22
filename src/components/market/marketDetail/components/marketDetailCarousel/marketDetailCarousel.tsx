@@ -1,7 +1,7 @@
 import Wrapper from 'components/common/wrapper/wrapper';
 import theme from 'constants/theme';
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React from 'react';
 import { css } from 'styled-components';
 import { WithBlurredImage } from 'types/market';
 
@@ -15,8 +15,8 @@ interface MarketDetailCarouselProps {
 }
 
 const MarketDetailCarousel = ({ imgSrc }: MarketDetailCarouselProps) => {
-  const [current, setCurrent] = useState<number>(0);
-  const [page, setPage] = useState<number>(1);
+  const [current, setCurrent] = React.useState<number>(0);
+  const [page, setPage] = React.useState<number>(1);
   const isFirst = page === 1;
   const isLast = page === Math.ceil(imgSrc.length / 8);
 

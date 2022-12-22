@@ -9,7 +9,7 @@ import queries from 'constants/queries';
 import useMarketDetail from 'hooks/queries/useMarketDetail';
 import { NextPageContext } from 'next';
 import { useRouter } from 'next/router';
-import React, { KeyboardEvent, useRef } from 'react';
+import React from 'react';
 import { css } from 'styled-components';
 
 interface MarketDetailPageProps {
@@ -19,7 +19,7 @@ interface MarketDetailPageProps {
 const MarketDetailPage = ({ id }: MarketDetailPageProps) => {
   const { push, query, back } = useRouter();
   const { data } = useMarketDetail(id);
-  const keywordRef = useRef<HTMLInputElement>(null);
+  const keywordRef = React.useRef<HTMLInputElement>(null);
 
   if (!data) return <div>로딩중?</div>;
 
@@ -29,7 +29,7 @@ const MarketDetailPage = ({ id }: MarketDetailPageProps) => {
       top: 0,
     });
 
-  const keydownHandler = (e: KeyboardEvent) => {
+  const keydownHandler = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && keywordRef.current !== null) {
       const queries = { ...query };
 
@@ -44,7 +44,7 @@ const MarketDetailPage = ({ id }: MarketDetailPageProps) => {
     }
   };
 
-  console.log(data)
+  console.log(data);
 
   return (
     <Wrapper

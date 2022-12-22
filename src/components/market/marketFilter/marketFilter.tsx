@@ -3,7 +3,7 @@ import MarketSelect from 'components/market/marketSelect';
 import { FIRST_MARKET_FILTER, SECOND_MARKET_FILTER } from 'constants/market';
 import theme from 'constants/theme';
 import { useRouter } from 'next/router';
-import React, { useMemo } from 'react';
+import React from 'react';
 import { convertQuery, makeFilterLabel } from 'utils/market/marketFilter';
 
 import Close from '../../../assets/svg/close.svg';
@@ -13,7 +13,7 @@ import * as Styled from './marketFilter.styled';
 const MarketFilter = () => {
   const { push, query, asPath } = useRouter();
 
-  const convertedQuery = useMemo(
+  const convertedQuery = React.useMemo(
     () => convertQuery(query, asPath),
     [query, asPath]
   );
