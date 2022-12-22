@@ -44,6 +44,8 @@ const MarketDetailPage = ({ id }: MarketDetailPageProps) => {
     }
   };
 
+  console.log(data)
+
   return (
     <Wrapper
       css={css`

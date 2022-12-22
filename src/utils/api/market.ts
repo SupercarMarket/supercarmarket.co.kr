@@ -7,8 +7,12 @@ import { getErrorMessage } from 'utils/misc';
 const marketApi: NextApiHandler = async (req, res) => {
   let query = decodeURI(req.url?.split('?')[1] || '');
 
-  if (query.match('모두')) {
-    query = query.replace('category=모두', '');
+  if (query.match('전체')) {
+    query = query.replace('category=전체', '');
+  }
+
+  if (query.match('클래식카&올드카')) {
+    query = query.replace('클래식카&올드카', '클래식카%26올드카');
   }
 
   try {

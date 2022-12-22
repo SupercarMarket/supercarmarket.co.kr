@@ -6,7 +6,7 @@ import {
 } from 'utils/market/marketFilter';
 
 const CATEGORY = [
-  { option: '전체', value: '모두' },
+  { option: '전체', value: '전체' },
   { option: '스포츠카', value: '스포츠카' },
   { option: '세단', value: '세단' },
   { option: 'SUV', value: 'SUV' },
@@ -21,12 +21,12 @@ const FIRST_MARKET_FILTER = [
     {
       label: '연식',
       defaultLabel: '최소',
-      optionSet: makeFilterDate(2023, 2010, 'minDate'),
+      optionSet: makeFilterDate(2023, 1950, 'minDate'),
     },
     {
       label: '연식',
       defaultLabel: '최대',
-      optionSet: makeFilterDate(2023, 2010, 'maxDate'),
+      optionSet: makeFilterDate(2023, 1950, 'maxDate'),
     },
   ],
   [
@@ -35,9 +35,9 @@ const FIRST_MARKET_FILTER = [
       defaultLabel: '선택',
       optionSet: [
         {
-          option: '가솔린',
+          option: '휘발유',
           dataName: 'fuel',
-          value: '가솔린',
+          value: '휘발유',
         },
         {
           option: '경유',
@@ -56,12 +56,12 @@ const FIRST_MARKET_FILTER = [
     {
       label: '주행거리',
       defaultLabel: '최소',
-      optionSet: makeFilterMileage(0, 50000, 5000, 'minMileage'),
+      optionSet: makeFilterMileage(0, 100000, 5000, 'minMileage'),
     },
     {
       label: '주행거리',
       defaultLabel: '최대',
-      optionSet: makeFilterMileage(0, 50000, 5000, 'maxMileage'),
+      optionSet: makeFilterMileage(0, 100000, 5000, 'maxMileage'),
     },
   ],
   [
