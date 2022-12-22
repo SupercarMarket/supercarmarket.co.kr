@@ -11,7 +11,7 @@ import {
   useAuthState,
 } from 'feature/authProvider';
 import Link from 'next/link';
-import { signIn } from 'next-auth/react';
+import { signIn, signOut } from 'next-auth/react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { catchNoExist } from 'utils/misc';
 
@@ -71,7 +71,8 @@ const LocalFormItem = () => {
   const onSubmit = methods.handleSubmit((data) => {
     const { id, password } = data;
     catchNoExist(id, password);
-    signIn('credentials', { id, password });
+    console.log(id, password);
+    signIn('credentials', { id, password, redirect: false });
   });
   return (
     <AuthProvider>
@@ -94,6 +95,7 @@ const LocalFormItem = () => {
           </Button>
           <Links />
         </Form>
+        <button onClick={() => signOut({ redirect: false })}>logout</button>
       </FormProvider>
     </AuthProvider>
   );
@@ -106,7 +108,7 @@ const OauthFormItem = () => {
         <Button
           key={service.provider}
           variant="Init"
-          onClick={() => signIn(service.provider)}
+          onClick={() => signIn(service.provider, { redirect: false })}
         >
           <Wrapper
             css={service.provider === 'kakao' ? style.kakao : style.google}

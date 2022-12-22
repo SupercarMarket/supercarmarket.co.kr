@@ -8,11 +8,9 @@ const refreshToken: NextApiHandler = () => {
   }
 };
 
-const isExpire: NextApiHandler = (req, res) => {
-  try {
-  } catch (error) {
-    throw new Error(getErrorMessage(error));
-  }
+const isExpire = (exp: number) => {
+  if (Date.now() < exp) return true;
+  return false;
 };
 
 export { isExpire, refreshToken };

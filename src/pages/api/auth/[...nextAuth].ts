@@ -10,6 +10,7 @@ import type { Provider } from 'next-auth/providers';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
 import KakaoProvider from 'next-auth/providers/kakao';
+import { isExpire } from 'utils/api/auth/token';
 import { baseFetcher } from 'utils/api/fetcher';
 
 const providers: Provider[] = [
@@ -21,21 +22,34 @@ const providers: Provider[] = [
     },
     async authorize(credentials) {
       if (!credentials) return null;
+
       const { id, password } = credentials;
 
-      const signin = await baseFetcher('/auth/user/signin', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ id, password }),
-      });
+      try {
+        const signin = await baseFetcher(
+          `${process.env.NEXT_PUBLIC_URL}/api/auth/user/signin`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ id, password }),
+          }
+        );
 
-      if (signin) {
-        return {
-          ...credentials,
-        };
-      } else {
+        if (signin)
+          return {
+            id: credentials.id,
+            sub: credentials.id,
+            accessToken: signin.data.access_TOKEN,
+            refreshToken: signin.data.refresh_TOKEN,
+            expire: signin.data.exp || 123123123123123,
+            verified: true,
+            provider: 'local',
+          };
+
+        return null;
+      } catch (error) {
         return null;
       }
     },
@@ -58,18 +72,55 @@ const providers: Provider[] = [
 ];
 
 const callbacks: Partial<CallbacksOptions<Profile, Account>> | undefined = {
-  jwt({ token, account }) {
-    console.log('token : ', token, 'account : ', account);
+  async jwt({ token, account, user }) {
+    // * next-auth 타입 추론 버그로 인해 단언 사용
+    console.log('user : ', user, 'account : ', account);
+
+    // * 첫 로그인 처리
+    if (account && user)
+      return {
+        accessToken: user.accessToken,
+        refreshToken: user.accessToken,
+        expire: user.expire,
+        sub: user.sub,
+        provider: user.provider,
+      };
+
+    // * 토큰이 만료 안될 때
+    // if(isExpire(exp)) return
+
+    console.log('token : ', token);
+    // * 토큰 만료
     return token;
   },
-  session({ session, token, user }) {
+  session({ session, token }) {
+    session.accessToken = token.accessToken;
+    session.refreshToken = token.refreshToken;
+    session.expire = token.expire;
+    session.provider = token.provider;
+    session.sub = token.sub;
+    console.log('session : ', session);
+
     return session;
+  },
+  signIn({ user }) {
+    user.verified = true;
+    return true;
+  },
+  redirect({ url, baseUrl }) {
+    if (url === '/auth/signup') return `${baseUrl}/auth/signup`;
+    if (url === '/auth/signin') return `${baseUrl}/auth/signin`;
+    return baseUrl;
   },
 };
 
 const nextAuthOptions: NextAuthOptions = {
   providers,
   callbacks,
+  pages: {
+    signIn: '/auth/signin',
+    signOut: '/auth/signup',
+  },
   secret: process.env.NEXT_PUBLIC_AUTH_SECRET,
 };
 

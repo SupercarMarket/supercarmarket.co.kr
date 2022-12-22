@@ -60,7 +60,7 @@ const signInApi: NextApiHandler = async (req, res) => {
 
   try {
     const signIn = await baseFetcher(
-      `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/user/signup`,
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/user/login`,
       {
         headers: {
           'Content-Type': 'application/json',
@@ -70,6 +70,29 @@ const signInApi: NextApiHandler = async (req, res) => {
           id,
           password,
         }),
+      }
+    );
+
+    return res.status(200).json(signIn);
+  } catch (error) {
+    throw new Error(getErrorMessage(error));
+  }
+};
+
+const oauthApi: NextApiHandler = async (req, res) => {
+  const { provider } = req.query as Params;
+  const {} = req.body;
+
+  catchNoExist(provider);
+  try {
+    const signIn = await baseFetcher(
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/user/login`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        method: 'POST',
+        params: provider,
       }
     );
 
@@ -147,4 +170,11 @@ const profile: NextApiHandler = async (req) => {
   }
 };
 
-export { checkAlreadyMember, duplicateApi, profile, signInApi, signUpApi };
+export {
+  checkAlreadyMember,
+  duplicateApi,
+  oauthApi,
+  profile,
+  signInApi,
+  signUpApi,
+};
