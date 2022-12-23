@@ -2,12 +2,20 @@ import { FormEvent } from 'react';
 
 interface MarketOptionType {
   option: string;
+  dataName: string;
   value: string;
 }
 
 interface MarketLabelType {
-  subject: string;
-  dataName: string;
+  label: string;
+  defaultLabel: string;
+  optionSet: MarketOptionType[];
+}
+
+interface SelectType {
+  label: string;
+  defaultLabel: string;
+  optionSet: MarketOptionType[];
 }
 
 interface MarketFormTarget extends FormEvent<HTMLFormElement> {
@@ -51,12 +59,18 @@ interface DealerDto {
   phone: string;
 }
 
+interface MarketAttachment {
+  originName: string;
+  attAttachmentUrl: string;
+}
+
 interface MarketDetailDto<T> {
   dealer: DealerDto;
-  viewCount: number;
+  view: number;
   dirSeq: number;
   likeCount: number;
   registration: string;
+  attSrc: MarketAttachment[];
   carName: string;
   introduction: string;
   year: string;
@@ -80,6 +94,7 @@ interface MarketDetailResponse<T> {
 export type {
   DealerDto,
   FilterType,
+  MarketAttachment,
   MarketDetailDto,
   MarketDetailResponse,
   MarketDto,
@@ -87,5 +102,6 @@ export type {
   MarketLabelType,
   MarketOptionType,
   MarketResponse,
+  SelectType,
   WithBlurredImage,
 };

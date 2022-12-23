@@ -2,110 +2,77 @@ import Typography from 'components/common/typography';
 import MarketSelect from 'components/market/marketSelect';
 import { FIRST_MARKET_FILTER, SECOND_MARKET_FILTER } from 'constants/market';
 import theme from 'constants/theme';
+import { useRouter } from 'next/router';
 import React from 'react';
-import { FilterType, MarketFormTarget, MarketLabelType } from 'types/market';
+import { convertQuery, makeFilterLabel } from 'utils/market/marketFilter';
 
 import Close from '../../../assets/svg/close.svg';
 import Refresh from '../../../assets/svg/refresh.svg';
 import * as Styled from './marketFilter.styled';
 
-interface MarketFilterProps {
-  filterList: FilterType[];
-  changeFilters: (f: FilterType[]) => void;
-}
+const MarketFilter = () => {
+  const { push, query, asPath } = useRouter();
 
-const MarketFilter = ({ filterList, changeFilters }: MarketFilterProps) => {
-  const submitHander = (
-    e: MarketFormTarget,
-    { subject, dataName }: MarketLabelType
-  ) => {
-    e.preventDefault();
-    const filters = [...filterList.filter((f) => f.subject !== subject)];
-    const form = e.target[dataName];
+  const convertedQuery = React.useMemo(
+    () => convertQuery(query, asPath),
+    [query, asPath]
+  );
 
-    if (form.value) {
-      const { value, ariaLabel: option } = form;
-      filters.push({ subject, value, option, dataName });
-    }
+  const removeFilter = (key: string) => {
+    const pattern = new RegExp(key);
+    const queries = Object.entries(query as { [key: string]: string });
+    const filtered = queries.filter(([key]) => !key.match(pattern));
+    const url = filtered.map(([key, value]) => `${key}=${value}`).join('&');
 
-    if (!form.value) {
-      const [
-        { ariaLabel: firstLabel, value: firstValue },
-        { ariaLabel: secondLabel, value: secondValue },
-      ] = form;
-
-      if (firstValue && secondValue)
-        filters.push({
-          subject,
-          dataName,
-          option:
-            +firstValue > +secondValue
-              ? `${secondLabel}~${secondLabel}`
-              : `${firstLabel}~${secondLabel}`,
-          value:
-            +firstValue > +secondValue
-              ? `${secondValue} ${secondValue}`
-              : `${firstValue} ${secondValue}`,
-        });
-    }
-    changeFilters(filters);
-  };
-
-  const removeFilter = (idx: number) => {
-    changeFilters(filterList.filter((_, index) => index !== idx));
+    push(`/market/${query.category}?${url}`, undefined, { scroll: false });
   };
 
   const resetfilter = () => {
-    changeFilters([]);
+    push(`/market/${query.category}?category=${query.category}`, undefined, {
+      scroll: false,
+    });
   };
 
   return (
     <Styled.MarketFilterContainer>
       <Styled.MarketFilterArea>
         <Styled.MarketFilterBox>
-          {FIRST_MARKET_FILTER.map(
-            ({ label, optionSet, firstLabel, secondLabel }) => (
-              <MarketSelect
-                key={label.subject}
-                label={label}
-                firstLabel={firstLabel}
-                secondLabel={secondLabel}
-                optionSet={optionSet}
-                formHandler={submitHander}
-              />
-            )
-          )}
+          {FIRST_MARKET_FILTER.map(([options1, options2], idx) => (
+            <Styled.MarketFilterWrapper key={idx}>
+              <Typography>{options1.label}</Typography>
+              <MarketSelect options1={options1} options2={options2} />
+            </Styled.MarketFilterWrapper>
+          ))}
         </Styled.MarketFilterBox>
         <Styled.MarketFilterBox>
-          {SECOND_MARKET_FILTER.map(
-            ({ label, optionSet, firstLabel, secondLabel }) => (
-              <MarketSelect
-                key={label.subject}
-                label={label}
-                firstLabel={firstLabel}
-                secondLabel={secondLabel}
-                optionSet={optionSet}
-                formHandler={submitHander}
-              />
-            )
-          )}
+          {SECOND_MARKET_FILTER.map(([options1, options2], idx) => (
+            <Styled.MarketFilterWrapper key={idx}>
+              <Typography>{options1.label}</Typography>
+              <MarketSelect options1={options1} options2={options2} />
+            </Styled.MarketFilterWrapper>
+          ))}
         </Styled.MarketFilterBox>
       </Styled.MarketFilterArea>
       <Styled.FilterListArea>
         <Styled.MarketFilterList>
-          {filterList.map(({ subject, option }, idx) => (
-            <Styled.MarketFilterItem key={subject} onClick={() => removeFilter(idx)}>
-              <Typography
-                fontSize="body-16"
-                lineHeight="150%"
-              >{`${subject} ${option}`}</Typography>
-              <Close
-                width="16px"
-                height="16px"
-                fill={theme.color['greyScale-5']}
-              />
-            </Styled.MarketFilterItem>
-          ))}
+          {convertedQuery.map(([key, [val1, val2]], idx) => {
+            const [k, value1, value2] = makeFilterLabel(key, val1, val2);
+            return (
+              <Styled.MarketFilterItem
+                key={idx}
+                onClick={() => removeFilter(key)}
+              >
+                <Typography fontSize="body-16" lineHeight="150%">
+                  {value2 ? `${k} ${value1}~${value2}` : `${k} ${value1}`}
+                </Typography>
+                <Close
+                  width="16px"
+                  height="16px"
+                  fill={theme.color['greyScale-5']}
+                />
+              </Styled.MarketFilterItem>
+            );
+          })}
         </Styled.MarketFilterList>
         <Styled.ResetButton onClick={resetfilter}>
           <Refresh

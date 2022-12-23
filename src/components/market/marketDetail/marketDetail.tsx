@@ -16,8 +16,6 @@ interface MarketDetailProps {
 }
 
 const MarketDetail = ({ data }: MarketDetailProps) => {
-  console.log(data);
-
   const {
     carName,
     year,
@@ -25,7 +23,7 @@ const MarketDetail = ({ data }: MarketDetailProps) => {
     mileage,
     price,
     regDate,
-    viewCount,
+    view,
     likeCount,
     imgSrc,
     dealer,
@@ -35,6 +33,7 @@ const MarketDetail = ({ data }: MarketDetailProps) => {
     trasmissionType,
     introduction,
     registration,
+    attSrc,
   } = data;
 
   return (
@@ -47,7 +46,7 @@ const MarketDetail = ({ data }: MarketDetailProps) => {
         mileage={mileage}
         price={price}
         regDate={regDate}
-        viewCount={viewCount}
+        viewCount={view}
       />
       <MarketDetailCarousel imgSrc={imgSrc} />
       <Typography fontSize="header-24" fontWeight="bold">
@@ -74,7 +73,7 @@ const MarketDetail = ({ data }: MarketDetailProps) => {
       <Typography fontSize="header-24" fontWeight="bold">
         첨부파일
       </Typography>
-      <MarketDetailAttached registration={registration} />
+      <MarketDetailAttached registration={registration} attrSrc={attSrc} />
       <MarketLike isLike={false} />
     </>
   );

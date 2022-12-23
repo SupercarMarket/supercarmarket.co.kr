@@ -4,6 +4,7 @@ import Wrapper from 'components/common/wrapper/wrapper';
 import theme from 'constants/theme';
 import Image from 'next/image';
 import React from 'react';
+import { css } from 'styled-components';
 import { DealerDto } from 'types/market';
 
 import CallIcon from '../../../../../assets/svg/call.svg';
@@ -19,15 +20,14 @@ const MarketDetailDealer = ({ dealer }: MarketDetailDealerProps) => {
   return (
     <Wrapper css={style.wrapper}>
       <Wrapper.Left css={style.left}>
-        <Wrapper>
+        <Wrapper
+          css={css`
+            border-radius: 50%;
+            overflow: hidden;
+          `}
+        >
           {profile ? (
-            <Image
-              alt="profile"
-              src={profile}
-              width={80}
-              height={80}
-              layout="fixed"
-            />
+            <Image alt="profile" src={profile} width={80} height={80} />
           ) : (
             <Avvvatars value={dealerName} size={80} />
           )}

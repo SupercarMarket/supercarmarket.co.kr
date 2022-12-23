@@ -7,7 +7,7 @@ const AttachedCard = styled.div`
   flex-direction: column;
   justify-content: center;
   gap: 8px;
-  height: 140px;
+  min-height: 140px;
   margin-top: 20px;
   padding: 30px 40px;
   border: 1px solid ${({ theme }) => theme.color['greyScale-3']};
@@ -20,7 +20,7 @@ const File = styled.div`
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    
+
     :hover {
       text-decoration: underline;
       cursor: pointer;

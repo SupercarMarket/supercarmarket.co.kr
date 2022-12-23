@@ -1,86 +1,39 @@
 import Select from 'components/common/select';
-import Typography from 'components/common/typography';
-import React, { useEffect, useState } from 'react';
-import { MarketFormTarget, MarketOptionType } from 'types/market';
+import { useRouter } from 'next/router';
+import React from 'react';
+import { SelectType } from 'types/market';
+import { makeSelectQuery } from 'utils/market/marketFilter';
 
 import * as Styled from './marketSelect.styled';
 
-interface MarketSelectProps {
-  label: {
-    subject: string;
-    dataName: string;
-  };
-  firstLabel: string;
-  secondLabel?: string;
-  optionSet: MarketOptionType[];
-  formHandler: (
-    e: MarketFormTarget,
-    label: { subject: string; dataName: string }
-  ) => void;
+interface SelectWrapperProps {
+  options1: SelectType;
+  options2?: SelectType;
 }
 
-const MarketSelect = ({
-  label,
-  firstLabel,
-  secondLabel,
-  optionSet,
-  formHandler,
-}: MarketSelectProps) => {
-  const [firstSelect, setFirstSelect] = useState<MarketOptionType | null>(null);
-  const [secondSelect, setSecondSelect] = useState<MarketOptionType | null>(
-    null
-  );
+const MarketSelect = ({ options1, options2 }: SelectWrapperProps) => {
+  const { push, query } = useRouter();
 
-  const changeFirstSelect = (option: MarketOptionType) => {
-    setFirstSelect(option);
-  };
-  const changeSecondSelect = (option: MarketOptionType) => {
-    setSecondSelect(option);
-  };
+  if (options1 && options2) {
+    const op1 = query[options1.optionSet[0].dataName] as string;
+    const op2 = query[options2.optionSet[0].dataName] as string;
 
-  useEffect(() => {
-    if (
-      firstSelect &&
-      secondSelect &&
-      +firstSelect.value > +secondSelect.value
-    ) {
-      setFirstSelect(secondSelect);
+    if (+op1 > +op2) {
+      const url = makeSelectQuery(query, options1.optionSet[0].dataName, op2);
+      push(`/market/${query.category}?${url}`, undefined, { scroll: false });
     }
-  }, [firstSelect, secondSelect]);
+  }
 
   return (
-    <Styled.MarketSelectContainer>
-      <form
-        name={label.dataName}
-        onSubmit={(e: MarketFormTarget) => formHandler(e, label)}
-      >
-        <Typography lineHeight="150%">{label.subject}</Typography>
-        <Styled.FilterBox>
-          <Select
-            width={secondLabel ? undefined : '270'}
-            defaultLabel={firstLabel}
-            label={label}
-            select={firstSelect}
-            changeSelect={changeFirstSelect}
-            optionSet={optionSet}
-            overflow={true}
-          />
-          {secondLabel && (
-            <>
-              <Styled.Hyphen />
-              <Select
-                defaultLabel={secondLabel}
-                label={label}
-                select={secondSelect}
-                changeSelect={changeSecondSelect}
-                optionSet={optionSet}
-                overflow={true}
-              />
-            </>
-          )}
-        </Styled.FilterBox>
-      </form>
-    </Styled.MarketSelectContainer>
+    <Styled.SelectBox>
+      <Select options={options1} />
+      {options2 && (
+        <>
+          <Styled.Hyphen />
+          <Select options={options2} />
+        </>
+      )}
+    </Styled.SelectBox>
   );
 };
 

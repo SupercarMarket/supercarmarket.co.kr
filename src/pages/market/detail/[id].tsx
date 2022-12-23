@@ -17,8 +17,9 @@ interface MarketDetailPageProps {
 }
 
 const MarketDetailPage = ({ id }: MarketDetailPageProps) => {
+  const { push, query, back } = useRouter();
   const { data } = useMarketDetail(id);
-  const { back } = useRouter();
+  const keywordRef = React.useRef<HTMLInputElement>(null);
 
   if (!data) return <div>로딩중?</div>;
 
@@ -27,6 +28,23 @@ const MarketDetailPage = ({ id }: MarketDetailPageProps) => {
       behavior: 'smooth',
       top: 0,
     });
+
+  const keydownHandler = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && keywordRef.current !== null) {
+      const queries = { ...query };
+
+      queries.keyword = keywordRef.current.value;
+      keywordRef.current.value = '';
+
+      const queryString = Object.entries(queries)
+        .map(([key, value]) => `${key}=${value}`)
+        .join('&');
+
+      push(`/market/${query.category}?${queryString}`);
+    }
+  };
+
+  console.log(data);
 
   return (
     <Wrapper
@@ -66,6 +84,8 @@ const MarketDetailPage = ({ id }: MarketDetailPageProps) => {
           variant="Line"
           width="540px"
           placeholder="검색어를 입력하세요"
+          onKeyDown={keydownHandler}
+          ref={keywordRef}
         />
       </Wrapper>
     </Wrapper>

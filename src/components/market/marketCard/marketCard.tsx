@@ -1,12 +1,10 @@
 import Container from 'components/common/container/container';
 import Typography from 'components/common/typography';
-import { FUEL_KIND } from 'constants/market';
 import { useRouter } from 'next/dist/client/router';
 import Image from 'next/image';
 import React from 'react';
 import { WithBlurredImage } from 'types/magazine';
 import { MarketDto } from 'types/market';
-import { convertMileageToKilometers } from 'utils/market/marketList';
 
 import * as Styled from './marketCard.styled';
 
@@ -21,10 +19,12 @@ const MarketCard = ({
   price,
   year,
 }: WithBlurredImage<MarketDto>) => {
-  const { push } = useRouter();
+  const { push, asPath } = useRouter();
+  const formatter = Intl.NumberFormat('ko-KR', { notation: 'compact' }).format;
 
   const onClick = (id: string) => {
-    push(`/market/detail/${id}`);
+    const query = asPath.split('?')[1];
+    push(`/market/detail/${id}?${query}`);
   };
 
   return (
@@ -38,7 +38,6 @@ const MarketCard = ({
           height={180}
           placeholder="blur"
           blurDataURL={base64}
-          layout="fixed"
           src={imgSrc}
           alt="thumbnail"
           style={{ borderRadius: '4px' }}
@@ -69,14 +68,12 @@ const MarketCard = ({
       >
         <Typography fontSize="body-14">{`${year}`}</Typography>
         <Styled.Divider />
-        <Typography fontSize="body-14">{FUEL_KIND[fuel]}</Typography>
+        <Typography fontSize="body-14">{fuel}</Typography>
         <Styled.Divider />
-        <Typography fontSize="body-14">
-          {convertMileageToKilometers(mileage)}
-        </Typography>
+        <Typography fontSize="body-14">{`${formatter(mileage)}km`}</Typography>
       </Styled.DivideArea>
       <Typography fontSize="body-14" fontWeight="bold" color="system-1">
-        {price ? price : '상담'}
+        {price ? `${formatter(price * 10000)}원` : '상담'}
       </Typography>
     </Container>
   );

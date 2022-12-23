@@ -80,7 +80,6 @@ const MagazineBanner = ({
         <Image
           src={data.imgSrc}
           alt="thumbnail"
-          layout="fixed"
           width={590}
           height={394}
           placeholder="blur"
