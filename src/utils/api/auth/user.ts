@@ -81,11 +81,12 @@ const signInApi: NextApiHandler = async (req, res) => {
 
 const oauthApi: NextApiHandler = async (req, res) => {
   const { provider } = req.query as Params;
-  const {} = req.body;
+  const { sub, name, email, picture } = req.body;
 
-  catchNoExist(provider);
+  catchNoExist(provider, sub, name, email, picture);
+
   try {
-    const signIn = await baseFetcher(
+    const oauth = await baseFetcher(
       `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/user/login`,
       {
         headers: {
@@ -93,10 +94,11 @@ const oauthApi: NextApiHandler = async (req, res) => {
         },
         method: 'POST',
         params: provider,
+        body: JSON.stringify({ sub, name, email, picture }),
       }
     );
 
-    return res.status(200).json(signIn);
+    return res.status(200).json(oauth);
   } catch (error) {
     throw new Error(getErrorMessage(error));
   }

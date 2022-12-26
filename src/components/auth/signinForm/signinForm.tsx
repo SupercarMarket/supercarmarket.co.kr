@@ -11,7 +11,7 @@ import {
   useAuthState,
 } from 'feature/authProvider';
 import Link from 'next/link';
-import { signIn, signOut } from 'next-auth/react';
+import { signIn } from 'next-auth/react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { catchNoExist } from 'utils/misc';
 
@@ -99,7 +99,6 @@ const LocalFormItem = () => {
           </Button>
           <Links />
         </Form>
-        <button onClick={() => signOut({ redirect: false })}>logout</button>
       </FormProvider>
     </AuthProvider>
   );
