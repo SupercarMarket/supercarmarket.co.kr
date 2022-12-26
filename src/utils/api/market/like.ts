@@ -21,7 +21,11 @@ const marketLikeApi: NextApiHandler = async (req, res) => {
       }
     );
 
-    if (!response.ok) throw new ServerApiError(response.url);
+    if (!response.ok)
+      throw new ServerApiError({
+        status: response.status,
+        message: response.statusText,
+      });
 
     const like = await response.json();
     return res.status(200).json(like);
