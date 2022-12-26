@@ -25,7 +25,8 @@ const baseFetcher = async (url: string, options: FetcherRequestInit) => {
 
     if (!response.ok)
       throw new ServerApiError({
-        message: url,
+        message: response.statusText,
+        status: response.status,
       });
 
     return await response.json();

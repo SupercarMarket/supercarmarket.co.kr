@@ -10,7 +10,7 @@ import type { Provider } from 'next-auth/providers';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
 import KakaoProvider from 'next-auth/providers/kakao';
-import { isExpire } from 'utils/api/auth/token';
+import { isExpire, refreshToken } from 'utils/api/auth/token';
 import { baseFetcher } from 'utils/api/fetcher';
 
 const providers: Provider[] = [
@@ -41,9 +41,9 @@ const providers: Provider[] = [
           return {
             id: credentials.id,
             sub: credentials.id,
-            accessToken: signin.data.access_TOKEN,
-            refreshToken: signin.data.refresh_TOKEN,
-            expire: signin.data.exp || 123123123123123,
+            accessToken: signin.data.access_token,
+            refreshToken: signin.data.refresh_token,
+            expire: signin.data.exp,
             verified: true,
             provider: 'local',
           };
@@ -80,18 +80,19 @@ const callbacks: Partial<CallbacksOptions<Profile, Account>> | undefined = {
     if (account && user)
       return {
         accessToken: user.accessToken,
-        refreshToken: user.accessToken,
+        refreshToken: user.refreshToken,
         expire: user.expire,
         sub: user.sub,
         provider: user.provider,
       };
 
     // * 토큰이 만료 안될 때
-    // if(isExpire(exp)) return
+    if (isExpire(token.expire)) return token;
 
-    console.log('token : ', token);
     // * 토큰 만료
-    return token;
+    const newToken = await refreshToken(token.refreshToken);
+
+    return { ...token, ...newToken };
   },
   session({ session, token }) {
     session.accessToken = token.accessToken;
@@ -129,3 +130,11 @@ const NextAuthHandler: NextApiHandler = (req, res) =>
 
 export { nextAuthOptions };
 export default NextAuthHandler;
+
+// ! oauth 로그인 플로우
+// ? 1. oauth 로그인
+// ? 2. oauth로 가입한 내역이 있는지 확인
+// ? 3-1. 가입했다면 정상적으로 oauth 로그인 -> 이 경우엔 여기서 끝 (내정보 api) -> oauth api -> next-auth
+// ? 3-2. phone 인증 페이지로 리다이렉트 가입하지 않았다면 jwt로 oauth 회원 로그인에 필요한 정보들을 쿠키에 저장 (httpOnly, 만료 시간은 1시간)  ->
+// ? 4. 추가적인 phone 인증 페이지로 리다이렉트 시키고 인증을 받는다.
+// ? 5. 핸드폰 정보를 포함하여 jwt에 저장된 회원 정보들을 포함하여 oauth 로그인 -> 서버 단에서 요청

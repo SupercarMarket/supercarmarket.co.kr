@@ -72,7 +72,11 @@ const LocalFormItem = () => {
     const { id, password } = data;
     catchNoExist(id, password);
     console.log(id, password);
-    signIn('credentials', { id, password, redirect: false });
+    signIn('credentials', { id, password, redirect: false }).then((result) => {
+      if (!result) return;
+      const { error, ok, status } = result;
+      console.log(error, ok, status);
+    });
   });
   return (
     <AuthProvider>
