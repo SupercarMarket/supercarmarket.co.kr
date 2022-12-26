@@ -1,19 +1,16 @@
-'use client';
-
 import styled from 'styled-components';
 
-const MarketSelectContainer = styled.div``;
-
-const FilterBox = styled.div`
+const SelectBox = styled.div`
   display: flex;
   align-items: center;
-  gap: 4px;
+  width: 270px;
 `;
 
 const Hyphen = styled.div`
-  width: 8px;
+  width: 16px;
   height: 1px;
-  background: ${({ theme }) => theme.color['greyScale-6']};
+  margin: 0 8px;
+  background: ${({ theme }) => theme.color.black};
 `;
 
-export { FilterBox, Hyphen, MarketSelectContainer };
+export { Hyphen, SelectBox };

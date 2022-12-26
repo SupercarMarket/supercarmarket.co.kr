@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import type { DuplicationList, Signin, Signup } from 'types/auth';
 import { baseFetcher } from 'utils/api/fetcher';
 
@@ -99,3 +100,15 @@ export {
   signIn,
   signUp,
 };
+=======
+import { phone } from 'utils/api/auth';
+
+import createAsyncDispatcher from '.';
+
+const requestAuthNumber = createAsyncDispatcher<'REQUEST_AUTH', string>(
+  'REQUEST_AUTH',
+  phone.requestAuthNumber
+);
+
+export { requestAuthNumber };
+>>>>>>> 45c355dfdce16a4132d1d52bd9d7eabb4caf0864

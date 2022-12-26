@@ -5,8 +5,13 @@ type ErrorWithMessage = {
 const isValidQuery = (query: string | null, ...values: string[]) => {
   if (!query) return false;
   if (!values) return false;
+<<<<<<< HEAD
   if (values.includes(query)) return true;
   return false;
+=======
+  if (values.includes(query)) return false;
+  return true;
+>>>>>>> 45c355dfdce16a4132d1d52bd9d7eabb4caf0864
 };
 
 const isErrorWithMessage = (error: unknown): error is ErrorWithMessage => {

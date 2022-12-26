@@ -9,7 +9,7 @@ interface SelectProps {
 const SelectContainer = styled.div<SelectProps>`
   box-sizing: border-box;
   position: relative;
-  width: ${({ width }) => width}px;
+  width: ${({ width }) => width};
 `;
 
 const Backdrop = styled.div<{ toggle: boolean }>`
@@ -30,6 +30,7 @@ const Backdrop = styled.div<{ toggle: boolean }>`
 
 interface AlignProps {
   align?: 'left' | 'center' | 'right';
+  active?: boolean;
 }
 
 const SelectCurrentButton = styled.button<AlignProps>`
@@ -69,13 +70,14 @@ interface SelectOptionListProps {
 
 const SelectOptionList = styled.ul<SelectOptionListProps>`
   box-sizing: border-box;
-  width: ${({ width }) => width}px;
+  width: ${({ width }) => width};
+  max-height: 200px;
   display: none;
   position: absolute;
-  overflow: scroll;
   background: ${({ theme }) => theme.color.white};
   border: 1px solid ${({ theme }) => theme.color['greyScale-4']};
   border-radius: 4px;
+  overflow: scroll;
   cursor: pointer;
   z-index: 20;
 
@@ -84,13 +86,6 @@ const SelectOptionList = styled.ul<SelectOptionListProps>`
     css`
       display: block;
     `}
-
-  ${({ over }) =>
-    over &&
-    css`
-      max-height: 200px;
-      overflow: scroll;
-    `}
 `;
 
 const SelectOptionItem = styled.li``;
@@ -98,10 +93,18 @@ const SelectOptionItem = styled.li``;
 const SelectOptionButton = styled(SelectCurrentButton)`
   border: none;
   border-radius: 0px;
+
   :hover {
     color: #b79f7b;
     background: ${({ theme }) => theme.color['greyScale-2']};
   }
+
+  ${({ active }) =>
+    active &&
+    css`
+      color: #b79f7b;
+      background: ${({ theme }) => theme.color['greyScale-2']};
+    `}
 
   ${({ align }) =>
     align &&

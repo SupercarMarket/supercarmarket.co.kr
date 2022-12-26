@@ -10,13 +10,17 @@ import type { Provider } from 'next-auth/providers';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
 import KakaoProvider from 'next-auth/providers/kakao';
+<<<<<<< HEAD
 import { isExpire, refreshToken } from 'utils/api/auth/token';
 import { baseFetcher } from 'utils/api/fetcher';
+=======
+>>>>>>> 45c355dfdce16a4132d1d52bd9d7eabb4caf0864
 
 const providers: Provider[] = [
   CredentialsProvider({
     name: 'Credentials',
     credentials: {
+<<<<<<< HEAD
       id: { label: 'id', type: 'text' },
       password: { label: 'password', type: 'password' },
     },
@@ -50,6 +54,17 @@ const providers: Provider[] = [
 
         return null;
       } catch (error) {
+=======
+      username: { label: 'id', type: 'text' },
+      password: { label: 'password', type: 'password' },
+    },
+    async authorize(credentials) {
+      const user = { id: 'blan19', password: 'qweqweqwe' };
+
+      if (user) {
+        return user;
+      } else {
+>>>>>>> 45c355dfdce16a4132d1d52bd9d7eabb4caf0864
         return null;
       }
     },
@@ -72,6 +87,7 @@ const providers: Provider[] = [
 ];
 
 const callbacks: Partial<CallbacksOptions<Profile, Account>> | undefined = {
+<<<<<<< HEAD
   async jwt({ token, account, user }) {
     // * next-auth 타입 추론 버그로 인해 단언 사용
     console.log('user : ', user, 'account : ', account);
@@ -113,15 +129,27 @@ const callbacks: Partial<CallbacksOptions<Profile, Account>> | undefined = {
     if (url === '/auth/signin') return `${baseUrl}/auth/signin`;
     return baseUrl;
   },
+=======
+  jwt({ token, account }) {
+    console.log('token : ', token, 'account : ', account);
+    return token;
+  },
+  session({ session, token, user }) {
+    return session;
+  },
+>>>>>>> 45c355dfdce16a4132d1d52bd9d7eabb4caf0864
 };
 
 const nextAuthOptions: NextAuthOptions = {
   providers,
   callbacks,
+<<<<<<< HEAD
   pages: {
     signIn: '/auth/signin',
     signOut: '/auth/signup',
   },
+=======
+>>>>>>> 45c355dfdce16a4132d1d52bd9d7eabb4caf0864
   secret: process.env.NEXT_PUBLIC_AUTH_SECRET,
 };
 
@@ -130,6 +158,7 @@ const NextAuthHandler: NextApiHandler = (req, res) =>
 
 export { nextAuthOptions };
 export default NextAuthHandler;
+<<<<<<< HEAD
 
 // ! oauth 로그인 플로우
 // ? 1. oauth 로그인
@@ -138,3 +167,5 @@ export default NextAuthHandler;
 // ? 3-2. phone 인증 페이지로 리다이렉트 가입하지 않았다면 jwt로 oauth 회원 로그인에 필요한 정보들을 쿠키에 저장 (httpOnly, 만료 시간은 1시간)  ->
 // ? 4. 추가적인 phone 인증 페이지로 리다이렉트 시키고 인증을 받는다.
 // ? 5. 핸드폰 정보를 포함하여 jwt에 저장된 회원 정보들을 포함하여 oauth 로그인 -> 서버 단에서 요청
+=======
+>>>>>>> 45c355dfdce16a4132d1d52bd9d7eabb4caf0864

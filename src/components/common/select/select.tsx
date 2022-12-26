@@ -1,68 +1,77 @@
 import Typography from 'components/common/typography';
-import React, { useState } from 'react';
-import { MarketOptionType } from 'types/market';
+import { useRouter } from 'next/router';
+import React from 'react';
+import { SelectType } from 'types/market';
+import { makeSelectQuery } from 'utils/market/marketFilter';
 
 import ArrowBottom from '../../../assets/svg/arrow-bottom.svg';
 import * as S from './select.styled';
 
 interface SelectProps {
   width?: string;
-  defaultLabel: string;
-  select: MarketOptionType | null;
-  optionSet: MarketOptionType[];
-  changeSelect: (o: MarketOptionType) => void;
-  overflow?: boolean;
   align?: 'left' | 'center' | 'right';
-  label: {
-    subject?: string;
-    dataName: string;
-  };
+  options: SelectType;
 }
 
-const Select = ({
-  width = '127',
-  label: { subject, dataName },
-  defaultLabel,
-  select,
-  changeSelect,
-  overflow,
-  align = 'left',
-  optionSet,
-}: SelectProps) => {
-  const [toggle, setToggle] = useState<boolean>(false);
+const Select = ({ options, width = '100%', align }: SelectProps) => {
+  const { optionSet, defaultLabel } = options;
+  const { push, query } = useRouter();
+  const [toggle, setToggle] = React.useState<boolean>(false);
+
+  const optionValue = React.useMemo(() => {
+    const check = (val: string, dat: string) => {
+      const [v1, v2] = val.split(' ');
+      const [d1, d2] = dat.split(' ');
+      return v1 === query[d1] && v2 === query[d2];
+    };
+
+    const options = optionSet.find(({ value, dataName }) =>
+      check(value, dataName)
+    );
+
+    return { option: options?.option, value: options?.value };
+  }, [optionSet, query]);
 
   const onToggle = () => setToggle(!toggle);
   const closeToggle = () => setToggle(false);
 
-  const changeCurrent = (option: MarketOptionType) => {
-    changeSelect(option);
+  const selectOption = (dataName: string, value: string) => {
+    const queryObj = { ...query };
+
+    const url = makeSelectQuery(
+      queryObj as { [key: string]: string },
+      dataName,
+      value
+    );
+
+    push(`/market/${queryObj.category}?${url}`, undefined, {
+      scroll: false,
+    });
+
     closeToggle();
   };
 
   return (
     <S.SelectContainer width={width}>
-      <input
-        readOnly
-        hidden
-        name={dataName}
-        value={(select && select.value) || ''}
-        aria-label={(select && select.option) || ''}
-      />
       <S.Backdrop toggle={toggle} onClick={closeToggle} />
       <S.SelectCurrentButton type="button" onClick={onToggle} align={align}>
         <Typography fontSize="body-16">
-          {select !== null ? select.option : defaultLabel}
+          {optionValue.option || defaultLabel}
         </Typography>
         <ArrowBottom width="13px" height="13px" />
       </S.SelectCurrentButton>
-      <S.SelectOptionList width={width} toggle={toggle} over={overflow}>
-        {optionSet.map((option) => (
+      <S.SelectOptionList width={width} toggle={toggle}>
+        {optionSet.map(({ option, dataName, value }) => (
           <S.SelectOptionItem
-            key={option.option}
-            onClick={() => changeCurrent(option)}
+            key={option}
+            onClick={() => selectOption(dataName, value)}
           >
-            <S.SelectOptionButton align={align}>
-              <Typography fontSize="body-16">{option.option}</Typography>
+            <S.SelectOptionButton
+              type="button"
+              active={optionValue.option === option}
+              align={align}
+            >
+              <Typography fontSize="body-16">{option}</Typography>
             </S.SelectOptionButton>
           </S.SelectOptionItem>
         ))}
@@ -71,4 +80,4 @@ const Select = ({
   );
 };
 
-export default Select;
+export default React.memo(Select);

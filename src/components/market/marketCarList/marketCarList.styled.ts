@@ -1,6 +1,6 @@
 'use client';
 
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 const MarketCarListContainer = styled.div`
   margin-bottom: 80px;
@@ -9,6 +9,12 @@ const MarketCarListContainer = styled.div`
 const ButtonBox = styled.div`
   display: flex;
   gap: 9px;
+`;
+
+const SelectBox = styled.div<{ width?: string }>`
+  ${({ width }) => css`
+    width: ${width};
+  `}
 `;
 
 const ViewButton = styled.button`
@@ -50,5 +56,6 @@ export {
   ListFilter,
   MarketCardList,
   MarketCarListContainer,
+  SelectBox,
   ViewButton,
 };

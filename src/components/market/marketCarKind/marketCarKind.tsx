@@ -3,17 +3,15 @@ import { CATEGORY } from 'constants/market';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import * as Styled from './marketCarCategory.styled';
+import * as Styled from './marketCarKind.styled';
 
-interface MarketCarKindProps {
-  category: string;
-}
-
-const MarketCarKind = ({ category }: MarketCarKindProps) => {
-  const { push } = useRouter();
+const MarketCarKind = () => {
+  const { query, push } = useRouter();
 
   const selectCarKind = (value: string) => {
-    push(`/market/${value}`);
+    push(`/market/${value}?category=${value}`, undefined, {
+      scroll: false,
+    });
   };
 
   return (
@@ -21,7 +19,7 @@ const MarketCarKind = ({ category }: MarketCarKindProps) => {
       {CATEGORY.map(({ option, value }) => (
         <Styled.MarketCarKindItem
           key={option}
-          active={category === value}
+          active={query.category === value}
           onClick={() => selectCarKind(value)}
         >
           <Typography>{option}</Typography>

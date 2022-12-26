@@ -4,7 +4,10 @@ import { FindForm } from 'components/auth';
 import Container from 'components/common/container';
 import Title from 'components/common/title';
 import layout from 'components/layout';
+<<<<<<< HEAD
 import { AuthProvider } from 'feature/authProvider';
+=======
+>>>>>>> 45c355dfdce16a4132d1d52bd9d7eabb4caf0864
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 import { isValidQuery } from 'utils/misc';
@@ -28,9 +31,13 @@ const Find = () => {
       <Title textAlign="center">
         {type === 'id' ? '아이디' : '비밀번호'} 찾기
       </Title>
+<<<<<<< HEAD
       <AuthProvider>
         {(type === 'id' || type === 'password') && <FindForm type={type} />}
       </AuthProvider>
+=======
+      {(type === 'id' || type === 'password') && <FindForm type={type} />}
+>>>>>>> 45c355dfdce16a4132d1d52bd9d7eabb4caf0864
     </Container>
   );
 };

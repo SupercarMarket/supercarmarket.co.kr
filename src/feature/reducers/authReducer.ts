@@ -3,6 +3,7 @@ import type { AuthAction, AuthInitialState } from 'feature/authProvider';
 
 import { createAsyncHandler } from '.';
 
+<<<<<<< HEAD
 const signUpHandler = createAsyncHandler<AuthAction, AuthInitialState>(
   'SIGNUP_AUTH',
   'signup'
@@ -38,11 +39,19 @@ const duplicateNicknameAuthHandler = createAsyncHandler<
   AuthInitialState
 >('DUPLICATE_NICKNAME_AUTH', 'nickname');
 
+=======
+const authHandler = createAsyncHandler<AuthAction, AuthInitialState>(
+  'REQUEST_AUTH',
+  'authorization'
+);
+
+>>>>>>> 45c355dfdce16a4132d1d52bd9d7eabb4caf0864
 export default function authReducer(
   state: AuthInitialState,
   action: Action<AuthAction>
 ) {
   switch (action.type) {
+<<<<<<< HEAD
     case 'REQUEST_PHONE_AUTH':
     case 'REQUEST_PHONE_AUTH_SUCCESS':
     case 'REQUEST_PHONE_AUTH_ERROR':
@@ -71,6 +80,16 @@ export default function authReducer(
     case 'SIGNIN_AUTH_SUCCESS':
     case 'SIGNIN_AUTH_ERROR':
       return signInHandler(state, action);
+=======
+    case 'REQUEST_AUTH':
+    case 'REQUEST_AUTH_SUCCESS':
+    case 'REQUEST_AUTH_ERROR':
+      return authHandler(state, action);
+    case 'CONFIRM_AUTH':
+    case 'CONFIRM_AUTH_SUCCESS':
+    case 'CONFIRM_AUTH_ERROR':
+      return authHandler(state, action);
+>>>>>>> 45c355dfdce16a4132d1d52bd9d7eabb4caf0864
     default:
       throw new Error(`Unhanded action type`);
   }

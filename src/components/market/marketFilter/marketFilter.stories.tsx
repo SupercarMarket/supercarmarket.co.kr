@@ -6,8 +6,8 @@ export default {
   component: MarketFilter,
 } as ComponentMeta<typeof MarketFilter>;
 
-const Template: ComponentStory<typeof MarketFilter> = (args) => (
-  <MarketFilter {...args} />
+const Template: ComponentStory<typeof MarketFilter> = () => (
+  <MarketFilter />
 );
 
 export const Default = Template.bind({});

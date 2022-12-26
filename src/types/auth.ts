@@ -1,7 +1,10 @@
 interface Signup {
   id: string;
   password: string;
+<<<<<<< HEAD
   passwordConfirm: string;
+=======
+>>>>>>> 45c355dfdce16a4132d1d52bd9d7eabb4caf0864
   name: string;
   nickname: string;
   email: string;

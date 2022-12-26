@@ -18,4 +18,4 @@ const Divider = styled.div`
   background: ${({ theme }) => theme.color['greyScale-4']};
 `;
 
-export { DivideArea, Divider,MarketCard };
+export { DivideArea, Divider, MarketCard };
