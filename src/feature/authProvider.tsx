@@ -3,7 +3,6 @@ import { createContext, useContext, useReducer } from 'react';
 
 import authReducer from './reducers/authReducer';
 
-<<<<<<< HEAD
 type AuthAction =
   | 'SIGNUP_AUTH'
   | 'SIGNIN_AUTH'
@@ -12,16 +11,12 @@ type AuthAction =
   | 'DUPLICATE_ID_AUTH'
   | 'DUPLICATE_EMAIL_AUTH'
   | 'DUPLICATE_NICKNAME_AUTH';
-=======
-type AuthAction = 'REQUEST_AUTH' | 'CONFIRM_AUTH';
->>>>>>> 45c355dfdce16a4132d1d52bd9d7eabb4caf0864
 type AuthDispatch = Dispatch<AuthAction>;
 interface AuthProviderProps {
   children: React.ReactNode;
 }
 
 interface AuthInitialState {
-<<<<<<< HEAD
   authentication: {
     error: null | Error;
     data: null | boolean;
@@ -58,17 +53,11 @@ interface AuthInitialState {
   signin: {
     error: null | Error;
     data: null | boolean;
-=======
-  authorization: {
-    error: boolean;
-    data: null | number;
->>>>>>> 45c355dfdce16a4132d1d52bd9d7eabb4caf0864
     loading: boolean;
   };
 }
 
 const initialState: AuthInitialState = {
-<<<<<<< HEAD
   authentication: {
     error: null,
     data: null,
@@ -101,10 +90,6 @@ const initialState: AuthInitialState = {
   },
   signin: {
     error: null,
-=======
-  authorization: {
-    error: false,
->>>>>>> 45c355dfdce16a4132d1d52bd9d7eabb4caf0864
     data: null,
     loading: false,
   },
@@ -140,9 +125,5 @@ export function useAuthDispatch() {
   return dispatch;
 }
 
-<<<<<<< HEAD
 export type { AuthAction, AuthDispatch, AuthInitialState };
-=======
-export type { AuthAction, AuthInitialState };
->>>>>>> 45c355dfdce16a4132d1d52bd9d7eabb4caf0864
 export { AuthProvider };

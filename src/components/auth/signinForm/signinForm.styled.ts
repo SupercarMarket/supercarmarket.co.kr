@@ -1,14 +1,8 @@
 'use client';
 
-<<<<<<< HEAD
 import { css } from 'styled-components';
 
 const form = css`
-=======
-import styled, { css } from 'styled-components';
-
-const Form = styled.form`
->>>>>>> 45c355dfdce16a4132d1d52bd9d7eabb4caf0864
   width: 340px;
   display: flex;
   flex-direction: column;
@@ -52,8 +46,4 @@ const google = css`
   cursor: pointer;
 `;
 
-<<<<<<< HEAD
 export { form, google, kakao, wrapper };
-=======
-export { Form, google, kakao, wrapper };
->>>>>>> 45c355dfdce16a4132d1d52bd9d7eabb4caf0864
