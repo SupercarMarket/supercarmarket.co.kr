@@ -1,10 +1,10 @@
-import { SignupForm } from 'components/auth';
+import { PhoneForm } from 'components/auth';
 import Container from 'components/common/container';
 import Title from 'components/common/title';
 import layout from 'components/layout';
 import { AuthProvider } from 'feature/authProvider';
 
-const Signup = () => {
+const Phone = () => {
   return (
     <Container
       display="flex"
@@ -13,14 +13,14 @@ const Signup = () => {
       margin="80px 0"
       gap="60px"
     >
-      <Title textAlign="center">회원가입</Title>
+      <Title textAlign="center">핸드폰 인증</Title>
       <AuthProvider>
-        <SignupForm />
+        <PhoneForm />
       </AuthProvider>
     </Container>
   );
 };
 
-Signup.Layout = layout;
+Phone.Layout = layout;
 
-export default Signup;
+export default Phone;

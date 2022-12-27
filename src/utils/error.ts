@@ -1,7 +1,9 @@
 const ServerApiError = class extends Error {
-  constructor(endPoint: string) {
+  status: number;
+  constructor({ message, status }: { message: string; status: number }) {
     super();
-    this.message = `[ERROR] Server ${endPoint} Api Error`;
+    this.status = status;
+    this.message = `[ERROR] ${message}`;
     this.name = 'ServerApiError';
   }
 };

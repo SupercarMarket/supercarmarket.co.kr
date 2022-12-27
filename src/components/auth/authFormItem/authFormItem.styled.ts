@@ -1,10 +1,12 @@
 import { css } from 'styled-components';
 
 const label = css`
-  width: 100%;
+  width: 660px;
   display: flex;
+  flex-direction: column;
   align-items: flex-start;
   justify-content: space-between;
+  gap: 6px;
 `;
 
 const wrapper = css`

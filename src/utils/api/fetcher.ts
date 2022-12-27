@@ -23,7 +23,11 @@ const baseFetcher = async (url: string, options: FetcherRequestInit) => {
   try {
     const response = await fetcher(url, options);
 
-    if (!response.ok) throw new ServerApiError(response.url);
+    if (!response.ok)
+      throw new ServerApiError({
+        message: response.statusText,
+        status: response.status,
+      });
 
     return await response.json();
   } catch (error) {

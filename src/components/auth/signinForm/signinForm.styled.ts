@@ -1,8 +1,8 @@
 'use client';
 
-import styled, { css } from 'styled-components';
+import { css } from 'styled-components';
 
-const Form = styled.form`
+const form = css`
   width: 340px;
   display: flex;
   flex-direction: column;
@@ -46,4 +46,4 @@ const google = css`
   cursor: pointer;
 `;
 
-export { Form, google, kakao, wrapper };
+export { form, google, kakao, wrapper };

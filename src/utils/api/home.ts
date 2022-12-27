@@ -24,7 +24,11 @@ const homeApi: NextApiHandler = async (req, res) => {
       }
     );
 
-    if (!response.ok) throw new ServerApiError(response.url);
+    if (!response.ok)
+      throw new ServerApiError({
+        message: response.statusText,
+        status: response.status,
+      });
 
     const home: MagazineResponse<MagazineDto | MarketDto | CommunityDto> =
       await response.json();

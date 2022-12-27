@@ -1,6 +1,7 @@
 interface Signup {
   id: string;
   password: string;
+  passwordConfirm: string;
   name: string;
   nickname: string;
   email: string;

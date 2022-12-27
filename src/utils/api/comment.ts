@@ -70,11 +70,14 @@ const commentUpdateApi: NextApiHandler = async (req, res) => {
 
   try {
     const update = await baseFetcher(
-      `${process.env.NEXT_PUBLIC_URL}/server/api/v1/${postId}/comment/${commentId}`,
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/post/${postId}/comment/${commentId}`,
       {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
+        },
+        query: {
+          category: 'magazine',
         },
         body: JSON.stringify({ contents }),
       }

@@ -1,43 +1,24 @@
 import Button from 'components/common/button';
 import Container from 'components/common/container';
 import Divider from 'components/common/divider';
+import { Form, FormLabel } from 'components/common/form';
 import Typography from 'components/common/typography';
 import Wrapper from 'components/common/wrapper';
+import auth from 'constants/auth';
+import {
+  AuthProvider,
+  useAuthDispatch,
+  useAuthState,
+} from 'feature/authProvider';
 import Link from 'next/link';
 import { signIn } from 'next-auth/react';
 import { FormProvider, useForm } from 'react-hook-form';
+import { catchNoExist } from 'utils/misc';
 
 import GoogleIcon from '../../../assets/svg/google.svg';
 import KakaoIcon from '../../../assets/svg/kakao.svg';
-import type { Forms } from '../authFormItem/authFormItem';
 import AuthFormItem from '../authFormItem/authFormItem';
 import * as style from './signinForm.styled';
-import { Form } from './signinForm.styled';
-
-const forms: Forms[] = [
-  {
-    variant: 'Default',
-    htmlFor: 'id',
-    label: '아이디',
-    type: 'text',
-    placeholder: '아이디를 입력해주세요',
-    options: {
-      required: true,
-    },
-    errorMessage: '사용 불가능한 아이디입니다',
-    successMessage: '사용 가능한 아이디입니다',
-  },
-  {
-    variant: 'Default',
-    htmlFor: 'password',
-    label: '비밀번호',
-    type: 'password',
-    placeholder: '비밀번호를 입력해주세요',
-    options: {
-      required: true,
-    },
-  },
-];
 
 const oauth = [
   { provider: 'kakao', title: '카카오', icon: <KakaoIcon /> },
@@ -84,25 +65,42 @@ const Links = () => {
 
 const LocalFormItem = () => {
   const methods = useForm<FormState>();
+  const dispatch = useAuthDispatch();
+  const state = useAuthState();
 
   const onSubmit = methods.handleSubmit((data) => {
     const { id, password } = data;
-    signIn('credentials', { id, password, redirect: false });
+    catchNoExist(id, password);
+    console.log(id, password);
+    signIn('credentials', { id, password, redirect: false }).then((result) => {
+      if (!result) return;
+      const { error, ok, status } = result;
+      console.log(error, ok, status);
+    });
   });
   return (
-    <FormProvider {...methods}>
-      <Form onSubmit={onSubmit}>
-        <Wrapper css={style.wrapper}>
-          {forms.map((form) => (
-            <AuthFormItem key={form.htmlFor} {...form} />
-          ))}
-        </Wrapper>
-        <Button type="submit" variant="Primary" fullWidth>
-          로그인
-        </Button>
-        <Links />
-      </Form>
-    </FormProvider>
+    <AuthProvider>
+      <FormProvider {...methods}>
+        <Form css={style.form} onSubmit={onSubmit}>
+          <Wrapper css={style.wrapper}>
+            {auth.signin().map((form) => (
+              <FormLabel
+                key={form.htmlFor}
+                name={form.htmlFor}
+                label={form.label}
+                hidden
+              >
+                <AuthFormItem state={state} dispatch={dispatch} {...form} />
+              </FormLabel>
+            ))}
+          </Wrapper>
+          <Button type="submit" variant="Primary" fullWidth>
+            로그인
+          </Button>
+          <Links />
+        </Form>
+      </FormProvider>
+    </AuthProvider>
   );
 };
 
@@ -113,7 +111,7 @@ const OauthFormItem = () => {
         <Button
           key={service.provider}
           variant="Init"
-          onClick={() => signIn(service.provider)}
+          onClick={() => signIn(service.provider, { redirect: false })}
         >
           <Wrapper
             css={service.provider === 'kakao' ? style.kakao : style.google}
@@ -144,7 +142,9 @@ const SigninForm = () => {
       alignItems="center"
       gap="64px"
     >
-      <LocalFormItem />
+      <AuthProvider>
+        <LocalFormItem />
+      </AuthProvider>
       <OauthFormItem />
     </Container>
   );
