@@ -1,3 +1,4 @@
+import { AccountNavbar } from 'components/account';
 import Container from 'components/common/container';
 import type { AccountRoute } from 'constants/account';
 import { PropsWithChildren } from 'react';
@@ -9,7 +10,7 @@ interface AccountLayoutProps extends PropsWithChildren {
   profileSrc: string;
   backgroundSrc: string;
   isMyAccountPage: boolean;
-  accountRoutes: AccountRoute;
+  accountRoutes: AccountRoute[];
 }
 
 const AccountLayout = (props: AccountLayoutProps) => {
@@ -20,6 +21,7 @@ const AccountLayout = (props: AccountLayoutProps) => {
       <Container>
         <h1></h1>
       </Container>
+      <AccountNavbar accountRoutes={accountRoutes} />
       {children}
     </Layout>
   );

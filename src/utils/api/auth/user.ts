@@ -191,7 +191,7 @@ export {
   checkAlreadyMember,
   duplicateApi,
   getSession,
+  oauthApi,
   signInApi,
   signUpApi,
-  oauthApi,
 };

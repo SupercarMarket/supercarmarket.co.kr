@@ -1,9 +1,14 @@
 import AccountLayout from 'components/layout/accountLayout';
+import type { AccountTab } from 'constants/account';
 import account from 'constants/account';
-import type { GetServerSideProps, GetServerSidePropsContext } from 'next';
+import type { GetServerSidePropsContext } from 'next';
 import type { Session } from 'next-auth';
 import type { Params } from 'types/base';
 import { getSession } from 'utils/api/auth/user';
+
+type AccountParams = Params & {
+  tab: AccountTab | null;
+};
 
 const Account = () => {
   return (
@@ -15,25 +20,53 @@ const Account = () => {
 
 Account.Layout = AccountLayout;
 
-const getUserPageProps = async (
+export const getUserPageProps = async (
   ctx: GetServerSidePropsContext,
   session: Session
 ) => {
-  const { sub } = ctx.query as Params;
+  const { query } = ctx;
+  const { sub, tab } = query as AccountParams;
   const isMyAccountPage = session.sub === sub;
+  const isCorrectTab = tab && account.accountTab.includes(tab);
   const accountRoutes = isMyAccountPage
     ? account.accountRoutes.myAccount(sub)
     : account.accountRoutes.someoneAccount(sub);
 
+  /**
+   * 타유저인 경우 작성글과 댓글단 글만 볼 수 있다.
+   * 이에 따라 쿼리 접근 제한 처리
+   */
+  if ((isMyAccountPage && isCorrectTab) || (!isMyAccountPage && isCorrectTab))
+    return {
+      props: {
+        isMyAccountPage,
+        accountRoutes,
+        tab,
+      },
+    };
+  if (isMyAccountPage && !isCorrectTab)
+    return {
+      props: {
+        isMyAccountPage,
+        accountRoutes,
+        tab: account.accountTab[0],
+      },
+    };
+  if (!isMyAccountPage && !isCorrectTab)
+    return {
+      props: {
+        isMyAccountPage,
+        accountRoutes,
+        tab: account.accountTab[2],
+      },
+    };
+
   return {
-    props: {
-      isMyAccountPage,
-      accountRoutes,
-    },
+    notFound: true,
   };
 };
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const { req } = ctx;
   const session = await getSession({ req });
 
