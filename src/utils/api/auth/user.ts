@@ -1,4 +1,7 @@
 import type { NextApiHandler } from 'next';
+import type { Session } from 'next-auth';
+import type { GetSessionParams } from 'next-auth/react';
+import { getSession as getSessionInner } from 'next-auth/react';
 import type { Signin, Signup } from 'types/auth';
 import type { Params } from 'types/base';
 import { catchNoExist, getErrorMessage } from 'utils/misc';
@@ -172,9 +175,23 @@ const profile: NextApiHandler = async (req) => {
   }
 };
 
+/**
+ * @description
+ * next-auth/react 대신 사용
+ */
+const getSession = async (
+  options: GetSessionParams
+): Promise<Session | null> => {
+  const session = await getSessionInner(options);
+
+  // that these are equal are ensured in `[...nextauth]`'s callback
+  return session as Session | null;
+};
+
 export {
   checkAlreadyMember,
   duplicateApi,
+  getSession,
   oauthApi,
   profile,
   signInApi,
