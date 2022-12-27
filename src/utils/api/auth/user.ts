@@ -177,7 +177,6 @@ const profile: NextApiHandler = async (req) => {
 
 /**
  * @description
- * next-auth/react 대신 사용
  */
 const getSession = async (
   options: GetSessionParams
@@ -192,8 +191,7 @@ export {
   checkAlreadyMember,
   duplicateApi,
   getSession,
-  oauthApi,
-  profile,
   signInApi,
   signUpApi,
+  oauthApi,
 };
