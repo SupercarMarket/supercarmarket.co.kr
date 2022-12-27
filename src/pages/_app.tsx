@@ -45,7 +45,7 @@ function MyApp({
         <Hydrate state={dehydratedState}>
           <SessionProvider session={session}>
             <GlobalStyle />
-            <Layout>
+            <Layout {...pageProps}>
               <Component {...pageProps} />
             </Layout>
           </SessionProvider>
