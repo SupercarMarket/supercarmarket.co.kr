@@ -81,9 +81,9 @@ const signInApi: NextApiHandler = async (req, res) => {
 
 const oauthApi: NextApiHandler = async (req, res) => {
   const { provider } = req.query as Params;
-  const { sub, name, email, picture } = req.body;
+  const { sub, nickname, email, picture } = req.body;
 
-  catchNoExist(provider, sub, name, email, picture);
+  catchNoExist(provider, sub, nickname, email, picture);
 
   try {
     const oauth = await baseFetcher(
@@ -94,7 +94,7 @@ const oauthApi: NextApiHandler = async (req, res) => {
         },
         method: 'POST',
         params: provider,
-        body: JSON.stringify({ sub, name, email, picture }),
+        body: JSON.stringify({ sub, name: nickname, email, picture }),
       }
     );
 
