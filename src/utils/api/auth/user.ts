@@ -3,10 +3,11 @@ import type { Session } from 'next-auth';
 import type { GetSessionParams } from 'next-auth/react';
 import { getSession as getSessionInner } from 'next-auth/react';
 import type { Signin, Signup } from 'types/auth';
-import type { Params } from 'types/base';
+import type { Params, User } from 'types/base';
+import { ErrorCode } from 'utils/error';
 import { catchNoExist, getErrorMessage } from 'utils/misc';
 
-import { baseFetcher } from '../fetcher';
+import { baseApi, baseFetcher } from '../fetcher';
 
 const signUpApi: NextApiHandler = async (req, res) => {
   const {
@@ -151,28 +152,48 @@ const checkAlreadyMember: NextApiHandler = async (req, res) => {
   }
 };
 
-const profile: NextApiHandler = async (req) => {
-  const { provider, sub } = req.query as Params;
+const findIdApi: NextApiHandler = async (req, res) => {
+  const { phone, name, authentication } = req.body;
 
-  catchNoExist(provider, sub);
+  catchNoExist(phone, name, authentication);
 
-  try {
-    const profile = await baseFetcher(
-      `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/user/${sub}`,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        method: 'GET',
-      }
-    );
+  const { status, ok, data } = await baseApi<{ data: { user: User } }>(
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/user/find-id`,
+    {
+      method: 'POST',
+      data: { phone, name, code: authentication },
+    }
+  );
 
-    // if(!profile) setCookie();
+  if (!ok) return res.status(status).json({ message: ErrorCode[`${status}`] });
 
-    return profile;
-  } catch (error) {
-    return true;
-  }
+  return res.status(200).json({ data });
+};
+
+const findPasswordApi: NextApiHandler = async (req, res) => {
+  const { phone, id, authentication } = req.body;
+
+  catchNoExist(phone, id, authentication);
+
+  return res.status(200).json({ phone, id, authentication });
+};
+
+const resetPasswordApi: NextApiHandler = async (req, res) => {
+  const { id, password, phone, authentication } = req.body;
+
+  catchNoExist(id, password, phone, authentication);
+
+  const { status, ok, data } = await baseApi<{ data: { success: boolean } }>(
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/user/change-pw`,
+    {
+      method: 'PATCH',
+      data: { id, password, phone, code: authentication },
+    }
+  );
+
+  if (!ok) return res.status(status).json({ message: ErrorCode[`${status}`] });
+
+  return res.status(200).json({ data });
 };
 
 /**
@@ -190,8 +211,11 @@ const getSession = async (
 export {
   checkAlreadyMember,
   duplicateApi,
+  findIdApi,
+  findPasswordApi,
   getSession,
   oauthApi,
+  resetPasswordApi,
   signInApi,
   signUpApi,
 };

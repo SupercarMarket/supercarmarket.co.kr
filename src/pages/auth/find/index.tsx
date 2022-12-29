@@ -24,9 +24,11 @@ const Find = ({
       <Title textAlign="center">
         {type === 'id' ? '아이디' : '비밀번호'} 찾기
       </Title>
-      <AuthProvider>
-        {(type === 'id' || type === 'password') && <FindForm type={type} />}
-      </AuthProvider>
+      {(type === 'id' || type === 'password') && (
+        <AuthProvider>
+          <FindForm type={type} />
+        </AuthProvider>
+      )}
     </Container>
   );
 };

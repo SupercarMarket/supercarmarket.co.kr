@@ -1,12 +1,13 @@
+import Alert from 'components/common/alert';
 import Button from 'components/common/button';
 import { Form, FormLabel } from 'components/common/form';
 import auth, { Forms } from 'constants/auth';
-import {
-  AuthProvider,
-  useAuthDispatch,
-  useAuthState,
-} from 'feature/authProvider';
+import { findId, findPassword } from 'feature/actions/authActions';
+import { useAuthDispatch, useAuthState } from 'feature/authProvider';
+import { useRouter } from 'next/navigation';
+import * as React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import { catchNoExist } from 'utils/misc';
 
 import AuthFormItem from '../authFormItem/authFormItem';
 import * as style from './findForm.style';
@@ -23,7 +24,7 @@ const forms: FindForms = {
 
 interface FormsState {
   id: string;
-  password: string;
+  name: string;
   phone: string;
   authentication: string;
 }
@@ -36,27 +37,46 @@ const FindForm = ({ type }: FindFormProps) => {
   const methods = useForm<FormsState>();
   const dispatch = useAuthDispatch();
   const state = useAuthState();
+  const { push } = useRouter();
+  const {
+    findId: findIdResult,
+    findPassword: findPasswordResult,
+    authentication: authenticationResult,
+    phone: phoneResult,
+  } = state;
 
-  const onSubmit = methods.handleSubmit((data) => console.log(data));
+  const onSubmit = methods.handleSubmit((data) => {
+    const { id, name, phone, authentication } = data;
+
+    catchNoExist(authenticationResult.data, phoneResult.data);
+
+    if (type === 'id') findId(dispatch, { name, phone, authentication });
+    else if (type === 'password')
+      findPassword(dispatch, { id, phone, authentication });
+  });
+
+  React.useEffect(() => {
+    console.log(findIdResult.data);
+    if (findIdResult.data) push('/auth/find/result-id');
+    if (findPasswordResult.data) push('/auth/find/result-password');
+  }, [findIdResult.data, findPasswordResult.data, push]);
   return (
-    <AuthProvider>
-      <FormProvider {...methods}>
-        <Form css={style.form} onSubmit={onSubmit}>
-          {forms[type].map((form) => (
-            <FormLabel
-              key={form.htmlFor}
-              name={form.htmlFor}
-              label={form.label}
-            >
-              <AuthFormItem state={state} dispatch={dispatch} {...form} />
-            </FormLabel>
-          ))}
-        </Form>
+    <FormProvider {...methods}>
+      <Form css={style.form} onSubmit={onSubmit}>
+        {forms[type].map((form) => (
+          <FormLabel key={form.htmlFor} name={form.htmlFor} label={form.label}>
+            <AuthFormItem state={state} dispatch={dispatch} {...form} />
+          </FormLabel>
+        ))}
         <Button width="340px" type="submit" variant="Primary">
           확인
         </Button>
-      </FormProvider>
-    </AuthProvider>
+        {findIdResult.error && <Alert title="에러 발생" severity="error" />}
+        {findPasswordResult.error && (
+          <Alert title="에러 발생" severity="error" />
+        )}
+      </Form>
+    </FormProvider>
   );
 };
 
