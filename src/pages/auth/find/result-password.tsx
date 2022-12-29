@@ -5,7 +5,13 @@ import AuthLayout from 'components/layout/authLayout';
 
 const FindResultPassword = () => {
   return (
-    <Container>
+    <Container
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      margin="80px 0"
+      gap="60px"
+    >
       <Title textAlign="center">비밀번호 재설정</Title>
       <ResultPasswordForm />
     </Container>
