@@ -56,10 +56,13 @@ const FindForm = ({ type }: FindFormProps) => {
   });
 
   React.useEffect(() => {
-    console.log(findIdResult.data);
     if (findIdResult.data) push('/auth/find/result-id');
     if (findPasswordResult.data) push('/auth/find/result-password');
   }, [findIdResult.data, findPasswordResult.data, push]);
+
+  React.useEffect(() => {
+    dispatch({ type: 'RESET_FIELD_AUTH' });
+  }, []);
   return (
     <FormProvider {...methods}>
       <Form css={style.form} onSubmit={onSubmit}>
