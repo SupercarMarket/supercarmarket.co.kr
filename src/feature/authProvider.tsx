@@ -10,7 +10,10 @@ type AuthAction =
   | 'CONFIRM_PHONE_AUTH'
   | 'DUPLICATE_ID_AUTH'
   | 'DUPLICATE_EMAIL_AUTH'
-  | 'DUPLICATE_NICKNAME_AUTH';
+  | 'DUPLICATE_NICKNAME_AUTH'
+  | 'FIND_ID_AUTH'
+  | 'FIND_PASSWORD_AUTH'
+  | 'RESET_PASSWORD_AUTH';
 type AuthDispatch = Dispatch<AuthAction>;
 interface AuthProviderProps {
   children: React.ReactNode;
@@ -55,6 +58,21 @@ interface AuthInitialState {
     data: null | boolean;
     loading: boolean;
   };
+  findId: {
+    error: null | Error;
+    data: null | boolean;
+    loading: boolean;
+  };
+  findPassword: {
+    error: null | Error;
+    data: null | boolean;
+    loading: boolean;
+  };
+  resetPassword: {
+    error: null | Error;
+    data: null | boolean;
+    loading: boolean;
+  };
 }
 
 const initialState: AuthInitialState = {
@@ -89,6 +107,21 @@ const initialState: AuthInitialState = {
     loading: false,
   },
   signin: {
+    error: null,
+    data: null,
+    loading: false,
+  },
+  findId: {
+    error: null,
+    data: null,
+    loading: false,
+  },
+  findPassword: {
+    error: null,
+    data: null,
+    loading: false,
+  },
+  resetPassword: {
     error: null,
     data: null,
     loading: false,
