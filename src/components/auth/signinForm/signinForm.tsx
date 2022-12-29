@@ -68,15 +68,18 @@ const LocalFormItem = () => {
   const dispatch = useAuthDispatch();
   const state = useAuthState();
 
-  const onSubmit = methods.handleSubmit((data) => {
+  const { formState } = methods;
+
+  const onSubmit = methods.handleSubmit(async (data) => {
     const { id, password } = data;
     catchNoExist(id, password);
-    console.log(id, password);
-    signIn('credentials', { id, password, redirect: false }).then((result) => {
-      if (!result) return;
-      const { error, ok, status } = result;
-      console.log(error, ok, status);
+    const response = await signIn('Credentials', {
+      id,
+      password,
+      redirect: false,
     });
+    if (!response) alert('fail');
+    else if (!response.error) alert('success');
   });
   return (
     <AuthProvider>
@@ -94,8 +97,13 @@ const LocalFormItem = () => {
               </FormLabel>
             ))}
           </Wrapper>
-          <Button type="submit" variant="Primary" fullWidth>
-            로그인
+          <Button
+            type="submit"
+            variant="Primary"
+            fullWidth
+            disabled={formState.isSubmitting}
+          >
+            {formState.isSubmitting ? '로그인중..' : '로그인'}
           </Button>
           <Links />
         </Form>
@@ -105,13 +113,17 @@ const LocalFormItem = () => {
 };
 
 const OauthFormItem = () => {
+  const handleOauthLogin = (provider: string) => {
+    signIn(provider);
+  };
+
   return (
     <Container display="flex" flexDirection="column" gap="10px">
       {oauth.map((service) => (
         <Button
           key={service.provider}
           variant="Init"
-          onClick={() => signIn(service.provider, { redirect: false })}
+          onClick={() => handleOauthLogin(service.provider)}
         >
           <Wrapper
             css={service.provider === 'kakao' ? style.kakao : style.google}

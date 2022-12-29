@@ -35,5 +35,24 @@ const baseFetcher = async (url: string, options: FetcherRequestInit) => {
   }
 };
 
-export { baseFetcher };
+const baseApi = async (url: string, options: FetcherRequestInit) => {
+  const { body, headers, ...rest } = options;
+  const requestBody = JSON.stringify(body);
+
+  const response = await fetcher(url, {
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      ...headers,
+    },
+    body: requestBody,
+    ...rest,
+  });
+
+  const result = await response.json();
+
+  return { status: response.status, ok: response.ok, ...result };
+};
+
+export { baseApi, baseFetcher };
 export default fetcher;

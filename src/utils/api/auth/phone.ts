@@ -63,8 +63,32 @@ const confirmPhoneAuthApi: NextApiHandler = async (req, res) => {
   }
 };
 
+const registerPhoneApi: NextApiHandler = async (req, res) => {
+  const { phone, authentication, uuid } = req.body;
+
+  catchNoExist(phone, authentication, uuid);
+
+  try {
+    const register = await baseFetcher(
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/user/register-phone`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ phone, code: authentication, token: uuid }),
+      }
+    );
+
+    return res.status(200).json(register);
+  } catch (error) {
+    throw new Error(getErrorMessage(error));
+  }
+};
+
 export {
   confirmPhoneAuthApi,
+  registerPhoneApi,
   requestPhoneAuthApi,
   requestPhoneAuthWithNameApi,
 };

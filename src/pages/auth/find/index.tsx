@@ -1,22 +1,18 @@
-'use client';
-
 import { FindForm } from 'components/auth';
 import Container from 'components/common/container';
 import Title from 'components/common/title';
 import layout from 'components/layout';
 import { AuthProvider } from 'feature/authProvider';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect } from 'react';
+import type {
+  GetServerSidePropsContext,
+  InferGetServerSidePropsType,
+} from 'next';
+import type { Params } from 'types/base';
 import { isValidQuery } from 'utils/misc';
 
-const Find = () => {
-  const router = useRouter();
-  const type = useSearchParams().get('type');
-
-  useEffect(() => {
-    if (isValidQuery(type, 'id', 'password')) router.push('/auth/signin');
-  }, [router, type]);
-
+const Find = ({
+  type,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   return (
     <Container
       display="flex"
@@ -36,5 +32,18 @@ const Find = () => {
 };
 
 Find.Layout = layout;
+
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  const { query } = ctx;
+  const { type } = query as Params;
+
+  if (!isValidQuery(type, 'id', 'password')) return { notFound: true };
+
+  return {
+    props: {
+      type,
+    },
+  };
+};
 
 export default Find;

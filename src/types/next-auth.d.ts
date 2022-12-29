@@ -8,6 +8,10 @@ declare module 'next-auth' {
     refreshToken: string;
     expire: number;
     provider: 'local' | 'kakao' | 'google';
+    newUser?: boolean;
+    nickname: string;
+    email?: string;
+    picture?: string;
   }
   interface User {
     id: string;
@@ -16,7 +20,10 @@ declare module 'next-auth' {
     refreshToken: string;
     expire: number;
     provider: 'local' | 'kakao' | 'google';
-    verified: boolean;
+    newUser?: boolean;
+    nickname: string;
+    email?: string;
+    picture?: string;
   }
 }
 
@@ -27,5 +34,9 @@ declare module 'next-auth/jwt' {
     expire: number;
     sub: string;
     provider: 'local' | 'kakao' | 'google';
+    newUser?: boolean;
+    nickname: string;
+    email?: string;
+    picture?: string;
   }
 }
