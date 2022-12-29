@@ -1,5 +1,7 @@
 import { Dispatch } from 'feature';
 import { createContext, useContext, useReducer } from 'react';
+import { User } from 'types/base';
+import { BaseApiHandlerResponse } from 'utils/api/fetcher';
 
 import authReducer from './reducers/authReducer';
 
@@ -13,7 +15,8 @@ type AuthAction =
   | 'DUPLICATE_NICKNAME_AUTH'
   | 'FIND_ID_AUTH'
   | 'FIND_PASSWORD_AUTH'
-  | 'RESET_PASSWORD_AUTH';
+  | 'RESET_PASSWORD_AUTH'
+  | 'RESET_FIELD_AUTH';
 type AuthDispatch = Dispatch<AuthAction>;
 interface AuthProviderProps {
   children: React.ReactNode;
@@ -60,17 +63,21 @@ interface AuthInitialState {
   };
   findId: {
     error: null | Error;
-    data: null | boolean;
+    data: null | BaseApiHandlerResponse<{ data: User }>;
     loading: boolean;
   };
   findPassword: {
     error: null | Error;
-    data: null | boolean;
+    data: null | BaseApiHandlerResponse<{
+      phone: string;
+      authentication: string;
+      id: string;
+    }>;
     loading: boolean;
   };
   resetPassword: {
     error: null | Error;
-    data: null | boolean;
+    data: null | BaseApiHandlerResponse<{ data: boolean }>;
     loading: boolean;
   };
 }
@@ -159,4 +166,4 @@ export function useAuthDispatch() {
 }
 
 export type { AuthAction, AuthDispatch, AuthInitialState };
-export { AuthProvider };
+export { AuthProvider, initialState };

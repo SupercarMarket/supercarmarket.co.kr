@@ -12,6 +12,8 @@ type FindId = FindAuth & { name: string };
 
 type FindPassword = FindAuth & { id: string };
 
+type ResetPassword = FindAuth & { password: string; id: string };
+
 const signUp = createAsyncDispatcher<'SIGNUP_AUTH', [Signup]>(
   'SIGNUP_AUTH',
   (data) =>
@@ -104,16 +106,17 @@ const findId = createAsyncDispatcher<'FIND_ID_AUTH', [FindId]>(
   (data: FindId) => baseApi('/api/auth/user/find-id', { method: 'POST', data })
 );
 
-const findPassword = createAsyncDispatcher<'FIND_ID_AUTH', [FindPassword]>(
-  'FIND_ID_AUTH',
-  (data: FindPassword) =>
-    baseApi('/api/auth/user/find-password', { method: 'POST', data })
+const findPassword = createAsyncDispatcher<
+  'FIND_PASSWORD_AUTH',
+  [FindPassword]
+>('FIND_PASSWORD_AUTH', (data: FindPassword) =>
+  baseApi('/api/auth/user/find-password', { method: 'POST', data })
 );
 
 const resetPassword = createAsyncDispatcher<
   'RESET_PASSWORD_AUTH',
-  [FindPassword]
->('RESET_PASSWORD_AUTH', (data: FindPassword) =>
+  [ResetPassword]
+>('RESET_PASSWORD_AUTH', (data: ResetPassword) =>
   baseApi('/api/auth/user/reset-password', { method: 'PATCH', data })
 );
 

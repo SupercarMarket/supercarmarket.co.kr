@@ -1,5 +1,9 @@
 import type { Action } from 'feature';
-import type { AuthAction, AuthInitialState } from 'feature/authProvider';
+import {
+  AuthAction,
+  AuthInitialState,
+  initialState,
+} from 'feature/authProvider';
 
 import { createAsyncHandler } from '.';
 
@@ -98,6 +102,8 @@ export default function authReducer(
     case 'RESET_PASSWORD_AUTH_SUCCESS':
     case 'RESET_PASSWORD_AUTH_ERROR':
       return resetPasswordHandler(state, action);
+    case 'RESET_FIELD_AUTH':
+      return initialState;
     default:
       throw new Error(`Unhanded action type`);
   }
