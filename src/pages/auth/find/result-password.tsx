@@ -1,15 +1,17 @@
+import { ResultPasswordForm } from 'components/auth';
 import Container from 'components/common/container';
 import Title from 'components/common/title';
-import layout from 'components/layout';
+import AuthLayout from 'components/layout/authLayout';
 
 const FindResultPassword = () => {
   return (
     <Container>
       <Title textAlign="center">비밀번호 재설정</Title>
+      <ResultPasswordForm />
     </Container>
   );
 };
 
-FindResultPassword.Layout = layout;
+FindResultPassword.Layout = AuthLayout;
 
 export default FindResultPassword;

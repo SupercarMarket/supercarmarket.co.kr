@@ -1,7 +1,7 @@
 import { SigninForm } from 'components/auth';
 import Container from 'components/common/container';
 import Title from 'components/common/title';
-import layout from 'components/layout';
+import AuthLayout from 'components/layout/authLayout';
 
 const Signin = () => {
   return (
@@ -18,6 +18,6 @@ const Signin = () => {
   );
 };
 
-Signin.Layout = layout;
+Signin.Layout = AuthLayout;
 
 export default Signin;

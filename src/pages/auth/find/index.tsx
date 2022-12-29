@@ -1,8 +1,7 @@
 import { FindForm } from 'components/auth';
 import Container from 'components/common/container';
 import Title from 'components/common/title';
-import layout from 'components/layout';
-import { AuthProvider } from 'feature/authProvider';
+import AuthLayout from 'components/layout/authLayout';
 import type {
   GetServerSidePropsContext,
   InferGetServerSidePropsType,
@@ -24,16 +23,12 @@ const Find = ({
       <Title textAlign="center">
         {type === 'id' ? '아이디' : '비밀번호'} 찾기
       </Title>
-      {(type === 'id' || type === 'password') && (
-        <AuthProvider>
-          <FindForm type={type} />
-        </AuthProvider>
-      )}
+      {(type === 'id' || type === 'password') && <FindForm type={type} />}
     </Container>
   );
 };
 
-Find.Layout = layout;
+Find.Layout = AuthLayout;
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const { query } = ctx;

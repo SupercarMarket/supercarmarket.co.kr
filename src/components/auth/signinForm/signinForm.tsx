@@ -5,11 +5,7 @@ import { Form, FormLabel } from 'components/common/form';
 import Typography from 'components/common/typography';
 import Wrapper from 'components/common/wrapper';
 import auth from 'constants/auth';
-import {
-  AuthProvider,
-  useAuthDispatch,
-  useAuthState,
-} from 'feature/authProvider';
+import { useAuthDispatch, useAuthState } from 'feature/authProvider';
 import Link from 'next/link';
 import { signIn } from 'next-auth/react';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -82,33 +78,31 @@ const LocalFormItem = () => {
     else if (!response.error) alert('success');
   });
   return (
-    <AuthProvider>
-      <FormProvider {...methods}>
-        <Form css={style.form} onSubmit={onSubmit}>
-          <Wrapper css={style.wrapper}>
-            {auth.signin().map((form) => (
-              <FormLabel
-                key={form.htmlFor}
-                name={form.htmlFor}
-                label={form.label}
-                hidden
-              >
-                <AuthFormItem state={state} dispatch={dispatch} {...form} />
-              </FormLabel>
-            ))}
-          </Wrapper>
-          <Button
-            type="submit"
-            variant="Primary"
-            fullWidth
-            disabled={formState.isSubmitting}
-          >
-            {formState.isSubmitting ? '로그인중..' : '로그인'}
-          </Button>
-          <Links />
-        </Form>
-      </FormProvider>
-    </AuthProvider>
+    <FormProvider {...methods}>
+      <Form css={style.form} onSubmit={onSubmit}>
+        <Wrapper css={style.wrapper}>
+          {auth.signin().map((form) => (
+            <FormLabel
+              key={form.htmlFor}
+              name={form.htmlFor}
+              label={form.label}
+              hidden
+            >
+              <AuthFormItem state={state} dispatch={dispatch} {...form} />
+            </FormLabel>
+          ))}
+        </Wrapper>
+        <Button
+          type="submit"
+          variant="Primary"
+          fullWidth
+          disabled={formState.isSubmitting}
+        >
+          {formState.isSubmitting ? '로그인중..' : '로그인'}
+        </Button>
+        <Links />
+      </Form>
+    </FormProvider>
   );
 };
 
@@ -154,9 +148,7 @@ const SigninForm = () => {
       alignItems="center"
       gap="64px"
     >
-      <AuthProvider>
-        <LocalFormItem />
-      </AuthProvider>
+      <LocalFormItem />
       <OauthFormItem />
     </Container>
   );

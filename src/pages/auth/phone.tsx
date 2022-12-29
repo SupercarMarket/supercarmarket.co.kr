@@ -1,8 +1,7 @@
 import { PhoneForm } from 'components/auth';
 import Container from 'components/common/container';
 import Title from 'components/common/title';
-import layout from 'components/layout';
-import { AuthProvider } from 'feature/authProvider';
+import AuthLayout from 'components/layout/authLayout';
 import type {
   GetServerSidePropsContext,
   InferGetServerSidePropsType,
@@ -21,14 +20,12 @@ const Phone = ({
       gap="60px"
     >
       <Title textAlign="center">핸드폰 인증</Title>
-      <AuthProvider>
-        <PhoneForm uuid={uuid} />
-      </AuthProvider>
+      <PhoneForm uuid={uuid} />
     </Container>
   );
 };
 
-Phone.Layout = layout;
+Phone.Layout = AuthLayout;
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const { uuid } = ctx.query as Params;
