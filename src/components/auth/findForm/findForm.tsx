@@ -45,6 +45,8 @@ const FindForm = ({ type }: FindFormProps) => {
     phone: phoneResult,
   } = state;
 
+  const { formState } = methods;
+
   const onSubmit = methods.handleSubmit((data) => {
     const { id, name, phone, authentication } = data;
 
@@ -60,9 +62,17 @@ const FindForm = ({ type }: FindFormProps) => {
   }, []);
 
   React.useEffect(() => {
-    if (findIdResult.data) push('/auth/find/result-id');
-    if (findPasswordResult.data) push('/auth/find/result-password');
-  }, [findIdResult.data, findPasswordResult.data, push]);
+    if (formState.isSubmitted && findIdResult.data)
+      push('/auth/find/result-id');
+    if (formState.isSubmitting && findPasswordResult.data)
+      push('/auth/find/result-password');
+  }, [
+    findIdResult.data,
+    findPasswordResult.data,
+    formState.isSubmitted,
+    formState.isSubmitting,
+    push,
+  ]);
 
   return (
     <FormProvider {...methods}>

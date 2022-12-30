@@ -5,7 +5,12 @@ import AuthLayout from 'components/layout/authLayout';
 
 const FindRsultId = () => {
   return (
-    <Container>
+    <Container
+      display="flex"
+      flexDirection="column"
+      gap="60px"
+      alignItems="center"
+    >
       <Title textAlign="center">아이디 찾기</Title>
       <ResultId />
     </Container>
