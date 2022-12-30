@@ -55,7 +55,7 @@ const baseApi = async <T>(url: string, options: FetcherRequestInit) => {
     ...rest,
   });
 
-  const result: T = await response.json();
+  const result: T = response.ok ? await response.json() : null;
 
   return { status: response.status, ok: response.ok, ...result };
 };

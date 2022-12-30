@@ -10,8 +10,10 @@ import type { Provider } from 'next-auth/providers';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
 import KakaoProvider from 'next-auth/providers/kakao';
+import { PhoneRegisterResponse } from 'utils/api/auth/phone';
 import { isExpire, refreshToken } from 'utils/api/auth/token';
-import { baseFetcher } from 'utils/api/fetcher';
+import { baseApi, baseFetcher } from 'utils/api/fetcher';
+import { SupercarMarketApiError } from 'utils/error';
 
 const providers: Provider[] = [
   /*
@@ -31,26 +33,24 @@ const providers: Provider[] = [
 
       const { id, password } = credentials;
 
-      const signin = await baseFetcher(
-        `${process.env.NEXT_PUBLIC_URL}/api/auth/user/signin`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ id, password }),
-        }
-      );
+      const { status, ok, ...data } = await baseApi<{
+        access_token: string;
+        refresh_token: string;
+        exp: number;
+      }>(`${process.env.NEXT_PUBLIC_URL}/api/auth/user/signin`, {
+        method: 'POST',
+        data: { id, password },
+      });
 
-      if (!signin) throw new Error('로그인에 실패했습니다.');
+      if (!ok) throw new SupercarMarketApiError(status);
 
-      if (signin)
+      if (data)
         return {
           id: credentials.id,
           sub: credentials.id,
-          accessToken: signin.data.access_token,
-          refreshToken: signin.data.refresh_token,
-          expire: signin.data.exp,
+          accessToken: data.access_token,
+          refreshToken: data.refresh_token,
+          expire: data.exp,
           newUser: true,
           provider: 'local',
           nickname: credentials.id,
@@ -77,38 +77,32 @@ const providers: Provider[] = [
 
       const { phone, authentication, uuid } = credentials;
 
-      try {
-        const register = await baseFetcher(
-          `${process.env.NEXT_PUBLIC_URL}/api/auth/phone/register-phone`,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ phone, authentication, uuid }),
-          }
-        );
+      const { status, ok, data } = await baseApi<PhoneRegisterResponse>(
+        `${process.env.NEXT_PUBLIC_URL}/api/auth/phone/register-phone`,
+        {
+          method: 'POST',
+          data: { phone, authentication, uuid },
+        }
+      );
 
-        const {
-          data: { user, access_token, refresh_token, exp, newUser },
-        } = register;
+      if (!ok) throw new SupercarMarketApiError(status);
 
-        if (register)
-          return {
-            id: user.sub,
-            sub: user.sub,
-            accessToken: access_token,
-            refreshToken: refresh_token,
-            expire: exp,
-            newUser: newUser,
-            provider: user.provider,
-            nickname: user.name,
-          };
+      const { access_token, refresh_token, exp, newUser, provider, sub, name } =
+        data;
 
-        return null;
-      } catch (error) {
-        return null;
-      }
+      if (data)
+        return {
+          id: sub,
+          sub: sub,
+          accessToken: access_token,
+          refreshToken: refresh_token,
+          expire: exp,
+          newUser: newUser,
+          provider: provider,
+          nickname: name,
+        };
+
+      return null;
     },
   }),
   /*
@@ -259,6 +253,7 @@ const nextAuthOptions: NextAuthOptions = {
   callbacks,
   pages: {
     signIn: '/auth/signin',
+    error: '/auth/error',
   },
   secret: process.env.NEXT_PUBLIC_AUTH_SECRET,
 };

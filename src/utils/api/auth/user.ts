@@ -3,11 +3,19 @@ import type { Session } from 'next-auth';
 import type { GetSessionParams } from 'next-auth/react';
 import { getSession as getSessionInner } from 'next-auth/react';
 import type { Signin, Signup } from 'types/auth';
-import type { Params, User } from 'types/base';
+import type { Params, ServerResponse, User } from 'types/base';
 import { ErrorCode } from 'utils/error';
 import { catchNoExist, getErrorMessage } from 'utils/misc';
 
 import { baseApi, baseFetcher } from '../fetcher';
+
+type SignInResponse = ServerResponse<{
+  access_token: string;
+  refresh_token: string;
+  exp: number;
+}>;
+
+type BooleanResponse = ServerResponse<boolean>;
 
 const signUpApi: NextApiHandler = async (req, res) => {
   const {
@@ -31,56 +39,46 @@ const signUpApi: NextApiHandler = async (req, res) => {
     authentication
   );
 
-  try {
-    const signUp = await baseFetcher(
-      `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/user/signup`,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        method: 'POST',
-        body: JSON.stringify({
-          id,
-          password,
-          passwordCheck: passwordConfirm,
-          name,
-          nickname,
-          email,
-          phone,
-          code: authentication,
-        }),
-      }
-    );
+  const { status, ok, data } = await baseApi<BooleanResponse>(
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/user/signup`,
+    {
+      method: 'POST',
+      data: {
+        id,
+        password,
+        passwordCheck: passwordConfirm,
+        name,
+        nickname,
+        email,
+        phone,
+        code: authentication,
+      },
+    }
+  );
 
-    return res.status(200).json(signUp);
-  } catch (error) {
-    throw new Error(getErrorMessage(error));
-  }
+  if (!ok) return res.status(status).json({ message: ErrorCode[status] });
+
+  return res.status(200).json(data);
 };
 
 const signInApi: NextApiHandler = async (req, res) => {
   const { id, password }: Signin = req.body;
   catchNoExist(id, password);
 
-  try {
-    const signIn = await baseFetcher(
-      `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/user/login`,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        method: 'POST',
-        body: JSON.stringify({
-          id,
-          password,
-        }),
-      }
-    );
+  const { status, ok, data } = await baseApi<SignInResponse>(
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/user/login`,
+    {
+      method: 'POST',
+      data: {
+        id,
+        password,
+      },
+    }
+  );
 
-    return res.status(200).json(signIn);
-  } catch (error) {
-    throw new Error(getErrorMessage(error));
-  }
+  if (!ok) return res.status(status).end();
+
+  return res.status(200).json(data);
 };
 
 const oauthApi: NextApiHandler = async (req, res) => {
@@ -113,21 +111,17 @@ const duplicateApi: NextApiHandler = async (req, res) => {
 
   catchNoExist(type, target);
 
-  try {
-    const duplicate = await baseFetcher(
-      `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/user/${type}chk`,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        method: 'POST',
-        body: JSON.stringify({ [type]: target }),
-      }
-    );
-    return res.status(200).json(duplicate);
-  } catch (error) {
-    throw new Error(getErrorMessage(error));
-  }
+  const { status, ok, data } = await baseApi<BooleanResponse>(
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/user/${type}chk`,
+    {
+      method: 'POST',
+      data: { [type]: target },
+    }
+  );
+
+  if (!ok) return res.status(status).json({ message: ErrorCode[status] });
+
+  return res.status(200).json(data);
 };
 
 const checkAlreadyMember: NextApiHandler = async (req, res) => {
@@ -219,3 +213,4 @@ export {
   signInApi,
   signUpApi,
 };
+export type { SignInResponse };
