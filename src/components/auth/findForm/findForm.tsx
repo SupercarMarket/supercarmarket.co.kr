@@ -56,13 +56,14 @@ const FindForm = ({ type }: FindFormProps) => {
   });
 
   React.useEffect(() => {
+    dispatch({ type: 'RESET_FIELD_AUTH' });
+  }, []);
+
+  React.useEffect(() => {
     if (findIdResult.data) push('/auth/find/result-id');
     if (findPasswordResult.data) push('/auth/find/result-password');
   }, [findIdResult.data, findPasswordResult.data, push]);
 
-  React.useEffect(() => {
-    dispatch({ type: 'RESET_FIELD_AUTH' });
-  }, []);
   return (
     <FormProvider {...methods}>
       <Form css={style.form} onSubmit={onSubmit}>
@@ -74,9 +75,11 @@ const FindForm = ({ type }: FindFormProps) => {
         <Button width="340px" type="submit" variant="Primary">
           확인
         </Button>
-        {findIdResult.error && <Alert title="에러 발생" severity="error" />}
+        {findIdResult.error && (
+          <Alert title={findIdResult.error.message} severity="error" />
+        )}
         {findPasswordResult.error && (
-          <Alert title="에러 발생" severity="error" />
+          <Alert title={findPasswordResult.error.message} severity="error" />
         )}
       </Form>
     </FormProvider>

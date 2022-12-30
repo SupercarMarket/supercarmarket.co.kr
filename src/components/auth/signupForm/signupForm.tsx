@@ -1,5 +1,6 @@
 'use client';
 
+import Alert from 'components/common/alert';
 import Button from 'components/common/button';
 import { Form, FormLabel } from 'components/common/form';
 import auth from 'constants/auth';
@@ -34,6 +35,7 @@ const SignupForm = () => {
   const methods = useForm<FormState>();
   const state = useAuthState();
   const dispatch = useAuthDispatch();
+  const { signup: signupResult } = state;
 
   const onSubmit = React.useCallback(
     (data: FormState) => {
@@ -77,6 +79,9 @@ const SignupForm = () => {
             가입하기
           </Button>
         </Form>
+        {signupResult.error && (
+          <Alert title={signupResult.error.message} severity="error" />
+        )}
       </FormProvider>
     </AuthProvider>
   );

@@ -1,3 +1,4 @@
+import Alert from 'components/common/alert';
 import Button from 'components/common/button';
 import Container from 'components/common/container';
 import Divider from 'components/common/divider';
@@ -7,8 +8,11 @@ import Wrapper from 'components/common/wrapper';
 import auth from 'constants/auth';
 import { useAuthDispatch, useAuthState } from 'feature/authProvider';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
+import * as React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import { ErrorCode } from 'utils/error';
 import { catchNoExist } from 'utils/misc';
 
 import GoogleIcon from '../../../assets/svg/google.svg';
@@ -63,19 +67,26 @@ const LocalFormItem = () => {
   const methods = useForm<FormState>();
   const dispatch = useAuthDispatch();
   const state = useAuthState();
+  const { replace } = useRouter();
+  const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
 
   const { formState } = methods;
 
   const onSubmit = methods.handleSubmit(async (data) => {
+    setErrorMessage(null);
+
     const { id, password } = data;
     catchNoExist(id, password);
+
     const response = await signIn('Credentials', {
       id,
       password,
       redirect: false,
     });
-    if (!response) alert('fail');
-    else if (!response.error) alert('success');
+
+    if (!response) setErrorMessage(ErrorCode[420]);
+    else if (!response.error) replace('/');
+    else setErrorMessage(ErrorCode[450]);
   });
   return (
     <FormProvider {...methods}>
@@ -101,6 +112,7 @@ const LocalFormItem = () => {
           {formState.isSubmitting ? '로그인중..' : '로그인'}
         </Button>
         <Links />
+        {errorMessage && <Alert title={errorMessage} severity="error" />}
       </Form>
     </FormProvider>
   );
