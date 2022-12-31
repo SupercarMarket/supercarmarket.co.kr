@@ -45,7 +45,7 @@ const FindForm = ({ type }: FindFormProps) => {
     phone: phoneResult,
   } = state;
 
-  const { formState } = methods;
+  const { formState, reset } = methods;
 
   const onSubmit = methods.handleSubmit((data) => {
     const { id, name, phone, authentication } = data;
@@ -55,16 +55,14 @@ const FindForm = ({ type }: FindFormProps) => {
     if (type === 'id') findId(dispatch, { name, phone, authentication });
     else if (type === 'password')
       findPassword(dispatch, { id, phone, authentication });
-  });
 
-  React.useEffect(() => {
-    dispatch({ type: 'RESET_FIELD_AUTH' });
-  }, []);
+    reset();
+  });
 
   React.useEffect(() => {
     if (formState.isSubmitted && findIdResult.data)
       push('/auth/find/result-id');
-    if (formState.isSubmitting && findPasswordResult.data)
+    if (formState.isSubmitted && findPasswordResult.data)
       push('/auth/find/result-password');
   }, [
     findIdResult.data,

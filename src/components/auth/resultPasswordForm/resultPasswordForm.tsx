@@ -4,6 +4,8 @@ import { Form, FormLabel } from 'components/common/form';
 import auth from 'constants/auth';
 import { resetPassword } from 'feature/actions/authActions';
 import { useAuthDispatch, useAuthState } from 'feature/authProvider';
+import { useRouter } from 'next/navigation';
+import * as React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { catchNoExist } from 'utils/misc';
 
@@ -19,6 +21,7 @@ const ResultPasswordForm = () => {
   const state = useAuthState();
   const dispatch = useAuthDispatch();
   const methods = useForm<FormState>();
+  const { replace } = useRouter();
 
   const {
     findPassword: findPasswordResult,
@@ -41,6 +44,10 @@ const ResultPasswordForm = () => {
     });
   });
 
+  React.useEffect(() => {
+    if (state.resetPassword.data) return replace('/auth/signin');
+  }, [replace, state.resetPassword.data, state.signup.data]);
+
   return (
     <FormProvider {...methods}>
       <Form css={style.form} onSubmit={onSubmit}>
@@ -54,6 +61,9 @@ const ResultPasswordForm = () => {
         </Button>
         {resetPasswordResult.error && (
           <Alert title="에러 발생" severity="error" />
+        )}
+        {state.resetPassword.error && (
+          <Alert title={state.resetPassword.error.message} severity="error" />
         )}
       </Form>
     </FormProvider>

@@ -2,7 +2,7 @@ import Button from 'components/common/button';
 import Container from 'components/common/container';
 import Typography from 'components/common/typography';
 import Wrapper from 'components/common/wrapper';
-import { useAuthDispatch, useAuthState } from 'feature/authProvider';
+import { useAuthState } from 'feature/authProvider';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import * as React from 'react';
@@ -12,9 +12,6 @@ import * as style from './resultId.styled';
 const ResultId = () => {
   const { findId } = useAuthState();
   const { replace } = useRouter();
-  const dispatch = useAuthDispatch();
-
-  const handleResetField = () => dispatch({ type: 'RESET_FIELD_AUTH' });
 
   React.useEffect(() => {
     if (!findId.data) replace('/');
@@ -64,22 +61,12 @@ const ResultId = () => {
           </Wrapper>
           <Wrapper css={style.button}>
             <Link href="/auth/find?type=password" shallow>
-              <Button
-                type="button"
-                variant="Primary-Line"
-                fullWidth
-                onClick={handleResetField}
-              >
+              <Button type="button" variant="Primary-Line" fullWidth>
                 비밀번호 찾기
               </Button>
             </Link>
             <Link href="/auth/signin" shallow>
-              <Button
-                type="button"
-                variant="Primary"
-                fullWidth
-                onClick={handleResetField}
-              >
+              <Button type="button" variant="Primary" fullWidth>
                 로그인
               </Button>
             </Link>
