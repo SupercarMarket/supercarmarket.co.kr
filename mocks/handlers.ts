@@ -18,6 +18,8 @@ const admin = {
   address: '서울특별시 청와대',
   call: '01012341234',
   description: '금기사 금종선입니다!',
+  createAt: '',
+  sub: randomId(),
 };
 
 const user = {
@@ -26,6 +28,8 @@ const user = {
   email: 'blanzzxz@naver.com',
   address: '서울특별시 청와대',
   call: '01012341234',
+  createAt: '',
+  sub: randomId(),
 };
 
 const marketImages = [
