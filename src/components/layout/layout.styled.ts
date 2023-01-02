@@ -1,5 +1,5 @@
 import DEVICE_LIST from 'constants/device';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { applyMediaQuery } from 'styles/mediaQuery';
 
 const availableWidth = {
@@ -20,4 +20,14 @@ const Container = styled.div`
 
 const Main = styled.main``;
 
-export { Container, Main };
+const account = css`
+  margin: 0 auto;
+  padding-top: 1.25rem;
+  ${DEVICE_LIST.map(
+    (device) => `${applyMediaQuery(device)} {
+    width: ${availableWidth[device]};
+  }`
+  ).join('')}
+`;
+
+export { account, Container, Main };

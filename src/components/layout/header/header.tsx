@@ -40,7 +40,7 @@ const Header = () => {
                 로그아웃
               </Typography>
             </Button>
-            <Link href={`/account/${session.user?.name}`}>
+            <Link href={`/account/${session.sub}`}>
               <Typography
                 color="black"
                 fontSize="body-16"

@@ -1,7 +1,12 @@
+import { Profile } from 'components/account';
+import Container from 'components/common/container';
 import AccountLayout from 'components/layout/accountLayout';
 import type { AccountTab } from 'constants/account';
 import account from 'constants/account';
-import type { GetServerSidePropsContext } from 'next';
+import type {
+  GetServerSidePropsContext,
+  InferGetServerSidePropsType,
+} from 'next';
 import type { Session } from 'next-auth';
 import type { Params } from 'types/base';
 import { getSession } from 'utils/api/auth/user';
@@ -10,11 +15,15 @@ type AccountParams = Params & {
   tab: AccountTab | null;
 };
 
-const Account = () => {
+const Account = ({
+  isMyAccountPage,
+  accountRoutes,
+  tab,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   return (
-    <div>
-      <h1>Account Page</h1>
-    </div>
+    <Container>
+      <Profile />
+    </Container>
   );
 };
 
