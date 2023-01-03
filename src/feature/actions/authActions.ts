@@ -1,7 +1,18 @@
 import type { DuplicationList, Signin, Signup } from 'types/auth';
-import { baseFetcher } from 'utils/api/fetcher';
+import { baseApi, baseFetcher } from 'utils/api/fetcher';
 
 import createAsyncDispatcher from '.';
+
+interface FindAuth {
+  phone: string;
+  authentication: string;
+}
+
+type FindId = FindAuth & { name: string };
+
+type FindPassword = FindAuth & { id: string };
+
+type ResetPassword = FindAuth & { password: string; id: string };
 
 const signUp = createAsyncDispatcher<'SIGNUP_AUTH', [Signup]>(
   'SIGNUP_AUTH',
@@ -90,12 +101,34 @@ const duplicateNickanmeAuth = createAsyncDispatcher<
   })
 );
 
+const findId = createAsyncDispatcher<'FIND_ID_AUTH', [FindId]>(
+  'FIND_ID_AUTH',
+  (data: FindId) => baseApi('/api/auth/user/find-id', { method: 'POST', data })
+);
+
+const findPassword = createAsyncDispatcher<
+  'FIND_PASSWORD_AUTH',
+  [FindPassword]
+>('FIND_PASSWORD_AUTH', (data: FindPassword) =>
+  baseApi('/api/auth/user/find-password', { method: 'POST', data })
+);
+
+const resetPassword = createAsyncDispatcher<
+  'RESET_PASSWORD_AUTH',
+  [ResetPassword]
+>('RESET_PASSWORD_AUTH', (data: ResetPassword) =>
+  baseApi('/api/auth/user/reset-password', { method: 'PATCH', data })
+);
+
 export {
   confirmPhoneAuth,
   duplicateEmailAuth,
   duplicateIdAuth,
   duplicateNickanmeAuth,
+  findId,
+  findPassword,
   requestPhoneAuth,
+  resetPassword,
   signIn,
   signUp,
 };

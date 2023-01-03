@@ -10,11 +10,19 @@ import type { Provider } from 'next-auth/providers';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
 import KakaoProvider from 'next-auth/providers/kakao';
+import { PhoneRegisterResponse } from 'utils/api/auth/phone';
 import { isExpire, refreshToken } from 'utils/api/auth/token';
-import { baseFetcher } from 'utils/api/fetcher';
+import { baseApi, baseFetcher } from 'utils/api/fetcher';
+import { SupercarMarketApiError } from 'utils/error';
 
 const providers: Provider[] = [
+  /*
+    |--------------------------------------------------------------------------
+    | Provider : Credentials
+    |--------------------------------------------------------------------------
+    */
   CredentialsProvider({
+    id: 'Credentials',
     name: 'Credentials',
     credentials: {
       id: { label: 'id', type: 'text' },
@@ -25,35 +33,83 @@ const providers: Provider[] = [
 
       const { id, password } = credentials;
 
-      try {
-        const signin = await baseFetcher(
-          `${process.env.NEXT_PUBLIC_URL}/api/auth/user/signin`,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ id, password }),
-          }
-        );
+      const { status, ok, ...data } = await baseApi<{
+        access_token: string;
+        refresh_token: string;
+        exp: number;
+      }>(`${process.env.NEXT_PUBLIC_URL}/api/auth/user/signin`, {
+        method: 'POST',
+        data: { id, password },
+      });
 
-        if (signin)
-          return {
-            id: credentials.id,
-            sub: credentials.id,
-            accessToken: signin.data.access_token,
-            refreshToken: signin.data.refresh_token,
-            expire: signin.data.exp,
-            verified: true,
-            provider: 'local',
-          };
+      if (!ok) throw new SupercarMarketApiError(status);
 
-        return null;
-      } catch (error) {
-        return null;
-      }
+      if (data)
+        return {
+          id: credentials.id,
+          sub: credentials.id,
+          accessToken: data.access_token,
+          refreshToken: data.refresh_token,
+          expire: data.exp,
+          newUser: true,
+          provider: 'local',
+          nickname: credentials.id,
+        };
+
+      return null;
     },
   }),
+  /*
+    |--------------------------------------------------------------------------
+    | Provider : Phone
+    |--------------------------------------------------------------------------
+    */
+  CredentialsProvider({
+    id: 'Phone',
+    name: 'Phone',
+    credentials: {
+      phone: { label: 'phone', type: 'tel' },
+      authentication: { label: 'authentication', type: 'text' },
+      uuid: { label: 'phone', type: 'text' },
+    },
+    async authorize(credentials) {
+      if (!credentials) return null;
+
+      const { phone, authentication, uuid } = credentials;
+
+      const { status, ok, data } = await baseApi<PhoneRegisterResponse>(
+        `${process.env.NEXT_PUBLIC_URL}/api/auth/phone/register-phone`,
+        {
+          method: 'POST',
+          data: { phone, authentication, uuid },
+        }
+      );
+
+      if (!ok) throw new SupercarMarketApiError(status);
+
+      const { access_token, refresh_token, exp, newUser, provider, sub, name } =
+        data;
+
+      if (data)
+        return {
+          id: sub,
+          sub: sub,
+          accessToken: access_token,
+          refreshToken: refresh_token,
+          expire: exp,
+          newUser: newUser,
+          provider: provider,
+          nickname: name,
+        };
+
+      return null;
+    },
+  }),
+  /*
+    |--------------------------------------------------------------------------
+    | Provider : Google
+    |--------------------------------------------------------------------------
+    */
   GoogleProvider({
     clientId: process.env.NEXT_PUBLIC_GOOGLE_ID,
     clientSecret: process.env.NEXT_PUBLIC_GOOGLE_SECRET,
@@ -65,18 +121,42 @@ const providers: Provider[] = [
       },
     },
   }),
+  /*
+    |--------------------------------------------------------------------------
+    | Provider : Kakao
+    |--------------------------------------------------------------------------
+    */
   KakaoProvider({
     clientId: process.env.NEXT_PUBLIC_KAKAO_ID,
     clientSecret: process.env.NEXT_PUBLIC_KAKAO_SECRET,
+    profile(profile) {
+      return {
+        id: profile.id,
+        sub: profile.id,
+        provider: 'kakao',
+        accessToken: '',
+        refreshToken: '',
+        expire: 0,
+        nickname: profile.kakao_account.profile.nickname,
+        picture: profile.kakao_account.profile.profile_image_url,
+        email: profile.kakao_account.has_email
+          ? profile.kakao_account.email
+          : null,
+      };
+    },
   }),
 ];
 
 const callbacks: Partial<CallbacksOptions<Profile, Account>> | undefined = {
+  /*
+  |--------------------------------------------------------------------------
+  | Callback : Jwt
+  |--------------------------------------------------------------------------
+  */
   async jwt({ token, account, user }) {
-    // * next-auth 타입 추론 버그로 인해 단언 사용
-    console.log('user : ', user, 'account : ', account);
-
-    // * 첫 로그인 처리
+    /**
+     * 첫 콜백 호출때 처리
+     */
     if (account && user)
       return {
         accessToken: user.accessToken,
@@ -84,35 +164,88 @@ const callbacks: Partial<CallbacksOptions<Profile, Account>> | undefined = {
         expire: user.expire,
         sub: user.sub,
         provider: user.provider,
+        newUser: user.newUser,
+        nickname: user.nickname,
+        email: user.email,
       };
 
-    // * 토큰이 만료 안될 때
+    /**
+     * 토큰 만료 체크
+     */
     if (isExpire(token.expire)) return token;
 
-    // * 토큰 만료
     const newToken = await refreshToken(token.refreshToken);
 
     return { ...token, ...newToken };
   },
+  /*
+    |--------------------------------------------------------------------------
+    | Callback : Session
+    |--------------------------------------------------------------------------
+    */
   session({ session, token }) {
     session.accessToken = token.accessToken;
     session.refreshToken = token.refreshToken;
     session.expire = token.expire;
     session.provider = token.provider;
     session.sub = token.sub;
-    console.log('session : ', session);
+    session.newUser = token.newUser;
+    session.nickname = token.nickname;
+    session.email = token.email;
 
     return session;
   },
-  signIn({ user }) {
-    user.verified = true;
+  /*
+    |--------------------------------------------------------------------------
+    | Callback : Sign In
+    |--------------------------------------------------------------------------
+    */
+  async signIn({ user, account }) {
+    if (account?.type === 'oauth') {
+      const { nickname, provider, email, picture, sub } = user;
+      const oauth = await baseFetcher(
+        `${process.env.NEXT_PUBLIC_URL}/api/auth/user/oauth`,
+        {
+          headers: { 'Content-Type': 'application/json' },
+          method: 'POST',
+          body: JSON.stringify({ nickname, provider, email, picture, sub }),
+          query: {
+            provider,
+          },
+        }
+      );
+
+      const {
+        data: { newUser, token, access_token, refresh_token, exp },
+      } = oauth;
+
+      user.newUser = newUser;
+
+      /**
+       * 처음 가입한 유저 핸드폰 등록으로 리다이렉트
+       */
+      if (newUser) return `/auth/phone?uuid=${token}`;
+
+      user.accessToken = access_token;
+      user.refreshToken = refresh_token;
+      user.expire = exp;
+
+      return true;
+    }
+
     return true;
   },
-  redirect({ url, baseUrl }) {
-    if (url === '/auth/signup') return `${baseUrl}/auth/signup`;
-    if (url === '/auth/signin') return `${baseUrl}/auth/signin`;
-    return baseUrl;
-  },
+  /*
+    |--------------------------------------------------------------------------
+    | Callback : Redirect
+    |--------------------------------------------------------------------------
+    */
+  // async redirect({ url, baseUrl }) {
+  //   if (url === `${baseUrl}/auth/signin`) {
+  //     return Promise.resolve(`${baseUrl}/auth/signin`);
+  //   }
+  //   return Promise.resolve(url);
+  // },
 };
 
 const nextAuthOptions: NextAuthOptions = {
@@ -120,7 +253,7 @@ const nextAuthOptions: NextAuthOptions = {
   callbacks,
   pages: {
     signIn: '/auth/signin',
-    signOut: '/auth/signup',
+    error: '/auth/error',
   },
   secret: process.env.NEXT_PUBLIC_AUTH_SECRET,
 };
@@ -130,11 +263,3 @@ const NextAuthHandler: NextApiHandler = (req, res) =>
 
 export { nextAuthOptions };
 export default NextAuthHandler;
-
-// ! oauth 로그인 플로우
-// ? 1. oauth 로그인
-// ? 2. oauth로 가입한 내역이 있는지 확인
-// ? 3-1. 가입했다면 정상적으로 oauth 로그인 -> 이 경우엔 여기서 끝 (내정보 api) -> oauth api -> next-auth
-// ? 3-2. phone 인증 페이지로 리다이렉트 가입하지 않았다면 jwt로 oauth 회원 로그인에 필요한 정보들을 쿠키에 저장 (httpOnly, 만료 시간은 1시간)  ->
-// ? 4. 추가적인 phone 인증 페이지로 리다이렉트 시키고 인증을 받는다.
-// ? 5. 핸드폰 정보를 포함하여 jwt에 저장된 회원 정보들을 포함하여 oauth 로그인 -> 서버 단에서 요청

@@ -1,5 +1,7 @@
 import { Dispatch } from 'feature';
 import { createContext, useContext, useReducer } from 'react';
+import { User } from 'types/base';
+import { BaseApiHandlerResponse } from 'utils/api/fetcher';
 
 import authReducer from './reducers/authReducer';
 
@@ -10,7 +12,11 @@ type AuthAction =
   | 'CONFIRM_PHONE_AUTH'
   | 'DUPLICATE_ID_AUTH'
   | 'DUPLICATE_EMAIL_AUTH'
-  | 'DUPLICATE_NICKNAME_AUTH';
+  | 'DUPLICATE_NICKNAME_AUTH'
+  | 'FIND_ID_AUTH'
+  | 'FIND_PASSWORD_AUTH'
+  | 'RESET_PASSWORD_AUTH'
+  | 'RESET_FIELD_AUTH';
 type AuthDispatch = Dispatch<AuthAction>;
 interface AuthProviderProps {
   children: React.ReactNode;
@@ -55,6 +61,25 @@ interface AuthInitialState {
     data: null | boolean;
     loading: boolean;
   };
+  findId: {
+    error: null | Error;
+    data: null | BaseApiHandlerResponse<{ data: User }>;
+    loading: boolean;
+  };
+  findPassword: {
+    error: null | Error;
+    data: null | BaseApiHandlerResponse<{
+      phone: string;
+      authentication: string;
+      id: string;
+    }>;
+    loading: boolean;
+  };
+  resetPassword: {
+    error: null | Error;
+    data: null | BaseApiHandlerResponse<{ data: boolean }>;
+    loading: boolean;
+  };
 }
 
 const initialState: AuthInitialState = {
@@ -93,6 +118,21 @@ const initialState: AuthInitialState = {
     data: null,
     loading: false,
   },
+  findId: {
+    error: null,
+    data: null,
+    loading: false,
+  },
+  findPassword: {
+    error: null,
+    data: null,
+    loading: false,
+  },
+  resetPassword: {
+    error: null,
+    data: null,
+    loading: false,
+  },
 };
 
 const AuthStateContext = createContext<AuthInitialState | null>(null);
@@ -126,4 +166,4 @@ export function useAuthDispatch() {
 }
 
 export type { AuthAction, AuthDispatch, AuthInitialState };
-export { AuthProvider };
+export { AuthProvider, initialState };

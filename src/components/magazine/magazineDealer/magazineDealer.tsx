@@ -25,6 +25,8 @@ const user = {
   address: '서울특별시 청와대',
   call: '01012341234',
   accessToken: '12kqwnflknqwlkfnr123kln',
+  createAt: '',
+  sub: '',
 };
 
 const MagazineDealer = ({ postId }: MagazineDealerProps) => {

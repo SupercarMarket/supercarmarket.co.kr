@@ -64,6 +64,16 @@ const auth = {
       validate: password,
     },
   } as Forms,
+  newPassword: {
+    htmlFor: 'password',
+    label: '새 비밀번호',
+    type: 'password',
+    placeholder: '비밀번호를 입력해주세요',
+    tooltip: '영문/숫자/특수문자 중 2가지 이상, 8자 이상',
+    options: {
+      validate: password,
+    },
+  } as Forms,
   name: {
     htmlFor: 'name',
     label: '이름',
@@ -139,6 +149,7 @@ const auth = {
     ...auth.phoneAuth(),
     auth.email,
   ],
+  resultPassword: () => [auth.newPassword, auth.passwordConfirm],
 };
 
 export type { Forms, FormState };

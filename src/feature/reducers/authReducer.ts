@@ -1,5 +1,9 @@
 import type { Action } from 'feature';
-import type { AuthAction, AuthInitialState } from 'feature/authProvider';
+import {
+  AuthAction,
+  AuthInitialState,
+  initialState,
+} from 'feature/authProvider';
 
 import { createAsyncHandler } from '.';
 
@@ -38,6 +42,21 @@ const duplicateNicknameAuthHandler = createAsyncHandler<
   AuthInitialState
 >('DUPLICATE_NICKNAME_AUTH', 'nickname');
 
+const findIdHandler = createAsyncHandler<AuthAction, AuthInitialState>(
+  'FIND_ID_AUTH',
+  'findId'
+);
+
+const findPasswordHandler = createAsyncHandler<AuthAction, AuthInitialState>(
+  'FIND_PASSWORD_AUTH',
+  'findPassword'
+);
+
+const resetPasswordHandler = createAsyncHandler<AuthAction, AuthInitialState>(
+  'RESET_PASSWORD_AUTH',
+  'resetPassword'
+);
+
 export default function authReducer(
   state: AuthInitialState,
   action: Action<AuthAction>
@@ -71,6 +90,20 @@ export default function authReducer(
     case 'SIGNIN_AUTH_SUCCESS':
     case 'SIGNIN_AUTH_ERROR':
       return signInHandler(state, action);
+    case 'FIND_ID_AUTH':
+    case 'FIND_ID_AUTH_SUCCESS':
+    case 'FIND_ID_AUTH_ERROR':
+      return findIdHandler(state, action);
+    case 'FIND_PASSWORD_AUTH':
+    case 'FIND_PASSWORD_AUTH_SUCCESS':
+    case 'FIND_PASSWORD_AUTH_ERROR':
+      return findPasswordHandler(state, action);
+    case 'RESET_PASSWORD_AUTH':
+    case 'RESET_PASSWORD_AUTH_SUCCESS':
+    case 'RESET_PASSWORD_AUTH_ERROR':
+      return resetPasswordHandler(state, action);
+    case 'RESET_FIELD_AUTH':
+      return initialState;
     default:
       throw new Error(`Unhanded action type`);
   }

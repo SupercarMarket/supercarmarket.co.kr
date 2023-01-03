@@ -1,10 +1,12 @@
 interface User {
   id: string;
+  sub: string;
   nickName: string;
   address: string;
   email: string;
   call: string;
   profileSrc?: string;
+  createAt: string;
 }
 
 interface Admin extends User {

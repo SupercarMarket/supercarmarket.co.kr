@@ -6,7 +6,13 @@ export interface FetcherRequestInit extends RequestInit {
   query?: {
     [key: string]: any;
   };
+  data?: unknown;
 }
+
+export type BaseApiHandlerResponse<T> = {
+  status: number;
+  ok: boolean;
+} & T;
 
 const fetcher = (url: string, options: FetcherRequestInit) => {
   const { params, query, ...rest } = options;
@@ -35,5 +41,24 @@ const baseFetcher = async (url: string, options: FetcherRequestInit) => {
   }
 };
 
-export { baseFetcher };
+const baseApi = async <T>(url: string, options: FetcherRequestInit) => {
+  const { data, headers, ...rest } = options;
+  const requestBody = JSON.stringify(data);
+
+  const response = await fetcher(url, {
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      ...headers,
+    },
+    body: requestBody,
+    ...rest,
+  });
+
+  const result: T = response.ok ? await response.json() : null;
+
+  return { status: response.status, ok: response.ok, ...result };
+};
+
+export { baseApi, baseFetcher };
 export default fetcher;

@@ -1,23 +1,22 @@
-import { SignupForm } from 'components/auth';
+import { ResultId } from 'components/auth';
 import Container from 'components/common/container';
 import Title from 'components/common/title';
 import AuthLayout from 'components/layout/authLayout';
 
-const Signup = () => {
+const FindRsultId = () => {
   return (
     <Container
       display="flex"
       flexDirection="column"
-      alignItems="center"
-      margin="80px 0"
       gap="60px"
+      alignItems="center"
     >
-      <Title textAlign="center">회원가입</Title>
-      <SignupForm />
+      <Title textAlign="center">아이디 찾기</Title>
+      <ResultId />
     </Container>
   );
 };
 
-Signup.Layout = AuthLayout;
+FindRsultId.Layout = AuthLayout;
 
-export default Signup;
+export default FindRsultId;

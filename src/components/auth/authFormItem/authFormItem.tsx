@@ -45,6 +45,7 @@ interface AuthFormItemContainerProps extends Omit<AuthFormItemProps, 'state'> {
       };
   patternError?: FieldError | Merge<FieldError, FieldErrorsImpl<any>>;
   target: string;
+  isSubmitSuccessful: boolean;
 }
 
 interface AuthFormPhoneItemContainerProps extends AuthFormItemContainerProps {
@@ -66,7 +67,7 @@ const AuthFormItem = (props: AuthFormItemProps) => {
   }, [state, htmlFor]);
   const {
     register,
-    formState: { errors },
+    formState: { errors, isSubmitSuccessful },
   } = useFormContext();
   const patternError = errors[htmlFor];
   const target = useWatch({ name: htmlFor });
@@ -80,6 +81,7 @@ const AuthFormItem = (props: AuthFormItemProps) => {
           authState={authState}
           patternError={patternError}
           phone={state['phone'].data}
+          isSubmitSuccessful={isSubmitSuccessful}
           {...rest}
         />
       ) : (
@@ -89,6 +91,7 @@ const AuthFormItem = (props: AuthFormItemProps) => {
           htmlFor={htmlFor}
           authState={authState}
           patternError={patternError}
+          isSubmitSuccessful={isSubmitSuccessful}
           {...rest}
         />
       )}
@@ -109,6 +112,7 @@ const AuthFormItemContainer = React.memo(function AuthFormItem({
   target,
   authState,
   patternError,
+  isSubmitSuccessful,
   register,
   dispatch,
 }: AuthFormItemContainerProps) {
@@ -134,8 +138,20 @@ const AuthFormItemContainer = React.memo(function AuthFormItem({
   }, [dispatch, htmlFor, target]);
 
   React.useEffect(() => {
+    if (isSubmitSuccessful) {
+      setError(false);
+      setSuccess(false);
+    }
+  }, [isSubmitSuccessful]);
+
+  React.useEffect(() => {
     if (authState && authState.data) setSuccess(true);
     if (authState && authState.error) setError(true);
+  }, [authState]);
+
+  React.useEffect(() => {
+    if (authState && !authState.data) setSuccess(false);
+    if (authState && !authState.error) setError(false);
   }, [authState]);
   return (
     <Wrapper css={style.label}>
@@ -176,6 +192,7 @@ const AuthFormPhoneItemContainer = React.memo(function AuthFormItem({
   authState,
   patternError,
   phone,
+  isSubmitSuccessful,
   register,
   dispatch,
 }: AuthFormPhoneItemContainerProps) {
@@ -208,8 +225,20 @@ const AuthFormPhoneItemContainer = React.memo(function AuthFormItem({
   }, [dispatch, htmlFor, phone, target]);
 
   React.useEffect(() => {
+    if (isSubmitSuccessful) {
+      setError(false);
+      setSuccess(false);
+    }
+  }, [isSubmitSuccessful]);
+
+  React.useEffect(() => {
     if (authState && authState.data) setSuccess(true);
     if (authState && authState.error) setError(true);
+  }, [authState]);
+
+  React.useEffect(() => {
+    if (authState && !authState.data) setSuccess(false);
+    if (authState && !authState.error) setError(false);
   }, [authState]);
   return (
     <Wrapper css={style.label}>
@@ -236,4 +265,5 @@ const AuthFormPhoneItemContainer = React.memo(function AuthFormItem({
     </Wrapper>
   );
 });
+
 export default AuthFormItem;
