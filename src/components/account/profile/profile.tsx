@@ -70,7 +70,7 @@ const ProfileRepresentative = ({ images }: ProfileRepresentativeProps) => {
 const Profile = (props: ProfileProps) => {
   const { ...rest } = props;
   return (
-    <Container position="relative">
+    <Container position="relative" padding="0 0 80px 0">
       <ProfileBackground src="https://user-images.githubusercontent.com/66871265/210207112-a0d7b276-e24b-4ae9-80a1-8e48d5cc45f2.png" />
       <Wrapper css={style.wrapper}>
         <ProfileInfo {...rest} />

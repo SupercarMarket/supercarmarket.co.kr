@@ -1,19 +1,15 @@
-'use client';
-
 import Button from 'components/common/button';
 import Container from 'components/common/container';
 import Typography from 'components/common/typography';
-import { AccountRoute } from 'constants/account';
+import { AccountRoute, AccountTab } from 'constants/account';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 
 interface AccountNavbarProps {
   accountRoutes: AccountRoute[];
+  tab: AccountTab;
 }
 
-const AccountNavbar = ({ accountRoutes }: AccountNavbarProps) => {
-  const pathname = usePathname();
-  // console.log(pathname, accountRoutes);
+const AccountNavbar = ({ accountRoutes, tab }: AccountNavbarProps) => {
   return (
     <Container
       display="flex"
@@ -22,14 +18,18 @@ const AccountNavbar = ({ accountRoutes }: AccountNavbarProps) => {
       justifyContent="flex-start"
     >
       {accountRoutes.map((accountRoute) => (
-        <Button key={accountRoute.title} variant="Line" border="rounded">
+        <Button
+          key={accountRoute.title}
+          variant={accountRoute.route.endsWith(tab) ? 'Primary' : 'Line'}
+          border="rounded"
+        >
           <Link href={accountRoute.route}>
             <Typography
               as="span"
               fontSize="body-16"
               fontWeight="regular"
               lineHeight="150%"
-              color="black"
+              color={accountRoute.route.endsWith(tab) ? 'white' : 'black'}
             >
               {accountRoute.title}
             </Typography>

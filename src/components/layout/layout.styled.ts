@@ -22,7 +22,6 @@ const Main = styled.main``;
 
 const account = css`
   margin: 0 auto;
-  padding-top: 1.25rem;
   ${DEVICE_LIST.map(
     (device) => `${applyMediaQuery(device)} {
     width: ${availableWidth[device]};

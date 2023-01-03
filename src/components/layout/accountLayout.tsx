@@ -21,20 +21,13 @@ const AccountLayout = (props: AccountLayoutProps) => {
   const { children, isMyAccountPage, accountRoutes } = props;
 
   return (
-    <Container>
+    <Container padding="1.25rem 0 0 0">
       <Wrapper css={style.account}>
         <Header />
         <Navbar navlinks={navlinks} />
       </Wrapper>
       <Wrapper>{children}</Wrapper>
     </Container>
-    // <Layout>
-    //   <Container>
-    //     <h1></h1>
-    //   </Container>
-    //   <AccountNavbar accountRoutes={accountRoutes} />
-    //   {children}
-    // </Layout>
   );
 };
 
