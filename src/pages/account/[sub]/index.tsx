@@ -21,8 +21,8 @@ const Account = ({
   tab,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   return (
-    <Container>
-      <Profile />
+    <Container margin="20px 0 0 0">
+      <Profile isMyAccountPage={isMyAccountPage} />
     </Container>
   );
 };
