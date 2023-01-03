@@ -10,6 +10,7 @@ interface BaseProps {
   margin?: CSSProperties['margin'];
   position?: CSSProperties['position'];
   display?: CSSProperties['display'];
+  flex?: CSSProperties['flex'];
   flexDirection?: CSSProperties['flexDirection'];
   justifyContent?: CSSProperties['justifyContent'];
   alignItems?: CSSProperties['alignItems'];
@@ -19,6 +20,8 @@ interface BaseProps {
   borderTop?: CSSProperties['borderTop'];
   borderRadius?: CSSProperties['borderRadius'];
   boxSizing?: CSSProperties['boxSizing'];
+  background?: CSSProperties['background'];
+  gridTemplateColumns?: CSSProperties['gridTemplateColumns'];
 }
 
 type ContainerProps<Element extends keyof JSX.IntrinsicElements = 'div'> =
@@ -38,6 +41,7 @@ const Container = <Element extends keyof JSX.IntrinsicElements = 'div'>(
     position,
     display,
     justifyContent,
+    flex,
     flexDirection,
     alignItems,
     gap,
@@ -46,6 +50,8 @@ const Container = <Element extends keyof JSX.IntrinsicElements = 'div'>(
     borderTop,
     borderRadius,
     border,
+    gridTemplateColumns,
+    background,
     className,
     children,
   } = props as ContainerProps;
@@ -68,9 +74,12 @@ const Container = <Element extends keyof JSX.IntrinsicElements = 'div'>(
         display,
         boxSizing,
         flexDirection,
+        flex,
         justifyContent,
         alignItems,
         gap,
+        gridTemplateColumns,
+        background,
         borderRadius,
         maxWidth: '100%',
         ...borderAttr,
