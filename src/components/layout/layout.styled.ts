@@ -24,8 +24,8 @@ const account = css`
   margin: 0 auto;
   ${DEVICE_LIST.map(
     (device) => `${applyMediaQuery(device)} {
-    width: ${availableWidth[device]};
-  }`
+      width: ${availableWidth[device]};
+    }`
   ).join('')}
 `;
 

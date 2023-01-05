@@ -1,4 +1,4 @@
-import { AccountNavbar, Profile } from 'components/account';
+import { AccountCategory, AccountNavbar, Profile } from 'components/account';
 import Container from 'components/common/container';
 import Wrapper from 'components/common/wrapper';
 import AccountLayout from 'components/layout/accountLayout';
@@ -27,6 +27,7 @@ const Account = ({
       <Profile isMyAccountPage={isMyAccountPage} />
       <Wrapper css={style.account}>
         <AccountNavbar tab={tab} accountRoutes={accountRoutes} />
+        <AccountCategory tab={tab} />
       </Wrapper>
     </Container>
   );

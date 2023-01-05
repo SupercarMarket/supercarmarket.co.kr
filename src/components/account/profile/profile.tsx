@@ -29,7 +29,7 @@ const ProfileBackground = ({ src }: ProfileBackgroundProps) => {
           width: '100%',
           height: 'auto',
           objectFit: 'cover',
-          zIndex: '1',
+          zIndex: 1,
         }}
       />
     </Container>
@@ -57,7 +57,7 @@ const ProfileRepresentative = ({ images }: ProfileRepresentativeProps) => {
                 width: '100%',
                 height: 'auto',
                 objectFit: 'cover',
-                zIndex: '1',
+                zIndex: 100,
                 borderRadius: '20px',
               }}
             />
