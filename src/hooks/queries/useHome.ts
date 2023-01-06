@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import queries from 'constants/queries';
 import { MagazineResponse, WithBlurredImage } from 'types/magazine';
-import { baseFetcher } from 'utils/api/fetcher';
+import { baseFetch } from 'utils/api/fetcher';
 
 export const getServerCategoryQuery = (query: keyof typeof queries.home) => {
   if (query === 'best') return 'interestProduct';
@@ -16,11 +16,11 @@ export default function useHome<T>(
   return useQuery<MagazineResponse<WithBlurredImage<T>>>(
     queries.home[query](),
     () =>
-      baseFetcher('/api/home', {
+      baseFetch('/api/home', {
         query: {
           category: getServerCategoryQuery(query),
         },
       }),
-    options
+    { ...options, useErrorBoundary: true }
   );
 }
