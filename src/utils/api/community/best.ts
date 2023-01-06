@@ -6,7 +6,7 @@ import { getErrorMessage } from 'utils/misc';
 const communityBestApi: NextApiHandler = async (_, res) => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_URL}/server/api/v1/community-best`,
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/community-best`,
       { method: 'GET' }
     );
 
