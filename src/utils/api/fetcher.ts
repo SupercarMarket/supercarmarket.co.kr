@@ -41,6 +41,24 @@ const baseFetcher = async (url: string, options: FetcherRequestInit) => {
   }
 };
 
+const baseFetch = async (url: string, options: FetcherRequestInit) => {
+  try {
+    const response = await fetcher(url, options);
+
+    const result = await response.json();
+
+    if (!response.ok)
+      throw new ServerApiError({
+        message: result.message,
+        status: response.status,
+      });
+
+    return result;
+  } catch (error) {
+    throw new Error(getErrorMessage(error));
+  }
+};
+
 const baseApi = async <T>(url: string, options: FetcherRequestInit) => {
   const { data, headers, ...rest } = options;
   const requestBody = JSON.stringify(data);
@@ -60,5 +78,5 @@ const baseApi = async <T>(url: string, options: FetcherRequestInit) => {
   return { status: response.status, ok: response.ok, ...result };
 };
 
-export { baseApi, baseFetcher };
+export { baseApi, baseFetch, baseFetcher };
 export default fetcher;
