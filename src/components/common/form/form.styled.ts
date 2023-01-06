@@ -67,7 +67,27 @@ const imageButton = css`
   cursor: pointer;
 `;
 
+const filesWrapper = css`
+  height: 44px;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 16px;
+  padding: 0 16px;
+  border: 1px solid #c3c3c7;
+  border-radius: 4px;
+`;
+
+const filesButton = css`
+  display: flex;
+  align-items: center;
+  width: 16px;
+  cursor: pointer;
+`;
+
 export {
+  filesButton,
+  filesWrapper,
   Form,
   imageButton,
   imageTitle,
