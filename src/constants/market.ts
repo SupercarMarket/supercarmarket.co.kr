@@ -6,13 +6,22 @@ import {
 } from 'utils/market/marketFilter';
 
 const CATEGORY = [
-  { option: '전체', value: '전체' },
-  { option: '스포츠카', value: '스포츠카' },
-  { option: '세단', value: '세단' },
-  { option: 'SUV', value: 'SUV' },
-  { option: '픽업트럭', value: '픽업트럭' },
-  { option: '클래식카&올드카', value: '클래식카&올드카' },
+  { option: '전체', value: 'all' },
+  { option: '스포츠카', value: 'sports-car' },
+  { option: '세단', value: 'saloon' },
+  { option: 'SUV', value: 'suv' },
+  { option: '픽업트럭', value: 'pickup-truck' },
+  { option: '클래식카&올드카', value: 'classic-car' },
 ];
+
+const CATEGORY_MAPPING: { [key: string]: string } = {};
+CATEGORY.forEach(({ option, value }) => {
+  if (value === 'classic-car') {
+    CATEGORY_MAPPING[value] = '클래식카%26올드카';
+  } else {
+    CATEGORY_MAPPING[value] = option;
+  }
+});
 
 const CATEGORY_VALUES = CATEGORY.map(({ value }) => value);
 
@@ -206,6 +215,7 @@ const FUEL_KIND: { [key: string]: string } = {
 
 export {
   CATEGORY,
+  CATEGORY_MAPPING,
   CATEGORY_VALUES,
   FILTER_OPTION_DATANAMES,
   FIRST_MARKET_FILTER,

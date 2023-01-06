@@ -30,7 +30,7 @@ export const navlinks: NavbarLinks[] = [
       },
       {
         title: '클래식카&올드카',
-        link: 'classic-car&old-car',
+        link: 'classic-car',
       },
     ],
   },
