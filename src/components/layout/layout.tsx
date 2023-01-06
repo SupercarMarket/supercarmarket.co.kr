@@ -7,7 +7,7 @@ interface LayoutProps {
   children?: React.ReactNode;
 }
 
-const navlinks: NavbarLinks[] = [
+export const navlinks: NavbarLinks[] = [
   {
     title: '매장',
     link: 'market',

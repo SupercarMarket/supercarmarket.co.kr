@@ -8,13 +8,15 @@ import Layout from 'components/layout';
 import queries from 'constants/queries';
 import useHome from 'hooks/queries/useHome';
 import { GetServerSideProps } from 'next';
+import * as React from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 import { CommunityDto } from 'types/community';
 import { MagazineDto } from 'types/magazine';
 import { MarketDto } from 'types/market';
 import { baseFetcher } from 'utils/api/fetcher';
 
 const Home = () => {
-  const { data: magazine } = useHome<MagazineDto>('magazine');
+  // const { data: magazine } = useHome<MagazineDto>('magazine');
   const { data: marketBest } = useHome<MarketDto>('best');
   const { data: marketNew } = useHome<MarketDto>('new');
   const { data: communityBest } = useHome<CommunityDto>('community');
@@ -22,7 +24,7 @@ const Home = () => {
   return (
     <Container>
       <Title marginBottom="20px">슈마매거진</Title>
-      {magazine && <Magazine data={magazine.data.slice(0, 5)} />}
+      {/* {magazine && <Magazine data={magazine.data.slice(0, 5)} />} */}
       <Title marginTop="80px" marginBottom="20px">
         매물 관심 베스트
       </Title>
@@ -45,14 +47,14 @@ const queryClient = new QueryClient();
 
 export const getServerSideProps: GetServerSideProps = async () => {
   await Promise.all([
-    queryClient.prefetchQuery(queries.home.magazine(), () =>
-      baseFetcher(`${process.env.NEXT_PUBLIC_URL}/api/home`, {
-        method: 'GET',
-        query: {
-          category: 'magazine',
-        },
-      })
-    ),
+    // queryClient.prefetchQuery(queries.home.magazine(), () =>
+    //   baseFetcher(`${process.env.NEXT_PUBLIC_URL}/api/home`, {
+    //     method: 'GET',
+    //     query: {
+    //       category: 'magazine',
+    //     },
+    //   })
+    // ),
     queryClient.prefetchQuery(queries.home.best(), () =>
       baseFetcher(`${process.env.NEXT_PUBLIC_URL}/api/home`, {
         method: 'GET',

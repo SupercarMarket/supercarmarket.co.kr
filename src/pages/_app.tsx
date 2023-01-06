@@ -11,10 +11,6 @@ import { useState } from 'react';
 import { ThemeProvider } from 'styled-components';
 import GlobalStyle from 'styles/globalStyles';
 
-if (process.env.NEXT_PUBLIC_API_MOCKING === 'enabled') {
-  require('../../mocks');
-}
-
 const Nope: FC<{ children?: ReactNode }> = ({ children }) => <>{children}</>;
 
 function MyApp({

@@ -4,52 +4,54 @@ import { getPlaiceholder } from 'plaiceholder';
 import type { CommunityDto } from 'types/community';
 import type { MagazineDto, MagazineResponse } from 'types/magazine';
 import type { MarketDto } from 'types/market';
-import { ServerApiError } from 'utils/error';
-import { getErrorMessage } from 'utils/misc';
+import { ErrorCode } from 'utils/error';
+import { catchNoExist } from 'utils/misc';
+
+import fetcher from './fetcher';
 
 const homeApi: NextApiHandler = async (req, res) => {
   const { query } = req;
   const { category } = query;
 
-  if (!category) throw new Error('invalid query');
-  if (typeof category !== 'string') throw new Error('invalid query');
+  catchNoExist(query, category);
 
-  try {
-    const response = await fetch(
-      `${
-        process.env.NEXT_PUBLIC_SERVER_URL
-      }/supercar/v1/main?category=${getServerCategoryQuery(category as any)}`,
-      {
-        method: 'GET',
-      }
-    );
+  const response = await fetcher(
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/main`,
+    {
+      method: 'GET',
+      query: {
+        category: getServerCategoryQuery(category as any),
+      },
+    }
+  );
 
-    if (!response.ok)
-      throw new ServerApiError({
-        message: response.statusText,
-        status: response.status,
-      });
+  if (!response.ok)
+    return res
+      .status(response.status)
+      .json({ message: ErrorCode[response.status] });
 
-    const home: MagazineResponse<MagazineDto | MarketDto | CommunityDto> =
-      await response.json();
+  const home: MagazineResponse<MagazineDto | MarketDto | CommunityDto> =
+    await response.json();
 
-    const homeWithBluredImage = await Promise.all(
-      home.data.map(async (m) => {
-        const { base64 } = await getPlaiceholder(m.imgSrc);
-        return {
-          ...m,
-          base64,
-        };
-      })
-    ).then((v) => v);
+  if (!home.data.every((v) => v.imgSrc))
+    return res
+      .status(481)
+      .json({ message: 'imgSrc 필드가 존재하지 않습니다.' });
 
-    return res.status(200).json({
-      ...home,
-      data: homeWithBluredImage,
-    });
-  } catch (e) {
-    throw new Error(getErrorMessage(e));
-  }
+  const homeWithBluredImage = await Promise.all(
+    home.data.map(async (m) => {
+      const { base64 } = await getPlaiceholder(m.imgSrc);
+      return {
+        ...m,
+        base64,
+      };
+    })
+  ).then((v) => v);
+
+  return res.status(200).json({
+    ...home,
+    data: homeWithBluredImage,
+  });
 };
 
 export { homeApi };
