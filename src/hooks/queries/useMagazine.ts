@@ -5,12 +5,12 @@ import {
   MagazineResponse,
   WithBlurredImage,
 } from 'types/magazine';
-import { baseFetcher } from 'utils/api/fetcher';
+import { baseFetch } from 'utils/api/fetcher';
 
 export default function useMagazine(options = {}) {
   return useQuery<MagazineResponse<WithBlurredImage<MagazineDto>>>(
     queries.magazine.lists(),
-    () => baseFetcher('/api/magazine', { method: 'GET' }),
-    options
+    () => baseFetch('/api/magazine', { method: 'GET' }),
+    { ...options, useErrorBoundary: true }
   );
 }
