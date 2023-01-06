@@ -1,15 +1,13 @@
 import { MarketCard } from 'components/common/card';
 import Container from 'components/common/container';
-import { MarketDto, WithBlurredImage } from 'types/market';
+import useHome from 'hooks/queries/useHome';
+import { MarketDto } from 'types/market';
 
 import { Wrapper } from './market.styled';
 
-interface MarketProps {
-  marketBest: WithBlurredImage<MarketDto>[];
-}
+const Market = () => {
+  const { data: marketBest } = useHome<MarketDto>('best');
 
-const Market = ({ marketBest }: MarketProps) => {
-  const marketBestList = marketBest.slice(0, 8);
   return (
     <Container
       display="flex"
@@ -18,9 +16,10 @@ const Market = ({ marketBest }: MarketProps) => {
       justifyContent="center"
     >
       <Wrapper>
-        {marketBestList.map((post) => (
-          <MarketCard key={post.id} {...post} />
-        ))}
+        {marketBest &&
+          marketBest.data
+            .slice(0, 8)
+            .map((post) => <MarketCard key={post.id} {...post} />)}
       </Wrapper>
     </Container>
   );
