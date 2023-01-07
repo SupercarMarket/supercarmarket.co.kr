@@ -13,7 +13,7 @@ const MagazineCard = memo(function MagazineCard({
   id,
   title,
   base64,
-  imgSrc,
+  thumbnailSrc,
   contents,
   type = 'normal',
 }: MagazineCardProps) {
@@ -32,13 +32,12 @@ const MagazineCard = memo(function MagazineCard({
     >
       <Container position="relative">
         <Image
-          src={imgSrc}
+          src={thumbnailSrc}
           width={imgWidth}
           height={imgHeight}
           placeholder="blur"
           blurDataURL={base64}
           alt="thumbnail"
-          layout="fixed"
           style={{
             borderRadius: '4px',
           }}

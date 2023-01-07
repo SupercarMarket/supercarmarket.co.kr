@@ -21,14 +21,14 @@ const magazineApi: NextApiHandler = async (_, res) => {
 
   const magazine: MagazineResponse<MagazineDto> = await response.json();
 
-  if (!magazine.data.every((v) => v.imgSrc))
+  if (!magazine.data.every((v) => v.thumbnailSrc))
     return res
       .status(481)
       .json({ message: 'imgSrc 필드가 존재하지 않습니다.' });
 
   const magazineWithBluredImage = await Promise.all(
     magazine.data.map(async (m) => {
-      const { base64 } = await getPlaiceholder(m.imgSrc);
+      const { base64 } = await getPlaiceholder(m.thumbnailSrc);
       return {
         ...m,
         base64,
