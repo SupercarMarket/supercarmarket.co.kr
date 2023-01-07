@@ -11,7 +11,7 @@ import Magazine from 'components/home/magazine';
 import { MarketBest, MarketNew } from 'components/home/market';
 import Layout from 'components/layout';
 import queries from 'constants/queries';
-import { GetServerSideProps } from 'next';
+import { GetStaticProps } from 'next';
 import * as React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { baseFetch } from 'utils/api/fetcher';
@@ -67,7 +67,7 @@ export default Home;
 
 const queryClient = new QueryClient();
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getStaticProps: GetStaticProps = async () => {
   await Promise.all([
     queryClient.prefetchQuery(queries.home.magazine(), () =>
       baseFetch(`${process.env.NEXT_PUBLIC_URL}/api/home`, {
@@ -107,6 +107,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
     props: {
       dehydratedState: dehydrate(queryClient),
     },
+    revalidate: 30,
   };
 };
 
