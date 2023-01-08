@@ -1,16 +1,25 @@
-import { dehydrate, QueryClient } from '@tanstack/react-query';
-import Comment from 'components/common/comment';
+import {
+  dehydrate,
+  QueryClient,
+  QueryErrorResetBoundary,
+} from '@tanstack/react-query';
 import Container from 'components/common/container';
 import Posting from 'components/common/posting';
+import { ErrorFallback } from 'components/fallback';
 import layout from 'components/layout';
 import { MagazineDealer, MagazineScrape } from 'components/magazine';
 import queries from 'constants/queries';
 import { ModalProvider } from 'feature/modalContext';
-import useComment from 'hooks/queries/useComment';
-import useMagazinePost from 'hooks/queries/useMagazinePost';
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import dynamic from 'next/dynamic';
 import type { ParsedUrlQuery } from 'querystring';
-import { baseFetcher } from 'utils/api/fetcher';
+import * as React from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
+import { baseFetch } from 'utils/api/fetcher';
+
+const Comment = dynamic(() => import('components/common/comment'), {
+  ssr: false,
+});
 
 interface IParams extends ParsedUrlQuery {
   id: string;
@@ -19,13 +28,6 @@ interface IParams extends ParsedUrlQuery {
 const MagazinePost = ({
   id,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const { data: comment } = useComment(id, {
-    enabled: !!id,
-  });
-  const { data: magazinePost } = useMagazinePost(id, {
-    enabled: !!id,
-  });
-
   return (
     <ModalProvider>
       <Container
@@ -35,12 +37,35 @@ const MagazinePost = ({
         flexDirection="column"
         gap="80px"
       >
-        {magazinePost && <Posting {...magazinePost.data} />}
-        {magazinePost && (
-          <MagazineScrape postId={id} isScraped={magazinePost?.isScraped} />
-        )}
-        <MagazineDealer postId={id} />
-        {comment && <Comment id={id} {...comment} />}
+        <QueryErrorResetBoundary>
+          {({ reset }) => (
+            <>
+              <ErrorBoundary
+                onReset={reset}
+                fallbackRender={(props) => (
+                  <ErrorFallback margin="100px 0" {...props} />
+                )}
+              >
+                <Posting postId={id} type="magazine" />
+              </ErrorBoundary>
+              {/* {magazinePost && (
+                <MagazineScrape
+                  postId={id}
+                  isScraped={magazinePost?.isScraped}
+                />
+              )} */}
+              <MagazineDealer postId={id} />
+              <ErrorBoundary
+                onReset={reset}
+                fallbackRender={(props) => <ErrorFallback {...props} />}
+              >
+                <React.Suspense fallback={<div>loading..</div>}>
+                  <Comment id={id} />
+                </React.Suspense>
+              </ErrorBoundary>
+            </>
+          )}
+        </QueryErrorResetBoundary>
       </Container>
     </ModalProvider>
   );
@@ -56,14 +81,8 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const queryClient = new QueryClient();
 
   await Promise.all([
-    queryClient.prefetchQuery(queries.comment.id(id), () =>
-      baseFetcher(`${process.env.NEXT_PUBLIC_URL}/api/comment`, {
-        method: 'GET',
-        params: id,
-      })
-    ),
     queryClient.prefetchQuery(queries.magazine.id(id), () =>
-      baseFetcher(`${process.env.NEXT_PUBLIC_URL}/api/magazine`, {
+      baseFetch(`${process.env.NEXT_PUBLIC_URL}/api/magazine`, {
         method: 'GET',
         params: id,
       })

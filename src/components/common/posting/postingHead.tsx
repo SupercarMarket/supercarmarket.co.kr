@@ -1,14 +1,14 @@
 import Avvvatars from 'avvvatars-react';
+import { Posting } from 'types/base';
 
 import ChatIcon from '../../../assets/svg/chat.svg';
 import EyeIcon from '../../../assets/svg/remove-red-eye.svg';
 import Container from '../container';
 import Typography from '../typography';
 import Wrapper from '../wrapper';
-import { PostingProps } from './posting';
 import * as style from './posting.styled';
 
-type PostingHeadProps = Omit<PostingProps, 'contentHtml'>;
+type PostingHeadProps = Omit<Posting, 'contentHtml'>;
 
 const PostingHead = ({
   title,

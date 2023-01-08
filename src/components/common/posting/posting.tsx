@@ -1,18 +1,22 @@
-import { memo, useMemo } from 'react';
-import type { Posting as PostingType } from 'types/base';
+import useMagazinePost from 'hooks/queries/useMagazinePost';
+import * as React from 'react';
 
 import Container from '../container';
 import PostingBody from './postingBody';
 import PostingHead from './postingHead';
 
-export interface PostingProps extends PostingType {
-  like?: number;
-  isScraped?: boolean;
+type PostingType = 'magazine' | 'community';
+
+export interface PostingProps {
+  postId: string;
+  type: PostingType;
 }
 
-const Posting = memo(function Posting(props: PostingProps) {
-  const posting = useMemo(() => ({ ...props }), [props]);
-  const { contentHtml, ...rest } = posting;
+const Posting = function Posting(props: PostingProps) {
+  const { postId, type } = props;
+  const { data: magazinePost } = useMagazinePost(postId, {
+    enabled: !!postId,
+  });
 
   return (
     <Container
@@ -24,10 +28,18 @@ const Posting = memo(function Posting(props: PostingProps) {
       borderRadius="4px"
       boxSizing="border-box"
     >
-      <PostingHead {...rest} />
-      <PostingBody contentHtml={contentHtml} />
+      {magazinePost && (
+        <>
+          {type === 'magazine' ? (
+            <PostingHead {...magazinePost.data} />
+          ) : (
+            <PostingHead {...magazinePost.data} />
+          )}
+          <PostingBody contentHtml={magazinePost.data.contentHtml} />
+        </>
+      )}
     </Container>
   );
-});
+};
 
-export default Posting;
+export default React.memo(Posting);
