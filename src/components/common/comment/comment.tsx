@@ -30,7 +30,7 @@ const Comment = ({ id }: CommentProps) => {
     >
       {comment && (
         <>
-          <CommentHead totalCount={9999} />
+          <CommentHead totalCount={comment.data.length} />
           <CommentBody postId={id} comments={comment.data} />
           <Pagination
             page={comment.page}

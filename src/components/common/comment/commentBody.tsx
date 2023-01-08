@@ -1,10 +1,12 @@
 import Avvvatars from 'avvvatars-react';
 import useLikeComment from 'hooks/mutations/comment/useLikeComment';
 import useRemoveComment from 'hooks/mutations/comment/useRemoveComment';
-import { memo, useCallback, useState } from 'react';
+import { useSession } from 'next-auth/react';
+import * as React from 'react';
 import { Comment } from 'types/comment';
 
 import LikeIcon from '../../../assets/svg/thumb-up.svg';
+import Alert from '../alert';
 import Button from '../button';
 import Container from '../container';
 import Typography from '../typography';
@@ -24,25 +26,41 @@ const CommentCard = ({
   isLiked,
   children,
 }: Comment & { postId: string }) => {
+  const isMyComment = useSession().data?.sub === user.nickName;
   const { mutate: likeMuate } = useLikeComment(postId, id);
   const { mutate: removeMutate } = useRemoveComment(postId, id);
-  const [open, setOpen] = useState(false);
+  const [modify, setModify] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
 
-  const handleOpen = useCallback(() => {
+  const handleOpen = React.useCallback(() => {
     setOpen((prev) => !prev);
   }, []);
 
-  const handleRemove = useCallback(() => {
+  const handleModify = React.useCallback(() => {
+    setModify((prev) => !prev);
+  }, []);
+
+  const handleRemove = React.useCallback(() => {
     removeMutate();
   }, [removeMutate]);
 
-  const handleLike = useCallback(() => {
+  const handleLike = React.useCallback(() => {
     likeMuate();
   }, [likeMuate]);
   return (
     <>
       {isRemoved ? (
-        <Typography>삭제된 댓글입니다.</Typography>
+        <Typography
+          fontSize="body-14"
+          fontWeight="regular"
+          lineHeight="150%"
+          color="greyScale-6"
+          style={{
+            marginTop: '22px',
+          }}
+        >
+          삭제된 댓글입니다.
+        </Typography>
       ) : (
         <Container
           display="flex"
@@ -95,32 +113,36 @@ const CommentCard = ({
                     </Typography>
                   </Button>
                 )}
-                <Button variant="Init" onClick={handleRemove}>
-                  <Typography
-                    fontSize="body-14"
-                    fontWeight="regular"
-                    lineHeight="150%"
-                    color="greyScale-5"
-                    style={{
-                      cursor: 'pointer',
-                    }}
-                  >
-                    수정
-                  </Typography>
-                </Button>
-                <Button variant="Init" onClick={handleRemove}>
-                  <Typography
-                    fontSize="body-14"
-                    fontWeight="regular"
-                    lineHeight="150%"
-                    color="greyScale-5"
-                    style={{
-                      cursor: 'pointer',
-                    }}
-                  >
-                    삭제
-                  </Typography>
-                </Button>
+                {true && (
+                  <Button variant="Init" onClick={handleModify}>
+                    <Typography
+                      fontSize="body-14"
+                      fontWeight="regular"
+                      lineHeight="150%"
+                      color="greyScale-5"
+                      style={{
+                        cursor: 'pointer',
+                      }}
+                    >
+                      수정
+                    </Typography>
+                  </Button>
+                )}
+                {isMyComment && (
+                  <Button variant="Init" onClick={handleRemove}>
+                    <Typography
+                      fontSize="body-14"
+                      fontWeight="regular"
+                      lineHeight="150%"
+                      color="greyScale-5"
+                      style={{
+                        cursor: 'pointer',
+                      }}
+                    >
+                      삭제
+                    </Typography>
+                  </Button>
+                )}
               </Wrapper>
               <Button
                 variant="Init"
@@ -149,6 +171,11 @@ const CommentCard = ({
           </Wrapper>
         </Container>
       )}
+      {modify && (
+        <Wrapper css={style.cardArea}>
+          <CommentArea postId={id} />
+        </Wrapper>
+      )}
       {open && (
         <Wrapper css={style.cardArea}>
           <CommentArea postId={postId} parentId={id} />
@@ -165,20 +192,26 @@ const CommentCard = ({
   );
 };
 
-const CommentBody = memo(function CommentBody({
+const CommentBody = ({
   postId,
   comments,
 }: {
   postId: string;
   comments: Comment[];
-}) {
+}) => {
   return (
     <Container display="flex" flexDirection="column">
+      {comments.length === 0 && (
+        <Alert
+          severity="info"
+          title="댓글이 아직 없습니다. 댓글을 남겨보세요."
+        />
+      )}
       {comments.map((comment) => (
         <CommentCard key={comment.id} postId={postId} {...comment} />
       ))}
     </Container>
   );
-});
+};
 
-export default CommentBody;
+export default React.memo(CommentBody);

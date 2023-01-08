@@ -1,4 +1,5 @@
 import useAddComment from 'hooks/mutations/comment/useAddComment';
+import { useSession } from 'next-auth/react';
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
 
 import Button from '../button';
@@ -10,21 +11,13 @@ import {
   CommentAreaTop,
 } from './comment.styled';
 
-const user = {
-  id: 'qwjfkqnwfkjnqwkjfnqwkfnkqwnfk',
-  nickName: 'blan19',
-  email: 'blanzzxz@naver.com',
-  address: '서울특별시 청와대',
-  call: '01012341234',
-  accessToken: '12kqwnflknqwlkfnr123kln',
-};
-
 interface CommentAreaProps {
   postId: string;
   parentId?: string;
 }
 
 const CommentArea = ({ postId, parentId }: CommentAreaProps) => {
+  const isAuthenticated = useSession().status === 'authenticated';
   const { mutate, isSuccess } = useAddComment(postId, parentId);
   const [comment, setComment] = useState('');
   const length = useMemo(() => comment.length, [comment.length]);
@@ -34,7 +27,7 @@ const CommentArea = ({ postId, parentId }: CommentAreaProps) => {
   }, []);
 
   const onSubmit = useCallback(() => {
-    mutate({ contents: comment, user });
+    mutate({ contents: comment });
   }, [comment, mutate]);
 
   useEffect(() => {
@@ -55,10 +48,12 @@ const CommentArea = ({ postId, parentId }: CommentAreaProps) => {
         <CommentAreaTextArea
           value={comment}
           onChange={onChange}
-          placeholder={user ? '댓글을 남겨보세요.' : '로그인이 필요합니다.'}
+          placeholder={
+            isAuthenticated ? '댓글을 남겨보세요.' : '로그인이 필요합니다.'
+          }
           minLength={1}
           maxLength={2000}
-          disabled={!user}
+          disabled={!isAuthenticated}
         />
       </CommentAreaTop>
       <CommentAreaBottom>
@@ -81,7 +76,7 @@ const CommentArea = ({ postId, parentId }: CommentAreaProps) => {
         <Button
           variant="Line"
           onClick={onSubmit}
-          disabled={!user || length < 1}
+          disabled={!isAuthenticated || length < 1}
         >
           <Typography
             fontSize="body-16"

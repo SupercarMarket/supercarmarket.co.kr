@@ -40,10 +40,10 @@ const commentApi: NextApiHandler = async (req, res) => {
 };
 
 const commentCreateApi: NextApiHandler = async (req, res) => {
-  const { user, contents } = req.body;
+  const { contents } = req.body;
   const { postId, parentId } = req.query as Params;
 
-  catchNoExist(user, contents, postId);
+  catchNoExist(contents, postId);
 
   const session = await getSession({ req });
 
