@@ -4,7 +4,7 @@ import { baseApi } from 'utils/api/fetcher';
 
 export default function useUpdateComment(
   postId: string,
-  commentId: string,
+  commentId?: string,
   options = {}
 ) {
   const queryClient = useQueryClient();

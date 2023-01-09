@@ -1,4 +1,5 @@
 import useComment from 'hooks/queries/useComment';
+import useCurrentPage from 'hooks/useCurrentPage';
 
 import Container from '../container';
 import Pagination from '../pagination';
@@ -11,6 +12,7 @@ interface CommentProps {
 }
 
 const Comment = ({ id }: CommentProps) => {
+  const page = useCurrentPage();
   const { data: comment } = useComment(id, {
     enabled: !!id,
   });
@@ -33,7 +35,7 @@ const Comment = ({ id }: CommentProps) => {
           <CommentHead totalCount={comment.data.length} />
           <CommentBody postId={id} comments={comment.data} />
           <Pagination
-            page={comment.page}
+            page={page}
             totalPages={comment.totalPages}
             totalCount={comment.totalCount}
             pageSize={10}

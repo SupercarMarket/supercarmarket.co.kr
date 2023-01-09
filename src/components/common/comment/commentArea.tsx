@@ -1,4 +1,5 @@
 import useAddComment from 'hooks/mutations/comment/useAddComment';
+import useUpdateComment from 'hooks/mutations/comment/useUpdateComment';
 import { useSession } from 'next-auth/react';
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
 
@@ -11,15 +12,29 @@ import {
   CommentAreaTop,
 } from './comment.styled';
 
+type CommentAreaType = 'add' | 'edit';
+
 interface CommentAreaProps {
   postId: string;
   parentId?: string;
+  type?: CommentAreaType;
+  defaultValue?: string;
 }
 
-const CommentArea = ({ postId, parentId }: CommentAreaProps) => {
+const CommentArea = ({
+  postId,
+  parentId,
+  defaultValue,
+  type = 'add',
+}: CommentAreaProps) => {
   const isAuthenticated = useSession().status === 'authenticated';
-  const { mutate, isSuccess } = useAddComment(postId, parentId);
-  const [comment, setComment] = useState('');
+  const { mutate: addMutation, isSuccess: isAddSuccess } = useAddComment(
+    postId,
+    parentId
+  );
+  const { mutate: updateMutation, isSuccess: isUpdateSuccess } =
+    useUpdateComment(postId, parentId);
+  const [comment, setComment] = useState(defaultValue ? defaultValue : '');
   const length = useMemo(() => comment.length, [comment.length]);
 
   const onChange = useCallback((e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -27,12 +42,13 @@ const CommentArea = ({ postId, parentId }: CommentAreaProps) => {
   }, []);
 
   const onSubmit = useCallback(() => {
-    mutate({ contents: comment });
-  }, [comment, mutate]);
+    if (type === 'add') addMutation({ contents: comment });
+    else if (type === 'edit') updateMutation(comment);
+  }, [type, addMutation, comment, updateMutation]);
 
   useEffect(() => {
-    if (isSuccess) setComment('');
-  }, [isSuccess]);
+    if (isAddSuccess || isUpdateSuccess) setComment('');
+  }, [isAddSuccess, isUpdateSuccess]);
 
   return (
     <Container

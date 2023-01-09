@@ -173,7 +173,12 @@ const CommentCard = ({
       )}
       {modify && (
         <Wrapper css={style.cardArea}>
-          <CommentArea postId={id} />
+          <CommentArea
+            postId={postId}
+            parentId={id}
+            defaultValue={content}
+            type="edit"
+          />
         </Wrapper>
       )}
       {open && (
