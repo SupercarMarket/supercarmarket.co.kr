@@ -57,12 +57,9 @@ const commentCreateApi: NextApiHandler = async (req, res) => {
     `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/post/${postId}/comment`,
     {
       method: 'POST',
-      headers: {
-        ...headers,
-        'Content-Type': 'application/json',
-      },
+      headers,
       query: {
-        parentId: parentId ? parentId : null,
+        parentId,
         category: 'magazine',
       },
       data: { contents },

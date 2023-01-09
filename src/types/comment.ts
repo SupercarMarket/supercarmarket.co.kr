@@ -7,6 +7,7 @@ interface Comment {
   like: number;
   isLiked: boolean;
   isRemoved: boolean;
+  isMyComment: boolean;
   createAt: Date;
   updateAt?: Date;
   children?: Comment[];

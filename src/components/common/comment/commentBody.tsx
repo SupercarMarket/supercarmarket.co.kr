@@ -1,7 +1,6 @@
 import Avvvatars from 'avvvatars-react';
 import useLikeComment from 'hooks/mutations/comment/useLikeComment';
 import useRemoveComment from 'hooks/mutations/comment/useRemoveComment';
-import { useSession } from 'next-auth/react';
 import * as React from 'react';
 import { Comment } from 'types/comment';
 
@@ -24,9 +23,9 @@ const CommentCard = ({
   updateAt,
   isRemoved,
   isLiked,
+  isMyComment = true,
   children,
 }: Comment & { postId: string }) => {
-  const isMyComment = useSession().data?.sub === user.nickName;
   const { mutate: likeMuate } = useLikeComment(postId, id);
   const { mutate: removeMutate } = useRemoveComment(postId, id);
   const [modify, setModify] = React.useState(false);
@@ -113,7 +112,7 @@ const CommentCard = ({
                     </Typography>
                   </Button>
                 )}
-                {true && (
+                {isMyComment && (
                   <Button variant="Init" onClick={handleModify}>
                     <Typography
                       fontSize="body-14"

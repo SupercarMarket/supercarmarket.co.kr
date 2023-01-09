@@ -78,5 +78,28 @@ const baseApi = async <T>(url: string, options: FetcherRequestInit) => {
   return { status: response.status, ok: response.ok, ...result };
 };
 
-export { baseApi, baseFetch, baseFetcher };
+const clientApi = async <T>(url: string, options: FetcherRequestInit) => {
+  const { data, headers, ...rest } = options;
+  const requestBody = JSON.stringify(data);
+
+  try {
+    const response = await fetcher(url, {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        ...headers,
+      },
+      body: requestBody,
+      ...rest,
+    });
+
+    const result: T = response.ok ? await response.json() : null;
+
+    return { status: response.status, ok: response.ok, ...result };
+  } catch (e) {
+    throw new Error(getErrorMessage(e));
+  }
+};
+
+export { baseApi, baseFetch, baseFetcher, clientApi };
 export default fetcher;

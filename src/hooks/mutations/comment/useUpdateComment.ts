@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import queries from 'constants/queries';
-import { baseApi } from 'utils/api/fetcher';
+import { clientApi } from 'utils/api/fetcher';
 
 export default function useUpdateComment(
   postId: string,
@@ -11,11 +11,8 @@ export default function useUpdateComment(
 
   return useMutation({
     mutationFn: (contents: string) =>
-      baseApi('/api/comment/update', {
+      clientApi('/api/comment/update', {
         method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
         query: {
           postId,
           commentId,

@@ -13,9 +13,6 @@ export default function useRemoveComment(
     mutationFn: () =>
       baseFetch('/api/comment/remove', {
         method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
         query: {
           postId,
           commentId,

@@ -13,9 +13,6 @@ export default function useLikeComment(
     mutationFn: () =>
       baseFetch('/api/comment/like', {
         method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
         query: {
           postId,
           commentId,
