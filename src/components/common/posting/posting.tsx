@@ -3,7 +3,7 @@ import * as React from 'react';
 
 import Container from '../container';
 import PostingBody from './postingBody';
-import PostingHead from './postingHead';
+import { PostingHeadCommunity, PostingHeadMagainze } from './postingHead';
 
 type PostingType = 'magazine' | 'community';
 
@@ -13,7 +13,46 @@ export interface PostingProps {
 }
 
 const Posting = function Posting(props: PostingProps) {
-  const { postId, type } = props;
+  const { type, postId } = props;
+
+  switch (type) {
+    case 'magazine':
+      return <MagazinePosting postId={postId} />;
+    case 'community':
+      return <CommunityPosting postId={postId} />;
+    default:
+      throw new Error('neead type props');
+  }
+};
+
+const MagazinePosting = ({ postId }: Omit<PostingProps, 'type'>) => {
+  const { data: magazinePost } = useMagazinePost(postId, {
+    enabled: !!postId,
+  });
+
+  return (
+    <Container>
+      {magazinePost && <PostingHeadMagainze {...magazinePost.data} />}
+      <Container
+        width="100%"
+        display="flex"
+        flexDirection="column"
+        padding="0 40px"
+        border="1px solid #EAEAEC"
+        borderRadius="4px"
+        boxSizing="border-box"
+      >
+        {magazinePost && (
+          <>
+            <PostingBody contentHtml={magazinePost.data.contentHtml} />
+          </>
+        )}
+      </Container>
+    </Container>
+  );
+};
+
+const CommunityPosting = ({ postId }: Omit<PostingProps, 'type'>) => {
   const { data: magazinePost } = useMagazinePost(postId, {
     enabled: !!postId,
   });
@@ -30,11 +69,7 @@ const Posting = function Posting(props: PostingProps) {
     >
       {magazinePost && (
         <>
-          {type === 'magazine' ? (
-            <PostingHead {...magazinePost.data} />
-          ) : (
-            <PostingHead {...magazinePost.data} />
-          )}
+          <PostingHeadCommunity {...magazinePost.data} />
           <PostingBody contentHtml={magazinePost.data.contentHtml} />
         </>
       )}
