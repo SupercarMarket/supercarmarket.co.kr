@@ -53,15 +53,22 @@ const commentCreateApi: NextApiHandler = async (req, res) => {
       }
     : undefined;
 
+  const query =
+    parentId === 'null'
+      ? {
+          category: 'magazine',
+        }
+      : {
+          parentId,
+          category: 'magazine',
+        };
+
   const response = await baseApi<MessageResponse>(
     `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/post/${postId}/comment`,
     {
       method: 'POST',
       headers,
-      query: {
-        parentId,
-        category: 'magazine',
-      },
+      query,
       data: { contents },
     }
   );
