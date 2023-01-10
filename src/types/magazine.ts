@@ -5,6 +5,7 @@ interface MagazineDto {
   title: string;
   contents: string;
   imgSrc: string;
+  comments: number;
 }
 
 type WithBlurredImage<T> = {
