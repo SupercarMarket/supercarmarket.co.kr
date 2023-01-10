@@ -1,5 +1,11 @@
 import { ServerResponse, User } from './base';
 
+interface CommentQuery {
+  page: number;
+  orderby: string;
+  category: 'magazine' | 'paparazzi' | 'partnership';
+}
+
 interface Comment {
   id: string;
   user: User;
@@ -20,4 +26,4 @@ interface CommentResponse extends ServerResponse<Comment[]> {
   isLastPage: boolean;
 }
 
-export type { Comment, CommentResponse };
+export type { Comment, CommentQuery, CommentResponse };

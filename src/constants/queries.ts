@@ -1,3 +1,5 @@
+import { CommentQuery } from 'types/comment';
+
 const queries = {
   /**
    * Home Query Keys
@@ -16,7 +18,8 @@ const queries = {
    */
   market: {
     all: ['market'] as const,
-    lists: (marketKey: string[]) => [...queries.market.all, 'list', ...marketKey] as const,
+    lists: (marketKey: string[]) =>
+      [...queries.market.all, 'list', ...marketKey] as const,
     detail: (id: string) => [...queries.market.all, 'detail', id] as const,
     best: () => [...queries.market.lists([]), 'best'] as const,
     new: () => [...queries.market.lists([]), 'new'] as const,
@@ -28,6 +31,7 @@ const queries = {
     all: ['magazine'] as const,
     lists: () => [...queries.magazine.all, 'list'] as const,
     id: (id: string) => [...queries.magazine.lists(), id] as const,
+    query: (query: { page: number }) => [query.page] as const,
   },
   /**
    * Community Query Keys
@@ -44,6 +48,8 @@ const queries = {
     all: ['comment'] as const,
     lists: () => [...queries.comment.all, 'list'] as const,
     id: (id: string) => [...queries.comment.lists(), id] as const,
+    query: (query: CommentQuery) =>
+      [query.page, query.orderby, query.category] as const,
   },
 };
 

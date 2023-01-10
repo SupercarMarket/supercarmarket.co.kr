@@ -1,3 +1,8 @@
+'use client';
+
+import Link from 'next/link';
+import { usePathname, useSearchParams } from 'next/navigation';
+
 import ChatIcon from '../../../assets/svg/chat.svg';
 import Container from '../container';
 import Typography from '../typography';
@@ -8,6 +13,9 @@ interface CommentHeadProps {
 }
 
 const CommentHead = ({ totalCount }: CommentHeadProps) => {
+  const pathname = usePathname();
+  const isOrderby = useSearchParams().get('orderby') === 'true';
+
   return (
     <Container
       display="flex"
@@ -34,28 +42,46 @@ const CommentHead = ({ totalCount }: CommentHeadProps) => {
         </Typography>
       </CommentHeadLeft>
       <CommentHeadRight>
-        <Typography
-          fontSize="body-16"
-          fontWeight="regular"
-          color="greyScale-6"
-          lineHeight="150%"
-          style={{
-            cursor: 'pointer',
+        <Link
+          href={{
+            pathname,
+            query: {
+              orderby: 'false',
+            },
           }}
         >
-          등록순
-        </Typography>
-        <Typography
-          fontSize="body-16"
-          fontWeight="regular"
-          color="greyScale-4"
-          lineHeight="150%"
-          style={{
-            cursor: 'pointer',
+          <Typography
+            fontSize="body-16"
+            fontWeight="regular"
+            color={isOrderby ? 'greyScale-4' : 'greyScale-6'}
+            lineHeight="150%"
+            style={{
+              cursor: 'pointer',
+            }}
+          >
+            등록순
+          </Typography>
+        </Link>
+        <Link
+          href={{
+            pathname,
+            query: {
+              orderby: 'true',
+            },
           }}
         >
-          최신순
-        </Typography>
+          <Typography
+            fontSize="body-16"
+            fontWeight="regular"
+            color={isOrderby ? 'greyScale-6' : 'greyScale-4'}
+            lineHeight="150%"
+            style={{
+              cursor: 'pointer',
+            }}
+          >
+            최신순
+          </Typography>
+        </Link>
       </CommentHeadRight>
     </Container>
   );

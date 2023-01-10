@@ -19,6 +19,7 @@ const MagazineBanner = ({
   className,
 }: MagazineBannerProps) => {
   const { data: magazine } = useMagazine();
+
   return (
     <Styled.Container
       className={clsx(
@@ -79,7 +80,7 @@ const MagazineBanner = ({
           </Styled.ContentsWrapper>
           <Styled.ImageWrapper>
             <Image
-              src={magazine.data[0].thumbnailSrc}
+              src={magazine.data[0].imgSrc}
               alt="thumbnail"
               width={590}
               height={394}

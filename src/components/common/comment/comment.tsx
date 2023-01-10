@@ -12,10 +12,19 @@ interface CommentProps {
 }
 
 const Comment = ({ id }: CommentProps) => {
-  const page = useCurrentPage();
-  const { data: comment } = useComment(id, {
-    enabled: !!id,
-  });
+  const { page, orderby } = useCurrentPage();
+
+  const { data: comment } = useComment(
+    id,
+    {
+      page,
+      orderby,
+      category: 'magazine',
+    },
+    {
+      enabled: !!id,
+    }
+  );
 
   return (
     <Container

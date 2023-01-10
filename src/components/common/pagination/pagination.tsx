@@ -1,6 +1,8 @@
+'use client';
+
 import clsx from 'clsx';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+import { usePathname, useRouter } from 'next/navigation';
 import { ReactNode, useMemo } from 'react';
 import { memo } from 'react';
 
@@ -14,6 +16,7 @@ interface PaginationItemProps {
   page: number;
   active?: boolean;
   children?: ReactNode;
+  pathname: string | null;
 }
 
 interface PaginationProps {
@@ -26,6 +29,7 @@ interface PaginationProps {
 
 const PaginationItem = memo(function PaginationItem({
   page,
+  pathname,
   active = false,
   children,
 }: PaginationItemProps) {
@@ -36,11 +40,12 @@ const PaginationItem = memo(function PaginationItem({
     >
       <Link
         href={{
-          pathname: '',
+          pathname,
           query: {
             page,
           },
         }}
+        shallow
       >
         <span>{children}</span>
       </Link>
@@ -55,6 +60,7 @@ const Pagination = memo(function Pagination({
   className = 'pagination',
 }: PaginationProps) {
   const { push } = useRouter();
+  const pathname = usePathname();
   const currentPages = useMemo(() => {
     const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
     return Array(totalPages)
@@ -74,48 +80,32 @@ const Pagination = memo(function Pagination({
       <PaginationButton
         variant="Line"
         disabled={page <= pageSize}
-        onClick={() =>
-          push({
-            pathname: '',
-            query: {
-              page: page - pageSize,
-            },
-          })
-        }
+        onClick={() => push(`${pathname}?page=${page - pageSize}`)}
       >
         <ArrowLeftTwo />
       </PaginationButton>
       <PaginationButton
         variant="Line"
         disabled={page <= 0}
-        onClick={() =>
-          push({
-            pathname: '',
-            query: {
-              page: page - 1,
-            },
-          })
-        }
+        onClick={() => push(`${pathname}?page=${page - 1}`)}
       >
         <ArrowLeft />
       </PaginationButton>
       {currentPages &&
         Array.from(currentPages).map((p) => (
-          <PaginationItem key={p} page={p - 1} active={p === page + 1}>
+          <PaginationItem
+            key={p}
+            page={p - 1}
+            active={p === page + 1}
+            pathname={pathname}
+          >
             {p}
           </PaginationItem>
         ))}
       <PaginationButton
         variant="Line"
         disabled={page + 1 >= totalPages}
-        onClick={() =>
-          push({
-            pathname: '',
-            query: {
-              page: page + 1,
-            },
-          })
-        }
+        onClick={() => push(`${pathname}?page=${page + 1}`)}
       >
         <ArrowRight />
       </PaginationButton>

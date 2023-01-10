@@ -10,7 +10,7 @@ import fetcher, { baseApi } from './fetcher';
 type MessageResponse = ServerResponse<{ message: string }>;
 
 const commentApi: NextApiHandler = async (req, res) => {
-  const { id } = req.query as Params;
+  const { id, page, orderby } = req.query as Params;
   const session = await getSession({ req });
 
   const headers = session
@@ -19,7 +19,7 @@ const commentApi: NextApiHandler = async (req, res) => {
       }
     : undefined;
 
-  catchNoExist(id);
+  catchNoExist(id, page, orderby);
 
   const response = await fetcher(
     `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/post/${id}/comment`,
@@ -27,6 +27,8 @@ const commentApi: NextApiHandler = async (req, res) => {
       headers,
       method: 'GET',
       query: {
+        page: page + 1,
+        orderby,
         category: 'magazine',
       },
     }

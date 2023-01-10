@@ -7,10 +7,16 @@ import {
 } from 'types/magazine';
 import { baseFetch } from 'utils/api/fetcher';
 
-export default function useMagazine(options = {}) {
+export default function useMagazine(page = 0, options = {}) {
   return useQuery<MagazineResponse<WithBlurredImage<MagazineDto>>>(
-    queries.magazine.lists(),
-    () => baseFetch('/api/magazine', { method: 'GET' }),
+    [...queries.magazine.lists(), ...queries.magazine.query({ page })],
+    () =>
+      baseFetch('/api/magazine', {
+        method: 'GET',
+        query: {
+          page,
+        },
+      }),
     { ...options, useErrorBoundary: true }
   );
 }

@@ -8,10 +8,19 @@ import { catchNoExist, getErrorMessage } from 'utils/misc';
 import { getSession } from './auth/user';
 import fetcher, { baseFetcher } from './fetcher';
 
-const magazineApi: NextApiHandler = async (_, res) => {
+const magazineApi: NextApiHandler = async (req, res) => {
+  const { page } = req.query as Params;
+
+  catchNoExist(page);
+
   const response = await fetcher(
     `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/magazine`,
-    { method: 'GET' }
+    {
+      method: 'GET',
+      query: {
+        page: page + 1,
+      },
+    }
   );
 
   if (!response.ok)
@@ -21,14 +30,14 @@ const magazineApi: NextApiHandler = async (_, res) => {
 
   const magazine: MagazineResponse<MagazineDto> = await response.json();
 
-  if (!magazine.data.every((v) => v.thumbnailSrc))
+  if (!magazine.data.every((v) => v.imgSrc))
     return res
       .status(481)
       .json({ message: 'imgSrc 필드가 존재하지 않습니다.' });
 
   const magazineWithBluredImage = await Promise.all(
     magazine.data.map(async (m) => {
-      const { base64 } = await getPlaiceholder(m.thumbnailSrc);
+      const { base64 } = await getPlaiceholder(m.imgSrc);
       return {
         ...m,
         base64,

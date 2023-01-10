@@ -15,8 +15,8 @@ const PostingHeadMagainze = ({
   view,
   totalCommentCount,
   createAt,
-  thumbnailSrc,
-}: Omit<Posting & { thumbnailSrc: string }, 'contentHtml'>) => {
+  imgSrc,
+}: Omit<Posting & { imgSrc: string }, 'contentHtml'>) => {
   return (
     <Container
       position="relative"
@@ -29,7 +29,7 @@ const PostingHeadMagainze = ({
       background="rgba(0, 0, 0, 0.5)"
     >
       <Image
-        src={thumbnailSrc}
+        src={imgSrc}
         alt="thumbnail"
         fill
         style={{

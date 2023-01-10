@@ -2,24 +2,17 @@ import Container from 'components/common/container';
 import Pagination from 'components/common/pagination';
 import Searchbar from 'components/common/searchbar';
 import useMagazine from 'hooks/queries/useMagazine';
-import { useMemo } from 'react';
-import {
-  MagazineDto,
-  MagazineResponse,
-  WithBlurredImage,
-} from 'types/magazine';
+import useUrlQuery from 'hooks/useCurrentPage';
 
 import MagazineCard from './magazineCard';
 import * as Styled from './magazineList.styled';
 
-interface MagazineListProps {
-  // data: MagazineResponse<WithBlurredImage<MagazineDto>>;
-  page: number;
-}
+const MagazineList = () => {
+  const { page } = useUrlQuery();
+  const { data: magazine } = useMagazine(page);
 
-const MagazineList = ({ page }: MagazineListProps) => {
-  // const magazine = useMemo(() => data.data, [data.data]);
-  const { data: magazine } = useMagazine();
+  console.log(magazine);
+
   return (
     <Container
       display="flex"
