@@ -1,6 +1,7 @@
 'use client';
 
 import clsx from 'clsx';
+import useUrlQuery from 'hooks/useCurrentPage';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { ReactNode, useMemo } from 'react';
@@ -14,13 +15,13 @@ import { PaginationButton, PaginationItemContainer } from './pagination.styled';
 
 interface PaginationItemProps {
   page: number;
+  orderby: string;
   active?: boolean;
   children?: ReactNode;
   pathname: string | null;
 }
 
 interface PaginationProps {
-  page: number;
   pageSize: number;
   totalCount: number;
   totalPages: number;
@@ -29,6 +30,7 @@ interface PaginationProps {
 
 const PaginationItem = memo(function PaginationItem({
   page,
+  orderby,
   pathname,
   active = false,
   children,
@@ -43,6 +45,7 @@ const PaginationItem = memo(function PaginationItem({
           pathname,
           query: {
             page,
+            orderby,
           },
         }}
         shallow
@@ -54,11 +57,11 @@ const PaginationItem = memo(function PaginationItem({
 });
 
 const Pagination = memo(function Pagination({
-  page,
   pageSize = 10,
   totalPages,
   className = 'pagination',
 }: PaginationProps) {
+  const { page, orderby } = useUrlQuery();
   const { push } = useRouter();
   const pathname = usePathname();
   const currentPages = useMemo(() => {
@@ -80,14 +83,16 @@ const Pagination = memo(function Pagination({
       <PaginationButton
         variant="Line"
         disabled={page <= pageSize}
-        onClick={() => push(`${pathname}?page=${page - pageSize}`)}
+        onClick={() =>
+          push(`${pathname}?page=${page - pageSize}&orderby=${orderby}`)
+        }
       >
         <ArrowLeftTwo />
       </PaginationButton>
       <PaginationButton
         variant="Line"
         disabled={page <= 0}
-        onClick={() => push(`${pathname}?page=${page - 1}`)}
+        onClick={() => push(`${pathname}?page=${page - 1}&orderby=${orderby}`)}
       >
         <ArrowLeft />
       </PaginationButton>
@@ -97,6 +102,7 @@ const Pagination = memo(function Pagination({
             key={p}
             page={p - 1}
             active={p === page + 1}
+            orderby={orderby}
             pathname={pathname}
           >
             {p}
@@ -105,7 +111,7 @@ const Pagination = memo(function Pagination({
       <PaginationButton
         variant="Line"
         disabled={page + 1 >= totalPages}
-        onClick={() => push(`${pathname}?page=${page + 1}`)}
+        onClick={() => push(`${pathname}?page=${page + 1}&orderby=${orderby}`)}
       >
         <ArrowRight />
       </PaginationButton>

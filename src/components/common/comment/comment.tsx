@@ -44,7 +44,6 @@ const Comment = ({ id }: CommentProps) => {
           <CommentHead totalCount={comment.data.length} />
           <CommentBody postId={id} comments={comment.data} />
           <Pagination
-            page={page}
             totalPages={comment.totalPages}
             totalCount={comment.totalCount}
             pageSize={10}

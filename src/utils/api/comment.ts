@@ -27,14 +27,17 @@ const commentApi: NextApiHandler = async (req, res) => {
       headers,
       method: 'GET',
       query: {
-        page: page + 1,
+        page: parseInt(page) + 1,
         orderby,
         category: 'magazine',
       },
     }
   );
 
-  if (!response.ok) return res.status(500).json({ message: ErrorCode[450] });
+  if (!response.ok)
+    return res
+      .status(response.status)
+      .json({ message: ErrorCode[response.status] });
 
   const comment: CommentResponse = await response.json();
 

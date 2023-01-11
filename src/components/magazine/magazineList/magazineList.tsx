@@ -11,8 +11,6 @@ const MagazineList = () => {
   const { page } = useUrlQuery();
   const { data: magazine } = useMagazine(page);
 
-  console.log(magazine);
-
   return (
     <Container
       display="flex"
@@ -29,7 +27,6 @@ const MagazineList = () => {
             ))}
           </Styled.CardPack>
           <Pagination
-            page={page}
             pageSize={magazine.pageSize}
             totalCount={magazine.totalCount}
             totalPages={magazine.totalPages}
