@@ -85,6 +85,11 @@ const filesButton = css`
   cursor: pointer;
 `;
 
+const postcodeWrapper = css`
+  display: flex;
+  gap: 8px;
+`;
+
 export {
   filesButton,
   filesWrapper,
@@ -95,5 +100,6 @@ export {
   Input,
   item,
   Label,
+  postcodeWrapper,
   wrapper,
 };
