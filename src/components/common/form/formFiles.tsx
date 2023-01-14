@@ -11,6 +11,7 @@ import * as style from './form.styled';
 import FormMessage from './formMessage';
 
 type FormFilesProps = React.InputHTMLAttributes<HTMLInputElement> & {
+  size?: number;
   callback?: (files: File[]) => void;
 };
 
@@ -60,7 +61,7 @@ const FormFile = React.memo(function FormFile({
 });
 
 const FormFiles = (props: FormFilesProps, ref: React.Ref<HTMLInputElement>) => {
-  const { name, callback, ...rest } = props;
+  const { name, size, callback, ...rest } = props;
   const [files, setFiles] = React.useState<File[]>([]);
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
 
@@ -96,7 +97,7 @@ const FormFiles = (props: FormFilesProps, ref: React.Ref<HTMLInputElement>) => {
 
   React.useEffect(() => {
     if (callback) callback(files);
-  }, [callback, files]);
+  }, [files]);
 
   return (
     <Container
@@ -114,6 +115,7 @@ const FormFiles = (props: FormFilesProps, ref: React.Ref<HTMLInputElement>) => {
         id={name}
         type="file"
         onChange={handleChange}
+        disabled={size && files.length === size ? true : undefined}
         {...rest}
       />
       {files &&

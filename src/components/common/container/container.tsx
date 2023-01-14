@@ -1,36 +1,37 @@
 import clsx from 'clsx';
-import type { AllHTMLAttributes, CSSProperties, ReactNode } from 'react';
+import * as React from 'react';
 
 interface BaseProps {
   className?: string;
-  children?: ReactNode;
-  width?: CSSProperties['width'];
-  height?: CSSProperties['height'];
-  padding?: CSSProperties['padding'];
-  margin?: CSSProperties['margin'];
-  position?: CSSProperties['position'];
-  display?: CSSProperties['display'];
-  flex?: CSSProperties['flex'];
-  flexDirection?: CSSProperties['flexDirection'];
-  justifyContent?: CSSProperties['justifyContent'];
-  alignItems?: CSSProperties['alignItems'];
-  gap?: CSSProperties['gap'];
-  border?: CSSProperties['border'];
-  borderBottom?: CSSProperties['borderBottom'];
-  borderTop?: CSSProperties['borderTop'];
-  borderRadius?: CSSProperties['borderRadius'];
-  boxSizing?: CSSProperties['boxSizing'];
-  background?: CSSProperties['background'];
-  gridTemplateColumns?: CSSProperties['gridTemplateColumns'];
+  children?: React.ReactNode;
+  width?: React.CSSProperties['width'];
+  height?: React.CSSProperties['height'];
+  padding?: React.CSSProperties['padding'];
+  margin?: React.CSSProperties['margin'];
+  position?: React.CSSProperties['position'];
+  display?: React.CSSProperties['display'];
+  flex?: React.CSSProperties['flex'];
+  flexDirection?: React.CSSProperties['flexDirection'];
+  justifyContent?: React.CSSProperties['justifyContent'];
+  alignItems?: React.CSSProperties['alignItems'];
+  gap?: React.CSSProperties['gap'];
+  border?: React.CSSProperties['border'];
+  borderBottom?: React.CSSProperties['borderBottom'];
+  borderTop?: React.CSSProperties['borderTop'];
+  borderRadius?: React.CSSProperties['borderRadius'];
+  boxSizing?: React.CSSProperties['boxSizing'];
+  background?: React.CSSProperties['background'];
+  gridTemplateColumns?: React.CSSProperties['gridTemplateColumns'];
 }
 
 type ContainerProps<Element extends keyof JSX.IntrinsicElements = 'div'> =
   BaseProps & {
     as?: Element;
-  } & Omit<AllHTMLAttributes<Element>, 'as'>;
+  } & Omit<React.AllHTMLAttributes<Element>, 'as'>;
 
 const Container = <Element extends keyof JSX.IntrinsicElements = 'div'>(
-  props: ContainerProps<Element>
+  props: ContainerProps<Element>,
+  ref: React.Ref<HTMLDivElement>
 ) => {
   const {
     as: Component = 'div',
@@ -64,6 +65,7 @@ const Container = <Element extends keyof JSX.IntrinsicElements = 'div'>(
       };
   return (
     <Component
+      ref={ref}
       className={clsx('container', className)}
       style={{
         width,
@@ -90,4 +92,4 @@ const Container = <Element extends keyof JSX.IntrinsicElements = 'div'>(
   );
 };
 
-export default Container;
+export default React.forwardRef(Container);

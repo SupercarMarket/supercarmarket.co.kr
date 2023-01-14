@@ -30,7 +30,7 @@ const FormPostcode = ({ callback }: FormPostcodeProps) => {
   React.useEffect(() => {
     if (address && detailAddress && zipcode && callback)
       callback([zipcode, address, detailAddress]);
-  }, [address, callback, detailAddress, zipcode]);
+  }, [address, detailAddress, zipcode]);
 
   return (
     <Container display="flex" flexDirection="column" gap="8px">

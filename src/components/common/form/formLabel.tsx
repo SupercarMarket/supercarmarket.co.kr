@@ -12,6 +12,8 @@ interface FormLabelProps extends React.PropsWithChildren {
   hidden?: boolean;
   width?: React.CSSProperties['width'];
   paddingTop?: React.CSSProperties['paddingTop'];
+  flexDirection?: React.CSSProperties['flexDirection'];
+  gap?: React.CSSProperties['gap'];
 }
 
 const FormLabel = (props: FormLabelProps) => {
@@ -22,11 +24,18 @@ const FormLabel = (props: FormLabelProps) => {
     hidden = false,
     width = '140px',
     paddingTop = '18px',
+    flexDirection = 'row',
+    gap,
     className,
     children,
   } = props;
   return (
-    <Container display="flex" className={className}>
+    <Container
+      display="flex"
+      flexDirection={flexDirection}
+      gap={gap}
+      className={className}
+    >
       <Wrapper>
         <Typography
           as="label"

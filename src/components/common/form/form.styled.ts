@@ -48,6 +48,13 @@ const item = css`
   top: 8px;
 `;
 
+const suffix = css`
+  position: absolute;
+  right: -37px;
+  top: 50%;
+  transform: translateY(-50%);
+`;
+
 const imageWrapper = css`
   display: flex;
   align-items: center;
@@ -101,5 +108,6 @@ export {
   item,
   Label,
   postcodeWrapper,
+  suffix,
   wrapper,
 };
