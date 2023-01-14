@@ -1,56 +1,135 @@
-import { FormInput, FormLabel, FormPostcode } from 'components/common/form';
+import Divider from 'components/common/divider';
+import {
+  FormInput,
+  FormLabel,
+  FormMessage,
+  FormPostcode,
+} from 'components/common/form';
 import FormFiles from 'components/common/form/formFiles';
+import FormImage from 'components/common/form/formImage';
+import FormTextArea from 'components/common/form/formTextArea';
 import Wrapper from 'components/common/wrapper';
-import { RegisterOptions, useFormContext } from 'react-hook-form';
+import type { InquiryRegister } from 'constants/inquiry';
+import type {
+  FieldValues,
+  UseFormRegister,
+  UseFormSetValue,
+} from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 import { css } from 'styled-components';
 
-export interface FormState {
-  dealerName: string;
-  dealerPhone: string;
-  dealerPostcode: string;
-  dealerBusinessNumber: string;
-  dealerCertification: string;
-}
-
-interface InquiryFormItemProps {
-  htmlFor: keyof FormState;
-  label?: string;
-  type?: React.HTMLInputTypeAttribute;
-  placeholder?: string;
-  options?: RegisterOptions;
-  successMessage?: string;
-  errorMessage?: string;
-  callback?: (data: unknown) => void;
-}
-
 type InquiryFormItemContainerProps = React.PropsWithChildren &
-  InquiryFormItemProps;
+  InquiryRegister & {
+    register: UseFormRegister<FieldValues>;
+    setValue: UseFormSetValue<FieldValues>;
+    isRequire: boolean;
+  };
 
-const InquiryFormItem = (props: InquiryFormItemProps) => {
-  const {} = useFormContext();
-  return <InquiryFormItemContainer {...props} />;
+const InquiryFormItem = (props: InquiryRegister) => {
+  const { htmlFor, options } = props;
+  const {
+    register,
+    setValue,
+    formState: { isSubmitted },
+  } = useFormContext();
+  const target = useWatch({ name: htmlFor });
+
+  const isRequire = isSubmitted && options.required === true && !target;
+
+  return (
+    <InquiryFormItemContainer
+      register={register}
+      setValue={setValue}
+      isRequire={isRequire}
+      {...props}
+    />
+  );
 };
 
 const InquiryFormItemContainer = (props: InquiryFormItemContainerProps) => {
-  const { htmlFor, label, type, children } = props;
+  const {
+    htmlFor,
+    label,
+    type,
+    placeholder,
+    suffix,
+    divider,
+    register,
+    setValue,
+    isRequire,
+  } = props;
+
   return (
-    <FormLabel name={htmlFor} label={label} width="200px" bold>
-      <Wrapper
-        css={css`
-          width: 100%;
-        `}
+    <>
+      <FormLabel
+        name={htmlFor}
+        label={label}
+        width="200px"
+        bold
+        flexDirection={htmlFor === 'addional' ? 'column' : undefined}
+        gap={htmlFor === 'addional' ? '22.5px' : undefined}
       >
-        {
+        <Wrapper
+          css={css`
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+          `}
+        >
           {
-            dealerName: <FormInput />,
-            dealerPhone: <FormInput />,
-            dealerBusinessNumber: <FormInput />,
-            dealerPostcode: <FormPostcode />,
-            dealerCertification: <FormFiles />,
-          }[htmlFor]
-        }
-      </Wrapper>
-    </FormLabel>
+            {
+              text: (
+                <FormInput
+                  placeholder={placeholder}
+                  suffix={suffix}
+                  {...register(htmlFor)}
+                />
+              ),
+              address: (
+                <FormPostcode callback={(value) => setValue(htmlFor, value)} />
+              ),
+              file: (
+                <FormFiles
+                  id={htmlFor}
+                  name={htmlFor}
+                  size={1}
+                  callback={(value) => setValue(htmlFor, value)}
+                />
+              ),
+              files: (
+                <FormFiles
+                  id={htmlFor}
+                  name={htmlFor}
+                  callback={(value) => setValue(htmlFor, value)}
+                />
+              ),
+              image: (
+                <FormImage
+                  title="사진 1"
+                  id={htmlFor}
+                  name={htmlFor}
+                  callback={(value) => setValue(htmlFor, value)}
+                />
+              ),
+              textarea: (
+                <FormTextArea
+                  placeholder={placeholder}
+                  {...register(htmlFor)}
+                />
+              ),
+            }[type]
+          }
+          <FormMessage
+            error={isRequire ? `${label} 을/를 입력해주세요.` : undefined}
+            padding="0 14px"
+          />
+        </Wrapper>
+      </FormLabel>
+      {divider && (
+        <Divider width="100%" height="1px" color="#EAEAEC" margin="16px 0" />
+      )}
+    </>
   );
 };
 
