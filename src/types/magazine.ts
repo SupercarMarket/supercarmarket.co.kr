@@ -24,7 +24,7 @@ interface MagazineResponse<T> {
 
 interface MagazinePostingResponse {
   data: Posting & {
-    thumbnailSrc: string;
+    imgSrc: string;
   };
   isScraped: boolean;
   isCounseling: boolean;
