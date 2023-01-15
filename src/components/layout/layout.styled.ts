@@ -16,9 +16,20 @@ const Container = styled.div`
   }`
   ).join('')}
   min-height: calc(100vh - 1.25rem);
+  padding-bottom: 85px;
 `;
 
-const Main = styled.main``;
+const footer = css`
+  margin: 0 auto;
+  padding-top: 1.25rem;
+  ${DEVICE_LIST.map(
+    (device) => `${applyMediaQuery(device)} {
+    width: ${availableWidth[device]};
+  }`
+  ).join('')}
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+`;
 
 const account = css`
   margin: 0 auto;
@@ -29,4 +40,4 @@ const account = css`
   ).join('')}
 `;
 
-export { account, Container, Main };
+export { account, Container, footer };

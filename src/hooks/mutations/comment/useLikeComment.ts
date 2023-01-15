@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import queries from 'constants/queries';
-import { baseFetcher } from 'utils/api/fetcher';
+import { baseFetch } from 'utils/api/fetcher';
 
 export default function useLikeComment(
   postId: string,
@@ -11,11 +11,8 @@ export default function useLikeComment(
 
   return useMutation({
     mutationFn: () =>
-      baseFetcher('/api/comment/like', {
+      baseFetch('/api/comment/like', {
         method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
         query: {
           postId,
           commentId,

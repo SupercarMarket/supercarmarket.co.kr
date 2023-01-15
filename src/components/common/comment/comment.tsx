@@ -1,4 +1,5 @@
-import type { CommentResponse } from 'types/comment';
+import useComment from 'hooks/queries/useComment';
+import useCurrentPage from 'hooks/useCurrentPage';
 
 import Container from '../container';
 import Pagination from '../pagination';
@@ -6,11 +7,25 @@ import CommentArea from './commentArea';
 import CommentBody from './commentBody';
 import CommentHead from './commentHead';
 
-interface CommentProps extends CommentResponse {
+interface CommentProps {
   id: string;
 }
 
-const Comment = ({ data, page, totalPages, totalCount, id }: CommentProps) => {
+const Comment = ({ id }: CommentProps) => {
+  const { page, orderby } = useCurrentPage();
+
+  const { data: comment } = useComment(
+    id,
+    {
+      page,
+      orderby,
+      category: 'magazine',
+    },
+    {
+      enabled: !!id,
+    }
+  );
+
   return (
     <Container
       width="100%"
@@ -24,15 +39,18 @@ const Comment = ({ data, page, totalPages, totalCount, id }: CommentProps) => {
       borderRadius="4px"
       boxSizing="border-box"
     >
-      <CommentHead totalCount={9999} />
-      <CommentBody postId={id} comments={data} />
-      <Pagination
-        page={page}
-        totalPages={totalPages}
-        totalCount={totalCount}
-        pageSize={10}
-      />
-      <CommentArea postId={id} />
+      {comment && (
+        <>
+          <CommentHead totalCount={comment.data.length} />
+          <CommentBody postId={id} comments={comment.data} />
+          <Pagination
+            totalPages={comment.totalPages}
+            totalCount={comment.totalCount}
+            pageSize={10}
+          />
+          <CommentArea postId={id} />
+        </>
+      )}
     </Container>
   );
 };

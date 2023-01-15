@@ -63,7 +63,7 @@ const Header = () => {
                 로그인
               </Typography>
             </Link>
-            <Link href="/auth/singinup">
+            <Link href="/auth/signup">
               <Typography
                 color="black"
                 fontSize="body-16"

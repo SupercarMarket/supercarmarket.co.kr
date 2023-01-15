@@ -5,6 +5,7 @@ interface MagazineDto {
   title: string;
   contents: string;
   imgSrc: string;
+  comments: number;
 }
 
 type WithBlurredImage<T> = {
@@ -22,7 +23,9 @@ interface MagazineResponse<T> {
 }
 
 interface MagazinePostingResponse {
-  data: Posting;
+  data: Posting & {
+    thumbnailSrc: string;
+  };
   isScraped: boolean;
   isCounseling: boolean;
 }
