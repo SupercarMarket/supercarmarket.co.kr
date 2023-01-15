@@ -8,10 +8,19 @@ import { catchNoExist, getErrorMessage } from 'utils/misc';
 import { getSession } from './auth/user';
 import fetcher, { baseFetcher } from './fetcher';
 
-const magazineApi: NextApiHandler = async (_, res) => {
+const magazineApi: NextApiHandler = async (req, res) => {
+  const { page } = req.query as Params;
+
+  catchNoExist(page);
+
   const response = await fetcher(
     `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/magazine`,
-    { method: 'GET' }
+    {
+      method: 'GET',
+      query: {
+        page: page + 1,
+      },
+    }
   );
 
   if (!response.ok)
@@ -46,25 +55,30 @@ const magazinePostApi: NextApiHandler = async (req, res) => {
   const { id } = req.query as Params;
   const session = await getSession({ req });
 
+  const headers = session
+    ? {
+        ACCESS_TOKEN: session.accessToken,
+      }
+    : undefined;
+
   catchNoExist(id);
 
-  if (!session) return res.status(430).json({ message: ErrorCode[430] });
+  const response = await fetcher(
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/magazine/${id}`,
+    {
+      headers,
+      method: 'GET',
+    }
+  );
 
-  try {
-    const magazinePost = await baseFetcher(
-      `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/magazine/${id}`,
-      {
-        headers: {
-          ACCESS_TOKEN: session.accessToken,
-        },
-        method: 'GET',
-      }
-    );
+  if (!response.ok)
+    return res
+      .status(response.status)
+      .json({ message: ErrorCode[response.status] });
 
-    return res.status(200).json(magazinePost);
-  } catch (error) {
-    throw new Error(getErrorMessage(error));
-  }
+  const magazinePost = await response.json();
+
+  return res.status(200).json(magazinePost);
 };
 
 const magazinePostScrapeApi: NextApiHandler = async (req, res) => {

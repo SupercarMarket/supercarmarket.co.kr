@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import Typography from 'components/common/typography';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { memo, useState } from 'react';
 
@@ -29,15 +30,29 @@ const NavLink = memo(function NavLink({ title, subMenu, link }: NavbarLinks) {
         {title}
       </label>
       <button id={title} className={clsx('navlink-button')}>
-        <Typography
-          as="a"
-          fontSize="header-16"
-          fontWeight="bold"
-          lineHeight="120%"
-          color="black"
-        >
-          {title}
-        </Typography>
+        {subMenu ? (
+          <Typography
+            as="a"
+            fontSize="header-16"
+            fontWeight="bold"
+            lineHeight="120%"
+            color="black"
+          >
+            {title}
+          </Typography>
+        ) : (
+          <Link href={'/' + link}>
+            <Typography
+              as="span"
+              fontSize="header-16"
+              fontWeight="bold"
+              lineHeight="120%"
+              color="black"
+            >
+              {title}
+            </Typography>
+          </Link>
+        )}
       </button>
       <Styled.Divider data-active={pathname.includes(link)} />
       <NavbarItem subMenu={subMenu} link={link} active={active} />

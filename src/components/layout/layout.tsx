@@ -1,3 +1,4 @@
+import Footer from './footer/footer';
 import Header from './header';
 import * as Styled from './layout.styled';
 import Navbar from './navbar';
@@ -82,11 +83,14 @@ export const navlinks: NavbarLinks[] = [
 
 const Layout = ({ children }: LayoutProps) => {
   return (
-    <Styled.Container>
-      <Header />
-      <Navbar navlinks={navlinks} />
-      <Styled.Main>{children}</Styled.Main>
-    </Styled.Container>
+    <>
+      <Styled.Container>
+        <Header />
+        <Navbar navlinks={navlinks} />
+        <main>{children}</main>
+      </Styled.Container>
+      <Footer />
+    </>
   );
 };
 

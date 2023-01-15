@@ -15,6 +15,7 @@ const MagazineCard = memo(function MagazineCard({
   base64,
   imgSrc,
   contents,
+  comments,
   type = 'normal',
 }: MagazineCardProps) {
   const imgWidth = type === 'normal' ? 387 : 285;
@@ -30,7 +31,7 @@ const MagazineCard = memo(function MagazineCard({
         cursor: 'pointer',
       }}
     >
-      <Container position="relative">
+      <Container position="relative" display="flex" flexDirection="column">
         <Image
           src={imgSrc}
           width={imgWidth}
@@ -38,7 +39,6 @@ const MagazineCard = memo(function MagazineCard({
           placeholder="blur"
           blurDataURL={base64}
           alt="thumbnail"
-          layout="fixed"
           style={{
             borderRadius: '4px',
           }}
@@ -60,7 +60,7 @@ const MagazineCard = memo(function MagazineCard({
             as="b"
             color="system-1"
             lineHeight="120%"
-          >{`(999)`}</Typography>
+          >{`(${comments})`}</Typography>
         </Typography>
         {visible && (
           <Typography

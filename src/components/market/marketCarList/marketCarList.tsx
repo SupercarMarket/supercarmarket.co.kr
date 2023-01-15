@@ -16,7 +16,7 @@ interface MarketCarListProps {
   page: number;
 }
 
-const MarketCarList = ({ data, page }: MarketCarListProps) => {
+const MarketCarList = ({ data }: MarketCarListProps) => {
   const markets = React.useMemo(() => data.data, [data.data]);
   const [listView, setListView] = React.useState(false);
 
@@ -51,7 +51,6 @@ const MarketCarList = ({ data, page }: MarketCarListProps) => {
         </Styled.MarketCardList>
       )}
       <Pagination
-        page={page}
         pageSize={data.pageSize}
         totalCount={data.totalCount}
         totalPages={data.totalPages}

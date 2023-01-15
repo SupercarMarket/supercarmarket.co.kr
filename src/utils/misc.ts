@@ -42,7 +42,7 @@ const env = (key: string): string => {
 
 const catchNoExist = (...lists: unknown[]) => {
   lists.forEach((list) => {
-    if (!list) throw new Error('No Exist Query or Data');
+    if (list === undefined) throw new Error('No Exist Query or Data');
   });
 };
 

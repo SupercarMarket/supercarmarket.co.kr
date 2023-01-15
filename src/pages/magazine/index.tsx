@@ -9,20 +9,11 @@ import { ErrorFallback } from 'components/fallback';
 import layout from 'components/layout';
 import { MagazineBanner, MagazineList } from 'components/magazine';
 import queries from 'constants/queries';
-import { useRouter } from 'next/router';
 import type { GetStaticProps } from 'next/types';
-import { useMemo } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import { baseFetcher } from 'utils/api/fetcher';
+import { clientFetcher } from 'utils/api/fetcher';
 
 const MagazinePage = () => {
-  const { query } = useRouter();
-  const page = useMemo(
-    () =>
-      query.page && typeof query.page === 'string' ? parseInt(query.page) : 0,
-    [query.page]
-  );
-
   return (
     <Container
       display="flex"
@@ -41,7 +32,7 @@ const MagazinePage = () => {
               )}
             >
               <MagazineBanner />
-              <MagazineList page={page} />
+              <MagazineList />
             </ErrorBoundary>
           </>
         )}
@@ -57,10 +48,15 @@ MagazinePage.Layout = layout;
 export const getStaticProps: GetStaticProps = async () => {
   const queryClient = new QueryClient();
 
-  await queryClient.prefetchQuery(queries.magazine.lists(), () =>
-    baseFetcher(`${process.env.NEXT_PUBLIC_URL}/api/magazine`, {
-      method: 'GET',
-    })
+  await queryClient.prefetchQuery(
+    [...queries.magazine.lists(), ...queries.magazine.query({ page: 0 })],
+    () =>
+      clientFetcher(`${process.env.NEXT_PUBLIC_URL}/api/magazine`, {
+        method: 'GET',
+        query: {
+          page: 0,
+        },
+      })
   );
 
   return {

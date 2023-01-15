@@ -25,7 +25,7 @@ const MarketNew = () => {
       </Wrapper>
       <RouterButton href="/market">
         <Typography fontSize="header-16" fontWeight="bold" color="black">
-          슈마 매거진 더보기
+          최신매물 더보기
         </Typography>
       </RouterButton>
     </Container>

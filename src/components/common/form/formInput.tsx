@@ -17,11 +17,13 @@ interface FormInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   buttonVariant?: 'Primary-Line' | 'Line';
   buttonDisabled?: boolean;
   buttonCallback?: () => void;
+  suffix?: React.ReactNode;
 }
 
 const FormInput = (props: FormInputProps, ref: React.Ref<HTMLInputElement>) => {
   const {
     count,
+    suffix,
     button = false,
     buttonText,
     buttonVariant,
@@ -35,9 +37,16 @@ const FormInput = (props: FormInputProps, ref: React.Ref<HTMLInputElement>) => {
     <Container display="flex" alignItems="center" gap={gap}>
       <Wrapper css={style.wrapper}>
         <Input ref={ref} {...rest} />
-        <Wrapper.Item css={style.item}>
-          {count && <Timer time={count} reset />}
-        </Wrapper.Item>
+        {count && (
+          <Wrapper.Item css={style.item}>
+            {count && <Timer time={count} reset />}
+          </Wrapper.Item>
+        )}
+        {suffix && (
+          <Wrapper.Item css={style.suffix}>
+            <Typography>{suffix}</Typography>
+          </Wrapper.Item>
+        )}
       </Wrapper>
       {button && (
         <Button

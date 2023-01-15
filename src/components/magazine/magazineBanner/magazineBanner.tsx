@@ -3,13 +3,11 @@ import Button from 'components/common/button';
 import Typography from 'components/common/typography';
 import useMagazine from 'hooks/queries/useMagazine';
 import Image from 'next/image';
-import { MagazineDto, WithBlurredImage } from 'types/magazine';
 
 import Arrow from '../../../assets/svg/arrow-right.svg';
 import * as Styled from './magazineBanner.styled';
 
 interface MagazineBannerProps {
-  // data: WithBlurredImage<MagazineDto>;
   reverse?: boolean;
   className?: string;
   button?: boolean;
@@ -21,6 +19,7 @@ const MagazineBanner = ({
   className,
 }: MagazineBannerProps) => {
   const { data: magazine } = useMagazine();
+
   return (
     <Styled.Container
       className={clsx(
