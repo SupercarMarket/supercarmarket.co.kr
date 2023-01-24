@@ -2,6 +2,7 @@ import { AccountUpdateForm } from 'components/account';
 import Container from 'components/common/container';
 import Title from 'components/common/title';
 import layout from 'components/layout';
+import { AuthProvider } from 'feature/authProvider';
 import { GetServerSidePropsContext } from 'next';
 import React from 'react';
 import { Params } from 'types/base';
@@ -16,7 +17,9 @@ const ProfileUpdate = () => {
       margin="80px 0"
     >
       <Title textAlign="center">개인정보 수정</Title>
-      <AccountUpdateForm />
+      <AuthProvider>
+        <AccountUpdateForm />
+      </AuthProvider>
     </Container>
   );
 };

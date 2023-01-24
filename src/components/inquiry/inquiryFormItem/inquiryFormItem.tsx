@@ -6,7 +6,7 @@ import {
   FormPostcode,
 } from 'components/common/form';
 import FormFiles from 'components/common/form/formFiles';
-import FormImage from 'components/common/form/formImage';
+import FormImage from 'components/common/form/formImages';
 import FormTextArea from 'components/common/form/formTextArea';
 import Wrapper from 'components/common/wrapper';
 import type { InquiryRegister } from 'constants/inquiry';
