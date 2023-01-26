@@ -51,6 +51,14 @@ const queries = {
     query: (query: CommentQuery) =>
       [query.page, query.orderby, query.category] as const,
   },
+  /**
+   * Account Query Keys
+   */
+  account: {
+    all: ['account'] as const,
+    info: () => [...queries.account.all, 'info'] as const,
+    id: (id: string) => [...queries.account.all, id] as const,
+  },
 };
 
 export default queries;
