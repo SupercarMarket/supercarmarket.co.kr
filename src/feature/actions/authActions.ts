@@ -1,5 +1,5 @@
 import type { DuplicationList, Signin, Signup } from 'types/auth';
-import { baseApi, baseFetcher } from 'utils/api/fetcher';
+import { baseApi, baseFetcher, clientApi } from 'utils/api/fetcher';
 
 import createAsyncDispatcher from '.';
 
@@ -120,6 +120,18 @@ const resetPassword = createAsyncDispatcher<
   baseApi('/api/auth/user/reset-password', { method: 'PATCH', data })
 );
 
+const update = createAsyncDispatcher<'UPDATE_AUTH', [Signup]>(
+  'UPDATE_AUTH',
+  (data: Signup) =>
+    clientApi('/api/account/update', {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      data,
+    })
+);
+
 export {
   confirmPhoneAuth,
   duplicateEmailAuth,
@@ -131,4 +143,5 @@ export {
   resetPassword,
   signIn,
   signUp,
+  update,
 };

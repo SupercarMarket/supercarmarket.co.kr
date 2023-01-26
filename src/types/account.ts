@@ -12,4 +12,17 @@ interface Profile extends User {
   representativeImgSrc?: string[];
 }
 
-export type { Profile, Rating };
+interface UpdateInfo {
+  user: {
+    id: string;
+    name: string;
+    nickname: string;
+    phone: string;
+    email: string;
+    description: string;
+    gallery: string[];
+    background: string;
+  };
+}
+
+export type { Profile, Rating, UpdateInfo };

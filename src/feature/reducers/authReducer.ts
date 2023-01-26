@@ -17,6 +17,11 @@ const signInHandler = createAsyncHandler<AuthAction, AuthInitialState>(
   'signin'
 );
 
+const updateHandler = createAsyncHandler<AuthAction, AuthInitialState>(
+  'UPDATE_AUTH',
+  'update'
+);
+
 const requestPhoneAuthHandler = createAsyncHandler<
   AuthAction,
   AuthInitialState
@@ -90,6 +95,10 @@ export default function authReducer(
     case 'SIGNIN_AUTH_SUCCESS':
     case 'SIGNIN_AUTH_ERROR':
       return signInHandler(state, action);
+    case 'UPDATE_AUTH':
+    case 'UPDATE_AUTH_SUCCESS':
+    case 'UPDATE_AUTH_ERROR':
+      return updateHandler(state, action);
     case 'FIND_ID_AUTH':
     case 'FIND_ID_AUTH_SUCCESS':
     case 'FIND_ID_AUTH_ERROR':

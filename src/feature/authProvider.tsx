@@ -8,6 +8,7 @@ import authReducer from './reducers/authReducer';
 type AuthAction =
   | 'SIGNUP_AUTH'
   | 'SIGNIN_AUTH'
+  | 'UPDATE_AUTH'
   | 'REQUEST_PHONE_AUTH'
   | 'CONFIRM_PHONE_AUTH'
   | 'DUPLICATE_ID_AUTH'
@@ -57,6 +58,11 @@ interface AuthInitialState {
     loading: boolean;
   };
   signin: {
+    error: null | Error;
+    data: null | boolean;
+    loading: boolean;
+  };
+  update: {
     error: null | Error;
     data: null | boolean;
     loading: boolean;
@@ -114,6 +120,11 @@ const initialState: AuthInitialState = {
     loading: false,
   },
   signin: {
+    error: null,
+    data: null,
+    loading: false,
+  },
+  update: {
     error: null,
     data: null,
     loading: false,
