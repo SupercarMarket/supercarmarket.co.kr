@@ -11,10 +11,11 @@ interface TableProps {
   tab: AccountTab;
   hidden?: boolean;
   handleCheckbox?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  padding?: React.CSSProperties['padding'];
 }
 
 const Table = (props: TableProps) => {
-  const { tab = 'product', hidden = true, handleCheckbox } = props;
+  const { tab = 'product', hidden = true, padding, handleCheckbox } = props;
 
   const table = React.useMemo(() => {
     if (tab === 'product')
@@ -45,9 +46,19 @@ const Table = (props: TableProps) => {
     ];
   }, [tab]);
   return (
-    <Container display="flex" borderRadius="4px">
-      {!hidden && (
-        <FormCheckbox name="check" id="check" onChange={handleCheckbox} />
+    <Container display="flex" borderRadius="4px" padding={padding}>
+      {hidden && (
+        <Wrapper
+          css={css`
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: ${({ theme }) => theme.color['greyScale-2']};
+            padding: 0 11.5px;
+          `}
+        >
+          <FormCheckbox name="check" id="check" onChange={handleCheckbox} />
+        </Wrapper>
       )}
       {table.map((value) => (
         <Wrapper
