@@ -4,4 +4,12 @@ interface InquiryLink {
   description?: string;
 }
 
-export type { InquiryLink };
+interface InquiryDto {
+  id: string;
+  title: string;
+  category: string;
+  progress: string;
+  created: string;
+}
+
+export type { InquiryDto, InquiryLink };
