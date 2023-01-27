@@ -14,6 +14,7 @@ const FormCheckbox = (
         input[type='checkbox'] {
           -webkit-appearance: none;
           appearance: none;
+          display: none;
         }
         input[type='checkbox'] + label {
           display: inline-block;

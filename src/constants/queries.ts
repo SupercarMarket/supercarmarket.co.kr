@@ -1,5 +1,7 @@
 import { CommentQuery } from 'types/comment';
 
+import type { AccountTab } from './account';
+
 const queries = {
   /**
    * Home Query Keys
@@ -58,6 +60,7 @@ const queries = {
     all: ['account'] as const,
     info: () => [...queries.account.all, 'info'] as const,
     id: (id: string) => [...queries.account.all, id] as const,
+    category: (category: AccountTab) => [category] as const,
   },
 };
 

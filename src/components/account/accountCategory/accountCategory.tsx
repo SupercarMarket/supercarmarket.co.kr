@@ -1,40 +1,118 @@
+import Alert from 'components/common/alert';
 import Container from 'components/common/container';
+import { FormCheckbox } from 'components/common/form';
+import Table from 'components/common/table';
+import Wrapper from 'components/common/wrapper';
 import { CommunityCard } from 'components/community';
-import { AccountTab } from 'constants/account';
+import InquiryCard from 'components/inquiry/inquiryCard/inquiryCard';
+import MagazineCard from 'components/magazine/magazineList/magazineCard';
+import MarketCard from 'components/market/marketCard';
+import type { AccountTab } from 'constants/account';
+import useAccountCategory from 'hooks/queries/useAccountCategory';
+import { useSession } from 'next-auth/react';
 import * as React from 'react';
+import { css } from 'styled-components';
+import { CommunityDto } from 'types/community';
+import { InquiryDto } from 'types/inquiry';
+import { MagazineDto } from 'types/magazine';
+import type { MarketDto } from 'types/market';
 
 interface AccountCategoryProps {
+  sub: string;
   tab: AccountTab;
+  isMyAccountPage: boolean;
 }
 
+type AccountCategoryItemWrapperProps = React.PropsWithChildren & {
+  hidden: boolean;
+  id: string;
+  handleCheckbox?: () => void;
+};
+
+const AccountCategoryItemWrapper = ({
+  id,
+  hidden,
+  children,
+  handleCheckbox,
+}: AccountCategoryItemWrapperProps) => {
+  return (
+    <Container display="flex" alignItems="center">
+      {hidden && (
+        <Wrapper
+          css={css`
+            padding: 0 11.5px;
+          `}
+        >
+          <FormCheckbox
+            name={id}
+            id={id}
+            hidden={hidden}
+            onChange={handleCheckbox}
+          />
+        </Wrapper>
+      )}
+      {children}
+    </Container>
+  );
+};
+
 const AccountCategory = React.memo(function AccountCategory({
+  sub,
   tab,
+  isMyAccountPage,
 }: AccountCategoryProps) {
-  switch (tab) {
-    case 'my-post':
-      return (
-        <Container margin="80px 0">
-          <CommunityCard variant="row" />
-          <CommunityCard variant="row" />
-          <CommunityCard variant="row" />
-        </Container>
-      );
-    case 'my-commented-post':
-      return (
-        <Container margin="80px 0">
-          <CommunityCard variant="row" />
-          <CommunityCard variant="row" />
-          <CommunityCard variant="row" />
-          <CommunityCard variant="row" />
-        </Container>
-      );
-    default:
-      return (
-        <Container>
-          <h1>알맞은 탭이 없습니다.</h1>
-        </Container>
-      );
-  }
+  const session = useSession();
+  const hidden = isMyAccountPage && tab !== 'magazine';
+  const { data, isLoading, isFetching } = useAccountCategory(
+    sub,
+    session.data?.accessToken,
+    {
+      category: tab,
+      page: 1,
+      size: 20,
+    }
+  );
+
+  if (isFetching) return <h1>loading...</h1>;
+
+  if (isLoading) return <h1>loading...</h1>;
+
+  return (
+    <Container margin="80px 0">
+      <Table tab={tab} hidden={hidden} padding="0 0 6px 0" />
+      {data?.data.length < 1 ? (
+        <Alert severity="info" title="게시글이 존재하지 않습니다." />
+      ) : (
+        {
+          product: data.data.map((d: MarketDto) => (
+            <AccountCategoryItemWrapper key={d.id} id={d.id} hidden={hidden}>
+              <MarketCard {...d} />
+            </AccountCategoryItemWrapper>
+          )),
+          magazine: data.data.map((d: MagazineDto) => (
+            <AccountCategoryItemWrapper key={d.id} id={d.id} hidden={hidden}>
+              <MagazineCard key={d.id} {...d} />
+            </AccountCategoryItemWrapper>
+          )),
+          comment: data.data.map((d: CommunityDto) => (
+            <AccountCategoryItemWrapper key={d.id} id={d.id} hidden={hidden}>
+              <CommunityCard key={d.id} variant="row" {...d} />
+            </AccountCategoryItemWrapper>
+          )),
+          community: data.data.map((d: CommunityDto) => (
+            <AccountCategoryItemWrapper key={d.id} id={d.id} hidden={hidden}>
+              <CommunityCard key={d.id} variant="row" {...d} />
+            </AccountCategoryItemWrapper>
+          )),
+          inquiry: data.data.map((d: InquiryDto) => (
+            <AccountCategoryItemWrapper key={d.id} id={d.id} hidden={hidden}>
+              <InquiryCard key={d.id} {...d} />
+            </AccountCategoryItemWrapper>
+          )),
+        }[tab]
+      )}
+    </Container>
+  );
 });
 
 export default AccountCategory;

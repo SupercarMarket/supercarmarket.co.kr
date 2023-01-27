@@ -21,13 +21,18 @@ const Account = ({
   isMyAccountPage,
   accountRoutes,
   tab,
+  sub,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   return (
     <Container margin="20px 0 0 0">
       <Profile isMyAccountPage={isMyAccountPage} />
       <Wrapper css={style.account}>
         <AccountNavbar tab={tab} accountRoutes={accountRoutes} />
-        <AccountCategory tab={tab} />
+        <AccountCategory
+          sub={sub}
+          tab={tab}
+          isMyAccountPage={isMyAccountPage}
+        />
       </Wrapper>
     </Container>
   );
@@ -61,7 +66,7 @@ export const getUserPageProps = async (
   }
   if (
     !isMyAccountPage &&
-    (!tab || !(tab === 'my-post' || tab === 'my-commented-post'))
+    (!tab || !(tab === 'community' || tab === 'comment'))
   ) {
     return {
       redirect: {
@@ -76,6 +81,7 @@ export const getUserPageProps = async (
         isMyAccountPage,
         accountRoutes,
         tab,
+        sub,
       },
     };
 

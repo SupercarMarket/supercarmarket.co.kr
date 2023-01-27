@@ -1,11 +1,6 @@
 import * as React from 'react-hook-form';
 
-type AccountTab =
-  | 'scraped-sale'
-  | 'scraped-post'
-  | 'my-counseling'
-  | 'my-post'
-  | 'my-commented-post';
+type AccountTab = 'product' | 'magazine' | 'inquiry' | 'community' | 'comment';
 
 interface AccountRoute {
   title: string;
@@ -41,37 +36,31 @@ interface Forms {
 }
 
 const account = {
-  accountTab: [
-    'scraped-sale',
-    'scraped-post',
-    'my-counseling',
-    'my-post',
-    'my-commented-post',
-  ],
+  accountTab: ['product', 'magazine', 'inquiry', 'community', 'comment'],
   accountRoutes: {
     myAccount: (sub: string) => [
       {
         title: '스크랩 매물',
-        route: `/account/${sub}?tab=scraped-sale`,
+        route: `/account/${sub}?tab=product`,
       },
       {
         title: '스크랩 글',
-        route: `/account/${sub}?tab=scraped-post`,
+        route: `/account/${sub}?tab=magazine`,
       },
       ...account.accountRoutes.someoneAccount(sub),
       {
         title: '문의신청내역',
-        route: `/account/${sub}?tab=my-counseling`,
+        route: `/account/${sub}?tab=inquiry`,
       },
     ],
     someoneAccount: (sub: string) => [
       {
         title: '작성한 글',
-        route: `/account/${sub}?tab=my-post`,
+        route: `/account/${sub}?tab=community`,
       },
       {
         title: '댓글단 글',
-        route: `/account/${sub}?tab=my-commented-post`,
+        route: `/account/${sub}?tab=comment`,
       },
     ],
   },
