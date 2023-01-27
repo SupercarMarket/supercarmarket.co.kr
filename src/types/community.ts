@@ -2,13 +2,16 @@ import { Posting } from './base';
 
 interface CommunityDto {
   id: string;
-  nickName: string;
+  nickname: string;
   title: string;
   date: Date;
   view: number;
   like: number;
   profileSrc?: string;
+  category: string;
   imgSrc: string;
+  comments: number;
+  created: string;
 }
 
 interface CommunityPostDto extends Posting {
