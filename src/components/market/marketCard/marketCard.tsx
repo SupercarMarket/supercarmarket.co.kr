@@ -36,8 +36,8 @@ const MarketCard = ({
         <Image
           width={285}
           height={180}
-          placeholder="blur"
-          blurDataURL={base64}
+          placeholder={base64 ? 'blur' : undefined}
+          blurDataURL={base64 ? 'blur' : undefined}
           src={imgSrc}
           alt="thumbnail"
           style={{ borderRadius: '4px' }}
