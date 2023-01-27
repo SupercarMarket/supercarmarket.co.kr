@@ -9,7 +9,7 @@ interface MagazineDto {
 }
 
 type WithBlurredImage<T> = {
-  base64: string;
+  base64?: string;
 } & T;
 
 interface MagazineResponse<T> {

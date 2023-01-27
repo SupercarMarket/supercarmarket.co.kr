@@ -36,8 +36,8 @@ const MagazineCard = memo(function MagazineCard({
           src={imgSrc}
           width={imgWidth}
           height={imgHeight}
-          placeholder="blur"
-          blurDataURL={base64}
+          placeholder={base64 ? 'blur' : undefined}
+          blurDataURL={base64 ? 'blur' : undefined}
           alt="thumbnail"
           style={{
             borderRadius: '4px',
