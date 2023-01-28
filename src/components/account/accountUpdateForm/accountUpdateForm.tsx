@@ -20,8 +20,6 @@ const AccountUpdateForm = () => {
   const state = useAuthState();
   const dispatch = useAuthDispatch();
 
-  // console.log('info : ', updateInfo);
-
   /**
    * @function handleRequire
    * @description
@@ -52,18 +50,29 @@ const AccountUpdateForm = () => {
 
     const formData = new FormData();
 
-    // formData.append('changeUserInfoDto', JSON.stringify(rest));
     formData.append(
       'changeUserInfoDto',
-      new Blob([JSON.stringify(rest)], { type: 'application/json' })
+      new Blob(
+        [
+          JSON.stringify({
+            ...rest,
+            newPassword: rest.newPassword ? rest.newPassword : null,
+            newPasswordCheck: rest.newPasswordConfirm
+              ? rest.newPasswordConfirm
+              : null,
+          }),
+        ],
+        {
+          type: 'application/json',
+        }
+      )
     );
-    formData.append('background', background);
+
+    background.forEach((file) => {
+      formData.append('background', file);
+    });
     gallery.forEach((file) => {
       formData.append('gallery', file);
-    });
-
-    formData.forEach((v, k) => {
-      console.log(k, ' : ', v);
     });
 
     const response = await fetch(`/server/supercar/v1/mypage`, {
@@ -73,13 +82,12 @@ const AccountUpdateForm = () => {
       },
       body: formData,
     });
-
-    console.log(response);
   });
   return (
     <FormProvider {...methods}>
       <Form
         onSubmit={onSubmit}
+        encType="multipart/form-data"
         css={css`
           width: 800px;
           display: flex;
@@ -92,6 +100,14 @@ const AccountUpdateForm = () => {
         {account.forms.map((form) => (
           <AccountFormItem
             key={form.htmlFor}
+            defaultValue={
+              form.htmlFor !== 'authentication' &&
+              form.htmlFor !== 'password' &&
+              form.htmlFor !== 'newPassword' &&
+              form.htmlFor !== 'newPasswordConfirm'
+                ? updateInfo?.data[form.htmlFor]
+                : undefined
+            }
             state={state}
             dispatch={dispatch}
             {...form}

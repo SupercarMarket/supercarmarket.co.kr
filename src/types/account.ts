@@ -13,16 +13,14 @@ interface Profile extends User {
 }
 
 interface UpdateInfo {
-  user: {
-    id: string;
-    name: string;
-    nickname: string;
-    phone: string;
-    email: string;
-    description: string;
-    gallery: string[];
-    background: string;
-  };
+  id: string;
+  name: string;
+  nickname: string;
+  phone: string;
+  email: string;
+  description: string;
+  gallery: string[];
+  background: string;
 }
 
 export type { Profile, Rating, UpdateInfo };

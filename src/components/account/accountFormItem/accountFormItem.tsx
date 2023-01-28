@@ -33,6 +33,7 @@ type InputBtnAttr = {
 };
 
 interface AccountFormItemProps extends Forms {
+  defaultValue?: string | string[];
   state: AuthInitialState;
   dispatch: AuthDispatch;
 }
@@ -116,6 +117,7 @@ const AccountFormItemContainer = React.memo(function AccountFormItemContainer({
   isSubmitSuccessful,
   infoState,
   phone,
+  defaultValue,
   dispatch,
   regsiter,
 }: AccountFormItemContainerProps) {
@@ -192,6 +194,7 @@ const AccountFormItemContainer = React.memo(function AccountFormItemContainer({
                 {...attr}
                 {...inputBtnAttr}
                 {...regsiter(htmlFor, options)}
+                defaultValue={defaultValue}
               />
             ),
             tel: (
@@ -199,6 +202,7 @@ const AccountFormItemContainer = React.memo(function AccountFormItemContainer({
                 {...attr}
                 {...inputBtnAttr}
                 {...regsiter(htmlFor, options)}
+                defaultValue={defaultValue}
                 buttonCallback={handlePhoneAuth}
               />
             ),
@@ -207,6 +211,7 @@ const AccountFormItemContainer = React.memo(function AccountFormItemContainer({
                 {...attr}
                 {...inputBtnAttr}
                 {...regsiter(htmlFor, options)}
+                defaultValue={defaultValue}
               />
             ),
             password: <FormInput {...attr} {...regsiter(htmlFor, options)} />,
