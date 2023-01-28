@@ -19,7 +19,7 @@ interface FormState {
   email: string;
   description: string;
   gallery: string[];
-  background: string;
+  background: string[];
 }
 
 interface Forms {

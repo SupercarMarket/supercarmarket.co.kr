@@ -16,12 +16,14 @@ type FormImagesState = Array<File | null>;
 interface FormImageProps extends React.InputHTMLAttributes<HTMLInputElement> {
   title: string;
   index: number;
+  defaultValue?: string;
   setImages: React.Dispatch<React.SetStateAction<FormImagesState>>;
 }
 
 interface FormImagesProps extends React.InputHTMLAttributes<HTMLInputElement> {
   title?: string;
   size?: number;
+  defaultValue?: string[];
   callback?: (file: FormImagesState) => void;
 }
 
@@ -69,7 +71,14 @@ const FormImage = React.forwardRef(function FormImage(
   props: FormImageProps,
   ref: React.Ref<HTMLInputElement>
 ) {
-  const { title, name = '사진', index, setImages, ...rest } = props;
+  const {
+    title,
+    name = '사진',
+    index,
+    defaultValue,
+    setImages,
+    ...rest
+  } = props;
   const [image, setImage] = React.useState<File | null>(null);
   const [thumbnail, setThumbnail] = React.useState<string | null>(null);
 
@@ -179,7 +188,14 @@ const FormImage = React.forwardRef(function FormImage(
 });
 
 const FormImages = (props: FormImagesProps) => {
-  const { title, name = '사진', size = 1, callback, ...rest } = props;
+  const {
+    title,
+    name = '사진',
+    size = 1,
+    defaultValue,
+    callback,
+    ...rest
+  } = props;
 
   const [images, setImages] = React.useState<FormImagesState>(
     Array.from({ length: size }, () => null)
@@ -199,6 +215,7 @@ const FormImages = (props: FormImagesProps) => {
           }`}
           index={order}
           title={title ? title : `${order + 1}`}
+          defaultValue={defaultValue ? defaultValue[order] : undefined}
           setImages={setImages}
           {...rest}
         />
