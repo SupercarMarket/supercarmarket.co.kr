@@ -12,7 +12,7 @@ const CommunityCard = ({
   profileSrc,
   imgSrc,
   title,
-  nickName,
+  nickname,
   base64,
   view,
   date,
@@ -40,7 +40,7 @@ const CommunityCard = ({
             }}
           />
         ) : (
-          <Avvvatars value={nickName} size={24} radius={12} />
+          <Avvvatars value={nickname} size={24} radius={12} />
         )}
         <Typography
           as="span"
@@ -48,7 +48,7 @@ const CommunityCard = ({
           fontWeight="regular"
           color="greyScale-6"
         >
-          {nickName}
+          {nickname}
         </Typography>
       </Wrapper>
       <Wrapper css={style.communityTitleWrapper}>

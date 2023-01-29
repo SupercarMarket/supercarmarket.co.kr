@@ -37,7 +37,7 @@ interface MarketDto {
 }
 
 type WithBlurredImage<T> = {
-  base64: string;
+  base64?: string;
 } & T;
 
 interface MarketResponse<T> {
