@@ -96,7 +96,7 @@ const clientFetcher = async (url: string, options: FetcherRequestInit) => {
   }
 };
 
-const clientApi = async <T>(url: string, options: FetcherRequestInit) => {
+const clientApi = async (url: string, options: FetcherRequestInit) => {
   const { data, headers, ...rest } = options;
   const requestBody = JSON.stringify(data);
 
@@ -111,7 +111,13 @@ const clientApi = async <T>(url: string, options: FetcherRequestInit) => {
       ...rest,
     });
 
-    const result: T = response.ok ? await response.json() : null;
+    const result = await response.json();
+
+    if (!response.ok)
+      throw new ServerApiError({
+        message: result.message,
+        status: response.status,
+      });
 
     return { status: response.status, ok: response.ok, ...result };
   } catch (e) {
