@@ -1,3 +1,6 @@
+'use client';
+
+import Alert from 'components/common/alert';
 import Button from 'components/common/button';
 import { Form } from 'components/common/form';
 import type { FormState } from 'constants/account';
@@ -5,17 +8,20 @@ import account from 'constants/account';
 import { update } from 'feature/actions/authActions';
 import { useAuthDispatch, useAuthState } from 'feature/authProvider';
 import useUpdateInfo from 'hooks/queries/useUpdateInfo';
+import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import * as React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { css } from 'styled-components';
-import { clientApi } from 'utils/api/fetcher';
 
 import AccountFormItem from '../accountFormItem';
 
 const AccountUpdateForm = () => {
   const { data: session } = useSession();
-  const { data: updateInfo } = useUpdateInfo(session?.accessToken as string);
+  const { data: updateInfo, refetch } = useUpdateInfo(
+    session?.accessToken as string
+  );
+  const { replace } = useRouter();
   const methods = useForm<FormState>();
   const state = useAuthState();
   const dispatch = useAuthDispatch();
@@ -27,62 +33,83 @@ const AccountUpdateForm = () => {
    * 각 필드마다 입력을 받았을 때, 다른 필드의 입력이 필수인지 아닌지 핸들링하는 함수
    */
   const handleRequire = (data: FormState) => {
-    const { phone, authentication, password, newPassword, newPasswordConfirm } =
-      data;
+    const { authentication, password, newPassword, newPasswordConfirm } = data;
 
-    if (!password) return '';
+    return new Promise((resolve, reject) => {
+      if (!password) {
+        methods.setError('password', { message: '비밀번호를 입력해주세요.' });
+        reject();
+      }
 
-    // * 폰 값이 있을 때 인증도 있어야 한다.
-    const isPhoneValue = !!(
-      state.phone.data &&
-      phone &&
-      state.authentication.data &&
-      authentication
-    );
+      const isNewPasswordRequire = newPasswordConfirm && !newPassword;
+      const isNewPasswordConfirmRequire = newPassword && !newPasswordConfirm;
+      const isPhoneAuthRequire = state.phone.data && !authentication;
+      const isNicknameRequire =
+        updateInfo?.data.nickname !== data.nickname && !state.nickname.data;
+      const isEmailRequire =
+        updateInfo?.data.email !== data.email && !state.email.data;
 
-    const isNewPasswordValue = !!(newPassword && newPasswordConfirm);
+      if (isNicknameRequire) {
+        methods.setError('nickname', {
+          message: '중복검사가 필요합니다.',
+        });
+        reject();
+      }
 
-    if (isNewPasswordValue) return '새 비밀번호를 입력해주세요.';
+      if (isEmailRequire) {
+        methods.setError('email', {
+          message: '중복검사가 필요합니다.',
+        });
+        reject();
+      }
+
+      if (isNewPasswordRequire) {
+        methods.setError('newPassword', {
+          message: '새 비밀번호를 입력해주세요.',
+        });
+        reject();
+      }
+
+      if (isNewPasswordConfirmRequire) {
+        methods.setError('newPasswordConfirm', {
+          message: '새 비밀번호 확인을 입력해주세요.',
+        });
+        reject();
+      }
+
+      if (isPhoneAuthRequire) {
+        methods.setError('authentication', {
+          message: '인증번호를 입력해주세요.',
+        });
+        reject();
+      }
+
+      resolve(true);
+    });
   };
 
-  const onSubmit = methods.handleSubmit(async (data) => {
-    const { gallery, background, ...rest } = data;
+  const onSubmit = methods.handleSubmit((data) =>
+    handleRequire(data).then(() => {
+      if (!session?.accessToken) return;
 
-    const formData = new FormData();
+      const { gallery, background, ...rest } = data;
+      const formData = {
+        ...rest,
+        newPasswordCheck: rest.newPasswordConfirm || null,
+        newPassword: rest.newPassword || null,
+        code: rest.authentication,
+      };
 
-    formData.append(
-      'changeUserInfoDto',
-      new Blob(
-        [
-          JSON.stringify({
-            ...rest,
-            newPassword: rest.newPassword ? rest.newPassword : null,
-            newPasswordCheck: rest.newPasswordConfirm
-              ? rest.newPasswordConfirm
-              : null,
-          }),
-        ],
-        {
-          type: 'application/json',
-        }
-      )
-    );
+      update(dispatch, formData, session.accessToken).then(() => {
+        refetch();
+      });
+    })
+  );
 
-    background.forEach((file) => {
-      formData.append('background', file);
-    });
-    gallery.forEach((file) => {
-      formData.append('gallery', file);
-    });
+  React.useEffect(() => {
+    if (state.update.data) return replace('/');
+  }, [replace, state.update.data]);
 
-    const response = await fetch(`/server/supercar/v1/mypage`, {
-      method: 'PATCH',
-      headers: {
-        ACCESS_TOKEN: session?.accessToken as string,
-      },
-      body: formData,
-    });
-  });
   return (
     <FormProvider {...methods}>
       <Form
@@ -97,25 +124,33 @@ const AccountUpdateForm = () => {
           gap: 26px;
         `}
       >
-        {account.forms.map((form) => (
-          <AccountFormItem
-            key={form.htmlFor}
-            defaultValue={
-              form.htmlFor !== 'authentication' &&
-              form.htmlFor !== 'password' &&
-              form.htmlFor !== 'newPassword' &&
-              form.htmlFor !== 'newPasswordConfirm'
-                ? updateInfo?.data[form.htmlFor]
-                : undefined
-            }
-            state={state}
-            dispatch={dispatch}
-            {...form}
-          />
-        ))}
-        <Button type="submit" variant="Primary" width="340px">
-          수정하기
-        </Button>
+        {updateInfo && (
+          <>
+            {account.forms.map((form) => (
+              <AccountFormItem
+                key={form.htmlFor}
+                defaultValue={
+                  form.htmlFor !== 'authentication' &&
+                  form.htmlFor !== 'password' &&
+                  form.htmlFor !== 'newPassword' &&
+                  form.htmlFor !== 'newPasswordConfirm'
+                    ? updateInfo?.data[form.htmlFor]
+                    : undefined
+                }
+                state={state}
+                session={session}
+                dispatch={dispatch}
+                {...form}
+              />
+            ))}
+            <Button type="submit" variant="Primary" width="340px">
+              수정하기
+            </Button>
+          </>
+        )}
+        {state.update.error && (
+          <Alert title={state.update.error.message} severity="error" />
+        )}
       </Form>
     </FormProvider>
   );

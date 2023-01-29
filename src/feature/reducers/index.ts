@@ -3,19 +3,19 @@ import type { Action } from 'feature';
 const loadingState = {
   loading: true,
   data: null,
-  error: false,
+  error: null,
 };
 
 const success = <DataType>(data: DataType) => ({
   loading: false,
   data,
-  error: false,
+  error: null,
 });
 
-const error = () => ({
+const error = (error: Error | null | undefined) => ({
   loading: false,
   data: null,
-  error: true,
+  error,
 });
 
 function createAsyncHandler<ActionType extends string, State>(
@@ -40,7 +40,7 @@ function createAsyncHandler<ActionType extends string, State>(
       case ERROR:
         return {
           ...state,
-          [key]: error(),
+          [key]: error(action.error),
         };
       default:
         return state;
