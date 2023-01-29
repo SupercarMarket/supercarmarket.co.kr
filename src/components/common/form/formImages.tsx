@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import * as React from 'react';
+import type { ServerResponse } from 'types/base';
 
 import AddIcon from '../../../assets/svg/add.svg';
 import CloseIcon from '../../../assets/svg/close.svg';
@@ -10,13 +11,16 @@ import Typography from '../typography';
 import Wrapper from '../wrapper';
 import { Input, Label } from './form.styled';
 import * as style from './form.styled';
+import FormMessage from './formMessage';
 
-type FormImagesState = Array<File | null>;
+type FormImagesState = Array<string | null>;
 
 interface FormImageProps extends React.InputHTMLAttributes<HTMLInputElement> {
   title: string;
   index: number;
   defaultValue?: string;
+  handleUpload?: (file: FileList) => Promise<ServerResponse<{ url: string }>>;
+  handleRemove?: (image: string) => Promise<ServerResponse<boolean>>;
   setImages: React.Dispatch<React.SetStateAction<FormImagesState>>;
 }
 
@@ -24,6 +28,8 @@ interface FormImagesProps extends React.InputHTMLAttributes<HTMLInputElement> {
   title?: string;
   size?: number;
   defaultValue?: string[];
+  handleUpload?: (file: FileList) => Promise<ServerResponse<{ url: string }>>;
+  handleRemove?: (image: string) => Promise<ServerResponse<boolean>>;
   callback?: (file: FormImagesState) => void;
 }
 
@@ -77,51 +83,68 @@ const FormImage = React.forwardRef(function FormImage(
     index,
     defaultValue,
     setImages,
+    handleUpload,
+    handleRemove,
     ...rest
   } = props;
   const [image, setImage] = React.useState<File | null>(null);
   const [thumbnail, setThumbnail] = React.useState<string | null>(null);
-
-  const encodeFileToBase64 = (fileBlob: File) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(fileBlob);
-    return new Promise((resolve) => {
-      reader.onload = () => {
-        setThumbnail(reader.result as string);
-        resolve(true);
-      };
-    });
-  };
+  const [error, setError] = React.useState<string | null>(null);
 
   const onRemove = () => {
-    setImages((prev) =>
-      prev.map((value, __index) => {
-        if (__index === index) {
-          return null;
-        }
-        return value;
+    setError(null);
+
+    if (!thumbnail) return;
+    if (!handleRemove) return;
+
+    handleRemove(thumbnail)
+      .then(() => {
+        setImages((prev) =>
+          prev.map((value, __index) => {
+            if (__index === index) {
+              return null;
+            }
+            return value;
+          })
+        );
+        setImage(null);
+        setThumbnail(null);
       })
-    );
-    setImage(null);
-    setThumbnail(null);
+      .catch(() => {
+        setError('이미지 삭제가 실패했습니다.');
+      });
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setError(null);
+
     if (!e.target.files) return;
+    if (!handleUpload) return;
 
     const image = e.target.files[0];
 
-    setImages((prev) =>
-      prev.map((value, __index) => {
-        if (__index === index) {
-          return image;
-        }
-        return value;
+    handleUpload(e.target.files)
+      .then((response) => {
+        const { data } = response;
+        setImages((prev) =>
+          prev.map((value, __index) => {
+            if (__index === index) {
+              return data.url;
+            }
+            return value;
+          })
+        );
+        setImage(image);
+        setThumbnail(data.url);
       })
-    );
-    encodeFileToBase64(image);
-    setImage(image);
+      .catch(() => {
+        setError('이미지 업로드가 실패했습니다.');
+      });
   };
+
+  React.useEffect(() => {
+    setThumbnail(() => defaultValue ?? null);
+  }, [defaultValue]);
 
   return (
     <Container display="flex" flexDirection="column" gap="10px">
@@ -152,8 +175,8 @@ const FormImage = React.forwardRef(function FormImage(
           )}
         </Wrapper.Left>
         <Wrapper.Right>
-          {image ? (
-            <Button variant="Init" onClick={onRemove}>
+          {thumbnail ? (
+            <Button type="button" variant="Init" onClick={onRemove}>
               <Wrapper.Item css={style.imageButton}>
                 <CloseIcon />
               </Wrapper.Item>
@@ -183,6 +206,7 @@ const FormImage = React.forwardRef(function FormImage(
           )}
         </Wrapper.Right>
       </Wrapper>
+      <FormMessage error={error ? error : undefined} />
     </Container>
   );
 });
@@ -193,12 +217,16 @@ const FormImages = (props: FormImagesProps) => {
     name = '사진',
     size = 1,
     defaultValue,
+    handleUpload,
+    handleRemove,
     callback,
     ...rest
   } = props;
 
   const [images, setImages] = React.useState<FormImagesState>(
-    Array.from({ length: size }, () => null)
+    defaultValue && defaultValue.length >= 1
+      ? Array.from({ length: size }, (_, index) => defaultValue[index] ?? null)
+      : Array.from({ length: size }, () => null)
   );
 
   React.useEffect(() => {
@@ -217,6 +245,8 @@ const FormImages = (props: FormImagesProps) => {
           title={title ? title : `${order + 1}`}
           defaultValue={defaultValue ? defaultValue[order] : undefined}
           setImages={setImages}
+          handleUpload={handleUpload}
+          handleRemove={handleRemove}
           {...rest}
         />
       ))}

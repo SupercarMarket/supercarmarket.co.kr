@@ -1,3 +1,4 @@
+import { FormState } from 'constants/account';
 import type { DuplicationList, Signin, Signup } from 'types/auth';
 import { baseApi, baseFetcher, clientApi } from 'utils/api/fetcher';
 
@@ -13,6 +14,15 @@ type FindId = FindAuth & { name: string };
 type FindPassword = FindAuth & { id: string };
 
 type ResetPassword = FindAuth & { password: string; id: string };
+
+type Update = [
+  Omit<FormState, 'gallery' | 'background' | 'newPassword'> & {
+    code: string;
+    newPassword: string | null;
+    newPasswordCheck: string | null;
+  },
+  string
+];
 
 const signUp = createAsyncDispatcher<'SIGNUP_AUTH', [Signup]>(
   'SIGNUP_AUTH',
@@ -120,13 +130,13 @@ const resetPassword = createAsyncDispatcher<
   baseApi('/api/auth/user/reset-password', { method: 'PATCH', data })
 );
 
-const update = createAsyncDispatcher<'UPDATE_AUTH', [Signup]>(
+const update = createAsyncDispatcher<'UPDATE_AUTH', Update>(
   'UPDATE_AUTH',
-  (data: Signup) =>
-    clientApi('/api/account/update', {
+  (data, token) =>
+    clientApi(`/server/supercar/v1/mypage`, {
       method: 'PATCH',
       headers: {
-        'Content-Type': 'multipart/form-data',
+        ACCESS_TOKEN: token,
       },
       data,
     })

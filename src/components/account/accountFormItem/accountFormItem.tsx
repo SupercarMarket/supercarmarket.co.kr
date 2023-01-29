@@ -9,10 +9,9 @@ import {
   requestPhoneAuth,
 } from 'feature/actions/authActions';
 import { AuthDispatch, AuthInitialState } from 'feature/authProvider';
+import type { Session } from 'next-auth';
 import * as React from 'react';
 import {
-  Control,
-  Controller,
   FieldError,
   FieldErrorsImpl,
   FieldValues,
@@ -21,6 +20,7 @@ import {
 } from 'react-hook-form';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { css } from 'styled-components';
+import { clientApi, clientFetcher } from 'utils/api/fetcher';
 
 type InputBtnAttr = {
   button?: boolean;
@@ -35,12 +35,12 @@ type InputBtnAttr = {
 interface AccountFormItemProps extends Forms {
   defaultValue?: string | string[];
   state: AuthInitialState;
+  session: Session | null;
   dispatch: AuthDispatch;
 }
 
 interface AccountFormItemContainerProps extends AccountFormItemProps {
   regsiter: UseFormRegister<FieldValues>;
-  control: Control<FieldValues, any>;
   patternError?: FieldError | Merge<FieldError, FieldErrorsImpl<any>>;
   target: string;
   isSubmitSuccessful: boolean;
@@ -80,15 +80,20 @@ const AccountFormItem = (props: AccountFormItemProps) => {
   }, [state, htmlFor]);
   const {
     register,
-    control,
+    setValue,
     formState: { errors, isSubmitSuccessful },
   } = useFormContext();
   const target = useWatch({ name: props.htmlFor });
   const patternError = errors[props.htmlFor];
 
+  React.useEffect(() => {
+    if (props.defaultValue) {
+      setValue(htmlFor, props.defaultValue);
+    }
+  }, []);
+
   return (
     <AccountFormItemContainer
-      control={control}
       patternError={patternError}
       target={target}
       isSubmitSuccessful={isSubmitSuccessful}
@@ -111,13 +116,13 @@ const AccountFormItemContainer = React.memo(function AccountFormItemContainer({
   errorMessage,
   successMessage,
   options,
-  control,
   patternError,
   target,
   isSubmitSuccessful,
   infoState,
   phone,
   defaultValue,
+  session,
   dispatch,
   regsiter,
 }: AccountFormItemContainerProps) {
@@ -130,8 +135,17 @@ const AccountFormItemContainer = React.memo(function AccountFormItemContainer({
     buttonText: button,
     buttonWidth: buttonWidth,
     buttonVariant: 'Primary-Line',
-    buttonCallback: () => console.log('callback'),
+    buttonDisabled: success,
+  };
+  const phoneBtnAttr: InputBtnAttr = {
+    button: !!button,
+    buttonText: htmlFor === 'phone' && phone ? '재시도' : button,
+    buttonWidth: buttonWidth,
+    buttonVariant: (htmlFor === 'authentication' ? !phone : !!phone)
+      ? 'Line'
+      : 'Primary-Line',
     buttonDisabled: false,
+    count: htmlFor === 'authentication' && phone && !success ? 179 : undefined,
   };
 
   const fieldErrorMessage = React.useMemo(() => {
@@ -139,6 +153,83 @@ const AccountFormItemContainer = React.memo(function AccountFormItemContainer({
     else if (patternError) return patternError.message as string;
     else return undefined;
   }, [error, errorMessage, patternError]);
+
+  const phoneButtonDisabled = () => {
+    if (success) return true;
+    if (htmlFor === 'authentication') return !phone;
+    return undefined;
+  };
+
+  const handleGalleryUpload = async (files: FileList) => {
+    if (!session) return;
+
+    const formData = new FormData();
+
+    Array.from(files).forEach((file) => {
+      formData.append('gallery', file);
+    });
+
+    const response = await clientFetcher('/server/supercar/v1/user/gallery', {
+      method: 'POST',
+      headers: {
+        ACCESS_TOKEN: session.accessToken,
+      },
+      body: formData,
+    });
+
+    return response;
+  };
+
+  const handleBackgroundUpload = async (files: FileList) => {
+    if (!session) return;
+
+    const formData = new FormData();
+
+    Array.from(files).forEach((file) => {
+      formData.append('background', file);
+    });
+
+    const response = await clientFetcher(
+      '/server/supercar/v1/user/background',
+      {
+        method: 'POST',
+        headers: {
+          ACCESS_TOKEN: session.accessToken,
+        },
+        body: formData,
+      }
+    );
+
+    return response;
+  };
+
+  const handleBackgroundRemove = async (url: string) => {
+    if (!session) return;
+
+    const response = await clientApi('/server/supercar/v1/user/background', {
+      method: 'DELETE',
+      headers: {
+        ACCESS_TOKEN: session.accessToken,
+      },
+      data: { url },
+    });
+
+    return response;
+  };
+
+  const handleGalleryRemove = async (url: string) => {
+    if (!session) return;
+
+    const response = await clientApi('/server/supercar/v1/user/gallery', {
+      method: 'DELETE',
+      headers: {
+        ACCESS_TOKEN: session.accessToken,
+      },
+      data: { url },
+    });
+
+    return response;
+  };
 
   const handlePhoneAuth = () => {
     if (!target) return;
@@ -158,6 +249,16 @@ const AccountFormItemContainer = React.memo(function AccountFormItemContainer({
     setSuccess(false);
 
     if (htmlFor === 'email') duplicateEmailAuth(dispatch, htmlFor, target);
+  };
+
+  const handleNicknameAuth = () => {
+    if (!target) return;
+
+    setError(false);
+    setSuccess(false);
+
+    if (htmlFor === 'nickname')
+      duplicateNickanmeAuth(dispatch, htmlFor, target);
   };
 
   React.useEffect(() => {
@@ -194,16 +295,18 @@ const AccountFormItemContainer = React.memo(function AccountFormItemContainer({
                 {...attr}
                 {...inputBtnAttr}
                 {...regsiter(htmlFor, options)}
-                defaultValue={defaultValue}
+                buttonCallback={handleNicknameAuth}
+                readOnly={success}
               />
             ),
             tel: (
               <FormInput
                 {...attr}
-                {...inputBtnAttr}
+                {...phoneBtnAttr}
                 {...regsiter(htmlFor, options)}
-                defaultValue={defaultValue}
                 buttonCallback={handlePhoneAuth}
+                buttonDisabled={phoneButtonDisabled()}
+                readOnly={success}
               />
             ),
             email: (
@@ -211,34 +314,29 @@ const AccountFormItemContainer = React.memo(function AccountFormItemContainer({
                 {...attr}
                 {...inputBtnAttr}
                 {...regsiter(htmlFor, options)}
-                defaultValue={defaultValue}
+                buttonCallback={handleEmailAuth}
+                readOnly={success}
               />
             ),
             password: <FormInput {...attr} {...regsiter(htmlFor, options)} />,
             images: (
-              <Controller
-                control={control}
+              <FormImages
+                {...attr}
+                size={3}
                 name={htmlFor}
-                render={({ field: { onChange } }) => (
-                  <FormImages
-                    size={3}
-                    {...attr}
-                    callback={(files) => onChange(files)}
-                  />
-                )}
+                defaultValue={defaultValue as string[]}
+                handleUpload={handleGalleryUpload}
+                handleRemove={handleGalleryRemove}
               />
             ),
             image: (
-              <Controller
-                control={control}
+              <FormImages
+                size={1}
                 name={htmlFor}
-                render={({ field: { onChange } }) => (
-                  <FormImages
-                    size={1}
-                    {...attr}
-                    callback={(files) => onChange(files)}
-                  />
-                )}
+                {...attr}
+                defaultValue={[defaultValue] as string[]}
+                handleUpload={handleBackgroundUpload}
+                handleRemove={handleBackgroundRemove}
               />
             ),
           }[type]
