@@ -3,6 +3,7 @@ import Header from './header';
 import * as Styled from './layout.styled';
 import Navbar from './navbar';
 import type { NavbarLinks } from './navbar/navbar';
+import Toggle from './toggle';
 
 interface LayoutProps {
   children?: React.ReactNode;
@@ -90,6 +91,7 @@ const Layout = ({ children }: LayoutProps) => {
         <main>{children}</main>
       </Styled.Container>
       <Footer />
+      <Toggle />
     </>
   );
 };
