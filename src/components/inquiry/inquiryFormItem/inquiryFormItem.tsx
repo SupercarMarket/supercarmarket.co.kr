@@ -109,6 +109,7 @@ const InquiryFormItemContainer = (props: InquiryFormItemContainerProps) => {
                   title="사진 1"
                   id={htmlFor}
                   name={htmlFor}
+                  size={1}
                   callback={(value) => setValue(htmlFor, value)}
                 />
               ),
