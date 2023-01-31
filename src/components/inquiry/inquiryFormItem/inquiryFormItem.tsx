@@ -1,9 +1,14 @@
 import Divider from 'components/common/divider';
 import {
+  FormAgreement,
+  FormAttachment,
   FormInput,
   FormLabel,
   FormMessage,
   FormPostcode,
+  FormRadioGroup,
+  FormRange,
+  FormSelect,
 } from 'components/common/form';
 import FormFiles from 'components/common/form/formFiles';
 import FormImage from 'components/common/form/formImages';
@@ -106,17 +111,50 @@ const InquiryFormItemContainer = (props: InquiryFormItemContainerProps) => {
               ),
               image: (
                 <FormImage
-                  title="사진 1"
+                  title="사진1"
                   id={htmlFor}
                   name={htmlFor}
                   size={1}
                   callback={(value) => setValue(htmlFor, value)}
                 />
               ),
+              images: (
+                <FormAttachment
+                  title="사진 추가"
+                  description="사진은 20장까지만 첨부 가능합니다."
+                  id={htmlFor}
+                  name={htmlFor}
+                  accept="image/jpg, image/png, image/jpeg"
+                  callback={(value) => console.log(value)}
+                />
+              ),
               textarea: (
                 <FormTextArea
                   placeholder={placeholder}
                   {...register(htmlFor)}
+                />
+              ),
+              radioGroup: (
+                <FormRadioGroup>
+                  {({ name, options, handleChange }) => <></>}
+                </FormRadioGroup>
+              ),
+              agreement: <FormAgreement />,
+              select: (
+                <FormSelect
+                  option={{
+                    name: '',
+                    values: [],
+                  }}
+                />
+              ),
+              range: (
+                <FormRange
+                  from={{
+                    name: '',
+                    values: [],
+                  }}
+                  to={{ name: '', values: [] }}
                 />
               ),
             }[type]
