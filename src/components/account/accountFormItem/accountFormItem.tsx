@@ -53,14 +53,18 @@ interface AccountFormItemContainerProps extends AccountFormItemProps {
     | {
         error: null | Error;
         data: {
-          code: string;
-          phone: string;
+          data: {
+            code: string;
+            phone: string;
+          };
         } | null;
         loading: boolean;
       };
   phone?: {
-    code: string;
-    phone: string;
+    data: {
+      code: string;
+      phone: string;
+    };
   } | null;
 }
 
@@ -239,7 +243,7 @@ const AccountFormItemContainer = React.memo(function AccountFormItemContainer({
 
     if (htmlFor === 'phone') requestPhoneAuth(dispatch, target);
     else if (htmlFor === 'authentication' && !!phone)
-      confirmPhoneAuth(dispatch, '01062579881', target);
+      confirmPhoneAuth(dispatch, phone.data.phone, target);
   };
 
   const handleEmailAuth = () => {

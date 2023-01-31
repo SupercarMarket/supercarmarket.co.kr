@@ -44,7 +44,7 @@ const ProfileInfoDetail = ({ title, content }: ProfileInfoDetailProps) => {
   );
 };
 
-const ProfileInfo = ({ isMyAccountPage }: ProfileInfoProps) => {
+const ProfileInfo = ({ isMyAccountPage, profile }: ProfileInfoProps) => {
   return (
     <Container
       display="flex"
@@ -68,7 +68,7 @@ const ProfileInfo = ({ isMyAccountPage }: ProfileInfoProps) => {
           color="greyScale-6"
           lineHeight="120%"
         >
-          blan19
+          {profile.nickname}
         </Typography>
         {isMyAccountPage && (
           <Link href={`/account/blan19/update`}>
@@ -85,14 +85,23 @@ const ProfileInfo = ({ isMyAccountPage }: ProfileInfoProps) => {
         lineHeight="150%"
         color="greyScale-5"
       >
-        소개글소개글소개글소개글소개글소개글소개글소개글소개글소개글소개글소개글소개글소개글소개글소개글소개
+        {profile.description ? profile.description : '소개글을 작성해주세요.'}
       </Typography>
       <Wrapper>
         <ProfileInfoDetail title="등급" content="브론즈" />
-        <ProfileInfoDetail title="가입일" content="2022.09.30" />
-        <ProfileInfoDetail title="작성 글 수" content="245개" />
-        <ProfileInfoDetail title="작성 댓글 수" content="1384개" />
-        <ProfileInfoDetail title="방문일 수" content="366일" />
+        <ProfileInfoDetail title="가입일" content={profile.createdDate} />
+        <ProfileInfoDetail
+          title="작성 글 수"
+          content={`${profile.boardCount}`}
+        />
+        <ProfileInfoDetail
+          title="작성 댓글 수"
+          content={`${profile.commentCount}`}
+        />
+        <ProfileInfoDetail
+          title="방문일 수"
+          content={`${profile.visitCount}`}
+        />
       </Wrapper>
     </Container>
   );

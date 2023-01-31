@@ -38,8 +38,10 @@ interface AuthFormItemContainerProps extends Omit<AuthFormItemProps, 'state'> {
     | {
         error: null | Error;
         data: {
-          code: string;
-          phone: string;
+          data: {
+            code: string;
+            phone: string;
+          };
         } | null;
         loading: boolean;
       };
@@ -50,8 +52,10 @@ interface AuthFormItemContainerProps extends Omit<AuthFormItemProps, 'state'> {
 
 interface AuthFormPhoneItemContainerProps extends AuthFormItemContainerProps {
   phone?: {
-    code: string;
-    phone: string;
+    data: {
+      code: string;
+      phone: string;
+    };
   } | null;
 }
 
@@ -221,7 +225,7 @@ const AuthFormPhoneItemContainer = React.memo(function AuthFormItem({
     setSuccess(false);
     if (htmlFor === 'phone') requestPhoneAuth(dispatch, target);
     else if (htmlFor === 'authentication' && !!phone)
-      confirmPhoneAuth(dispatch, '01062579881', target);
+      confirmPhoneAuth(dispatch, phone.data.phone, target);
   }, [dispatch, htmlFor, phone, target]);
 
   React.useEffect(() => {

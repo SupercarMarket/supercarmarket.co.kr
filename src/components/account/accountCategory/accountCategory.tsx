@@ -77,6 +77,8 @@ const AccountCategory = React.memo(function AccountCategory({
 
   if (isLoading) return <h1>loading...</h1>;
 
+  console.log(data);
+
   return (
     <Container margin="80px 0">
       <Table tab={tab} hidden={hidden} padding="0 0 6px 0" />

@@ -1,12 +1,14 @@
 import Container from 'components/common/container';
 import Wrapper from 'components/common/wrapper';
 import Image from 'next/image';
+import { Profile as ProfileType } from 'types/account';
 
 import * as style from './profile.styled';
 import ProfileInfo from './profileInfo';
 
 export interface ProfileProps {
   isMyAccountPage: boolean;
+  profile: ProfileType;
 }
 
 interface ProfileBackgroundProps {
@@ -68,12 +70,12 @@ const ProfileRepresentative = ({ images }: ProfileRepresentativeProps) => {
 };
 
 const Profile = (props: ProfileProps) => {
-  const { ...rest } = props;
+  const { profile, ...rest } = props;
   return (
     <Container position="relative" padding="0 0 80px 0">
       <ProfileBackground src="https://user-images.githubusercontent.com/66871265/210207112-a0d7b276-e24b-4ae9-80a1-8e48d5cc45f2.png" />
       <Wrapper css={style.wrapper}>
-        <ProfileInfo {...rest} />
+        <ProfileInfo profile={profile} {...rest} />
         <ProfileRepresentative
           images={[
             'https://user-images.githubusercontent.com/66871265/210207136-2ff5d0a2-0284-4d82-bddf-d4bc6021d679.png',

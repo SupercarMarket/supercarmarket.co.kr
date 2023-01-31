@@ -10,8 +10,10 @@ import type {
   InferGetServerSidePropsType,
 } from 'next';
 import type { Session } from 'next-auth';
+import type { Profile as ProfileType } from 'types/account';
 import type { Params } from 'types/base';
 import { getSession } from 'utils/api/auth/user';
+import { BaseApiHandlerResponse, serverFetcher } from 'utils/api/fetcher';
 
 type AccountParams = Params & {
   tab: AccountTab | null;
@@ -22,10 +24,11 @@ const Account = ({
   accountRoutes,
   tab,
   sub,
+  profile,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   return (
     <Container margin="20px 0 0 0">
-      <Profile isMyAccountPage={isMyAccountPage} />
+      <Profile isMyAccountPage={isMyAccountPage} profile={profile} />
       <Wrapper css={style.account}>
         <AccountNavbar tab={tab} accountRoutes={accountRoutes} />
         <AccountCategory
@@ -51,6 +54,26 @@ export const getUserPageProps = async (
   const accountRoutes = isMyAccountPage
     ? account.accountRoutes.myAccount(sub)
     : account.accountRoutes.someoneAccount(sub);
+
+  const user: BaseApiHandlerResponse<{ data: ProfileType }> =
+    await serverFetcher(
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/userpage`,
+      {
+        method: 'GET',
+        headers: {
+          ACCESS_TOKEN: session.accessToken,
+        },
+        query: {
+          id: session.sub,
+        },
+      }
+    );
+
+  if (!user.ok) {
+    return {
+      notFound: true,
+    };
+  }
 
   /**
    * 타유저인 경우 작성글과 댓글단 글만 볼 수 있다.
@@ -82,6 +105,7 @@ export const getUserPageProps = async (
         accountRoutes,
         tab,
         sub,
+        profile: user.data,
       },
     };
 
