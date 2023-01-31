@@ -13,7 +13,7 @@ import { Input, Label } from './form.styled';
 import * as style from './form.styled';
 import FormMessage from './formMessage';
 
-type FormImagesState = Array<string | null>;
+type FormImagesState = Array<string | File | null>;
 
 interface FormImageProps extends React.InputHTMLAttributes<HTMLInputElement> {
   title: string;
@@ -91,11 +91,34 @@ const FormImage = React.forwardRef(function FormImage(
   const [thumbnail, setThumbnail] = React.useState<string | null>(null);
   const [error, setError] = React.useState<string | null>(null);
 
+  const encodeFileToBase64 = (fileBlob: File) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(fileBlob);
+    return new Promise((resolve) => {
+      reader.onload = () => {
+        setThumbnail(reader.result as string);
+        resolve(true);
+      };
+    });
+  };
+
   const onRemove = () => {
     setError(null);
 
     if (!thumbnail) return;
-    if (!handleRemove) return;
+    if (!handleRemove) {
+      setImages((prev) =>
+        prev.map((value, __index) => {
+          if (__index === index) {
+            return null;
+          }
+          return value;
+        })
+      );
+      setImage(null);
+      setThumbnail(null);
+      return;
+    }
 
     handleRemove(thumbnail)
       .then(() => {
@@ -119,9 +142,22 @@ const FormImage = React.forwardRef(function FormImage(
     setError(null);
 
     if (!e.target.files) return;
-    if (!handleUpload) return;
 
     const image = e.target.files[0];
+
+    if (!handleUpload) {
+      setImages((prev) =>
+        prev.map((value, __index) => {
+          if (__index === index) {
+            return image;
+          }
+          return value;
+        })
+      );
+      setImage(image);
+      encodeFileToBase64(image);
+      return;
+    }
 
     handleUpload(e.target.files)
       .then((response) => {
