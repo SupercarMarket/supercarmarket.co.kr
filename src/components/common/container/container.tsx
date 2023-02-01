@@ -10,6 +10,7 @@ interface BaseProps {
   margin?: React.CSSProperties['margin'];
   position?: React.CSSProperties['position'];
   display?: React.CSSProperties['display'];
+  zIndex?: React.CSSProperties['zIndex'];
   flex?: React.CSSProperties['flex'];
   flexDirection?: React.CSSProperties['flexDirection'];
   justifyContent?: React.CSSProperties['justifyContent'];
@@ -54,6 +55,7 @@ const Container = <Element extends keyof JSX.IntrinsicElements = 'div'>(
     gridTemplateColumns,
     background,
     className,
+    zIndex,
     children,
   } = props as ContainerProps;
 
@@ -84,6 +86,7 @@ const Container = <Element extends keyof JSX.IntrinsicElements = 'div'>(
         background,
         borderRadius,
         maxWidth: '100%',
+        zIndex,
         ...borderAttr,
       }}
     >
