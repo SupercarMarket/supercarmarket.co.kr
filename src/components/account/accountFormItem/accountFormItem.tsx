@@ -41,7 +41,10 @@ interface AccountFormItemProps extends Forms {
 
 interface AccountFormItemContainerProps extends AccountFormItemProps {
   regsiter: UseFormRegister<FieldValues>;
-  patternError?: FieldError | Merge<FieldError, FieldErrorsImpl<any>>;
+  patternError?:
+    | FieldError
+    | Merge<FieldError, FieldErrorsImpl<any>>
+    | Partial<{ type: string | number; message: string }>;
   target: string;
   isSubmitSuccessful: boolean;
   infoState?:

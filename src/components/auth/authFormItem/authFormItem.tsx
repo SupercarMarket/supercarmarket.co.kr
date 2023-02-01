@@ -45,7 +45,10 @@ interface AuthFormItemContainerProps extends Omit<AuthFormItemProps, 'state'> {
         } | null;
         loading: boolean;
       };
-  patternError?: FieldError | Merge<FieldError, FieldErrorsImpl<any>>;
+  patternError?:
+    | FieldError
+    | Merge<FieldError, FieldErrorsImpl<any>>
+    | Partial<{ type: string | number; message: string }>;
   target: string;
   isSubmitSuccessful: boolean;
 }
