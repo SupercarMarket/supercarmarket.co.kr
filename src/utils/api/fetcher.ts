@@ -125,7 +125,7 @@ const clientApi = async (url: string, options: FetcherRequestInit) => {
   }
 };
 
-const serverApi = async <T>(url: string, options: FetcherRequestInit) => {
+const serverApi = async (url: string, options: FetcherRequestInit) => {
   const { data, headers, ...rest } = options;
   const requestBody = JSON.stringify(data);
 
@@ -139,12 +139,12 @@ const serverApi = async <T>(url: string, options: FetcherRequestInit) => {
     ...rest,
   });
 
-  const result: T = response.ok ? await response.json() : null;
+  const result = response.ok ? await response.json() : null;
 
   return { status: response.status, ok: response.ok, ...result };
 };
 
-const serverFetcher = async <T>(url: string, options: FetcherRequestInit) => {
+const serverFetcher = async (url: string, options: FetcherRequestInit) => {
   const { headers, ...rest } = options;
 
   const response = await fetcher(url, {
@@ -155,7 +155,7 @@ const serverFetcher = async <T>(url: string, options: FetcherRequestInit) => {
     ...rest,
   });
 
-  const result: T = response.ok ? await response.json() : null;
+  const result = response.ok ? await response.json() : null;
 
   return { status: response.status, ok: response.ok, ...result };
 };

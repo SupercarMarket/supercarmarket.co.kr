@@ -3,7 +3,8 @@ import useMediaQuery from './useMediaQuery';
 
 export default function useMedia() {
   const isDestop = useMediaQuery(deviceQuery.desktop);
-  const isWideDestop = useMediaQuery(deviceQuery.wideDesktop);
+  const isTablet = useMediaQuery(deviceQuery.tablet);
+  const isMobile = useMediaQuery(deviceQuery.mobile);
 
-  return { isDestop, isWideDestop };
+  return { isDestop, isTablet, isMobile };
 }

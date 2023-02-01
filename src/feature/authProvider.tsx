@@ -32,8 +32,10 @@ interface AuthInitialState {
   phone: {
     error: null | Error;
     data: {
-      phone: string;
-      code: string;
+      data: {
+        phone: string;
+        code: string;
+      };
     } | null;
     loading: boolean;
   };
