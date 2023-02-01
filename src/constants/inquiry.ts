@@ -1,3 +1,4 @@
+import type { FormSelectOption } from 'components/common/form/formSelect';
 import * as React from 'react';
 import type { RegisterOptions } from 'react-hook-form';
 import type { InquiryLink } from 'types/inquiry';
@@ -33,12 +34,16 @@ interface InquiryRegister {
     | 'agreement'
     | 'radioGroup'
     | 'range'
-    | 'select';
+    | 'select'
+    | 'mixed';
   label?: string;
   placeholder?: string;
   suffix?: React.ReactNode;
   divider?: boolean;
-  options: RegisterOptions;
+  options: RegisterOptions & {
+    option?: FormSelectOption;
+  };
+  tooltip?: string;
   errorMessage?: string;
   callback?: (data: unknown) => void;
 }
@@ -179,6 +184,10 @@ const inquiry = {
         type: 'select',
         placeholder: '선택하세요',
         options: {
+          option: {
+            name: '차종',
+            values: ['스포츠카', '세단', 'SUV', '픽업트럭', '클래식카&올드카'],
+          },
           required: true,
         },
       },
@@ -221,7 +230,7 @@ const inquiry = {
       {
         htmlFor: 'year',
         label: '연식 (최초 등록일)',
-        type: 'range',
+        type: 'text',
         placeholder: '',
         options: {
           required: true,
@@ -232,8 +241,12 @@ const inquiry = {
         label: '형식연도',
         type: 'select',
         placeholder: '선택하세요',
-        suffix: '년도',
+        suffix: 'text',
         options: {
+          option: {
+            name: '형식연도',
+            values: ['2006', '2011', '2018'],
+          },
           required: true,
         },
       },
@@ -281,6 +294,10 @@ const inquiry = {
         type: 'radioGroup',
         placeholder: '내용을 입력해주세요',
         options: {
+          option: {
+            name: 'accidentHistory',
+            values: ['무사고', '사고'],
+          },
           required: true,
         },
       },
@@ -290,14 +307,19 @@ const inquiry = {
         type: 'select',
         placeholder: '내용을 입력해주세요',
         options: {
+          option: {
+            name: '판매형태',
+            values: ['매매', '승계', '기타'],
+          },
           required: true,
         },
       },
       {
         htmlFor: 'price',
         label: '판매가격',
-        type: 'text',
+        type: 'mixed',
         placeholder: '내용을 입력해주세요',
+        suffix: '만원',
         divider: true,
         options: {
           required: true,
@@ -320,12 +342,12 @@ const inquiry = {
         placeholder: '내용을 입력해주세요',
         divider: true,
         options: {
-          required: true,
+          required: false,
         },
       },
       {
         htmlFor: 'productImages',
-        label: '',
+        label: '사진 등록',
         type: 'images',
         placeholder: '내용을 입력해주세요',
         divider: true,
@@ -335,9 +357,10 @@ const inquiry = {
       },
       {
         htmlFor: 'attchments',
-        label: '',
+        label: '첨부파일',
         type: 'files',
         placeholder: '내용을 입력해주세요',
+        tooltip: '사진은 20장까지만 첨부 가능합니다.',
         options: {
           required: true,
         },
@@ -347,6 +370,7 @@ const inquiry = {
         label: '판매약관',
         type: 'agreement',
         placeholder: '내용을 입력해주세요',
+        tooltip: '판매약관 내용에 동의합니다.',
         options: {
           required: true,
         },
@@ -356,6 +380,7 @@ const inquiry = {
         label: '개인정보 수집 이용',
         type: 'agreement',
         placeholder: '내용을 입력해주세요',
+        tooltip: '개인정보 수집 이용에 동의합니다.',
         options: {
           required: true,
         },

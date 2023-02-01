@@ -2,6 +2,7 @@ import Button from 'components/common/button';
 import { Form } from 'components/common/form';
 import inquiry from 'constants/inquiry';
 import { FormProvider, useForm } from 'react-hook-form';
+import { css } from 'styled-components';
 
 import InquiryFormItem from '../inquiryFormItem';
 
@@ -10,7 +11,14 @@ const SaleForm = () => {
   const onSubmit = methods.handleSubmit((d) => console.log(d));
   return (
     <FormProvider {...methods}>
-      <Form onSubmit={onSubmit}>
+      <Form
+        onSubmit={onSubmit}
+        css={css`
+          display: flex;
+          flex-direction: column;
+          gap: 24px;
+        `}
+      >
         {inquiry.register.car.map((d) => (
           <InquiryFormItem
             key={d.htmlFor}
