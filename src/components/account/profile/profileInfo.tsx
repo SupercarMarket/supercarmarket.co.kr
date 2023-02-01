@@ -2,6 +2,7 @@ import Avvvatars from 'avvvatars-react';
 import Container from 'components/common/container';
 import Typography from 'components/common/typography';
 import Wrapper from 'components/common/wrapper';
+import dayjs from 'dayjs';
 import Link from 'next/link';
 
 import CreateIcon from '../../../assets/svg/create.svg';
@@ -89,7 +90,10 @@ const ProfileInfo = ({ isMyAccountPage, profile }: ProfileInfoProps) => {
       </Typography>
       <Wrapper>
         <ProfileInfoDetail title="등급" content="브론즈" />
-        <ProfileInfoDetail title="가입일" content={profile.createdDate} />
+        <ProfileInfoDetail
+          title="가입일"
+          content={dayjs(profile.createdDate).format('YYYY.MM.DD')}
+        />
         <ProfileInfoDetail
           title="작성 글 수"
           content={`${profile.boardCount}`}
