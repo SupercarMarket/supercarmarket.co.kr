@@ -77,13 +77,17 @@ const AccountCategory = React.memo(function AccountCategory({
 
   if (isLoading) return <h1>loading...</h1>;
 
-  console.log(data);
-
   return (
     <Container margin="80px 0">
       <Table tab={tab} hidden={hidden} padding="0 0 6px 0" />
       {data?.data.length < 1 ? (
-        <Alert severity="info" title="게시글이 존재하지 않습니다." />
+        <Wrapper
+          css={css`
+            padding-top: 35px;
+          `}
+        >
+          <Alert severity="info" title="게시글이 존재하지 않습니다." />
+        </Wrapper>
       ) : (
         {
           product: data.data.map((d: MarketDto) => (
