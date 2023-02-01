@@ -7,15 +7,17 @@ import Input from '../input';
 import Typography from '../typography';
 import Wrapper from '../wrapper';
 
+type FormSelectOption = {
+  name: string;
+  values: string[];
+  placeholder?: string;
+  suffix?: string;
+};
+
 type FormSelectProps = React.PropsWithChildren &
   React.InputHTMLAttributes<HTMLInputElement> & {
     callback?: (value: string) => void;
-    option: {
-      name: string;
-      values: string[];
-      placeholder?: string;
-      suffix?: string;
-    };
+    option: FormSelectOption;
   };
 
 interface FormSelectItem {
@@ -28,7 +30,7 @@ const FormSelectItem = React.memo(function FormSelectItem({
   onSelect,
 }: FormSelectItem) {
   return (
-    <Container position="absolute" border="1px solid #EAEAEC">
+    <Container position="absolute" border="1px solid #EAEAEC" zIndex={999}>
       <Wrapper>
         {values.map((value) => (
           <li
@@ -38,6 +40,7 @@ const FormSelectItem = React.memo(function FormSelectItem({
               width: '100%',
               listStyle: 'none',
               overflow: 'hidden',
+              zIndex: 999,
             }}
           >
             <Wrapper.Item
@@ -103,6 +106,7 @@ const FormSelect = (
       document.removeEventListener('mousedown', handleClickOutSide);
     };
   });
+
   return (
     <Container
       ref={containerRef}
@@ -150,5 +154,5 @@ const FormSelect = (
   );
 };
 
-export type { FormSelectProps };
+export type { FormSelectOption, FormSelectProps };
 export default React.forwardRef(FormSelect);

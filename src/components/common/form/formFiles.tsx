@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { css } from 'styled-components';
 
 import AddIcon from '../../../assets/svg/add.svg';
 import CloseIcon from '../../../assets/svg/close.svg';
@@ -11,6 +12,8 @@ import * as style from './form.styled';
 import FormMessage from './formMessage';
 
 type FormFilesProps = React.InputHTMLAttributes<HTMLInputElement> & {
+  title?: string;
+  description?: string;
   size?: number;
   callback?: (files: File[]) => void;
 };
@@ -61,7 +64,14 @@ const FormFile = React.memo(function FormFile({
 });
 
 const FormFiles = (props: FormFilesProps, ref: React.Ref<HTMLInputElement>) => {
-  const { name, size, callback, ...rest } = props;
+  const {
+    name,
+    size,
+    title = '파일추가',
+    description,
+    callback,
+    ...rest
+  } = props;
   const [files, setFiles] = React.useState<File[]>([]);
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
 
@@ -106,9 +116,27 @@ const FormFiles = (props: FormFilesProps, ref: React.Ref<HTMLInputElement>) => {
       alignItems="flex-start"
       gap="8px"
     >
-      <Button variant="Line" type="button" suffix={<AddIcon />}>
-        <Label htmlFor={name}>파일추가</Label>
-      </Button>
+      <Wrapper
+        css={css`
+          display: flex;
+          align-items: center;
+          gap: 24px;
+        `}
+      >
+        <Button variant="Line" type="button" width="120px" suffix={<AddIcon />}>
+          <Label htmlFor={name}>{title}</Label>
+        </Button>
+        {description && (
+          <Typography
+            fontSize="body-14"
+            fontWeight="regular"
+            color="greyScale-5"
+            lineHeight="150%"
+          >
+            {description}
+          </Typography>
+        )}
+      </Wrapper>
       {errorMessage && <FormMessage error={errorMessage} />}
       <Input
         ref={ref}

@@ -1,17 +1,28 @@
 import Button from 'components/common/button';
 import { Form } from 'components/common/form';
-import inquiry from 'constants/inquiry';
+import inquiry, { InquiryDealerFormState } from 'constants/inquiry';
 import { FormProvider, useForm } from 'react-hook-form';
+import { css } from 'styled-components';
 
 import InquiryFormItem from '../inquiryFormItem';
-import * as style from './dealer.styled';
 
 const DealerForm = () => {
-  const methods = useForm();
-  const onSubmit = methods.handleSubmit((d) => console.log(d));
+  const methods = useForm<InquiryDealerFormState>();
+  const onSubmit = methods.handleSubmit((d) => {
+    const { comAddress } = d;
+  });
   return (
     <FormProvider {...methods}>
-      <Form css={style.form} onSubmit={onSubmit}>
+      <Form
+        encType="multipart/form-data"
+        onSubmit={onSubmit}
+        css={css`
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
+          gap: 24px;
+        `}
+      >
         {inquiry.register.dealer.map((d) => (
           <InquiryFormItem
             key={d.htmlFor}

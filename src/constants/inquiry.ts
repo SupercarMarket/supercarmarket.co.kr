@@ -1,3 +1,4 @@
+import type { FormSelectOption } from 'components/common/form/formSelect';
 import * as React from 'react';
 import type { RegisterOptions } from 'react-hook-form';
 import type { InquiryLink } from 'types/inquiry';
@@ -22,12 +23,27 @@ interface InquiryCarFormState {
 
 interface InquiryRegister {
   htmlFor: string;
-  type: 'text' | 'file' | 'files' | 'image' | 'address' | 'textarea';
+  type:
+    | 'text'
+    | 'file'
+    | 'files'
+    | 'image'
+    | 'images'
+    | 'address'
+    | 'textarea'
+    | 'agreement'
+    | 'radioGroup'
+    | 'range'
+    | 'select'
+    | 'mixed';
   label?: string;
   placeholder?: string;
   suffix?: React.ReactNode;
   divider?: boolean;
-  options: RegisterOptions;
+  options: RegisterOptions & {
+    option?: FormSelectOption;
+  };
+  tooltip?: string;
   errorMessage?: string;
   callback?: (data: unknown) => void;
 }
@@ -154,7 +170,7 @@ const inquiry = {
     ] as InquiryRegister[],
     car: [
       {
-        htmlFor: '차량정보',
+        htmlFor: 'carNumber',
         label: '차량정보',
         type: 'text',
         placeholder: '예) 123가1234',
@@ -163,16 +179,20 @@ const inquiry = {
         },
       },
       {
-        htmlFor: '차종',
+        htmlFor: 'category',
         label: '차종',
-        type: 'text',
+        type: 'select',
         placeholder: '선택하세요',
         options: {
+          option: {
+            name: '차종',
+            values: ['스포츠카', '세단', 'SUV', '픽업트럭', '클래식카&올드카'],
+          },
           required: true,
         },
       },
       {
-        htmlFor: '차량명',
+        htmlFor: 'title',
         label: '차량명',
         type: 'text',
         placeholder: '',
@@ -181,7 +201,7 @@ const inquiry = {
         },
       },
       {
-        htmlFor: '브랜드',
+        htmlFor: 'brand',
         label: '브랜드',
         type: 'text',
         placeholder: '',
@@ -190,7 +210,7 @@ const inquiry = {
         },
       },
       {
-        htmlFor: '모델',
+        htmlFor: 'model',
         label: '모델',
         type: 'text',
         placeholder: '',
@@ -199,7 +219,7 @@ const inquiry = {
         },
       },
       {
-        htmlFor: '변속기',
+        htmlFor: 'transmissionType',
         label: '변속기',
         type: 'text',
         placeholder: '',
@@ -208,7 +228,7 @@ const inquiry = {
         },
       },
       {
-        htmlFor: '연식',
+        htmlFor: 'year',
         label: '연식 (최초 등록일)',
         type: 'text',
         placeholder: '',
@@ -217,17 +237,21 @@ const inquiry = {
         },
       },
       {
-        htmlFor: '형식연도',
+        htmlFor: 'regDate',
         label: '형식연도',
-        type: 'text',
+        type: 'select',
         placeholder: '선택하세요',
-        suffix: '년도',
+        suffix: 'text',
         options: {
+          option: {
+            name: '형식연도',
+            values: ['2006', '2011', '2018'],
+          },
           required: true,
         },
       },
       {
-        htmlFor: '연료',
+        htmlFor: 'fuel',
         label: '연료',
         type: 'text',
         placeholder: '선택하세요',
@@ -236,7 +260,7 @@ const inquiry = {
         },
       },
       {
-        htmlFor: '배기량',
+        htmlFor: 'cc',
         label: '배기량',
         type: 'text',
         placeholder: '내용을 입력해주세요',
@@ -246,7 +270,7 @@ const inquiry = {
         },
       },
       {
-        htmlFor: '주행거리',
+        htmlFor: 'mileage',
         label: '주행거리',
         type: 'text',
         placeholder: '내용을 입력해주세요',
@@ -256,10 +280,107 @@ const inquiry = {
         },
       },
       {
-        htmlFor: '색상',
+        htmlFor: 'color',
         label: '색상',
         type: 'text',
         placeholder: '내용을 입력해주세요',
+        options: {
+          required: true,
+        },
+      },
+      {
+        htmlFor: 'accidentHistory',
+        label: '사고여부',
+        type: 'radioGroup',
+        placeholder: '내용을 입력해주세요',
+        options: {
+          option: {
+            name: 'accidentHistory',
+            values: ['무사고', '사고'],
+          },
+          required: true,
+        },
+      },
+      {
+        htmlFor: 'sellType',
+        label: '판매형태',
+        type: 'select',
+        placeholder: '내용을 입력해주세요',
+        options: {
+          option: {
+            name: '판매형태',
+            values: ['매매', '승계', '기타'],
+          },
+          required: true,
+        },
+      },
+      {
+        htmlFor: 'price',
+        label: '판매가격',
+        type: 'mixed',
+        placeholder: '내용을 입력해주세요',
+        suffix: '만원',
+        divider: true,
+        options: {
+          required: true,
+        },
+      },
+      {
+        htmlFor: 'subtitle',
+        label: '부제목',
+        type: 'text',
+        placeholder: '넣고싶은 정보를 입력해주세요. 예) 무사고, 짧은 주행',
+        divider: true,
+        options: {
+          required: true,
+        },
+      },
+      {
+        htmlFor: 'contents',
+        label: '차량 설명글 입력',
+        type: 'textarea',
+        placeholder: '내용을 입력해주세요',
+        divider: true,
+        options: {
+          required: false,
+        },
+      },
+      {
+        htmlFor: 'productImages',
+        label: '사진 등록',
+        type: 'images',
+        placeholder: '내용을 입력해주세요',
+        divider: true,
+        options: {
+          required: true,
+        },
+      },
+      {
+        htmlFor: 'attchments',
+        label: '첨부파일',
+        type: 'files',
+        placeholder: '내용을 입력해주세요',
+        tooltip: '사진은 20장까지만 첨부 가능합니다.',
+        options: {
+          required: true,
+        },
+      },
+      {
+        htmlFor: 'sellClause',
+        label: '판매약관',
+        type: 'agreement',
+        placeholder: '내용을 입력해주세요',
+        tooltip: '판매약관 내용에 동의합니다.',
+        options: {
+          required: true,
+        },
+      },
+      {
+        htmlFor: 'personalInfoAgree',
+        label: '개인정보 수집 이용',
+        type: 'agreement',
+        placeholder: '내용을 입력해주세요',
+        tooltip: '개인정보 수집 이용에 동의합니다.',
         options: {
           required: true,
         },
