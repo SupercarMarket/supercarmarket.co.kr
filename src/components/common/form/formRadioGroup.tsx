@@ -1,16 +1,11 @@
 import * as React from 'react';
 
-type FormRadioValueType = {
-  value: string;
-  content?: string;
-};
-
 type FormRadioGroupProps = {
   name?: string;
-  options?: FormRadioValueType[];
+  options?: string[];
   children?: (props: {
     name?: string;
-    options?: FormRadioValueType[];
+    options?: string[];
     handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   }) => React.ReactElement;
   callback?: (value: string) => void;
