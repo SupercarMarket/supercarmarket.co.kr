@@ -1,15 +1,16 @@
-import { User } from './base';
-
 type Rating = '1' | '2' | '3' | '4' | '5';
 
-interface Profile extends User {
-  rating: Rating;
-  posted: number;
-  commented: number;
-  visited: number;
-  description?: number;
-  backgroundImgSrc?: string;
+interface Profile {
+  nickname: string;
+  userRating: Rating;
+  boardCount: number;
+  commentCount: number;
+  visitCount: number;
+  description: number | null;
+  background: string | null;
   representativeImgSrc?: string[];
+  gallery: string[];
+  createdDate: string;
 }
 
 interface UpdateInfo {
