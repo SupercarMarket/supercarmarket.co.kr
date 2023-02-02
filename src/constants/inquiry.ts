@@ -386,6 +386,178 @@ const inquiry = {
         },
       },
     ] as InquiryRegister[],
+    partnership: [
+      {
+        htmlFor: '업체 상호',
+        label: '업체 상호',
+        type: 'text',
+        placeholder: '상호를 입력해주세요.',
+        options: {
+          required: true,
+        },
+      },
+      {
+        htmlFor: '대표자',
+        label: '대표자',
+        type: 'text',
+        placeholder: '대표자 성함을 입력해주세요.',
+        options: {
+          required: true,
+        },
+      },
+      {
+        htmlFor: '업체 전화번호',
+        label: '업체 전화번호',
+        type: 'tel',
+        placeholder: '‘-’ 없이 숫자만 입력해주세요.',
+        options: {
+          required: true,
+        },
+      },
+      {
+        htmlFor: '휴대폰',
+        label: '휴데폰',
+        type: 'tel',
+        placeholder: '‘-’ 없이 숫자만 입력해주세요.',
+        options: {
+          required: true,
+        },
+      },
+      {
+        htmlFor: '업무 시간',
+        label: '업무 시간',
+        type: 'text',
+        placeholder: '예) 평일 09:00~18:00',
+        options: {
+          required: true,
+        },
+      },
+      {
+        htmlFor: '업종 선택',
+        label: '업종 선택',
+        type: 'select',
+        placeholder: '',
+        options: {
+          option: {
+            name: '업종 선택',
+            values: ['자동차매장', '공업사', '디테일링', '도색', '기타'],
+          },
+          required: true,
+        },
+      },
+      {
+        htmlFor: '취급 품목',
+        label: '취급 품목',
+        type: 'text',
+        placeholder: '취급 품목을 입력해주세요.',
+        options: {
+          required: true,
+        },
+      },
+      {
+        htmlFor: '업체 주소',
+        label: '업체 주소',
+        type: 'address',
+        placeholder: '',
+        options: {
+          required: true,
+        },
+      },
+      {
+        htmlFor: '홈페이지 주소',
+        label: '홈페이지 주소',
+        type: 'text',
+        placeholder: 'https://...',
+        options: {
+          required: true,
+        },
+      },
+      {
+        htmlFor: '첨부파일',
+        label: '첨부파일',
+        type: 'file',
+        placeholder: '',
+        options: {
+          required: true,
+        },
+      },
+      {
+        htmlFor: '업체 소개',
+        label: '업체 소개',
+        type: 'textarea',
+        placeholder: '내용을 입력해주세요.',
+        options: {
+          required: true,
+        },
+      },
+      {
+        htmlFor: '업체 사진',
+        label: '업체 사진',
+        type: 'images',
+        placeholder: '내용을 입력해주세요.',
+        options: {
+          required: true,
+        },
+      },
+    ] as InquiryRegister[],
+    advertisement: [
+      {
+        htmlFor: '제목',
+        label: '제목',
+        type: 'text',
+        placeholder: '제목을 입력해주세요.',
+        options: {
+          required: true,
+        },
+      },
+      {
+        htmlFor: '관련 링크',
+        label: '관련 링크',
+        type: 'text',
+        placeholder: 'https://...',
+        options: {
+          required: true,
+        },
+      },
+      {
+        htmlFor: '첨부파일',
+        label: '첨부파일',
+        type: 'file',
+        placeholder: '',
+        options: {
+          required: true,
+        },
+      },
+      {
+        htmlFor: '내용',
+        label: '내용',
+        type: 'textarea',
+        placeholder: '내용을 입력해주세요.',
+        options: {
+          required: true,
+        },
+      },
+    ] as InquiryRegister[],
+    misc: [
+      {
+        htmlFor: '제목',
+        label: '제목',
+        type: 'text',
+        placeholder: '제목을 입력해주세요.',
+        options: {
+          required: true,
+        },
+      },
+      {
+        htmlFor: '내용',
+        label: '내용',
+        type: 'textarea',
+        placeholder: '내용을 입력해주세요.',
+        options: {
+          required: true,
+        },
+      },
+    ] as InquiryRegister[],
   },
 };
 
