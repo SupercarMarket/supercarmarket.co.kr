@@ -22,7 +22,7 @@ const Toggle = () => {
             viewBox="0 0 24 24"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <g clip-path="url(#clip0_206_2548)">
+            <g clipPath="url(#clip0_206_2548)">
               <path
                 d="M6.48999 20.1296L8.25999 21.8996L18.16 11.9996L8.25999 2.09961L6.48999 3.86961L14.62 11.9996L6.48999 20.1296Z"
                 fill="current"
