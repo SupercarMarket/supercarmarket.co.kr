@@ -213,7 +213,11 @@ const InquiryFormItemContainer = (props: InquiryFormItemContainerProps) => {
                 />
               ),
               radioGroup: (
-                <FormRadioGroup name={htmlFor} options={options.option?.values}>
+                <FormRadioGroup
+                  name={htmlFor}
+                  options={options.option?.values}
+                  callback={(value) => setValue(htmlFor, value)}
+                >
                   {({ name, options, handleChange }) =>
                     options ? (
                       <Wrapper

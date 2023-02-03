@@ -57,14 +57,6 @@ const DealerForm = () => {
         ...rest
       } = d;
       const [zipcode, address, addressDetail] = comAddress;
-      console.log({
-        ...rest,
-        additional: addional || null,
-        comAddress: {
-          zipcode,
-          detail: `${address} ${addressDetail}`,
-        },
-      });
 
       formData.append(
         'dealerRequestDto',

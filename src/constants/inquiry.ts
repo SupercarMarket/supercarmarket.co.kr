@@ -18,7 +18,27 @@ interface InquiryDealerFormState {
 }
 
 interface InquiryCarFormState {
-  배기량: string;
+  title: string;
+  carNumber: string;
+  subTitle: string;
+  category: string;
+  model: string;
+  brand: string;
+  regDate: string;
+  year: string;
+  sellType: string;
+  fuel: string;
+  cc: string;
+  mileage: string;
+  color: string;
+  accidentHistory: string;
+  price: string;
+  contents: string;
+  transmissionType: string;
+  sellClause: boolean;
+  personalInfoAgree: boolean;
+  productImages: Array<{ file: File; thumbnail: string }>;
+  attachments: File[];
 }
 
 interface InquiryRegister {
@@ -326,7 +346,7 @@ const inquiry = {
         },
       },
       {
-        htmlFor: 'subtitle',
+        htmlFor: 'subTitle',
         label: '부제목',
         type: 'text',
         placeholder: '넣고싶은 정보를 입력해주세요. 예) 무사고, 짧은 주행',
@@ -356,7 +376,7 @@ const inquiry = {
         },
       },
       {
-        htmlFor: 'attchments',
+        htmlFor: 'attachments',
         label: '첨부파일',
         type: 'files',
         placeholder: '내용을 입력해주세요',
