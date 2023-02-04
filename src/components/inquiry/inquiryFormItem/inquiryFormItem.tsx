@@ -18,7 +18,10 @@ import Wrapper from 'components/common/wrapper';
 import type { InquiryRegister } from 'constants/inquiry';
 import * as React from 'react';
 import type {
+  FieldError,
+  FieldErrorsImpl,
   FieldValues,
+  Merge,
   UseFormRegister,
   UseFormSetValue,
 } from 'react-hook-form';
@@ -30,6 +33,10 @@ type InquiryFormItemContainerProps = React.PropsWithChildren &
     register: UseFormRegister<FieldValues>;
     setValue: UseFormSetValue<FieldValues>;
     isRequire: boolean;
+    patternError?:
+      | FieldError
+      | Merge<FieldError, FieldErrorsImpl<any>>
+      | Partial<{ type: string | number; message: string }>;
   };
 
 const InquiryFormMixed = (
@@ -96,9 +103,10 @@ const InquiryFormItem = (props: InquiryRegister) => {
   const {
     register,
     setValue,
-    formState: { isSubmitted },
+    formState: { isSubmitted, errors },
   } = useFormContext();
   const target = useWatch({ name: htmlFor });
+  const patternError = errors[props.htmlFor];
 
   const isRequire = isSubmitted && options.required === true && !target;
 
@@ -107,6 +115,7 @@ const InquiryFormItem = (props: InquiryRegister) => {
       register={register}
       setValue={setValue}
       isRequire={isRequire}
+      patternError={patternError}
       {...props}
     />
   );
@@ -122,10 +131,16 @@ const InquiryFormItemContainer = (props: InquiryFormItemContainerProps) => {
     divider,
     tooltip,
     options,
+    patternError,
     register,
     setValue,
     isRequire,
   } = props;
+
+  const fieldErrorMessage = React.useMemo(() => {
+    if (patternError) return patternError.message as string;
+    else return undefined;
+  }, [patternError]);
 
   return (
     <>
@@ -198,7 +213,11 @@ const InquiryFormItemContainer = (props: InquiryFormItemContainerProps) => {
                 />
               ),
               radioGroup: (
-                <FormRadioGroup name={htmlFor} options={options.option?.values}>
+                <FormRadioGroup
+                  name={htmlFor}
+                  options={options.option?.values}
+                  callback={(value) => setValue(htmlFor, value)}
+                >
                   {({ name, options, handleChange }) =>
                     options ? (
                       <Wrapper
@@ -259,10 +278,7 @@ const InquiryFormItemContainer = (props: InquiryFormItemContainerProps) => {
               ),
             }[type]
           }
-          <FormMessage
-            error={isRequire ? `${label} 을/를 입력해주세요.` : undefined}
-            padding="0 14px"
-          />
+          <FormMessage error={fieldErrorMessage} padding="0 14px" />
         </Wrapper>
       </FormLabel>
       {divider && (

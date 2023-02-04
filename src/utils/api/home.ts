@@ -33,16 +33,14 @@ const homeApi: NextApiHandler = async (req, res) => {
   const home: MagazineResponse<MagazineDto | MarketDto | CommunityDto> =
     await response.json();
 
-  if (!home.data.every((v) => v.imgSrc))
-    return res
-      .status(481)
-      .json({ message: 'imgSrc 필드가 존재하지 않습니다.' });
-
   const homeWithBluredImage = await Promise.all(
     home.data.map(async (m) => {
-      const { base64 } = await getPlaiceholder(m.imgSrc);
+      const src = m.imgSrc || `/images/base.png`;
+
+      const { base64 } = await getPlaiceholder(src);
       return {
         ...m,
+        imgSrc: src,
         base64,
       };
     })
