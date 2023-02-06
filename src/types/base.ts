@@ -1,3 +1,9 @@
+interface Links {
+  title: string;
+  href: string;
+  children?: Links[];
+}
+
 interface User {
   id: string;
   sub: string;
@@ -36,4 +42,12 @@ interface Params {
   [key: string]: string;
 }
 
-export type { Admin, Params, Posting, ServerResponse, User, WithBlurredImage };
+export type {
+  Admin,
+  Links,
+  Params,
+  Posting,
+  ServerResponse,
+  User,
+  WithBlurredImage,
+};
