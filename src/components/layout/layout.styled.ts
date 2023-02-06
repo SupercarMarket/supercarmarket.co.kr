@@ -18,6 +18,11 @@ const Container = styled.div`
   ).join('')}
   min-height: calc(100vh - 1.25rem);
   padding-bottom: 85px;
+  ${applyMediaQuery('mobile')} {
+    & > .navbar {
+      display: none !important;
+    }
+  }
 `;
 
 const footer = css`
