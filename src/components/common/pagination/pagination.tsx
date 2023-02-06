@@ -1,7 +1,7 @@
 'use client';
 
 import clsx from 'clsx';
-import useUrlQuery from 'hooks/useCurrentPage';
+import useUrlQuery from 'hooks/useUrlQuery';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { ReactNode, useMemo } from 'react';
