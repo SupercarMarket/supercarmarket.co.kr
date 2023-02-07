@@ -46,7 +46,7 @@ export const navlinks: NavbarLinks[] = [
     subMenu: [
       {
         title: '파파라치',
-        link: 'paparazzo',
+        link: 'paparazzi',
       },
       {
         title: '자료실',

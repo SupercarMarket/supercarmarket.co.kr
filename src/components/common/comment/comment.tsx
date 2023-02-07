@@ -1,5 +1,5 @@
 import useComment from 'hooks/queries/useComment';
-import useCurrentPage from 'hooks/useCurrentPage';
+import useCurrentPage from 'hooks/useUrlQuery';
 
 import Container from '../container';
 import Pagination from '../pagination';

@@ -19,6 +19,12 @@ const GlobalStyle = createGlobalStyle`
     ${applyMediaQuery('mobile')} {
       font-size: 87.5%;
     }
+
+    ${applyMediaQuery('tablet')} {}
+
+    ${applyMediaQuery('mobile')} {
+      font-size: 87.5%;
+    }
   }
 
   a {

@@ -23,6 +23,10 @@ interface BaseProps {
   boxSizing?: React.CSSProperties['boxSizing'];
   background?: React.CSSProperties['background'];
   gridTemplateColumns?: React.CSSProperties['gridTemplateColumns'];
+  top?: React.CSSProperties['top'];
+  bottom?: React.CSSProperties['bottom'];
+  left?: React.CSSProperties['left'];
+  right?: React.CSSProperties['right'];
 }
 
 type ContainerProps<Element extends keyof JSX.IntrinsicElements = 'div'> =
@@ -56,6 +60,10 @@ const Container = <Element extends keyof JSX.IntrinsicElements = 'div'>(
     background,
     className,
     zIndex,
+    top,
+    bottom,
+    left,
+    right,
     children,
   } = props as ContainerProps;
 
@@ -87,6 +95,10 @@ const Container = <Element extends keyof JSX.IntrinsicElements = 'div'>(
         borderRadius,
         maxWidth: '100%',
         zIndex,
+        top,
+        bottom,
+        left,
+        right,
         ...borderAttr,
       }}
     >
