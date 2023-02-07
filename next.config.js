@@ -15,6 +15,8 @@ const nextConfig = {
   },
   images: {
     formats: ['image/avif', 'image/webp'],
+    deviceSizes: [767, 1199, 1200],
+    imageSizes: [178, 285, 387],
     domains: [
       'user-images.githubusercontent.com',
       'supercarmarket-bucket.s3.ap-northeast-2.amazonaws.com',
