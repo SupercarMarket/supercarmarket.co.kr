@@ -1,8 +1,11 @@
 import Container from 'components/common/container';
 import Typography from 'components/common/typography';
+import Wrapper from 'components/common/wrapper';
 import Image from 'next/image';
 import Link from 'next/link';
 import { memo } from 'react';
+import { css } from 'styled-components';
+import { applyMediaQuery } from 'styles/mediaQuery';
 import { MagazineDto, WithBlurredImage } from 'types/magazine';
 
 interface MagazineCardProps extends WithBlurredImage<MagazineDto> {
@@ -32,17 +35,29 @@ const MagazineCard = memo(function MagazineCard({
       }}
     >
       <Container position="relative" display="flex" flexDirection="column">
-        <Image
-          src={imgSrc}
-          width={imgWidth}
-          height={imgHeight}
-          placeholder={base64 ? 'blur' : undefined}
-          blurDataURL={base64 ? 'blur' : undefined}
-          alt="thumbnail"
-          style={{
-            borderRadius: '4px',
-          }}
-        />
+        <Wrapper.Item
+          css={css`
+            position: relative;
+            width: ${imgWidth}px;
+            height: ${imgHeight}px;
+
+            ${applyMediaQuery('mobile')} {
+              ${type === 'small' && 'width: 178px;'}
+              ${type === 'small' && 'height: 120px;'}
+            }
+          `}
+        >
+          <Image
+            src={imgSrc}
+            fill
+            placeholder={base64 ? 'blur' : undefined}
+            blurDataURL={base64 ? 'blur' : undefined}
+            alt="thumbnail"
+            style={{
+              borderRadius: '4px',
+            }}
+          />
+        </Wrapper.Item>
         <Typography
           as="h2"
           fontSize={headingFontSize}
