@@ -1,11 +1,14 @@
 import clsx from 'clsx';
 import Button from 'components/common/button';
+import Container from 'components/common/container';
 import Typography from 'components/common/typography';
+import Wrapper from 'components/common/wrapper';
 import useMagazine from 'hooks/queries/useMagazine';
 import Image from 'next/image';
+import { css } from 'styled-components';
+import { applyMediaQuery } from 'styles/mediaQuery';
 
 import Arrow from '../../../assets/svg/arrow-right.svg';
-import * as Styled from './magazineBanner.styled';
 
 interface MagazineBannerProps {
   reverse?: boolean;
@@ -19,25 +22,47 @@ const MagazineBanner = ({
   className,
 }: MagazineBannerProps) => {
   const { data: magazine } = useMagazine();
-
   return (
-    <Styled.Container
-      className={clsx(
-        'mb',
-        {
-          [`mb-reverse`]: reverse,
-        },
-        className
-      )}
-    >
+    <Container width="100%" className={className}>
       {magazine && (
-        <>
-          <Styled.ContentsWrapper>
+        <Wrapper
+          css={css`
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            gap: 75px;
+            ${reverse && 'flex-direction: row-reverse;'}
+            ${applyMediaQuery('mobile')} {
+              flex-direction: column-reverse;
+              gap: 20px;
+            }
+          `}
+        >
+          <Wrapper.Item
+            css={css`
+              width: 590px;
+              height: 394px;
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              gap: 16px;
+              fill: #fff;
+
+              ${applyMediaQuery('mobile')} {
+                width: 375px;
+                height: 233px;
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+              }
+            `}
+          >
             <Typography
               as="span"
               color="system-1"
               style={{
-                width: '480px',
+                width: '100%',
                 textAlign: 'start',
               }}
             >
@@ -66,7 +91,12 @@ const MagazineBanner = ({
               {magazine.data[0].contents}
             </Typography>
             {button && (
-              <Styled.ButtonWrapper>
+              <Wrapper.Item
+                css={css`
+                  width: 100%;
+                  display: flex;
+                `}
+              >
                 <Button
                   variant="Black"
                   border="rounded"
@@ -75,15 +105,25 @@ const MagazineBanner = ({
                 >
                   보러가기
                 </Button>
-              </Styled.ButtonWrapper>
+              </Wrapper.Item>
             )}
-          </Styled.ContentsWrapper>
-          <Styled.ImageWrapper>
+          </Wrapper.Item>
+          <Wrapper.Item
+            css={css`
+              position: relative;
+              width: 590px;
+              height: 394px;
+              gap: 16px;
+              ${applyMediaQuery('mobile')} {
+                width: 375px;
+                height: 264px;
+              }
+            `}
+          >
             <Image
               src={magazine.data[0].imgSrc}
               alt="thumbnail"
-              width={590}
-              height={394}
+              fill
               placeholder="blur"
               blurDataURL={magazine.data[0].base64}
               style={{
@@ -91,10 +131,10 @@ const MagazineBanner = ({
               }}
               priority
             />
-          </Styled.ImageWrapper>
-        </>
+          </Wrapper.Item>
+        </Wrapper>
       )}
-    </Styled.Container>
+    </Container>
   );
 };
 
