@@ -2,7 +2,7 @@ import Container from 'components/common/container';
 import Pagination from 'components/common/pagination';
 import Searchbar from 'components/common/searchbar';
 import useMagazine from 'hooks/queries/useMagazine';
-import useUrlQuery from 'hooks/useCurrentPage';
+import useUrlQuery from 'hooks/useUrlQuery';
 
 import MagazineCard from './magazineCard';
 import * as Styled from './magazineList.styled';
