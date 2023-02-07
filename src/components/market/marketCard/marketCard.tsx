@@ -50,7 +50,7 @@ const MarketCard = ({
           <Image
             fill
             placeholder={base64 ? 'blur' : undefined}
-            blurDataURL={base64 ? 'blur' : undefined}
+            blurDataURL={base64 ? base64 : undefined}
             src={imgSrc}
             alt="thumbnail"
             style={{ borderRadius: '4px' }}
