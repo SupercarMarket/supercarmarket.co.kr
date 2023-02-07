@@ -1,6 +1,8 @@
 import { createGlobalStyle } from 'styled-components';
 import reset from 'styled-reset';
 
+import { applyMediaQuery } from './mediaQuery';
+
 const GlobalStyle = createGlobalStyle`
   ${reset}
 
@@ -23,6 +25,12 @@ const GlobalStyle = createGlobalStyle`
     * {
       box-sizing: "border-box";
       font-family: 'Pretendard';
+    }
+
+    ${applyMediaQuery('tablet')} {}
+
+    ${applyMediaQuery('mobile')} {
+      font-size: 87.5%;
     }
   }
 

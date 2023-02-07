@@ -2,16 +2,16 @@ import type { DefaultTheme } from 'styled-components';
 
 const theme: DefaultTheme = {
   fontSize: {
-    'header-36': '36px',
-    'header-24': '24px',
-    'header-20': '20px',
-    'header-16': '16px',
-    'header-14': '14px',
-    'body-24': '24px',
-    'body-20': '20px',
-    'body-16': '16px',
-    'body-14': '14px',
-    'body-12': '12px',
+    'header-36': '2.25rem',
+    'header-24': '1.5rem',
+    'header-20': '1.25rem',
+    'header-16': '1rem',
+    'header-14': '0.875rem',
+    'body-24': '1.5rem',
+    'body-20': '1.25rem',
+    'body-16': '1rem',
+    'body-14': '0.875rem',
+    'body-12': '0.75rem',
   },
   fontWeight: {
     bold: 700,
