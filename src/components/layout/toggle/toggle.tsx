@@ -1,21 +1,45 @@
-import Button from 'components/common/button';
-import Typography from 'components/common/typography';
+import Wrapper from 'components/common/wrapper';
 import Link from 'next/link';
+import { css } from 'styled-components';
+import { applyMediaQuery } from 'styles/mediaQuery';
 
 const Toggle = () => {
   return (
-    <Link
-      href="/inquiry"
-      style={{
-        position: 'fixed',
-        bottom: 40,
-        right: 80,
-      }}
+    <Wrapper
+      css={css`
+        position: fixed;
+        bottom: 0;
+        right: 80px;
+        bottom: 40px;
+        button {
+          all: unset;
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          padding: 20px 40px;
+          gap: 10px;
+          background: #ffffff;
+          box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.25);
+          border-radius: 20px;
+        }
+        b {
+          font-weight: bold;
+          font-size: 1rem;
+          line-height: 120%;
+          color: #1e1e20;
+        }
+        ${applyMediaQuery('mobile')} {
+          right: 40px;
+          bottom: 20px;
+          button {
+            padding: 15px 20px;
+          }
+        }
+      `}
     >
-      <Button
-        variant="Line"
-        border="rounded"
-        suffix={
+      <Link href="/inquiry">
+        <button>
+          <b>문의/상담은 여기로!</b>
           <svg
             width="18"
             height="18"
@@ -34,22 +58,9 @@ const Toggle = () => {
               </clipPath>
             </defs>
           </svg>
-        }
-        style={{
-          height: '59px',
-        }}
-      >
-        <Typography
-          as="b"
-          fontSize="header-16"
-          fontWeight="bold"
-          lineHeight="120%"
-          color="greyScale-6"
-        >
-          문의/상담은 여기로!
-        </Typography>
-      </Button>
-    </Link>
+        </button>
+      </Link>
+    </Wrapper>
   );
 };
 

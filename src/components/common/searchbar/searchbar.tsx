@@ -66,6 +66,7 @@ const Searchbar = (props: SearchbarProps, ref: Ref<HTMLInputElement>) => {
           font-size: 16px;
           line-height: 150%;
           padding: 14px 0;
+          box-sizing: border-box;
         }
         .search::placeholder {
           color: #8e8e95;

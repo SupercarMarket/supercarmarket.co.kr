@@ -3,16 +3,16 @@ import 'styled-components';
 declare module 'styled-components' {
   export interface DefaultTheme {
     fontSize: {
-      'header-36': '36px';
-      'header-24': '24px';
-      'header-20': '20px';
-      'header-16': '16px';
-      'header-14': '14px';
-      'body-24': '24px';
-      'body-20': '20px';
-      'body-16': '16px';
-      'body-14': '14px';
-      'body-12': '12px';
+      'header-36': string;
+      'header-24': string;
+      'header-20': string;
+      'header-16': string;
+      'header-14': string;
+      'body-24': string;
+      'body-20': string;
+      'body-16': string;
+      'body-14': string;
+      'body-12': string;
     };
     fontWeight: {
       bold: 700;

@@ -1,10 +1,12 @@
 import clsx from 'clsx';
+import Container from 'components/common/container';
 import Typography from 'components/common/typography';
+import Wrapper from 'components/common/wrapper';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { memo, useState } from 'react';
+import { css } from 'styled-components';
 
-import * as Styled from './navbar.styled';
 import NavbarItem from './navbarItem';
 
 export interface NavbarLinks {
@@ -54,7 +56,20 @@ const NavLink = memo(function NavLink({ title, subMenu, link }: NavbarLinks) {
           </Link>
         )}
       </button>
-      <Styled.Divider data-active={pathname.includes(link)} />
+      <Wrapper.Item
+        data-active={pathname.includes(link)}
+        css={css`
+          display: none;
+          ${pathname.includes(link) && 'display: block'}
+          width: 255px;
+          height: 3px;
+          position: absolute;
+          left: 50%;
+          transform: translateX(-50%);
+          margin-top: 12px;
+          background-color: ${({ theme }) => theme.color['greyScale-6']};
+        `}
+      />
       <NavbarItem subMenu={subMenu} link={link} active={active} />
       <style jsx>{`
         .navlink {
@@ -73,11 +88,18 @@ const NavLink = memo(function NavLink({ title, subMenu, link }: NavbarLinks) {
 
 const Navbar = ({ navlinks }: NavbarProps) => {
   return (
-    <Styled.Container>
+    <Container
+      className="navbar"
+      width="100%"
+      position="relative"
+      display="flex"
+      alignItems="center"
+      justifyContent="space-around"
+    >
       {navlinks.map((navlink) => (
         <NavLink key={navlink.title} {...navlink} />
       ))}
-    </Styled.Container>
+    </Container>
   );
 };
 

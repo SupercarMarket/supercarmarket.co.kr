@@ -1,8 +1,11 @@
 import Container from 'components/common/container/container';
 import Typography from 'components/common/typography';
+import Wrapper from 'components/common/wrapper';
 import { useRouter } from 'next/dist/client/router';
 import Image from 'next/image';
 import React from 'react';
+import { css } from 'styled-components';
+import { applyMediaQuery } from 'styles/mediaQuery';
 import { WithBlurredImage } from 'types/magazine';
 import { MarketDto } from 'types/market';
 
@@ -28,20 +31,31 @@ const MarketCard = ({
   };
 
   return (
-    <Container width="285px" display="flex" flexDirection="column" key={id}>
+    <Container width="100%" display="flex" flexDirection="column" key={id}>
       <Styled.DivideArea
         style={{ marginBottom: '20px' }}
         onClick={() => onClick(id)}
       >
-        <Image
-          width={285}
-          height={180}
-          placeholder={base64 ? 'blur' : undefined}
-          blurDataURL={base64 ? 'blur' : undefined}
-          src={imgSrc}
-          alt="thumbnail"
-          style={{ borderRadius: '4px' }}
-        />
+        <Wrapper.Item
+          css={css`
+            position: relative;
+            width: 285px;
+            height: 180px;
+            ${applyMediaQuery('mobile')} {
+              width: 178px;
+              height: 120px;
+            }
+          `}
+        >
+          <Image
+            fill
+            placeholder={base64 ? 'blur' : undefined}
+            blurDataURL={base64 ? 'blur' : undefined}
+            src={imgSrc}
+            alt="thumbnail"
+            style={{ borderRadius: '4px' }}
+          />
+        </Wrapper.Item>
       </Styled.DivideArea>
       <Typography
         fontSize="header-16"
