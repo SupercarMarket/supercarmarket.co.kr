@@ -1,8 +1,13 @@
 'use client';
 
-import { dehydrate, QueryClient } from '@tanstack/react-query';
+import {
+  dehydrate,
+  QueryClient,
+  QueryErrorResetBoundary,
+} from '@tanstack/react-query';
 import Container from 'components/common/container';
 import Searchbar from 'components/common/searchbar';
+import { ErrorFallback } from 'components/fallback';
 import layout from 'components/layout';
 import MarketBanner from 'components/market/marketBanner';
 import MarketCarKind from 'components/market/marketCarKind';
@@ -15,6 +20,7 @@ import useUrlQuery from 'hooks/useUrlQuery';
 import { useRouter } from 'next/router';
 import { NextPageContext } from 'next/types';
 import React from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 
 const MarketFilterPage = () => {
   const { push, query } = useRouter();
@@ -62,9 +68,18 @@ const MarketFilterPage = () => {
           ref={keywordRef}
         />
       </Container>
-      <MarketCarKind />
-      <MarketFilter />
-      {markets && <MarketCarList data={markets} page={page} />}
+      <QueryErrorResetBoundary>
+        {({ reset }) => (
+          <ErrorBoundary
+            onReset={reset}
+            fallbackRender={(props) => <ErrorFallback {...props} />}
+          >
+            <MarketCarKind />
+            <MarketFilter />
+            {markets && <MarketCarList data={markets} page={page} />}
+          </ErrorBoundary>
+        )}
+      </QueryErrorResetBoundary>
     </Container>
   );
 };
