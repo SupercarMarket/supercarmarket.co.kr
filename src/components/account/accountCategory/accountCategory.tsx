@@ -4,6 +4,7 @@ import { FormCheckbox } from 'components/common/form';
 import Table from 'components/common/table';
 import Wrapper from 'components/common/wrapper';
 import { CommunityCard } from 'components/community';
+import { CardSkeleton } from 'components/fallback/loading';
 import InquiryCard from 'components/inquiry/inquiryCard/inquiryCard';
 import MagazineCard from 'components/magazine/magazineList/magazineCard';
 import MarketCard from 'components/market/marketCard';
@@ -73,9 +74,7 @@ const AccountCategory = React.memo(function AccountCategory({
     }
   );
 
-  if (isFetching) return <h1>loading...</h1>;
-
-  if (isLoading) return <h1>loading...</h1>;
+  if (isFetching || isLoading) return <CardSkeleton variant="row" />;
 
   return (
     <Container margin="80px 0">
