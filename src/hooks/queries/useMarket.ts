@@ -1,15 +1,23 @@
 import { useQuery } from '@tanstack/react-query';
 import queries from 'constants/queries';
+import { clientFetcher } from 'utils/api/fetcher';
 
-const fetcher = async (query: string) =>
-  await fetch(`/api/market?${query}`, { method: 'GET' }).then((res) =>
-    res.json()
-  );
-
-export default function useMarket(query: string, options = {}) {
+export default function useMarket(
+  query: {
+    category: string;
+    filter: string;
+    orderBy: string;
+    page: number;
+  },
+  options = {}
+) {
   return useQuery(
-    queries.market.lists(query.split('&')),
-    () => fetcher(query),
+    queries.market.lists([query.category]),
+    () =>
+      clientFetcher('/api/market', {
+        method: 'GET',
+        query,
+      }),
     options
   );
 }
