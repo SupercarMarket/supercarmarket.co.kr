@@ -1,3 +1,5 @@
+'use client';
+
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import Container from 'components/common/container';
 import Searchbar from 'components/common/searchbar';
@@ -9,21 +11,23 @@ import MarketFilter from 'components/market/marketFilter';
 import { CATEGORY_VALUES } from 'constants/market';
 import queries from 'constants/queries';
 import useMarket from 'hooks/queries/useMarket';
+import useUrlQuery from 'hooks/useUrlQuery';
 import { useRouter } from 'next/router';
 import { NextPageContext } from 'next/types';
 import React from 'react';
-import { makeQuery } from 'utils/market/marketFilter';
 
 const MarketFilterPage = () => {
   const { push, query } = useRouter();
+  const { page, orderBy, filter, category } = useUrlQuery();
   const keywordRef = React.useRef<HTMLInputElement>(null);
-  const page = React.useMemo(
-    () => (query.page && query.page ? +query.page : 0),
-    [query.page]
-  );
 
   const { data: markets } = useMarket(
-    makeQuery(query as { [key: string]: string }),
+    {
+      page,
+      orderBy: orderBy ? orderBy : 'DESC',
+      filter: filter ? filter : 'created_date',
+      category: category ? category : 'all',
+    },
     { keepPreviousData: true }
   );
 

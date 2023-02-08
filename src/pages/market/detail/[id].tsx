@@ -1,10 +1,13 @@
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import Button from 'components/common/button';
+import Divider from 'components/common/divider';
 import Searchbar from 'components/common/searchbar';
+import Table from 'components/common/table';
 import Wrapper from 'components/common/wrapper';
 import layout from 'components/layout';
+import MarketCard from 'components/market/marketCard';
+import MarketContents from 'components/market/marketContents';
 import { MarketDetail } from 'components/market/marketDetail';
-import MarketTable from 'components/market/marketTable/marketTable';
 import queries from 'constants/queries';
 import useMarketDetail from 'hooks/queries/useMarketDetail';
 import { NextPageContext } from 'next';
@@ -44,8 +47,6 @@ const MarketDetailPage = ({ id }: MarketDetailPageProps) => {
     }
   };
 
-  console.log(data);
-
   return (
     <Wrapper
       css={css`
@@ -55,8 +56,7 @@ const MarketDetailPage = ({ id }: MarketDetailPageProps) => {
         margin: 20px 0 0 0;
       `}
     >
-      <MarketDetail data={data.data} />
-      <MarketTable markets={data.carList} marginBottom="20px" />
+      <MarketContents id={id} />
       <Wrapper
         css={css`
           display: flex;
