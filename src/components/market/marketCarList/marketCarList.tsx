@@ -1,9 +1,11 @@
 import Pagination from 'components/common/pagination';
 import Select from 'components/common/select';
+import Table from 'components/common/table';
+import Wrapper from 'components/common/wrapper';
 import MarketCard from 'components/market/marketCard';
-import MarketTable from 'components/market/marketTable';
 import { ORDER_OPTIONSET, SHOW_COUNT_OPTIONS } from 'constants/market';
 import React from 'react';
+import { css } from 'styled-components';
 import { WithBlurredImage } from 'types/magazine';
 import { MarketDto, MarketResponse } from 'types/market';
 
@@ -42,13 +44,34 @@ const MarketCarList = ({ data }: MarketCarListProps) => {
         </Styled.ButtonBox>
       </Styled.ListFilter>
       {listView ? (
-        <MarketTable markets={markets} />
+        <Wrapper
+          css={css`
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 80px;
+            gap: 13px;
+          `}
+        >
+          <Table tab="product" hidden={false} />
+          {markets.map((m) => (
+            <MarketCard variant="row" key={m.id} {...m} />
+          ))}
+        </Wrapper>
       ) : (
-        <Styled.MarketCardList>
+        <Wrapper
+          css={css`
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            row-gap: 40px;
+            column-gap: 20px;
+            margin-bottom: 80px;
+          `}
+        >
           {markets.map((m) => (
             <MarketCard key={m.id} {...m} />
           ))}
-        </Styled.MarketCardList>
+        </Wrapper>
       )}
       <Pagination
         pageSize={data.pageSize}

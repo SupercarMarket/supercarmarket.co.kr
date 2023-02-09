@@ -1,6 +1,13 @@
-import { dehydrate, QueryClient } from '@tanstack/react-query';
+'use client';
+
+import {
+  dehydrate,
+  QueryClient,
+  QueryErrorResetBoundary,
+} from '@tanstack/react-query';
 import Container from 'components/common/container';
 import Searchbar from 'components/common/searchbar';
+import { ErrorFallback } from 'components/fallback';
 import layout from 'components/layout';
 import MarketBanner from 'components/market/marketBanner';
 import MarketCarKind from 'components/market/marketCarKind';
@@ -9,21 +16,24 @@ import MarketFilter from 'components/market/marketFilter';
 import { CATEGORY_VALUES } from 'constants/market';
 import queries from 'constants/queries';
 import useMarket from 'hooks/queries/useMarket';
+import useUrlQuery from 'hooks/useUrlQuery';
 import { useRouter } from 'next/router';
 import { NextPageContext } from 'next/types';
 import React from 'react';
-import { makeQuery } from 'utils/market/marketFilter';
+import { ErrorBoundary } from 'react-error-boundary';
 
 const MarketFilterPage = () => {
   const { push, query } = useRouter();
+  const { page, orderBy, filter, category } = useUrlQuery();
   const keywordRef = React.useRef<HTMLInputElement>(null);
-  const page = React.useMemo(
-    () => (query.page && query.page ? +query.page : 0),
-    [query.page]
-  );
 
   const { data: markets } = useMarket(
-    makeQuery(query as { [key: string]: string }),
+    {
+      page,
+      orderBy: orderBy ? orderBy : 'DESC',
+      filter: filter ? filter : 'created_date',
+      category: category ? category : 'all',
+    },
     { keepPreviousData: true }
   );
 
@@ -58,9 +68,18 @@ const MarketFilterPage = () => {
           ref={keywordRef}
         />
       </Container>
-      <MarketCarKind />
-      <MarketFilter />
-      {markets && <MarketCarList data={markets} page={page} />}
+      <QueryErrorResetBoundary>
+        {({ reset }) => (
+          <ErrorBoundary
+            onReset={reset}
+            fallbackRender={(props) => <ErrorFallback {...props} />}
+          >
+            <MarketCarKind />
+            <MarketFilter />
+            {markets && <MarketCarList data={markets} page={page} />}
+          </ErrorBoundary>
+        )}
+      </QueryErrorResetBoundary>
     </Container>
   );
 };

@@ -1,11 +1,12 @@
+import Container from 'components/common/container';
 import Typography from 'components/common/typography';
+import Wrapper from 'components/common/wrapper';
 import Image from 'next/image';
-import { useRouter } from 'next/router';
+import Link from 'next/link';
 import React from 'react';
+import { css } from 'styled-components';
 import { WithBlurredImage } from 'types/magazine';
 import { MarketDto } from 'types/market';
-
-import * as Styled from './marketRow.styled';
 
 const MarketRow = ({
   id,
@@ -19,17 +20,15 @@ const MarketRow = ({
   dealer,
   year,
 }: WithBlurredImage<MarketDto>) => {
-  const { push, asPath } = useRouter();
   const formatter = Intl.NumberFormat('ko-KR', { notation: 'compact' }).format;
 
-  const onClick = (id: string) => {
-    const query = asPath.split('?')[1];
-    push(`/market/detail/${id}?${query}`);
-  };
-
   return (
-    <Styled.MarketTableRow key={id} onClick={() => onClick(id)}>
-      <Styled.MarketTableData>
+    <Link
+      href={{
+        pathname: `/market/detail/${id}`,
+      }}
+    >
+      <Container width="100%" display="flex" alignItems="center">
         <Image
           width={196}
           height={124}
@@ -39,37 +38,45 @@ const MarketRow = ({
           alt="thumbnail"
           style={{ borderRadius: '4px' }}
         />
-      </Styled.MarketTableData>
-      <Styled.MarketTableData>
-        <Styled.CarInformation>
+        <Wrapper.Item
+          css={css`
+            flex: 1;
+            width: 504px;
+            display: flex;
+            flex-direction: column;
+            padding: 0 30px;
+            justify-content: center;
+            gap: 8px;
+          `}
+        >
           <Typography fontSize="body-24" fontWeight="bold">
             {carName}
           </Typography>
           <Typography fontSize="body-14" color="greyScale-5">
             {description}
           </Typography>
-        </Styled.CarInformation>
-      </Styled.MarketTableData>
-      <Styled.MarketTableData>
-        <Typography fontSize="body-14">{year}</Typography>
-      </Styled.MarketTableData>
-      <Styled.MarketTableData>
-        <Typography fontSize="body-14">{fuel}</Typography>
-      </Styled.MarketTableData>
-      <Styled.MarketTableData>
-        <Typography fontSize="body-14">{`${formatter(mileage)}km`}</Typography>
-      </Styled.MarketTableData>
-      <Styled.MarketTableData>
-        <Typography fontSize="body-14" fontWeight="bold" color="system-1">
-          {price ? `${formatter(price * 10000)}원` : '상담'}
-        </Typography>
-      </Styled.MarketTableData>
-      <Styled.MarketTableData
-        style={{ width: '120px', wordBreak: 'break-all', padding: '15px' }}
-      >
-        <Typography fontSize="body-14">{dealer}</Typography>
-      </Styled.MarketTableData>
-    </Styled.MarketTableRow>
+        </Wrapper.Item>
+        <Wrapper.Item
+          css={css`
+            display: flex;
+            & > span {
+              width: 100px;
+              text-align: center;
+            }
+          `}
+        >
+          <Typography fontSize="body-14">{year}</Typography>
+          <Typography fontSize="body-14">{fuel}</Typography>
+          <Typography fontSize="body-14">{`${formatter(
+            mileage
+          )}km`}</Typography>
+          <Typography fontSize="body-14" fontWeight="bold" color="system-1">
+            {price ? `${formatter(price * 10000)}원` : '상담'}
+          </Typography>
+          <Typography fontSize="body-14">{dealer}</Typography>
+        </Wrapper.Item>
+      </Container>
+    </Link>
   );
 };
 

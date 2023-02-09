@@ -5,12 +5,17 @@ import {
   MarketDetailResponse,
   WithBlurredImage,
 } from 'types/market';
-
-const fetcher = async (id: string) =>
-  await fetch(`/api/market/${id}`, { method: 'GET' }).then((res) => res.json());
+import { clientFetcher } from 'utils/api/fetcher';
 
 export default function useMarketDetail(id: string, options = {}) {
   return useQuery<
     MarketDetailResponse<MarketDetailDto<WithBlurredImage<{ imgSrc: string }>>>
-  >(queries.market.detail(id), () => fetcher(id), options);
+  >(
+    queries.market.detail(id),
+    () => clientFetcher(`/api/market/${id}`, { method: 'GET' }),
+    {
+      ...options,
+      useErrorBoundary: true,
+    }
+  );
 }

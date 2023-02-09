@@ -134,7 +134,7 @@ const CommunityCardColumn = (props: CommunityCardChildrenProps) => {
           alt="thumbnail"
           fill
           placeholder={base64 ? 'blur' : undefined}
-          blurDataURL={base64 ? 'blur' : undefined}
+          blurDataURL={base64 ? base64 : undefined}
         />
       </Wrapper.Item>
       <Wrapper.Item

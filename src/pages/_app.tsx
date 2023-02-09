@@ -3,7 +3,7 @@ import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query';
-import theme from 'constants/theme';
+import theme, { pretendard } from 'constants/theme';
 import type { AppProps } from 'next/app';
 import { SessionProvider } from 'next-auth/react';
 import type { FC, ReactNode } from 'react';
@@ -44,6 +44,11 @@ function MyApp({
             <Layout {...pageProps}>
               <Component {...pageProps} />
             </Layout>
+            <style jsx global>{`
+              :root {
+                --pretendard: ${pretendard.style.fontFamily};
+              }
+            `}</style>
           </SessionProvider>
         </Hydrate>
       </QueryClientProvider>

@@ -27,6 +27,7 @@ const MagazineCard = memo(function MagazineCard({
   const headingMarginTop = type === 'normal' ? '22px' : '20px';
   const bodyFontSize = type === 'normal' ? 'body-16' : 'body-14';
   const visible = type === 'normal';
+
   return (
     <Link
       href={`/magazine/${id}`}
@@ -51,7 +52,7 @@ const MagazineCard = memo(function MagazineCard({
             src={imgSrc}
             fill
             placeholder={base64 ? 'blur' : undefined}
-            blurDataURL={base64 ? 'blur' : undefined}
+            blurDataURL={base64 ? base64 : undefined}
             alt="thumbnail"
             style={{
               borderRadius: '4px',

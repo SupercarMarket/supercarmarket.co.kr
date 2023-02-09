@@ -19,7 +19,7 @@ const Magazine = () => {
       alignItems="center"
       justifyContent="center"
     >
-      <MagazineBanner reverse button />
+      <MagazineBanner reverse button initialData={magazine} />
       <Wrapper
         css={css`
           margin: 40px 0;
