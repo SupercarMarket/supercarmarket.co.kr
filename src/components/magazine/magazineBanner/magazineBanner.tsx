@@ -7,6 +7,11 @@ import useMagazine from 'hooks/queries/useMagazine';
 import Image from 'next/image';
 import { css } from 'styled-components';
 import { applyMediaQuery } from 'styles/mediaQuery';
+import {
+  MagazineDto,
+  MagazineResponse,
+  WithBlurredImage,
+} from 'types/magazine';
 
 import Arrow from '../../../assets/svg/arrow-right.svg';
 
@@ -14,14 +19,19 @@ interface MagazineBannerProps {
   reverse?: boolean;
   className?: string;
   button?: boolean;
+  initialData?: MagazineResponse<WithBlurredImage<MagazineDto>>;
 }
 
 const MagazineBanner = ({
   reverse,
   button,
   className,
+  initialData,
 }: MagazineBannerProps) => {
-  const { data: magazine } = useMagazine();
+  const { data: magazine } = useMagazine(0, {
+    initialData,
+  });
+
   return (
     <Container width="100%" className={className}>
       {magazine && (
