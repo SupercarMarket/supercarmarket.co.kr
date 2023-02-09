@@ -4,6 +4,7 @@ import Logo from 'components/common/logo';
 import Searchbar from 'components/common/searchbar';
 import Typography from 'components/common/typography';
 import Wrapper from 'components/common/wrapper';
+import { LinkSkeleton } from 'components/fallback/loading';
 import Link from 'next/link';
 import { signOut, useSession } from 'next-auth/react';
 import { css } from 'styled-components';
@@ -41,13 +42,31 @@ const Header = () => {
         />
         <Wrapper.Item
           css={css`
+            width: 100%;
             display: flex;
             align-items: center;
             gap: 32px;
           `}
         >
           {status === 'loading' ? (
-            'loading...'
+            <Wrapper
+              css={css`
+                flex: 1;
+                width: 100%;
+                display: flex;
+                gap: 30px;
+                align-items: center;
+                & > span {
+                  flex: 1;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                }
+              `}
+            >
+              <LinkSkeleton />
+              <LinkSkeleton />
+            </Wrapper>
           ) : status === 'authenticated' ? (
             <>
               <Button

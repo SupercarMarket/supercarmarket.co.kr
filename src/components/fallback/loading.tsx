@@ -74,4 +74,9 @@ const MagazineBannerSkeleton = () => {
     </div>
   );
 };
-export { CardSkeleton, MagazineBannerSkeleton };
+
+const LinkSkeleton = () => {
+  return <Skeleton />;
+};
+
+export { CardSkeleton, LinkSkeleton, MagazineBannerSkeleton };
