@@ -4,50 +4,24 @@ importers:
 
   .:
     specifiers:
+      '@supercarmarket/eslint-config-custom': workspace:*
       dotenv-cli: ^7.0.0
-      eslint-config-custom: workspace:*
       prettier: latest
       turbo: latest
     devDependencies:
+      '@supercarmarket/eslint-config-custom': link:packages/eslint-config-custom
       dotenv-cli: 7.0.0
-      eslint-config-custom: link:packages/eslint-config-custom
       prettier: 2.8.4
       turbo: 1.7.4
-
-  apps/docs:
-    specifiers:
-      '@babel/core': ^7.0.0
-      '@types/node': ^17.0.12
-      '@types/react': ^18.0.22
-      '@types/react-dom': ^18.0.7
-      eslint: 7.32.0
-      eslint-config-custom: workspace:*
-      next: ^13.1.1
-      react: 18.2.0
-      react-dom: 18.2.0
-      tsconfig: workspace:*
-      typescript: ^4.5.3
-      ui: workspace:*
-    dependencies:
-      next: 13.1.6_pjwopsidmaokadturxaafygjp4
-      react: 18.2.0
-      react-dom: 18.2.0_react@18.2.0
-      ui: link:../../packages/ui
-    devDependencies:
-      '@babel/core': 7.20.12
-      '@types/node': 17.0.45
-      '@types/react': 18.0.27
-      '@types/react-dom': 18.0.10
-      eslint: 7.32.0
-      eslint-config-custom: link:../../packages/eslint-config-custom
-      tsconfig: link:../../packages/tsconfig
-      typescript: 4.9.5
 
   apps/web:
     specifiers:
       '@babel/core': ^7.0.0
       '@next/font': ^13.1.6
       '@plaiceholder/next': ^2.5.0
+      '@supercarmarket/eslint-config-custom': workspace:*
+      '@supercarmarket/tsconfig': workspace:*
+      '@supercarmarket/ui': workspace:*
       '@svgr/webpack': ^6.5.1
       '@tanstack/react-query': ^4.24.4
       '@toast-ui/react-editor': ^3.2.2
@@ -61,7 +35,6 @@ importers:
       cookies-next: ^2.1.1
       csstype: ^3.1.1
       dayjs: ^1.11.7
-      eslint-config-custom: workspace:*
       i: ^0.3.7
       next: ^13.1.6
       next-auth: ^4.19.2
@@ -78,13 +51,12 @@ importers:
       sharp: ^0.31.3
       styled-components: ^5.3.6
       styled-reset: ^4.4.5
-      tsconfig: workspace:*
       typescript: ^4.9.5
-      ui: workspace:*
       webpack: ^5.75.0
     dependencies:
       '@next/font': 13.1.6
       '@plaiceholder/next': 2.5.0_next@13.1.6+sharp@0.31.3
+      '@supercarmarket/ui': link:../../packages/ui
       '@tanstack/react-query': 4.24.4_biqbaboplfbrettd7655fr4n2y
       '@toast-ui/react-editor': 3.2.2_react@18.2.0
       avvvatars-react: 0.4.2_owo25xnefcwdq3zjgtohz6dbju
@@ -107,24 +79,24 @@ importers:
       sharp: 0.31.3
       styled-components: 5.3.6_7i5myeigehqah43i5u7wbekgba
       styled-reset: 4.4.5_styled-components@5.3.6
-      ui: link:../../packages/ui
     devDependencies:
       '@babel/core': 7.20.12
+      '@supercarmarket/eslint-config-custom': link:../../packages/eslint-config-custom
+      '@supercarmarket/tsconfig': link:../../packages/tsconfig
       '@svgr/webpack': 6.5.1
       '@types/node': 17.0.45
       '@types/react': 18.0.27
       '@types/react-dom': 18.0.10
       '@types/styled-components': 5.1.26
       babel-loader: 9.1.2_la66t7xldg4uecmyawueag5wkm
-      eslint-config-custom: link:../../packages/eslint-config-custom
       prettier: 2.8.4
-      tsconfig: link:../../packages/tsconfig
       typescript: 4.9.5
       webpack: 5.75.0
 
   packages/eslint-config-custom:
     specifiers:
       '@typescript-eslint/eslint-plugin': ^5.51.0
+      '@typescript-eslint/parser': ^5.51.0
       eslint: ^7.23.0
       eslint-config-next: 13.0.0
       eslint-config-prettier: ^8.3.0
@@ -133,7 +105,8 @@ importers:
       eslint-plugin-simple-import-sort: ^10.0.0
       typescript: ^4.7.4
     dependencies:
-      '@typescript-eslint/eslint-plugin': 5.51.0_jofidmxrjzhj7l6vknpw5ecvfe
+      '@typescript-eslint/eslint-plugin': 5.51.0_hvob2mnilzlwxjztadamqigvwy
+      '@typescript-eslint/parser': 5.51.0_jofidmxrjzhj7l6vknpw5ecvfe
       eslint: 7.32.0
       eslint-config-next: 13.0.0_jofidmxrjzhj7l6vknpw5ecvfe
       eslint-config-prettier: 8.6.0_eslint@7.32.0
@@ -148,20 +121,20 @@ importers:
 
   packages/ui:
     specifiers:
+      '@supercarmarket/eslint-config-custom': workspace:*
+      '@supercarmarket/tsconfig': workspace:*
       '@types/react': ^18.0.17
       '@types/react-dom': ^18.0.6
       eslint: ^7.32.0
-      eslint-config-custom: workspace:*
       react: ^18.2.0
-      tsconfig: workspace:*
       typescript: ^4.5.2
     devDependencies:
+      '@supercarmarket/eslint-config-custom': link:../eslint-config-custom
+      '@supercarmarket/tsconfig': link:../tsconfig
       '@types/react': 18.0.27
       '@types/react-dom': 18.0.10
       eslint: 7.32.0
-      eslint-config-custom: link:../eslint-config-custom
       react: 18.2.0
-      tsconfig: link:../tsconfig
       typescript: 4.9.5
 
 packages:
@@ -1982,7 +1955,7 @@ packages:
       csstype: 3.1.1
     dev: true
 
-  /@typescript-eslint/eslint-plugin/5.51.0_jofidmxrjzhj7l6vknpw5ecvfe:
+  /@typescript-eslint/eslint-plugin/5.51.0_hvob2mnilzlwxjztadamqigvwy:
     resolution: {integrity: sha512-wcAwhEWm1RgNd7dxD/o+nnLW8oH+6RK1OGnmbmkj/GGoDPV1WWMVP0FXYQBivKHdwM1pwii3bt//RC62EriIUQ==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     peerDependencies:
@@ -1993,6 +1966,7 @@ packages:
       typescript:
         optional: true
     dependencies:
+      '@typescript-eslint/parser': 5.51.0_jofidmxrjzhj7l6vknpw5ecvfe
       '@typescript-eslint/scope-manager': 5.51.0
       '@typescript-eslint/type-utils': 5.51.0_jofidmxrjzhj7l6vknpw5ecvfe
       '@typescript-eslint/utils': 5.51.0_jofidmxrjzhj7l6vknpw5ecvfe
