@@ -1,6 +1,5 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": ["**/.env.*local"],
   "pipeline": {
     "build": {
       "dependsOn": ["^build"],
@@ -13,5 +12,15 @@
       "cache": false
     }
   },
-  "globalEnv": []
+  "globalDependencies": [
+    ".env.production",
+    "$NEXT_PUBLIC_URL",
+    "$NEXT_PUBLIC_SERVER_URL",
+    "$NEXT_PUBLIC_API_MOCKING",
+    "$NEXT_PUBLIC_AUTH_SECRET",
+    "$NEXT_PUBLIC_GOOGLE_ID",
+    "$NEXT_PUBLIC_GOOGLE_SECRET",
+    "$NEXT_PUBLIC_KAKAO_ID",
+    "$NEXT_PUBLIC_KAKAO_SECRET"
+  ]
 }
