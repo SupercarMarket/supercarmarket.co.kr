@@ -1,76 +1,25 @@
 {
-  "name": "supercar-market",
-  "version": "0.1.0",
+  "name": "supercarmarket_client",
+  "version": "0.0.0",
   "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
-  },
-  "dependencies": {
-    "@next/font": "^13.1.6",
-    "@plaiceholder/next": "^2.5.0",
-    "@tanstack/react-query": "^4.16.1",
-    "@toast-ui/react-editor": "^3.2.2",
-    "avvvatars-react": "^0.4.2",
-    "clsx": "^1.2.1",
-    "cookies-next": "^2.1.1",
-    "dayjs": "^1.11.7",
-    "i": "^0.3.7",
-    "next": "^13.1.1",
-    "next-auth": "^4.17.0",
-    "npm": "^9.2.0",
-    "plaiceholder": "^2.5.0",
-    "react": "^18.2.0",
-    "react-daum-postcode": "^3.1.1",
-    "react-dom": "^18.2.0",
-    "react-error-boundary": "^3.1.4",
-    "react-hook-form": "^7.40.0",
-    "react-loading-skeleton": "^3.1.0",
-    "server-only": "^0.0.1",
-    "sharp": "^0.31.2",
-    "styled-components": "^5.3.6",
-    "styled-reset": "^4.4.2"
+    "build": "turbo run build",
+    "dev": "dotenv -- turbo run dev",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
-    "@babel/core": "^7.20.2",
-    "@storybook/addon-actions": "^6.5.13",
-    "@storybook/addon-controls": "^6.5.13",
-    "@storybook/addon-essentials": "^6.5.13",
-    "@storybook/addon-interactions": "^6.5.13",
-    "@storybook/addon-links": "^6.5.13",
-    "@storybook/builder-webpack5": "^6.5.13",
-    "@storybook/jest": "^0.0.10",
-    "@storybook/manager-webpack5": "^6.5.13",
-    "@storybook/react": "^6.5.13",
-    "@storybook/testing-library": "^0.0.13",
-    "@svgr/webpack": "^6.5.1",
-    "@types/node": "18.11.9",
-    "@types/react": "18.0.25",
-    "@types/react-dom": "18.0.9",
-    "@types/styled-components": "^5.1.26",
-    "@typescript-eslint/eslint-plugin": "^5.44.0",
-    "babel-loader": "^9.1.0",
-    "chromatic": "^6.11.4",
-    "eslint": "^8.28.0",
-    "eslint-config-next": "^13.1.1",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-simple-import-sort": "^8.0.0",
-    "eslint-plugin-storybook": "^0.6.7",
-    "msw": "^0.49.0",
-    "prettier": "^2.8.0",
-    "sb": "^6.5.13",
-    "storybook-addon-next": "^1.6.10",
-    "storybook-addon-styled-component-theme": "^2.0.0",
-    "typescript": "4.9.3",
-    "webpack": "^5.75.0"
+    "dotenv-cli": "^7.0.0",
+    "eslint-config-custom": "workspace:*",
+    "prettier": "latest",
+    "turbo": "latest"
   },
-  "readme": "ERROR: No README data found!",
-  "_id": "supercar-market@0.1.0",
-  "msw": {
-    "workerDirectory": "public"
-  }
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "packageManager": "pnpm@7.27.0"
 }
