@@ -1,5 +1,5 @@
 {
-  "name": "web",
+  "name": "@supercarmarket/web",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -33,7 +33,7 @@
     "sharp": "^0.31.3",
     "styled-components": "^5.3.6",
     "styled-reset": "^4.4.5",
-    "ui": "workspace:*"
+    "@supercarmarket/ui": "workspace:*"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
@@ -43,9 +43,9 @@
     "@types/react-dom": "^18.0.10",
     "@types/styled-components": "^5.1.26",
     "babel-loader": "^9.1.2",
-    "eslint-config-custom": "workspace:*",
+    "@supercarmarket/eslint-config-custom": "workspace:*",
     "prettier": "^2.8.4",
-    "tsconfig": "workspace:*",
+    "@supercarmarket/tsconfig": "workspace:*",
     "typescript": "^4.9.5",
     "webpack": "^5.75.0"
   }

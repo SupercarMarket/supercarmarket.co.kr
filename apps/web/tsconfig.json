@@ -2,7 +2,7 @@
   "compilerOptions": {
     "baseUrl": "./src"
   },
-  "extends": "tsconfig/nextjs.json",
+  "extends": "@supercarmarket/tsconfig/nextjs.json",
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
 }
