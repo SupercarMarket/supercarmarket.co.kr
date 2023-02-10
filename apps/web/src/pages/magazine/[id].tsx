@@ -15,6 +15,7 @@ import dynamic from 'next/dynamic';
 import type { ParsedUrlQuery } from 'querystring';
 import * as React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
+import type { NextPageWithLayout } from 'types/base';
 import { baseFetch } from 'utils/api/fetcher';
 
 const Comment = dynamic(() => import('components/common/comment'), {
@@ -25,7 +26,7 @@ interface IParams extends ParsedUrlQuery {
   id: string;
 }
 
-const MagazinePost = ({
+const MagazinePost: NextPageWithLayout = ({
   id,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   return (

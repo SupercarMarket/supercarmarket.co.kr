@@ -1,3 +1,7 @@
+import type { NextPage } from 'next';
+import type { AppProps } from 'next/app';
+import { ReactElement, ReactNode } from 'react';
+
 interface Links {
   title: string;
   href: string;
@@ -42,9 +46,14 @@ interface Params {
   [key: string]: string;
 }
 
+type NextPageWithLayout = NextPage & {
+  Layout?: any;
+};
+
 export type {
   Admin,
   Links,
+  NextPageWithLayout,
   Params,
   Posting,
   ServerResponse,

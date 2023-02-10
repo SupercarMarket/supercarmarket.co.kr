@@ -14,9 +14,10 @@ import queries from 'constants/queries';
 import { GetStaticProps } from 'next';
 import * as React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
+import type { NextPageWithLayout } from 'types/base';
 import { baseFetch } from 'utils/api/fetcher';
 
-const Home = () => {
+const Home: NextPageWithLayout = () => {
   return (
     <Container>
       <QueryErrorResetBoundary>

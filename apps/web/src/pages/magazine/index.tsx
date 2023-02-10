@@ -11,9 +11,10 @@ import { MagazineBanner, MagazineList } from 'components/magazine';
 import queries from 'constants/queries';
 import type { GetStaticProps } from 'next/types';
 import { ErrorBoundary } from 'react-error-boundary';
+import type { NextPageWithLayout } from 'types/base';
 import { clientFetcher } from 'utils/api/fetcher';
 
-const MagazinePage = () => {
+const MagazinePage: NextPageWithLayout = () => {
   return (
     <Container
       display="flex"

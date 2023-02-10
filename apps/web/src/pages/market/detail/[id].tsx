@@ -1,25 +1,20 @@
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import Button from 'components/common/button';
-import Divider from 'components/common/divider';
 import Searchbar from 'components/common/searchbar';
-import Table from 'components/common/table';
 import Wrapper from 'components/common/wrapper';
 import layout from 'components/layout';
-import MarketCard from 'components/market/marketCard';
 import MarketContents from 'components/market/marketContents';
-import { MarketDetail } from 'components/market/marketDetail';
 import queries from 'constants/queries';
 import useMarketDetail from 'hooks/queries/useMarketDetail';
-import { NextPageContext } from 'next';
+import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { css } from 'styled-components';
+import type { NextPageWithLayout } from 'types/base';
 
-interface MarketDetailPageProps {
-  id: string;
-}
-
-const MarketDetailPage = ({ id }: MarketDetailPageProps) => {
+const MarketDetailPage: NextPageWithLayout = ({
+  id,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const { push, query, back } = useRouter();
   const { data } = useMarketDetail(id);
   const keywordRef = React.useRef<HTMLInputElement>(null);
@@ -96,7 +91,7 @@ MarketDetailPage.Layout = layout;
 
 const queryClient = new QueryClient();
 
-export const getServerSideProps = async (ctx: NextPageContext) => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { id } = ctx.query;
 
   queryClient.prefetchQuery(queries.market.detail(id as string), () =>

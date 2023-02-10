@@ -2,13 +2,11 @@ import { PhoneForm } from 'components/auth';
 import Container from 'components/common/container';
 import Title from 'components/common/title';
 import AuthLayout from 'components/layout/authLayout';
-import type {
-  GetServerSidePropsContext,
-  InferGetServerSidePropsType,
-} from 'next';
+import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import type { Params } from 'types/base';
+import { NextPageWithLayout } from 'types/base';
 
-const Phone = ({
+const Phone: NextPageWithLayout = ({
   uuid,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   return (
@@ -27,7 +25,7 @@ const Phone = ({
 
 Phone.Layout = AuthLayout;
 
-export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { uuid } = ctx.query as Params;
 
   if (!uuid) return { notFound: true };

@@ -21,8 +21,9 @@ import { useRouter } from 'next/router';
 import { NextPageContext } from 'next/types';
 import React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
+import type { NextPageWithLayout } from 'types/base';
 
-const MarketFilterPage = () => {
+const MarketFilterPage: NextPageWithLayout = () => {
   const { push, query } = useRouter();
   const { page, orderBy, filter, category } = useUrlQuery();
   const keywordRef = React.useRef<HTMLInputElement>(null);

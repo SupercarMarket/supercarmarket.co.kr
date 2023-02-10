@@ -2,8 +2,9 @@ import { SignupForm } from 'components/auth';
 import Container from 'components/common/container';
 import Title from 'components/common/title';
 import AuthLayout from 'components/layout/authLayout';
+import { NextPageWithLayout } from 'types/base';
 
-const Signup = () => {
+const Signup: NextPageWithLayout = () => {
   return (
     <Container
       display="flex"

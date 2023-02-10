@@ -3,15 +3,12 @@ import Container from 'components/common/container';
 import Title from 'components/common/title';
 import AuthLayout from 'components/layout/authLayout';
 import { useAuthDispatch } from 'feature/authProvider';
-import type {
-  GetServerSidePropsContext,
-  InferGetServerSidePropsType,
-} from 'next';
+import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import * as React from 'react';
-import type { Params } from 'types/base';
+import type { NextPageWithLayout, Params } from 'types/base';
 import { isValidQuery } from 'utils/misc';
 
-const Find = ({
+const Find: NextPageWithLayout = ({
   type,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const dispatch = useAuthDispatch();
@@ -37,7 +34,7 @@ const Find = ({
 
 Find.Layout = AuthLayout;
 
-export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { query } = ctx;
   const { type } = query as Params;
 

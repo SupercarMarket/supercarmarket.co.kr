@@ -6,8 +6,9 @@ import { CommunityList } from 'components/community';
 import CommunityNavbar from 'components/community/communityNavbar';
 import layout from 'components/layout';
 import { css } from 'styled-components';
+import { NextPageWithLayout } from 'types/base';
 
-const CommunityCategory = () => {
+const CommunityCategory: NextPageWithLayout = () => {
   return (
     <Container display="flex" flexDirection="column" gap="27.5px">
       <Title>커뮤니티 인기글</Title>

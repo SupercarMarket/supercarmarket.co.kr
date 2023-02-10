@@ -6,12 +6,14 @@ import * as style from 'components/layout/layout.styled';
 import type { AccountTab } from 'constants/account';
 import account from 'constants/account';
 import type {
+  GetServerSideProps,
   GetServerSidePropsContext,
   InferGetServerSidePropsType,
 } from 'next';
 import type { Session } from 'next-auth';
 import type { Profile as ProfileType } from 'types/account';
 import type { Params } from 'types/base';
+import { NextPageWithLayout } from 'types/base';
 import { getSession } from 'utils/api/auth/user';
 import { BaseApiHandlerResponse, serverFetcher } from 'utils/api/fetcher';
 
@@ -19,7 +21,7 @@ type AccountParams = Params & {
   tab: AccountTab | null;
 };
 
-const Account = ({
+const Account: NextPageWithLayout = ({
   isMyAccountPage,
   accountRoutes,
   tab,
@@ -114,7 +116,9 @@ export const getUserPageProps = async (
   };
 };
 
-export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+export const getServerSideProps: GetServerSideProps = async (
+  ctx
+): Promise<any> => {
   const { req } = ctx;
   const session = await getSession({ req });
 
