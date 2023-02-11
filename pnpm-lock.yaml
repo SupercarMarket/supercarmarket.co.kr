@@ -120,7 +120,12 @@ importers:
     specifiers: {}
 
   packages/hooks:
-    specifiers: {}
+    specifiers:
+      next: ^13.1.6
+      react: ^18.2.0
+    dependencies:
+      next: 13.1.6_react@18.2.0
+      react: 18.2.0
 
   packages/tsconfig:
     specifiers: {}

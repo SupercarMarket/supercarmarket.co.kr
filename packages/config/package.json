@@ -1,5 +1,5 @@
 {
-  "name": "@supercarmarket/eslint-config-custom",
+  "name": "@supercarmarket/config",
   "version": "0.0.0",
   "main": "index.js",
   "license": "MIT",

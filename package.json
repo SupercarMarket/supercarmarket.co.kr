@@ -14,7 +14,7 @@
   },
   "devDependencies": {
     "dotenv-cli": "^7.0.0",
-    "@supercarmarket/eslint-config-custom": "workspace:*",
+    "@supercarmarket/config": "workspace:*",
     "prettier": "latest",
     "turbo": "latest"
   },
