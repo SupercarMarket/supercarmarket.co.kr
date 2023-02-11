@@ -1,5 +1,5 @@
 {
-  "extends": "@supercarmarket/tsconfig/react-library.json",
+  "extends": "@supercarmarket/tsconfig/nextjs.json",
   "include": ["."],
   "exclude": ["dist", "build", "node_modules"]
 }

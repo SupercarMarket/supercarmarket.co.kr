@@ -7,5 +7,8 @@
   "scripts": {
     "lint": "eslint *.ts*"
   },
-  "devDependencies": {}
+  "dependencies": {
+    "next": "^13.1.6",
+    "react": "^18.2.0"
+  }
 }
