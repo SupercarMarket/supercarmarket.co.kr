@@ -15,6 +15,4 @@ module.exports = {
     "^[./]",
   ],
   importOrderSeparation: true,
-  plugins: ["simple-import-sort"],
-
 };
