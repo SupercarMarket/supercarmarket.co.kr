@@ -8,12 +8,19 @@
     "lint": "eslint *.ts*"
   },
   "devDependencies": {
+    "@supercarmarket/eslint-config-custom": "workspace:*",
+    "@supercarmarket/tsconfig": "workspace:*",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
+    "@types/styled-components": "^5.1.26",
     "eslint": "^7.32.0",
-    "@supercarmarket/eslint-config-custom": "workspace:*",
     "react": "^18.2.0",
-    "@supercarmarket/tsconfig": "workspace:*",
     "typescript": "^4.5.2"
+  },
+  "dependencies": {
+    "avvvatars-react": "^0.4.2",
+    "clsx": "^1.2.1",
+    "next": "^13.1.6",
+    "styled-components": "^5.3.6"
   }
 }
