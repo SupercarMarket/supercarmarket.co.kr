@@ -65,9 +65,8 @@ const CommunityCard = ({
           fontSize="header-16"
           fontWeight="bold"
           color="system-1"
-        ></Typography>
+        />
       </Wrapper>
-      <Wrapper></Wrapper>
     </Container>
   );
 };

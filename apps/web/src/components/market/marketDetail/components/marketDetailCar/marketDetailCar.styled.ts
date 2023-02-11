@@ -2,7 +2,6 @@
 
 import styled, { css } from 'styled-components';
 
-
 const wrapper = css`
   display: flex;
   align-items: center;
@@ -27,4 +26,4 @@ const Content = styled.div`
   width: 270px;
 `;
 
-export { Content, Info, Subject,wrapper };
+export { Content, Info, Subject, wrapper };

@@ -153,7 +153,7 @@ const FormAttachment = (
           gap: 24px;
         `}
       >
-        <Button variant="Line" type="button" width="120px" suffix={<div></div>}>
+        <Button variant="Line" type="button" width="120px" suffix={<div />}>
           <Label htmlFor={name}>{title}</Label>
         </Button>
         {description && (

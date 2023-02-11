@@ -101,7 +101,9 @@ const MagazineCard = memo(function MagazineCard({
           style={{
             lineHeight: '19.36px',
           }}
-        >{`2022.09.01`}</Typography>
+        >
+          2022.09.01
+        </Typography>
       </Container>
     </Link>
   );

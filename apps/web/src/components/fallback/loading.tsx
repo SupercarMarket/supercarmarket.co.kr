@@ -55,7 +55,7 @@ const CardRowSkeleton = () => {
 const CardColumnSkeleton = () => {
   return (
     <div>
-      <h1></h1>
+      <h1 />
     </div>
   );
 };
@@ -70,7 +70,7 @@ const CardSkeleton = ({ variant = 'column' }: CardSkeletonProps) => {
 const MagazineBannerSkeleton = () => {
   return (
     <div>
-      <h1></h1>
+      <h1 />
     </div>
   );
 };

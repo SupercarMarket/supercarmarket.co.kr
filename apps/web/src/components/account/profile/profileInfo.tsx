@@ -72,7 +72,7 @@ const ProfileInfo = ({ isMyAccountPage, profile }: ProfileInfoProps) => {
           {profile.nickname}
         </Typography>
         {isMyAccountPage && (
-          <Link href={`/account/blan19/update`}>
+          <Link href="/account/blan19/update">
             <Wrapper.Item css={style.svg}>
               <CreateIcon />
             </Wrapper.Item>

@@ -14,12 +14,12 @@ const FormTextArea = (
         id={id}
         role={role}
         name={name}
-        className={'form-textarea'}
+        className="form-textarea"
         autoComplete="off"
         autoCorrect="off"
         spellCheck="false"
         {...rest}
-      ></textarea>
+      />
       <style jsx>{`
         .form-textarea {
           width: 100%;

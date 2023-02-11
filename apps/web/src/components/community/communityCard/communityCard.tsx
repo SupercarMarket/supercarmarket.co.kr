@@ -52,7 +52,9 @@ const CommunityCardRow = ({}: CommunityCardChildrenProps) => {
               fontWeight="regular"
               color="greyScale-5"
               lineHeight="150%"
-            >{`[제보]`}</Typography>
+            >
+              [제보]
+            </Typography>
             <Typography
               as="span"
               fontSize="body-16"
@@ -68,7 +70,9 @@ const CommunityCardRow = ({}: CommunityCardChildrenProps) => {
               fontWeight="regular"
               color="system-1"
               lineHeight="150%"
-            >{`(12)`}</Typography>
+            >
+              (12)
+            </Typography>
           </Wrapper.Item>
         </Wrapper.Left>
         <Wrapper.Right css={style.rowRight}>
@@ -185,7 +189,7 @@ const CommunityCardColumn = (props: CommunityCardChildrenProps) => {
           fontSize="header-16"
           fontWeight="bold"
           color="system-1"
-        ></Typography>
+        />
       </Wrapper>
     </Container>
   );
