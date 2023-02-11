@@ -12,7 +12,6 @@ module.exports = {
       rootDir: ["apps/*/", "packages/*/"],
     },
   },
-  plugins: ["simple-import-sort"],
   rules: {
     "@next/next/no-img-element": "off",
     "@next/next/no-html-link-for-pages": "off",
