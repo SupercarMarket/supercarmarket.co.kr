@@ -1,17 +1,11 @@
-import Image from 'next/image';
-import * as React from 'react';
-import type { ServerResponse } from 'types/base';
+import Image from "next/image";
+import * as React from "react";
+import type { ServerResponse } from "types/base";
 
-import AddIcon from '../../../assets/svg/add.svg';
-import CloseIcon from '../../../assets/svg/close.svg';
-import ThumbnailIcon from '../../../assets/svg/image.svg';
-import Button from '../button';
-import Container from '../container';
-import Typography from '../typography';
-import Wrapper from '../wrapper';
-import { Input, Label } from './form.styled';
-import * as style from './form.styled';
-import FormMessage from './formMessage';
+import { Button, Container, Typography, Wrapper } from "../components";
+import { Input, Label } from "./form.styled";
+import * as style from "./form.styled";
+import FormMessage from "./formMessage";
 
 type FormImagesState = Array<string | File | null>;
 
@@ -50,7 +44,25 @@ const FormImageNoThumbnail = () => {
       border="1px solid #C3C3C7"
       borderRadius="4px"
     >
-      <ThumbnailIcon />
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <g clipPath="url(#clip0_276_12485)">
+          <path
+            d="M19 5V19H5V5H19ZM19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3ZM14.14 11.86L11.14 15.73L9 13.14L6 17H18L14.14 11.86Z"
+            fill="#8E8E95"
+          />
+        </g>
+        <defs>
+          <clipPath id="clip0_276_12485">
+            <rect width="24" height="24" fill="white" />
+          </clipPath>
+        </defs>
+      </svg>
     </Container>
   );
 };
@@ -66,7 +78,7 @@ const FormImageThumbnail = React.memo(function FormImageThumbnail({
         width={320}
         height={180}
         style={{
-          width: '100%',
+          width: "100%",
         }}
       />
     </Container>
@@ -79,7 +91,7 @@ const FormImage = React.forwardRef(function FormImage(
 ) {
   const {
     title,
-    name = '사진',
+    name = "사진",
     index,
     defaultValue,
     setImages,
@@ -134,7 +146,7 @@ const FormImage = React.forwardRef(function FormImage(
         setThumbnail(null);
       })
       .catch(() => {
-        setError('이미지 삭제가 실패했습니다.');
+        setError("이미지 삭제가 실패했습니다.");
       });
   };
 
@@ -174,7 +186,7 @@ const FormImage = React.forwardRef(function FormImage(
         setThumbnail(data.url);
       })
       .catch(() => {
-        setError('이미지 업로드가 실패했습니다.');
+        setError("이미지 업로드가 실패했습니다.");
       });
   };
 
@@ -214,13 +226,49 @@ const FormImage = React.forwardRef(function FormImage(
           {thumbnail ? (
             <Button type="button" variant="Init" onClick={onRemove}>
               <Wrapper.Item css={style.imageButton}>
-                <CloseIcon />
+                <svg
+                  width="100%"
+                  height="100%"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <g clipPath="url(#clip0_275_10413)">
+                    <path
+                      d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z"
+                      fill="#1E1E20"
+                    />
+                  </g>
+                  <defs>
+                    <clipPath id="clip0_275_10413">
+                      <rect width="100%" height="100%" fill="white" />
+                    </clipPath>
+                  </defs>
+                </svg>
               </Wrapper.Item>
             </Button>
           ) : (
             <>
               <Label htmlFor={name}>
-                <AddIcon />
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <g clipPath="url(#clip0_275_10412)">
+                    <path
+                      d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z"
+                      fill="#8E8E95"
+                    />
+                  </g>
+                  <defs>
+                    <clipPath id="clip0_275_10412">
+                      <rect width="24" height="24" fill="white" />
+                    </clipPath>
+                  </defs>
+                </svg>
                 <Typography
                   fontSize="body-14"
                   fontWeight="regular"
@@ -250,7 +298,7 @@ const FormImage = React.forwardRef(function FormImage(
 const FormImages = (props: FormImagesProps) => {
   const {
     title,
-    name = '사진',
+    name = "사진",
     size = 1,
     defaultValue,
     handleUpload,

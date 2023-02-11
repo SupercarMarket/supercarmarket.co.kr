@@ -1,22 +1,20 @@
-import clsx from 'clsx';
-import { InputHTMLAttributes, Ref, useId } from 'react';
-import { forwardRef } from 'react';
-
-import SearchIcon from '../../../assets/svg/search.svg';
+import clsx from "clsx";
+import { InputHTMLAttributes, Ref, useId } from "react";
+import { forwardRef } from "react";
 
 export interface SearchbarProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
-  variant?: 'Line' | 'Grey';
-  border?: 'rounded' | 'normal';
+  variant?: "Line" | "Grey";
+  border?: "rounded" | "normal";
 }
 /**
  * 1. 리렌더링 최적화를 위한 온체인지 핸들러 설정 여부
  */
 const Searchbar = (props: SearchbarProps, ref: Ref<HTMLInputElement>) => {
   const {
-    label = 'search',
-    border = 'normal',
-    variant = 'Grey',
+    label = "search",
+    border = "normal",
+    variant = "Grey",
     placeholder,
     className,
     width,
@@ -26,7 +24,7 @@ const Searchbar = (props: SearchbarProps, ref: Ref<HTMLInputElement>) => {
 
   return (
     <>
-      <div className={clsx('search-container')}>
+      <div className={clsx("search-container")}>
         <label htmlFor={id} hidden>
           {label}
         </label>
@@ -35,7 +33,7 @@ const Searchbar = (props: SearchbarProps, ref: Ref<HTMLInputElement>) => {
           id={id}
           placeholder={placeholder}
           className={clsx(
-            'search',
+            "search",
             {
               [`search-${variant}`]: variant,
               [`search-${border}`]: border,
@@ -52,11 +50,29 @@ const Searchbar = (props: SearchbarProps, ref: Ref<HTMLInputElement>) => {
           {...rest}
         />
         <i
-          className={clsx('search-icon', {
+          className={clsx("search-icon", {
             [`search-${variant}`]: variant,
           })}
         >
-          <SearchIcon />
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g clipPath="url(#clip0_206_3022)">
+              <path
+                d="M15.5 14H14.71L14.43 13.73C15.41 12.59 16 11.11 16 9.5C16 5.91 13.09 3 9.5 3C5.91 3 3 5.91 3 9.5C3 13.09 5.91 16 9.5 16C11.11 16 12.59 15.41 13.73 14.43L14 14.71V15.5L19 20.49L20.49 19L15.5 14ZM9.5 14C7.01 14 5 11.99 5 9.5C5 7.01 7.01 5 9.5 5C11.99 5 14 7.01 14 9.5C14 11.99 11.99 14 9.5 14Z"
+                fill="#1E1E20"
+              />
+            </g>
+            <defs>
+              <clipPath id="clip0_206_3022">
+                <rect width="24" height="24" fill="white" />
+              </clipPath>
+            </defs>
+          </svg>
         </i>
       </div>
       <style jsx>{`

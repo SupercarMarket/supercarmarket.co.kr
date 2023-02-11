@@ -4,12 +4,12 @@ importers:
 
   .:
     specifiers:
-      '@supercarmarket/eslint-config-custom': workspace:*
+      '@supercarmarket/config': workspace:*
       dotenv-cli: ^7.0.0
       prettier: latest
       turbo: latest
     devDependencies:
-      '@supercarmarket/eslint-config-custom': link:packages/eslint-config-custom
+      '@supercarmarket/config': link:packages/config
       dotenv-cli: 7.0.0
       prettier: 2.8.4
       turbo: 1.7.4
@@ -19,7 +19,7 @@ importers:
       '@babel/core': ^7.0.0
       '@next/font': ^13.1.6
       '@plaiceholder/next': ^2.5.0
-      '@supercarmarket/eslint-config-custom': workspace:*
+      '@supercarmarket/config': workspace:*
       '@supercarmarket/tsconfig': workspace:*
       '@supercarmarket/ui': workspace:*
       '@svgr/webpack': ^6.5.1
@@ -81,7 +81,7 @@ importers:
       styled-reset: 4.4.5_styled-components@5.3.6
     devDependencies:
       '@babel/core': 7.20.12
-      '@supercarmarket/eslint-config-custom': link:../../packages/eslint-config-custom
+      '@supercarmarket/config': link:../../packages/config
       '@supercarmarket/tsconfig': link:../../packages/tsconfig
       '@svgr/webpack': 6.5.1
       '@types/node': 17.0.45
@@ -93,7 +93,7 @@ importers:
       typescript: 4.9.5
       webpack: 5.75.0
 
-  packages/eslint-config-custom:
+  packages/config:
     specifiers:
       '@typescript-eslint/eslint-plugin': ^5.51.0
       '@typescript-eslint/parser': ^5.51.0
@@ -101,8 +101,10 @@ importers:
       eslint-config-next: 13.0.0
       eslint-config-prettier: ^8.3.0
       eslint-config-turbo: latest
+      eslint-plugin-prettier: ^4.2.1
       eslint-plugin-react: 7.31.8
       eslint-plugin-simple-import-sort: ^10.0.0
+      prettier: ^2.8.4
       typescript: ^4.7.4
     dependencies:
       '@typescript-eslint/eslint-plugin': 5.51.0_hvob2mnilzlwxjztadamqigvwy
@@ -111,9 +113,11 @@ importers:
       eslint-config-next: 13.0.0_jofidmxrjzhj7l6vknpw5ecvfe
       eslint-config-prettier: 8.6.0_eslint@7.32.0
       eslint-config-turbo: 0.0.7_eslint@7.32.0
+      eslint-plugin-prettier: 4.2.1_2fbugv7hbzbahj5qm3ztcno6by
       eslint-plugin-react: 7.31.8_eslint@7.32.0
       eslint-plugin-simple-import-sort: 10.0.0_eslint@7.32.0
     devDependencies:
+      prettier: 2.8.4
       typescript: 4.9.5
 
   packages/features:
@@ -130,9 +134,13 @@ importers:
   packages/tsconfig:
     specifiers: {}
 
+  packages/types:
+    specifiers: {}
+
   packages/ui:
     specifiers:
-      '@supercarmarket/eslint-config-custom': workspace:*
+      '@supercarmarket/config': workspace:*
+      '@supercarmarket/hooks': workspace:*
       '@supercarmarket/tsconfig': workspace:*
       '@types/react': ^18.0.17
       '@types/react-dom': ^18.0.6
@@ -145,12 +153,13 @@ importers:
       styled-components: ^5.3.6
       typescript: ^4.5.2
     dependencies:
+      '@supercarmarket/hooks': link:../hooks
       avvvatars-react: 0.4.2_react@18.2.0
       clsx: 1.2.1
       next: 13.1.6_react@18.2.0
       styled-components: 5.3.6_react@18.2.0
     devDependencies:
-      '@supercarmarket/eslint-config-custom': link:../eslint-config-custom
+      '@supercarmarket/config': link:../config
       '@supercarmarket/tsconfig': link:../tsconfig
       '@types/react': 18.0.27
       '@types/react-dom': 18.0.10
@@ -2464,7 +2473,7 @@ packages:
       babel-plugin-syntax-jsx: 6.18.0
       lodash: 4.17.21
       picomatch: 2.3.1
-      styled-components: 5.3.6_react@18.2.0
+      styled-components: 5.3.6_7i5myeigehqah43i5u7wbekgba
     dev: false
 
   /babel-plugin-syntax-jsx/6.18.0:
@@ -3201,6 +3210,23 @@ packages:
       semver: 6.3.0
     dev: false
 
+  /eslint-plugin-prettier/4.2.1_2fbugv7hbzbahj5qm3ztcno6by:
+    resolution: {integrity: sha512-f/0rXLXUt0oFYs8ra4w49wYZBG5GKZpAYsJSm6rnYL5uVDjd+zowwMwVZHnAjf4edNrKpCDYfXDgmRE/Ak7QyQ==}
+    engines: {node: '>=12.0.0'}
+    peerDependencies:
+      eslint: '>=7.28.0'
+      eslint-config-prettier: '*'
+      prettier: '>=2.0.0'
+    peerDependenciesMeta:
+      eslint-config-prettier:
+        optional: true
+    dependencies:
+      eslint: 7.32.0
+      eslint-config-prettier: 8.6.0_eslint@7.32.0
+      prettier: 2.8.4
+      prettier-linter-helpers: 1.0.0
+    dev: false
+
   /eslint-plugin-react-hooks/4.6.0_eslint@7.32.0:
     resolution: {integrity: sha512-oFc7Itz9Qxh2x4gNHStv3BqJq54ExXmfC+a1NjAta66IAN87Wu0R/QArgIS9qKzX3dXKPI9H5crl9QchNMY9+g==}
     engines: {node: '>=10'}
@@ -3382,6 +3408,10 @@ packages:
 
   /fast-deep-equal/3.1.3:
     resolution: {integrity: sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==}
+
+  /fast-diff/1.2.0:
+    resolution: {integrity: sha512-xJuoT5+L99XlZ8twedaRf6Ax2TgQVxvgZOYoPKqZufmJib0tL2tegPBOZb1pVNgIhlqDlA0eO0c3wBvQcmzx4w==}
+    dev: false
 
   /fast-glob/3.2.12:
     resolution: {integrity: sha512-DVj4CQIYYow0BlaelwK1pHl5n5cRSJfM60UA0zK891sVInoPri2Ekj7+e1CT3/3qxXenpI+nBBmQAcJPJgaj4w==}
@@ -4468,11 +4498,17 @@ packages:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
     engines: {node: '>= 0.8.0'}
 
+  /prettier-linter-helpers/1.0.0:
+    resolution: {integrity: sha512-GbK2cP9nraSSUF9N2XwUwqfzlAFlMNYYl+ShE/V+H8a9uNl/oUqB1w2EL54Jh0OlyRSd8RfWYJ3coVS4TROP2w==}
+    engines: {node: '>=6.0.0'}
+    dependencies:
+      fast-diff: 1.2.0
+    dev: false
+
   /prettier/2.8.4:
     resolution: {integrity: sha512-vIS4Rlc2FNh0BySk3Wkd6xmwxB0FpOndW5fisM5H8hsZSxU2VWVB5CWIkIjWvrHjIhxk2g3bfMKM87zNTrZddw==}
     engines: {node: '>=10.13.0'}
     hasBin: true
-    dev: true
 
   /pretty-format/3.8.0:
     resolution: {integrity: sha512-WuxUnVtlWL1OfZFQFuqvnvs6MiAGk9UNsBostyBOB0Is9wb5uRESevA6rnl/rkksXaGX3GzZhPup5d6Vp1nFew==}

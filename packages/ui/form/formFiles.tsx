@@ -1,15 +1,10 @@
-import * as React from 'react';
-import { css } from 'styled-components';
+import * as React from "react";
+import { css } from "styled-components";
 
-import AddIcon from '../../../assets/svg/add.svg';
-import CloseIcon from '../../../assets/svg/close.svg';
-import Button from '../button';
-import Container from '../container';
-import Typography from '../typography';
-import Wrapper from '../wrapper';
-import { Input, Label } from './form.styled';
-import * as style from './form.styled';
-import FormMessage from './formMessage';
+import { Button, Container, Typography, Wrapper } from "../components";
+import { Input, Label } from "./form.styled";
+import * as style from "./form.styled";
+import FormMessage from "./formMessage";
 
 type FormFilesProps = React.InputHTMLAttributes<HTMLInputElement> & {
   title?: string;
@@ -52,7 +47,25 @@ const FormFile = React.memo(function FormFile({
         variant="Line"
         suffix={
           <Wrapper css={style.filesButton}>
-            <CloseIcon />
+            <svg
+              width="100%"
+              height="100%"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <g clipPath="url(#clip0_275_10413)">
+                <path
+                  d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z"
+                  fill="#1E1E20"
+                />
+              </g>
+              <defs>
+                <clipPath id="clip0_275_10413">
+                  <rect width="100%" height="100%" fill="white" />
+                </clipPath>
+              </defs>
+            </svg>
           </Wrapper>
         }
         onClick={onRemove}
@@ -67,7 +80,7 @@ const FormFiles = (props: FormFilesProps, ref: React.Ref<HTMLInputElement>) => {
   const {
     name,
     size,
-    title = '파일추가',
+    title = "파일추가",
     description,
     callback,
     ...rest
@@ -98,7 +111,7 @@ const FormFiles = (props: FormFilesProps, ref: React.Ref<HTMLInputElement>) => {
     );
 
     if (isDuplicated) {
-      setErrorMessage('이미 파일이 존재합니다.');
+      setErrorMessage("이미 파일이 존재합니다.");
       return;
     }
 
@@ -123,7 +136,32 @@ const FormFiles = (props: FormFilesProps, ref: React.Ref<HTMLInputElement>) => {
           gap: 24px;
         `}
       >
-        <Button variant="Line" type="button" width="120px" suffix={<AddIcon />}>
+        <Button
+          variant="Line"
+          type="button"
+          width="120px"
+          suffix={
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <g clipPath="url(#clip0_275_10412)">
+                <path
+                  d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z"
+                  fill="#8E8E95"
+                />
+              </g>
+              <defs>
+                <clipPath id="clip0_275_10412">
+                  <rect width="24" height="24" fill="white" />
+                </clipPath>
+              </defs>
+            </svg>
+          }
+        >
           <Label htmlFor={name}>{title}</Label>
         </Button>
         {description && (

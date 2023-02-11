@@ -1,11 +1,6 @@
 {
-  "name": "@supercarmarket/types",
+  "name": "@calcom/types",
   "version": "0.0.0",
-  "main": "./index.tsx",
-  "types": "./index.tsx",
-  "license": "MIT",
-  "scripts": {
-    "lint": "eslint *.ts*"
-  },
-  "dependencies": {}
+  "private": true,
+  "main": "index.js"
 }

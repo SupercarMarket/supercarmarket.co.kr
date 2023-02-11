@@ -1,17 +1,14 @@
-'use client';
+"use client";
 
-import clsx from 'clsx';
-import useUrlQuery from 'hooks/useUrlQuery';
-import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
-import { ReactNode, useMemo } from 'react';
-import { memo } from 'react';
+import clsx from "clsx";
+import { useUrlQuery } from "@supercarmarket/hooks";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { ReactNode, useMemo } from "react";
+import { memo } from "react";
 
-import ArrowLeft from '../../../assets/svg/arrow-left.svg';
-import ArrowLeftTwo from '../../../assets/svg/arrow-left-two.svg';
-import ArrowRight from '../../../assets/svg/arrow-right.svg';
-import Container from '../container';
-import { PaginationButton, PaginationItemContainer } from './pagination.styled';
+import Container from "../container";
+import { PaginationButton, PaginationItemContainer } from "./pagination.styled";
 
 interface PaginationItemProps {
   page: number;
@@ -38,7 +35,7 @@ const PaginationItem = memo(function PaginationItem({
   return (
     <PaginationItemContainer
       data-active={active}
-      className={clsx('pagination-item')}
+      className={clsx("pagination-item")}
     >
       <Link
         href={{
@@ -59,7 +56,7 @@ const PaginationItem = memo(function PaginationItem({
 const Pagination = memo(function Pagination({
   pageSize = 10,
   totalPages,
-  className = 'pagination',
+  className = "pagination",
 }: PaginationProps) {
   const { page, orderby } = useUrlQuery();
   const { push } = useRouter();
@@ -87,14 +84,54 @@ const Pagination = memo(function Pagination({
           push(`${pathname}?page=${page - pageSize}&orderby=${orderby}`)
         }
       >
-        <ArrowLeftTwo />
+        <svg
+          width="12"
+          height="12"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g clipPath="url(#clip0_245_3907)">
+            <path
+              d="M21.3894 20.1296L19.6194 21.8996L9.7194 11.9996L19.6194 2.09961L21.3894 3.86961L13.2594 11.9996L21.3894 20.1296Z"
+              fill="current"
+            />
+            <path
+              d="M14.2805 20.1296L12.5105 21.8996L2.61052 11.9996L12.5105 2.09961L14.2805 3.86961L6.15052 11.9996L14.2805 20.1296Z"
+              fill="current"
+            />
+          </g>
+          <defs>
+            <clipPath id="clip0_245_3907">
+              <rect width="24" height="24" fill="white" />
+            </clipPath>
+          </defs>
+        </svg>
       </PaginationButton>
       <PaginationButton
         variant="Line"
         disabled={page <= 0}
         onClick={() => push(`${pathname}?page=${page - 1}&orderby=${orderby}`)}
       >
-        <ArrowLeft />
+        <svg
+          width="12"
+          height="12"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g clipPath="url(#clip0_245_3944)">
+            <path
+              d="M18.16 3.87039L16.39 2.10039L6.49003 12.0004L16.39 21.9004L18.16 20.1304L10.03 12.0004L18.16 3.87039Z"
+              fill="current"
+            />
+          </g>
+          <defs>
+            <clipPath id="clip0_245_3944">
+              <rect width="24" height="24" fill="white" />
+            </clipPath>
+          </defs>
+        </svg>
       </PaginationButton>
       {currentPages &&
         Array.from(currentPages).map((p) => (
@@ -113,7 +150,24 @@ const Pagination = memo(function Pagination({
         disabled={page + 1 >= totalPages}
         onClick={() => push(`${pathname}?page=${page + 1}&orderby=${orderby}`)}
       >
-        <ArrowRight />
+        <svg
+          width="12"
+          height="12"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g clipPath="url(#clip0_206_2548)">
+            <path
+              d="M6.48999 20.1296L8.25999 21.8996L18.16 11.9996L8.25999 2.09961L6.48999 3.86961L14.62 11.9996L6.48999 20.1296Z"
+              fill="current"
+            />
+          </g>
+          <defs>
+            <clipPath id="clip0_206_2548">
+              <rect width="25" height="24" fill="white" />
+            </clipPath>
+          </defs>
+        </svg>
       </PaginationButton>
     </Container>
   );

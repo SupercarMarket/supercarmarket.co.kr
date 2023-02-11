@@ -1,4 +1,3 @@
-import { AccountTab } from "constants/account";
 import * as React from "react";
 import { css } from "styled-components";
 import { FormCheckbox } from "../../form";
@@ -8,7 +7,7 @@ import Typography from "../typography";
 import Wrapper from "../wrapper";
 
 interface TableProps {
-  tab: AccountTab;
+  tab: "product" | "magazine" | "inquiry" | "community" | "comment";
   hidden?: boolean;
   handleCheckbox?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   padding?: React.CSSProperties["padding"];

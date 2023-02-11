@@ -1,7 +1,7 @@
-import useInterval from 'hooks/useInterval';
-import * as React from 'react';
+import { useInterval } from "@supercarmarket/hooks";
+import * as React from "react";
 
-import Typography from '../typography';
+import Typography from "../typography";
 
 interface TimerProps {
   time: number;

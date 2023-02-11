@@ -1,14 +1,10 @@
-import Image from 'next/image';
-import * as React from 'react';
-import { css } from 'styled-components';
+import Image from "next/image";
+import * as React from "react";
+import { css } from "styled-components";
 
-import CloseIcon from '../../../assets/svg/close.svg';
-import Button from '../button';
-import Container from '../container';
-import Typography from '../typography';
-import Wrapper from '../wrapper';
-import * as style from './form.styled';
-import { Input, Label } from './form.styled';
+import { Button, Container, Typography, Wrapper } from "../components";
+import * as style from "./form.styled";
+import { Input, Label } from "./form.styled";
 
 type FormImagesState = Array<{ file: File; thumbnail: string }>;
 
@@ -42,7 +38,7 @@ const FormImageThumbnail = React.memo(function FormImageThumbnail({
         width={320}
         height={180}
         style={{
-          width: '100%',
+          width: "100%",
         }}
       />
     </Container>
@@ -83,7 +79,25 @@ const FormAttachmentItem = (props: FormImageProps) => {
             onClick={() => handleRemove(index)}
           >
             <Wrapper.Item css={style.imageButton}>
-              <CloseIcon />
+              <svg
+                width="100%"
+                height="100%"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <g clipPath="url(#clip0_275_10413)">
+                  <path
+                    d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z"
+                    fill="#1E1E20"
+                  />
+                </g>
+                <defs>
+                  <clipPath id="clip0_275_10413">
+                    <rect width="100%" height="100%" fill="white" />
+                  </clipPath>
+                </defs>
+              </svg>
             </Wrapper.Item>
           </Button>
         </Wrapper.Right>
@@ -99,7 +113,7 @@ const FormAttachment = (
   const {
     name,
     size,
-    title = '파일추가',
+    title = "파일추가",
     description,
     callback,
     ...rest
@@ -191,7 +205,7 @@ const FormAttachment = (
               index={index}
               file={file.file}
               thumbnail={file.thumbnail}
-              title={'사진 ' + index}
+              title={"사진 " + index}
               handleRemove={handleRemove}
             />
           ))}
