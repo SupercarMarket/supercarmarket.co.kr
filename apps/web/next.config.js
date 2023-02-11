@@ -13,7 +13,7 @@ const nextConfig = {
       fileName: true,
     },
   },
-  transpilePackages: ["ui"],
+  transpilePackages: ['@supercarmarket/ui'],
   images: {
     formats: ['image/avif', 'image/webp'],
     deviceSizes: [767, 1199, 1200],
