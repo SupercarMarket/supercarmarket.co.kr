@@ -1,8 +1,8 @@
 {
   "name": "@supercarmarket/hooks",
   "version": "0.0.0",
-  "main": "./index.ts",
-  "types": "./index.ts",
+  "main": "./index.tsx",
+  "types": "./index.tsx",
   "license": "MIT",
   "scripts": {
     "lint": "eslint *.ts*"
@@ -10,5 +10,9 @@
   "dependencies": {
     "next": "^13.1.6",
     "react": "^18.2.0"
+  },
+  "devDependencies": {
+    "typescript": "^4.9.5",
+    "@supercarmarket/tsconfig": "workspace:*"
   }
 }

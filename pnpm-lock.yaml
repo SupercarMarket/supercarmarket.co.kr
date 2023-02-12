@@ -141,11 +141,16 @@ importers:
 
   packages/hooks:
     specifiers:
+      '@supercarmarket/tsconfig': workspace:*
       next: ^13.1.6
       react: ^18.2.0
+      typescript: ^4.9.5
     dependencies:
       next: 13.1.6_react@18.2.0
       react: 18.2.0
+    devDependencies:
+      '@supercarmarket/tsconfig': link:../tsconfig
+      typescript: 4.9.5
 
   packages/lib:
     specifiers:
