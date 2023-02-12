@@ -1,0 +1,18 @@
+{
+  "name": "@supercarmarket/features",
+  "version": "0.0.0",
+  "main": "./index.tsx",
+  "types": "./index.tsx",
+  "license": "MIT",
+  "scripts": {
+    "lint": "eslint *.ts*"
+  },
+  "devDependencies": {
+    "@supercarmarket/tsconfig": "workspace:*",
+    "@supercarmarket/types": "workspace:*"
+  },
+  "dependencies": {
+    "@supercarmarket/ui": "workspace:*",
+    "react": "^18.2.0"
+  }
+}

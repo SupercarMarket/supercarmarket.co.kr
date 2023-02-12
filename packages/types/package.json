@@ -1,0 +1,12 @@
+{
+  "name": "@supercarmarket/types",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "devDependencies": {
+    "@supercarmarket/config": "workspace:*",
+    "@supercarmarket/tsconfig": "workspace:*",
+    "typescript": "^4.9.5"
+  }
+}

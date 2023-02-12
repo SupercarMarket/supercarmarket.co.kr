@@ -1,0 +1,28 @@
+{
+  "name": "@supercarmarket/ui",
+  "sideEffects": false,
+  "version": "0.0.0",
+  "main": "./index.tsx",
+  "types": "./index.tsx",
+  "license": "MIT",
+  "scripts": {
+    "lint": "eslint *.ts*"
+  },
+  "devDependencies": {
+    "@supercarmarket/config": "workspace:*",
+    "@supercarmarket/tsconfig": "workspace:*",
+    "@types/react": "^18.0.17",
+    "@types/react-dom": "^18.0.6",
+    "@types/styled-components": "^5.1.26",
+    "eslint": "^7.32.0",
+    "react": "^18.2.0",
+    "typescript": "^4.5.2"
+  },
+  "dependencies": {
+    "@supercarmarket/hooks": "workspace:*",
+    "avvvatars-react": "^0.4.2",
+    "clsx": "^1.2.1",
+    "next": "^13.1.6",
+    "styled-components": "^5.3.6"
+  }
+}
