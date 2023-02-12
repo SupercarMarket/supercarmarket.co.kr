@@ -121,7 +121,17 @@ importers:
       typescript: 4.9.5
 
   packages/features:
-    specifiers: {}
+    specifiers:
+      '@supercarmarket/tsconfig': workspace:*
+      '@supercarmarket/types': workspace:*
+      '@supercarmarket/ui': workspace:*
+      react: ^18.2.0
+    dependencies:
+      '@supercarmarket/ui': link:../ui
+      react: 18.2.0
+    devDependencies:
+      '@supercarmarket/tsconfig': link:../tsconfig
+      '@supercarmarket/types': link:../types
 
   packages/hooks:
     specifiers:
@@ -131,6 +141,14 @@ importers:
       next: 13.1.6_react@18.2.0
       react: 18.2.0
 
+  packages/lib:
+    specifiers:
+      '@supercarmarket/tsconfig': workspace:*
+      '@supercarmarket/types': workspace:*
+    dependencies:
+      '@supercarmarket/tsconfig': link:../tsconfig
+      '@supercarmarket/types': link:../types
+
   packages/tsconfig:
     specifiers:
       tsconfig-paths: ^4.1.2
@@ -138,7 +156,14 @@ importers:
       tsconfig-paths: 4.1.2
 
   packages/types:
-    specifiers: {}
+    specifiers:
+      '@supercarmarket/config': workspace:*
+      '@supercarmarket/tsconfig': workspace:*
+      typescript: ^4.9.5
+    devDependencies:
+      '@supercarmarket/config': link:../config
+      '@supercarmarket/tsconfig': link:../tsconfig
+      typescript: 4.9.5
 
   packages/ui:
     specifiers:

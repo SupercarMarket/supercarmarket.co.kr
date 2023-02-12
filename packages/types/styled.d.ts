@@ -1,6 +1,6 @@
 import 'styled-components';
 
-declare module 'styled-components' {
+export declare module 'styled-components' {
   export interface DefaultTheme {
     fontSize: {
       'header-36': string;

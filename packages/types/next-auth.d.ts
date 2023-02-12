@@ -1,7 +1,7 @@
 import { Session } from 'next-auth';
 import { JWT } from 'next-auth/jwt';
 
-declare module 'next-auth' {
+export declare module 'next-auth' {
   interface Session {
     sub: string;
     accessToken: string;

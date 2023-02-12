@@ -1,4 +1,4 @@
-namespace NodeJS {
+export namespace NodeJS {
   interface ProcessEnv extends NodeJS.ProcessEnv {
     NEXT_PUBLIC_URL: string;
     NEXT_PUBLIC_SERVER_URL: string;

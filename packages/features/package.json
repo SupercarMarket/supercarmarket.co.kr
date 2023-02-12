@@ -7,5 +7,12 @@
   "scripts": {
     "lint": "eslint *.ts*"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@supercarmarket/tsconfig": "workspace:*",
+    "@supercarmarket/types": "workspace:*"
+  },
+  "dependencies": {
+    "@supercarmarket/ui": "workspace:*",
+    "react": "^18.2.0"
+  }
 }
