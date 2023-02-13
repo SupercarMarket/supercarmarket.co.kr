@@ -12,7 +12,9 @@
     "react": "^18.2.0"
   },
   "devDependencies": {
-    "typescript": "^4.9.5",
-    "@supercarmarket/tsconfig": "workspace:*"
+    "@supercarmarket/tsconfig": "workspace:*",
+    "@types/react": "^18.0.28",
+    "@types/react-dom": "^18.0.10",
+    "typescript": "^4.9.5"
   }
 }
