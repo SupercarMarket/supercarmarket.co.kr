@@ -3,6 +3,7 @@ import { css } from 'styled-components';
 
 import { Container, Input, Typography } from '../components';
 import { Wrapper } from '../components/wrapper';
+import { theme } from '../styles';
 
 type FormSelectOption = {
   name: string;
@@ -45,14 +46,14 @@ const FormSelectItem = React.memo(function FormSelectItem({
                 width: 100%;
                 padding: 14px;
                 z-index: 999;
-                background: ${({ theme }) => theme.color.white};
+                background: ${theme.color.white};
                 cursor: pointer;
                 font-size: 14px;
                 line-height: 150%;
-                color: ${({ theme }) => theme.color['greyScale-6']};
+                color: ${theme.color['greyScale-6']};
                 &:hover {
-                  background: ${({ theme }) => theme.color['greyScale-2']};
-                  color: ${({ theme }) => theme.color.primary};
+                  background: ${theme.color['greyScale-2']};
+                  color: ${theme.color.primary};
                   font-weight: bold;
                 }
               `}
@@ -139,7 +140,7 @@ const FormSelect = React.forwardRef(function FormSelect(
             right: 13px;
             transform: translateY(-50%);
             width: 18px;
-            fill: ${({ theme }) => theme.color['greyScale-6']};
+            fill: ${theme.color['greyScale-6']};
           `}
         >
           <svg

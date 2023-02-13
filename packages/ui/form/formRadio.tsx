@@ -2,6 +2,7 @@ import * as React from 'react';
 import { css } from 'styled-components';
 
 import { Wrapper } from '../components/wrapper';
+import { theme } from '../styles';
 
 interface FormRadioProps extends React.InputHTMLAttributes<HTMLInputElement> {
   content?: string;
@@ -27,7 +28,7 @@ const FormRadio = React.forwardRef(function FormRadio(
           display: inline-block;
           width: 16px;
           height: 16px;
-          border: 1px solid ${({ theme }) => theme.color.primary};
+          border: 1px solid ${theme.color.primary};
           border-radius: 50%;
           position: relative;
           cursor: pointer;
@@ -37,10 +38,10 @@ const FormRadio = React.forwardRef(function FormRadio(
           height: 100%;
           border-radius: 50%;
           box-sizing: border-box;
-          border: 2px solid ${({ theme }) => theme.color.white};
+          border: 2px solid ${theme.color.white};
         }
         input[type='radio']:checked + label > div {
-          background: ${({ theme }) => theme.color.primary};
+          background: ${theme.color.primary};
         }
         span {
           font-weight: 500;

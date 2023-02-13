@@ -3,6 +3,7 @@ import { css } from 'styled-components';
 
 import { Container } from '../components';
 import { Wrapper } from '../components/wrapper';
+import { theme } from '../styles';
 import type { FormSelectProps } from './formSelect';
 import { FormSelect } from './formSelect';
 
@@ -27,7 +28,7 @@ const FormRange = (props: FormRageProps) => {
         css={css`
           width: 8px;
           height: 1px;
-          background: ${({ theme }) => theme.color['greyScale-6']};
+          background: ${theme.color['greyScale-6']};
         `}
       />
       <FormSelect option={to} callback={(to) => setToValue(to)} />
