@@ -16,7 +16,7 @@ import MarketFilter from 'components/market/marketFilter';
 import { CATEGORY_VALUES } from 'constants/market';
 import queries from 'constants/queries';
 import useMarket from 'hooks/queries/useMarket';
-import useUrlQuery from 'hooks/useUrlQuery';
+import useMarketUrlQuery from 'hooks/useMarketUrlQuery';
 import { useRouter } from 'next/router';
 import { NextPageContext } from 'next/types';
 import React from 'react';
@@ -25,18 +25,10 @@ import type { NextPageWithLayout } from 'types/base';
 
 const MarketFilterPage: NextPageWithLayout = () => {
   const { push, query } = useRouter();
-  const { page, orderBy, filter, category } = useUrlQuery();
+  const marketQuery = useMarketUrlQuery();
   const keywordRef = React.useRef<HTMLInputElement>(null);
 
-  const { data: markets } = useMarket(
-    {
-      page,
-      orderBy: orderBy ? orderBy : 'DESC',
-      filter: filter ? filter : 'created_date',
-      category: category ? category : 'all',
-    },
-    { keepPreviousData: true }
-  );
+  const { data: markets } = useMarket(marketQuery, { keepPreviousData: true });
 
   const keydownHandler = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && keywordRef.current !== null) {
@@ -77,7 +69,9 @@ const MarketFilterPage: NextPageWithLayout = () => {
           >
             <MarketCarKind />
             <MarketFilter />
-            {markets && <MarketCarList data={markets} page={page} />}
+            {markets && (
+              <MarketCarList data={markets} page={marketQuery.page} />
+            )}
           </ErrorBoundary>
         )}
       </QueryErrorResetBoundary>

@@ -2,8 +2,8 @@ import Button from 'components/common/button';
 import Container from 'components/common/container';
 import Typography from 'components/common/typography';
 import theme from 'constants/theme';
-import useMarketLike from 'hooks/mutations/useMarketLike';
 import { useRouter } from 'next/router';
+import { useSession } from 'next-auth/react';
 import React from 'react';
 
 import FavoriteIcon from '../../../../../assets/svg/favorite.svg';
@@ -15,15 +15,25 @@ interface MarketLikeProps {
 
 const MarketLike = ({ isLike }: MarketLikeProps) => {
   const [like, setLike] = React.useState<boolean>(isLike);
+  const { data } = useSession();
 
   const {
     query: { id },
   } = useRouter();
-  const { mutate } = useMarketLike(id as string);
 
-  const onClick = () => {
-    // mutate(id as string);
-    setLike(!like);
+  const toggleLike = async () =>
+    await fetch(`/server/supercar/v1/shop/${id}/scrap`, {
+      method: 'POST',
+      headers: {
+        ACCESS_TOKEN: data?.accessToken || '',
+      },
+    });
+
+  const onClick = async () => {
+    const result = await toggleLike();
+    if (result.ok) {
+      setLike(!like);
+    }
   };
 
   return (
