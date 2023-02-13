@@ -11,10 +11,10 @@ type FormRadioGroupProps = {
   callback?: (value: string) => void;
 };
 
-const FormRadioGroup = (
+const FormRadioGroup = React.forwardRef(function FormRadioGroup(
   props: FormRadioGroupProps,
   ref: React.Ref<HTMLFieldSetElement>
-) => {
+) {
   const { name, options, children, callback, ...rest } = props;
   const [value, setValue] = React.useState('');
 
@@ -36,6 +36,7 @@ const FormRadioGroup = (
       {children({ name, options, handleChange })}
     </fieldset>
   );
-};
+});
 
-export default React.forwardRef(FormRadioGroup);
+export { FormRadioGroup };
+export type { FormRadioGroupProps };

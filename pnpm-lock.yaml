@@ -181,6 +181,7 @@ importers:
       '@supercarmarket/config': workspace:*
       '@supercarmarket/hooks': workspace:*
       '@supercarmarket/tsconfig': workspace:*
+      '@supercarmarket/types': workspace:*
       '@types/react': ^18.0.17
       '@types/react-dom': ^18.0.6
       '@types/styled-components': ^5.1.26
@@ -189,6 +190,7 @@ importers:
       eslint: ^7.32.0
       next: ^13.1.6
       react: ^18.2.0
+      react-daum-postcode: ^3.1.1
       styled-components: ^5.3.6
       styled-reset: ^4.4.5
       typescript: ^4.5.2
@@ -197,11 +199,13 @@ importers:
       avvvatars-react: 0.4.2_react@18.2.0
       clsx: 1.2.1
       next: 13.1.6_react@18.2.0
+      react-daum-postcode: 3.1.1_react@18.2.0
       styled-components: 5.3.6_react@18.2.0
       styled-reset: 4.4.5_styled-components@5.3.6
     devDependencies:
       '@supercarmarket/config': link:../config
       '@supercarmarket/tsconfig': link:../tsconfig
+      '@supercarmarket/types': link:../types
       '@types/react': 18.0.27
       '@types/react-dom': 18.0.10
       '@types/styled-components': 5.1.26
@@ -2514,7 +2518,7 @@ packages:
       babel-plugin-syntax-jsx: 6.18.0
       lodash: 4.17.21
       picomatch: 2.3.1
-      styled-components: 5.3.6_7i5myeigehqah43i5u7wbekgba
+      styled-components: 5.3.6_react@18.2.0
     dev: false
 
   /babel-plugin-syntax-jsx/6.18.0:
@@ -5129,7 +5133,7 @@ packages:
     peerDependencies:
       styled-components: '>=4.0.0 || >=5.0.0'
     dependencies:
-      styled-components: 5.3.6_7i5myeigehqah43i5u7wbekgba
+      styled-components: 5.3.6_react@18.2.0
     dev: false
 
   /supports-color/5.5.0:

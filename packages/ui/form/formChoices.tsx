@@ -1,10 +1,11 @@
-import * as React from "react";
+import * as React from 'react';
 
-import { Container } from "../components";
-import FormSelect, { FormSelectProps } from "./formSelect";
+import { Container } from '../components';
+import { FormSelect } from './formSelect';
+import type { FormSelectProps } from './formSelect';
 
 interface FormChoicesProps {
-  options: FormSelectProps["option"][];
+  options: FormSelectProps['option'][];
   callback?: (values: { [key: string]: string }) => void;
 }
 
@@ -30,4 +31,5 @@ const FormChoices = (props: FormChoicesProps) => {
   );
 };
 
-export default FormChoices;
+export { FormChoices };
+export type { FormChoicesProps };

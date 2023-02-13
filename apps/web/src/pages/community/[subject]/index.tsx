@@ -1,4 +1,3 @@
-import { Alert } from '@supercarmarket/ui';
 import Container from 'components/common/container';
 import Title from 'components/common/title';
 import layout from 'components/layout';
@@ -8,7 +7,6 @@ const CommunitySubject: NextPageWithLayout = () => {
   return (
     <Container>
       <Title>커뮤니티</Title>
-      <Alert severity="error" title="hi" />
     </Container>
   );
 };

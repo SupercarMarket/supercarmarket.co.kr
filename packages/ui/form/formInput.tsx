@@ -1,11 +1,7 @@
 import * as React from 'react';
 
-import Button from '../button';
-import Container from '../container';
-import Input from '../input';
-import Timer from '../timer';
-import Typography from '../typography';
-import Wrapper from '../wrapper';
+import { Button, Timer, Typography, Container, Input } from '../components';
+import { Wrapper } from '../components/wrapper';
 import * as style from './form.styled';
 
 interface FormInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -20,7 +16,10 @@ interface FormInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   suffix?: React.ReactNode;
 }
 
-const FormInput = (props: FormInputProps, ref: React.Ref<HTMLInputElement>) => {
+const FormInput = React.forwardRef(function FormInput(
+  props: FormInputProps,
+  ref: React.Ref<HTMLInputElement>
+) {
   const {
     count,
     suffix,
@@ -76,6 +75,7 @@ const FormInput = (props: FormInputProps, ref: React.Ref<HTMLInputElement>) => {
       )}
     </Container>
   );
-};
+});
 
-export default React.forwardRef(FormInput);
+export { FormInput };
+export type { FormInputProps };

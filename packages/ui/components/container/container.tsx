@@ -34,10 +34,9 @@ type ContainerProps<Element extends keyof JSX.IntrinsicElements = 'div'> =
     as?: Element;
   } & Omit<React.AllHTMLAttributes<Element>, 'as'>;
 
-const Container = <Element extends keyof JSX.IntrinsicElements = 'div'>(
-  props: ContainerProps<Element>,
-  ref: React.Ref<HTMLDivElement>
-) => {
+const Container = React.forwardRef(function Container<
+  Element extends keyof JSX.IntrinsicElements = 'div'
+>(props: ContainerProps<Element>, ref: React.Ref<HTMLDivElement>) {
   const {
     as: Component = 'div',
     width = '100%',
@@ -105,6 +104,7 @@ const Container = <Element extends keyof JSX.IntrinsicElements = 'div'>(
       {children}
     </Component>
   );
-};
+});
 
-export default React.forwardRef(Container);
+export { Container };
+export type { ContainerProps };

@@ -1,28 +1,31 @@
-import * as React from "react";
+import * as React from 'react';
 import type {
   DefaultTheme,
   FlattenInterpolation,
   FlattenSimpleInterpolation,
   ThemeProps,
-} from "styled-components";
+} from 'styled-components';
 
-import { Title } from "../components";
-import * as Styled from "./form.styled";
+import { Title } from '../components';
+import * as Styled from './form.styled';
 
 interface FormProps extends React.FormHTMLAttributes<HTMLFormElement> {
   title?: string;
-  titleAlign?: React.CSSProperties["textAlign"];
+  titleAlign?: React.CSSProperties['textAlign'];
   className?: string;
   css?:
     | FlattenSimpleInterpolation
     | FlattenInterpolation<ThemeProps<DefaultTheme>>;
 }
 
-const Form = (props: FormProps, ref: React.Ref<HTMLFormElement>) => {
+const Form = React.forwardRef(function Form(
+  props: FormProps,
+  ref: React.Ref<HTMLFormElement>
+) {
   const {
     title,
     titleAlign,
-    className = "form",
+    className = 'form',
     css,
     children,
     ...rest
@@ -35,6 +38,7 @@ const Form = (props: FormProps, ref: React.Ref<HTMLFormElement>) => {
       </Styled.Form>
     </>
   );
-};
+});
 
-export default React.forwardRef(Form);
+export { Form };
+export type { FormProps };

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import Button from '../button';
+import { Button } from '../button';
 
 const PaginationItemContainer = styled.div`
   width: 34.49px;

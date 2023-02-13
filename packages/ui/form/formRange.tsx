@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { css } from 'styled-components';
 
-import Container from '../container';
-import Wrapper from '../wrapper';
+import { Container } from '../components';
+import { Wrapper } from '../components/wrapper';
 import type { FormSelectProps } from './formSelect';
-import FormSelect from './formSelect';
+import { FormSelect } from './formSelect';
 
 interface FormRageProps {
   from: FormSelectProps['option'];
@@ -35,4 +35,5 @@ const FormRange = (props: FormRageProps) => {
   );
 };
 
-export default FormRange;
+export { FormRange };
+export type { FormRageProps };

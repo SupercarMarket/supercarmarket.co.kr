@@ -1,6 +1,6 @@
 import { CSSProperties } from 'react';
 
-import Typography from '../typography';
+import { Typography } from '../typography';
 
 interface TitleProps {
   children?: React.ReactNode;
@@ -33,4 +33,5 @@ const Title = ({
   );
 };
 
-export default Title;
+export { Title };
+export { TitleProps };

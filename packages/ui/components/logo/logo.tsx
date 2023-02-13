@@ -151,4 +151,5 @@ const Logo = (props: LogoProps) => {
   );
 };
 
-export default Logo;
+export { Logo };
+export type { LogoProps };

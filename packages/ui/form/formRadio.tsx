@@ -1,12 +1,15 @@
 import * as React from 'react';
 import { css } from 'styled-components';
 
-import Wrapper from '../wrapper';
+import { Wrapper } from '../components/wrapper';
 
 interface FormRadioProps extends React.InputHTMLAttributes<HTMLInputElement> {
   content?: string;
 }
-const FormRadio = (props: FormRadioProps, ref: React.Ref<HTMLInputElement>) => {
+const FormRadio = React.forwardRef(function FormRadio(
+  props: FormRadioProps,
+  ref: React.Ref<HTMLInputElement>
+) {
   const { name, value = 'radio', content, ...rest } = props;
 
   return (
@@ -60,6 +63,7 @@ const FormRadio = (props: FormRadioProps, ref: React.Ref<HTMLInputElement>) => {
       {content && <span>{content}</span>}
     </Wrapper>
   );
-};
+});
 
-export default React.forwardRef(FormRadio);
+export { FormRadio };
+export type { FormRadioProps };
