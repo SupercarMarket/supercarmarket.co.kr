@@ -1,4 +1,8 @@
-import Typography from 'components/common/typography';
+import { Typography } from '@supercarmarket/ui';
+import type {
+  MarketDetailDto,
+  WithBlurredImage,
+} from '@supercarmarket/types/market';
 import {
   MarketDetailAttached,
   MarketDetailCar,
@@ -8,8 +12,6 @@ import {
   MarketDetailIntroduction,
   MarketLike,
 } from 'components/market/marketDetail/components';
-import React from 'react';
-import { MarketDetailDto, WithBlurredImage } from 'types/market';
 
 interface MarketDetailProps {
   data: MarketDetailDto<WithBlurredImage<{ imgSrc: string }>>;

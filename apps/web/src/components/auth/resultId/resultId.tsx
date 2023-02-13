@@ -1,7 +1,4 @@
-import Button from 'components/common/button';
-import Container from 'components/common/container';
-import Typography from 'components/common/typography';
-import Wrapper from 'components/common/wrapper';
+import { Button, Container, Typography, Wrapper } from '@supercarmarket/ui';
 import { useAuthState } from 'feature/authProvider';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';

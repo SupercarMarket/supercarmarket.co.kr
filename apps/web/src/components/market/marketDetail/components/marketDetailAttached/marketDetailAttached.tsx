@@ -1,9 +1,8 @@
-import Typography from 'components/common/typography';
-import Wrapper from 'components/common/wrapper/wrapper';
+import { Typography, Wrapper } from '@supercarmarket/ui';
+import type { MarketAttachment } from '@supercarmarket/types/market';
 import theme from 'constants/theme';
-import React, { ReactNode } from 'react';
+import * as React from 'react';
 import { css } from 'styled-components';
-import { MarketAttachment } from 'types/market';
 
 import DownloadIcon from '../../../../../assets/svg/download.svg';
 import * as Styled from './marketDetailAttached.styled';
@@ -32,7 +31,7 @@ const MarketDetailAttached = ({ attrSrc }: MarketDetailAttachedProps) => {
 };
 
 interface AttachedFileProps {
-  children: ReactNode;
+  children: React.ReactNode;
   url: string;
 }
 

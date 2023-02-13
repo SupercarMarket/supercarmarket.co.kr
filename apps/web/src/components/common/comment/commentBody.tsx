@@ -1,3 +1,11 @@
+import {
+  Alert,
+  Button,
+  Container,
+  Typography,
+  Wrapper,
+} from '@supercarmarket/ui';
+
 import Avvvatars from 'avvvatars-react';
 import useLikeComment from 'hooks/mutations/comment/useLikeComment';
 import useRemoveComment from 'hooks/mutations/comment/useRemoveComment';
@@ -5,11 +13,6 @@ import * as React from 'react';
 import { Comment } from 'types/comment';
 
 import LikeIcon from '../../../assets/svg/thumb-up.svg';
-import Alert from '../alert';
-import Button from '../button';
-import Container from '../container';
-import Typography from '../typography';
-import Wrapper from '../wrapper';
 import * as style from './comment.styled';
 import CommentArea from './commentArea';
 

@@ -1,9 +1,8 @@
-import Container from 'components/common/container';
-import Title from 'components/common/title';
+import { Container, Title } from '@supercarmarket/ui';
+import type { NextPageWithLayout } from '@supercarmarket/types/base';
 import { InquiryNavbar } from 'components/inquiry';
 import Layout from 'components/layout/layout';
 import inquiry from 'constants/inquiry';
-import { NextPageWithLayout } from 'types/base';
 
 const Inquiry: NextPageWithLayout = () => {
   return (

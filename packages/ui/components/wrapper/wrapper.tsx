@@ -25,10 +25,6 @@ const Wrapper = (props: PropsWithChildren<WrapperProps>) => {
   );
 };
 
-const Div = styled((props: PropsWithChildren<WrapperProps>) => (
-  <div {...props}>{props.children}</div>
-));
-
 Wrapper.Item = function Top(props: PropsWithChildren<WrapperProps>) {
   const { css, children, className = 'item' } = props;
   return (
@@ -83,5 +79,5 @@ const Container = styled.div<{
   ${({ css }) => css}
 `;
 
-export { Wrapper, Div };
+export { Wrapper };
 export type { WrapperProps };

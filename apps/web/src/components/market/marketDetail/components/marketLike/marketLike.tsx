@@ -1,10 +1,8 @@
-import Button from 'components/common/button';
-import Container from 'components/common/container';
-import Typography from 'components/common/typography';
+import * as React from 'react';
+import { Button, Container, Typography } from '@supercarmarket/ui';
 import theme from 'constants/theme';
 import useMarketLike from 'hooks/mutations/useMarketLike';
 import { useRouter } from 'next/router';
-import React from 'react';
 
 import FavoriteIcon from '../../../../../assets/svg/favorite.svg';
 import FavoriteBorderIcon from '../../../../../assets/svg/favorite-border.svg';

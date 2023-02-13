@@ -1,9 +1,9 @@
-import Wrapper from 'components/common/wrapper/wrapper';
+import { Wrapper } from '@supercarmarket/ui';
+import type { WithBlurredImage } from '@supercarmarket/types/market';
 import theme from 'constants/theme';
 import Image from 'next/image';
-import React from 'react';
+import * as React from 'react';
 import { css } from 'styled-components';
-import { WithBlurredImage } from 'types/market';
 
 import ArrowLeftIcon from '../../../../../assets/svg/arrow-left.svg';
 import ArrowRightIcon from '../../../../../assets/svg/arrow-right.svg';

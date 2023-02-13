@@ -1,7 +1,7 @@
-import type { FormSelectOption } from 'components/common/form/formSelect';
+import type { InquiryLink } from '@supercarmarket/types/inquiry';
+import type { FormSelectOption } from '@supercarmarket/ui/form/formSelect';
 import * as React from 'react';
 import type { RegisterOptions } from 'react-hook-form';
-import type { InquiryLink } from 'types/inquiry';
 
 interface InquiryDealerFormState {
   comName: string;

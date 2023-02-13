@@ -1,7 +1,8 @@
+import { Container } from '@supercarmarket/ui';
+
 import useMagazinePost from 'hooks/queries/useMagazinePost';
 import * as React from 'react';
 
-import Container from '../container';
 import PostingBody from './postingBody';
 import { PostingHeadCommunity, PostingHeadMagainze } from './postingHead';
 

@@ -1,5 +1,4 @@
-import Wrapper from 'components/common/wrapper';
-import React from 'react';
+import { Wrapper } from '@supercarmarket/ui';
 
 import * as Styled from './marketDetailIntroduction.styled';
 

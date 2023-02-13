@@ -1,8 +1,7 @@
-import Container from 'components/common/container';
-import Wrapper from 'components/common/wrapper';
+import { Container, Wrapper } from '@supercarmarket/ui';
+import { Profile as ProfileType } from '@supercarmarket/types/account';
 import Image from 'next/image';
 import { css } from 'styled-components';
-import { Profile as ProfileType } from 'types/account';
 
 import * as style from './profile.styled';
 import ProfileInfo from './profileInfo';

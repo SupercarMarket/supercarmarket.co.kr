@@ -1,8 +1,3 @@
-// import Alert from 'components/common/alert';
-// import Container from 'components/common/container';
-// import { FormCheckbox } from 'components/common/form';
-// import Table from 'components/common/table';
-// import Wrapper from 'components/common/wrapper';
 import { CommunityCard } from 'components/community';
 import { CardSkeleton } from 'components/fallback/loading';
 import InquiryCard from 'components/inquiry/inquiryCard/inquiryCard';
@@ -17,10 +12,6 @@ import type { CommunityDto } from '@supercarmarket/types/community';
 import type { InquiryDto } from '@supercarmarket/types/inquiry';
 import type { MagazineDto } from '@supercarmarket/types/magazine';
 import type { MarketDto } from '@supercarmarket/types/market';
-// import { CommunityDto } from 'types/community';
-// import { InquiryDto } from 'types/inquiry';
-// import { MagazineDto } from 'types/magazine';
-// import type { MarketDto } from 'types/market';
 import {
   Alert,
   Container,

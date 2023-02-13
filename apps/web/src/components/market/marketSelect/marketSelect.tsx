@@ -1,6 +1,5 @@
 import Select from 'components/common/select';
 import { useRouter } from 'next/router';
-import React from 'react';
 import { SelectType } from 'types/market';
 import { makeSelectQuery } from 'utils/market/marketFilter';
 

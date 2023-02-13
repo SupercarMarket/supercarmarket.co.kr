@@ -1,7 +1,12 @@
-import Button from 'components/common/button';
-import { Form, FormInput, FormLabel, FormSelect } from 'components/common/form';
-import Typography from 'components/common/typography';
-import Wrapper from 'components/common/wrapper';
+import {
+  Button,
+  Form,
+  FormInput,
+  FormLabel,
+  FormSelect,
+  Typography,
+  Wrapper,
+} from '@supercarmarket/ui';
 import dynamic from 'next/dynamic';
 import { css } from 'styled-components';
 

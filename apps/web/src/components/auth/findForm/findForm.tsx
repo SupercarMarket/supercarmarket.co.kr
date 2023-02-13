@@ -1,13 +1,11 @@
-import Alert from 'components/common/alert';
-import Button from 'components/common/button';
-import { Form, FormLabel } from 'components/common/form';
+import { Alert, Button, Form, FormLabel } from '@supercarmarket/ui';
+import { catchNoExist } from '@supercarmarket/lib';
 import auth, { Forms } from 'constants/auth';
 import { findId, findPassword } from 'feature/actions/authActions';
 import { useAuthDispatch, useAuthState } from 'feature/authProvider';
 import { useRouter } from 'next/navigation';
 import * as React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { catchNoExist } from 'utils/misc';
 
 import AuthFormItem from '../authFormItem/authFormItem';
 import * as style from './findForm.style';

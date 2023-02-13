@@ -1,4 +1,4 @@
-import { Links } from 'types/base';
+import type { Links } from '@supercarmarket/types/base';
 
 const community = {
   links: [
