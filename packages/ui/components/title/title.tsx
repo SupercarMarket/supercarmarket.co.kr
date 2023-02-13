@@ -34,4 +34,4 @@ const Title = ({
 };
 
 export { Title };
-export { TitleProps };
+export type { TitleProps };
