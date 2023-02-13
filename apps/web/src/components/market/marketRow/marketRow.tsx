@@ -2,7 +2,7 @@ import { Container, Typography, Wrapper } from '@supercarmarket/ui';
 import Image from 'next/image';
 import Link from 'next/link';
 import { css } from 'styled-components';
-import type { WithBlurredImage } from '@supercarmarket/types/base';
+import type { WithBlurredImage } from '@supercarmarket/types/magazine';
 import type { MarketDto } from '@supercarmarket/types/market';
 
 const MarketRow = ({
