@@ -1,7 +1,7 @@
 'use client';
 
 import { Container, Searchbar } from '@supercarmarket/ui';
-import type { NextPageWithLayout } from '@supercarmarket/types/base';
+import type { NextPageWithLayout, Params } from '@supercarmarket/types/base';
 import {
   dehydrate,
   QueryClient,
@@ -83,9 +83,9 @@ MarketFilterPage.Layout = layout;
 const queryClient = new QueryClient();
 
 export const getServerSideProps = async (ctx: NextPageContext) => {
-  const { category } = ctx.query;
+  const { category } = ctx.query as Params;
 
-  if (!category || !CATEGORY_VALUES.includes(category as string))
+  if (!category || !CATEGORY_VALUES.includes(category))
     return {
       redirect: {
         destination: '/market/all',

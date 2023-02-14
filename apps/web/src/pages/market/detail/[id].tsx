@@ -1,5 +1,5 @@
 import { Button, Searchbar, Wrapper } from '@supercarmarket/ui';
-import type { NextPageWithLayout } from '@supercarmarket/types/base';
+import type { NextPageWithLayout, Params } from '@supercarmarket/types/base';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import layout from 'components/layout';
 import MarketContents from 'components/market/marketContents';
@@ -90,9 +90,9 @@ MarketDetailPage.Layout = layout;
 const queryClient = new QueryClient();
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { id } = ctx.query;
+  const { id } = ctx.query as Params;
 
-  queryClient.prefetchQuery(queries.market.detail(id as string), () =>
+  queryClient.prefetchQuery(queries.market.detail(id), () =>
     fetch(`/api/market/${id}`, {
       method: 'GET',
     }).then((res) => res.json())
