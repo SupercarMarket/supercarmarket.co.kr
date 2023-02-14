@@ -1,8 +1,7 @@
-import Container from 'components/common/container';
-import Title from 'components/common/title';
+import { Container, Title } from '@supercarmarket/ui';
+import type { NextPageWithLayout } from '@supercarmarket/types/base';
 import { CommunityForm } from 'components/community';
 import layout from 'components/layout';
-import { NextPageWithLayout } from 'types/base';
 
 const Create: NextPageWithLayout = () => {
   return (

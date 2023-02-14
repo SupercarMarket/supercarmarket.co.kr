@@ -1,8 +1,6 @@
 'use client';
 
-import Alert from 'components/common/alert';
-import Button from 'components/common/button';
-import { Form } from 'components/common/form';
+import { Alert, Button, Form } from '@supercarmarket/ui';
 import type { FormState } from 'constants/account';
 import account from 'constants/account';
 import { update } from 'feature/actions/authActions';

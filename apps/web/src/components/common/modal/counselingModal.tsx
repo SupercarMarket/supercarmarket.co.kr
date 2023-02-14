@@ -1,10 +1,7 @@
+import { Button, Container, Typography, Wrapper } from '@supercarmarket/ui';
 import { ModalContextProps } from 'feature/modalContext';
 import { User } from 'types/base';
 
-import Button from '../button';
-import Container from '../container';
-import Typography from '../typography';
-import Wrapper from '../wrapper';
 import * as style from './modal.styled';
 
 interface CounselingModalProps extends ModalContextProps {

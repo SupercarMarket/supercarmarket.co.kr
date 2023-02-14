@@ -1,6 +1,4 @@
-import Button from 'components/common/button';
-import Container from 'components/common/container';
-import Typography from 'components/common/typography';
+import { Button, Container, Typography } from '@supercarmarket/ui';
 import { AccountRoute, AccountTab } from 'constants/account';
 import Link from 'next/link';
 

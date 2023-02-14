@@ -1,8 +1,7 @@
 import * as React from 'react';
 
-import Container from '../container';
-import Typography from '../typography';
-import Wrapper from '../wrapper';
+import { Container, Typography } from '../components';
+import { Wrapper } from '../components/wrapper';
 
 interface FormLabelProps extends React.PropsWithChildren {
   name?: string;
@@ -56,4 +55,5 @@ const FormLabel = (props: FormLabelProps) => {
   );
 };
 
-export default FormLabel;
+export { FormLabel };
+export type { FormLabelProps };

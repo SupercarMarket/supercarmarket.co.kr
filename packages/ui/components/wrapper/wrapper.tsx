@@ -1,3 +1,5 @@
+'use client';
+
 import type { PropsWithChildren } from 'react';
 import type {
   DefaultTheme,
@@ -5,8 +7,7 @@ import type {
   FlattenSimpleInterpolation,
   ThemeProps,
 } from 'styled-components';
-
-import { Container } from './wrapper.styled';
+import styled, { css as style } from 'styled-components';
 
 interface WrapperProps {
   css?:
@@ -16,7 +17,7 @@ interface WrapperProps {
 }
 
 const Wrapper = (props: PropsWithChildren<WrapperProps>) => {
-  const { css, children, className = 'wrapper' } = props;
+  const { css = style``, children, className = 'wrapper' } = props;
   return (
     <Container css={css} className={className}>
       {children}
@@ -69,4 +70,14 @@ Wrapper.Right = function Right(props: PropsWithChildren<WrapperProps>) {
   );
 };
 
-export default Wrapper;
+const Container = styled.div<{
+  css:
+    | FlattenSimpleInterpolation
+    | FlattenInterpolation<ThemeProps<DefaultTheme>>
+    | undefined;
+}>`
+  ${({ css }) => css}
+`;
+
+export { Wrapper };
+export type { WrapperProps };

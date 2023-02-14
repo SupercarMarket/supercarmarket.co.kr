@@ -1,7 +1,6 @@
 import 'react-loading-skeleton/dist/skeleton.css';
 
-import Container from 'components/common/container';
-import Wrapper from 'components/common/wrapper';
+import { Container, Wrapper } from '@supercarmarket/ui';
 import Skeleton from 'react-loading-skeleton';
 import { css } from 'styled-components';
 

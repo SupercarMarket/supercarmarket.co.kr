@@ -1,7 +1,7 @@
-import { useInterval } from "@supercarmarket/hooks";
-import * as React from "react";
+import { useInterval } from '@supercarmarket/hooks';
+import * as React from 'react';
 
-import Typography from "../typography";
+import { Typography } from '../typography';
 
 interface TimerProps {
   time: number;
@@ -39,4 +39,5 @@ const Timer = ({ time, reset }: TimerProps) => {
   );
 };
 
-export default Timer;
+export { Timer };
+export type { TimerProps };

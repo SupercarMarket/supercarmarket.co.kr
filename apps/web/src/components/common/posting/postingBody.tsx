@@ -1,4 +1,4 @@
-import Container from '../container';
+import { Container } from '@supercarmarket/ui';
 
 interface PostingBodyProps {
   contentHtml: string;

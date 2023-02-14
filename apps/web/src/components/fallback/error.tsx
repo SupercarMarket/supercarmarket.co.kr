@@ -1,7 +1,4 @@
-import Alert from 'components/common/alert';
-import Button from 'components/common/button';
-import Container from 'components/common/container';
-import Typography from 'components/common/typography';
+import { Alert, Button, Container, Typography } from '@supercarmarket/ui';
 import * as React from 'react';
 import type { FallbackProps } from 'react-error-boundary';
 

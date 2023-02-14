@@ -1,12 +1,9 @@
-import Container from 'components/common/container';
-import Tab from 'components/common/tab';
-import Title from 'components/common/title';
-import Wrapper from 'components/common/wrapper';
+import { Container, Tab, Title, Wrapper } from '@supercarmarket/ui';
+import type { NextPageWithLayout } from '@supercarmarket/types/base';
 import { CommunityList } from 'components/community';
 import CommunityNavbar from 'components/community/communityNavbar';
 import layout from 'components/layout';
 import { css } from 'styled-components';
-import { NextPageWithLayout } from 'types/base';
 
 const CommunityCategory: NextPageWithLayout = () => {
   return (

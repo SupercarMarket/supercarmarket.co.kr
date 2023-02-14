@@ -1,11 +1,10 @@
 'use client';
 
+import { Container, Typography } from '@supercarmarket/ui';
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 
 import ChatIcon from '../../../assets/svg/chat.svg';
-import Container from '../container';
-import Typography from '../typography';
 import { CommentHeadLeft, CommentHeadRight } from './comment.styled';
 
 interface CommentHeadProps {

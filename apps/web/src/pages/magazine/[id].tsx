@@ -1,9 +1,10 @@
+import { Container } from '@supercarmarket/ui';
+import type { NextPageWithLayout } from '@supercarmarket/types/base';
 import {
   dehydrate,
   QueryClient,
   QueryErrorResetBoundary,
 } from '@tanstack/react-query';
-import Container from 'components/common/container';
 import Posting from 'components/common/posting';
 import { ErrorFallback } from 'components/fallback';
 import layout from 'components/layout';
@@ -15,7 +16,6 @@ import dynamic from 'next/dynamic';
 import type { ParsedUrlQuery } from 'querystring';
 import * as React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import type { NextPageWithLayout } from 'types/base';
 import { baseFetch } from 'utils/api/fetcher';
 
 const Comment = dynamic(() => import('components/common/comment'), {

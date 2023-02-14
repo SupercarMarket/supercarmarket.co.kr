@@ -1,5 +1,4 @@
-import Button from 'components/common/button';
-import { Form } from 'components/common/form';
+import { Button, Form } from '@supercarmarket/ui';
 import inquiry from 'constants/inquiry';
 import { FormProvider, useForm } from 'react-hook-form';
 import { css } from 'styled-components';

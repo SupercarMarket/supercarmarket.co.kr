@@ -1,14 +1,16 @@
-import Button from 'components/common/button';
-import Container from 'components/common/container';
-import Logo from 'components/common/logo';
-import Searchbar from 'components/common/searchbar';
-import Typography from 'components/common/typography';
-import Wrapper from 'components/common/wrapper';
+import {
+  Button,
+  Container,
+  Logo,
+  Searchbar,
+  Typography,
+  Wrapper,
+  applyMediaQuery,
+} from '@supercarmarket/ui';
 import { LinkSkeleton } from 'components/fallback/loading';
 import Link from 'next/link';
 import { signOut, useSession } from 'next-auth/react';
 import { css } from 'styled-components';
-import { applyMediaQuery } from 'styles/mediaQuery';
 
 const Header = () => {
   const { status, data: session } = useSession();

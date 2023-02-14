@@ -1,6 +1,8 @@
+import { Container, Wrapper } from '@supercarmarket/ui';
+import { BaseApiHandlerResponse, serverFetcher } from '@supercarmarket/lib';
+import type { Profile as ProfileType } from '@supercarmarket/types/account';
+import type { Params, NextPageWithLayout } from '@supercarmarket/types/base';
 import { AccountCategory, AccountNavbar, Profile } from 'components/account';
-import Container from 'components/common/container';
-import Wrapper from 'components/common/wrapper';
 import AccountLayout from 'components/layout/accountLayout';
 import * as style from 'components/layout/layout.styled';
 import type { AccountTab } from 'constants/account';
@@ -11,11 +13,7 @@ import type {
   InferGetServerSidePropsType,
 } from 'next';
 import type { Session } from 'next-auth';
-import type { Profile as ProfileType } from 'types/account';
-import type { Params } from 'types/base';
-import { NextPageWithLayout } from 'types/base';
 import { getSession } from 'utils/api/auth/user';
-import { BaseApiHandlerResponse, serverFetcher } from 'utils/api/fetcher';
 
 type AccountParams = Params & {
   tab: AccountTab | null;

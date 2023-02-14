@@ -1,4 +1,4 @@
-import Portal from 'components/common/portal';
+import { Portal } from '@supercarmarket/ui';
 import {
   MouseEvent,
   MouseEventHandler,

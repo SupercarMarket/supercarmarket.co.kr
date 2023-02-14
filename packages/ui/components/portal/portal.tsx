@@ -10,4 +10,5 @@ const Portal = ({ children }: PortalProps): React.ReactPortal | null => {
   return createPortal(children, container);
 };
 
-export default Portal;
+export { Portal };
+export type { PortalProps };

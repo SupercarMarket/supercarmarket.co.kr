@@ -1,11 +1,9 @@
 import * as React from 'react';
 import { css } from 'styled-components';
 
-import ArrowBottom from '../../../assets/svg/arrow-bottom.svg';
-import Container from '../container';
-import Input from '../input';
-import Typography from '../typography';
-import Wrapper from '../wrapper';
+import { Container, Input, Typography } from '../components';
+import { Wrapper } from '../components/wrapper';
+import { theme } from '../styles';
 
 type FormSelectOption = {
   name: string;
@@ -48,14 +46,14 @@ const FormSelectItem = React.memo(function FormSelectItem({
                 width: 100%;
                 padding: 14px;
                 z-index: 999;
-                background: ${({ theme }) => theme.color.white};
+                background: ${theme.color.white};
                 cursor: pointer;
                 font-size: 14px;
                 line-height: 150%;
-                color: ${({ theme }) => theme.color['greyScale-6']};
+                color: ${theme.color['greyScale-6']};
                 &:hover {
-                  background: ${({ theme }) => theme.color['greyScale-2']};
-                  color: ${({ theme }) => theme.color.primary};
+                  background: ${theme.color['greyScale-2']};
+                  color: ${theme.color.primary};
                   font-weight: bold;
                 }
               `}
@@ -69,10 +67,10 @@ const FormSelectItem = React.memo(function FormSelectItem({
   );
 });
 
-const FormSelect = (
+const FormSelect = React.forwardRef(function FormSelect(
   props: FormSelectProps,
   ref: React.Ref<HTMLInputElement>
-) => {
+) {
   const { option, callback, ...rest } = props;
   const containerRef = React.useRef<HTMLDivElement | null>(null);
   const [selected, setSelected] = React.useState('');
@@ -142,17 +140,30 @@ const FormSelect = (
             right: 13px;
             transform: translateY(-50%);
             width: 18px;
-            fill: ${({ theme }) => theme.color['greyScale-6']};
+            fill: ${theme.color['greyScale-6']};
           `}
         >
-          <ArrowBottom />
+          <svg
+            viewBox="0 0 24 24"
+            fill="current"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g clipPath="url(#clip0_212_9286)">
+              <path d="M4.19498 6.16504L2.42498 7.93504L12.325 17.835L22.225 7.93504L20.455 6.16504L12.325 14.295L4.19498 6.16504Z" />
+            </g>
+            <defs>
+              <clipPath id="clip0_212_9286">
+                <rect width="100%" height="100%" fill="white" />
+              </clipPath>
+            </defs>
+          </svg>
         </Wrapper.Item>
         {open && <FormSelectItem values={option.values} onSelect={onSelect} />}
       </Wrapper>
       {option.suffix && <Typography>{option.suffix}</Typography>}
     </Container>
   );
-};
+});
 
 export type { FormSelectOption, FormSelectProps };
-export default React.forwardRef(FormSelect);
+export { FormSelect };

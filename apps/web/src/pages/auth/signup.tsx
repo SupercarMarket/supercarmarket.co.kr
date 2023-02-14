@@ -1,8 +1,7 @@
+import { Container, Title } from '@supercarmarket/ui';
+import type { NextPageWithLayout } from '@supercarmarket/types/base';
 import { SignupForm } from 'components/auth';
-import Container from 'components/common/container';
-import Title from 'components/common/title';
 import AuthLayout from 'components/layout/authLayout';
-import { NextPageWithLayout } from 'types/base';
 
 const Signup: NextPageWithLayout = () => {
   return (

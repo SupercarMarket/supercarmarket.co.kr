@@ -1,10 +1,14 @@
-import Alert from 'components/common/alert';
-import Button from 'components/common/button';
-import Container from 'components/common/container';
-import Divider from 'components/common/divider';
-import { Form, FormLabel } from 'components/common/form';
-import Typography from 'components/common/typography';
-import Wrapper from 'components/common/wrapper';
+import {
+  Alert,
+  Button,
+  Container,
+  Divider,
+  Form,
+  FormLabel,
+  Typography,
+  Wrapper,
+} from '@supercarmarket/ui';
+import { catchNoExist, ErrorCode } from '@supercarmarket/lib';
 import auth from 'constants/auth';
 import { useAuthDispatch, useAuthState } from 'feature/authProvider';
 import Link from 'next/link';
@@ -12,8 +16,6 @@ import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 import * as React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { ErrorCode } from 'utils/error';
-import { catchNoExist } from 'utils/misc';
 
 import GoogleIcon from '../../../assets/svg/google.svg';
 import KakaoIcon from '../../../assets/svg/kakao.svg';

@@ -1,8 +1,6 @@
-import Button from 'components/common/button';
-import Typography from 'components/common/typography';
-import Wrapper from 'components/common/wrapper';
+import { Button, Typography, Wrapper } from '@supercarmarket/ui';
 import useMagazineScrape from 'hooks/mutations/magazine/useMagazineScrape';
-import { useCallback } from 'react';
+import * as React from 'react';
 import { css } from 'styled-components';
 
 interface MagazineScrapeProps {
@@ -37,7 +35,7 @@ const Star = ({ isScraped }: MagazineScrapeProps) => {
 const MagazineScrape = ({ postId, isScraped }: MagazineScrapeProps) => {
   const { mutate } = useMagazineScrape(postId);
 
-  const handleScrape = useCallback(() => {
+  const handleScrape = React.useCallback(() => {
     mutate();
   }, [mutate]);
   return (

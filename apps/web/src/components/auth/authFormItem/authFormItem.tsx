@@ -1,5 +1,4 @@
-import { FormInput, FormMessage } from 'components/common/form';
-import Wrapper from 'components/common/wrapper';
+import { FormInput, FormMessage, Wrapper } from '@supercarmarket/ui';
 import { Forms } from 'constants/auth';
 import {
   confirmPhoneAuth,

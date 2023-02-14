@@ -2,10 +2,8 @@ import * as React from 'react';
 import type { Address } from 'react-daum-postcode';
 import { useDaumPostcodePopup } from 'react-daum-postcode';
 
-import Button from '../button';
-import Container from '../container';
-import Input from '../input';
-import Wrapper from '../wrapper';
+import { Container, Button, Input } from '../components';
+import { Wrapper } from '../components/wrapper';
 import * as style from './form.styled';
 
 interface FormPostcodeProps {
@@ -51,4 +49,5 @@ const FormPostcode = ({ callback }: FormPostcodeProps) => {
   );
 };
 
-export default FormPostcode;
+export { FormPostcode };
+export type { FormPostcodeProps };

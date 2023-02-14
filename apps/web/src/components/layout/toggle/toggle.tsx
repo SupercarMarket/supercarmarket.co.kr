@@ -1,7 +1,6 @@
-import Wrapper from 'components/common/wrapper';
+import { Wrapper, applyMediaQuery } from '@supercarmarket/ui';
 import Link from 'next/link';
 import { css } from 'styled-components';
-import { applyMediaQuery } from 'styles/mediaQuery';
 
 const Toggle = () => {
   return (
