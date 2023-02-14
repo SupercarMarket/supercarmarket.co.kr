@@ -6,15 +6,17 @@ const community = {
       title: '파파라치',
       href: '/community/paparazzi',
       children: [
-        { title: '제보', href: '/community/paparazzi' },
-        { title: '포토갤러리', href: '/community/paparazzi' },
-        { title: '내 차 자랑', href: '/community/paparazzi' },
+        { title: '제보', href: '/community/paparazzi/report' },
+        { title: '포토갤러리', href: '/community/paparazzi/gallery' },
+        { title: '내 차 자랑', href: '/community/paparazzi/boast' },
       ],
     },
     {
       title: '자료실',
-      href: '/community/reference-room',
-      children: [{ title: '차량 정보', href: '/community/reference-room' }],
+      href: '/community/library',
+      children: [
+        { title: '차량 정보', href: '/community/library/information' },
+      ],
     },
   ] as Links[],
 };

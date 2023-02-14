@@ -3,8 +3,11 @@ import type { Links } from '@supercarmarket/types/base';
 import community from 'constants/community';
 import Link from 'next/link';
 import { css } from 'styled-components';
+import { usePathname } from 'next/navigation';
 
 const CommunityNavbarItem = (link: Links) => {
+  const pathname = usePathname();
+
   return (
     <Container width="160px" display="flex" flexDirection="column" gap="4px">
       <Typography
@@ -23,6 +26,7 @@ const CommunityNavbarItem = (link: Links) => {
         link.children.map((children) => (
           <Link key={children.title} href={children.href}>
             <Wrapper
+              className={pathname === children.href ? 'active' : undefined}
               css={css`
                 padding: 12px;
                 font-weight: ${({ theme }) => theme.fontWeight.regular};
@@ -31,6 +35,11 @@ const CommunityNavbarItem = (link: Links) => {
                 color: ${({ theme }) => theme.color['greyScale-6']};
                 border-radius: 4px;
                 &:hover {
+                  color: ${({ theme }) => theme.color.primary};
+                  background: ${({ theme }) => theme.color['greyScale-2']};
+                  font-weight: ${({ theme }) => theme.fontWeight.bold};
+                }
+                &.active {
                   color: ${({ theme }) => theme.color.primary};
                   background: ${({ theme }) => theme.color['greyScale-2']};
                   font-weight: ${({ theme }) => theme.fontWeight.bold};
