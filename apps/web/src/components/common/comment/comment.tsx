@@ -1,8 +1,7 @@
+import { Container, Pagination } from '@supercarmarket/ui';
+import { useUrlQuery } from '@supercarmarket/hooks';
 import useComment from 'hooks/queries/useComment';
-import useCurrentPage from 'hooks/useUrlQuery';
 
-import Container from '../container';
-import Pagination from '../pagination';
 import CommentArea from './commentArea';
 import CommentBody from './commentBody';
 import CommentHead from './commentHead';
@@ -12,7 +11,7 @@ interface CommentProps {
 }
 
 const Comment = ({ id }: CommentProps) => {
-  const { page, orderby } = useCurrentPage();
+  const { page, orderby } = useUrlQuery();
 
   const { data: comment } = useComment(
     id,

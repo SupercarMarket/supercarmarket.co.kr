@@ -1,11 +1,9 @@
-import Container from 'components/common/container';
-import Pagination from 'components/common/pagination';
-import Searchbar from 'components/common/searchbar';
+import { Container, Pagination, Searchbar, Wrapper } from '@supercarmarket/ui';
+import { useUrlQuery } from '@supercarmarket/hooks';
 import useMagazine from 'hooks/queries/useMagazine';
-import useUrlQuery from 'hooks/useUrlQuery';
 
 import MagazineCard from './magazineCard';
-import * as Styled from './magazineList.styled';
+import { css } from 'styled-components';
 
 const MagazineList = () => {
   const { page } = useUrlQuery();
@@ -21,11 +19,20 @@ const MagazineList = () => {
       <Searchbar width="880px" variant="Line" border="normal" />
       {magazine && (
         <>
-          <Styled.CardPack>
+          <Wrapper
+            css={css`
+              margin: 80px 0;
+              width: 100%;
+              display: grid;
+              grid-template-columns: 1fr 1fr 1fr;
+              row-gap: 40px;
+              column-gap: 19.5px;
+            `}
+          >
             {magazine.data.map((m) => (
               <MagazineCard key={m.id} {...m} />
             ))}
-          </Styled.CardPack>
+          </Wrapper>
           <Pagination
             pageSize={magazine.pageSize}
             totalCount={magazine.totalCount}

@@ -1,6 +1,5 @@
-import Typography from 'components/common/typography';
-import Wrapper from 'components/common/wrapper';
-import React, { ReactNode } from 'react';
+import { Typography, Wrapper } from '@supercarmarket/ui';
+import * as React from 'react';
 
 import * as Styled from './marketDetailCar.styled';
 
@@ -42,7 +41,7 @@ const MarketDetailCar = ({
 
 interface CarInfoProps {
   subject: string;
-  children: ReactNode;
+  children: React.ReactNode;
 }
 
 const CarInfo = ({ subject, children }: CarInfoProps) => {

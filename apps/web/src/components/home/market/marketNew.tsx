@@ -1,11 +1,9 @@
-import Container from 'components/common/container';
-import Typography from 'components/common/typography';
-import Wrapper from 'components/common/wrapper';
+import { Container, Typography, Wrapper } from '@supercarmarket/ui';
+import type { MarketDto } from '@supercarmarket/types/market';
 import MarketCard from 'components/market/marketCard';
 import useHome from 'hooks/queries/useHome';
 import { css } from 'styled-components';
 import { applyMediaQuery } from 'styles/mediaQuery';
-import { MarketDto } from 'types/market';
 
 import RouterButton from '../routerButton';
 

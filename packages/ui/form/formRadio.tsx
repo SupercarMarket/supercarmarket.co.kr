@@ -1,12 +1,16 @@
 import * as React from 'react';
 import { css } from 'styled-components';
 
-import Wrapper from '../wrapper';
+import { Wrapper } from '../components/wrapper';
+import { theme } from '../styles';
 
 interface FormRadioProps extends React.InputHTMLAttributes<HTMLInputElement> {
   content?: string;
 }
-const FormRadio = (props: FormRadioProps, ref: React.Ref<HTMLInputElement>) => {
+const FormRadio = React.forwardRef(function FormRadio(
+  props: FormRadioProps,
+  ref: React.Ref<HTMLInputElement>
+) {
   const { name, value = 'radio', content, ...rest } = props;
 
   return (
@@ -24,7 +28,7 @@ const FormRadio = (props: FormRadioProps, ref: React.Ref<HTMLInputElement>) => {
           display: inline-block;
           width: 16px;
           height: 16px;
-          border: 1px solid ${({ theme }) => theme.color.primary};
+          border: 1px solid ${theme.color.primary};
           border-radius: 50%;
           position: relative;
           cursor: pointer;
@@ -34,10 +38,10 @@ const FormRadio = (props: FormRadioProps, ref: React.Ref<HTMLInputElement>) => {
           height: 100%;
           border-radius: 50%;
           box-sizing: border-box;
-          border: 2px solid ${({ theme }) => theme.color.white};
+          border: 2px solid ${theme.color.white};
         }
         input[type='radio']:checked + label > div {
-          background: ${({ theme }) => theme.color.primary};
+          background: ${theme.color.primary};
         }
         span {
           font-weight: 500;
@@ -60,6 +64,7 @@ const FormRadio = (props: FormRadioProps, ref: React.Ref<HTMLInputElement>) => {
       {content && <span>{content}</span>}
     </Wrapper>
   );
-};
+});
 
-export default React.forwardRef(FormRadio);
+export { FormRadio };
+export type { FormRadioProps };

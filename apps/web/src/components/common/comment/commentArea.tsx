@@ -1,11 +1,9 @@
+import { Button, Container, Typography } from '@supercarmarket/ui';
 import useAddComment from 'hooks/mutations/comment/useAddComment';
 import useUpdateComment from 'hooks/mutations/comment/useUpdateComment';
 import { useSession } from 'next-auth/react';
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
 
-import Button from '../button';
-import Container from '../container';
-import Typography from '../typography';
 import {
   CommentAreaBottom,
   CommentAreaTextArea,

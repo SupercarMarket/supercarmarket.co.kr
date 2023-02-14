@@ -1,7 +1,6 @@
 import * as React from 'react';
 
-import Container from '../container';
-import Typography from '../typography';
+import { Container, Typography } from '../components';
 
 interface FormMessageProps {
   tooltip?: string;
@@ -62,4 +61,5 @@ const FormMessage = React.memo(function FormMessage({
   );
 });
 
-export default FormMessage;
+export { FormMessage };
+export type { FormMessageProps };

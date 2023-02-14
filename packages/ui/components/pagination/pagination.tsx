@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import clsx from "clsx";
-import { useUrlQuery } from "@supercarmarket/hooks";
-import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { ReactNode, useMemo } from "react";
-import { memo } from "react";
+import clsx from 'clsx';
+import { useUrlQuery } from '@supercarmarket/hooks';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
+import { ReactNode, useMemo } from 'react';
+import { memo } from 'react';
 
-import Container from "../container";
-import { PaginationButton, PaginationItemContainer } from "./pagination.styled";
+import { Container } from '../container';
+import { PaginationButton, PaginationItemContainer } from './pagination.styled';
 
 interface PaginationItemProps {
   page: number;
@@ -35,7 +35,7 @@ const PaginationItem = memo(function PaginationItem({
   return (
     <PaginationItemContainer
       data-active={active}
-      className={clsx("pagination-item")}
+      className={clsx('pagination-item')}
     >
       <Link
         href={{
@@ -56,7 +56,7 @@ const PaginationItem = memo(function PaginationItem({
 const Pagination = memo(function Pagination({
   pageSize = 10,
   totalPages,
-  className = "pagination",
+  className = 'pagination',
 }: PaginationProps) {
   const { page, orderby } = useUrlQuery();
   const { push } = useRouter();
@@ -173,4 +173,5 @@ const Pagination = memo(function Pagination({
   );
 });
 
-export default Pagination;
+export { Pagination };
+export type { PaginationProps };

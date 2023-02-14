@@ -1,18 +1,11 @@
+import { Button, Container, Typography, Wrapper } from '@supercarmarket/ui';
 import Avvvatars from 'avvvatars-react';
-import Button from 'components/common/button';
-import Container from 'components/common/container';
 import AuthModal from 'components/common/modal';
 import CounselingModal from 'components/common/modal/counselingModal';
-import Typography from 'components/common/typography';
 import ModalContext from 'feature/modalContext';
 import useMagazineCounseling from 'hooks/mutations/magazine/useMagazineCounseling';
 import { useCallback, useContext } from 'react';
-
-import {
-  MagazineDealerLeft,
-  MagazineDealerLeftWrapper,
-  MagazineDealerRight,
-} from './magazine.styled';
+import { css } from 'styled-components';
 
 interface MagazineDealerProps {
   postId: string;
@@ -60,9 +53,21 @@ const MagazineDealer = ({ postId }: MagazineDealerProps) => {
       borderRadius="4px"
       padding="30px 40px"
     >
-      <MagazineDealerLeft>
+      <Wrapper.Left
+        css={css`
+          display: flex;
+          align-items: center;
+          gap: 40px;
+        `}
+      >
         <Avvvatars value="금종선" size={80} />
-        <MagazineDealerLeftWrapper>
+        <Wrapper.Item
+          css={css`
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+          `}
+        >
           <Typography
             as="h4"
             fontSize="header-24"
@@ -83,9 +88,15 @@ const MagazineDealer = ({ postId }: MagazineDealerProps) => {
           >
             금기사 금종선입니다!
           </Typography>
-        </MagazineDealerLeftWrapper>
-      </MagazineDealerLeft>
-      <MagazineDealerRight>
+        </Wrapper.Item>
+      </Wrapper.Left>
+      <Wrapper.Right
+        css={css`
+          display: flex;
+          align-items: center;
+          gap: 40px;
+        `}
+      >
         <Typography
           as="p"
           fontSize="body-14"
@@ -97,7 +108,7 @@ const MagazineDealer = ({ postId }: MagazineDealerProps) => {
         <Button variant="Primary" onClick={onModal}>
           상담 신청
         </Button>
-      </MagazineDealerRight>
+      </Wrapper.Right>
     </Container>
   );
 };

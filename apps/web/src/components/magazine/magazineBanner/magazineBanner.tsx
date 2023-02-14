@@ -1,17 +1,19 @@
-import clsx from 'clsx';
-import Button from 'components/common/button';
-import Container from 'components/common/container';
-import Typography from 'components/common/typography';
-import Wrapper from 'components/common/wrapper';
-import useMagazine from 'hooks/queries/useMagazine';
-import Image from 'next/image';
-import { css } from 'styled-components';
-import { applyMediaQuery } from 'styles/mediaQuery';
 import {
+  Button,
+  Container,
+  Typography,
+  Wrapper,
+  applyMediaQuery,
+} from '@supercarmarket/ui';
+import type {
   MagazineDto,
   MagazineResponse,
   WithBlurredImage,
-} from 'types/magazine';
+} from '@supercarmarket/types/magazine';
+import clsx from 'clsx';
+import useMagazine from 'hooks/queries/useMagazine';
+import Image from 'next/image';
+import { css } from 'styled-components';
 
 import Arrow from '../../../assets/svg/arrow-right.svg';
 

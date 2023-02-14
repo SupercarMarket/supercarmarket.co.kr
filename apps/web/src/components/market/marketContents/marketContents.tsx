@@ -1,7 +1,4 @@
-import Container from 'components/common/container';
-import Divider from 'components/common/divider';
-import Table from 'components/common/table';
-import Wrapper from 'components/common/wrapper';
+import { Container, Divider, Table, Wrapper } from '@supercarmarket/ui';
 import useMarketDetail from 'hooks/queries/useMarketDetail';
 import * as React from 'react';
 import { css } from 'styled-components';

@@ -1,7 +1,5 @@
+import { Container, Typography, Wrapper } from '@supercarmarket/ui';
 import clsx from 'clsx';
-import Container from 'components/common/container';
-import Typography from 'components/common/typography';
-import Wrapper from 'components/common/wrapper';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { memo, useState } from 'react';

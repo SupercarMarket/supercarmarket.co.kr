@@ -1,6 +1,4 @@
-import Container from 'components/common/container';
-import Typography from 'components/common/typography';
-import Wrapper from 'components/common/wrapper';
+import { Container, Typography, Wrapper } from '@supercarmarket/ui';
 
 import * as style from './footer.styled';
 

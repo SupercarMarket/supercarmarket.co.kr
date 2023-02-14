@@ -1,6 +1,11 @@
-import { FormInput, FormLabel, FormMessage } from 'components/common/form';
-import FormImages from 'components/common/form/formImages';
-import Wrapper from 'components/common/wrapper';
+import {
+  Wrapper,
+  FormImages,
+  FormInput,
+  FormLabel,
+  FormMessage,
+} from '@supercarmarket/ui';
+import { clientApi, clientFetcher } from '@supercarmarket/lib';
 import type { Forms } from 'constants/account';
 import {
   confirmPhoneAuth,
@@ -20,7 +25,6 @@ import {
 } from 'react-hook-form';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { css } from 'styled-components';
-import { clientApi, clientFetcher } from 'utils/api/fetcher';
 
 type InputBtnAttr = {
   button?: boolean;
@@ -180,6 +184,7 @@ const AccountFormItemContainer = React.memo(function AccountFormItemContainer({
       method: 'POST',
       headers: {
         ACCESS_TOKEN: session.accessToken,
+        'Content-Type': 'application/json',
       },
       body: formData,
     });
@@ -202,6 +207,7 @@ const AccountFormItemContainer = React.memo(function AccountFormItemContainer({
         method: 'POST',
         headers: {
           ACCESS_TOKEN: session.accessToken,
+          'Content-Type': 'application/json',
         },
         body: formData,
       }
@@ -217,6 +223,7 @@ const AccountFormItemContainer = React.memo(function AccountFormItemContainer({
       method: 'DELETE',
       headers: {
         ACCESS_TOKEN: session.accessToken,
+        'Content-Type': 'application/json',
       },
       data: { url },
     });
@@ -231,6 +238,7 @@ const AccountFormItemContainer = React.memo(function AccountFormItemContainer({
       method: 'DELETE',
       headers: {
         ACCESS_TOKEN: session.accessToken,
+        'Content-Type': 'application/json',
       },
       data: { url },
     });

@@ -1,7 +1,5 @@
-import Container from 'components/common/container';
-import Pagination from 'components/common/pagination';
-import Table from 'components/common/table';
-import useUrlQuery from 'hooks/useUrlQuery';
+import { Container, Pagination, Table } from '@supercarmarket/ui';
+import { useUrlQuery } from '@supercarmarket/hooks';
 
 const CommunityList = () => {
   const { variant } = useUrlQuery();

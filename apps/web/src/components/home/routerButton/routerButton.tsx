@@ -1,4 +1,4 @@
-import Button from 'components/common/button';
+import { Button } from '@supercarmarket/ui';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 

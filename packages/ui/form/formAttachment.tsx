@@ -1,10 +1,13 @@
-import Image from "next/image";
-import * as React from "react";
-import { css } from "styled-components";
+import Image from 'next/image';
+import * as React from 'react';
+import { css } from 'styled-components';
 
-import { Button, Container, Typography, Wrapper } from "../components";
-import * as style from "./form.styled";
-import { Input, Label } from "./form.styled";
+import { Button } from '../components/button';
+import { Container } from '../components/container';
+import { Typography } from '../components/typography';
+import { Wrapper } from '../components/wrapper';
+import * as style from './form.styled';
+import { Input, Label } from './form.styled';
 
 type FormImagesState = Array<{ file: File; thumbnail: string }>;
 
@@ -38,7 +41,7 @@ const FormImageThumbnail = React.memo(function FormImageThumbnail({
         width={320}
         height={180}
         style={{
-          width: "100%",
+          width: '100%',
         }}
       />
     </Container>
@@ -106,14 +109,14 @@ const FormAttachmentItem = (props: FormImageProps) => {
   );
 };
 
-const FormAttachment = (
+const FormAttachment = React.forwardRef(function FormAttachment(
   props: FormAttachmentProps,
   ref: React.Ref<HTMLInputElement>
-) => {
+) {
   const {
     name,
     size,
-    title = "파일추가",
+    title = '파일추가',
     description,
     callback,
     ...rest
@@ -167,7 +170,7 @@ const FormAttachment = (
           gap: 24px;
         `}
       >
-        <Button variant="Line" type="button" width="120px" suffix={<div></div>}>
+        <Button variant="Line" type="button" width="120px" suffix={<div />}>
           <Label htmlFor={name}>{title}</Label>
         </Button>
         {description && (
@@ -205,7 +208,7 @@ const FormAttachment = (
               index={index}
               file={file.file}
               thumbnail={file.thumbnail}
-              title={"사진 " + index}
+              title={'사진 ' + index}
               handleRemove={handleRemove}
             />
           ))}
@@ -213,6 +216,7 @@ const FormAttachment = (
       )}
     </Container>
   );
-};
+});
 
-export default React.forwardRef(FormAttachment);
+export { FormAttachment };
+export type { FormAttachmentProps };

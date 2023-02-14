@@ -1,6 +1,4 @@
-import Typography from 'components/common/typography';
-import Wrapper from 'components/common/wrapper';
-import React from 'react';
+import { Typography, Wrapper } from '@supercarmarket/ui';
 
 import EyeIcon from '../../../../../assets/svg/eye.svg';
 import FavoriteBorderIcon from '../../../../../assets/svg/favorite-border.svg';

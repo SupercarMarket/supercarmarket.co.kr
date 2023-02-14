@@ -1,12 +1,10 @@
-import Container from 'components/common/container';
-import Typography from 'components/common/typography';
-import Wrapper from 'components/common/wrapper';
+import { Container, Typography, Wrapper } from '@supercarmarket/ui';
+import type { MagazineDto } from '@supercarmarket/types/magazine';
 import { MagazineBanner } from 'components/magazine';
 import MagazineCard from 'components/magazine/magazineList/magazineCard';
 import useHome from 'hooks/queries/useHome';
 import { css } from 'styled-components';
 import { applyMediaQuery } from 'styles/mediaQuery';
-import { MagazineDto } from 'types/magazine';
 
 import RouterButton from '../routerButton';
 

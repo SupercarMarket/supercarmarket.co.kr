@@ -1,9 +1,9 @@
-import Typography from 'components/common/typography';
+import { Typography } from '@supercarmarket/ui';
 import MarketSelect from 'components/market/marketSelect';
 import { FIRST_MARKET_FILTER, SECOND_MARKET_FILTER } from 'constants/market';
 import theme from 'constants/theme';
 import { useRouter } from 'next/router';
-import React from 'react';
+import * as React from 'react';
 import { convertQuery, makeFilterLabel } from 'utils/market/marketFilter';
 
 import Close from '../../../assets/svg/close.svg';

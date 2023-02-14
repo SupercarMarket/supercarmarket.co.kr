@@ -1,13 +1,14 @@
-import Container from 'components/common/container/container';
-import Typography from 'components/common/typography';
-import Wrapper from 'components/common/wrapper';
+import {
+  Container,
+  Typography,
+  Wrapper,
+  applyMediaQuery,
+} from '@supercarmarket/ui';
+import { MarketDto } from '@supercarmarket/types/market';
+import { WithBlurredImage } from '@supercarmarket/types/magazine';
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
 import { css } from 'styled-components';
-import { applyMediaQuery } from 'styles/mediaQuery';
-import { WithBlurredImage } from 'types/magazine';
-import { MarketDto } from 'types/market';
 
 import MarketRow from '../marketRow';
 import * as Styled from './marketCard.styled';

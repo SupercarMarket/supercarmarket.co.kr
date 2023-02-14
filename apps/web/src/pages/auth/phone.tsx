@@ -1,10 +1,8 @@
+import { Container, Title } from '@supercarmarket/ui';
 import { PhoneForm } from 'components/auth';
-import Container from 'components/common/container';
-import Title from 'components/common/title';
 import AuthLayout from 'components/layout/authLayout';
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-import type { Params } from 'types/base';
-import { NextPageWithLayout } from 'types/base';
+import type { NextPageWithLayout, Params } from '@supercarmarket/types/base';
 
 const Phone: NextPageWithLayout = ({
   uuid,

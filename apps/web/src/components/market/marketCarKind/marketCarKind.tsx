@@ -1,7 +1,6 @@
-import Typography from 'components/common/typography';
+import { Typography } from '@supercarmarket/ui';
 import { CATEGORY } from 'constants/market';
 import { useRouter } from 'next/router';
-import React from 'react';
 
 import * as Styled from './marketCarKind.styled';
 

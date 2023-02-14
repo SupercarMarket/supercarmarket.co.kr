@@ -17,7 +17,10 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   active?: boolean;
 }
 
-const Button = (props: ButtonProps, ref: Ref<HTMLButtonElement>) => {
+const Button = forwardRef(function Button(
+  props: ButtonProps,
+  ref: Ref<HTMLButtonElement>
+) {
   const {
     type,
     children,
@@ -147,6 +150,6 @@ const Button = (props: ButtonProps, ref: Ref<HTMLButtonElement>) => {
       `}</style>
     </>
   );
-};
+});
 
-export default forwardRef(Button);
+export { Button };

@@ -1,20 +1,23 @@
-import clsx from "clsx";
-import { InputHTMLAttributes, Ref, useId } from "react";
-import { forwardRef } from "react";
+import clsx from 'clsx';
+import { InputHTMLAttributes, Ref, useId } from 'react';
+import { forwardRef } from 'react';
 
 export interface SearchbarProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
-  variant?: "Line" | "Grey";
-  border?: "rounded" | "normal";
+  variant?: 'Line' | 'Grey';
+  border?: 'rounded' | 'normal';
 }
 /**
  * 1. 리렌더링 최적화를 위한 온체인지 핸들러 설정 여부
  */
-const Searchbar = (props: SearchbarProps, ref: Ref<HTMLInputElement>) => {
+const Searchbar = forwardRef(function Searchbar(
+  props: SearchbarProps,
+  ref: Ref<HTMLInputElement>
+) {
   const {
-    label = "search",
-    border = "normal",
-    variant = "Grey",
+    label = 'search',
+    border = 'normal',
+    variant = 'Grey',
     placeholder,
     className,
     width,
@@ -24,7 +27,7 @@ const Searchbar = (props: SearchbarProps, ref: Ref<HTMLInputElement>) => {
 
   return (
     <>
-      <div className={clsx("search-container")}>
+      <div className={clsx('search-container')}>
         <label htmlFor={id} hidden>
           {label}
         </label>
@@ -33,7 +36,7 @@ const Searchbar = (props: SearchbarProps, ref: Ref<HTMLInputElement>) => {
           id={id}
           placeholder={placeholder}
           className={clsx(
-            "search",
+            'search',
             {
               [`search-${variant}`]: variant,
               [`search-${border}`]: border,
@@ -50,7 +53,7 @@ const Searchbar = (props: SearchbarProps, ref: Ref<HTMLInputElement>) => {
           {...rest}
         />
         <i
-          className={clsx("search-icon", {
+          className={clsx('search-icon', {
             [`search-${variant}`]: variant,
           })}
         >
@@ -127,6 +130,6 @@ const Searchbar = (props: SearchbarProps, ref: Ref<HTMLInputElement>) => {
       `}</style>
     </>
   );
-};
+});
 
-export default forwardRef(Searchbar);
+export { Searchbar };

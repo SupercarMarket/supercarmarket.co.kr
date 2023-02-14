@@ -1,10 +1,8 @@
-import Container from 'components/common/container';
-import Typography from 'components/common/typography';
-import Wrapper from 'components/common/wrapper';
+import { Container, Typography, Wrapper } from '@supercarmarket/ui';
+import type { Links } from '@supercarmarket/types/base';
 import community from 'constants/community';
 import Link from 'next/link';
 import { css } from 'styled-components';
-import { Links } from 'types/base';
 
 const CommunityNavbarItem = (link: Links) => {
   return (

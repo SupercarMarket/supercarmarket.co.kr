@@ -1,13 +1,10 @@
+import { Container, Divider, Typography, Wrapper } from '@supercarmarket/ui';
+import type { CommunityDto } from '@supercarmarket/types/community';
+import type { WithBlurredImage } from '@supercarmarket/types/magazine';
 import Avvvatars from 'avvvatars-react';
-import Container from 'components/common/container';
-import Divider from 'components/common/divider';
-import Typography from 'components/common/typography';
-import Wrapper from 'components/common/wrapper';
 import Image from 'next/image';
 import { css } from 'styled-components';
 import { applyMediaQuery } from 'styles/mediaQuery';
-import type { CommunityDto } from 'types/community';
-import type { WithBlurredImage } from 'types/magazine';
 
 import * as style from './communityCard.style';
 

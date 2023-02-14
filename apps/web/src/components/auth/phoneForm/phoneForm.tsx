@@ -1,13 +1,11 @@
-import Alert from 'components/common/alert';
-import Button from 'components/common/button';
-import { Form, FormLabel } from 'components/common/form';
+import { Alert, Button, Form, FormLabel } from '@supercarmarket/ui';
+import { ErrorCode } from '@supercarmarket/lib';
 import auth from 'constants/auth';
 import { useAuthDispatch, useAuthState } from 'feature/authProvider';
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 import * as React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { ErrorCode } from 'utils/error';
 
 import AuthFormItem from '../authFormItem/authFormItem';
 import * as style from './phoneForm.styled';

@@ -1,5 +1,5 @@
-import Divider from 'components/common/divider';
 import {
+  Divider,
   FormAgreement,
   FormAttachment,
   FormInput,
@@ -10,11 +10,11 @@ import {
   FormRadioGroup,
   FormRange,
   FormSelect,
-} from 'components/common/form';
-import FormFiles from 'components/common/form/formFiles';
-import FormImage from 'components/common/form/formImages';
-import FormTextArea from 'components/common/form/formTextArea';
-import Wrapper from 'components/common/wrapper';
+  FormFiles,
+  FormImages,
+  FormTextArea,
+  Wrapper,
+} from '@supercarmarket/ui';
 import type { InquiryRegister } from 'constants/inquiry';
 import * as React from 'react';
 import type {
@@ -188,7 +188,7 @@ const InquiryFormItemContainer = (props: InquiryFormItemContainerProps) => {
                 />
               ),
               image: (
-                <FormImage
+                <FormImages
                   title="사진1"
                   id={htmlFor}
                   name={htmlFor}

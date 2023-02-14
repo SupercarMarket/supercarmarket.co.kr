@@ -1,12 +1,17 @@
-import Container from 'components/common/container';
-import Typography from 'components/common/typography';
-import Wrapper from 'components/common/wrapper';
+import {
+  Container,
+  Typography,
+  Wrapper,
+  applyMediaQuery,
+} from '@supercarmarket/ui';
+import type {
+  MagazineDto,
+  WithBlurredImage,
+} from '@supercarmarket/types/magazine';
 import Image from 'next/image';
 import Link from 'next/link';
 import { memo } from 'react';
 import { css } from 'styled-components';
-import { applyMediaQuery } from 'styles/mediaQuery';
-import { MagazineDto, WithBlurredImage } from 'types/magazine';
 
 interface MagazineCardProps extends WithBlurredImage<MagazineDto> {
   type?: 'small' | 'normal';

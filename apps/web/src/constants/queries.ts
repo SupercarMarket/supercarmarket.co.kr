@@ -1,4 +1,4 @@
-import { CommentQuery } from 'types/comment';
+import type { CommentQuery } from '@supercarmarket/types/comment';
 
 import type { AccountTab } from './account';
 

@@ -1,4 +1,4 @@
-import type { Device } from '@supercarmarket/ui';
+import { Device } from './mediaQuery';
 
 const DEVICE_LIST: Device[] = ['desktop', 'tablet', 'mobile'];
 

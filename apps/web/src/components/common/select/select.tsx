@@ -1,6 +1,6 @@
-import Typography from 'components/common/typography';
+import { Typography } from '@supercarmarket/ui';
 import { useRouter } from 'next/router';
-import React from 'react';
+import * as React from 'react';
 import { SelectType } from 'types/market';
 import { makeSelectQuery } from 'utils/market/marketFilter';
 

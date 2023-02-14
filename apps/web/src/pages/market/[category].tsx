@@ -1,12 +1,12 @@
 'use client';
 
+import { Container, Searchbar } from '@supercarmarket/ui';
+import type { NextPageWithLayout } from '@supercarmarket/types/base';
 import {
   dehydrate,
   QueryClient,
   QueryErrorResetBoundary,
 } from '@tanstack/react-query';
-import Container from 'components/common/container';
-import Searchbar from 'components/common/searchbar';
 import { ErrorFallback } from 'components/fallback';
 import layout from 'components/layout';
 import MarketBanner from 'components/market/marketBanner';
@@ -18,10 +18,9 @@ import queries from 'constants/queries';
 import useMarket from 'hooks/queries/useMarket';
 import useMarketUrlQuery from 'hooks/useMarketUrlQuery';
 import { useRouter } from 'next/router';
-import { NextPageContext } from 'next/types';
-import React from 'react';
+import type { NextPageContext } from 'next/types';
+import * as React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import type { NextPageWithLayout } from 'types/base';
 
 const MarketFilterPage: NextPageWithLayout = () => {
   const { push, query } = useRouter();

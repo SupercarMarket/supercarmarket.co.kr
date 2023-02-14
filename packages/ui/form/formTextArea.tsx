@@ -2,10 +2,10 @@ import * as React from 'react';
 
 type FormTextAreaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement>;
 
-const FormTextArea = (
+const FormTextArea = React.forwardRef(function FormTextArea(
   props: FormTextAreaProps,
   ref: React.Ref<HTMLTextAreaElement>
-) => {
+) {
   const { name, id, role, ...rest } = props;
   return (
     <>
@@ -14,12 +14,12 @@ const FormTextArea = (
         id={id}
         role={role}
         name={name}
-        className={'form-textarea'}
+        className="form-textarea"
         autoComplete="off"
         autoCorrect="off"
         spellCheck="false"
         {...rest}
-      ></textarea>
+      />
       <style jsx>{`
         .form-textarea {
           width: 100%;
@@ -38,6 +38,7 @@ const FormTextArea = (
       `}</style>
     </>
   );
-};
+});
 
-export default React.forwardRef(FormTextArea);
+export { FormTextArea };
+export type { FormTextAreaProps };

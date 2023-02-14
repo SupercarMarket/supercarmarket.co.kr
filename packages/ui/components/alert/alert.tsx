@@ -44,4 +44,5 @@ const Alert = (props: AlertProps) => {
   );
 };
 
-export default Alert;
+export { Alert };
+export type { AlertProps };

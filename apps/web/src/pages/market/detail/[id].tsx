@@ -1,16 +1,14 @@
+import { Button, Searchbar, Wrapper } from '@supercarmarket/ui';
+import type { NextPageWithLayout } from '@supercarmarket/types/base';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
-import Button from 'components/common/button';
-import Searchbar from 'components/common/searchbar';
-import Wrapper from 'components/common/wrapper';
 import layout from 'components/layout';
 import MarketContents from 'components/market/marketContents';
 import queries from 'constants/queries';
 import useMarketDetail from 'hooks/queries/useMarketDetail';
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
-import React from 'react';
+import * as React from 'react';
 import { css } from 'styled-components';
-import type { NextPageWithLayout } from 'types/base';
 
 const MarketDetailPage: NextPageWithLayout = ({
   id,
