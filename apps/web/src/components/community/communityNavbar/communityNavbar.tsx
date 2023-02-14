@@ -3,10 +3,10 @@ import type { Links } from '@supercarmarket/types/base';
 import community from 'constants/community';
 import Link from 'next/link';
 import { css } from 'styled-components';
-import { usePathname } from 'next/navigation';
+import useUrlQuery from 'hooks/useUrlQuery';
 
 const CommunityNavbarItem = (link: Links) => {
-  const pathname = usePathname();
+  const { category } = useUrlQuery();
 
   return (
     <Container width="160px" display="flex" flexDirection="column" gap="4px">
@@ -24,9 +24,17 @@ const CommunityNavbarItem = (link: Links) => {
       </Typography>
       {link.children &&
         link.children.map((children) => (
-          <Link key={children.title} href={children.href}>
+          <Link
+            key={children.title}
+            href={{
+              pathname: link.href,
+              query: {
+                category: children.href,
+              },
+            }}
+          >
             <Wrapper
-              className={pathname === children.href ? 'active' : undefined}
+              className={category === children.href ? 'active' : undefined}
               css={css`
                 padding: 12px;
                 font-weight: ${({ theme }) => theme.fontWeight.regular};
