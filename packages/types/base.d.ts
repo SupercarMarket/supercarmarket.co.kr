@@ -50,6 +50,27 @@ type NextPageWithLayout = NextPage & {
   Layout?: any;
 };
 
+interface Query {
+  page: number;
+  category: string;
+  orderby: string;
+  popular: string;
+  variant: 'row' | 'column';
+  orderBy: string;
+  filter: string | null;
+  searchType: string | null;
+}
+
+interface PaginationResponse<T> {
+  data: T[];
+  page: number;
+  pageSize: number;
+  totalPages: number;
+  totalCount: number;
+  isLastPage: boolean;
+  isFirstPage: boolean;
+}
+
 export type {
   Admin,
   Links,
@@ -59,4 +80,6 @@ export type {
   ServerResponse,
   User,
   WithBlurredImage,
+  Query,
+  PaginationResponse,
 };
