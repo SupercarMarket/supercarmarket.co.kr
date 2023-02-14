@@ -184,7 +184,6 @@ const AccountFormItemContainer = React.memo(function AccountFormItemContainer({
       method: 'POST',
       headers: {
         ACCESS_TOKEN: session.accessToken,
-        'Content-Type': 'application/json',
       },
       body: formData,
     });
@@ -207,7 +206,6 @@ const AccountFormItemContainer = React.memo(function AccountFormItemContainer({
         method: 'POST',
         headers: {
           ACCESS_TOKEN: session.accessToken,
-          'Content-Type': 'application/json',
         },
         body: formData,
       }
