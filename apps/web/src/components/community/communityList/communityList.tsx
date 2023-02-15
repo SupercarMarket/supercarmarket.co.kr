@@ -29,7 +29,11 @@ const CommunityList = () => {
   return (
     <Container display="flex" flexDirection="column" gap="32px">
       <Table tab="community" hidden={false} />
-      <Wrapper>
+      <Wrapper
+        css={css`
+          padding-bottom: 16px;
+        `}
+      >
         {data?.data && data.data.length > 0 ? (
           <>
             {data.data.map((value) => (
