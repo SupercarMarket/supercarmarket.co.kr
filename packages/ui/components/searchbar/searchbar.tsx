@@ -1,18 +1,20 @@
 import clsx from 'clsx';
-import { InputHTMLAttributes, Ref, useId } from 'react';
+import * as React from 'react';
 import { forwardRef } from 'react';
 
-export interface SearchbarProps extends InputHTMLAttributes<HTMLInputElement> {
+export interface SearchbarProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   variant?: 'Line' | 'Grey';
   border?: 'rounded' | 'normal';
+  handleClick?: (query: string) => void;
 }
 /**
  * 1. 리렌더링 최적화를 위한 온체인지 핸들러 설정 여부
  */
 const Searchbar = forwardRef(function Searchbar(
   props: SearchbarProps,
-  ref: Ref<HTMLInputElement>
+  ref: React.Ref<HTMLInputElement>
 ) {
   const {
     label = 'search',
@@ -21,9 +23,35 @@ const Searchbar = forwardRef(function Searchbar(
     placeholder,
     className,
     width,
+    handleClick: handleCallback,
     ...rest
   } = props;
-  const id = useId();
+  const id = React.useId();
+  const [query, setQuery] = React.useState('');
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(e.target.value);
+  };
+
+  const handleClick = (e: React.MouseEvent<HTMLInputElement>) => {
+    if (!query) return;
+    if (!handleCallback) return;
+
+    handleCallback(query);
+
+    return;
+  };
+
+  const handleEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const value = e.currentTarget.value;
+
+    if (!value) return;
+    if (!handleCallback) return;
+
+    if (e.key === 'Enter') handleCallback(value);
+
+    return;
+  };
 
   return (
     <>
@@ -50,12 +78,15 @@ const Searchbar = forwardRef(function Searchbar(
           autoCorrect="off"
           autoCapitalize="off"
           spellCheck="false"
+          onChange={handleChange}
+          onKeyUp={handleEnter}
           {...rest}
         />
         <i
           className={clsx('search-icon', {
             [`search-${variant}`]: variant,
           })}
+          onClick={handleClick}
         >
           <svg
             width="24"
@@ -111,6 +142,7 @@ const Searchbar = forwardRef(function Searchbar(
         .search-icon {
           position: absolute;
           top: 14px;
+          cursor: pointer;
         }
         .search-icon.search-Grey {
           background: none;

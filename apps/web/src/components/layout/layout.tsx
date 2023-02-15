@@ -46,11 +46,11 @@ export const navlinks: NavbarLinks[] = [
     subMenu: [
       {
         title: '파파라치',
-        link: 'paparazzi',
+        link: 'paparazzi?category=report',
       },
       {
         title: '자료실',
-        link: 'reference-room',
+        link: 'library?category=information',
       },
     ],
   },

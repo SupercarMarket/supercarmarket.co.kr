@@ -4,18 +4,22 @@ import clsx from 'clsx';
 import { useUrlQuery } from '@supercarmarket/hooks';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { ReactNode, useMemo } from 'react';
+import * as React from 'react';
 import { memo } from 'react';
+import type { UrlObject } from 'url';
 
 import { Container } from '../container';
 import { PaginationButton, PaginationItemContainer } from './pagination.styled';
 
+interface PaginationLinkProps extends React.PropsWithChildren {
+  disabled?: boolean;
+  href: string | UrlObject;
+}
+
 interface PaginationItemProps {
-  page: number;
-  orderby: string;
   active?: boolean;
-  children?: ReactNode;
-  pathname: string | null;
+  children?: React.ReactNode;
+  href: string | UrlObject;
 }
 
 interface PaginationProps {
@@ -25,11 +29,30 @@ interface PaginationProps {
   className?: string;
 }
 
-const PaginationItem = memo(function PaginationItem({
-  page,
-  orderby,
-  pathname,
+const PaginationLink = ({
+  disabled = false,
+  href,
+  children,
+}: PaginationLinkProps) => {
+  if (disabled) {
+    return (
+      <PaginationButton disabled variant="Line" type="button">
+        {children}
+      </PaginationButton>
+    );
+  }
+  return (
+    <Link href={href}>
+      <PaginationButton type="button" variant="Line">
+        {children}
+      </PaginationButton>
+    </Link>
+  );
+};
+
+const PaginationItem = React.memo(function PaginationItem({
   active = false,
+  href,
   children,
 }: PaginationItemProps) {
   return (
@@ -37,16 +60,7 @@ const PaginationItem = memo(function PaginationItem({
       data-active={active}
       className={clsx('pagination-item')}
     >
-      <Link
-        href={{
-          pathname,
-          query: {
-            page,
-            orderby,
-          },
-        }}
-        shallow
-      >
+      <Link href={href} shallow>
         <span>{children}</span>
       </Link>
     </PaginationItemContainer>
@@ -58,10 +72,11 @@ const Pagination = memo(function Pagination({
   totalPages,
   className = 'pagination',
 }: PaginationProps) {
-  const { page, orderby } = useUrlQuery();
+  const { page, orderby, filter, searchType, keyword, category, variant } =
+    useUrlQuery();
   const { push } = useRouter();
   const pathname = usePathname();
-  const currentPages = useMemo(() => {
+  const currentPages = React.useMemo(() => {
     const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
     return Array(totalPages)
       .fill(0)
@@ -70,6 +85,17 @@ const Pagination = memo(function Pagination({
       .shift();
   }, [page, pageSize, totalPages]);
 
+  const categoryQuery = category && {
+    category,
+  };
+  const keywordQuery = keyword && {
+    keyword,
+    searchType,
+  };
+  const filterQuery = filter && {
+    filter,
+  };
+
   return (
     <Container
       display="flex"
@@ -77,12 +103,19 @@ const Pagination = memo(function Pagination({
       gap="16px"
       className={className}
     >
-      <PaginationButton
-        variant="Line"
+      <PaginationLink
+        href={{
+          pathname,
+          query: {
+            page: page - pageSize,
+            orderby,
+            variant,
+            ...categoryQuery,
+            ...keywordQuery,
+            ...filterQuery,
+          },
+        }}
         disabled={page <= pageSize}
-        onClick={() =>
-          push(`${pathname}?page=${page - pageSize}&orderby=${orderby}`)
-        }
       >
         <svg
           width="12"
@@ -107,11 +140,20 @@ const Pagination = memo(function Pagination({
             </clipPath>
           </defs>
         </svg>
-      </PaginationButton>
-      <PaginationButton
-        variant="Line"
+      </PaginationLink>
+      <PaginationLink
+        href={{
+          pathname,
+          query: {
+            page: page - 1,
+            orderby,
+            variant,
+            ...categoryQuery,
+            ...keywordQuery,
+            ...filterQuery,
+          },
+        }}
         disabled={page <= 0}
-        onClick={() => push(`${pathname}?page=${page - 1}&orderby=${orderby}`)}
       >
         <svg
           width="12"
@@ -132,23 +174,40 @@ const Pagination = memo(function Pagination({
             </clipPath>
           </defs>
         </svg>
-      </PaginationButton>
+      </PaginationLink>
       {currentPages &&
         Array.from(currentPages).map((p) => (
           <PaginationItem
             key={p}
-            page={p - 1}
+            href={{
+              pathname,
+              query: {
+                page: p - 1,
+                orderby,
+                variant,
+                ...categoryQuery,
+                ...keywordQuery,
+                ...filterQuery,
+              },
+            }}
             active={p === page + 1}
-            orderby={orderby}
-            pathname={pathname}
           >
             {p}
           </PaginationItem>
         ))}
-      <PaginationButton
-        variant="Line"
+      <PaginationLink
+        href={{
+          pathname,
+          query: {
+            page: page + 1,
+            orderby,
+            variant,
+            ...categoryQuery,
+            ...keywordQuery,
+            ...filterQuery,
+          },
+        }}
         disabled={page + 1 >= totalPages}
-        onClick={() => push(`${pathname}?page=${page + 1}&orderby=${orderby}`)}
       >
         <svg
           width="12"
@@ -168,7 +227,7 @@ const Pagination = memo(function Pagination({
             </clipPath>
           </defs>
         </svg>
-      </PaginationButton>
+      </PaginationLink>
     </Container>
   );
 });

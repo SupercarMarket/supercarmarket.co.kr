@@ -12,6 +12,7 @@ interface CommunityDto {
   imgSrc: string;
   comments: number;
   created: string;
+  popular: boolean;
 }
 
 interface CommunityPostDto extends Posting {
