@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { Container, Divider, Typography, Wrapper } from '@supercarmarket/ui';
 import type { CommunityDto } from '@supercarmarket/types/community';
 import type { WithBlurredImage } from '@supercarmarket/types/magazine';
@@ -20,6 +21,11 @@ const formatter = (category: string) => {
   return '차량 정보';
 };
 
+const getCategoryPathname = (category: string) => {
+  if (category === 'information') return `/community/library/${category}`;
+  return `/community/paparazzi/${category}`;
+};
+
 const CommunityCard = ({ variant, ...rest }: CommunityCardProps) => {
   return (
     <>
@@ -35,6 +41,7 @@ const CommunityCard = ({ variant, ...rest }: CommunityCardProps) => {
 
 const CommunityCardRow = (props: CommunityCardChildrenProps) => {
   const {
+    id,
     title,
     category,
     like,
@@ -47,7 +54,11 @@ const CommunityCardRow = (props: CommunityCardChildrenProps) => {
   } = props;
 
   return (
-    <>
+    <Link
+      href={{
+        pathname: `${getCategoryPathname(category)}/${id}`,
+      }}
+    >
       <Container display="flex" alignItems="center">
         <Wrapper.Left
           css={css`
@@ -180,84 +191,90 @@ const CommunityCardRow = (props: CommunityCardChildrenProps) => {
         </Wrapper.Right>
       </Container>
       <Divider color="#EAEAEC" width="100%" height="1px" margin="6px 0" />
-    </>
+    </Link>
   );
 };
 
 const CommunityCardColumn = (props: CommunityCardChildrenProps) => {
-  const { imgSrc, base64, profileSrc, nickname, title } = props;
+  const { id, imgSrc, base64, category, profileSrc, nickname, title } = props;
   return (
-    <Container>
-      <Wrapper.Item
-        css={css`
-          position: relative;
-          width: 285px;
-          height: 180px;
-          ${applyMediaQuery('mobile')} {
-            width: 178px;
-            height: 120px;
-          }
-        `}
-      >
-        <Image
-          src={imgSrc}
-          alt="thumbnail"
-          fill
-          placeholder={base64 ? 'blur' : undefined}
-          blurDataURL={base64 ? base64 : undefined}
-        />
-      </Wrapper.Item>
-      <Wrapper.Item
-        css={css`
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          margin-top: 20px;
-        `}
-      >
-        {profileSrc ? (
+    <Link
+      href={{
+        pathname: `${getCategoryPathname(category)}/${id}`,
+      }}
+    >
+      <Container>
+        <Wrapper.Item
+          css={css`
+            position: relative;
+            width: 285px;
+            height: 180px;
+            ${applyMediaQuery('mobile')} {
+              width: 178px;
+              height: 120px;
+            }
+          `}
+        >
           <Image
-            src={profileSrc}
-            alt="profile"
-            width={24}
-            height={24}
-            style={{
-              borderRadius: '12px',
-            }}
+            src={imgSrc}
+            alt="thumbnail"
+            fill
+            placeholder={base64 ? 'blur' : undefined}
+            blurDataURL={base64 ? base64 : undefined}
           />
-        ) : (
-          <Avvvatars value={nickname} size={24} radius={12} />
-        )}
-        <Typography
-          as="span"
-          fontSize="body-16"
-          fontWeight="regular"
-          color="greyScale-6"
+        </Wrapper.Item>
+        <Wrapper.Item
+          css={css`
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 20px;
+          `}
         >
-          {nickname}
-        </Typography>
-      </Wrapper.Item>
-      <Wrapper
-        css={css`
-          margin-top: 10px;
-        `}
-      >
-        <Typography
-          as="h2"
-          fontSize="header-16"
-          fontWeight="bold"
-          color="greyScale-6"
+          {profileSrc ? (
+            <Image
+              src={profileSrc}
+              alt="profile"
+              width={24}
+              height={24}
+              style={{
+                borderRadius: '12px',
+              }}
+            />
+          ) : (
+            <Avvvatars value={nickname} size={24} radius={12} />
+          )}
+          <Typography
+            as="span"
+            fontSize="body-16"
+            fontWeight="regular"
+            color="greyScale-6"
+          >
+            {nickname}
+          </Typography>
+        </Wrapper.Item>
+        <Wrapper
+          css={css`
+            margin-top: 10px;
+          `}
         >
-          {title}
-        </Typography>
-        <Typography
-          as="h2"
-          fontSize="header-16"
-          fontWeight="bold"
-          color="system-1"
-        />
-      </Wrapper>
-    </Container>
+          <Typography
+            as="h2"
+            fontSize="header-16"
+            fontWeight="bold"
+            color="greyScale-6"
+          >
+            {title}
+          </Typography>
+          <Typography
+            as="h2"
+            fontSize="header-16"
+            fontWeight="bold"
+            color="system-1"
+          />
+        </Wrapper>
+      </Container>
+    </Link>
   );
 };
 
