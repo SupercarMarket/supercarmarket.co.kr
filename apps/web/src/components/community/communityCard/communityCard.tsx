@@ -2,17 +2,23 @@ import { Container, Divider, Typography, Wrapper } from '@supercarmarket/ui';
 import type { CommunityDto } from '@supercarmarket/types/community';
 import type { WithBlurredImage } from '@supercarmarket/types/magazine';
 import Avvvatars from 'avvvatars-react';
+import dayjs from 'dayjs';
 import Image from 'next/image';
 import { css } from 'styled-components';
 import { applyMediaQuery } from 'styles/mediaQuery';
-
-import * as style from './communityCard.style';
 
 interface CommunityCardProps extends WithBlurredImage<CommunityDto> {
   variant: string;
 }
 
 type CommunityCardChildrenProps = Omit<CommunityCardProps, 'variant'>;
+
+const formatter = (category: string) => {
+  if (category === 'report') return '제보';
+  if (category === 'gallery') return '포토갤러리';
+  if (category === 'boast') return '내 차 자랑';
+  return '차량 정보';
+};
 
 const CommunityCard = ({ variant, ...rest }: CommunityCardProps) => {
   return (
@@ -27,28 +33,60 @@ const CommunityCard = ({ variant, ...rest }: CommunityCardProps) => {
   );
 };
 
-const CommunityCardRow = ({}: CommunityCardChildrenProps) => {
+const CommunityCardRow = (props: CommunityCardChildrenProps) => {
+  const {
+    title,
+    category,
+    like,
+    popular,
+    comments,
+    nickname,
+    imgSrc,
+    view,
+    created,
+  } = props;
+
   return (
     <>
       <Container display="flex" alignItems="center">
-        <Wrapper.Left css={style.rowLeft}>
+        <Wrapper.Left
+          css={css`
+            width: 760px;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+          `}
+        >
           <Image
-            src="https://user-images.githubusercontent.com/66871265/210489106-611e72ee-94f8-49e8-9faa-60f9f20ae50f.png"
+            src={
+              imgSrc ||
+              'https://user-images.githubusercontent.com/66871265/210489106-611e72ee-94f8-49e8-9faa-60f9f20ae50f.png'
+            }
             alt="thumbnail"
             width={196}
             height={124}
             style={{ borderRadius: '4px' }}
           />
-          <Wrapper.Item css={style.rowTitle}>
-            <Typography
-              as="b"
-              fontSize="header-16"
-              fontWeight="bold"
-              color="system-1"
-              lineHeight="120%"
-            >
-              인기
-            </Typography>
+          <Wrapper.Item
+            css={css`
+              display: flex;
+              align-items: center;
+              justify-content: flex-start;
+              gap: 12px;
+            `}
+          >
+            {popular && (
+              <Typography
+                as="b"
+                fontSize="header-16"
+                fontWeight="bold"
+                color="system-1"
+                lineHeight="120%"
+              >
+                인기
+              </Typography>
+            )}
             <Typography
               as="span"
               fontSize="body-16"
@@ -56,7 +94,7 @@ const CommunityCardRow = ({}: CommunityCardChildrenProps) => {
               color="greyScale-5"
               lineHeight="150%"
             >
-              [제보]
+              [{formatter(category)}]
             </Typography>
             <Typography
               as="span"
@@ -64,8 +102,11 @@ const CommunityCardRow = ({}: CommunityCardChildrenProps) => {
               fontWeight="regular"
               color="greyScale-6"
               lineHeight="150%"
+              style={{
+                flex: '1',
+              }}
             >
-              새 차 무사고 기원하며 인증합니다!
+              {title}
             </Typography>
             <Typography
               as="span"
@@ -74,46 +115,68 @@ const CommunityCardRow = ({}: CommunityCardChildrenProps) => {
               color="system-1"
               lineHeight="150%"
             >
-              (12)
+              ({comments})
             </Typography>
           </Wrapper.Item>
         </Wrapper.Left>
-        <Wrapper.Right css={style.rowRight}>
-          <Wrapper.Item css={style.rowUser}>
-            <Avvvatars size={40} value="blan19" />
+        <Wrapper.Right
+          css={css`
+            display: flex;
+            align-items: center;
+          `}
+        >
+          <Wrapper.Item
+            css={css`
+              display: flex;
+              width: 200px;
+              align-items: center;
+              justify-content: center;
+              gap: 8px;
+            `}
+          >
+            <Avvvatars size={40} value={nickname} />
             <Typography
               fontSize="body-14"
               fontWeight="regular"
               color="greyScale-6"
               lineHeight="150%"
             >
-              blan19
+              {nickname}
             </Typography>
           </Wrapper.Item>
-          <Typography
-            fontSize="body-14"
-            fontWeight="regular"
-            color="greyScale-6"
-            lineHeight="150%"
+          <Wrapper.Item
+            css={css`
+              & > span {
+                width: 80px;
+                text-align: center;
+              }
+            `}
           >
-            16:24
-          </Typography>
-          <Typography
-            fontSize="body-14"
-            fontWeight="regular"
-            color="greyScale-6"
-            lineHeight="150%"
-          >
-            64792
-          </Typography>
-          <Typography
-            fontSize="body-14"
-            fontWeight="regular"
-            color="greyScale-6"
-            lineHeight="150%"
-          >
-            999
-          </Typography>
+            <Typography
+              fontSize="body-14"
+              fontWeight="regular"
+              color="greyScale-6"
+              lineHeight="150%"
+            >
+              {dayjs(created).format('hh:ss')}
+            </Typography>
+            <Typography
+              fontSize="body-14"
+              fontWeight="regular"
+              color="greyScale-6"
+              lineHeight="150%"
+            >
+              {view}
+            </Typography>
+            <Typography
+              fontSize="body-14"
+              fontWeight="regular"
+              color="greyScale-6"
+              lineHeight="150%"
+            >
+              {like}
+            </Typography>
+          </Wrapper.Item>
         </Wrapper.Right>
       </Container>
       <Divider color="#EAEAEC" width="100%" height="1px" margin="6px 0" />
