@@ -58,7 +58,8 @@ interface Query {
   variant: 'row' | 'column';
   orderBy: string;
   filter: string | null;
-  searchType: string | null;
+  searchType: string;
+  keyword: string | null;
 }
 
 interface PaginationResponse<T> {

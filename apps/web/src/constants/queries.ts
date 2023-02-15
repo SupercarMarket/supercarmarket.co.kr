@@ -43,12 +43,16 @@ const queries = {
     lists: () => [...queries.community.all, 'list'] as const,
     best: () => [...queries.community.lists(), 'best'] as const,
     query: (
-      query: Pick<Query, 'category' | 'page' | 'filter' | 'searchType'>
+      query: Pick<
+        Query,
+        'category' | 'page' | 'filter' | 'searchType' | 'keyword'
+      >
     ) =>
       [
         String(query.filter),
         String(query.searchType),
         String(query.page),
+        String(query.keyword),
         query.category,
       ] as const,
   },

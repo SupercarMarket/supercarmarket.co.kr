@@ -11,6 +11,7 @@ export default function useUrlQuery() {
   const filter = searchParams.get('filter');
   const category = searchParams.get('category');
   const searchType = searchParams.get('searchType');
+  const keyword = searchParams.get('keyword');
 
   return {
     page: page ? parseInt(page) : 0,
@@ -20,6 +21,7 @@ export default function useUrlQuery() {
     orderBy: orderBy ? orderBy : undefined,
     filter: filter ? filter : undefined,
     category: category ? category : undefined,
-    searchType: searchType ? searchType : undefined,
+    searchType: searchType ? searchType : 'title',
+    keyword: keyword ? keyword : undefined,
   };
 }

@@ -9,16 +9,22 @@ import { applyMediaQuery } from 'styles/mediaQuery';
 import * as style from './communityCard.style';
 
 interface CommunityCardProps extends WithBlurredImage<CommunityDto> {
-  variant: 'row' | 'column';
+  variant: string;
 }
 
 type CommunityCardChildrenProps = Omit<CommunityCardProps, 'variant'>;
 
 const CommunityCard = ({ variant, ...rest }: CommunityCardProps) => {
-  return {
-    column: <CommunityCardColumn {...rest} />,
-    row: <CommunityCardRow {...rest} />,
-  }[variant];
+  return (
+    <>
+      {
+        {
+          column: <CommunityCardColumn {...rest} />,
+          row: <CommunityCardRow {...rest} />,
+        }[variant]
+      }
+    </>
+  );
 };
 
 const CommunityCardRow = ({}: CommunityCardChildrenProps) => {

@@ -9,13 +9,25 @@ export default function useCommunity(
     category: string;
     filter: string | null;
     page: number;
-    searchType: string | null;
+    searchType: string;
+    keyword: string | null;
   },
   options = {}
 ) {
-  const { category = 'report', filter = null, page = 0 } = query;
+  const {
+    category = 'report',
+    filter = null,
+    page = 0,
+    searchType,
+    keyword,
+  } = query;
 
-  return useQuery<{ data: PaginationResponse<CommunityDto[]> }>(
+  const currentQuery = keyword && {
+    searchType,
+    keyword,
+  };
+
+  return useQuery<PaginationResponse<CommunityDto>>(
     queries.market.lists([
       ...queries.community.lists(),
       ...queries.community.query(query),
@@ -27,6 +39,7 @@ export default function useCommunity(
           category,
           filter,
           page: page + 1,
+          ...currentQuery,
         },
       }),
     { ...options, useErrorBoundary: true }
