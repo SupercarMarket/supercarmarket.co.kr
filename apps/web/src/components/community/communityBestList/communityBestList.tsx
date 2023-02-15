@@ -1,5 +1,6 @@
 import { useUrlQuery } from '@supercarmarket/hooks';
 import { Alert, Container, Wrapper } from '@supercarmarket/ui';
+import { CardSkeleton } from 'components/fallback/loading';
 import useCommunity from 'hooks/queries/useCommunity';
 import * as React from 'react';
 import { css } from 'styled-components';
@@ -7,14 +8,16 @@ import CommunityCard from '../communityCard';
 
 const CommunityBestList = () => {
   const { category } = useUrlQuery();
-  const { data } = useCommunity({
+  const { data, isFetching, isLoading } = useCommunity({
     category: category || 'report',
     page: 0,
     filter: 'popular',
     searchType: 'title',
     keyword: null,
   });
-  console.log(data);
+
+  if (isFetching || isLoading)
+    return <CardSkeleton size={4} variant="column" />;
 
   return (
     <Container display="flex">
