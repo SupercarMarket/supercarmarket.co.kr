@@ -15,10 +15,15 @@ interface TabProps {
 }
 
 const Tab = ({ show = true }: TabProps) => {
-  const { page, popular, variant, query } = useUrlQuery();
-  const isPopular = popular === 'true';
+  const { page, variant, searchType, keyword, filter, category } =
+    useUrlQuery();
+  const isPopular = filter === 'popular';
   const isVariantRow = variant === 'row';
   const pathname = usePathname();
+  const keywordQuery = keyword && {
+    keyword,
+    searchType,
+  };
 
   return (
     <Container
@@ -33,9 +38,10 @@ const Tab = ({ show = true }: TabProps) => {
           pathname,
           query: {
             page,
-            query,
+            category,
             variant,
-            popular: isPopular ? 'false' : 'true',
+            filter: isPopular ? 'null' : 'popular',
+            ...keywordQuery,
           },
         }}
       >
@@ -46,9 +52,10 @@ const Tab = ({ show = true }: TabProps) => {
           pathname,
           query: {
             page,
-            query,
+            category,
+            filter,
             variant: 'row',
-            popular,
+            ...keywordQuery,
           },
         }}
         shallow
@@ -90,9 +97,10 @@ const Tab = ({ show = true }: TabProps) => {
           pathname,
           query: {
             page,
-            query,
+            category,
+            filter,
             variant: 'column',
-            popular,
+            ...keywordQuery,
           },
         }}
         shallow
@@ -153,9 +161,12 @@ const Tab = ({ show = true }: TabProps) => {
             pathname,
             query: {
               page,
-              query,
+              category,
+              keyword,
+              searchType,
               variant,
-              popular,
+              filter,
+              ...keywordQuery,
             },
           }}
           shallow

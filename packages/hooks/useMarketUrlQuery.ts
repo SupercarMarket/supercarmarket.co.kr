@@ -19,6 +19,7 @@ export default function useMarketUrlQuery() {
   const accident = searchParams.get('accident');
   const transmission = searchParams.get('transmission');
   const size = searchParams.get('size');
+  const variant = searchParams.get('variant');
 
   return {
     page: page ? parseInt(page) : 0,
@@ -37,5 +38,6 @@ export default function useMarketUrlQuery() {
     accident: accident ?? undefined,
     transmission: transmission ?? undefined,
     size: size ? size : undefined,
+    variant: variant ? variant : 'row',
   };
 }

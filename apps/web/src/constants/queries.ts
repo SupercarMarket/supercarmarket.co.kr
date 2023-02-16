@@ -1,5 +1,5 @@
 import type { CommentQuery } from '@supercarmarket/types/comment';
-
+import type { Query } from '@supercarmarket/types/base';
 import type { AccountTab } from './account';
 
 const queries = {
@@ -42,6 +42,19 @@ const queries = {
     all: ['community'] as const,
     lists: () => [...queries.community.all, 'list'] as const,
     best: () => [...queries.community.lists(), 'best'] as const,
+    query: (
+      query: Pick<
+        Query,
+        'category' | 'page' | 'filter' | 'searchType' | 'keyword'
+      >
+    ) =>
+      [
+        String(query.filter),
+        String(query.searchType),
+        String(query.page),
+        String(query.keyword),
+        query.category,
+      ] as const,
   },
   /**
    * Comment Query Keys
