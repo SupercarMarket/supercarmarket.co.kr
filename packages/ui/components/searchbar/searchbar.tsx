@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import * as React from 'react';
 import { forwardRef } from 'react';
+import { theme } from '../../styles';
 
 export interface SearchbarProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -26,11 +27,17 @@ const Searchbar = forwardRef(function Searchbar(
     handleClick: handleCallback,
     ...rest
   } = props;
+  const input = React.useRef<HTMLInputElement>(null);
   const id = React.useId();
   const [query, setQuery] = React.useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
+  };
+
+  const handleClose = (e: React.MouseEvent<HTMLInputElement>) => {
+    setQuery('');
+    if (input.current) input.current.focus();
   };
 
   const handleClick = (e: React.MouseEvent<HTMLInputElement>) => {
@@ -60,7 +67,7 @@ const Searchbar = forwardRef(function Searchbar(
           {label}
         </label>
         <input
-          ref={ref}
+          ref={ref ?? input}
           id={id}
           placeholder={placeholder}
           className={clsx(
@@ -80,6 +87,7 @@ const Searchbar = forwardRef(function Searchbar(
           spellCheck="false"
           onChange={handleChange}
           onKeyUp={handleEnter}
+          value={query}
           {...rest}
         />
         <i
@@ -108,6 +116,29 @@ const Searchbar = forwardRef(function Searchbar(
             </defs>
           </svg>
         </i>
+        {query && variant === 'Grey' && (
+          <i className={clsx('close-icon')} onClick={handleClose}>
+            <svg
+              width="12px"
+              height="12px"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <g clipPath="url(#clip0_275_10413)">
+                <path
+                  d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z"
+                  fill="#fff"
+                />
+              </g>
+              <defs>
+                <clipPath id="clip0_275_10413">
+                  <rect width="100%" height="100%" fill="white" />
+                </clipPath>
+              </defs>
+            </svg>
+          </i>
+        )}
       </div>
       <style jsx>{`
         .search {
@@ -117,9 +148,13 @@ const Searchbar = forwardRef(function Searchbar(
           line-height: 150%;
           padding: 14px 0;
           box-sizing: border-box;
+          border: 1px solid #f7f7f8;
         }
         .search::placeholder {
           color: #8e8e95;
+        }
+        .search:focus {
+          border: 1px solid ${theme.color['greyScale-5']};
         }
         .search-rounded {
           border-radius: 20px;
@@ -130,7 +165,7 @@ const Searchbar = forwardRef(function Searchbar(
         .search-Grey {
           background-color: #f7f7f8;
           padding-left: 59px;
-          padding-right: 25px;
+          padding-right: 59px;
         }
         .search-Line {
           box-sizing: border-box;
@@ -141,7 +176,8 @@ const Searchbar = forwardRef(function Searchbar(
         }
         .search-icon {
           position: absolute;
-          top: 14px;
+          top: 50%;
+          transform: translateY(-50%);
           cursor: pointer;
         }
         .search-icon.search-Grey {
@@ -154,6 +190,20 @@ const Searchbar = forwardRef(function Searchbar(
           border: none;
           padding: 0;
           right: 25px;
+        }
+        .close-icon {
+          width: 18px;
+          height: 18px;
+          background: ${theme.color['greyScale-5']};
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          cursor: pointer;
+          right: 25px;
+          border-radius: 9px;
         }
         .search-container {
           position: relative;
