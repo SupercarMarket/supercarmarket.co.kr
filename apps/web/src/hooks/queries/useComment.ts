@@ -7,7 +7,7 @@ export default function useComment(
   id: string,
   query: CommentQuery = {
     page: 0,
-    orderby: 'false',
+    orderBy: 'DESC',
     category: 'magazine',
   },
   options = {}
@@ -15,7 +15,14 @@ export default function useComment(
   return useQuery<CommentResponse>({
     queryKey: [...queries.comment.id(id), ...queries.comment.query(query)],
     queryFn: () =>
-      baseFetch('/api/comment', { method: 'GET', params: id, query }),
+      baseFetch('/api/comment', {
+        method: 'GET',
+        params: id,
+        query: {
+          ...query,
+          orderby: query.orderBy === 'DESC' ? 'false' : 'true',
+        },
+      }),
     suspense: true,
     ...options,
   });

@@ -13,6 +13,7 @@ interface MarketDetailHeaderProps {
   price: number;
   viewCount: number;
   likeCount: number;
+  createdDate: string;
 }
 
 const MarketDetailHeader = ({
@@ -24,6 +25,7 @@ const MarketDetailHeader = ({
   mileage,
   price,
   viewCount,
+  createdDate,
 }: MarketDetailHeaderProps) => {
   const formatter = Intl.NumberFormat('ko-KR', { notation: 'compact' }).format;
 
@@ -57,7 +59,7 @@ const MarketDetailHeader = ({
         <Wrapper.Bottom css={style.rightBottom}>
           <Wrapper css={style.iconWrapper}>
             <Typography>
-              {new Date(regDate).toLocaleDateString('us')}
+              {new Date(createdDate).toLocaleDateString('us')}
             </Typography>
           </Wrapper>
           <Wrapper css={style.iconWrapper}>

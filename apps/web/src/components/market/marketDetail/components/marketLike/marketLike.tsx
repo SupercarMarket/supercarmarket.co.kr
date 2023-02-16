@@ -1,11 +1,13 @@
 import * as React from 'react';
 import { Button, Container, Typography } from '@supercarmarket/ui';
 import theme from 'constants/theme';
-import useMarketLike from 'hooks/mutations/useMarketLike';
 import { useRouter } from 'next/router';
+import { useSession } from 'next-auth/react';
 
 import FavoriteIcon from '../../../../../assets/svg/favorite.svg';
 import FavoriteBorderIcon from '../../../../../assets/svg/favorite-border.svg';
+import ModalContext from 'feature/modalContext';
+import AuthModal from 'components/common/modal/authModal';
 
 interface MarketLikeProps {
   isLike: boolean;
@@ -13,16 +15,35 @@ interface MarketLikeProps {
 
 const MarketLike = ({ isLike }: MarketLikeProps) => {
   const [like, setLike] = React.useState<boolean>(isLike);
+  const { onOpen, onClose, onClick } = React.useContext(ModalContext);
+  const { data: user } = useSession();
 
   const {
     query: { id },
   } = useRouter();
-  const { mutate } = useMarketLike(id as string);
 
-  const onClick = () => {
-    // mutate(id as string);
-    setLike(!like);
-  };
+  const toggleLike = React.useCallback(
+    async () =>
+      await fetch(`/server/supercar/v1/shop/${id}/scrap`, {
+        method: 'POST',
+        headers: {
+          ACCESS_TOKEN: user?.accessToken || '',
+        },
+      }),
+    [id, user]
+  );
+
+  const likeClick = React.useCallback(async () => {
+    if (!user) {
+      onOpen(<AuthModal onClose={onClose} onClick={onClick} onOpen={onOpen} />);
+    } else {
+      const result = await toggleLike();
+
+      if (result.ok) {
+        setLike(!like);
+      }
+    }
+  }, [like, setLike, toggleLike, user, onClick, onClose, onOpen]);
 
   return (
     <Container
@@ -32,7 +53,7 @@ const MarketLike = ({ isLike }: MarketLikeProps) => {
       height="205px"
     >
       <Button
-        onClick={onClick}
+        onClick={likeClick}
         variant="Line"
         prefixx={
           like ? (

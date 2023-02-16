@@ -77,16 +77,6 @@ const makeFilterMileage = (
 };
 
 const makeQuery = (obj: { [key: string]: string }) => {
-  const keys = Object.keys(obj);
-  if (
-    !keys.includes('filter') &&
-    !keys.includes('orderBy') &&
-    !keys.includes('page')
-  ) {
-    obj.filter = 'created_date';
-    obj.orderBy = 'DESC';
-    obj.page = '1';
-  }
   if (obj.id) delete obj.id;
 
   return Object.entries(obj)
