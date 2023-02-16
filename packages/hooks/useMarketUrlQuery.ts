@@ -5,6 +5,7 @@ export default function useMarketUrlQuery() {
 
   const page = searchParams.get('page');
   const orderBy = searchParams.get('orderBy');
+  const orderby = searchParams.get('orderby');
   const filter = searchParams.get('filter');
   const category = searchParams.get('category');
   const keyword = searchParams.get('keyword');
@@ -17,13 +18,15 @@ export default function useMarketUrlQuery() {
   const maxPrice = searchParams.get('maxPrice');
   const accident = searchParams.get('accident');
   const transmission = searchParams.get('transmission');
+  const size = searchParams.get('size');
 
   return {
     page: page ? parseInt(page) : 0,
+    orderby: orderby ? orderby : 'false',
     orderBy: orderBy ?? 'DESC',
     filter: filter ?? 'created_date',
     category: category ?? 'all',
-    keyword: keyword ? keyword : undefined,
+    keyword: keyword ?? undefined,
     minDate: minDate ?? undefined,
     maxDate: maxDate ?? undefined,
     fuel: fuel ?? undefined,
@@ -33,5 +36,6 @@ export default function useMarketUrlQuery() {
     maxPrice: maxPrice ?? undefined,
     accident: accident ?? undefined,
     transmission: transmission ?? undefined,
+    size: size ? size : undefined,
   };
 }

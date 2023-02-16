@@ -21,6 +21,8 @@ const marketApi: NextApiHandler = async (req, res) => {
       ? { filter, orderBy, page, ...rest }
       : { category, filter, orderBy, page, ...rest };
 
+  console.log('market Api query', query);
+
   const response = await fetcher(
     `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/shop`,
     {

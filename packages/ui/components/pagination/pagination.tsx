@@ -1,7 +1,7 @@
 'use client';
 
 import clsx from 'clsx';
-import { useUrlQuery } from '@supercarmarket/hooks';
+import { useUrlQuery, useMarketUrlQuery } from '@supercarmarket/hooks';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { ReactNode, useMemo } from 'react';
@@ -16,6 +16,7 @@ interface PaginationItemProps {
   active?: boolean;
   children?: ReactNode;
   pathname: string | null;
+  restQuery?: Record<string, string | undefined>;
 }
 
 interface PaginationProps {
@@ -23,6 +24,7 @@ interface PaginationProps {
   totalCount: number;
   totalPages: number;
   className?: string;
+  tap?: 'common' | 'market';
 }
 
 const PaginationItem = memo(function PaginationItem({
@@ -31,6 +33,7 @@ const PaginationItem = memo(function PaginationItem({
   pathname,
   active = false,
   children,
+  restQuery,
 }: PaginationItemProps) {
   return (
     <PaginationItemContainer
@@ -43,6 +46,7 @@ const PaginationItem = memo(function PaginationItem({
           query: {
             page,
             orderby,
+            ...restQuery,
           },
         }}
         shallow
@@ -57,8 +61,15 @@ const Pagination = memo(function Pagination({
   pageSize = 10,
   totalPages,
   className = 'pagination',
+  tap = 'common',
 }: PaginationProps) {
-  const { page, orderby } = useUrlQuery();
+  const useQuery = tap === 'common' ? useUrlQuery : useMarketUrlQuery;
+
+  const { page, orderby, ...rest } = useQuery();
+  const baseQuery = Object.entries(rest).filter(([, val]) => val);
+  const queryString = baseQuery.map(([key, val]) => `${key}=${val}`).join('&');
+  const restQuery = Object.fromEntries(baseQuery);
+
   const { push } = useRouter();
   const pathname = usePathname();
   const currentPages = useMemo(() => {
@@ -81,7 +92,11 @@ const Pagination = memo(function Pagination({
         variant="Line"
         disabled={page <= pageSize}
         onClick={() =>
-          push(`${pathname}?page=${page - pageSize}&orderby=${orderby}`)
+          push(
+            `${pathname}?page=${
+              page - pageSize
+            }&orderby=${orderby}&${queryString}`
+          )
         }
       >
         <svg
@@ -111,7 +126,13 @@ const Pagination = memo(function Pagination({
       <PaginationButton
         variant="Line"
         disabled={page <= 0}
-        onClick={() => push(`${pathname}?page=${page - 1}&orderby=${orderby}`)}
+        onClick={() =>
+          push(
+            `${pathname}?page=${
+              page - pageSize
+            }&orderby=${orderby}&${queryString}`
+          )
+        }
       >
         <svg
           width="12"
@@ -141,6 +162,7 @@ const Pagination = memo(function Pagination({
             active={p === page + 1}
             orderby={orderby}
             pathname={pathname}
+            restQuery={restQuery}
           >
             {p}
           </PaginationItem>
@@ -148,7 +170,13 @@ const Pagination = memo(function Pagination({
       <PaginationButton
         variant="Line"
         disabled={page + 1 >= totalPages}
-        onClick={() => push(`${pathname}?page=${page + 1}&orderby=${orderby}`)}
+        onClick={() =>
+          push(
+            `${pathname}?page=${
+              page - pageSize
+            }&orderby=${orderby}&${queryString}`
+          )
+        }
       >
         <svg
           width="12"

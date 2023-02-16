@@ -16,7 +16,7 @@ import MarketFilter from 'components/market/marketFilter';
 import { CATEGORY_VALUES } from 'constants/market';
 import queries from 'constants/queries';
 import useMarket from 'hooks/queries/useMarket';
-import useMarketUrlQuery from 'hooks/useMarketUrlQuery';
+import useMarketUrlQuery from '@supercarmarket/hooks/useMarketUrlQuery';
 import { useRouter } from 'next/router';
 import type { NextPageContext } from 'next/types';
 import * as React from 'react';
