@@ -1,7 +1,10 @@
-import { Query } from '@supercarmarket/types/base';
+import type { PaginationResponse, Query } from '@supercarmarket/types/base';
+import type { CommunityDto } from '@supercarmarket/types/community';
+import type { MagazineDto } from '@supercarmarket/types/magazine';
+import type { MarketDto } from '@supercarmarket/types/market';
+import type { SearchAll } from '@supercarmarket/types/search';
 import { useQuery } from '@tanstack/react-query';
 import queries from 'constants/queries';
-import { MagazinePostingResponse } from 'types/magazine';
 import { clientFetcher } from 'utils/api/fetcher';
 
 export default function useSearch(
@@ -20,7 +23,9 @@ export default function useSearch(
 
   if (filter !== 'null') currentQuery = { ...currentQuery, filter, orderBy };
 
-  return useQuery<MagazinePostingResponse>(
+  return useQuery<
+    PaginationResponse<SearchAll | MarketDto[] | CommunityDto[] | MagazineDto[]>
+  >(
     [...queries.search.all, ...queries.search.query(query)],
     () =>
       clientFetcher('/server/supercar/v1/search', {
