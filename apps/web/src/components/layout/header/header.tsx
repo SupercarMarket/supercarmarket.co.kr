@@ -45,9 +45,7 @@ const Header = () => {
           border="rounded"
           placeholder="검색어를 입력해주세요."
           width="527px"
-          handleClick={(query) =>
-            push(`/search?keyword=${query}&category=null`)
-          }
+          handleClick={(query) => push(`/search?keyword=${query}&category=all`)}
         />
         <Wrapper.Item
           css={css`

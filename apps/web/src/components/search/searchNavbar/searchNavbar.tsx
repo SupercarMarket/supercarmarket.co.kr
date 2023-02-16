@@ -22,7 +22,7 @@ const searchLinks: Pick<SearchNavbarItemProps, 'href' | 'title'>[] = [
     href: {
       pathname: '/search',
       query: {
-        category: 'null',
+        category: 'all',
       },
     },
   },

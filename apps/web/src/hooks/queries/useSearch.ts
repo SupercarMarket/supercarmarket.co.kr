@@ -16,12 +16,13 @@ export default function useSearch(
   let currentQuery = {};
   currentQuery = {
     ...currentQuery,
-    category,
-    keyword,
+    category: category === 'all' ? 'null' : category,
     page: page + 1,
+    keyword,
   };
 
-  if (filter !== 'null') currentQuery = { ...currentQuery, filter, orderBy };
+  if (filter !== 'created_date')
+    currentQuery = { ...currentQuery, filter, orderBy };
 
   return useQuery<
     PaginationResponse<SearchAll | MarketDto[] | CommunityDto[] | MagazineDto[]>

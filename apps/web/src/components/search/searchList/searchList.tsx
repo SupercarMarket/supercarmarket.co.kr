@@ -23,14 +23,12 @@ const SearchList = () => {
     page,
   } = useUrlQuery();
   const { data } = useSearch({
-    orderBy: orderBy ?? 'null',
-    filter: filter ?? 'null',
     keyword: keyword ?? 'null',
+    orderBy: orderBy,
+    filter: filter,
     category: category,
     page,
   });
-
-  console.log(data);
 
   return (
     <Container>
