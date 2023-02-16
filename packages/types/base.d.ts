@@ -63,7 +63,7 @@ interface Query {
 }
 
 interface PaginationResponse<T> {
-  data: T[];
+  data: T;
   page: number;
   pageSize: number;
   totalPages: number;
