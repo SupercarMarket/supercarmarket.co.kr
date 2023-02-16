@@ -13,7 +13,7 @@ interface CommentHeadProps {
 
 const CommentHead = ({ totalCount }: CommentHeadProps) => {
   const pathname = usePathname();
-  const isOrderby = useSearchParams().get('orderby') === 'true';
+  const isOrderBy = useSearchParams().get('orderBy') === 'ASC';
 
   return (
     <Container
@@ -45,14 +45,14 @@ const CommentHead = ({ totalCount }: CommentHeadProps) => {
           href={{
             pathname,
             query: {
-              orderby: 'false',
+              orderBy: 'DESC',
             },
           }}
         >
           <Typography
             fontSize="body-16"
             fontWeight="regular"
-            color={isOrderby ? 'greyScale-4' : 'greyScale-6'}
+            color={isOrderBy ? 'greyScale-4' : 'greyScale-6'}
             lineHeight="150%"
             style={{
               cursor: 'pointer',
@@ -65,14 +65,14 @@ const CommentHead = ({ totalCount }: CommentHeadProps) => {
           href={{
             pathname,
             query: {
-              orderby: 'true',
+              orderBy: 'ASC',
             },
           }}
         >
           <Typography
             fontSize="body-16"
             fontWeight="regular"
-            color={isOrderby ? 'greyScale-6' : 'greyScale-4'}
+            color={isOrderBy ? 'greyScale-6' : 'greyScale-4'}
             lineHeight="150%"
             style={{
               cursor: 'pointer',

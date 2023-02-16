@@ -173,7 +173,7 @@ const ORDER_OPTIONSET = {
 const SHOW_COUNT_OPTIONS = {
   label: '리스트 개수',
   defaultLabel: '20개씩',
-  optionSet: makeHowManyResult(20, 70, 'size'),
+  optionSet: makeHowManyResult(5, 70, 'size'),
 };
 
 const MARKET_LIST_TABLE_HEAD = [

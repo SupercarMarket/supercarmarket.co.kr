@@ -83,7 +83,9 @@ interface MarketDetailDto<T> {
   color: string;
   trasmissionType: string;
   category: string;
+  isLike: boolean;
   imgSrc: T[];
+  createdDate: string;
 }
 
 interface MarketDetailResponse<T> {

@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { css } from 'styled-components';
 import type { WithBlurredImage } from '@supercarmarket/types/magazine';
 import type { MarketDto } from '@supercarmarket/types/market';
+import { useRouter } from 'next/router';
+import { Params } from '@supercarmarket/types/base';
 
 const MarketRow = ({
   id,
@@ -17,14 +19,13 @@ const MarketRow = ({
   dealer,
   year,
 }: WithBlurredImage<MarketDto>) => {
+  const { query } = useRouter();
+  const queryString = new URLSearchParams(query as Params).toString();
+
   const formatter = Intl.NumberFormat('ko-KR', { notation: 'compact' }).format;
 
   return (
-    <Link
-      href={{
-        pathname: `/market/detail/${id}`,
-      }}
-    >
+    <Link href={`/market/detail/${id}?${queryString}`}>
       <Container width="100%" display="flex" alignItems="center">
         <Image
           width={196}
@@ -34,6 +35,7 @@ const MarketRow = ({
           src={imgSrc}
           alt="thumbnail"
           style={{ borderRadius: '4px' }}
+          sizes="100%"
         />
         <Wrapper.Item
           css={css`

@@ -57,7 +57,7 @@ const MarketFilterItem = styled.li`
 `;
 
 const ResetButton = styled.button`
-  width: 75px;
+  width: 100px;
   display: flex;
   align-items: center;
   justify-content: flex-end;
