@@ -75,6 +75,21 @@ const queries = {
     id: (id: string) => [...queries.account.all, id] as const,
     category: (category: AccountTab) => [category] as const,
   },
+  /**
+   * Search Query Keys
+   */
+  search: {
+    all: ['search'] as const,
+    query: (
+      query: Pick<Query, 'category' | 'page' | 'filter' | 'keyword' | 'orderBy'>
+    ) => [
+      String(query.filter),
+      String(query.page),
+      String(query.keyword),
+      String(query.orderBy),
+      query.category,
+    ],
+  },
 };
 
 export default queries;
