@@ -11,13 +11,13 @@ interface CommentProps {
 }
 
 const Comment = ({ id }: CommentProps) => {
-  const { page, orderby } = useUrlQuery();
+  const { page, orderBy } = useUrlQuery();
 
   const { data: comment } = useComment(
     id,
     {
       page,
-      orderby,
+      orderBy,
       category: 'magazine',
     },
     {

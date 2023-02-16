@@ -1,9 +1,9 @@
 'use client';
 
 import clsx from 'clsx';
-import { useUrlQuery, useMarketUrlQuery } from '@supercarmarket/hooks';
+import { useUrlQuery } from '@supercarmarket/hooks';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import * as React from 'react';
 import { memo } from 'react';
 import type { UrlObject } from 'url';
@@ -27,7 +27,6 @@ interface PaginationProps {
   totalCount: number;
   totalPages: number;
   className?: string;
-  tap?: 'common' | 'market';
 }
 
 const PaginationLink = ({
@@ -72,18 +71,22 @@ const Pagination = memo(function Pagination({
   pageSize = 10,
   totalPages,
   className = 'pagination',
-  tap = 'common',
 }: PaginationProps) {
-  // const { page, orderby } = useUrlQuery();
-
-  const useQuery = tap === 'common' ? useUrlQuery : useMarketUrlQuery;
-  const { page, orderby, variant, ...rest } = useQuery();
+  const {
+    page,
+    orderBy,
+    filter,
+    searchType,
+    keyword,
+    category,
+    variant,
+    ...rest
+  } = useUrlQuery();
   const restQuery = React.useMemo(() => {
     const filteredQuery = Object.entries(rest).filter(([, val]) => val);
     return Object.fromEntries(filteredQuery);
   }, [rest]);
 
-  const { push } = useRouter();
   const pathname = usePathname();
   const currentPages = React.useMemo(() => {
     const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
@@ -93,6 +96,17 @@ const Pagination = memo(function Pagination({
       .filter((v) => v.has(page + 1))
       .shift();
   }, [page, pageSize, totalPages]);
+
+  const categoryQuery = category !== 'all' && {
+    category,
+  };
+  const filterQuery = filter !== 'created_date' && {
+    filter,
+  };
+  const keywordQuery = keyword && {
+    keyword,
+    searchType,
+  };
 
   return (
     <Container
@@ -106,8 +120,10 @@ const Pagination = memo(function Pagination({
           pathname,
           query: {
             page: page - pageSize,
-            orderby,
             variant,
+            ...categoryQuery,
+            ...keywordQuery,
+            ...filterQuery,
             ...restQuery,
           },
         }}
@@ -142,8 +158,10 @@ const Pagination = memo(function Pagination({
           pathname,
           query: {
             page: page - 1,
-            orderby,
             variant,
+            ...categoryQuery,
+            ...keywordQuery,
+            ...filterQuery,
             ...restQuery,
           },
         }}
@@ -177,8 +195,10 @@ const Pagination = memo(function Pagination({
               pathname,
               query: {
                 page: p - 1,
-                orderby,
                 variant,
+                ...categoryQuery,
+                ...keywordQuery,
+                ...filterQuery,
                 ...restQuery,
               },
             }}
@@ -192,8 +212,10 @@ const Pagination = memo(function Pagination({
           pathname,
           query: {
             page: page + 1,
-            orderby,
             variant,
+            ...categoryQuery,
+            ...keywordQuery,
+            ...filterQuery,
             ...restQuery,
           },
         }}

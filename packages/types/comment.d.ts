@@ -2,7 +2,7 @@ import { ServerResponse, User } from './base';
 
 interface CommentQuery {
   page: number;
-  orderby: string;
+  orderBy: string;
   category: 'magazine' | 'paparazzi' | 'partnership';
 }
 

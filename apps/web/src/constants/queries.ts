@@ -64,7 +64,7 @@ const queries = {
     lists: () => [...queries.comment.all, 'list'] as const,
     id: (id: string) => [...queries.comment.lists(), id] as const,
     query: (query: CommentQuery) =>
-      [query.page, query.orderby, query.category] as const,
+      [query.page, query.orderBy, query.category] as const,
   },
   /**
    * Account Query Keys

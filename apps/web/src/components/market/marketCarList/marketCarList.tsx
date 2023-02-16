@@ -72,7 +72,6 @@ const MarketCarList = ({ data }: MarketCarListProps) => {
         </Wrapper>
       )}
       <Pagination
-        tap="market"
         pageSize={data.pageSize}
         totalCount={data.totalCount}
         totalPages={data.totalPages}

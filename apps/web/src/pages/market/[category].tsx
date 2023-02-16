@@ -16,7 +16,7 @@ import MarketFilter from 'components/market/marketFilter';
 import { CATEGORY_VALUES } from 'constants/market';
 import queries from 'constants/queries';
 import useMarket from 'hooks/queries/useMarket';
-import useMarketUrlQuery from '@supercarmarket/hooks/useMarketUrlQuery';
+import { useUrlQuery } from '@supercarmarket/hooks';
 import { useRouter } from 'next/router';
 import type { NextPageContext } from 'next/types';
 import * as React from 'react';
@@ -24,7 +24,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 
 const MarketFilterPage: NextPageWithLayout = () => {
   const { push, query } = useRouter();
-  const marketQuery = useMarketUrlQuery();
+  const marketQuery = useUrlQuery();
   const keywordRef = React.useRef<HTMLInputElement>(null);
 
   const { data: markets } = useMarket(marketQuery, { keepPreviousData: true });
