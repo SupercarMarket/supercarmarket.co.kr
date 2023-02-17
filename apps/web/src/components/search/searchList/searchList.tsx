@@ -29,6 +29,7 @@ const SearchList = () => {
     category: category,
     page,
   });
+  console.log(data);
 
   return (
     <Container>
