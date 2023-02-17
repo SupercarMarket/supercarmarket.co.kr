@@ -16,6 +16,7 @@ export type {
   TitleProps,
   TypographyProps,
   WrapperProps,
+  HighlightProps,
 } from './components';
 export * from './form';
 export type {

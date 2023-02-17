@@ -1,3 +1,6 @@
+'use client';
+
+import { useRouter } from 'next/navigation';
 import {
   Button,
   Container,
@@ -14,6 +17,7 @@ import { css } from 'styled-components';
 
 const Header = () => {
   const { status, data: session } = useSession();
+  const { push } = useRouter();
 
   return (
     <Container
@@ -41,6 +45,7 @@ const Header = () => {
           border="rounded"
           placeholder="검색어를 입력해주세요."
           width="527px"
+          handleClick={(query) => push(`/search?keyword=${query}&category=all`)}
         />
         <Wrapper.Item
           css={css`

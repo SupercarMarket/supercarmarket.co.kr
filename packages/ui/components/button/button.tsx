@@ -106,6 +106,7 @@ const Button = forwardRef(function Button(
         }
         .button-Primary {
           color: #ffffff;
+          border: 1px solid #b79f7b;
           background-color: #b79f7b;
         }
         .button-Primary:hover {
@@ -132,6 +133,7 @@ const Button = forwardRef(function Button(
         .button-Black {
           color: #ffffff;
           background-color: #1e1e20;
+          border: 1px solid #1e1e20;
         }
         .button-Black:hover {
           background-color: #000;
