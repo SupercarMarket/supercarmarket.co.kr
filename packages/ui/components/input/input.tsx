@@ -53,6 +53,9 @@ const Input = forwardRef(function Input(
         .input::placeholder {
           color: #8e8e95;
         }
+        .input:focus {
+          border: 1px solid #8e8e95;
+        }
         .input:invalid {
           border: 1px solid #ed7474;
         }
