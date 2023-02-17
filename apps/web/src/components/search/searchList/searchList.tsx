@@ -38,7 +38,12 @@ const SearchList = () => {
           <SearchNavbar keyword={keyword} category={category} />
           {
             {
-              null: <SearchAll data={data.data as SearchAllType} />,
+              all: (
+                <SearchAll
+                  keyword={keyword}
+                  data={data.data as SearchAllType}
+                />
+              ),
               paparazzi: <SearchCommunity data={data.data as CommunityDto[]} />,
               product: <SearchMarket data={data.data as MarketDto[]} />,
               magazine: <SearchMagazine data={data.data as MagazineDto[]} />,

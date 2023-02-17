@@ -30,8 +30,8 @@ const MarketRow = ({
         <Image
           width={196}
           height={124}
-          placeholder="blur"
-          blurDataURL={base64}
+          placeholder={base64 ? 'blur' : undefined}
+          blurDataURL={base64 ? base64 : undefined}
           src={imgSrc}
           alt="thumbnail"
           style={{ borderRadius: '4px' }}
@@ -43,15 +43,26 @@ const MarketRow = ({
             width: 504px;
             display: flex;
             flex-direction: column;
-            padding: 0 30px;
             justify-content: center;
             gap: 8px;
           `}
         >
-          <Typography fontSize="body-24" fontWeight="bold">
+          <Typography
+            fontSize="body-24"
+            fontWeight="bold"
+            style={{
+              padding: '0 30px',
+            }}
+          >
             {carName}
           </Typography>
-          <Typography fontSize="body-14" color="greyScale-5">
+          <Typography
+            fontSize="body-14"
+            color="greyScale-5"
+            style={{
+              padding: '0 30px',
+            }}
+          >
             {description}
           </Typography>
         </Wrapper.Item>
