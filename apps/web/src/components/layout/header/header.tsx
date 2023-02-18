@@ -10,7 +10,6 @@ import {
   Typography,
   Wrapper,
   applyMediaQuery,
-  Hamburger,
 } from '@supercarmarket/ui';
 import { LinkSkeleton } from 'components/fallback/loading';
 import Link from 'next/link';
@@ -18,6 +17,8 @@ import { signOut, useSession } from 'next-auth/react';
 import { css } from 'styled-components';
 import clsx from 'clsx';
 import type { Links } from '@supercarmarket/types/base';
+import Hamburger from '../hamburger';
+import Image from 'next/image';
 
 interface HeaderProps {
   navlinks: Links[];
@@ -73,8 +74,8 @@ const Header = ({ navlinks }: HeaderProps) => {
         >
           <Button variant="Init" type="button" onClick={handleHamburger}>
             <svg
-              width="24"
-              height="24"
+              width="1.625rem"
+              height="1.625rem"
               viewBox="0 0 24 24"
               fill="#1E1E20"
               xmlns="http://www.w3.org/2000/svg"
@@ -216,10 +217,10 @@ const Header = ({ navlinks }: HeaderProps) => {
         >
           <Button variant="Init" type="button" onClick={() => setSearch(true)}>
             <svg
-              width="24"
-              height="24"
+              width="1.625rem"
+              height="1.625rem"
               viewBox="0 0 24 24"
-              fill="#1E1E20"
+              fill="none"
               xmlns="http://www.w3.org/2000/svg"
             >
               <g clipPath="url(#clip0_206_3022)">
@@ -264,8 +265,8 @@ const Header = ({ navlinks }: HeaderProps) => {
         />
         <Button variant="Init" onClick={() => setSearch(false)}>
           <svg
-            width="24"
-            height="24"
+            width="1.625rem"
+            height="1.625rem"
             viewBox="0 0 24 24"
             fill="#1E1E20"
             xmlns="http://www.w3.org/2000/svg"

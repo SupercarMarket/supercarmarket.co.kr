@@ -1,13 +1,13 @@
 import * as React from 'react';
 import clsx from 'clsx';
 import { css } from 'styled-components';
-import { theme } from '../../styles';
-import { Button } from '../button';
-import { Typography } from '../typography';
-import { Wrapper } from '../wrapper';
-import { Link as SupercarmarketLink } from '../link';
+import { theme } from '@supercarmarket/ui/styles';
+import { Button } from '@supercarmarket/ui/components/button';
+import { Typography } from '@supercarmarket/ui/components/typography';
+import { Wrapper } from '@supercarmarket/ui/components/wrapper';
+import { Link as SupercarmarketLink } from '@supercarmarket/ui/components/link';
 import type { Session } from 'next-auth';
-import { Container } from '../container';
+import { Container } from '@supercarmarket/ui/components/container';
 import type { Links } from '@supercarmarket/types/base';
 import { useRouter } from 'next/navigation';
 
@@ -79,8 +79,8 @@ const HamburgerLinkItem = React.memo(function HamburgerLinkItem({
         </SupercarmarketLink>
         {children && children.length > 0 && (
           <svg
-            width="16"
-            height="16"
+            width="1.125rem"
+            height="1.125rem"
             viewBox="0 0 24 24"
             xmlns="http://www.w3.org/2000/svg"
             onClick={handleShow}
@@ -205,8 +205,8 @@ const Hamburger = React.memo(function Hamburger({
         <Wrapper.Left>
           <Button variant="Init" type="button" onClick={handleClose}>
             <svg
-              width="24"
-              height="24"
+              width="1.625rem"
+              height="1.625rem"
               viewBox="0 0 24 24"
               fill="#fff"
               xmlns="http://www.w3.org/2000/svg"
@@ -319,5 +319,5 @@ const Hamburger = React.memo(function Hamburger({
   );
 });
 
-export { Hamburger };
+export default Hamburger;
 export type { HamburgerProps };
