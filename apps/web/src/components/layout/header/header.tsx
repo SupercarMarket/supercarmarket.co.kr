@@ -76,7 +76,7 @@ const Header = ({ navlinks }: HeaderProps) => {
               width="24"
               height="24"
               viewBox="0 0 24 24"
-              fill="none"
+              fill="#1E1E20"
               xmlns="http://www.w3.org/2000/svg"
             >
               <g clipPath="url(#clip0_268_8692)">
@@ -219,7 +219,7 @@ const Header = ({ navlinks }: HeaderProps) => {
               width="24"
               height="24"
               viewBox="0 0 24 24"
-              fill="none"
+              fill="#1E1E20"
               xmlns="http://www.w3.org/2000/svg"
             >
               <g clipPath="url(#clip0_206_3022)">
@@ -267,7 +267,7 @@ const Header = ({ navlinks }: HeaderProps) => {
             width="24"
             height="24"
             viewBox="0 0 24 24"
-            fill="none"
+            fill="#1E1E20"
             xmlns="http://www.w3.org/2000/svg"
           >
             <g clipPath="url(#clip0_359_6756)">
