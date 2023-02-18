@@ -1,15 +1,16 @@
 import * as React from 'react';
 import clsx from 'clsx';
 import { css } from 'styled-components';
-import { theme } from '../../styles';
-import { Button } from '../button';
-import { Typography } from '../typography';
-import { Wrapper } from '../wrapper';
-import { Link as SupercarmarketLink } from '../link';
+import { theme } from '@supercarmarket/ui/styles';
+import { Button } from '@supercarmarket/ui/components/button';
+import { Typography } from '@supercarmarket/ui/components/typography';
+import { Wrapper } from '@supercarmarket/ui/components/wrapper';
+import { Link as SupercarmarketLink } from '@supercarmarket/ui/components/link';
 import type { Session } from 'next-auth';
-import { Container } from '../container';
+import { Container } from '@supercarmarket/ui/components/container';
 import type { Links } from '@supercarmarket/types/base';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 interface ISession extends Session {
   sub: string;
@@ -52,11 +53,11 @@ const HamburgerLinkItem = React.memo(function HamburgerLinkItem({
           display: flex;
           align-items: center;
           justify-content: space-between;
-          & > svg {
+          & > img {
             transition: all 0.1s ease-in-out;
           }
           &.drop {
-            svg {
+            img {
               transform: rotate(0.25turn);
             }
           }
@@ -78,26 +79,16 @@ const HamburgerLinkItem = React.memo(function HamburgerLinkItem({
           </Typography>
         </SupercarmarketLink>
         {children && children.length > 0 && (
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-            onClick={handleShow}
-            fill="#fff"
-          >
-            <g clipPath="url(#clip0_206_2548)">
-              <path
-                d="M6.48999 20.1296L8.25999 21.8996L18.16 11.9996L8.25999 2.09961L6.48999 3.86961L14.62 11.9996L6.48999 20.1296Z"
-                fill="#fff"
-              />
-            </g>
-            <defs>
-              <clipPath id="clip0_206_2548">
-                <rect width="25" height="24" fill="white" />
-              </clipPath>
-            </defs>
-          </svg>
+          <Button type="button" variant="Init" onClick={handleShow}>
+            <Image
+              src="/images/arrow-right.png"
+              placeholder="blur"
+              blurDataURL="/images/arrow-right-blur.png"
+              width={16}
+              height={16}
+              alt="arrow"
+            />
+          </Button>
         )}
       </Wrapper.Top>
       <Wrapper.Bottom
@@ -205,8 +196,8 @@ const Hamburger = React.memo(function Hamburger({
         <Wrapper.Left>
           <Button variant="Init" type="button" onClick={handleClose}>
             <svg
-              width="24"
-              height="24"
+              width="1.625rem"
+              height="1.625rem"
               viewBox="0 0 24 24"
               fill="#fff"
               xmlns="http://www.w3.org/2000/svg"
@@ -319,5 +310,5 @@ const Hamburger = React.memo(function Hamburger({
   );
 });
 
-export { Hamburger };
+export default Hamburger;
 export type { HamburgerProps };

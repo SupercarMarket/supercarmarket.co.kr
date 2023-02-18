@@ -17,7 +17,6 @@ export type {
   TypographyProps,
   WrapperProps,
   HighlightProps,
-  HamburgerProps,
   LinkProps,
 } from './components';
 export * from './form';

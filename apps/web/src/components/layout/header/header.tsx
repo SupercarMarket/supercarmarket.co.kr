@@ -10,7 +10,6 @@ import {
   Typography,
   Wrapper,
   applyMediaQuery,
-  Hamburger,
 } from '@supercarmarket/ui';
 import { LinkSkeleton } from 'components/fallback/loading';
 import Link from 'next/link';
@@ -18,6 +17,8 @@ import { signOut, useSession } from 'next-auth/react';
 import { css } from 'styled-components';
 import clsx from 'clsx';
 import type { Links } from '@supercarmarket/types/base';
+import Hamburger from '../hamburger';
+import Image from 'next/image';
 
 interface HeaderProps {
   navlinks: Links[];
@@ -72,25 +73,14 @@ const Header = ({ navlinks }: HeaderProps) => {
           `}
         >
           <Button variant="Init" type="button" onClick={handleHamburger}>
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="#1E1E20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <g clipPath="url(#clip0_268_8692)">
-                <path
-                  d="M3 18H21V16H3V18ZM3 13H21V11H3V13ZM3 6V8H21V6H3Z"
-                  fill="#1E1E20"
-                />
-              </g>
-              <defs>
-                <clipPath id="clip0_268_8692">
-                  <rect width="100%" height="100%" fill="white" />
-                </clipPath>
-              </defs>
-            </svg>
+            <Image
+              src="/images/menu.png"
+              placeholder="blur"
+              blurDataURL="/images/menu-blur.png"
+              alt="search"
+              width={24}
+              height={24}
+            />
           </Button>
         </Wrapper.Item>
         <Wrapper.Item
@@ -214,26 +204,22 @@ const Header = ({ navlinks }: HeaderProps) => {
             }
           `}
         >
-          <Button variant="Init" type="button" onClick={() => setSearch(true)}>
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="#1E1E20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <g clipPath="url(#clip0_206_3022)">
-                <path
-                  d="M15.5 14H14.71L14.43 13.73C15.41 12.59 16 11.11 16 9.5C16 5.91 13.09 3 9.5 3C5.91 3 3 5.91 3 9.5C3 13.09 5.91 16 9.5 16C11.11 16 12.59 15.41 13.73 14.43L14 14.71V15.5L19 20.49L20.49 19L15.5 14ZM9.5 14C7.01 14 5 11.99 5 9.5C5 7.01 7.01 5 9.5 5C11.99 5 14 7.01 14 9.5C14 11.99 11.99 14 9.5 14Z"
-                  fill="#1E1E20"
-                />
-              </g>
-              <defs>
-                <clipPath id="clip0_206_3022">
-                  <rect width="24" height="24" fill="white" />
-                </clipPath>
-              </defs>
-            </svg>
+          <Button
+            variant="Init"
+            type="button"
+            onClick={() => setSearch(true)}
+            style={{
+              zIndex: '999',
+            }}
+          >
+            <Image
+              src="/images/search.png"
+              placeholder="blur"
+              blurDataURL="/images/search-blur.png"
+              alt="search"
+              width={24}
+              height={24}
+            />
           </Button>
         </Wrapper.Item>
       </Wrapper>
@@ -264,8 +250,8 @@ const Header = ({ navlinks }: HeaderProps) => {
         />
         <Button variant="Init" onClick={() => setSearch(false)}>
           <svg
-            width="24"
-            height="24"
+            width="1.625rem"
+            height="1.625rem"
             viewBox="0 0 24 24"
             fill="#1E1E20"
             xmlns="http://www.w3.org/2000/svg"
