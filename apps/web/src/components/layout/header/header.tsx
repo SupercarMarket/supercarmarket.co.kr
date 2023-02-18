@@ -208,7 +208,6 @@ const Header = ({ navlinks }: HeaderProps) => {
               zIndex: '999',
             }}
           >
-
             <Image src={searchSrc} alt="search" placeholder="blur" />
           </Button>
         </Wrapper.Item>
