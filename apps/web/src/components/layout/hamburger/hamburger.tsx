@@ -12,6 +12,8 @@ import type { Links } from '@supercarmarket/types/base';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
+import arrowRightSrc from '../../../../public/images/arrow-right.png';
+
 interface ISession extends Session {
   sub: string;
 }
@@ -80,14 +82,7 @@ const HamburgerLinkItem = React.memo(function HamburgerLinkItem({
         </SupercarmarketLink>
         {children && children.length > 0 && (
           <Button type="button" variant="Init" onClick={handleShow}>
-            <Image
-              src="/images/arrow-right.png"
-              placeholder="blur"
-              blurDataURL="/images/arrow-right-blur.png"
-              width={16}
-              height={16}
-              alt="arrow"
-            />
+            <Image src={arrowRightSrc} placeholder="blur" alt="arrow" />
           </Button>
         )}
       </Wrapper.Top>

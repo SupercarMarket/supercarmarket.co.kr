@@ -20,6 +20,9 @@ import type { Links } from '@supercarmarket/types/base';
 import Hamburger from '../hamburger';
 import Image from 'next/image';
 
+import searchSrc from '../../../../public/images/search.png';
+import menuSrc from '../../../../public/images/menu.png';
+
 interface HeaderProps {
   navlinks: Links[];
 }
@@ -73,14 +76,7 @@ const Header = ({ navlinks }: HeaderProps) => {
           `}
         >
           <Button variant="Init" type="button" onClick={handleHamburger}>
-            <Image
-              src="/images/menu.png"
-              placeholder="blur"
-              blurDataURL="/images/menu-blur.png"
-              alt="search"
-              width={24}
-              height={24}
-            />
+            <Image src={menuSrc} alt="menu" placeholder="blur" />
           </Button>
         </Wrapper.Item>
         <Wrapper.Item
@@ -212,14 +208,8 @@ const Header = ({ navlinks }: HeaderProps) => {
               zIndex: '999',
             }}
           >
-            <Image
-              src="/images/search.png"
-              placeholder="blur"
-              blurDataURL="/images/search-blur.png"
-              alt="search"
-              width={24}
-              height={24}
-            />
+
+            <Image src={searchSrc} alt="search" placeholder="blur" />
           </Button>
         </Wrapper.Item>
       </Wrapper>
