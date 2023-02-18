@@ -77,7 +77,7 @@ const HamburgerLinkItem = React.memo(function HamburgerLinkItem({
             {title}
           </Typography>
         </SupercarmarketLink>
-        {children?.length && (
+        {children && children.length > 0 && (
           <svg
             width="16"
             height="16"

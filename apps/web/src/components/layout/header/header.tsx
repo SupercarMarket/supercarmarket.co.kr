@@ -28,7 +28,6 @@ const Header = ({ navlinks }: HeaderProps) => {
   const [hamburger, setHamburger] = React.useState(false);
   const { status, data: session } = useSession();
   const { push } = useRouter();
-  console.log(session, status);
 
   const handleHamburger = React.useCallback(() => {
     setHamburger((prev) => !prev);
