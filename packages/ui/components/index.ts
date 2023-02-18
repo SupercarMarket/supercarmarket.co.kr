@@ -32,3 +32,7 @@ export { Portal } from './portal';
 export type { PortalProps } from './portal';
 export { Highlight } from './highlight';
 export type { HighlightProps } from './highlight';
+export { Hamburger } from './hamburger';
+export type { HamburgerProps } from './hamburger';
+export { Link } from './link';
+export type { LinkProps } from './link';
