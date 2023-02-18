@@ -21,7 +21,7 @@ const AccountLayout = (props: AccountLayoutProps) => {
   return (
     <Container padding="1.25rem 0 0 0">
       <Wrapper css={style.account}>
-        <Header />
+        <Header navlinks={navlinks} />
         <Navbar navlinks={navlinks} />
       </Wrapper>
       <Wrapper>{children}</Wrapper>

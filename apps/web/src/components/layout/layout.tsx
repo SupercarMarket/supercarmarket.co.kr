@@ -1,82 +1,82 @@
+import type { Links } from '@supercarmarket/types/base';
 import Footer from './footer/footer';
 import Header from './header';
 import * as Styled from './layout.styled';
 import Navbar from './navbar';
-import type { NavbarLinks } from './navbar/navbar';
 import Toggle from './toggle';
 
 interface LayoutProps {
   children?: React.ReactNode;
 }
 
-export const navlinks: NavbarLinks[] = [
+export const navlinks: Links[] = [
   {
     title: '매장',
-    link: 'market',
-    subMenu: [
+    href: 'market',
+    children: [
       {
         title: '스포츠카',
-        link: 'sports-car',
+        href: 'sports-car',
       },
       {
         title: '세단',
-        link: 'saloon',
+        href: 'saloon',
       },
       {
         title: 'SUV',
-        link: 'suv',
+        href: 'suv',
       },
       {
         title: '픽업트럭',
-        link: 'pickup-truck',
+        href: 'pickup-truck',
       },
       {
         title: '클래식카&올드카',
-        link: 'classic-car',
+        href: 'classic-car',
       },
     ],
   },
   {
     title: '슈마매거진',
-    link: 'magazine',
+    href: 'magazine',
   },
   {
     title: '커뮤니티',
-    link: 'community',
-    subMenu: [
+    href: 'community',
+    children: [
       {
         title: '파파라치',
-        link: 'paparazzi?category=report',
+        href: 'paparazzi?category=report',
       },
       {
         title: '자료실',
-        link: 'library?category=information',
+        href: 'library?category=information',
       },
     ],
   },
   {
     title: '제휴업체',
-    link: 'partnership',
-    subMenu: [
+    href: 'partnership',
+    children: [
       {
         title: '자동차매장',
-        link: 'automobile-store',
+        href: 'automobile-store',
       },
       {
         title: '공업사',
-        link: 'industries',
+        href: 'industries',
       },
       {
         title: '디테일링',
-        link: 'detail-ring',
+        href: 'detail-ring',
       },
       {
         title: '도색',
-        link: 'painting',
+        href: 'painting',
       },
       {
         title: '기타',
-        link: 'misc',
+        href: 'misc',
       },
     ],
   },
@@ -86,7 +86,7 @@ const Layout = ({ children }: LayoutProps) => {
   return (
     <>
       <Styled.Container>
-        <Header />
+        <Header navlinks={navlinks} />
         <Navbar navlinks={navlinks} />
         <main>{children}</main>
       </Styled.Container>

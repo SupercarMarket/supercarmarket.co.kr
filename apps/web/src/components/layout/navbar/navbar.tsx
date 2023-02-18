@@ -1,3 +1,4 @@
+import type { Links } from '@supercarmarket/types/base';
 import { Container, Typography, Wrapper } from '@supercarmarket/ui';
 import clsx from 'clsx';
 import Link from 'next/link';
@@ -7,17 +8,15 @@ import { css } from 'styled-components';
 
 import NavbarItem from './navbarItem';
 
-export interface NavbarLinks {
-  title: string;
-  link: string;
-  subMenu?: undefined | NavbarLinks[];
-}
-
 interface NavbarProps {
-  navlinks: NavbarLinks[];
+  navlinks: Links[];
 }
 
-const NavLink = memo(function NavLink({ title, subMenu, link }: NavbarLinks) {
+const NavLink = memo(function NavLink({
+  title,
+  children: subMenu,
+  href,
+}: Links) {
   const [active, setActive] = useState<boolean>(false);
   const { pathname } = useRouter();
   return (
@@ -41,7 +40,7 @@ const NavLink = memo(function NavLink({ title, subMenu, link }: NavbarLinks) {
             {title}
           </Typography>
         ) : (
-          <Link href={'/' + link}>
+          <Link href={'/' + href}>
             <Typography
               as="span"
               fontSize="header-16"
@@ -55,10 +54,10 @@ const NavLink = memo(function NavLink({ title, subMenu, link }: NavbarLinks) {
         )}
       </button>
       <Wrapper.Item
-        data-active={pathname.includes(link)}
+        data-active={pathname.includes(href)}
         css={css`
           display: none;
-          ${pathname.includes(link) && 'display: block'}
+          ${pathname.includes(href) && 'display: block'}
           width: 255px;
           height: 3px;
           position: absolute;
@@ -68,7 +67,7 @@ const NavLink = memo(function NavLink({ title, subMenu, link }: NavbarLinks) {
           background-color: ${({ theme }) => theme.color['greyScale-6']};
         `}
       />
-      <NavbarItem subMenu={subMenu} link={link} active={active} />
+      <NavbarItem subMenu={subMenu} href={href} active={active} />
       <style jsx>{`
         .navlink {
           padding-top: 20px;
