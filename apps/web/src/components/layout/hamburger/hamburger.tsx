@@ -10,6 +10,7 @@ import type { Session } from 'next-auth';
 import { Container } from '@supercarmarket/ui/components/container';
 import type { Links } from '@supercarmarket/types/base';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 interface ISession extends Session {
   sub: string;
@@ -52,11 +53,11 @@ const HamburgerLinkItem = React.memo(function HamburgerLinkItem({
           display: flex;
           align-items: center;
           justify-content: space-between;
-          & > svg {
+          & > img {
             transition: all 0.1s ease-in-out;
           }
           &.drop {
-            svg {
+            img {
               transform: rotate(0.25turn);
             }
           }
@@ -78,26 +79,16 @@ const HamburgerLinkItem = React.memo(function HamburgerLinkItem({
           </Typography>
         </SupercarmarketLink>
         {children && children.length > 0 && (
-          <svg
-            width="1.125rem"
-            height="1.125rem"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-            onClick={handleShow}
-            fill="#fff"
-          >
-            <g clipPath="url(#clip0_206_2548)">
-              <path
-                d="M6.48999 20.1296L8.25999 21.8996L18.16 11.9996L8.25999 2.09961L6.48999 3.86961L14.62 11.9996L6.48999 20.1296Z"
-                fill="#fff"
-              />
-            </g>
-            <defs>
-              <clipPath id="clip0_206_2548">
-                <rect width="25" height="24" fill="white" />
-              </clipPath>
-            </defs>
-          </svg>
+          <Button type="button" variant="Init" onClick={handleShow}>
+            <Image
+              src="/images/arrow-right.png"
+              placeholder="blur"
+              blurDataURL="/images/arrow-right-blur.png"
+              width={16}
+              height={16}
+              alt="arrow"
+            />
+          </Button>
         )}
       </Wrapper.Top>
       <Wrapper.Bottom
