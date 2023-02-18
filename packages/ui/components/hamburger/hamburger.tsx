@@ -5,7 +5,6 @@ import { theme } from '../../styles';
 import { Button } from '../button';
 import { Typography } from '../typography';
 import { Wrapper } from '../wrapper';
-import { signOut } from 'next-auth/react';
 import { Link as SupercarmarketLink } from '../link';
 import type { Session } from 'next-auth';
 import { Container } from '../container';
