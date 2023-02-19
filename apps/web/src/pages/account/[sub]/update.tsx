@@ -1,11 +1,9 @@
+import { Container, Title } from '@supercarmarket/ui';
+import type { NextPageWithLayout, Params } from '@supercarmarket/types/base';
 import { AccountUpdateForm } from 'components/account';
-import Container from 'components/common/container';
-import Title from 'components/common/title';
 import layout from 'components/layout';
 import { AuthProvider } from 'feature/authProvider';
-import { GetServerSideProps } from 'next';
-import React from 'react';
-import type { NextPageWithLayout, Params } from 'types/base';
+import type { GetServerSideProps } from 'next';
 import { getSession } from 'utils/api/auth/user';
 
 const ProfileUpdate: NextPageWithLayout = () => {

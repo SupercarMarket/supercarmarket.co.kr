@@ -1,8 +1,7 @@
 'use client';
 
-import Alert from 'components/common/alert';
-import Button from 'components/common/button';
-import { Form, FormLabel } from 'components/common/form';
+import { Alert, Button, Form, FormLabel } from '@supercarmarket/ui';
+import { catchNoExist } from '@supercarmarket/lib';
 import auth from 'constants/auth';
 import { signUp } from 'feature/actions/authActions';
 import {
@@ -14,7 +13,6 @@ import { useRouter } from 'next/navigation';
 import * as React from 'react';
 import { FormProvider } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
-import { catchNoExist } from 'utils/misc';
 
 import AuthFormItem from '../authFormItem/authFormItem';
 import * as style from './signupForm.styled';

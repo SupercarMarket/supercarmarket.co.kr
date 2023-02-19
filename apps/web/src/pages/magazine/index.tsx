@@ -1,18 +1,17 @@
+import { Container, Title } from '@supercarmarket/ui';
+import type { NextPageWithLayout } from '@supercarmarket/types/base';
+import { clientFetcher } from '@supercarmarket/lib';
 import {
   dehydrate,
   QueryClient,
   QueryErrorResetBoundary,
 } from '@tanstack/react-query';
-import Container from 'components/common/container';
-import Title from 'components/common/title';
 import { ErrorFallback } from 'components/fallback';
 import layout from 'components/layout';
 import { MagazineBanner, MagazineList } from 'components/magazine';
 import queries from 'constants/queries';
 import type { GetStaticProps } from 'next/types';
 import { ErrorBoundary } from 'react-error-boundary';
-import type { NextPageWithLayout } from 'types/base';
-import { clientFetcher } from 'utils/api/fetcher';
 
 const MagazinePage: NextPageWithLayout = () => {
   return (

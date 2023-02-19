@@ -1,11 +1,10 @@
+import { Container, Title } from '@supercarmarket/ui';
+import type { NextPageWithLayout, Params } from '@supercarmarket/types/base';
 import { FindForm } from 'components/auth';
-import Container from 'components/common/container';
-import Title from 'components/common/title';
 import AuthLayout from 'components/layout/authLayout';
 import { useAuthDispatch } from 'feature/authProvider';
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import * as React from 'react';
-import type { NextPageWithLayout, Params } from 'types/base';
 import { isValidQuery } from 'utils/misc';
 
 const Find: NextPageWithLayout = ({

@@ -1,12 +1,12 @@
 'use client';
 
+import { Container, Searchbar } from '@supercarmarket/ui';
+import type { NextPageWithLayout, Params } from '@supercarmarket/types/base';
 import {
   dehydrate,
   QueryClient,
   QueryErrorResetBoundary,
 } from '@tanstack/react-query';
-import Container from 'components/common/container';
-import Searchbar from 'components/common/searchbar';
 import { ErrorFallback } from 'components/fallback';
 import layout from 'components/layout';
 import MarketBanner from 'components/market/marketBanner';
@@ -16,16 +16,15 @@ import MarketFilter from 'components/market/marketFilter';
 import { CATEGORY_VALUES } from 'constants/market';
 import queries from 'constants/queries';
 import useMarket from 'hooks/queries/useMarket';
-import useMarketUrlQuery from 'hooks/useMarketUrlQuery';
+import { useUrlQuery } from '@supercarmarket/hooks';
 import { useRouter } from 'next/router';
-import { NextPageContext } from 'next/types';
-import React from 'react';
+import type { NextPageContext } from 'next/types';
+import * as React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import type { NextPageWithLayout } from 'types/base';
 
 const MarketFilterPage: NextPageWithLayout = () => {
   const { push, query } = useRouter();
-  const marketQuery = useMarketUrlQuery();
+  const marketQuery = useUrlQuery();
   const keywordRef = React.useRef<HTMLInputElement>(null);
 
   const { data: markets } = useMarket(marketQuery, { keepPreviousData: true });
@@ -84,9 +83,9 @@ MarketFilterPage.Layout = layout;
 const queryClient = new QueryClient();
 
 export const getServerSideProps = async (ctx: NextPageContext) => {
-  const { category } = ctx.query;
+  const { category } = ctx.query as Params;
 
-  if (!category || !CATEGORY_VALUES.includes(category as string))
+  if (!category || !CATEGORY_VALUES.includes(category))
     return {
       redirect: {
         destination: '/market/all',

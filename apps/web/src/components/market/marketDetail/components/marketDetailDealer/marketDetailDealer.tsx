@@ -1,11 +1,9 @@
+import { Typography, Wrapper } from '@supercarmarket/ui';
+import type { DealerDto } from '@supercarmarket/types/market';
 import Avvvatars from 'avvvatars-react';
-import Typography from 'components/common/typography';
-import Wrapper from 'components/common/wrapper/wrapper';
 import theme from 'constants/theme';
 import Image from 'next/image';
-import React from 'react';
 import { css } from 'styled-components';
-import { DealerDto } from 'types/market';
 
 import CallIcon from '../../../../../assets/svg/call.svg';
 import * as style from './marketDetailDealer.styled';

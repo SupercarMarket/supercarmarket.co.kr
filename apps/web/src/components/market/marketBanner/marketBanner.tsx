@@ -1,6 +1,5 @@
-import Button from 'components/common/button';
-import Typography from 'components/common/typography';
-import React, { memo } from 'react';
+import { Button, Typography } from '@supercarmarket/ui';
+import * as React from 'react';
 
 import ArrowRight from '../../../assets/svg/arrow-right.svg';
 import * as Styled from './marketBanner.styled';
@@ -29,4 +28,4 @@ const MarketBanner = () => {
   );
 };
 
-export default memo(MarketBanner);
+export default React.memo(MarketBanner);

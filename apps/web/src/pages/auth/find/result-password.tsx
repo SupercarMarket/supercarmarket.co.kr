@@ -1,9 +1,8 @@
+import { Container, Title } from '@supercarmarket/ui';
 import { ResultPasswordForm } from 'components/auth';
-import Container from 'components/common/container';
-import Title from 'components/common/title';
 import AuthLayout from 'components/layout/authLayout';
 import { ModalProvider } from 'feature/modalContext';
-import { NextPageWithLayout } from 'types/base';
+import type { NextPageWithLayout } from '@supercarmarket/types/base';
 
 const FindResultPassword: NextPageWithLayout = () => {
   return (

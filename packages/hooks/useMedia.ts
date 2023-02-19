@@ -1,7 +1,14 @@
-import { deviceQuery } from '../styles/mediaQuery';
 import useMediaQuery from './useMediaQuery';
 
-export default function useMedia() {
+interface useMediaProps {
+  deviceQuery: {
+    desktop: string;
+    tablet: string;
+    mobile: string;
+  };
+}
+
+export default function useMedia({ deviceQuery }: useMediaProps) {
   const isDestop = useMediaQuery(deviceQuery.desktop);
   const isTablet = useMediaQuery(deviceQuery.tablet);
   const isMobile = useMediaQuery(deviceQuery.mobile);

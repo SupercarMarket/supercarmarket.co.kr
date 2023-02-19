@@ -1,6 +1,4 @@
-import Typography from 'components/common/typography';
-import Wrapper from 'components/common/wrapper';
-import React from 'react';
+import { Typography, Wrapper } from '@supercarmarket/ui';
 
 import EyeIcon from '../../../../../assets/svg/eye.svg';
 import FavoriteBorderIcon from '../../../../../assets/svg/favorite-border.svg';
@@ -15,6 +13,7 @@ interface MarketDetailHeaderProps {
   price: number;
   viewCount: number;
   likeCount: number;
+  createdDate: string;
 }
 
 const MarketDetailHeader = ({
@@ -26,6 +25,7 @@ const MarketDetailHeader = ({
   mileage,
   price,
   viewCount,
+  createdDate,
 }: MarketDetailHeaderProps) => {
   const formatter = Intl.NumberFormat('ko-KR', { notation: 'compact' }).format;
 
@@ -59,7 +59,7 @@ const MarketDetailHeader = ({
         <Wrapper.Bottom css={style.rightBottom}>
           <Wrapper css={style.iconWrapper}>
             <Typography>
-              {new Date(regDate).toLocaleDateString('us')}
+              {new Date(createdDate).toLocaleDateString('us')}
             </Typography>
           </Wrapper>
           <Wrapper css={style.iconWrapper}>

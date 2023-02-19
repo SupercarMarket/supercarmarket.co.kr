@@ -1,12 +1,11 @@
+import { Container, Typography, Wrapper } from '@supercarmarket/ui';
+
 import Avvvatars from 'avvvatars-react';
 import Image from 'next/image';
 import { Posting } from 'types/base';
 
 import ChatIcon from '../../../assets/svg/chat.svg';
 import EyeIcon from '../../../assets/svg/remove-red-eye.svg';
-import Container from '../container';
-import Typography from '../typography';
-import Wrapper from '../wrapper';
 import * as style from './posting.styled';
 
 const PostingHeadMagainze = ({

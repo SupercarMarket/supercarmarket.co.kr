@@ -1,11 +1,12 @@
-import Image from "next/image";
-import * as React from "react";
-import type { ServerResponse } from "types/base";
+import Image from 'next/image';
+import * as React from 'react';
+import type { ServerResponse } from '@supercarmarket/types/base';
 
-import { Button, Container, Typography, Wrapper } from "../components";
-import { Input, Label } from "./form.styled";
-import * as style from "./form.styled";
-import FormMessage from "./formMessage";
+import { Button, Container, Typography } from '../components';
+import { Wrapper } from '../components/wrapper';
+import { Input, Label } from './form.styled';
+import * as style from './form.styled';
+import { FormMessage } from './formMessage';
 
 type FormImagesState = Array<string | File | null>;
 
@@ -78,7 +79,7 @@ const FormImageThumbnail = React.memo(function FormImageThumbnail({
         width={320}
         height={180}
         style={{
-          width: "100%",
+          width: '100%',
         }}
       />
     </Container>
@@ -91,7 +92,7 @@ const FormImage = React.forwardRef(function FormImage(
 ) {
   const {
     title,
-    name = "사진",
+    name = '사진',
     index,
     defaultValue,
     setImages,
@@ -146,7 +147,7 @@ const FormImage = React.forwardRef(function FormImage(
         setThumbnail(null);
       })
       .catch(() => {
-        setError("이미지 삭제가 실패했습니다.");
+        setError('이미지 삭제가 실패했습니다.');
       });
   };
 
@@ -186,7 +187,7 @@ const FormImage = React.forwardRef(function FormImage(
         setThumbnail(data.url);
       })
       .catch(() => {
-        setError("이미지 업로드가 실패했습니다.");
+        setError('이미지 업로드가 실패했습니다.');
       });
   };
 
@@ -298,7 +299,7 @@ const FormImage = React.forwardRef(function FormImage(
 const FormImages = (props: FormImagesProps) => {
   const {
     title,
-    name = "사진",
+    name = '사진',
     size = 1,
     defaultValue,
     handleUpload,
@@ -338,4 +339,5 @@ const FormImages = (props: FormImagesProps) => {
   );
 };
 
-export default FormImages;
+export { FormImages };
+export type { FormImagesProps };

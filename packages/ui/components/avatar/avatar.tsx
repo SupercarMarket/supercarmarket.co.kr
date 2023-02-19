@@ -1,8 +1,8 @@
 import Avvvatars from 'avvvatars-react';
 import Image from 'next/image';
 
-import Container from '../container';
-import Typography from '../typography';
+import { Container } from '../container';
+import { Typography } from '../typography';
 
 interface AvatarProps {
   nickname: string;
@@ -43,4 +43,5 @@ const Avatar = ({ nickname, profileSrc, size }: AvatarProps) => {
   );
 };
 
-export default Avatar;
+export { Avatar };
+export type { AvatarProps };

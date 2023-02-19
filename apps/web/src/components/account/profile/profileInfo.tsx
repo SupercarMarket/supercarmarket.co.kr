@@ -1,7 +1,5 @@
+import { Container, Typography, Wrapper } from '@supercarmarket/ui';
 import Avvvatars from 'avvvatars-react';
-import Container from 'components/common/container';
-import Typography from 'components/common/typography';
-import Wrapper from 'components/common/wrapper';
 import dayjs from 'dayjs';
 import Link from 'next/link';
 

@@ -1,5 +1,4 @@
-import Wrapper from 'components/common/wrapper';
-import React from 'react';
+import { Wrapper } from '@supercarmarket/ui';
 
 import * as Styled from './marketDetailIntroduction.styled';
 
@@ -12,7 +11,7 @@ const MarketDetailIntroduction = ({
 }: MarketDetailIntroductionProps) => {
   return (
     <Wrapper css={Styled.wrapper}>
-      <Styled.Content>{introduction}</Styled.Content>
+      <Styled.Content>{introduction.split('"\n"')}</Styled.Content>
     </Wrapper>
   );
 };

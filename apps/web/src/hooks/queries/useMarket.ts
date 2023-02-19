@@ -18,6 +18,7 @@ export default function useMarket(
     maxPrice?: string;
     accident?: string;
     transmission?: string;
+    size?: string;
   },
   options = {}
 ) {

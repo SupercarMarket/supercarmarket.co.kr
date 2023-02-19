@@ -1,8 +1,14 @@
-import Button from 'components/common/button';
-import { Form, FormInput, FormLabel, FormSelect } from 'components/common/form';
-import Typography from 'components/common/typography';
-import Wrapper from 'components/common/wrapper';
+import {
+  Button,
+  Form,
+  FormInput,
+  FormLabel,
+  FormSelect,
+  Typography,
+  Wrapper,
+} from '@supercarmarket/ui';
 import dynamic from 'next/dynamic';
+import * as React from 'react';
 import { css } from 'styled-components';
 
 const CommunityEditor = dynamic(() => import('./communityEditor'), {
@@ -27,7 +33,7 @@ const CommunityForm = () => {
         />
       </FormLabel>
       <FormLabel name="제목" label="제목" bold>
-        <FormInput />
+        <FormInput placeholder="제목을 입력해주세요." />
       </FormLabel>
       <CommunityEditor />
       <Wrapper

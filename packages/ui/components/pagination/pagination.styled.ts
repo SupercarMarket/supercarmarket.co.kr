@@ -1,6 +1,7 @@
 import styled from 'styled-components';
+import { theme } from '../../styles';
 
-import Button from '../button';
+import { Button } from '../button';
 
 const PaginationItemContainer = styled.div`
   width: 34.49px;
@@ -13,14 +14,14 @@ const PaginationItemContainer = styled.div`
   font-size: 14px;
   text-align: center;
   cursor: pointer;
-  color: ${({ theme }) => theme.color['greyScale-6']};
+  color: ${theme.color['greyScale-6']};
   &[data-active='true'] {
-    background-color: ${({ theme }) => theme.color['primary']};
-    color: ${({ theme }) => theme.color['white']};
+    background-color: ${theme.color['primary']};
+    color: ${theme.color['white']};
   }
   &:hover {
-    background-color: ${({ theme }) => theme.color['primary']};
-    color: ${({ theme }) => theme.color['white']};
+    background-color: ${theme.color['primary']};
+    color: ${theme.color['white']};
   }
 `;
 

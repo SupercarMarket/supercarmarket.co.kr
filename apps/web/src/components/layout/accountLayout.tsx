@@ -1,6 +1,4 @@
-import { AccountNavbar } from 'components/account';
-import Container from 'components/common/container';
-import Wrapper from 'components/common/wrapper';
+import { Container, Wrapper } from '@supercarmarket/ui';
 import type { AccountRoute } from 'constants/account';
 import { PropsWithChildren } from 'react';
 
@@ -23,7 +21,7 @@ const AccountLayout = (props: AccountLayoutProps) => {
   return (
     <Container padding="1.25rem 0 0 0">
       <Wrapper css={style.account}>
-        <Header />
+        <Header navlinks={navlinks} />
         <Navbar navlinks={navlinks} />
       </Wrapper>
       <Wrapper>{children}</Wrapper>

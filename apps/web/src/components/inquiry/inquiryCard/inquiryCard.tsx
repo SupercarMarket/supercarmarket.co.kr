@@ -1,8 +1,6 @@
-import Container from 'components/common/container';
-import Typography from 'components/common/typography';
-import Wrapper from 'components/common/wrapper';
+import { Container, Typography, Wrapper } from '@supercarmarket/ui';
+import type { InquiryDto } from '@supercarmarket/types/inquiry';
 import { css } from 'styled-components';
-import { InquiryDto } from 'types/inquiry';
 
 const InquiryCard = (props: InquiryDto) => {
   const { title, category, created, progress } = props;

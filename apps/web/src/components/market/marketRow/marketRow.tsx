@@ -1,12 +1,11 @@
-import Container from 'components/common/container';
-import Typography from 'components/common/typography';
-import Wrapper from 'components/common/wrapper';
+import { Container, Typography, Wrapper } from '@supercarmarket/ui';
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
 import { css } from 'styled-components';
-import { WithBlurredImage } from 'types/magazine';
-import { MarketDto } from 'types/market';
+import type { WithBlurredImage } from '@supercarmarket/types/magazine';
+import type { MarketDto } from '@supercarmarket/types/market';
+import { useRouter } from 'next/router';
+import { Params } from '@supercarmarket/types/base';
 
 const MarketRow = ({
   id,
@@ -20,23 +19,23 @@ const MarketRow = ({
   dealer,
   year,
 }: WithBlurredImage<MarketDto>) => {
+  const { query } = useRouter();
+  const queryString = new URLSearchParams(query as Params).toString();
+
   const formatter = Intl.NumberFormat('ko-KR', { notation: 'compact' }).format;
 
   return (
-    <Link
-      href={{
-        pathname: `/market/detail/${id}`,
-      }}
-    >
+    <Link href={`/market/detail/${id}?${queryString}`}>
       <Container width="100%" display="flex" alignItems="center">
         <Image
           width={196}
           height={124}
-          placeholder="blur"
-          blurDataURL={base64}
+          placeholder={base64 ? 'blur' : undefined}
+          blurDataURL={base64 ? base64 : undefined}
           src={imgSrc}
           alt="thumbnail"
           style={{ borderRadius: '4px' }}
+          sizes="100%"
         />
         <Wrapper.Item
           css={css`
@@ -44,15 +43,26 @@ const MarketRow = ({
             width: 504px;
             display: flex;
             flex-direction: column;
-            padding: 0 30px;
             justify-content: center;
             gap: 8px;
           `}
         >
-          <Typography fontSize="body-24" fontWeight="bold">
+          <Typography
+            fontSize="body-24"
+            fontWeight="bold"
+            style={{
+              padding: '0 30px',
+            }}
+          >
             {carName}
           </Typography>
-          <Typography fontSize="body-14" color="greyScale-5">
+          <Typography
+            fontSize="body-14"
+            color="greyScale-5"
+            style={{
+              padding: '0 30px',
+            }}
+          >
             {description}
           </Typography>
         </Wrapper.Item>

@@ -17,7 +17,10 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   active?: boolean;
 }
 
-const Button = (props: ButtonProps, ref: Ref<HTMLButtonElement>) => {
+const Button = forwardRef(function Button(
+  props: ButtonProps,
+  ref: Ref<HTMLButtonElement>
+) {
   const {
     type,
     children,
@@ -103,6 +106,7 @@ const Button = (props: ButtonProps, ref: Ref<HTMLButtonElement>) => {
         }
         .button-Primary {
           color: #ffffff;
+          border: 1px solid #b79f7b;
           background-color: #b79f7b;
         }
         .button-Primary:hover {
@@ -129,6 +133,7 @@ const Button = (props: ButtonProps, ref: Ref<HTMLButtonElement>) => {
         .button-Black {
           color: #ffffff;
           background-color: #1e1e20;
+          border: 1px solid #1e1e20;
         }
         .button-Black:hover {
           background-color: #000;
@@ -147,6 +152,6 @@ const Button = (props: ButtonProps, ref: Ref<HTMLButtonElement>) => {
       `}</style>
     </>
   );
-};
+});
 
-export default forwardRef(Button);
+export { Button };

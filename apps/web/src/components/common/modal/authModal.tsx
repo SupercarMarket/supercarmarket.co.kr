@@ -1,10 +1,7 @@
+import { Button, Container, Typography, Wrapper } from '@supercarmarket/ui';
 import type { ModalContextProps } from 'feature/modalContext';
 import { ModalProvider } from 'feature/modalContext';
 
-import Button from '../button';
-import Container from '../container';
-import Typography from '../typography';
-import Wrapper from '../wrapper';
 import * as style from './modal.styled';
 
 const AuthModal = ({ onClose }: ModalContextProps) => {

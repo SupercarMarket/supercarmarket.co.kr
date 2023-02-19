@@ -1,21 +1,24 @@
+import { Button, Searchbar, Wrapper } from '@supercarmarket/ui';
+import type { NextPageWithLayout, Params } from '@supercarmarket/types/base';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
-import Button from 'components/common/button';
-import Searchbar from 'components/common/searchbar';
-import Wrapper from 'components/common/wrapper';
 import layout from 'components/layout';
 import MarketContents from 'components/market/marketContents';
 import queries from 'constants/queries';
 import useMarketDetail from 'hooks/queries/useMarketDetail';
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
-import React from 'react';
+import * as React from 'react';
 import { css } from 'styled-components';
-import type { NextPageWithLayout } from 'types/base';
+
+const makeQuery = (query: Params) =>
+  Object.entries(query)
+    .map(([key, value]) => `${key}=${value}`)
+    .join('&');
 
 const MarketDetailPage: NextPageWithLayout = ({
   id,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const { push, query, back } = useRouter();
+  const { push, query } = useRouter();
   const { data } = useMarketDetail(id);
   const keywordRef = React.useRef<HTMLInputElement>(null);
 
@@ -29,17 +32,22 @@ const MarketDetailPage: NextPageWithLayout = ({
 
   const keydownHandler = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && keywordRef.current !== null) {
-      const queries = { ...query };
+      delete query.id;
 
-      queries.keyword = keywordRef.current.value;
+      query.keyword = keywordRef.current.value;
       keywordRef.current.value = '';
 
-      const queryString = Object.entries(queries)
-        .map(([key, value]) => `${key}=${value}`)
-        .join('&');
+      const queryString = makeQuery(query as Params);
 
       push(`/market/${query.category}?${queryString}`);
     }
+  };
+
+  const backToMarketList = () => {
+    delete query.id;
+    const queryString = makeQuery(query as Params);
+
+    push(`/market/${query.category}?${queryString}`);
   };
 
   return (
@@ -60,7 +68,7 @@ const MarketDetailPage: NextPageWithLayout = ({
           gap: 9px;
         `}
       >
-        <Button variant="Line" onClick={back}>
+        <Button variant="Line" onClick={backToMarketList}>
           목록
         </Button>
         <Button variant="Line" onClick={scrollToTop}>
@@ -89,12 +97,11 @@ const MarketDetailPage: NextPageWithLayout = ({
 
 MarketDetailPage.Layout = layout;
 
-const queryClient = new QueryClient();
-
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { id } = ctx.query;
+  const { id } = ctx.query as Params;
+  const queryClient = new QueryClient();
 
-  queryClient.prefetchQuery(queries.market.detail(id as string), () =>
+  queryClient.prefetchQuery(queries.market.detail(id), () =>
     fetch(`/api/market/${id}`, {
       method: 'GET',
     }).then((res) => res.json())

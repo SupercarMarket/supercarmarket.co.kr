@@ -1,10 +1,11 @@
-import * as React from "react";
-import { css } from "styled-components";
+import * as React from 'react';
+import { css } from 'styled-components';
 
-import { Button, Container, Typography, Wrapper } from "../components";
-import { Input, Label } from "./form.styled";
-import * as style from "./form.styled";
-import FormMessage from "./formMessage";
+import { Button, Container, Typography } from '../components';
+import { Wrapper } from '../components/wrapper';
+import { Input, Label } from './form.styled';
+import * as style from './form.styled';
+import { FormMessage } from './formMessage';
 
 type FormFilesProps = React.InputHTMLAttributes<HTMLInputElement> & {
   title?: string;
@@ -76,11 +77,14 @@ const FormFile = React.memo(function FormFile({
   );
 });
 
-const FormFiles = (props: FormFilesProps, ref: React.Ref<HTMLInputElement>) => {
+const FormFiles = React.forwardRef(function FormFiles(
+  props: FormFilesProps,
+  ref: React.Ref<HTMLInputElement>
+) {
   const {
     name,
     size,
-    title = "파일추가",
+    title = '파일추가',
     description,
     callback,
     ...rest
@@ -111,7 +115,7 @@ const FormFiles = (props: FormFilesProps, ref: React.Ref<HTMLInputElement>) => {
     );
 
     if (isDuplicated) {
-      setErrorMessage("이미 파일이 존재합니다.");
+      setErrorMessage('이미 파일이 존재합니다.');
       return;
     }
 
@@ -195,6 +199,7 @@ const FormFiles = (props: FormFilesProps, ref: React.Ref<HTMLInputElement>) => {
         ))}
     </Container>
   );
-};
+});
 
-export default React.forwardRef(FormFiles);
+export { FormFiles };
+export type { FormFilesProps };

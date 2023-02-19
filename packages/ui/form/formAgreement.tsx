@@ -1,7 +1,12 @@
-import Link from "next/link";
-import * as React from "react";
-import { css } from "styled-components";
-import { Button, Container, Typography, Wrapper } from "../components";
+'use client';
+import Link from 'next/link';
+import * as React from 'react';
+import { css } from 'styled-components';
+import { Wrapper } from '../components/wrapper';
+import { Button } from '../components/button';
+import { Container } from '../components/container';
+import { Typography } from '../components/typography';
+import { theme } from '../styles';
 
 interface FormAgreementProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -10,7 +15,7 @@ interface FormAgreementProps
 }
 
 const FormAgreement = (props: FormAgreementProps) => {
-  const { name, content, href = "/", ...rest } = props;
+  const { name, content, href = '/', ...rest } = props;
   return (
     <Container
       width="100%"
@@ -23,29 +28,29 @@ const FormAgreement = (props: FormAgreementProps) => {
           display: flex;
           align-items: center;
           gap: 8px;
-          input[type="checkbox"] {
+          input[type='checkbox'] {
             -webkit-appearance: none;
             appearance: none;
             display: none;
           }
-          input[type="checkbox"] + label {
+          input[type='checkbox'] + label {
             display: inline-block;
             width: 16px;
             height: 16px;
-            border: 1px solid ${({ theme }) => theme.color.primary};
+            border: 1px solid ${theme.color.primary};
             border-radius: 50%;
             position: relative;
             cursor: pointer;
           }
-          input[type="checkbox"] + label > div {
+          input[type='checkbox'] + label > div {
             width: 100%;
             height: 100%;
             border-radius: 50%;
             box-sizing: border-box;
-            border: 2px solid ${({ theme }) => theme.color.white};
+            border: 2px solid ${theme.color.white};
           }
-          input[type="checkbox"]:checked + label > div {
-            background: ${({ theme }) => theme.color.primary};
+          input[type='checkbox']:checked + label > div {
+            background: ${theme.color.primary};
           }
         `}
       >
@@ -64,4 +69,5 @@ const FormAgreement = (props: FormAgreementProps) => {
   );
 };
 
-export default FormAgreement;
+export { FormAgreement };
+export type { FormAgreementProps };

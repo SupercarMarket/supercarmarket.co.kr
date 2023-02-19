@@ -1,13 +1,11 @@
-import Container from 'components/common/container';
-import Divider from 'components/common/divider';
-import Table from 'components/common/table';
-import Wrapper from 'components/common/wrapper';
+import { Container, Divider, Table, Wrapper } from '@supercarmarket/ui';
 import useMarketDetail from 'hooks/queries/useMarketDetail';
 import * as React from 'react';
 import { css } from 'styled-components';
 
 import MarketCard from '../marketCard';
 import { MarketDetail } from '../marketDetail';
+import { ModalProvider } from 'feature/modalContext';
 
 interface MarketContentsProps {
   id: string;
@@ -20,11 +18,11 @@ const MarketContents = (props: MarketContentsProps) => {
   if (isFetching || isLoading) return <div>로딩중?</div>;
 
   return (
-    <Container>
-      {data && (
-        <>
-          <MarketDetail data={data.data} />
-          {data && (
+    <ModalProvider>
+      <Container>
+        {data && (
+          <>
+            <MarketDetail data={data.data} />
             <Wrapper
               css={css`
                 display: flex;
@@ -46,10 +44,10 @@ const MarketContents = (props: MarketContentsProps) => {
                 </React.Fragment>
               ))}
             </Wrapper>
-          )}
-        </>
-      )}
-    </Container>
+          </>
+        )}
+      </Container>
+    </ModalProvider>
   );
 };
 

@@ -6,7 +6,10 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   className?: string;
 }
 
-const Input = (props: InputProps, ref: Ref<HTMLInputElement>) => {
+const Input = forwardRef(function Input(
+  props: InputProps,
+  ref: Ref<HTMLInputElement>
+) {
   const {
     type,
     name,
@@ -50,12 +53,16 @@ const Input = (props: InputProps, ref: Ref<HTMLInputElement>) => {
         .input::placeholder {
           color: #8e8e95;
         }
+        .input:focus {
+          border: 1px solid #8e8e95;
+        }
         .input:invalid {
           border: 1px solid #ed7474;
         }
       `}</style>
     </>
   );
-};
+});
 
-export default forwardRef(Input);
+export { Input };
+export type { InputProps };

@@ -1,23 +1,29 @@
-"use client";
+'use client';
 
-import { useUrlQuery } from "@supercarmarket/hooks";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { css } from "styled-components";
+import { useUrlQuery } from '@supercarmarket/hooks';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { css } from 'styled-components';
+import { theme } from '../../styles';
 
-import Button from "../button";
-import Container from "../container";
-import Wrapper from "../wrapper";
+import { Button } from '../button';
+import { Container } from '../container';
+import { Wrapper } from '../wrapper';
 
 interface TabProps {
   show?: boolean;
 }
 
 const Tab = ({ show = true }: TabProps) => {
-  const { page, popular, variant, query } = useUrlQuery();
-  const isPopular = popular === "true";
-  const isVariantRow = variant === "row";
+  const { page, variant, searchType, keyword, filter, category } =
+    useUrlQuery();
+  const isPopular = filter === 'popular';
+  const isVariantRow = variant === 'row';
   const pathname = usePathname();
+  const keywordQuery = keyword && {
+    keyword,
+    searchType,
+  };
 
   return (
     <Container
@@ -32,22 +38,24 @@ const Tab = ({ show = true }: TabProps) => {
           pathname,
           query: {
             page,
-            query,
+            category,
             variant,
-            popular: isPopular ? "false" : "true",
+            filter: isPopular ? 'null' : 'popular',
+            ...keywordQuery,
           },
         }}
       >
-        <Button variant={isPopular ? "Primary" : "Line"}>인기글</Button>
+        <Button variant={isPopular ? 'Primary' : 'Line'}>인기글</Button>
       </Link>
       <Link
         href={{
           pathname,
           query: {
             page,
-            query,
-            variant: "row",
-            popular,
+            category,
+            filter,
+            variant: 'row',
+            ...keywordQuery,
           },
         }}
         shallow
@@ -58,8 +66,8 @@ const Tab = ({ show = true }: TabProps) => {
             align-items: center;
             box-sizing: border-box;
             padding: 10px;
-            background: ${({ theme }) => theme.color.white};
-            border: 1px solid ${({ theme }) => theme.color["greyScale-4"]};
+            background: ${theme.color.white};
+            border: 1px solid ${theme.color['greyScale-4']};
             border-radius: 4px;
           `}
         >
@@ -73,7 +81,7 @@ const Tab = ({ show = true }: TabProps) => {
             <g clipPath="url(#clip0_268_8692)">
               <path
                 d="M3 18H21V16H3V18ZM3 13H21V11H3V13ZM3 6V8H21V6H3Z"
-                fill={isVariantRow ? "#1E1E20" : "#C3C3C7"}
+                fill={isVariantRow ? '#1E1E20' : '#C3C3C7'}
               />
             </g>
             <defs>
@@ -89,9 +97,10 @@ const Tab = ({ show = true }: TabProps) => {
           pathname,
           query: {
             page,
-            query,
-            variant: "column",
-            popular,
+            category,
+            filter,
+            variant: 'column',
+            ...keywordQuery,
           },
         }}
         shallow
@@ -103,8 +112,8 @@ const Tab = ({ show = true }: TabProps) => {
             align-items: center;
             box-sizing: border-box;
             padding: 10px;
-            background: ${({ theme }) => theme.color.white};
-            border: 1px solid ${({ theme }) => theme.color["greyScale-4"]};
+            background: ${theme.color.white};
+            border: 1px solid ${theme.color['greyScale-4']};
             border-radius: 4px;
           `}
         >
@@ -120,28 +129,28 @@ const Tab = ({ show = true }: TabProps) => {
               y="3"
               width="8"
               height="8"
-              fill={isVariantRow ? "#C3C3C7" : "#1E1E20"}
+              fill={isVariantRow ? '#C3C3C7' : '#1E1E20'}
             />
             <rect
               x="13"
               y="3"
               width="8"
               height="8"
-              fill={isVariantRow ? "#C3C3C7" : "#1E1E20"}
+              fill={isVariantRow ? '#C3C3C7' : '#1E1E20'}
             />
             <rect
               x="13"
               y="13"
               width="8"
               height="8"
-              fill={isVariantRow ? "#C3C3C7" : "#1E1E20"}
+              fill={isVariantRow ? '#C3C3C7' : '#1E1E20'}
             />
             <rect
               x="3"
               y="13"
               width="8"
               height="8"
-              fill={isVariantRow ? "#C3C3C7" : "#1E1E20"}
+              fill={isVariantRow ? '#C3C3C7' : '#1E1E20'}
             />
           </svg>
         </Wrapper>
@@ -152,9 +161,12 @@ const Tab = ({ show = true }: TabProps) => {
             pathname,
             query: {
               page,
-              query,
+              category,
+              keyword,
+              searchType,
               variant,
-              popular,
+              filter,
+              ...keywordQuery,
             },
           }}
           shallow
@@ -191,4 +203,5 @@ const Tab = ({ show = true }: TabProps) => {
   );
 };
 
-export default Tab;
+export { Tab };
+export type { TabProps };

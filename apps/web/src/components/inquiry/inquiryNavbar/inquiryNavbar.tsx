@@ -1,11 +1,8 @@
-import Button from 'components/common/button';
-import Container from 'components/common/container';
-import Typography from 'components/common/typography';
-import Wrapper from 'components/common/wrapper';
+import { Button, Container, Typography, Wrapper } from '@supercarmarket/ui';
+import type { InquiryLink } from '@supercarmarket/types/inquiry';
 import Link from 'next/link';
-import type { InquiryLink } from 'types/inquiry';
 
-import * as style from './inquiryNavbar.styled';
+import { css } from 'styled-components';
 
 const InquiryNavbar = ({ title, description, link }: InquiryLink) => {
   return (
@@ -15,7 +12,13 @@ const InquiryNavbar = ({ title, description, link }: InquiryLink) => {
       background="#F7F7F8"
       borderRadius="4px"
     >
-      <Wrapper.Left css={style.left}>
+      <Wrapper.Left
+        css={css`
+          display: flex;
+          align-items: center;
+          gap: 40px;
+        `}
+      >
         <div
           style={{
             width: '100px',
@@ -24,7 +27,11 @@ const InquiryNavbar = ({ title, description, link }: InquiryLink) => {
             background: '#D9D9D9',
           }}
         />
-        <Wrapper.Item css={style.leftItem}>
+        <Wrapper.Item
+          css={css`
+            position: relative;
+          `}
+        >
           <Typography
             as="b"
             fontSize="header-24"
@@ -53,7 +60,14 @@ const InquiryNavbar = ({ title, description, link }: InquiryLink) => {
           )}
         </Wrapper.Item>
       </Wrapper.Left>
-      <Wrapper.Right css={style.right}>
+      <Wrapper.Right
+        css={css`
+          flex: 1;
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+        `}
+      >
         <Link href={link} shallow>
           <Button variant="Black">문의하기</Button>
         </Link>

@@ -1,16 +1,19 @@
-import Container from 'components/common/container/container';
-import Typography from 'components/common/typography';
-import Wrapper from 'components/common/wrapper';
+import {
+  Container,
+  Typography,
+  Wrapper,
+  applyMediaQuery,
+} from '@supercarmarket/ui';
+import { MarketDto } from '@supercarmarket/types/market';
+import { WithBlurredImage } from '@supercarmarket/types/magazine';
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
 import { css } from 'styled-components';
-import { applyMediaQuery } from 'styles/mediaQuery';
-import { WithBlurredImage } from 'types/magazine';
-import { MarketDto } from 'types/market';
 
 import MarketRow from '../marketRow';
 import * as Styled from './marketCard.styled';
+import { useRouter } from 'next/router';
+import { Params } from '@supercarmarket/types/base';
 
 interface MarketCardProps extends WithBlurredImage<MarketDto> {
   variant?: 'row' | 'column';
@@ -35,14 +38,13 @@ const MarketColumn = ({
   price,
   year,
 }: WithBlurredImage<MarketDto>) => {
+  const { query } = useRouter();
+  const queryString = new URLSearchParams(query as Params).toString();
+
   const formatter = Intl.NumberFormat('ko-KR', { notation: 'compact' }).format;
 
   return (
-    <Link
-      href={{
-        pathname: `/market/detail/${id}`,
-      }}
-    >
+    <Link href={`/market/detail/${id}?${queryString}`}>
       <Container width="100%" display="flex" flexDirection="column" key={id}>
         <Styled.DivideArea style={{ marginBottom: '20px' }}>
           <Wrapper.Item
@@ -63,6 +65,7 @@ const MarketColumn = ({
               src={imgSrc}
               alt="thumbnail"
               style={{ borderRadius: '4px' }}
+              sizes="100%"
             />
           </Wrapper.Item>
         </Styled.DivideArea>

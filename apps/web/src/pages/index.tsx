@@ -3,8 +3,8 @@ import {
   QueryClient,
   QueryErrorResetBoundary,
 } from '@tanstack/react-query';
-import Container from 'components/common/container';
-import Title from 'components/common/title';
+import { Container, Title } from '@supercarmarket/ui';
+import type { NextPageWithLayout } from '@supercarmarket/types/base';
 import { ErrorFallback } from 'components/fallback';
 import Community from 'components/home/community';
 import Magazine from 'components/home/magazine';
@@ -14,7 +14,6 @@ import queries from 'constants/queries';
 import { GetStaticProps } from 'next';
 import * as React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import type { NextPageWithLayout } from 'types/base';
 import { baseFetch } from 'utils/api/fetcher';
 
 const Home: NextPageWithLayout = () => {

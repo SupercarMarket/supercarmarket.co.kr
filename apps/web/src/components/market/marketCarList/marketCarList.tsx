@@ -1,13 +1,11 @@
-import Pagination from 'components/common/pagination';
+import * as React from 'react';
+import { Pagination, Table, Wrapper } from '@supercarmarket/ui';
+import { WithBlurredImage } from '@supercarmarket/types/magazine';
+import { MarketDto, MarketResponse } from '@supercarmarket/types/market';
 import Select from 'components/common/select';
-import Table from 'components/common/table';
-import Wrapper from 'components/common/wrapper';
 import MarketCard from 'components/market/marketCard';
 import { ORDER_OPTIONSET, SHOW_COUNT_OPTIONS } from 'constants/market';
-import React from 'react';
 import { css } from 'styled-components';
-import { WithBlurredImage } from 'types/magazine';
-import { MarketDto, MarketResponse } from 'types/market';
 
 import ListIcon from '../../../assets/svg/menu.svg';
 import ViewCardIcon from '../../../assets/svg/sqaure.svg';

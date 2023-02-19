@@ -1,4 +1,8 @@
-import Typography from 'components/common/typography';
+import { Typography } from '@supercarmarket/ui';
+import type {
+  MarketDetailDto,
+  WithBlurredImage,
+} from '@supercarmarket/types/market';
 import {
   MarketDetailAttached,
   MarketDetailCar,
@@ -8,8 +12,6 @@ import {
   MarketDetailIntroduction,
   MarketLike,
 } from 'components/market/marketDetail/components';
-import React from 'react';
-import { MarketDetailDto, WithBlurredImage } from 'types/market';
 
 interface MarketDetailProps {
   data: MarketDetailDto<WithBlurredImage<{ imgSrc: string }>>;
@@ -34,6 +36,8 @@ const MarketDetail = ({ data }: MarketDetailProps) => {
     introduction,
     registration,
     attSrc,
+    createdDate,
+    isLike,
   } = data;
 
   return (
@@ -47,6 +51,7 @@ const MarketDetail = ({ data }: MarketDetailProps) => {
         price={price}
         regDate={regDate}
         viewCount={view}
+        createdDate={createdDate}
       />
       <MarketDetailCarousel imgSrc={imgSrc} />
       <Typography fontSize="header-24" fontWeight="bold">
@@ -74,7 +79,7 @@ const MarketDetail = ({ data }: MarketDetailProps) => {
         첨부파일
       </Typography>
       <MarketDetailAttached registration={registration} attrSrc={attSrc} />
-      <MarketLike isLike={false} />
+      <MarketLike isLike={isLike} />
     </>
   );
 };
