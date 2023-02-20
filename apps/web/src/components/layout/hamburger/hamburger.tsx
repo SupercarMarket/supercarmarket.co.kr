@@ -68,7 +68,7 @@ const HamburgerLinkItem = React.memo(function HamburgerLinkItem({
         <SupercarmarketLink
           href={href}
           disabled={!!children}
-          callback={() => handleClick(href)}
+          callback={() => handleClick(`/${href}`)}
         >
           <Typography
             as="b"
@@ -140,6 +140,8 @@ const Hamburger = React.memo(function Hamburger({
 
   const handleClick = React.useCallback(
     (href: string) => {
+      console.log(href);
+
       handleClose();
       push(href);
     },
