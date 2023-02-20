@@ -29,7 +29,7 @@ const Table = ({ data, tableHeaders, marginBottom = '80px' }: TableProps) => {
       </Styled.THead>
       <Styled.TBody>
         {data.map((p) => (
-          <PartnershipRow key={p.id} {...p} />
+          <PartnershipRow key={p.brdSeq} {...p} />
         ))}
       </Styled.TBody>
     </Styled.Table>

@@ -9,27 +9,27 @@ import { PartnershipDto } from 'types/partnership';
 import * as Styled from './partnershipRow.styled';
 
 const PartnershipRow = ({
-  id,
+  brdSeq,
   base64,
   partnerName,
   description,
   category,
   workTime,
   phone,
-  region,
+  address,
   siteUrl,
   imgSrc,
 }: WithBlurredImage<PartnershipDto>) => {
   const { push, asPath } = useRouter();
 
-  const onClick = (id: string) => {
+  const onClick = (brdSeq: string) => {
     const query = asPath.split('?')[1];
-    push(`/partnership/detail/${id}?${query}`);
+    push(`/partnership/detail/${brdSeq}?${query}`);
   };
 
   return (
-    <Styled.TableRow key={id}>
-      <Styled.TableData onClick={() => onClick(id)}>
+    <Styled.TableRow key={brdSeq}>
+      <Styled.TableData onClick={() => onClick(brdSeq)}>
         <Image
           width={196}
           height={124}
@@ -46,7 +46,7 @@ const PartnershipRow = ({
             {partnerName}
           </Typography>
           <Typography fontSize="body-14" color="greyScale-5">
-            {description}
+            {address}
           </Typography>
         </Styled.Description>
       </Styled.TableData>
@@ -60,7 +60,9 @@ const PartnershipRow = ({
         <Typography fontSize="body-14">{phone}</Typography>
       </Styled.TableData>
       <Styled.TableData>
-        <Typography fontSize="body-14">{region}</Typography>
+        <Typography fontSize="body-14">
+          {address.split(' ').slice(0, 2).join(' ')}
+        </Typography>
       </Styled.TableData>
       <Styled.TableData>
         <Link href={siteUrl}>
@@ -68,7 +70,7 @@ const PartnershipRow = ({
             fontSize="body-14"
             style={{ textDecorationLine: 'underline', cursor: 'pointer' }}
           >
-            {'바로가기'}
+            바로가기
           </Typography>
         </Link>
       </Styled.TableData>

@@ -1,6 +1,11 @@
-import { NextPageWithLayout } from '@supercarmarket/types/base';
-import { Searchbar, Wrapper } from '@supercarmarket/ui';
-import { dehydrate, QueryClient } from '@tanstack/react-query';
+import { NextPageWithLayout, Params } from '@supercarmarket/types/base';
+import { Pagination, Searchbar, Wrapper } from '@supercarmarket/ui';
+import {
+  dehydrate,
+  QueryClient,
+  QueryErrorResetBoundary,
+} from '@tanstack/react-query';
+import { ErrorFallback } from 'components/fallback';
 import layout from 'components/layout';
 import Banner from 'components/partnership/banner';
 import Category from 'components/partnership/category';
@@ -10,9 +15,11 @@ import {
   PARTNERSHIP_TABLE_HEAD,
 } from 'constants/partnership';
 import usePartnership from 'hooks/queries/usePartnership';
+import { useRouter } from 'next/router';
 import { NextPageContext } from 'next/types';
 import type { ParsedUrlQuery } from 'querystring';
 import React from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 import { css } from 'styled-components';
 
 interface IParams extends ParsedUrlQuery {
@@ -20,8 +27,12 @@ interface IParams extends ParsedUrlQuery {
 }
 
 const PartnershipPage: NextPageWithLayout = () => {
-  const { data } = usePartnership();
-  console.log(data);
+  const { query } = useRouter();
+
+  const { data: partnerships, isLoading } = usePartnership(query as Params);
+  console.log(partnerships);
+
+  if (isLoading) return <div>로딩 중???</div>;
 
   return (
     <>
@@ -45,7 +56,28 @@ const PartnershipPage: NextPageWithLayout = () => {
         />
       </Wrapper.Top>
       <Category domain="partnership" category={PARTNERSHIP_CATEGORY} />
-      {data && <Table data={data.data} tableHeaders={PARTNERSHIP_TABLE_HEAD} />}
+      <QueryErrorResetBoundary>
+        {({ reset }) => (
+          <ErrorBoundary
+            onReset={reset}
+            fallbackRender={(props) => <ErrorFallback {...props} />}
+          >
+            {partnerships && (
+              <>
+                <Table
+                  data={partnerships.data}
+                  tableHeaders={PARTNERSHIP_TABLE_HEAD}
+                />
+                <Pagination
+                  pageSize={20}
+                  totalCount={partnerships.totalCount}
+                  totalPages={partnerships.totalPages}
+                />
+              </>
+            )}
+          </ErrorBoundary>
+        )}
+      </QueryErrorResetBoundary>
     </>
   );
 };

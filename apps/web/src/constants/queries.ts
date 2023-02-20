@@ -95,8 +95,9 @@ const queries = {
    */
   partnership: {
     all: ['partnership'] as const,
-    lists: () => [...queries.partnership.all, 'list'] as const,
-    id: (id: string) => [...queries.partnership.lists(), id] as const,
+    lists: (query: string[]) =>
+      [...queries.partnership.all, 'list', ...query] as const,
+    id: (id: string) => [...queries.partnership.lists([]), id] as const,
   },
 };
 

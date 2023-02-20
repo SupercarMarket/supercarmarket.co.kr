@@ -1,5 +1,4 @@
-import Typography from 'components/common/typography';
-import Wrapper from 'components/common/wrapper';
+import { Typography, Wrapper } from '@supercarmarket/ui';
 import React from 'react';
 import { css } from 'styled-components';
 
@@ -30,7 +29,7 @@ const PartnershipIntroduction = ({
           margin-bottom: 80px;
         `}
       >
-        업체 소개 내용입니다.
+        {introduction}
       </Wrapper.Bottom>
     </>
   );

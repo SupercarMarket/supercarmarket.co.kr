@@ -1,27 +1,28 @@
+import React from 'react';
+import { NextPageContext } from 'next';
+import { useRouter } from 'next/router';
+import { css } from 'styled-components';
+import { NextPageWithLayout } from '@supercarmarket/types/base';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
-import Button from 'components/common/button';
-import Carousel from 'components/common/carousel';
-import Pagination from 'components/common/pagination';
-import Searchbar from 'components/common/searchbar';
-import Wrapper from 'components/common/wrapper';
-import Layout from 'components/layout';
-import PartnershipDetailCard from 'components/partnership/partnershipDetailCard';
-import PartnershipIntroduction from 'components/partnership/partnershipIntroduction';
-import Table from 'components/partnership/table';
+import { Button, Pagination, Searchbar, Wrapper } from '@supercarmarket/ui';
+
 import { PARTNERSHIP_TABLE_HEAD } from 'constants/partnership';
 import usePartnership from 'hooks/queries/usePartnership';
 import usePartnershipDetail from 'hooks/queries/usePartnershipDetail';
-import { NextPageContext } from 'next';
-import { useRouter } from 'next/router';
-import React from 'react';
-import { css } from 'styled-components';
+import Layout from 'components/layout';
+import Table from 'components/partnership/table';
+import Carousel from 'components/common/carousel';
+import PartnershipDetailCard from 'components/partnership/partnershipDetailCard';
+import PartnershipIntroduction from 'components/partnership/partnershipIntroduction';
 
 interface PartnershipDetailPageProps {
   pid: string;
 }
 
-const PartnershipDetailPage = ({ pid }: PartnershipDetailPageProps) => {
-  const { back } = useRouter();
+const PartnershipDetailPage: NextPageWithLayout = ({
+  pid,
+}: PartnershipDetailPageProps) => {
+  const { query, back } = useRouter();
 
   const scrollToTop = () =>
     window.scrollTo({
@@ -29,11 +30,10 @@ const PartnershipDetailPage = ({ pid }: PartnershipDetailPageProps) => {
       top: 0,
     });
 
-  const { data, isLoading } = usePartnershipDetail(pid);
-  const { data: list } = usePartnership();
-  console.log('list', list);
+  const { data: partnerships, isLoading } = usePartnershipDetail(pid);
+  const { data: list } = usePartnership(query);
 
-  console.log(data);
+  console.log(partnerships);
 
   if (isLoading) return <div>로딩 중???</div>;
 
@@ -46,20 +46,22 @@ const PartnershipDetailPage = ({ pid }: PartnershipDetailPageProps) => {
         margin: 20px 0 0 0;
       `}
     >
-      {data && (
+      {partnerships && (
         <>
           <Carousel>
             <Carousel.CarouselWrapper
-              imgList={data.data.partnerDetail.imgSrc}
+              imgList={partnerships.data.imgSrc}
               margin="0 0 80px 0"
             >
               <Carousel.CarouselTop width={578} height={386} display="flex">
-                <PartnershipDetailCard />
+                <PartnershipDetailCard info={partnerships.data} />
               </Carousel.CarouselTop>
               <Carousel.CarouselBottom />
             </Carousel.CarouselWrapper>
           </Carousel>
-          <PartnershipIntroduction />
+          <PartnershipIntroduction
+            introduction={partnerships.data.introduction}
+          />
         </>
       )}
       {list && (
@@ -90,12 +92,11 @@ const PartnershipDetailPage = ({ pid }: PartnershipDetailPageProps) => {
           margin-bottom: 32px;
         `}
       >
-        {data && (
+        {partnerships && (
           <Pagination
-            page={data.page}
             pageSize={10}
-            totalCount={data.totalCount}
-            totalPages={data.totalPages}
+            totalCount={partnerships.totalCount}
+            totalPages={partnerships.totalPages}
           />
         )}
       </Wrapper>

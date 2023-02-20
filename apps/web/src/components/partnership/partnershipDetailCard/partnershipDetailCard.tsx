@@ -1,9 +1,28 @@
-import Typography from 'components/common/typography';
-import Wrapper from 'components/common/wrapper';
+import { WithBlurredImage } from '@supercarmarket/types/base';
+import { Typography, Wrapper } from '@supercarmarket/ui';
 import React from 'react';
 import { css } from 'styled-components';
+import { PartnershipDetailDto } from 'types/partnership';
 
-const PartnershipDetailCard = () => {
+interface PartnershipDetailCard {
+  info: Omit<
+    PartnershipDetailDto<WithBlurredImage<string>>,
+    'imgSrc' | 'introduction' | 'description'
+  >;
+}
+
+const PartnershipDetailCard = ({ info }: PartnershipDetailCard) => {
+  const {
+    address,
+    category,
+    owner,
+    partnerName,
+    phone,
+    production,
+    workTime,
+    tel,
+    siteUrl,
+  } = info;
   return (
     <Wrapper.Top
       css={css`
@@ -21,7 +40,7 @@ const PartnershipDetailCard = () => {
         fontWeight="bold"
         style={{ marginBottom: '42px' }}
       >
-        슈퍼카타이어
+        {partnerName}
       </Typography>
       <Wrapper.Bottom
         css={css`
@@ -30,19 +49,16 @@ const PartnershipDetailCard = () => {
           gap: 15px;
         `}
       >
-        <Information label="업종">공업사</Information>
-        <Information label="취급품목">수입 타이어</Information>
-        <Information label="업무시간">평일 09:00~18:00</Information>
+        <Information label="업종">{category}</Information>
+        <Information label="취급품목">{production}</Information>
+        <Information label="업무시간">{workTime}</Information>
         <Information label="홈페이지" margin="0 0 34px 0">
-          https://supercarmarket.co.kr
+          {siteUrl}
         </Information>
-        <Information label="대표자">금종선</Information>
-        <Information label="주소">
-          서울특별시 서초구 양재대로 36길11
-        </Information>
+        <Information label="대표자">{owner}</Information>
+        <Information label="주소">{address}</Information>
         <Information label="전화번호">
-          02-9166-5122 <Typography color="greyScale-5">|</Typography>{' '}
-          010-6545-5265
+          {tel} <Typography color="greyScale-5">|</Typography> {phone}
         </Information>
       </Wrapper.Bottom>
     </Wrapper.Top>

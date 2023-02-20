@@ -1,13 +1,13 @@
 import { WithBlurredImage } from './base';
 
 interface PartnershipDto {
-  id: string;
+  brdSeq: string;
   partnerName: string;
   description: string;
   category: string;
   workTime: string;
   phone: string;
-  region: string;
+  address: string;
   siteUrl: string;
   imgSrc: string;
 }
@@ -29,15 +29,11 @@ type PartnershipDetailDto<T> = Omit<PartnershipDto, 'imgSrc'> & {
   imgSrc: T[];
 };
 
-interface PartnershipDetailResponse<T> {
-  data: {
-    partnerDetail: PartnershipDetailDto<T>;
-    partnerList: WithBlurredImage<PartnershipDto>[];
-  };
-  page: number;
+interface PartnershipDetailResponse {
+  data: PartnershipDetailDto<string>;
+  isLastPage: boolean;
   totalPages: number;
   totalCount: number;
-  isLastPage: boolean;
 }
 
 export type {
