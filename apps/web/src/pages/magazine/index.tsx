@@ -21,7 +21,7 @@ const MagazinePage: NextPageWithLayout = () => {
       alignItems="center"
       margin="20px 0 0 0"
     >
-      <Title>따끈따끈한 최근 소식</Title>
+      <Title marginBottom="20px">따끈따끈한 최근 소식</Title>
       <QueryErrorResetBoundary>
         {({ reset }) => (
           <>
