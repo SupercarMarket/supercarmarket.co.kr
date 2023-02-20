@@ -4,6 +4,7 @@ import styled, { css } from 'styled-components';
 
 const MarketCarKindList = styled.ul`
   display: flex;
+  flex-wrap: wrap;
   gap: 9px;
   margin-bottom: 20px;
 `;

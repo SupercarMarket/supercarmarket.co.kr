@@ -23,7 +23,7 @@ const Searchbar = forwardRef(function Searchbar(
     variant = 'Grey',
     placeholder,
     className,
-    width,
+    width = '100%',
     handleClick: handleCallback,
     ...rest
   } = props;
@@ -78,9 +78,6 @@ const Searchbar = forwardRef(function Searchbar(
             },
             className
           )}
-          style={{
-            width,
-          }}
           autoComplete="off"
           autoCorrect="off"
           autoCapitalize="off"
@@ -144,6 +141,7 @@ const Searchbar = forwardRef(function Searchbar(
         .search {
           all: unset;
           font-weight: 400;
+          width: ${width};
           font-size: 16px;
           line-height: 150%;
           padding: 14px 0;
@@ -207,7 +205,7 @@ const Searchbar = forwardRef(function Searchbar(
         }
         .search-container {
           position: relative;
-          width: fit-content;
+          width: ${width};
         }
       `}</style>
     </>

@@ -13,6 +13,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
 import arrowRightSrc from '../../../../public/images/arrow-right.png';
+import closeSrc from '../../../../public/images/close.png';
 
 interface ISession extends Session {
   sub: string;
@@ -68,7 +69,7 @@ const HamburgerLinkItem = React.memo(function HamburgerLinkItem({
         <SupercarmarketLink
           href={href}
           disabled={!!children}
-          callback={() => handleClick(href)}
+          callback={() => handleClick(`/${href}`)}
         >
           <Typography
             as="b"
@@ -190,25 +191,7 @@ const Hamburger = React.memo(function Hamburger({
       >
         <Wrapper.Left>
           <Button variant="Init" type="button" onClick={handleClose}>
-            <svg
-              width="1.625rem"
-              height="1.625rem"
-              viewBox="0 0 24 24"
-              fill="#fff"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <g clipPath="url(#clip0_275_10413)">
-                <path
-                  d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z"
-                  fill="#fff"
-                />
-              </g>
-              <defs>
-                <clipPath id="clip0_275_10413">
-                  <rect width="100%" height="100%" fill="white" />
-                </clipPath>
-              </defs>
-            </svg>
+            <Image src={closeSrc} placeholder="blur" alt="arrow" />
           </Button>
         </Wrapper.Left>
         <Wrapper.Right
