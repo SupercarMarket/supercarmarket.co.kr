@@ -28,9 +28,21 @@ const CommentCard = ({
   isLiked,
   isMyComment = true,
   children,
-}: Comment & { postId: string }) => {
-  const { mutate: likeMuate } = useLikeComment(postId, id);
-  const { mutate: removeMutate } = useRemoveComment(postId, id);
+  category,
+}: Comment & {
+  postId: string;
+  category: 'magazine' | 'paparazzi' | 'partnership';
+}) => {
+  const { mutate: likeMuate } = useLikeComment({
+    category,
+    postId,
+    commentId: id,
+  });
+  const { mutate: removeMutate } = useRemoveComment({
+    category,
+    postId,
+    commentId: id,
+  });
   const [modify, setModify] = React.useState(false);
   const [open, setOpen] = React.useState(false);
 
@@ -179,19 +191,25 @@ const CommentCard = ({
             postId={postId}
             parentId={id}
             defaultValue={content}
+            category={category}
             type="edit"
           />
         </Wrapper>
       )}
       {open && (
         <Wrapper css={style.cardArea}>
-          <CommentArea postId={postId} parentId={id} />
+          <CommentArea postId={postId} parentId={id} category={category} />
         </Wrapper>
       )}
       {children && (
         <Wrapper css={style.cardChildren}>
           {children.map((comment) => (
-            <CommentCard key={comment.id} postId={postId} {...comment} />
+            <CommentCard
+              key={comment.id}
+              postId={postId}
+              category={category}
+              {...comment}
+            />
           ))}
         </Wrapper>
       )}
@@ -202,9 +220,11 @@ const CommentCard = ({
 const CommentBody = ({
   postId,
   comments,
+  category = 'magazine',
 }: {
   postId: string;
   comments: Comment[];
+  category?: 'magazine' | 'paparazzi' | 'partnership';
 }) => {
   return (
     <Container display="flex" flexDirection="column">
@@ -215,7 +235,12 @@ const CommentBody = ({
         />
       )}
       {comments.map((comment) => (
-        <CommentCard key={comment.id} postId={postId} {...comment} />
+        <CommentCard
+          key={comment.id}
+          postId={postId}
+          category={category}
+          {...comment}
+        />
       ))}
     </Container>
   );

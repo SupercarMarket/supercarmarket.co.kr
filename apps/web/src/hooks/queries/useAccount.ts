@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import queries from 'constants/queries';
-import { MagazinePostingResponse } from 'types/magazine';
+import type { MagazinePostingResponse } from '@supercarmarket/types/magazine';
 import { clientFetcher } from 'utils/api/fetcher';
 
 export default function useAccount(id: string, options = {}) {

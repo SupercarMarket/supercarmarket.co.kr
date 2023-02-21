@@ -42,13 +42,17 @@ const Comment = ({ id, category = 'magazine' }: CommentProps) => {
       {comment && (
         <>
           <CommentHead totalCount={comment.data.length} />
-          <CommentBody postId={id} comments={comment.data} />
+          <CommentBody
+            postId={id}
+            comments={comment.data}
+            category={category}
+          />
           <Pagination
             totalPages={comment.totalPages}
             totalCount={comment.totalCount}
             pageSize={10}
           />
-          <CommentArea postId={id} />
+          <CommentArea postId={id} category={category} />
         </>
       )}
     </Container>

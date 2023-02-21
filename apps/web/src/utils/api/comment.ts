@@ -46,9 +46,9 @@ const commentApi: NextApiHandler = async (req, res) => {
 
 const commentCreateApi: NextApiHandler = async (req, res) => {
   const { contents } = req.body;
-  const { postId, parentId } = req.query as Params;
+  const { postId, parentId, category } = req.query as Params;
 
-  catchNoExist(contents, postId);
+  catchNoExist(contents, postId, category);
 
   const session = await getSession({ req });
 
@@ -61,11 +61,11 @@ const commentCreateApi: NextApiHandler = async (req, res) => {
   const query =
     parentId === 'null'
       ? {
-          category: 'magazine',
+          category,
         }
       : {
           parentId,
-          category: 'magazine',
+          category,
         };
 
   const response = await baseApi<MessageResponse>(
@@ -86,10 +86,10 @@ const commentCreateApi: NextApiHandler = async (req, res) => {
 };
 
 const commentUpdateApi: NextApiHandler = async (req, res) => {
-  const { postId, commentId } = req.query as Params;
+  const { postId, commentId, category } = req.query as Params;
   const { contents } = req.body;
 
-  catchNoExist(postId, commentId, contents);
+  catchNoExist(postId, commentId, contents, category);
 
   const session = await getSession({ req });
 
@@ -105,7 +105,7 @@ const commentUpdateApi: NextApiHandler = async (req, res) => {
       method: 'PATCH',
       headers,
       query: {
-        category: 'magazine',
+        category,
       },
       data: { contents },
     }
@@ -119,9 +119,9 @@ const commentUpdateApi: NextApiHandler = async (req, res) => {
 };
 
 const commentLikeApi: NextApiHandler = async (req, res) => {
-  const { postId, commentId } = req.query as Params;
+  const { postId, commentId, category } = req.query as Params;
 
-  catchNoExist(postId, commentId);
+  catchNoExist(postId, commentId, category);
 
   const session = await getSession({ req });
 
@@ -136,7 +136,7 @@ const commentLikeApi: NextApiHandler = async (req, res) => {
     {
       headers: headers,
       query: {
-        category: 'magazine',
+        category,
       },
       method: 'POST',
     }
@@ -153,9 +153,9 @@ const commentLikeApi: NextApiHandler = async (req, res) => {
 };
 
 const commentRemoveApi: NextApiHandler = async (req, res) => {
-  const { postId, commentId } = req.query as Params;
+  const { postId, commentId, category } = req.query as Params;
 
-  catchNoExist(postId, commentId);
+  catchNoExist(postId, commentId, category);
 
   const session = await getSession({ req });
 
@@ -170,7 +170,7 @@ const commentRemoveApi: NextApiHandler = async (req, res) => {
     {
       headers,
       query: {
-        category: 'magazine',
+        category,
       },
       method: 'DELETE',
     }

@@ -3,10 +3,14 @@ import queries from 'constants/queries';
 import { baseFetch } from 'utils/api/fetcher';
 
 export default function useRemoveComment(
-  postId: string,
-  commentId: string,
+  query: {
+    category: string;
+    postId: string;
+    commentId: string;
+  },
   options = {}
 ) {
+  const { category, postId, commentId } = query;
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -14,6 +18,7 @@ export default function useRemoveComment(
       baseFetch('/api/comment/remove', {
         method: 'DELETE',
         query: {
+          category,
           postId,
           commentId,
         },
