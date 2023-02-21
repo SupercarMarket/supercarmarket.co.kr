@@ -10,18 +10,24 @@ import {
   Wrapper,
 } from '@supercarmarket/ui';
 import { useUrlQuery } from '@supercarmarket/hooks';
-import useCommunity from 'hooks/queries/useCommunity';
+import useCommunity from 'hooks/queries/community/useCommunity';
 import { css } from 'styled-components';
 import CommunityCard from '../communityCard';
 import { CardSkeleton } from 'components/fallback/loading';
 
-const CommunityList = () => {
+interface CommunityListProps {
+  category?: string;
+  subject?: 'magazine' | 'paparazzi' | 'partnership';
+}
+
+const CommunityList = (props: CommunityListProps) => {
+  const { category: iCategory } = props;
   const pathname = usePathname();
   const { push } = useRouter();
   const { variant, category, page, searchType, keyword, filter } =
     useUrlQuery();
   const { data, isFetching, isLoading } = useCommunity({
-    category: category || 'report',
+    category: iCategory || category || 'report',
     filter: filter ?? null,
     searchType: searchType ?? null,
     keyword: keyword ?? null,

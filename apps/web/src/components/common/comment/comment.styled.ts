@@ -50,6 +50,10 @@ const CommentAreaTextArea = styled.textarea`
   font-size: 14px;
   line-height: 21px;
   box-sizing: border-box;
+  background-color: ${({ theme }) => theme.color.white};
+  &::placeholder {
+    background-color: ${({ theme }) => theme.color.white};
+  }
 `;
 
 const CommentAreaTop = styled.div`

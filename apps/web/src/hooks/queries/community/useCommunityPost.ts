@@ -1,6 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import queries from 'constants/queries';
 import { clientFetcher } from 'utils/api/fetcher';
+import type { ServerResponse } from '@supercarmarket/types/base';
+import type { CommunityPostDto } from '@supercarmarket/types/community';
 
 export default function useCommunityPost(
   token: string | null,
@@ -12,12 +14,18 @@ export default function useCommunityPost(
   options = {}
 ) {
   const { subject, category, id } = query;
-  return useQuery(
+
+  let headers = {};
+
+  if (token) headers = { ACCESS_TOKEN: token };
+
+  return useQuery<ServerResponse<CommunityPostDto>>(
     queries.community.detail(subject, category, id),
     () =>
       clientFetcher(`/server/supercar/v1/community/${category}/post-id/${id}`, {
         method: 'GET',
+        headers,
       }),
-    options
+    { ...options, useErrorBoundary: true }
   );
 }

@@ -13,7 +13,8 @@ import { getSession } from 'utils/api/auth/user';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from 'components/fallback';
 import Posting from 'components/common/posting';
-import Comment from 'components/common/comment';
+import { CommunityPostingList } from 'components/community';
+import { ModalProvider } from 'feature/modalContext';
 
 const CommunityPost: NextPageWithLayout = ({
   subject,
@@ -32,12 +33,14 @@ const CommunityPost: NextPageWithLayout = ({
                 <ErrorFallback margin="100px 0" {...props} />
               )}
             >
-              <Posting
-                type="community"
-                postId={id}
-                subject={subject}
-                category={category}
-              />
+              <ModalProvider>
+                <Posting
+                  type="community"
+                  postId={id}
+                  subject={subject}
+                  category={category}
+                />
+              </ModalProvider>
             </ErrorBoundary>
             <ErrorBoundary
               onReset={reset}
@@ -45,7 +48,7 @@ const CommunityPost: NextPageWithLayout = ({
                 <ErrorFallback margin="100px 0" {...props} />
               )}
             >
-              <Comment id={id} category="paparazzi" />
+              <CommunityPostingList category={category} subject={subject} />
             </ErrorBoundary>
           </>
         )}

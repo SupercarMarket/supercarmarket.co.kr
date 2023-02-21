@@ -9,6 +9,7 @@ import { Posting } from '@supercarmarket/types/base';
 import ChatIcon from '../../../assets/svg/chat.svg';
 import EyeIcon from '../../../assets/svg/remove-red-eye.svg';
 import * as style from './posting.styled';
+import { PostingProps } from './posting';
 
 const PostingHeadMagainze = ({
   title,
@@ -107,7 +108,8 @@ const PostingHeadCommunity = ({
   comments,
   created,
   updated,
-}: CommunityPostDto) => {
+  category,
+}: CommunityPostDto & Pick<PostingProps, 'category'>) => {
   return (
     <Container
       display="flex"

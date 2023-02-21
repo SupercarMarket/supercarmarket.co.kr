@@ -10,7 +10,7 @@ import Avvvatars from 'avvvatars-react';
 import useLikeComment from 'hooks/mutations/comment/useLikeComment';
 import useRemoveComment from 'hooks/mutations/comment/useRemoveComment';
 import * as React from 'react';
-import { Comment } from 'types/comment';
+import type { Comment } from '@supercarmarket/types/comment';
 
 import LikeIcon from '../../../assets/svg/thumb-up.svg';
 import * as style from './comment.styled';
