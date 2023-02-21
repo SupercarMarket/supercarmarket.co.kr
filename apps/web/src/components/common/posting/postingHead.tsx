@@ -10,6 +10,8 @@ import ChatIcon from '../../../assets/svg/chat.svg';
 import EyeIcon from '../../../assets/svg/remove-red-eye.svg';
 import * as style from './posting.styled';
 import { PostingProps } from './posting';
+import { formatter } from 'components/community/communityCard/communityCard';
+import { css } from 'styled-components';
 
 const PostingHeadMagainze = ({
   title,
@@ -108,7 +110,7 @@ const PostingHeadCommunity = ({
   comments,
   created,
   updated,
-  category,
+  category = 'report',
 }: CommunityPostDto & Pick<PostingProps, 'category'>) => {
   return (
     <Container
@@ -118,7 +120,21 @@ const PostingHeadCommunity = ({
       borderBottom="1px solid #EAEAEC"
       boxSizing="border-box"
     >
-      <Wrapper.Top>
+      <Wrapper.Top
+        css={css`
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+        `}
+      >
+        <Typography
+          fontSize="body-16"
+          fontWeight="regular"
+          color="primary"
+          lineHeight="150%"
+        >
+          {formatter(category)} {`>`}
+        </Typography>
         <Typography
           as="h2"
           fontSize="header-24"

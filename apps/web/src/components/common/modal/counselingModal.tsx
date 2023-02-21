@@ -1,6 +1,6 @@
 import { Button, Container, Typography, Wrapper } from '@supercarmarket/ui';
 import { ModalContextProps } from 'feature/modalContext';
-import { User } from 'types/base';
+import { User } from '@supercarmarket/types/base';
 
 import * as style from './modal.styled';
 
