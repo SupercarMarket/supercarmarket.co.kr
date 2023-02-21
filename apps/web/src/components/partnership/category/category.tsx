@@ -13,7 +13,6 @@ interface CategoryProps {
     option: string;
     value: string;
   }[];
-  domain: string;
 }
 
 const makeQuery = (q: object) =>
@@ -21,12 +20,11 @@ const makeQuery = (q: object) =>
     .map(([key, val]) => `${key}=${val}`)
     .join('&');
 
-const Category = ({ domain, category }: CategoryProps) => {
+const Category = ({ category }: CategoryProps) => {
   const { query, push } = useRouter();
-  const defaultUrl = makeQuery(query);
 
   const selectCategory = (value: string) => {
-    push(`/${domain}/${value}?${defaultUrl}`, undefined, {
+    push(`/partnership/${value}?category=${value}`, undefined, {
       scroll: false,
     });
   };
@@ -37,7 +35,7 @@ const Category = ({ domain, category }: CategoryProps) => {
 
     const url = makeQuery(queries);
 
-    push(`/${domain}/${queries.category}?${url}`, undefined, {
+    push(`/partnership/${queries.category}?${url}`, undefined, {
       scroll: false,
     });
   };
@@ -56,7 +54,7 @@ const Category = ({ domain, category }: CategoryProps) => {
         ))}
       </Styled.CategoryList>
       <SecondSelect width="100px">
-        <SecondSelect.Button align="left">
+        <SecondSelect.Button align="left" selected={(query as Params).region}>
           {PARTNERSHIP_FILTER_OPTIONS.defaultLabel}
         </SecondSelect.Button>
         <SecondSelect.List>

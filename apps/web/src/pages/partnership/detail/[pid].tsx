@@ -3,17 +3,28 @@ import { NextPageContext } from 'next';
 import { useRouter } from 'next/router';
 import { css } from 'styled-components';
 import { NextPageWithLayout } from '@supercarmarket/types/base';
-import { dehydrate, QueryClient } from '@tanstack/react-query';
-import { Button, Pagination, Searchbar, Wrapper } from '@supercarmarket/ui';
+import {
+  dehydrate,
+  QueryClient,
+  QueryErrorResetBoundary,
+} from '@tanstack/react-query';
+import {
+  Button,
+  Pagination,
+  Searchbar,
+  Table,
+  Wrapper,
+} from '@supercarmarket/ui';
 
-import { PARTNERSHIP_TABLE_HEAD } from 'constants/partnership';
 import usePartnership from 'hooks/queries/usePartnership';
 import usePartnershipDetail from 'hooks/queries/usePartnershipDetail';
 import Layout from 'components/layout';
-import Table from 'components/partnership/table';
 import Carousel from 'components/common/carousel';
 import PartnershipDetailCard from 'components/partnership/partnershipDetailCard';
 import PartnershipIntroduction from 'components/partnership/partnershipIntroduction';
+import PartnershipRow from 'components/partnership/partnershipRow/partnershipRow';
+import { ErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from 'components/fallback';
 
 interface PartnershipDetailPageProps {
   pid: string;
@@ -34,6 +45,7 @@ const PartnershipDetailPage: NextPageWithLayout = ({
   const { data: list } = usePartnership(query);
 
   console.log(partnerships);
+  console.log(list);
 
   if (isLoading) return <div>로딩 중???</div>;
 
@@ -46,31 +58,58 @@ const PartnershipDetailPage: NextPageWithLayout = ({
         margin: 20px 0 0 0;
       `}
     >
-      {partnerships && (
-        <>
-          <Carousel>
-            <Carousel.CarouselWrapper
-              imgList={partnerships.data.imgSrc}
-              margin="0 0 80px 0"
+      <QueryErrorResetBoundary>
+        {({ reset }) => (
+          <>
+            <ErrorBoundary
+              onReset={reset}
+              fallbackRender={(props) => <ErrorFallback {...props} />}
             >
-              <Carousel.CarouselTop width={578} height={386} display="flex">
-                <PartnershipDetailCard info={partnerships.data} />
-              </Carousel.CarouselTop>
-              <Carousel.CarouselBottom />
-            </Carousel.CarouselWrapper>
-          </Carousel>
-          <PartnershipIntroduction
-            introduction={partnerships.data.introduction}
-          />
-        </>
-      )}
-      {list && (
-        <Table
-          data={list.data}
-          tableHeaders={PARTNERSHIP_TABLE_HEAD}
-          marginBottom="20px"
-        />
-      )}
+              {partnerships && (
+                <>
+                  <Carousel>
+                    <Carousel.CarouselWrapper
+                      imgList={partnerships.data.imgSrc}
+                      margin="0 0 80px 0"
+                    >
+                      <Carousel.CarouselTop
+                        width={578}
+                        height={386}
+                        display="flex"
+                      >
+                        <PartnershipDetailCard info={partnerships.data} />
+                      </Carousel.CarouselTop>
+                      <Carousel.CarouselBottom />
+                    </Carousel.CarouselWrapper>
+                  </Carousel>
+                  <PartnershipIntroduction
+                    introduction={partnerships.data.introduction}
+                  />
+                </>
+              )}
+            </ErrorBoundary>
+            <ErrorBoundary
+              onReset={reset}
+              fallbackRender={(props) => <ErrorFallback {...props} />}
+            >
+              <Wrapper
+                css={css`
+                  width: 100%;
+                  display: flex;
+                  flex-direction: column;
+                  margin-bottom: 80px;
+                `}
+              >
+                <Table tab="partnership" hidden={false} />{' '}
+                {list &&
+                  list.data.map((p) => (
+                    <PartnershipRow key={p.brdSeq} {...p} />
+                  ))}
+              </Wrapper>
+            </ErrorBoundary>
+          </>
+        )}
+      </QueryErrorResetBoundary>
       <Wrapper
         css={css`
           display: flex;
@@ -92,11 +131,11 @@ const PartnershipDetailPage: NextPageWithLayout = ({
           margin-bottom: 32px;
         `}
       >
-        {partnerships && (
+        {list && (
           <Pagination
             pageSize={10}
-            totalCount={partnerships.totalCount}
-            totalPages={partnerships.totalPages}
+            totalCount={list.totalCount}
+            totalPages={list.totalPages}
           />
         )}
       </Wrapper>

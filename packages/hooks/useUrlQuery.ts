@@ -20,6 +20,7 @@ export default function useMarketUrlQuery() {
   const size = searchParams.get('size');
   const variant = searchParams.get('variant');
   const searchType = searchParams.get('searchType');
+  const region = searchParams.get('region');
 
   return {
     page: page ? parseInt(page) : 0,
@@ -39,5 +40,6 @@ export default function useMarketUrlQuery() {
     accident: accident ?? undefined,
     transmission: transmission ?? undefined,
     size: size ? size : undefined,
+    region: region ? region : undefined,
   };
 }

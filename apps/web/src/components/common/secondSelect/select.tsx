@@ -56,10 +56,16 @@ const SecondSelect = ({ width, children }: SecondSelectProps) => {
 interface SelectButtonProps {
   align: 'left' | 'center' | 'right';
   children: React.ReactNode;
+  selected: string;
 }
 
-const SelectButton = ({ align, children }: SelectButtonProps) => {
-  const { toggle, onToggle, current } = useSelectContext('SelectButton');
+const SelectButton = ({ align, selected, children }: SelectButtonProps) => {
+  const { toggle, onToggle, current, changeCurrent } =
+    useSelectContext('SelectButton');
+
+  React.useEffect(() => {
+    changeCurrent(selected);
+  }, [changeCurrent, selected]);
 
   const closeToggle = () => onToggle(false);
   const clickToggle = () => onToggle(!toggle);

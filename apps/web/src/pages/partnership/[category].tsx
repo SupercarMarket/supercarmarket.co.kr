@@ -29,9 +29,7 @@ interface IParams extends ParsedUrlQuery {
 
 const PartnershipPage: NextPageWithLayout = () => {
   const { query } = useRouter();
-
   const { data: partnerships, isLoading } = usePartnership(query as Params);
-  console.log(partnerships);
 
   if (isLoading) return <div>로딩 중???</div>;
 
@@ -56,7 +54,7 @@ const PartnershipPage: NextPageWithLayout = () => {
           placeholder="원하시는 업체를 검색하세요"
         />
       </Wrapper.Top>
-      <Category domain="partnership" category={PARTNERSHIP_CATEGORY} />
+      <Category category={PARTNERSHIP_CATEGORY} />
       <QueryErrorResetBoundary>
         {({ reset }) => (
           <ErrorBoundary
