@@ -2,6 +2,7 @@ import {
   Alert,
   Button,
   Container,
+  theme,
   Typography,
   Wrapper,
 } from '@supercarmarket/ui';
@@ -10,11 +11,12 @@ import Avvvatars from 'avvvatars-react';
 import useLikeComment from 'hooks/mutations/comment/useLikeComment';
 import useRemoveComment from 'hooks/mutations/comment/useRemoveComment';
 import * as React from 'react';
-import { Comment } from 'types/comment';
+import type { Comment } from '@supercarmarket/types/comment';
 
 import LikeIcon from '../../../assets/svg/thumb-up.svg';
 import * as style from './comment.styled';
 import CommentArea from './commentArea';
+import { css } from 'styled-components';
 
 const CommentCard = ({
   postId,
@@ -28,9 +30,21 @@ const CommentCard = ({
   isLiked,
   isMyComment = true,
   children,
-}: Comment & { postId: string }) => {
-  const { mutate: likeMuate } = useLikeComment(postId, id);
-  const { mutate: removeMutate } = useRemoveComment(postId, id);
+  category,
+}: Comment & {
+  postId: string;
+  category: 'magazine' | 'paparazzi' | 'partnership';
+}) => {
+  const { mutate: likeMuate } = useLikeComment({
+    category,
+    postId,
+    commentId: id,
+  });
+  const { mutate: removeMutate } = useRemoveComment({
+    category,
+    postId,
+    commentId: id,
+  });
   const [modify, setModify] = React.useState(false);
   const [open, setOpen] = React.useState(false);
 
@@ -154,13 +168,26 @@ const CommentCard = ({
                   cursor: 'pointer',
                 }}
               >
-                <Wrapper css={style.cardInfoWrapper}>
+                <Wrapper
+                  css={css`
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    & > svg {
+                      width: 16px;
+                      height: 16px;
+                      fill: ${isLiked
+                        ? theme.color['system-1']
+                        : theme.color['greyScale-5']};
+                    }
+                  `}
+                >
                   <LikeIcon />
                   <Typography
                     fontSize="body-14"
                     fontWeight="regular"
                     lineHeight="120%"
-                    color="greyScale-5"
+                    color={isLiked ? 'system-1' : 'greyScale-5'}
                   >
                     {like}
                   </Typography>
@@ -179,19 +206,25 @@ const CommentCard = ({
             postId={postId}
             parentId={id}
             defaultValue={content}
+            category={category}
             type="edit"
           />
         </Wrapper>
       )}
       {open && (
         <Wrapper css={style.cardArea}>
-          <CommentArea postId={postId} parentId={id} />
+          <CommentArea postId={postId} parentId={id} category={category} />
         </Wrapper>
       )}
       {children && (
         <Wrapper css={style.cardChildren}>
           {children.map((comment) => (
-            <CommentCard key={comment.id} postId={postId} {...comment} />
+            <CommentCard
+              key={comment.id}
+              postId={postId}
+              category={category}
+              {...comment}
+            />
           ))}
         </Wrapper>
       )}
@@ -202,9 +235,11 @@ const CommentCard = ({
 const CommentBody = ({
   postId,
   comments,
+  category = 'magazine',
 }: {
   postId: string;
   comments: Comment[];
+  category?: 'magazine' | 'paparazzi' | 'partnership';
 }) => {
   return (
     <Container display="flex" flexDirection="column">
@@ -215,7 +250,12 @@ const CommentBody = ({
         />
       )}
       {comments.map((comment) => (
-        <CommentCard key={comment.id} postId={postId} {...comment} />
+        <CommentCard
+          key={comment.id}
+          postId={postId}
+          category={category}
+          {...comment}
+        />
       ))}
     </Container>
   );

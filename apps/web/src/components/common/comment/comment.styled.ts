@@ -39,6 +39,11 @@ const cardInfoWrapper = css`
   display: flex;
   align-items: center;
   gap: 12px;
+  & > svg {
+    width: 16px;
+    height: 16px;
+    fill: ${({ theme }) => theme.color['greyScale-5']};
+  }
 `;
 
 const CommentAreaTextArea = styled.textarea`
@@ -50,6 +55,10 @@ const CommentAreaTextArea = styled.textarea`
   font-size: 14px;
   line-height: 21px;
   box-sizing: border-box;
+  background-color: ${({ theme }) => theme.color.white};
+  &::placeholder {
+    background-color: ${({ theme }) => theme.color.white};
+  }
 `;
 
 const CommentAreaTop = styled.div`

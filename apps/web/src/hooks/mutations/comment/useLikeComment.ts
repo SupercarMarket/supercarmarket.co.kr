@@ -3,10 +3,14 @@ import queries from 'constants/queries';
 import { baseFetch } from 'utils/api/fetcher';
 
 export default function useLikeComment(
-  postId: string,
-  commentId: string,
+  query: {
+    category: string;
+    postId: string;
+    commentId: string;
+  },
   options = {}
 ) {
+  const { category, postId, commentId } = query;
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -14,6 +18,7 @@ export default function useLikeComment(
       baseFetch('/api/comment/like', {
         method: 'PATCH',
         query: {
+          category,
           postId,
           commentId,
         },

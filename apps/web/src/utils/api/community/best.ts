@@ -1,6 +1,9 @@
 import type { NextApiHandler } from 'next/types';
 import { getPlaiceholder } from 'plaiceholder';
-import type { CommunityBestResponse, CommunityDto } from 'types/community';
+import type {
+  CommunityBestResponse,
+  CommunityDto,
+} from '@supercarmarket/types/community';
 import { getErrorMessage } from 'utils/misc';
 
 const communityBestApi: NextApiHandler = async (_, res) => {

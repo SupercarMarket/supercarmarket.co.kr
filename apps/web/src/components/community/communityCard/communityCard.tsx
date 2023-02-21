@@ -14,7 +14,7 @@ interface CommunityCardProps extends WithBlurredImage<CommunityDto> {
 
 type CommunityCardChildrenProps = Omit<CommunityCardProps, 'variant'>;
 
-const formatter = (category: string) => {
+export const formatter = (category: string) => {
   if (category === 'report') return '제보';
   if (category === 'gallery') return '포토갤러리';
   if (category === 'boast') return '내 차 자랑';

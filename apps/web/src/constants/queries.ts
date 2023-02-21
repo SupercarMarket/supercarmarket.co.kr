@@ -42,6 +42,7 @@ const queries = {
     all: ['community'] as const,
     lists: () => [...queries.community.all, 'list'] as const,
     best: () => [...queries.community.lists(), 'best'] as const,
+    detail: (...query: string[]) => [...query, 'detail'] as const,
     query: (
       query: Pick<
         Query,

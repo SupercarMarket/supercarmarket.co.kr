@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import queries from 'constants/queries';
-import { MagazinePostingResponse } from 'types/magazine';
+import type { MagazinePostingResponse } from '@supercarmarket/types/magazine';
 import { baseFetch } from 'utils/api/fetcher';
 
 export default function useMagazinePost(id: string, options = {}) {

@@ -1,5 +1,5 @@
 import type { NextApiHandler } from 'next';
-import type { Params, ServerResponse } from 'types/base';
+import type { Params, ServerResponse } from '@supercarmarket/types/base';
 import { ErrorCode } from 'utils/error';
 import { catchNoExist, getErrorMessage } from 'utils/misc';
 

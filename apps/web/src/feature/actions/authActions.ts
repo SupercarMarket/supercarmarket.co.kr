@@ -1,5 +1,9 @@
 import { FormState } from 'constants/account';
-import type { DuplicationList, Signin, Signup } from 'types/auth';
+import type {
+  DuplicationList,
+  Signin,
+  Signup,
+} from '@supercarmarket/types/auth';
 import { baseApi, baseFetcher, clientApi } from 'utils/api/fetcher';
 
 import createAsyncDispatcher from '.';

@@ -1,7 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import queries from 'constants/queries';
-import type { CommentQuery, CommentResponse } from 'types/comment';
-import { baseFetch } from 'utils/api/fetcher';
+import type {
+  CommentQuery,
+  CommentResponse,
+} from '@supercarmarket/types/comment';
+import { clientFetcher } from '@supercarmarket/lib';
 
 export default function useComment(
   id: string,
@@ -15,7 +18,7 @@ export default function useComment(
   return useQuery<CommentResponse>({
     queryKey: [...queries.comment.id(id), ...queries.comment.query(query)],
     queryFn: () =>
-      baseFetch('/api/comment', {
+      clientFetcher('/api/comment', {
         method: 'GET',
         params: id,
         query: {
