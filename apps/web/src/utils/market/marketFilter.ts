@@ -3,7 +3,7 @@ import {
   FIRST_MARKET_FILTER,
   SECOND_MARKET_FILTER,
 } from 'constants/market';
-import { MarketOptionType, SelectType } from 'types/market';
+import { MarketOptionType, SelectType } from '@supercarmarket/types/market';
 
 const formatter = Intl.NumberFormat('ko-KR', {
   notation: 'compact',
