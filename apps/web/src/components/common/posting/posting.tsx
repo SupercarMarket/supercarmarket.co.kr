@@ -1,4 +1,10 @@
-import { Button, Container, Typography, Wrapper } from '@supercarmarket/ui';
+import {
+  Button,
+  Container,
+  theme,
+  Typography,
+  Wrapper,
+} from '@supercarmarket/ui';
 import useCommunityPost from 'hooks/queries/community/useCommunityPost';
 
 import useMagazinePost from 'hooks/queries/useMagazinePost';
@@ -14,6 +20,8 @@ import Link from 'next/link';
 import useLikeCommunityPost from 'hooks/mutations/community/useLikeCommunityPost';
 import ModalContext from 'feature/modalContext';
 import AuthModal from '../modal/authModal';
+
+import LikeIcon from '../../../assets/svg/thumb-up.svg';
 
 const Comment = dynamic(() => import('components/common/comment'), {
   ssr: false,
@@ -167,7 +175,7 @@ const CommunityPosting = ({
             <Button
               type="button"
               variant="Line"
-              width="71px"
+              width="95px"
               onClick={handleLike}
             >
               <Wrapper.Item
@@ -175,6 +183,7 @@ const CommunityPosting = ({
                   display: flex;
                   flex-direction: column;
                   align-items: center;
+                  gap: 4px;
                 `}
               >
                 <Typography
@@ -193,7 +202,30 @@ const CommunityPosting = ({
                   }
                   lineHeight="150%"
                 >
-                  추천
+                  <Wrapper.Item
+                    css={css`
+                      display: flex;
+                      align-items: center;
+                      gap: 4.5px;
+                    `}
+                  >
+                    <Wrapper.Left
+                      css={css`
+                        display: flex;
+                        align-items: center;
+                        & > svg {
+                          width: 18px;
+                          height: 18px;
+                          fill: ${communityPost.data.isLiked
+                            ? theme.color['system-1']
+                            : theme.color['greyScale-6']};
+                        }
+                      `}
+                    >
+                      <LikeIcon />
+                    </Wrapper.Left>
+                    <Wrapper.Right>추천</Wrapper.Right>
+                  </Wrapper.Item>
                 </Typography>
               </Wrapper.Item>
             </Button>

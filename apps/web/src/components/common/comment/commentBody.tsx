@@ -2,6 +2,7 @@ import {
   Alert,
   Button,
   Container,
+  theme,
   Typography,
   Wrapper,
 } from '@supercarmarket/ui';
@@ -15,6 +16,7 @@ import type { Comment } from '@supercarmarket/types/comment';
 import LikeIcon from '../../../assets/svg/thumb-up.svg';
 import * as style from './comment.styled';
 import CommentArea from './commentArea';
+import { css } from 'styled-components';
 
 const CommentCard = ({
   postId,
@@ -166,13 +168,26 @@ const CommentCard = ({
                   cursor: 'pointer',
                 }}
               >
-                <Wrapper css={style.cardInfoWrapper}>
+                <Wrapper
+                  css={css`
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    & > svg {
+                      width: 16px;
+                      height: 16px;
+                      fill: ${isLiked
+                        ? theme.color['system-1']
+                        : theme.color['greyScale-5']};
+                    }
+                  `}
+                >
                   <LikeIcon />
                   <Typography
                     fontSize="body-14"
                     fontWeight="regular"
                     lineHeight="120%"
-                    color="greyScale-5"
+                    color={isLiked ? 'system-1' : 'greyScale-5'}
                   >
                     {like}
                   </Typography>

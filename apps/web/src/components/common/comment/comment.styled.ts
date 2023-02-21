@@ -39,6 +39,11 @@ const cardInfoWrapper = css`
   display: flex;
   align-items: center;
   gap: 12px;
+  & > svg {
+    width: 16px;
+    height: 16px;
+    fill: ${({ theme }) => theme.color['greyScale-5']};
+  }
 `;
 
 const CommentAreaTextArea = styled.textarea`
