@@ -2,19 +2,20 @@ import { useQuery } from '@tanstack/react-query';
 import queries from 'constants/queries';
 import { clientFetcher } from 'utils/api/fetcher';
 
-export default function useCommunityDetail(
+export default function useCommunityPost(
+  token: string | null,
   query: {
+    subject: string;
     category: string;
-    filter: string;
-    orderBy: string;
-    page: number;
+    id: string;
   },
   options = {}
 ) {
+  const { subject, category, id } = query;
   return useQuery(
-    queries.market.lists([query.category]),
+    queries.community.detail(subject, category, id),
     () =>
-      clientFetcher('/supercar/v1/community-temp', {
+      clientFetcher(`/server/supercar/v1/community/${category}/post-id/${id}`, {
         method: 'GET',
       }),
     options

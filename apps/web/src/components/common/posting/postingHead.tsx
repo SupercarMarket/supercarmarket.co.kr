@@ -1,8 +1,10 @@
+import { CommunityPostDto } from '@supercarmarket/types/community';
 import { Container, Typography, Wrapper } from '@supercarmarket/ui';
 
 import Avvvatars from 'avvvatars-react';
+import dayjs from 'dayjs';
 import Image from 'next/image';
-import { Posting } from 'types/base';
+import { Posting } from '@supercarmarket/types/base';
 
 import ChatIcon from '../../../assets/svg/chat.svg';
 import EyeIcon from '../../../assets/svg/remove-red-eye.svg';
@@ -100,11 +102,12 @@ const PostingHeadMagainze = ({
 
 const PostingHeadCommunity = ({
   title,
-  user,
+  nickname,
   view,
-  totalCommentCount,
-  createAt,
-}: Omit<Posting, 'contentHtml'>) => {
+  comments,
+  created,
+  updated,
+}: CommunityPostDto) => {
   return (
     <Container
       display="flex"
@@ -126,7 +129,7 @@ const PostingHeadCommunity = ({
       </Wrapper.Top>
       <Wrapper.Bottom css={style.bottom}>
         <Wrapper.Left css={style.left}>
-          <Avvvatars value={user.nickName} size={40} />
+          <Avvvatars value={nickname} size={40} />
           <Typography
             as="span"
             fontSize="body-14"
@@ -134,7 +137,7 @@ const PostingHeadCommunity = ({
             color="greyScale-6"
             lineHeight="120%"
           >
-            {user.nickName}
+            {nickname}
           </Typography>
           <Typography
             as="span"
@@ -143,7 +146,7 @@ const PostingHeadCommunity = ({
             color="greyScale-5"
             lineHeight="120%"
           >
-            {createAt.toString()}
+            {dayjs(created).format('YYYY-MM-DD')}
           </Typography>
         </Wrapper.Left>
         <Wrapper.Right css={style.right}>
@@ -156,7 +159,7 @@ const PostingHeadCommunity = ({
               color="greyScale-5"
               lineHeight="120%"
             >
-              {totalCommentCount}
+              {comments}
             </Typography>
           </Wrapper>
           <Wrapper css={style.wrapper}>
