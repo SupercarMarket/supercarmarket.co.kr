@@ -15,16 +15,13 @@ import {
   Table,
   Wrapper,
 } from '@supercarmarket/ui';
+import { ErrorBoundary } from 'react-error-boundary';
 
 import usePartnership from 'hooks/queries/usePartnership';
-import usePartnershipDetail from 'hooks/queries/usePartnershipDetail';
 import Layout from 'components/layout';
-import Carousel from 'components/common/carousel';
-import PartnershipDetailCard from 'components/partnership/partnershipDetailCard';
-import PartnershipIntroduction from 'components/partnership/partnershipIntroduction';
-import PartnershipRow from 'components/partnership/partnershipRow/partnershipRow';
-import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from 'components/fallback';
+import PartnershipRow from 'components/partnership/partnershipRow';
+import PartnershipDetail from 'components/partnership/partnershipDetail';
 
 interface PartnershipDetailPageProps {
   pid: string;
@@ -34,20 +31,13 @@ const PartnershipDetailPage: NextPageWithLayout = ({
   pid,
 }: PartnershipDetailPageProps) => {
   const { query, back } = useRouter();
+  const { data: list } = usePartnership(query);
 
   const scrollToTop = () =>
     window.scrollTo({
       behavior: 'smooth',
       top: 0,
     });
-
-  const { data: partnerships, isLoading } = usePartnershipDetail(pid);
-  const { data: list } = usePartnership(query);
-
-  console.log(partnerships);
-  console.log(list);
-
-  if (isLoading) return <div>로딩 중???</div>;
 
   return (
     <Wrapper
@@ -65,28 +55,7 @@ const PartnershipDetailPage: NextPageWithLayout = ({
               onReset={reset}
               fallbackRender={(props) => <ErrorFallback {...props} />}
             >
-              {partnerships && (
-                <>
-                  <Carousel>
-                    <Carousel.CarouselWrapper
-                      imgList={partnerships.data.imgSrc}
-                      margin="0 0 80px 0"
-                    >
-                      <Carousel.CarouselTop
-                        width={578}
-                        height={386}
-                        display="flex"
-                      >
-                        <PartnershipDetailCard info={partnerships.data} />
-                      </Carousel.CarouselTop>
-                      <Carousel.CarouselBottom />
-                    </Carousel.CarouselWrapper>
-                  </Carousel>
-                  <PartnershipIntroduction
-                    introduction={partnerships.data.introduction}
-                  />
-                </>
-              )}
+              <PartnershipDetail pid={pid} />
             </ErrorBoundary>
             <ErrorBoundary
               onReset={reset}

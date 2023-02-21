@@ -30,7 +30,7 @@ type PartnershipDetailDto<T> = Omit<PartnershipDto, 'imgSrc'> & {
 };
 
 interface PartnershipDetailResponse {
-  data: PartnershipDetailDto<string>;
+  data: PartnershipDetailDto<{ imgSrc: string; base64: string }>;
   isLastPage: boolean;
   totalPages: number;
   totalCount: number;

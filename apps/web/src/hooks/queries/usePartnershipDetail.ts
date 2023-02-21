@@ -4,9 +4,7 @@ import queries from 'constants/queries';
 import { PartnershipDetailResponse } from 'types/partnership';
 
 export default function usePartnershipDetail(id: string, options = {}) {
-  return useQuery<
-    PartnershipDetailResponse<{ imgSrc: string; base64: string }>
-  >(
+  return useQuery<PartnershipDetailResponse>(
     queries.partnership.id(id),
     () => clientFetcher(`/api/partnership/${id}`, { method: 'GET' }),
     options
