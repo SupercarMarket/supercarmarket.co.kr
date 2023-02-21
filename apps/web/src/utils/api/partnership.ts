@@ -17,6 +17,8 @@ import {
 const partnershipApi: NextApiHandler = async (req, res) => {
   const query = req.query as Params;
 
+  console.log(query);
+
   query.page = +query.page + 1 + '';
 
   try {
@@ -24,7 +26,7 @@ const partnershipApi: NextApiHandler = async (req, res) => {
       `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/partnership`,
       {
         method: 'get',
-        query,
+        // query,
       }
     );
 

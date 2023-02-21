@@ -1,5 +1,5 @@
 import { NextPageWithLayout, Params } from '@supercarmarket/types/base';
-import { Pagination, Searchbar, Wrapper } from '@supercarmarket/ui';
+import { Pagination, Searchbar, Table, Wrapper } from '@supercarmarket/ui';
 import {
   dehydrate,
   QueryClient,
@@ -9,7 +9,8 @@ import { ErrorFallback } from 'components/fallback';
 import layout from 'components/layout';
 import Banner from 'components/partnership/banner';
 import Category from 'components/partnership/category';
-import Table from 'components/partnership/table';
+import PartnershipRow from 'components/partnership/partnershipRow/partnershipRow';
+import PartnershipTable from 'components/partnership/table';
 import {
   PARTNERSHIP_CATEGORY,
   PARTNERSHIP_TABLE_HEAD,
@@ -64,10 +65,19 @@ const PartnershipPage: NextPageWithLayout = () => {
           >
             {partnerships && (
               <>
-                <Table
-                  data={partnerships.data}
-                  tableHeaders={PARTNERSHIP_TABLE_HEAD}
-                />
+                <Wrapper
+                  css={css`
+                    width: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    margin-bottom: 80px;
+                  `}
+                >
+                  <Table tab="partnership" hidden={false} />
+                  {partnerships.data.map((p) => (
+                    <PartnershipRow key={p.brdSeq} {...p} />
+                  ))}
+                </Wrapper>
                 <Pagination
                   pageSize={20}
                   totalCount={partnerships.totalCount}

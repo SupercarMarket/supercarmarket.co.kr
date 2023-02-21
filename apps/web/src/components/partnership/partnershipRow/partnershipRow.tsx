@@ -1,4 +1,4 @@
-import { Typography } from '@supercarmarket/ui';
+import { Container, Typography, Wrapper } from '@supercarmarket/ui';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -7,12 +7,13 @@ import { WithBlurredImage } from 'types/magazine';
 import { PartnershipDto } from 'types/partnership';
 
 import * as Styled from './partnershipRow.styled';
+import { css } from 'styled-components';
+import { Params } from '@supercarmarket/types/base';
 
 const PartnershipRow = ({
   brdSeq,
   base64,
   partnerName,
-  description,
   category,
   workTime,
   phone,
@@ -20,61 +21,99 @@ const PartnershipRow = ({
   siteUrl,
   imgSrc,
 }: WithBlurredImage<PartnershipDto>) => {
-  const { push, asPath } = useRouter();
-
-  const onClick = (brdSeq: string) => {
-    const query = asPath.split('?')[1];
-    push(`/partnership/detail/${brdSeq}?${query}`);
-  };
+  const { query } = useRouter();
+  const queryString = new URLSearchParams(query as Params).toString();
 
   return (
-    <Styled.TableRow key={brdSeq}>
-      <Styled.TableData onClick={() => onClick(brdSeq)}>
+    <Container
+      width="100%"
+      display="flex"
+      alignItems="center"
+      borderBottom="1px solid #EAEAEC"
+    >
+      <Link
+        href={`/partnership/detail/${brdSeq}?${queryString}`}
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
         <Image
           width={196}
           height={124}
-          placeholder="blur"
-          blurDataURL={base64}
+          placeholder={base64 ? 'blur' : undefined}
+          blurDataURL={base64 ? base64 : undefined}
           src={imgSrc}
           alt="thumbnail"
           style={{ borderRadius: '4px' }}
+          sizes="100%"
         />
-      </Styled.TableData>
-      <Styled.TableData>
-        <Styled.Description>
-          <Typography fontSize="body-24" fontWeight="bold">
+        <Wrapper.Item
+          css={css`
+            flex: 1;
+            width: 403px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 12px;
+          `}
+        >
+          <Typography
+            fontSize="body-24"
+            fontWeight="bold"
+            style={{ padding: '0 30px' }}
+          >
             {partnerName}
           </Typography>
-          <Typography fontSize="body-14" color="greyScale-5">
-            {address}
-          </Typography>
-        </Styled.Description>
-      </Styled.TableData>
-      <Styled.TableData>
-        <Typography fontSize="body-14">{category}</Typography>
-      </Styled.TableData>
-      <Styled.TableData>
-        <Typography fontSize="body-14">{workTime}</Typography>
-      </Styled.TableData>
-      <Styled.TableData>
-        <Typography fontSize="body-14">{phone}</Typography>
-      </Styled.TableData>
-      <Styled.TableData>
-        <Typography fontSize="body-14">
-          {address.split(' ').slice(0, 2).join(' ')}
-        </Typography>
-      </Styled.TableData>
-      <Styled.TableData>
-        <Link href={siteUrl}>
           <Typography
             fontSize="body-14"
-            style={{ textDecorationLine: 'underline', cursor: 'pointer' }}
+            color="greyScale-5"
+            style={{ padding: '0 30px' }}
           >
-            바로가기
+            {address}
           </Typography>
-        </Link>
-      </Styled.TableData>
-    </Styled.TableRow>
+        </Wrapper.Item>
+        <Wrapper.Item
+          css={css`
+            display: flex;
+            & > span {
+              text-align: center;
+            }
+          `}
+        >
+          <Typography fontSize="body-14" style={{ width: '120px' }}>
+            {category}
+          </Typography>
+          <Typography fontSize="body-14" style={{ width: '119px' }}>
+            {workTime}
+          </Typography>
+          <Typography fontSize="body-14" style={{ width: '142px' }}>
+            {phone}
+          </Typography>
+          <Typography fontSize="body-14" style={{ width: '137px' }}>
+            {address.split(' ').slice(0, 2).join(' ')}
+          </Typography>
+        </Wrapper.Item>
+      </Link>
+      <Link
+        href={siteUrl}
+        style={{
+          display: 'inline-block',
+          width: '80px',
+          textAlign: 'center',
+          cursor: 'pointer',
+        }}
+      >
+        <Typography
+          fontSize="body-14"
+          style={{
+            textDecorationLine: 'underline',
+          }}
+        >
+          바로가기
+        </Typography>
+      </Link>
+    </Container>
   );
 };
 

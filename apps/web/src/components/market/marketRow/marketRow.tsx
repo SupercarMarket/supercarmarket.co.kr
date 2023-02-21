@@ -26,7 +26,12 @@ const MarketRow = ({
 
   return (
     <Link href={`/market/detail/${id}?${queryString}`}>
-      <Container width="100%" display="flex" alignItems="center">
+      <Container
+        width="100%"
+        display="flex"
+        alignItems="center"
+        borderBottom="1px solid #EAEAEC"
+      >
         <Image
           width={196}
           height={124}
