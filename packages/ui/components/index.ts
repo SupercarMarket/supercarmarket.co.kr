@@ -30,3 +30,7 @@ export { Wrapper } from './wrapper';
 export type { WrapperProps } from './wrapper';
 export { Portal } from './portal';
 export type { PortalProps } from './portal';
+export { Highlight } from './highlight';
+export type { HighlightProps } from './highlight';
+export { Link } from './link';
+export type { LinkProps } from './link';

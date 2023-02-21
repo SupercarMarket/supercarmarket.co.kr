@@ -64,7 +64,7 @@ const queries = {
     lists: () => [...queries.comment.all, 'list'] as const,
     id: (id: string) => [...queries.comment.lists(), id] as const,
     query: (query: CommentQuery) =>
-      [query.page, query.orderby, query.category] as const,
+      [query.page, query.orderBy, query.category] as const,
   },
   /**
    * Account Query Keys
@@ -74,6 +74,21 @@ const queries = {
     info: () => [...queries.account.all, 'info'] as const,
     id: (id: string) => [...queries.account.all, id] as const,
     category: (category: AccountTab) => [category] as const,
+  },
+  /**
+   * Search Query Keys
+   */
+  search: {
+    all: ['search'] as const,
+    query: (
+      query: Pick<Query, 'category' | 'page' | 'filter' | 'keyword' | 'orderBy'>
+    ) => [
+      String(query.filter),
+      String(query.page),
+      String(query.keyword),
+      String(query.orderBy),
+      query.category,
+    ],
   },
 };
 

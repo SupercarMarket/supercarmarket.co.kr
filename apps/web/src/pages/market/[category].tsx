@@ -1,8 +1,12 @@
 'use client';
 
-import { Container, Searchbar } from '@supercarmarket/ui';
-import { useUrlQuery } from '@supercarmarket/hooks';
-import type { NextPageWithLayout } from '@supercarmarket/types/base';
+import {
+  applyMediaQuery,
+  Container,
+  Searchbar,
+  Wrapper,
+} from '@supercarmarket/ui';
+import type { NextPageWithLayout, Params } from '@supercarmarket/types/base';
 import {
   dehydrate,
   QueryClient,
@@ -17,25 +21,19 @@ import MarketFilter from 'components/market/marketFilter';
 import { CATEGORY_VALUES } from 'constants/market';
 import queries from 'constants/queries';
 import useMarket from 'hooks/queries/useMarket';
+import { useUrlQuery } from '@supercarmarket/hooks';
 import { useRouter } from 'next/router';
 import type { NextPageContext } from 'next/types';
 import * as React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
+import { css } from 'styled-components';
 
 const MarketFilterPage: NextPageWithLayout = () => {
   const { push, query } = useRouter();
-  const { page, orderBy, filter, category } = useUrlQuery();
+  const marketQuery = useUrlQuery();
   const keywordRef = React.useRef<HTMLInputElement>(null);
 
-  const { data: markets } = useMarket(
-    {
-      page,
-      orderBy: orderBy ? orderBy : 'DESC',
-      filter: filter ? filter : 'created_date',
-      category: category ? category : 'all',
-    },
-    { keepPreviousData: true }
-  );
+  const { data: markets } = useMarket(marketQuery, { keepPreviousData: true });
 
   const keydownHandler = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && keywordRef.current !== null) {
@@ -54,20 +52,33 @@ const MarketFilterPage: NextPageWithLayout = () => {
   return (
     <Container display="flex" flexDirection="column" margin="20px 0 0 0">
       <MarketBanner />
-      <Container
-        height="212px"
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
+      <Wrapper
+        css={css`
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin: 80px 0;
+          ${applyMediaQuery('mobile')} {
+            margin: 32px 0;
+          }
+        `}
       >
-        <Searchbar
-          variant="Line"
-          width="880px"
-          placeholder="원하는 차량을 검색하세요"
-          onKeyDown={keydownHandler}
-          ref={keywordRef}
-        />
-      </Container>
+        <Wrapper.Item
+          css={css`
+            width: 880px;
+            ${applyMediaQuery('mobile')} {
+              width: 100%;
+            }
+          `}
+        >
+          <Searchbar
+            variant="Line"
+            placeholder="원하는 차량을 검색하세요"
+            onKeyDown={keydownHandler}
+            ref={keywordRef}
+          />
+        </Wrapper.Item>
+      </Wrapper>
       <QueryErrorResetBoundary>
         {({ reset }) => (
           <ErrorBoundary
@@ -76,7 +87,9 @@ const MarketFilterPage: NextPageWithLayout = () => {
           >
             <MarketCarKind />
             <MarketFilter />
-            {markets && <MarketCarList data={markets} page={page} />}
+            {markets && (
+              <MarketCarList data={markets} page={marketQuery.page} />
+            )}
           </ErrorBoundary>
         )}
       </QueryErrorResetBoundary>
@@ -89,9 +102,9 @@ MarketFilterPage.Layout = layout;
 const queryClient = new QueryClient();
 
 export const getServerSideProps = async (ctx: NextPageContext) => {
-  const { category } = ctx.query;
+  const { category } = ctx.query as Params;
 
-  if (!category || !CATEGORY_VALUES.includes(category as string))
+  if (!category || !CATEGORY_VALUES.includes(category))
     return {
       redirect: {
         destination: '/market/all',

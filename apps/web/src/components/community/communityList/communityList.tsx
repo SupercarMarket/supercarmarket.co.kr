@@ -18,14 +18,14 @@ import { CardSkeleton } from 'components/fallback/loading';
 const CommunityList = () => {
   const pathname = usePathname();
   const { push } = useRouter();
-  const { variant, category, page, popular, searchType, keyword } =
+  const { variant, category, page, searchType, keyword, filter } =
     useUrlQuery();
   const { data, isFetching, isLoading } = useCommunity({
     category: category || 'report',
-    page,
-    filter: popular === 'true' ? 'popular' : null,
+    filter: filter ?? null,
     searchType: searchType ?? null,
     keyword: keyword ?? null,
+    page,
   });
 
   if (isFetching || isLoading) {

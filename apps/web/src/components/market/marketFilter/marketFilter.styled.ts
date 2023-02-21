@@ -1,5 +1,6 @@
 'use client';
 
+import { applyMediaQuery } from '@supercarmarket/ui';
 import styled from 'styled-components';
 
 const MarketFilterContainer = styled.div`
@@ -14,7 +15,7 @@ const MarketFilterArea = styled.div`
   flex-direction: column;
   gap: 32px;
   margin-bottom: 20px;
-  padding: 28px 24px;
+  padding: 16px 12px;
   background: ${({ theme }) => theme.color['greyScale-2']};
   border-radius: 4px;
 `;
@@ -25,6 +26,7 @@ const MarketFilterBox = styled.div`
 `;
 
 const MarketFilterWrapper = styled.div`
+  width: 270px;
   display: flex;
   flex-direction: column;
   gap: 5px;
@@ -34,6 +36,13 @@ const FilterListArea = styled.div`
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
+  flex-wrap: wrap;
+  margin-bottom: 80px;
+  ${applyMediaQuery('mobile')} {
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 32px;
+  }
 `;
 
 const MarketFilterList = styled.ul`
@@ -57,7 +66,7 @@ const MarketFilterItem = styled.li`
 `;
 
 const ResetButton = styled.button`
-  width: 75px;
+  width: 100px;
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -65,6 +74,9 @@ const ResetButton = styled.button`
   border: none;
   color: ${({ theme }) => theme.color['greyScale-5']};
   cursor: pointer;
+  ${applyMediaQuery('mobile')} {
+    width: 100%;
+  }
 `;
 
 export {

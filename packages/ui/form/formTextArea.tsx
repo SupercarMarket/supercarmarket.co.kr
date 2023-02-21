@@ -31,9 +31,12 @@ const FormTextArea = React.forwardRef(function FormTextArea(
           font-size: 14px;
           line-height: 21px;
           box-sizing: border-box;
-          border: 1px solid #c3c3c7;
+          border: 1px solid #eaeaec;
           border-radius: 4px;
           padding: 16px;
+        }
+        .form-textarea:focus {
+          border: 1px solid #8e8e95;
         }
       `}</style>
     </>

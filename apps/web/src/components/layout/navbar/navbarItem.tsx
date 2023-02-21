@@ -1,15 +1,14 @@
+import type { Links } from '@supercarmarket/types/base';
 import clsx from 'clsx';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { memo } from 'react';
 
-import { NavbarLinks } from './navbar';
-
 const NavbarItem = memo(function NavbarItem({
   subMenu,
   active,
-  link,
-}: Pick<NavbarLinks, 'subMenu'> & { active: boolean; link: string }) {
+  href,
+}: Pick<Links, 'href'> & { active: boolean; subMenu: Links[] | undefined }) {
   const { pathname } = useRouter();
 
   return (
@@ -22,10 +21,10 @@ const NavbarItem = memo(function NavbarItem({
               style={{
                 width: '100%',
               }}
-              href={'/' + link + '/' + s.link}
+              href={'/' + href + '/' + s.href}
             >
               <li
-                data-active={pathname.includes(s.link)}
+                data-active={pathname.includes(s.href)}
                 className={clsx('navbarItem-li')}
               >
                 {s.title}

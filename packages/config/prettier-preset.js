@@ -1,14 +1,15 @@
 module.exports = {
-  trailingComma: "es5",
+  trailingComma: 'es5',
   tabWidth: 2,
   singleQuote: true,
-  arrowParens: "always",
+  arrowParens: 'always',
   importOrder: [
-    "^@(supercarmarket|ee)/(.*)$",
-    "^@lib/(.*)$",
-    "^@components/(.*)$",
-    "^~/(.*)$",
-    "^[./]",
+    '^@(supercarmarket|ee)/(.*)$',
+    '^@lib/(.*)$',
+    '^@components/(.*)$',
+    '^~/(.*)$',
+    '^[./]',
   ],
   importOrderSeparation: true,
+  endOfLine: 'auto',
 };

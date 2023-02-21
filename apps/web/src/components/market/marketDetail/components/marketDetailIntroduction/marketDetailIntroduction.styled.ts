@@ -4,7 +4,7 @@ import styled, { css } from 'styled-components';
 
 const wrapper = css`
   margin-top: 20px;
-  height: 800px;
+  height: fit-content;
   margin-bottom: 80px;
   padding: 30px 40px;
   border: 1px solid ${({ theme }) => theme.color['greyScale-3']};
@@ -16,6 +16,7 @@ const Content = styled.div`
   width: 100%;
   height: 100%;
   word-wrap: break-word;
+  line-height: 150%;
 `;
 
 export { Content, wrapper };

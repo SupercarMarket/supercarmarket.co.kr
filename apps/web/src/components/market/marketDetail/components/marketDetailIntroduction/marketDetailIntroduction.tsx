@@ -11,7 +11,7 @@ const MarketDetailIntroduction = ({
 }: MarketDetailIntroductionProps) => {
   return (
     <Wrapper css={Styled.wrapper}>
-      <Styled.Content>{introduction}</Styled.Content>
+      <Styled.Content>{introduction.split('"\n"')}</Styled.Content>
     </Wrapper>
   );
 };
