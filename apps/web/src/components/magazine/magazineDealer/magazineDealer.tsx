@@ -42,7 +42,14 @@ const MagazineDealer = ({ postId }: MagazineDealerProps) => {
         />
       );
     else
-      onOpen(<AuthModal onClose={onClose} onClick={onClick} onOpen={onOpen} />);
+      onOpen(
+        <AuthModal
+          onClose={onClose}
+          onClick={onClick}
+          onOpen={onOpen}
+          description="로그인 후 상담 신청이 가능합니다"
+        />
+      );
   }, [handleCounseling, onClick, onClose, onOpen]);
 
   return (

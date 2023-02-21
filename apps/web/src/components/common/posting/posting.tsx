@@ -94,7 +94,14 @@ const CommunityPosting = ({
 
   const handleLike = React.useCallback(() => {
     if (session.status === 'unauthenticated') {
-      onOpen(<AuthModal onClose={onClose} onClick={onClick} onOpen={onOpen} />);
+      onOpen(
+        <AuthModal
+          onClose={onClose}
+          onClick={onClick}
+          onOpen={onOpen}
+          description="로그인 후 상담 추천이 가능합니다"
+        />
+      );
       return;
     }
     likeMuate(session.data?.accessToken || '');
