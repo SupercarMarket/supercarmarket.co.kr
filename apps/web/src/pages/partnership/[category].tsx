@@ -1,3 +1,10 @@
+'use client';
+
+import React from 'react';
+import { css } from 'styled-components';
+import { useRouter } from 'next/router';
+import { ErrorBoundary } from 'react-error-boundary';
+import { NextPageContext } from 'next/types';
 import { NextPageWithLayout, Params } from '@supercarmarket/types/base';
 import { Pagination, Searchbar, Table, Wrapper } from '@supercarmarket/ui';
 import {
@@ -5,23 +12,17 @@ import {
   QueryClient,
   QueryErrorResetBoundary,
 } from '@tanstack/react-query';
-import { ErrorFallback } from 'components/fallback';
+import type { ParsedUrlQuery } from 'querystring';
+
+import queries from 'constants/queries';
 import layout from 'components/layout';
 import Banner from 'components/partnership/banner';
 import Category from 'components/partnership/category';
-import PartnershipRow from 'components/partnership/partnershipRow/partnershipRow';
-import PartnershipTable from 'components/partnership/table';
-import {
-  PARTNERSHIP_CATEGORY,
-  PARTNERSHIP_TABLE_HEAD,
-} from 'constants/partnership';
+import PartnershipRow from 'components/partnership/partnershipRow';
 import usePartnership from 'hooks/queries/usePartnership';
-import { useRouter } from 'next/router';
-import { NextPageContext } from 'next/types';
-import type { ParsedUrlQuery } from 'querystring';
-import React from 'react';
-import { ErrorBoundary } from 'react-error-boundary';
-import { css } from 'styled-components';
+import { ErrorFallback } from 'components/fallback';
+import { useSearchKeyword } from 'hooks/useSearchKeyword';
+import { PARTNERSHIP_CATEGORY } from 'constants/partnership';
 
 interface IParams extends ParsedUrlQuery {
   category: string;
@@ -30,6 +31,9 @@ interface IParams extends ParsedUrlQuery {
 const PartnershipPage: NextPageWithLayout = () => {
   const { query } = useRouter();
   const { data: partnerships, isLoading } = usePartnership(query as Params);
+  const { keydownHandler, keywordRef } = useSearchKeyword({
+    domain: 'partnership',
+  });
 
   if (isLoading) return <div>로딩 중???</div>;
 
@@ -52,6 +56,8 @@ const PartnershipPage: NextPageWithLayout = () => {
           width="880px"
           variant="Line"
           placeholder="원하시는 업체를 검색하세요"
+          onKeyDown={keydownHandler}
+          ref={keywordRef}
         />
       </Wrapper.Top>
       <Category category={PARTNERSHIP_CATEGORY} />
@@ -108,11 +114,11 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
       },
     };
 
-  // queryClient.prefetchQuery(queries.partnership.lists([]), () =>
-  //   fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/shop`, {
-  //     method: 'GET',
-  //   }).then((res) => res.json())
-  // );
+  queryClient.prefetchQuery(queries.partnership.lists([]), () =>
+    fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/partnership`, {
+      method: 'GET',
+    }).then((res) => res.json())
+  );
 
   return {
     props: {

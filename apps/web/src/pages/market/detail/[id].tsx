@@ -1,26 +1,27 @@
+'use client';
+
+import { css } from 'styled-components';
+import * as React from 'react';
+import { useRouter } from 'next/router';
+import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { Button, Searchbar, Wrapper } from '@supercarmarket/ui';
 import type { NextPageWithLayout, Params } from '@supercarmarket/types/base';
-import { dehydrate, QueryClient } from '@tanstack/react-query';
+import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+
 import layout from 'components/layout';
-import MarketContents from 'components/market/marketContents';
 import queries from 'constants/queries';
 import useMarketDetail from 'hooks/queries/useMarketDetail';
-import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-import { useRouter } from 'next/router';
-import * as React from 'react';
-import { css } from 'styled-components';
-
-const makeQuery = (query: Params) =>
-  Object.entries(query)
-    .map(([key, value]) => `${key}=${value}`)
-    .join('&');
+import MarketContents from 'components/market/marketContents';
+import { useSearchKeyword } from 'hooks/useSearchKeyword';
 
 const MarketDetailPage: NextPageWithLayout = ({
   id,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const { push, query } = useRouter();
   const { data } = useMarketDetail(id);
-  const keywordRef = React.useRef<HTMLInputElement>(null);
+  const { keywordRef, keydownHandler } = useSearchKeyword({
+    domain: 'partnership',
+  });
 
   if (!data) return <div>로딩중?</div>;
 
@@ -30,22 +31,11 @@ const MarketDetailPage: NextPageWithLayout = ({
       top: 0,
     });
 
-  const keydownHandler = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && keywordRef.current !== null) {
-      delete query.id;
-
-      query.keyword = keywordRef.current.value;
-      keywordRef.current.value = '';
-
-      const queryString = makeQuery(query as Params);
-
-      push(`/market/${query.category}?${queryString}`);
-    }
-  };
-
   const backToMarketList = () => {
     delete query.id;
-    const queryString = makeQuery(query as Params);
+    const queryString = Object.entries(query)
+      .map(([key, value]) => `${key}=${value}`)
+      .join('&');
 
     push(`/market/${query.category}?${queryString}`);
   };

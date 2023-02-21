@@ -19,14 +19,16 @@ const partnershipApi: NextApiHandler = async (req, res) => {
 
   console.log(query);
 
-  query.page = +query.page + 1 + '';
+  query.page = +query.page + 1 + '' ?? 1;
 
   try {
     const response = await fetcher(
       `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/partnership`,
       {
         method: 'get',
-        // query,
+        // query: {
+        //   page: query.page,
+        // },
       }
     );
 
@@ -73,7 +75,8 @@ const partnershipDetailApi: NextApiHandler = async (req, res) => {
         .status(response.status)
         .json({ message: ErrorCode[response.status] });
 
-    const partnerships: PartnershipDetailResponse = await response.json();
+    const partnerships: PartnershipDetailResponse<string> =
+      await response.json();
 
     const partnershipDetailBluredImage = await Promise.all(
       partnerships.data.imgSrc.map(async (m) => {

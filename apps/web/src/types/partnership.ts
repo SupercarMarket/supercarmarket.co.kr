@@ -29,8 +29,8 @@ type PartnershipDetailDto<T> = Omit<PartnershipDto, 'imgSrc'> & {
   imgSrc: T[];
 };
 
-interface PartnershipDetailResponse {
-  data: PartnershipDetailDto<{ imgSrc: string; base64: string }>;
+interface PartnershipDetailResponse<T> {
+  data: PartnershipDetailDto<T>;
   isLastPage: boolean;
   totalPages: number;
   totalCount: number;

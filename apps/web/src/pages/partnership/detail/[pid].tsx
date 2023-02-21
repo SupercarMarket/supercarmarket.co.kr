@@ -19,9 +19,10 @@ import { ErrorBoundary } from 'react-error-boundary';
 
 import usePartnership from 'hooks/queries/usePartnership';
 import Layout from 'components/layout';
-import { ErrorFallback } from 'components/fallback';
 import PartnershipRow from 'components/partnership/partnershipRow';
 import PartnershipDetail from 'components/partnership/partnershipDetail';
+import { ErrorFallback } from 'components/fallback';
+import { useSearchKeyword } from 'hooks/useSearchKeyword';
 
 interface PartnershipDetailPageProps {
   pid: string;
@@ -32,6 +33,9 @@ const PartnershipDetailPage: NextPageWithLayout = ({
 }: PartnershipDetailPageProps) => {
   const { query, back } = useRouter();
   const { data: list } = usePartnership(query);
+  const { keydownHandler, keywordRef } = useSearchKeyword({
+    domain: 'partnership',
+  });
 
   const scrollToTop = () =>
     window.scrollTo({
@@ -111,11 +115,18 @@ const PartnershipDetailPage: NextPageWithLayout = ({
       <Wrapper
         css={css`
           display: flex;
+          align-items: center;
           justify-content: center;
-          margin-bottom: 130px;
+          margin-bottom: 160px;
         `}
       >
-        <Searchbar width="540px" variant="Line" />
+        <Searchbar
+          variant="Line"
+          width="540px"
+          placeholder="검색어를 입력하세요"
+          ref={keywordRef}
+          onKeyDown={keydownHandler}
+        />
       </Wrapper>
     </Wrapper>
   );
