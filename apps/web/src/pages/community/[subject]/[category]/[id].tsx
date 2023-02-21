@@ -13,6 +13,7 @@ import { getSession } from 'utils/api/auth/user';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from 'components/fallback';
 import Posting from 'components/common/posting';
+import Comment from 'components/common/comment';
 
 const CommunityPost: NextPageWithLayout = ({
   subject,
@@ -37,6 +38,14 @@ const CommunityPost: NextPageWithLayout = ({
                 subject={subject}
                 category={category}
               />
+            </ErrorBoundary>
+            <ErrorBoundary
+              onReset={reset}
+              fallbackRender={(props) => (
+                <ErrorFallback margin="100px 0" {...props} />
+              )}
+            >
+              <Comment id={id} category="paparazzi" />
             </ErrorBoundary>
           </>
         )}

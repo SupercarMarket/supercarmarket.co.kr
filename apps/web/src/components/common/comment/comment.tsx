@@ -8,9 +8,10 @@ import CommentHead from './commentHead';
 
 interface CommentProps {
   id: string;
+  category?: 'magazine' | 'paparazzi' | 'partnership';
 }
 
-const Comment = ({ id }: CommentProps) => {
+const Comment = ({ id, category = 'magazine' }: CommentProps) => {
   const { page, orderBy } = useUrlQuery();
 
   const { data: comment } = useComment(
@@ -18,7 +19,7 @@ const Comment = ({ id }: CommentProps) => {
     {
       page,
       orderBy,
-      category: 'magazine',
+      category,
     },
     {
       enabled: !!id,

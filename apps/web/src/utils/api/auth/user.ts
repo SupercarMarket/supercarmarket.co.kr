@@ -2,8 +2,8 @@ import type { NextApiHandler } from 'next';
 import type { Session } from 'next-auth';
 import type { GetSessionParams } from 'next-auth/react';
 import { getSession as getSessionInner } from 'next-auth/react';
-import type { Signin, Signup } from 'types/auth';
-import type { Params, ServerResponse, User } from 'types/base';
+import type { Signin, Signup } from '@supercarmarket/types/auth';
+import type { Params, ServerResponse, User } from '@supercarmarket/types/base';
 import { ErrorCode } from 'utils/error';
 import { catchNoExist, getErrorMessage } from 'utils/misc';
 

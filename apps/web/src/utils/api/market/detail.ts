@@ -1,7 +1,11 @@
 import type { NextApiHandler } from 'next/types';
 import { getPlaiceholder } from 'plaiceholder';
-import { Params } from 'types/base';
-import { MarketDetailDto, MarketDetailResponse, MarketDto } from 'types/market';
+import { Params } from '@supercarmarket/types/base';
+import {
+  MarketDetailDto,
+  MarketDetailResponse,
+  MarketDto,
+} from '@supercarmarket/types/market';
 import { ErrorCode } from 'utils/error';
 
 import fetcher from '../fetcher';

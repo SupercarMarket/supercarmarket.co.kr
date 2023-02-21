@@ -1,7 +1,10 @@
 import type { NextApiHandler } from 'next/types';
 import { getPlaiceholder } from 'plaiceholder';
-import { Params } from 'types/base';
-import type { MagazineDto, MagazineResponse } from 'types/magazine';
+import { Params } from '@supercarmarket/types/base';
+import type {
+  MagazineDto,
+  MagazineResponse,
+} from '@supercarmarket/types/magazine';
 import { ErrorCode } from 'utils/error';
 import { catchNoExist, getErrorMessage } from 'utils/misc';
 
