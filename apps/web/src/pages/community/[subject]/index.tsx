@@ -24,6 +24,9 @@ const CommunityCategory: NextPageWithLayout = () => {
             <Wrapper
               css={css`
                 position: relative;
+                display: flex;
+                flex-direction: column;
+                gap: 27.5px;
               `}
             >
               <Wrapper.Item
