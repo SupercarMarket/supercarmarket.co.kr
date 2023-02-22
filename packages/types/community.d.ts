@@ -30,6 +30,21 @@ interface CommunityPostDto {
   view: number;
 }
 
+interface CommunityTemporaryStorageDto {
+  id: number;
+  title: string;
+  like: number;
+  contentHtml: string;
+  created: string;
+  updated: string;
+  nickname: string;
+  rate: string;
+  comments: number;
+  isLiked: boolean;
+  isMyPost: boolean;
+  view: number;
+}
+
 interface CommunityBestResponse<T> {
   data: T[];
   page: number;

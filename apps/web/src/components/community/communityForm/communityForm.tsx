@@ -10,12 +10,28 @@ import {
 import dynamic from 'next/dynamic';
 import * as React from 'react';
 import { css } from 'styled-components';
+import type { Editor } from '@toast-ui/react-editor';
 
 const CommunityEditor = dynamic(() => import('./communityEditor'), {
   ssr: false,
 });
 
 const CommunityForm = () => {
+  const editor = React.useRef<InstanceType<typeof Editor>>(null);
+
+  const handleInitEditor = React.useCallback(() => {
+    const instance = editor.current?.getInstance();
+
+    if (!instance) return;
+
+    instance.removeHook('addImageBlobHook');
+    instance.addHook('addImageBlobHook', (blob, dropImage) => {
+      const local = URL.createObjectURL(blob);
+      console.log('local : ', local);
+      dropImage(local, `alt_type`);
+    });
+  }, []);
+
   return (
     <Form
       css={css`
@@ -35,7 +51,7 @@ const CommunityForm = () => {
       <FormLabel name="제목" label="제목" bold>
         <FormInput placeholder="제목을 입력해주세요." />
       </FormLabel>
-      <CommunityEditor />
+      <CommunityEditor editor={editor} init={handleInitEditor} />
       <Wrapper
         css={css`
           display: flex;
@@ -57,9 +73,15 @@ const CommunityForm = () => {
             gap: 9px;
           `}
         >
-          <Button variant="Line">취소</Button>
-          <Button variant="Line">임시저장</Button>
-          <Button variant="Primary">작성 완료</Button>
+          <Button variant="Line" type="button">
+            취소
+          </Button>
+          <Button variant="Line" type="button">
+            임시저장
+          </Button>
+          <Button variant="Primary" type="button">
+            작성 완료
+          </Button>
         </Wrapper.Item>
       </Wrapper>
     </Form>

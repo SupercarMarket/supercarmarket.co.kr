@@ -34,10 +34,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       },
     };
   }
-  console.log(
-    `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/community-temp`,
-    session
-  );
 
   const temporaryStorage = await serverFetcher(
     `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/community-temp`,
@@ -48,8 +44,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       },
     }
   );
-
-  console.log(temporaryStorage);
 
   return {
     props: {
