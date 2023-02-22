@@ -56,22 +56,22 @@ const MagazinePosting = ({ postId }: Omit<PostingProps, 'type'>) => {
 
   return (
     <Container>
-      {magazinePost && <PostingHeadMagainze {...magazinePost.data} />}
-      <Container
-        width="100%"
-        display="flex"
-        flexDirection="column"
-        padding="0 40px"
-        border="1px solid #EAEAEC"
-        borderRadius="4px"
-        boxSizing="border-box"
-      >
-        {magazinePost && (
-          <>
+      {magazinePost && (
+        <>
+          <PostingHeadMagainze {...magazinePost.data} />
+          <Container
+            width="100%"
+            display="flex"
+            flexDirection="column"
+            padding="0 40px"
+            border="1px solid #EAEAEC"
+            borderRadius="4px"
+            boxSizing="border-box"
+          >
             <PostingBody contentHtml={magazinePost.data.contentHtml} />
-          </>
-        )}
-      </Container>
+          </Container>
+        </>
+      )}
     </Container>
   );
 };

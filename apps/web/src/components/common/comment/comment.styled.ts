@@ -4,6 +4,11 @@ const CommentHeadLeft = styled.div`
   display: flex;
   align-items: center;
   gap: 9px;
+  & > svg {
+    width: 18px;
+    height: 18px;
+    fill: ${({ theme }) => theme.color['greyScale-6']};
+  }
 `;
 
 const CommentHeadRight = styled.div`
