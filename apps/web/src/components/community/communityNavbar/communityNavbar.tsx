@@ -23,6 +23,7 @@ const CommunityNavbarItem = (link: Links) => {
         gap: 4px;
         ${applyMediaQuery('mobile')} {
           flex-direction: row;
+          align-items: center;
         }
       `}
     >
@@ -67,6 +68,10 @@ const CommunityNavbarItem = (link: Links) => {
                   color: ${({ theme }) => theme.color.primary};
                   background: ${({ theme }) => theme.color['greyScale-2']};
                   font-weight: ${({ theme }) => theme.fontWeight.bold};
+                }
+                ${applyMediaQuery('mobile')} {
+                  padding: 8px;
+                  line-height: 12px;
                 }
               `}
             >

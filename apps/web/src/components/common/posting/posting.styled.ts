@@ -46,6 +46,11 @@ const wrapper = css`
   display: flex;
   align-items: center;
   gap: 4px;
+  & > svg {
+    width: 16px;
+    height: 16px;
+    fill: ${({ theme }) => theme.color['greyScale-5']};
+  }
 `;
 
 export {

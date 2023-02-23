@@ -141,6 +141,7 @@ const Button = forwardRef(function Button(
         }
         .button-Init {
           all: unset;
+          padding: 0 !important;
         }
         .button-suffix {
           display: flex;
