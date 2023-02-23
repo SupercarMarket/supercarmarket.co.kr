@@ -1,5 +1,11 @@
 import Link from 'next/link';
-import { Container, Divider, Typography, Wrapper } from '@supercarmarket/ui';
+import {
+  Container,
+  deviceQuery,
+  Divider,
+  Typography,
+  Wrapper,
+} from '@supercarmarket/ui';
 import type { CommunityDto } from '@supercarmarket/types/community';
 import type { WithBlurredImage } from '@supercarmarket/types/magazine';
 import Avvvatars from 'avvvatars-react';
@@ -7,6 +13,10 @@ import dayjs from 'dayjs';
 import Image from 'next/image';
 import { css } from 'styled-components';
 import { applyMediaQuery } from 'styles/mediaQuery';
+import { useMedia } from '@supercarmarket/hooks';
+
+import ViewIcon from '../../../assets/svg/eye.svg';
+import LikeIcon from '../../../assets/svg/thumb-up.svg';
 
 interface CommunityCardProps extends WithBlurredImage<CommunityDto> {
   variant: string;
@@ -52,6 +62,7 @@ const CommunityCardRow = (props: CommunityCardChildrenProps) => {
     view,
     created,
   } = props;
+  const { isMobile } = useMedia({ deviceQuery });
 
   return (
     <Link
@@ -59,7 +70,15 @@ const CommunityCardRow = (props: CommunityCardChildrenProps) => {
         pathname: `${getCategoryPathname(category)}/${id}`,
       }}
     >
-      <Container display="flex" alignItems="center">
+      <Wrapper
+        css={css`
+          display: flex;
+          align-items: center;
+          ${applyMediaQuery('mobile')} {
+            flex-direction: row-reverse;
+          }
+        `}
+      >
         <Wrapper.Left
           css={css`
             width: 760px;
@@ -67,6 +86,10 @@ const CommunityCardRow = (props: CommunityCardChildrenProps) => {
             display: flex;
             align-items: center;
             gap: 30px;
+            ${applyMediaQuery('mobile')} {
+              width: 64px;
+              flex: unset;
+            }
           `}
         >
           <Image
@@ -75,8 +98,8 @@ const CommunityCardRow = (props: CommunityCardChildrenProps) => {
               'https://user-images.githubusercontent.com/66871265/210489106-611e72ee-94f8-49e8-9faa-60f9f20ae50f.png'
             }
             alt="thumbnail"
-            width={196}
-            height={124}
+            width={isMobile ? 64 : 196}
+            height={isMobile ? 64 : 124}
             style={{ borderRadius: '4px' }}
           />
           <Wrapper.Item
@@ -85,6 +108,9 @@ const CommunityCardRow = (props: CommunityCardChildrenProps) => {
               align-items: center;
               justify-content: flex-start;
               gap: 12px;
+              ${applyMediaQuery('mobile')} {
+                display: none;
+              }
             `}
           >
             {popular && (
@@ -134,6 +160,12 @@ const CommunityCardRow = (props: CommunityCardChildrenProps) => {
           css={css`
             display: flex;
             align-items: center;
+            ${applyMediaQuery('mobile')} {
+              height: 64px;
+              flex: 1;
+              flex-direction: column;
+              align-items: flex-start;
+            }
           `}
         >
           <Wrapper.Item
@@ -143,6 +175,9 @@ const CommunityCardRow = (props: CommunityCardChildrenProps) => {
               align-items: center;
               justify-content: center;
               gap: 8px;
+              ${applyMediaQuery('mobile')} {
+                display: none;
+              }
             `}
           >
             <Avvvatars size={40} value={nickname} />
@@ -160,6 +195,9 @@ const CommunityCardRow = (props: CommunityCardChildrenProps) => {
               & > span {
                 width: 80px;
                 text-align: center;
+              }
+              ${applyMediaQuery('mobile')} {
+                display: none;
               }
             `}
           >
@@ -188,8 +226,95 @@ const CommunityCardRow = (props: CommunityCardChildrenProps) => {
               {like}
             </Typography>
           </Wrapper.Item>
+          <Wrapper.Top
+            css={css`
+              flex: 1;
+              ${applyMediaQuery('desktop', 'tablet')} {
+                display: none;
+              }
+            `}
+          >
+            <Typography
+              fontSize="body-14"
+              fontWeight="regular"
+              color="greyScale-6"
+              lineHeight="150%"
+            >
+              {title}
+            </Typography>
+          </Wrapper.Top>
+          <Wrapper.Bottom
+            css={css`
+              display: flex;
+              gap: 8px;
+              ${applyMediaQuery('desktop', 'tablet')} {
+                display: none;
+              }
+            `}
+          >
+            <Typography
+              fontSize="body-12"
+              fontWeight="regular"
+              color="greyScale-5"
+              lineHeight="150%"
+            >
+              {nickname}
+            </Typography>
+            <Typography
+              fontSize="body-12"
+              fontWeight="regular"
+              color="greyScale-5"
+              lineHeight="150%"
+            >
+              {dayjs(created).format('YY.MM.DD')}
+            </Typography>
+            <Wrapper.Item
+              css={css`
+                display: flex;
+                align-items: center;
+                gap: 2px;
+                & > svg {
+                  width: 16px;
+                  height: 16px;
+                  fill: ${({ theme }) => theme.color['greyScale-5']};
+                }
+              `}
+            >
+              <ViewIcon />
+              <Typography
+                fontSize="body-12"
+                fontWeight="regular"
+                color="greyScale-5"
+                lineHeight="150%"
+              >
+                {view}
+              </Typography>
+            </Wrapper.Item>
+            <Wrapper.Item
+              css={css`
+                display: flex;
+                align-items: center;
+                gap: 2px;
+                & > svg {
+                  width: 16px;
+                  height: 16px;
+                  fill: ${({ theme }) => theme.color['greyScale-5']};
+                }
+              `}
+            >
+              <LikeIcon />
+              <Typography
+                fontSize="body-12"
+                fontWeight="regular"
+                color="greyScale-5"
+                lineHeight="150%"
+              >
+                {like}
+              </Typography>
+            </Wrapper.Item>
+          </Wrapper.Bottom>
         </Wrapper.Right>
-      </Container>
+      </Wrapper>
       <Divider color="#EAEAEC" width="100%" height="1px" margin="6px 0" />
     </Link>
   );

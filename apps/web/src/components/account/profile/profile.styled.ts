@@ -10,7 +10,7 @@ const background = css`
 const wrapper = css`
   ${account};
   padding: 0;
-  padding-top: 10%;
+  padding-top: 200px;
   display: flex;
   align-items: flex-end;
   gap: 50px;

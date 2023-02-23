@@ -1,5 +1,6 @@
 import {
   Alert,
+  applyMediaQuery,
   Button,
   Container,
   theme,
@@ -19,6 +20,8 @@ import CommentArea from './commentArea';
 import { css } from 'styled-components';
 
 const CommentCard = ({
+  isMyComment = true,
+  root = true,
   postId,
   id,
   user,
@@ -28,10 +31,10 @@ const CommentCard = ({
   updateAt,
   isRemoved,
   isLiked,
-  isMyComment = true,
   children,
   category,
 }: Comment & {
+  root?: boolean;
   postId: string;
   category: 'magazine' | 'paparazzi' | 'partnership';
 }) => {
@@ -84,11 +87,26 @@ const CommentCard = ({
           gap="12px"
           borderBottom="1px solid #EAEAEC"
         >
-          <Avvvatars value={user.nickName} size={40} radius={20} />
+          <Wrapper
+            css={css`
+              ${applyMediaQuery('mobile')} {
+                & > div {
+                  width: 24px !important;
+                  height: 24px !important;
+                }
+                & > div > p {
+                  font-size: 10px !important;
+                }
+              }
+            `}
+          >
+            <Avvvatars value={user.nickName} size={40} radius={20} />
+          </Wrapper>
           <Wrapper css={style.cardWrapper}>
             <Wrapper.Top css={style.cardInfo}>
               <Wrapper css={style.cardInfoWrapper}>
                 <Typography
+                  as="p"
                   fontSize="header-14"
                   fontWeight="bold"
                   lineHeight="120%"
@@ -114,7 +132,7 @@ const CommentCard = ({
                     수정됨
                   </Typography>
                 )}
-                {children && (
+                {children && root && (
                   <Button variant="Init" onClick={handleOpen}>
                     <Typography
                       fontSize="body-14"
@@ -194,8 +212,98 @@ const CommentCard = ({
                 </Wrapper>
               </Button>
             </Wrapper.Top>
-            <Wrapper.Bottom>
+            <Wrapper.Bottom
+              css={css`
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
+              `}
+            >
               <Typography>{content}</Typography>
+              <Wrapper
+                css={css`
+                  display: flex;
+                  align-items: center;
+                  gap: 12px;
+                  & > svg {
+                    width: 16px;
+                    height: 16px;
+                    fill: ${({ theme }) => theme.color['greyScale-5']};
+                  }
+                  ${applyMediaQuery('desktop', 'tablet')} {
+                    & > span {
+                      display: none !important;
+                    }
+                    & > button {
+                      display: none !important;
+                    }
+                  }
+                `}
+              >
+                <Typography
+                  fontSize="body-14"
+                  fontWeight="regular"
+                  lineHeight="150%"
+                  color="greyScale-5"
+                >
+                  {createAt.toString()}
+                </Typography>
+                {updateAt && (
+                  <Typography
+                    fontSize="body-14"
+                    fontWeight="regular"
+                    lineHeight="150%"
+                    color="greyScale-5"
+                  >
+                    수정됨
+                  </Typography>
+                )}
+                {children && root && (
+                  <Button variant="Init" onClick={handleOpen}>
+                    <Typography
+                      fontSize="body-14"
+                      fontWeight="regular"
+                      lineHeight="150%"
+                      color="greyScale-5"
+                      style={{
+                        cursor: 'pointer',
+                      }}
+                    >
+                      답글쓰기
+                    </Typography>
+                  </Button>
+                )}
+                {isMyComment && (
+                  <Button variant="Init" onClick={handleModify}>
+                    <Typography
+                      fontSize="body-14"
+                      fontWeight="regular"
+                      lineHeight="150%"
+                      color="greyScale-5"
+                      style={{
+                        cursor: 'pointer',
+                      }}
+                    >
+                      수정
+                    </Typography>
+                  </Button>
+                )}
+                {isMyComment && (
+                  <Button variant="Init" onClick={handleRemove}>
+                    <Typography
+                      fontSize="body-14"
+                      fontWeight="regular"
+                      lineHeight="150%"
+                      color="greyScale-5"
+                      style={{
+                        cursor: 'pointer',
+                      }}
+                    >
+                      삭제
+                    </Typography>
+                  </Button>
+                )}
+              </Wrapper>
             </Wrapper.Bottom>
           </Wrapper>
         </Container>
@@ -223,6 +331,7 @@ const CommentCard = ({
               key={comment.id}
               postId={postId}
               category={category}
+              root={false}
               {...comment}
             />
           ))}

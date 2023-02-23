@@ -8,7 +8,7 @@ import * as React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import AuthFormItem from '../authFormItem/authFormItem';
-import * as style from './resultPasswordForm.styled';
+import * as style from '../signupForm/signupForm.styled';
 
 interface FormState {
   password: string;

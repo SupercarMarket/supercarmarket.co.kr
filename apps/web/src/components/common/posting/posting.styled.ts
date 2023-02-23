@@ -15,7 +15,6 @@ const bottom = css`
 `;
 
 const magazineHeadLeft = css`
-  position: absolute;
   bottom: 40px;
   display: flex;
   align-items: center;
@@ -23,7 +22,6 @@ const magazineHeadLeft = css`
 `;
 
 const magazineHeadRight = css`
-  position: absolute;
   display: flex;
   bottom: 40px;
   right: 40px;
@@ -48,6 +46,11 @@ const wrapper = css`
   display: flex;
   align-items: center;
   gap: 4px;
+  & > svg {
+    width: 16px;
+    height: 16px;
+    fill: ${({ theme }) => theme.color['greyScale-5']};
+  }
 `;
 
 export {
