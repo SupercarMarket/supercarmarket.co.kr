@@ -31,18 +31,11 @@ interface CommunityPostDto {
 }
 
 interface CommunityTemporaryStorageDto {
-  id: number;
-  title: string;
-  like: number;
-  contentHtml: string;
-  created: string;
-  updated: string;
-  nickname: string;
-  rate: string;
-  comments: number;
-  isLiked: boolean;
-  isMyPost: boolean;
-  view: number;
+  category: null;
+  tempId: null;
+  title: null;
+  contents: null;
+  images: null;
 }
 
 interface CommunityBestResponse<T> {
@@ -51,4 +44,9 @@ interface CommunityBestResponse<T> {
   pageSize: number;
 }
 
-export type { CommunityBestResponse, CommunityDto, CommunityPostDto };
+export type {
+  CommunityBestResponse,
+  CommunityTemporaryStorageDto,
+  CommunityDto,
+  CommunityPostDto,
+};

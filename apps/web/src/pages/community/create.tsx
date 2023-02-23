@@ -2,17 +2,19 @@ import { Container, Title } from '@supercarmarket/ui';
 import type { NextPageWithLayout } from '@supercarmarket/types/base';
 import { CommunityForm } from 'components/community';
 import layout from 'components/layout';
-import { GetServerSideProps } from 'next';
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { getSession } from 'utils/api/auth/user';
 import { serverFetcher } from '@supercarmarket/lib';
 import { ModalProvider } from 'feature/modalContext';
 
-const Create: NextPageWithLayout = () => {
+const Create: NextPageWithLayout = ({
+  temporaryStorage,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   return (
     <Container display="flex" flexDirection="column" gap="20px">
       <Title>게시글 작성</Title>
       <ModalProvider>
-        <CommunityForm />
+        <CommunityForm temporaryStorage={temporaryStorage} />
       </ModalProvider>
     </Container>
   );
@@ -43,11 +45,14 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         ACCESS_TOKEN: `${session.accessToken}`,
       },
     }
-  );
+  ).then((res) => {
+    const { ok, status, ...rest } = res;
+    return rest;
+  });
 
   return {
     props: {
-      title: '',
+      temporaryStorage,
     },
   };
 };
