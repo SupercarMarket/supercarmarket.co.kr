@@ -1,5 +1,5 @@
-import { Container, Pagination } from '@supercarmarket/ui';
-import { useUrlQuery } from '@supercarmarket/hooks';
+import { Container, deviceQuery, Pagination } from '@supercarmarket/ui';
+import { useMedia, useUrlQuery } from '@supercarmarket/hooks';
 import useComment from 'hooks/queries/useComment';
 
 import CommentArea from './commentArea';
@@ -12,6 +12,7 @@ interface CommentProps {
 }
 
 const Comment = ({ id, category = 'magazine' }: CommentProps) => {
+  const { isMobile } = useMedia({ deviceQuery });
   const { page, orderBy } = useUrlQuery();
 
   const { data: comment } = useComment(
@@ -34,8 +35,8 @@ const Comment = ({ id, category = 'magazine' }: CommentProps) => {
       justifyContent="flex-start"
       flexDirection="column"
       gap="20px"
-      padding="40px 40px"
-      border="1px solid #EAEAEC"
+      padding={isMobile ? '16px' : '40px'}
+      border={isMobile ? undefined : '1px solid #EAEAEC'}
       borderRadius="4px"
       boxSizing="border-box"
     >

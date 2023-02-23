@@ -1,7 +1,9 @@
 import * as React from 'react';
+import { css } from 'styled-components';
 
-import { Container, Typography } from '../components';
+import { Typography } from '../components';
 import { Wrapper } from '../components/wrapper';
+import { applyMediaQuery } from '../styles';
 
 interface FormLabelProps extends React.PropsWithChildren {
   name?: string;
@@ -29,29 +31,44 @@ const FormLabel = (props: FormLabelProps) => {
     children,
   } = props;
   return (
-    <Container
-      display="flex"
-      flexDirection={flexDirection}
-      gap={gap}
+    <Wrapper
       className={className}
+      css={css`
+        display: flex;
+        flex-direction: ${flexDirection};
+        gap: ${gap};
+
+        ${applyMediaQuery('mobile')} {
+          width: 100%;
+          flex-direction: column;
+          gap: 4px;
+        }
+      `}
     >
-      <Wrapper>
+      <Wrapper.Item
+        css={css`
+          padding-top: ${paddingTop};
+          ${applyMediaQuery('mobile')} {
+            padding-top: 0;
+          }
+        `}
+      >
         <Typography
           as="label"
           htmlFor={name}
           fontSize="body-16"
           fontWeight={bold ? 'bold' : 'regular'}
+          lineHeight="150%"
           style={{
             display: hidden ? 'none' : 'block',
             width,
-            paddingTop,
           }}
         >
           {label}
         </Typography>
-      </Wrapper>
+      </Wrapper.Item>
       {children}
-    </Container>
+    </Wrapper>
   );
 };
 

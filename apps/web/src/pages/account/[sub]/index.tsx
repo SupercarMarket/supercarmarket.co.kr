@@ -14,6 +14,9 @@ import type {
 } from 'next';
 import type { Session } from 'next-auth';
 import { getSession } from 'utils/api/auth/user';
+import { QueryErrorResetBoundary } from '@tanstack/react-query';
+import { ErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from 'components/fallback';
 
 type AccountParams = Params & {
   tab: AccountTab | null;
@@ -28,15 +31,33 @@ const Account: NextPageWithLayout = ({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   return (
     <Container margin="20px 0 0 0">
-      <Profile isMyAccountPage={isMyAccountPage} profile={profile} />
-      <Wrapper css={style.account}>
-        <AccountNavbar tab={tab} accountRoutes={accountRoutes} />
-        <AccountCategory
-          sub={sub}
-          tab={tab}
-          isMyAccountPage={isMyAccountPage}
-        />
-      </Wrapper>
+      <QueryErrorResetBoundary>
+        {({ reset }) => (
+          <>
+            <ErrorBoundary
+              onReset={reset}
+              fallbackRender={(props) => <ErrorFallback {...props} />}
+            >
+              <Profile isMyAccountPage={isMyAccountPage} profile={profile} />
+            </ErrorBoundary>
+            <Wrapper css={style.account}>
+              <AccountNavbar tab={tab} accountRoutes={accountRoutes} />
+              <ErrorBoundary
+                onReset={reset}
+                fallbackRender={(props) => (
+                  <ErrorFallback {...props} margin="100px 0" />
+                )}
+              >
+                <AccountCategory
+                  sub={sub}
+                  tab={tab}
+                  isMyAccountPage={isMyAccountPage}
+                />
+              </ErrorBoundary>
+            </Wrapper>
+          </>
+        )}
+      </QueryErrorResetBoundary>
     </Container>
   );
 };

@@ -1,7 +1,9 @@
 import * as React from 'react';
+import { css } from 'styled-components';
 
 import { Button, Timer, Typography, Container, Input } from '../components';
 import { Wrapper } from '../components/wrapper';
+import { applyMediaQuery } from '../styles';
 import * as style from './form.styled';
 
 interface FormInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -48,30 +50,41 @@ const FormInput = React.forwardRef(function FormInput(
         )}
       </Wrapper>
       {button && (
-        <Button
-          type="button"
-          variant={buttonVariant}
-          disabled={buttonDisabled}
-          width={buttonWidth}
-          onClick={buttonCallback}
+        <Wrapper
+          css={css`
+            & > button {
+              width: ${buttonWidth} !important;
+              ${applyMediaQuery('mobile')} {
+                width: fit-content !important;
+              }
+            }
+          `}
         >
-          <Typography
-            as="span"
-            fontSize="body-16"
-            fontWeight="regular"
-            lineHeight="150%"
-            color={buttonVariant === 'Primary-Line' ? 'primary' : 'greyScale-4'}
-            style={{
-              width: buttonWidth,
-              display: 'flex',
-              justifyContent: 'center',
-              whiteSpace: 'nowrap',
-              textAlign: 'center',
-            }}
+          <Button
+            type="button"
+            variant={buttonVariant}
+            disabled={buttonDisabled}
+            onClick={buttonCallback}
           >
-            {buttonText}
-          </Typography>
-        </Button>
+            <Typography
+              as="span"
+              fontSize="body-16"
+              fontWeight="regular"
+              lineHeight="150%"
+              color={
+                buttonVariant === 'Primary-Line' ? 'primary' : 'greyScale-4'
+              }
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                whiteSpace: 'nowrap',
+                textAlign: 'center',
+              }}
+            >
+              {buttonText}
+            </Typography>
+          </Button>
+        </Wrapper>
       )}
     </Container>
   );

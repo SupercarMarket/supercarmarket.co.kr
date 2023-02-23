@@ -1,4 +1,4 @@
-import { Container, Wrapper } from '@supercarmarket/ui';
+import { applyMediaQuery, Container, Wrapper } from '@supercarmarket/ui';
 import { Profile as ProfileType } from '@supercarmarket/types/account';
 import Image from 'next/image';
 import { css } from 'styled-components';
@@ -22,22 +22,33 @@ interface ProfileRepresentativeProps {
 const ProfileBackground = ({ src }: ProfileBackgroundProps) => {
   return (
     <Container position="absolute">
-      <Image
-        src={
-          src
-            ? src
-            : 'https://user-images.githubusercontent.com/66871265/210207112-a0d7b276-e24b-4ae9-80a1-8e48d5cc45f2.png'
-        }
-        alt="background"
-        width={1920}
-        height={400}
-        style={{
-          width: '100%',
-          height: 'auto',
-          objectFit: 'cover',
-          zIndex: -1,
-        }}
-      />
+      <Wrapper
+        css={css`
+          width: 100%;
+          height: 400px;
+
+          ${applyMediaQuery('mobile')} {
+            height: 200px;
+          }
+        `}
+      >
+        <Image
+          src={
+            src
+              ? src
+              : 'https://user-images.githubusercontent.com/66871265/210207112-a0d7b276-e24b-4ae9-80a1-8e48d5cc45f2.png'
+          }
+          alt="background"
+          width={1920}
+          height={400}
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            zIndex: -1,
+          }}
+        />
+      </Wrapper>
     </Container>
   );
 };
@@ -53,7 +64,13 @@ const ProfileRepresentative = ({ images }: ProfileRepresentativeProps) => {
     >
       {images &&
         images.map((image) => (
-          <Wrapper key={image}>
+          <Wrapper
+            key={image}
+            css={css`
+              width: 260px;
+              height: 260px;
+            `}
+          >
             <Image
               src={image}
               alt="대표이미지"
@@ -74,8 +91,9 @@ const ProfileRepresentative = ({ images }: ProfileRepresentativeProps) => {
           <Wrapper
             key={index}
             css={css`
-              width: 280px;
-              height: 280px;
+              width: 260px;
+              height: 260px;
+              box-sizing: border-box;
               display: flex;
               align-items: center;
               justify-content: center;

@@ -1,3 +1,4 @@
+import { applyMediaQuery } from '@supercarmarket/ui';
 import { css } from 'styled-components';
 
 const label = css`
@@ -7,6 +8,9 @@ const label = css`
   align-items: flex-start;
   justify-content: space-between;
   gap: 6px;
+  ${applyMediaQuery('mobile')} {
+    width: 100%;
+  }
 `;
 
 const wrapper = css`

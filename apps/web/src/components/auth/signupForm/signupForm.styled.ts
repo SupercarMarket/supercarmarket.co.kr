@@ -1,3 +1,4 @@
+import { applyMediaQuery } from '@supercarmarket/ui';
 import { css } from 'styled-components';
 
 const form = css`
@@ -6,6 +7,13 @@ const form = css`
   flex-direction: column;
   align-items: center;
   gap: 26px;
+  ${applyMediaQuery('mobile')} {
+    width: 375px;
+    gap: 16px;
+    & > button[type='submit'] {
+      width: 100% !important;
+    }
+  }
 `;
 
 const label = css`
