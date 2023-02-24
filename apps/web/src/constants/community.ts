@@ -1,5 +1,11 @@
 import type { Links } from '@supercarmarket/types/base';
 
+interface FormState {
+  files: File[];
+  category: string;
+  title: string;
+}
+
 const community = {
   links: [
     {
@@ -19,4 +25,5 @@ const community = {
   ] as Links[],
 };
 
+export type { FormState };
 export default community;

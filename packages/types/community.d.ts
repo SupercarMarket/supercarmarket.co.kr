@@ -31,11 +31,12 @@ interface CommunityPostDto {
 }
 
 interface CommunityTemporaryStorageDto {
-  category: null;
-  tempId: null;
-  title: null;
-  contents: null;
-  images: null;
+  category: string;
+  tempId: string;
+  title: string;
+  contents: string;
+  images: stirng[];
+  files: { url: string; name: string }[];
 }
 
 interface CommunityBestResponse<T> {

@@ -7,8 +7,10 @@ import * as style from './modal.styled';
 
 const TemporaryStorageModal = ({
   onClose,
+  onInit,
   description = '로그인이 필요한 서비스입니다.',
 }: ModalContextProps & {
+  onInit: () => void;
   description?: string;
 }) => {
   return (
@@ -45,18 +47,12 @@ const TemporaryStorageModal = ({
           {`취소를 누르면 임시저장 글이 삭제되고\n새 글을 작성할 수 있습니다.`}
         </Typography>
         <Wrapper css={style.modalButtonWrapper}>
-          <Button variant="Primary-Line" width="160px">
+          <Button variant="Primary-Line" width="160px" onClick={onClose}>
             취소
           </Button>
-          <Link
-            href={{
-              pathname: '/auth/signin',
-            }}
-          >
-            <Button variant="Primary" width="116px">
-              불러오기
-            </Button>
-          </Link>
+          <Button variant="Primary" width="116px" onClick={onInit}>
+            불러오기
+          </Button>
         </Wrapper>
       </Container>
     </ModalProvider>
