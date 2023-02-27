@@ -15,7 +15,7 @@ const Create: NextPageWithLayout = ({
     <Container display="flex" flexDirection="column" gap="20px">
       <Title>게시글 작성</Title>
       <ModalProvider>
-        <CommunityForm temporaryStorage={temporaryStorage} />
+        <CommunityForm initialData={temporaryStorage} />
       </ModalProvider>
     </Container>
   );
@@ -54,13 +54,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   return {
     props: {
-      temporaryStorage: {
-        ...temporaryStorage,
-        tempId: 'asdasdasd',
-        images: [
-          'https://user-images.githubusercontent.com/66871265/210489106-611e72ee-94f8-49e8-9faa-60f9f20ae50f.png',
-        ],
-      },
+      temporaryStorage,
     },
   };
 };

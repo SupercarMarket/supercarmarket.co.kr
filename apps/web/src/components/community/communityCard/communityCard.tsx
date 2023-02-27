@@ -31,6 +31,13 @@ export const formatter = (category: string) => {
   return '차량 정보';
 };
 
+export const reverseFormatter = (category: string) => {
+  if (category === '제보') return 'report';
+  if (category === '포토갤러리') return 'gallery';
+  if (category === '내 차 자랑') return 'boast';
+  return 'information';
+};
+
 const getCategoryPathname = (category: string) => {
   if (category === 'information') return `/community/library/${category}`;
   return `/community/paparazzi/${category}`;

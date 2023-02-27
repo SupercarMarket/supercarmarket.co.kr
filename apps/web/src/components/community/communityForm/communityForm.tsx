@@ -17,9 +17,13 @@ import ModalContext from 'feature/modalContext';
 import TemporaryStorageModal from 'components/common/modal/temporaryStorageModal';
 import { FormProvider, useForm } from 'react-hook-form';
 import { FormState } from 'constants/community';
+import { clientApi } from '@supercarmarket/lib';
+import { useSession } from 'next-auth/react';
+import { formatter, reverseFormatter } from '../communityCard/communityCard';
 
 interface CommunityFormProps {
-  temporaryStorage: CommunityTemporaryStorageDto;
+  id?: string;
+  initialData: CommunityTemporaryStorageDto;
 }
 
 interface CommunityFormEditorImages {
@@ -31,13 +35,10 @@ const CommunityEditor = dynamic(() => import('./communityEditor'), {
   ssr: false,
 });
 
-const scanner = () => {
-  return;
-};
-
 const CommunityForm = (props: CommunityFormProps) => {
-  const { temporaryStorage } = props;
+  const { id, initialData } = props;
 
+  const session = useSession();
   const [category, setCategory] = React.useState('');
   const [isInitialize, setIsInitialize] = React.useState(false);
   const [images, setImages] = React.useState<CommunityFormEditorImages[]>([]);
@@ -49,24 +50,28 @@ const CommunityForm = (props: CommunityFormProps) => {
     setIsInitialize((prev) => !prev);
     const instance = editor.current?.getInstance();
 
-    if (instance && temporaryStorage.contents)
-      instance.setHTML(temporaryStorage.contents);
+    if (instance && initialData.contents)
+      instance.setHTML(initialData.contents);
 
-    if (temporaryStorage.images.length > 0)
+    if (initialData.images?.length > 0)
       setImages(() =>
-        temporaryStorage.images.map((i) => ({
+        initialData.images.map((i) => ({
           file: new File([i], i),
           local: i,
         }))
       );
 
     onClose();
-  }, [onClose, temporaryStorage.contents, temporaryStorage.images]);
+  }, [onClose, initialData?.contents, initialData?.images]);
 
   const handleInitEditor = React.useCallback(() => {
     const instance = editor.current?.getInstance();
 
     if (!instance) return;
+
+    if (id) {
+      instance.setHTML(initialData.contents);
+    }
 
     instance.removeHook('addImageBlobHook');
     instance.addHook('addImageBlobHook', (blob, dropImage) => {
@@ -74,140 +79,201 @@ const CommunityForm = (props: CommunityFormProps) => {
       setImages((prev) => [...prev, { file: blob, local }]);
       dropImage(local, local);
     });
-  }, []);
+  }, [id, initialData.contents]);
 
-  const handleRequire = (data: FormState) => {
-    const { category, title, files } = data;
-
+  const handleEditorHtml = async () => {
     const html = editor.current?.getInstance()?.getHTML();
 
-    return new Promise<{}>((resolve, reject) => {
-      if (!html) {
-        reject();
-        return;
-      }
+    if (!html) {
+      throw 'editor contents is require';
+    }
 
-      const document = new DOMParser().parseFromString(html, 'text/html');
-      const img = Array.from(document.querySelectorAll('img'));
-      const isImg = img.length > 0;
-      const isTempImg =
-        temporaryStorage.images && temporaryStorage.images.length > 0;
-      const thumbnail = isImg ? img[0].src : null;
+    const document = new DOMParser().parseFromString(html, 'text/html');
+    const img = Array.from(document.querySelectorAll('img'));
+    const isImg = img.length > 0;
+    const isTempImg = initialData.images && initialData.images.length > 0;
+    const thumbnail = img[0]?.src || null;
 
-      // * 불러오지 않고, 이미지가 존재하는 경우와 없는 경우
-      // * 에디터 본문에 이미지가 없는 경우
+    let addImgSrcs = null;
+    let deleteImgSrcs = null;
+    let addImgFiles = null;
 
-      // * 불러온 후, 임시저장과 에디터 본문 이미지가 그대로인 경우
-      // * 이미지에 변동이 있는 경우
-      // * 모두 삭제된 경우
-      // * 임시저장 이미지의 길이가 존재하는지 확인
+    // * case 1-1 @임시저장을 불러옴
+    // * 내부 에디터에 이미지가 존재하지 않는 경우
 
-      let dto = {};
-      let addImgSrcs = null,
-        deleteImgSrcs = null;
+    // ! 본문 임시저장 이미지도 고려해야함
+    const currentImages = images.filter((prev) =>
+      img.some((el) => el.src === prev.local)
+    );
 
-      dto = {
-        tempId: temporaryStorage.tempId,
-        thumbnail,
-      };
+    // * case 1-2 내부 에디터에 이미지가 존재하는 경우
 
-      console.log(isImg, isInitialize, isTempImg);
+    if (!isInitialize && isImg) {
+      addImgSrcs = currentImages.map((i) => i.local);
+      addImgFiles = currentImages.map((i) => i.file);
+    }
 
-      if (!isInitialize && !isImg) {
-        dto = {
-          ...dto,
-          addImgSrcs,
-          deleteImgSrcs,
-        };
-      }
+    // * case 2-1 @임시저장을 불러옴
+    // * @임시저장 이미지가 존재하지 않고, 내부 에디터에 이미지가 존재하지 않는 경우
 
-      // * 본문 임시저장 이미지도 고려해야함
-      const currentImages = images.filter((prev) =>
-        img.some((el) => el.src === prev.local)
+    // * case 2-2 @임시저장 이미지가 존재하지 않고, 내부 에디터에 이미지가 존재하는 경우
+
+    if (!isTempImg && isInitialize && isImg) {
+      addImgSrcs = currentImages.map((i) => i.local);
+      addImgFiles = currentImages.map((i) => i.file);
+    }
+
+    // * case 2-3 @임시저장 이미지가 존재하고, 내부 에디터에 이미지가 존재하지 않는 경우
+
+    if (isTempImg && isInitialize && !isImg) {
+      deleteImgSrcs = initialData.images;
+    }
+
+    // * case 2-4 @임시저장 이미지가 존재하고, 내부 에디터에 이미지가 존재해 변동이 생긴 경우
+
+    if (isTempImg && isInitialize && isImg) {
+      deleteImgSrcs = initialData.images.filter((i) =>
+        currentImages.some((el) => el.local !== i)
       );
+      const addImg = currentImages.filter((i) => i.local.includes('blob'));
+      addImgSrcs = addImg.map((i) => i.local) || null;
+      addImgFiles = addImg.map((i) => i.file) || null;
+    }
 
-      if (!isInitialize && isImg) {
-        addImgSrcs = currentImages.map((i) => i.local);
-        dto = {
-          ...dto,
-          addImgSrcs,
-        };
-      }
-
-      // * @임시저장 이미지가 존재하지 않고, 내부 에디터에 이미지가 존재하지 않는 경우
-
-      if (!isTempImg && isInitialize && !isImg) {
-        dto = {
-          ...dto,
-          addImgSrcs: null,
-          deleteImgSrcs: null,
-        };
-      }
-
-      // * @임시저장 이미지가 존재하지 않고, 내부 에디터에 이미지가 존재하는 경우
-
-      if (!isTempImg && isInitialize && isImg) {
-        addImgSrcs = currentImages.map((i) => i.local);
-        dto = {
-          ...dto,
-          addImgSrcs,
-          deleteImgSrcs: null,
-        };
-      }
-
-      // * @임시저장 이미지가 존재하고, 내부 에디터에 이미지가 존재하지 않는 경우
-
-      if (isTempImg && isInitialize && !isImg) {
-        deleteImgSrcs = temporaryStorage.images;
-        dto = {
-          ...dto,
-          deleteImgSrcs,
-          addImgSrcs: null,
-        };
-      }
-
-      // * @임시저장 이미지가 존재하고, 내부 에디터에 이미지가 존재해 변동이 생긴 경우
-
-      if (isTempImg && isInitialize && isImg) {
-        deleteImgSrcs = temporaryStorage.images.filter((i) =>
-          currentImages.some((el) => el.local !== i)
-        );
-        addImgSrcs =
-          currentImages.filter((i) => i.local.includes('blob')) || null;
-        dto = {
-          ...dto,
-          deleteImgSrcs,
-          addImgSrcs,
-        };
-      }
-
-      resolve(html);
-    });
+    return {
+      tempId: initialData.tempId || null,
+      thumbnail,
+      deleteImgSrcs,
+      addImgSrcs,
+      addImgFiles,
+      html,
+    };
   };
 
-  const handleSubmit = methods.handleSubmit((data) =>
-    handleRequire(data).then((html) => {
-      const { title, category, files } = data;
-      const {} = html;
+  const handleFiles = async (data: FormState) => {
+    const { files } = data;
+
+    const isLibrary = initialData?.category === 'information' || null;
+    const isSelecteLibrary = category === '자료실';
+
+    let addFiles = null;
+    let deleteFilesSrcs = null;
+
+    // * 애초에 카테고리가 자료실이 아닌경우와 자료실인 경우
+    // * - 선택한 카테고리가 자료실인 경우와 아닌경우
+    // *
+
+    if (!isInitialize) {
+      // * case 1-1
+      // * 임시저장을 불러오지 않은 경우
+      // * 선택한 카테고리가 자료실이 아닌 경우
+
+      if (!isSelecteLibrary) {
+      }
+
+      // * case 1-2
+      // * 선택한 카테고리가 자료실인 경우
+      if (isSelecteLibrary) {
+        addFiles = files;
+      }
+    }
+
+    // * case 2-1
+    // * 임시저장을 불러온 경우
+    // * 임시저장 카테고리가 자료실이고 선택한 카테고리가 자료실이 아닌 경우
+    if (isInitialize) {
+      const currentTempFiles = initialData?.files || [];
+
+      if (isLibrary && !isSelecteLibrary) {
+        deleteFilesSrcs = initialData.files.map((file) => file.url);
+      }
+
+      // * case 2-2
+      // * 임시저장 카테고리가 자료실이고 선택한 카테고리가 자료실인 경우
+      if (isLibrary && isSelecteLibrary) {
+        deleteFilesSrcs = currentTempFiles
+          .filter((file) => !files.some((f) => f.name === file.name))
+          .map((file) => file.url);
+        addFiles = files.filter(
+          (file) => !currentTempFiles.some((f) => f.name === file.name)
+        );
+      }
+    }
+
+    return {
+      addFiles,
+      deleteFilesSrcs,
+    };
+  };
+
+  const handleRequire = async (data: FormState) => {
+    const { title, category } = data;
+
+    if (!title) {
+      methods.setError('title', { message: '제목을 입력해주세요.' });
+      throw 'title is require';
+    }
+
+    if (!category) {
+      methods.setError('title', { message: '카테고리를 입력해주세요.' });
+      throw 'category is require';
+    }
+  };
+
+  const handleSubmit = methods.handleSubmit(async (data) =>
+    handleRequire(data).then(async () => {
+      const { title, category } = data;
+      const {
+        addImgFiles,
+        addImgSrcs,
+        deleteImgSrcs,
+        thumbnail,
+        tempId,
+        html,
+      } = await handleEditorHtml();
+      const { addFiles, deleteFilesSrcs } = await handleFiles(data);
 
       const formData = new FormData();
+
       formData.append(
         'requestDto',
         new Blob(
           [
             JSON.stringify({
               title,
-              category,
+              category: reverseFormatter(category),
+              addImgSrcs,
+              thumbnail,
+              tempId,
+              deleteImgSrcs,
+              deleteFilesSrcs,
+              contents: html,
             }),
           ],
           { type: 'application/json' }
         )
       );
+
+      if (addImgFiles?.length)
+        addImgFiles.forEach((file) => formData.append('images', file));
+      if (addFiles?.length)
+        addFiles.forEach((file) => formData.append('files', file));
+
+      const options = id ? { method: 'PATCH', params: id } : { method: 'POST' };
+
+      await clientApi('/server/supercar/v1/community', {
+        ...options,
+        headers: {
+          ACCESS_TOKEN: session.data?.accessToken || '',
+        },
+        data: formData,
+      });
     })
   );
 
+  // * 임시저장 데이터 불러오기
   React.useEffect(() => {
-    if (temporaryStorage.tempId)
+    if (initialData?.tempId && !id)
       onOpen(
         <TemporaryStorageModal
           onClick={onClick}
@@ -216,9 +282,7 @@ const CommunityForm = (props: CommunityFormProps) => {
           onInit={handleInitialize}
         />
       );
-  }, [handleInitialize, onClick, onClose, onOpen, temporaryStorage]);
-
-  console.log(images);
+  }, [handleInitialize, onClick, onClose, onOpen, initialData, id]);
 
   return (
     <FormProvider {...methods}>
@@ -238,21 +302,33 @@ const CommunityForm = (props: CommunityFormProps) => {
               name: 'community',
               values: ['제보', '포토갤러리', '내 차 자랑', '자료실'],
             }}
-            callback={(value) => setCategory(value)}
+            defaultValues={
+              initialData?.category
+                ? formatter(initialData.category)
+                : undefined
+            }
+            callback={(value) => {
+              setCategory(value);
+              methods.setValue('category', value);
+            }}
           />
         </FormLabel>
         <FormLabel name="title" label="제목" bold>
-          <FormInput name="title" placeholder="제목을 입력해주세요." />
+          <FormInput
+            placeholder="제목을 입력해주세요."
+            defaultValue={initialData?.title ? initialData.title : undefined}
+            {...methods.register('title')}
+          />
         </FormLabel>
         {category === '자료실' && (
           <FormLabel name="files" label="첨부파일" bold>
             <FormFiles
               name="files"
               defaultValues={
-                temporaryStorage.tempId &&
-                temporaryStorage.category === 'information' &&
-                temporaryStorage.files.length > 0
-                  ? temporaryStorage.files.map(
+                initialData.tempId &&
+                initialData.category === 'information' &&
+                initialData.files.length > 0
+                  ? initialData.files.map(
                       (file) => new File([file.url], file.name)
                     )
                   : undefined
