@@ -1,12 +1,12 @@
 import type { NextApiHandler } from 'next/types';
 import { getPlaiceholder } from 'plaiceholder';
-import type { Params } from 'types/base';
+import type { Params } from '@supercarmarket/types/base';
 import {
   MarketDetailDto,
   MarketDetailResponse,
   MarketDto,
   MarketResponse,
-} from 'types/market';
+} from '@supercarmarket/types/market';
 import fetcher from 'utils/api/fetcher';
 import { ErrorCode } from 'utils/error';
 import { catchNoExist, getErrorMessage } from 'utils/misc';

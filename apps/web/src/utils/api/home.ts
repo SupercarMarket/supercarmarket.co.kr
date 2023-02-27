@@ -1,9 +1,12 @@
 import { getServerCategoryQuery } from 'hooks/queries/useHome';
 import type { NextApiHandler } from 'next/types';
 import { getPlaiceholder } from 'plaiceholder';
-import type { CommunityDto } from 'types/community';
-import type { MagazineDto, MagazineResponse } from 'types/magazine';
-import type { MarketDto } from 'types/market';
+import type { CommunityDto } from '@supercarmarket/types/community';
+import type {
+  MagazineDto,
+  MagazineResponse,
+} from '@supercarmarket/types/magazine';
+import type { MarketDto } from '@supercarmarket/types/market';
 import { ErrorCode } from 'utils/error';
 import { catchNoExist } from 'utils/misc';
 

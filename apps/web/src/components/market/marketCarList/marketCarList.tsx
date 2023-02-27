@@ -1,5 +1,10 @@
 import * as React from 'react';
-import { Pagination, Table, Wrapper } from '@supercarmarket/ui';
+import {
+  applyMediaQuery,
+  Pagination,
+  Table,
+  Wrapper,
+} from '@supercarmarket/ui';
 import { WithBlurredImage } from '@supercarmarket/types/magazine';
 import { MarketDto, MarketResponse } from '@supercarmarket/types/market';
 import Select from 'components/common/select';
@@ -64,6 +69,11 @@ const MarketCarList = ({ data }: MarketCarListProps) => {
             row-gap: 40px;
             column-gap: 20px;
             margin-bottom: 80px;
+            ${applyMediaQuery('mobile')} {
+              grid-template-columns: 1fr 1fr;
+              row-gap: 16px;
+              column-gap: 8px;
+            }
           `}
         >
           {markets.map((m) => (

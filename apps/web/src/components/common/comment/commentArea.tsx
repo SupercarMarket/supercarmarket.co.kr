@@ -17,6 +17,7 @@ interface CommentAreaProps {
   parentId?: string;
   type?: CommentAreaType;
   defaultValue?: string;
+  category?: 'magazine' | 'paparazzi' | 'partnership';
 }
 
 const CommentArea = ({
@@ -24,14 +25,20 @@ const CommentArea = ({
   parentId,
   defaultValue,
   type = 'add',
+  category = 'magazine',
 }: CommentAreaProps) => {
   const isAuthenticated = useSession().status === 'authenticated';
-  const { mutate: addMutation, isSuccess: isAddSuccess } = useAddComment(
+  const { mutate: addMutation, isSuccess: isAddSuccess } = useAddComment({
+    category,
     postId,
-    parentId
-  );
+    parentId,
+  });
   const { mutate: updateMutation, isSuccess: isUpdateSuccess } =
-    useUpdateComment(postId, parentId);
+    useUpdateComment({
+      category,
+      postId,
+      commentId: parentId,
+    });
   const [comment, setComment] = useState(defaultValue ? defaultValue : '');
   const length = useMemo(() => comment.length, [comment.length]);
 

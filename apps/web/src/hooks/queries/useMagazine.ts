@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import queries from 'constants/queries';
-import {
+import type {
   MagazineDto,
   MagazineResponse,
   WithBlurredImage,
-} from 'types/magazine';
+} from '@supercarmarket/types/magazine';
 import { baseFetch } from 'utils/api/fetcher';
 
 export default function useMagazine(page = 0, options = {}) {

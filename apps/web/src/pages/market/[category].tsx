@@ -1,6 +1,11 @@
 'use client';
 
-import { Container, Searchbar } from '@supercarmarket/ui';
+import {
+  applyMediaQuery,
+  Container,
+  Searchbar,
+  Wrapper,
+} from '@supercarmarket/ui';
 import type { NextPageWithLayout, Params } from '@supercarmarket/types/base';
 import {
   dehydrate,
@@ -21,6 +26,7 @@ import type { NextPageContext } from 'next/types';
 import * as React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useSearchKeyword } from 'hooks/useSearchKeyword';
+import { css } from 'styled-components';
 
 const MarketFilterPage: NextPageWithLayout = () => {
   const marketQuery = useUrlQuery();
@@ -33,20 +39,33 @@ const MarketFilterPage: NextPageWithLayout = () => {
   return (
     <Container display="flex" flexDirection="column" margin="20px 0 0 0">
       <MarketBanner />
-      <Container
-        height="212px"
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
+      <Wrapper
+        css={css`
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin: 80px 0;
+          ${applyMediaQuery('mobile')} {
+            margin: 32px 0;
+          }
+        `}
       >
-        <Searchbar
-          variant="Line"
-          width="880px"
-          placeholder="원하는 차량을 검색하세요"
-          onKeyDown={keydownHandler}
-          ref={keywordRef}
-        />
-      </Container>
+        <Wrapper.Item
+          css={css`
+            width: 880px;
+            ${applyMediaQuery('mobile')} {
+              width: 100%;
+            }
+          `}
+        >
+          <Searchbar
+            variant="Line"
+            placeholder="원하는 차량을 검색하세요"
+            onKeyDown={keydownHandler}
+            ref={keywordRef}
+          />
+        </Wrapper.Item>
+      </Wrapper>
       <QueryErrorResetBoundary>
         {({ reset }) => (
           <ErrorBoundary

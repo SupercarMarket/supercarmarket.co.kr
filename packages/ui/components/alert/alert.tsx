@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import * as React from 'react';
+import { deviceQuery } from '../../styles';
 import theme from '../../styles/theme';
 
 type Severity = 'success' | 'error' | 'info';
@@ -34,10 +35,15 @@ const Alert = (props: AlertProps) => {
           border-radius: 4px;
           padding: 12px 22px;
           border: 1px solid ${contentColor};
-          font-size: 20px;
+          font-size: ${theme.fontSize['body-20']};
           width: ${width};
           color: ${contentColor};
           background-color: ${bgColor};
+        }
+        @media screen and (${deviceQuery.mobile}) {
+          .alert {
+            font-size: ${theme.fontSize['body-14']};
+          }
         }
       `}</style>
     </div>

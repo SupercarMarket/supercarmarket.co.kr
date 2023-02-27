@@ -1,5 +1,5 @@
-import { Container, Pagination } from '@supercarmarket/ui';
-import { useUrlQuery } from '@supercarmarket/hooks';
+import { Container, deviceQuery, Pagination } from '@supercarmarket/ui';
+import { useMedia, useUrlQuery } from '@supercarmarket/hooks';
 import useComment from 'hooks/queries/useComment';
 
 import CommentArea from './commentArea';
@@ -8,9 +8,11 @@ import CommentHead from './commentHead';
 
 interface CommentProps {
   id: string;
+  category?: 'magazine' | 'paparazzi' | 'partnership';
 }
 
-const Comment = ({ id }: CommentProps) => {
+const Comment = ({ id, category = 'magazine' }: CommentProps) => {
+  const { isMobile } = useMedia({ deviceQuery });
   const { page, orderBy } = useUrlQuery();
 
   const { data: comment } = useComment(
@@ -18,7 +20,7 @@ const Comment = ({ id }: CommentProps) => {
     {
       page,
       orderBy,
-      category: 'magazine',
+      category,
     },
     {
       enabled: !!id,
@@ -33,21 +35,25 @@ const Comment = ({ id }: CommentProps) => {
       justifyContent="flex-start"
       flexDirection="column"
       gap="20px"
-      padding="40px 40px"
-      border="1px solid #EAEAEC"
+      padding={isMobile ? '16px' : '40px'}
+      border={isMobile ? undefined : '1px solid #EAEAEC'}
       borderRadius="4px"
       boxSizing="border-box"
     >
       {comment && (
         <>
           <CommentHead totalCount={comment.data.length} />
-          <CommentBody postId={id} comments={comment.data} />
+          <CommentBody
+            postId={id}
+            comments={comment.data}
+            category={category}
+          />
           <Pagination
             totalPages={comment.totalPages}
             totalCount={comment.totalCount}
             pageSize={10}
           />
-          <CommentArea postId={id} />
+          <CommentArea postId={id} category={category} />
         </>
       )}
     </Container>

@@ -86,7 +86,6 @@ const Pagination = memo(function Pagination({
     const filteredQuery = Object.entries(rest).filter(([, val]) => val);
     return Object.fromEntries(filteredQuery);
   }, [rest]);
-
   const pathname = usePathname();
   const currentPages = React.useMemo(() => {
     const pages = Array.from({ length: totalPages }, (_, i) => i + 1);

@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import queries from 'constants/queries';
-import type { UpdateInfo } from 'types/account';
-import type { ServerResponse } from 'types/base';
+import type { UpdateInfo } from '@supercarmarket/types/account';
+import type { ServerResponse } from '@supercarmarket/types/base';
 import { clientFetcher } from 'utils/api/fetcher';
 
 export default function useUpdateInfo(token: string, options = {}) {

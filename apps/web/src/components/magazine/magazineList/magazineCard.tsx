@@ -48,8 +48,8 @@ const MagazineCard = memo(function MagazineCard({
             height: ${imgHeight}px;
 
             ${applyMediaQuery('mobile')} {
-              ${type === 'small' && 'width: 178px;'}
-              ${type === 'small' && 'height: 120px;'}
+              width: 178px;
+              height: 120px;
             }
           `}
         >

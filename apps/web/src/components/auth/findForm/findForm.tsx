@@ -8,7 +8,7 @@ import * as React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import AuthFormItem from '../authFormItem/authFormItem';
-import * as style from './findForm.style';
+import * as style from '../signupForm/signupForm.styled';
 
 interface FindForms {
   id: Forms[];

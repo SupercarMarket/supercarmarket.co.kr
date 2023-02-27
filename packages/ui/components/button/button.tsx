@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import { ButtonHTMLAttributes, Ref, useId } from 'react';
 import { forwardRef } from 'react';
+import { deviceQuery } from '../../styles';
 
 type Variant = 'Primary' | 'Primary-Line' | 'Line' | 'Black' | 'Init';
 
@@ -140,6 +141,7 @@ const Button = forwardRef(function Button(
         }
         .button-Init {
           all: unset;
+          padding: 0 !important;
         }
         .button-suffix {
           display: flex;
@@ -148,6 +150,12 @@ const Button = forwardRef(function Button(
         }
         .button-disabled {
           cursor: not-allowed;
+        }
+        @media (${deviceQuery.mobile}) {
+          .button {
+            padding: 9.5px 16px;
+            font-size: 14px;
+          }
         }
       `}</style>
     </>

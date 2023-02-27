@@ -26,7 +26,6 @@ export default function useCommunity(
     searchType,
     keyword,
   };
-
   return useQuery<PaginationResponse<CommunityDto[]>>(
     queries.market.lists([
       ...queries.community.lists(),

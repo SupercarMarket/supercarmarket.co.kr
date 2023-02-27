@@ -1,7 +1,7 @@
 import { useUrlQuery } from '@supercarmarket/hooks';
 import { Alert, Container, Wrapper } from '@supercarmarket/ui';
 import { CardSkeleton } from 'components/fallback/loading';
-import useCommunity from 'hooks/queries/useCommunity';
+import useCommunity from 'hooks/queries/community/useCommunity';
 import * as React from 'react';
 import { css } from 'styled-components';
 import CommunityCard from '../communityCard';

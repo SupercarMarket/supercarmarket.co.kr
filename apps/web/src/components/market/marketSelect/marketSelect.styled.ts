@@ -3,7 +3,7 @@ import styled from 'styled-components';
 const SelectBox = styled.div`
   display: flex;
   align-items: center;
-  width: 270px;
+  width: 100%;
 `;
 
 const Hyphen = styled.div`

@@ -1,6 +1,6 @@
 import Select from 'components/common/select';
 import { useRouter } from 'next/router';
-import { SelectType } from 'types/market';
+import { SelectType } from '@supercarmarket/types/market';
 import { makeSelectQuery } from 'utils/market/marketFilter';
 
 import * as Styled from './marketSelect.styled';

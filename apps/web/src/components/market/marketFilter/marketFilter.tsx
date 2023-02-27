@@ -1,9 +1,15 @@
-import { Typography } from '@supercarmarket/ui';
+import {
+  applyMediaQuery,
+  Container,
+  Typography,
+  Wrapper,
+} from '@supercarmarket/ui';
 import MarketSelect from 'components/market/marketSelect';
 import { FIRST_MARKET_FILTER, SECOND_MARKET_FILTER } from 'constants/market';
 import theme from 'constants/theme';
 import { useRouter } from 'next/router';
 import * as React from 'react';
+import { css } from 'styled-components';
 import { convertQuery, makeFilterLabel } from 'utils/market/marketFilter';
 
 import Close from '../../../assets/svg/close.svg';
@@ -34,24 +40,66 @@ const MarketFilter = () => {
   };
 
   return (
-    <Styled.MarketFilterContainer>
+    <Container>
       <Styled.MarketFilterArea>
-        <Styled.MarketFilterBox>
+        <Wrapper
+          css={css`
+            display: flex;
+            gap: 24px;
+            ${applyMediaQuery('mobile')} {
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+            }
+          `}
+        >
           {FIRST_MARKET_FILTER.map(([options1, options2], idx) => (
-            <Styled.MarketFilterWrapper key={idx}>
+            <Wrapper.Item
+              key={idx}
+              css={css`
+                width: 270px;
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+                ${applyMediaQuery('mobile')} {
+                  width: 311px;
+                }
+              `}
+            >
               <Typography>{options1.label}</Typography>
               <MarketSelect options1={options1} options2={options2} />
-            </Styled.MarketFilterWrapper>
+            </Wrapper.Item>
           ))}
-        </Styled.MarketFilterBox>
-        <Styled.MarketFilterBox>
+        </Wrapper>
+        <Wrapper
+          css={css`
+            display: flex;
+            gap: 24px;
+            ${applyMediaQuery('mobile')} {
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+            }
+          `}
+        >
           {SECOND_MARKET_FILTER.map(([options1, options2], idx) => (
-            <Styled.MarketFilterWrapper key={idx}>
+            <Wrapper.Item
+              key={idx}
+              css={css`
+                width: 270px;
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+                ${applyMediaQuery('mobile')} {
+                  width: 311px;
+                }
+              `}
+            >
               <Typography>{options1.label}</Typography>
               <MarketSelect options1={options1} options2={options2} />
-            </Styled.MarketFilterWrapper>
+            </Wrapper.Item>
           ))}
-        </Styled.MarketFilterBox>
+        </Wrapper>
       </Styled.MarketFilterArea>
       <Styled.FilterListArea>
         <Styled.MarketFilterList>
@@ -83,7 +131,7 @@ const MarketFilter = () => {
           <Typography fontSize="body-16">초기화</Typography>
         </Styled.ResetButton>
       </Styled.FilterListArea>
-    </Styled.MarketFilterContainer>
+    </Container>
   );
 };
 

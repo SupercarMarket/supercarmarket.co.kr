@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { css } from 'styled-components';
 import { FormCheckbox } from '../../form';
-import { theme } from '../../styles';
+import { applyMediaQuery, theme } from '../../styles';
 
 import { Container } from '../container';
 import { Typography } from '../typography';
@@ -62,9 +62,18 @@ const Table = (props: TableProps) => {
     ];
   }, [tab]);
   return (
-    <Container display="flex" borderRadius="4px" padding={padding}>
+    <Wrapper
+      css={css`
+        display: flex;
+        border-radius: 4px;
+        padding: ${padding};
+        ${applyMediaQuery('mobile')} {
+          display: none;
+        }
+      `}
+    >
       {hidden && (
-        <Wrapper
+        <Wrapper.Item
           css={css`
             display: flex;
             align-items: center;
@@ -74,10 +83,10 @@ const Table = (props: TableProps) => {
           `}
         >
           <FormCheckbox name="check" id="check" onChange={handleCheckbox} />
-        </Wrapper>
+        </Wrapper.Item>
       )}
       {table.map((value) => (
-        <Wrapper
+        <Wrapper.Item
           key={value.title}
           css={css`
             flex: ${value.width === '100%' ? 1 : undefined};
@@ -95,9 +104,9 @@ const Table = (props: TableProps) => {
           >
             {value.title}
           </Typography>
-        </Wrapper>
+        </Wrapper.Item>
       ))}
-    </Container>
+    </Wrapper>
   );
 };
 

@@ -1,6 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import queries from 'constants/queries';
-import { MagazineResponse, WithBlurredImage } from 'types/magazine';
+import type {
+  MagazineResponse,
+  WithBlurredImage,
+} from '@supercarmarket/types/magazine';
 import { baseFetch } from 'utils/api/fetcher';
 
 export const getServerCategoryQuery = (query: keyof typeof queries.home) => {

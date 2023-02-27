@@ -8,7 +8,7 @@ import * as React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import AuthFormItem from '../authFormItem/authFormItem';
-import * as style from './phoneForm.styled';
+import * as style from '../signupForm/signupForm.styled';
 
 interface PhoneFormProps {
   uuid: string;

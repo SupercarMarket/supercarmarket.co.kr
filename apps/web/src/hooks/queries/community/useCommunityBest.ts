@@ -1,8 +1,11 @@
 import { Query } from '@supercarmarket/types/base';
 import { useQuery } from '@tanstack/react-query';
 import queries from 'constants/queries';
-import { CommunityBestResponse, CommunityDto } from 'types/community';
-import { WithBlurredImage } from 'types/market';
+import type {
+  CommunityBestResponse,
+  CommunityDto,
+} from '@supercarmarket/types/community';
+import type { WithBlurredImage } from '@supercarmarket/types/market';
 import { baseFetcher } from 'utils/api/fetcher';
 
 export default function useCommunityBest(

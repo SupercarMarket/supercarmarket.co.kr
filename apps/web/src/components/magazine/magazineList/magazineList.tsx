@@ -1,4 +1,10 @@
-import { Container, Pagination, Searchbar, Wrapper } from '@supercarmarket/ui';
+import {
+  applyMediaQuery,
+  Container,
+  Pagination,
+  Searchbar,
+  Wrapper,
+} from '@supercarmarket/ui';
 import { useUrlQuery } from '@supercarmarket/hooks';
 import useMagazine from 'hooks/queries/useMagazine';
 
@@ -10,13 +16,17 @@ const MagazineList = () => {
   const { data: magazine } = useMagazine(page);
 
   return (
-    <Container
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-      margin="80px 0"
-    >
-      <Searchbar width="880px" variant="Line" border="normal" />
+    <Container display="flex" flexDirection="column" alignItems="center">
+      <Wrapper
+        css={css`
+          margin-top: 80px;
+          ${applyMediaQuery('mobile')} {
+            margin-top: 32px;
+          }
+        `}
+      >
+        <Searchbar width="375px" variant="Line" border="normal" />
+      </Wrapper>
       {magazine && (
         <>
           <Wrapper
@@ -27,6 +37,11 @@ const MagazineList = () => {
               grid-template-columns: 1fr 1fr 1fr;
               row-gap: 40px;
               column-gap: 19.5px;
+
+              ${applyMediaQuery('mobile')} {
+                margin-top: 32px;
+                grid-template-columns: 1fr 1fr;
+              }
             `}
           >
             {magazine.data.map((m) => (

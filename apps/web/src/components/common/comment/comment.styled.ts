@@ -1,9 +1,15 @@
+import { applyMediaQuery } from '@supercarmarket/ui';
 import styled, { css } from 'styled-components';
 
 const CommentHeadLeft = styled.div`
   display: flex;
   align-items: center;
   gap: 9px;
+  & > svg {
+    width: 18px;
+    height: 18px;
+    fill: ${({ theme }) => theme.color['greyScale-6']};
+  }
 `;
 
 const CommentHeadRight = styled.div`
@@ -39,6 +45,19 @@ const cardInfoWrapper = css`
   display: flex;
   align-items: center;
   gap: 12px;
+  & > svg {
+    width: 16px;
+    height: 16px;
+    fill: ${({ theme }) => theme.color['greyScale-5']};
+  }
+  ${applyMediaQuery('mobile')} {
+    & > span {
+      display: none !important;
+    }
+    & > button {
+      display: none !important;
+    }
+  }
 `;
 
 const CommentAreaTextArea = styled.textarea`
@@ -50,6 +69,10 @@ const CommentAreaTextArea = styled.textarea`
   font-size: 14px;
   line-height: 21px;
   box-sizing: border-box;
+  background-color: ${({ theme }) => theme.color.white};
+  &::placeholder {
+    background-color: ${({ theme }) => theme.color.white};
+  }
 `;
 
 const CommentAreaTop = styled.div`

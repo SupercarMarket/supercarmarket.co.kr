@@ -1,15 +1,32 @@
-import { Container, Typography, Wrapper } from '@supercarmarket/ui';
+import {
+  applyMediaQuery,
+  Container,
+  deviceQuery,
+  Typography,
+  Wrapper,
+} from '@supercarmarket/ui';
 import type { Links } from '@supercarmarket/types/base';
 import community from 'constants/community';
 import Link from 'next/link';
 import { css } from 'styled-components';
 import useUrlQuery from 'hooks/useUrlQuery';
+import { useMedia } from '@supercarmarket/hooks';
 
 const CommunityNavbarItem = (link: Links) => {
   const { category } = useUrlQuery();
 
   return (
-    <Container width="160px" display="flex" flexDirection="column" gap="4px">
+    <Wrapper
+      css={css`
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        ${applyMediaQuery('mobile')} {
+          flex-direction: row;
+          align-items: center;
+        }
+      `}
+    >
       <Typography
         as="b"
         fontSize="header-16"
@@ -52,31 +69,40 @@ const CommunityNavbarItem = (link: Links) => {
                   background: ${({ theme }) => theme.color['greyScale-2']};
                   font-weight: ${({ theme }) => theme.fontWeight.bold};
                 }
+                ${applyMediaQuery('mobile')} {
+                  padding: 8px;
+                  line-height: 12px;
+                }
               `}
             >
               <span>{children.title}</span>
             </Wrapper>
           </Link>
         ))}
-    </Container>
+    </Wrapper>
   );
 };
 
 const CommunityNavbar = () => {
+  const { isMobile } = useMedia({ deviceQuery });
   return (
     <Container
-      position="absolute"
-      width="160px"
+      position={isMobile ? 'relative' : 'absolute'}
+      top={isMobile ? 0 : 0}
+      left={isMobile ? 0 : '-192px'}
+      width={isMobile ? '100%' : '160px'}
       display="flex"
       flexDirection="column"
       border="1px solid #C3C3C7"
       borderRadius="4px"
-      top="0"
-      left="-192px"
     >
       <Wrapper
         css={css`
           padding: 12px;
+          ${applyMediaQuery('mobile')} {
+            display: flex;
+            flex-direction: column;
+          }
         `}
       >
         {community.links.map((link) => (
