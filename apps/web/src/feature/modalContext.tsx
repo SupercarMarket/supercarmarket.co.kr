@@ -13,7 +13,7 @@ interface ModalProviderProps {
 }
 
 interface ModalContextProps {
-  onClose: () => void;
+  onClose: (callback?: () => void) => void;
   onClick: (e: MouseEvent<HTMLDivElement, globalThis.MouseEvent>) => void;
   onOpen: (children: ReactNode) => void;
 }
@@ -41,9 +41,10 @@ const ModalProvider = ({ children }: ModalProviderProps) => {
     setModalContents(children);
   };
 
-  const onClose = () => {
+  const onClose = (callback?: () => void) => {
     setIsModalOpen(false);
     setModalContents(<></>);
+    if (callback) callback();
   };
 
   const onClick: MouseEventHandler<HTMLDivElement> = useCallback((e) => {
