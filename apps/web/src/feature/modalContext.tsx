@@ -7,6 +7,7 @@ import {
   useMemo,
 } from 'react';
 import { createContext, useState } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 
 interface ModalProviderProps {
   children: ReactNode;
@@ -35,6 +36,8 @@ const ModalContext = createContext(ModalInitialValue);
 const ModalProvider = ({ children }: ModalProviderProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalContents, setModalContents] = useState<ReactNode>(<></>);
+  const pathname = usePathname();
+  const { replace } = useRouter();
 
   const onOpen = (children: ReactNode) => {
     setIsModalOpen(true);
@@ -53,6 +56,27 @@ const ModalProvider = ({ children }: ModalProviderProps) => {
     onClose();
   }, []);
 
+  const handleClick: MouseEventHandler<HTMLDivElement> = useCallback(
+    (e) => {
+      if (e.currentTarget !== e.target) return;
+
+      const links = pathname?.split('/');
+
+      if (!links) return;
+
+      const currentPath = links.pop();
+      let href = '';
+
+      if (!currentPath?.length) href = '/';
+      else href = `/${links[links.length - 1]}`;
+
+      onClose(() => {
+        replace(href);
+      });
+    },
+    [pathname, replace]
+  );
+
   const value = useMemo(() => ({ onClick, onClose, onOpen }), [onClick]);
 
   return (
@@ -61,7 +85,7 @@ const ModalProvider = ({ children }: ModalProviderProps) => {
       {isModalOpen && (
         <Portal>
           <div
-            onClick={onClick}
+            onClick={handleClick}
             style={{
               position: 'fixed',
               display: 'flex',
