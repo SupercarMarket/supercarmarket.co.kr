@@ -16,6 +16,18 @@ export async function middleware(req: NextRequest) {
       return NextResponse.redirect(url);
     }
   }
+
+  if (url.pathname.startsWith('/inquiry')) {
+    const session = await getToken({
+      req,
+      secret: process.env.NEXT_PUBLIC_AUTH_SECRET,
+    });
+
+    if (!session) {
+      url.pathname = '/auth/signin';
+      return NextResponse.redirect(url);
+    }
+  }
   return NextResponse.next();
 }
 
