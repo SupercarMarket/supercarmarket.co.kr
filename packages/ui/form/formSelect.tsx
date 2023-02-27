@@ -15,6 +15,7 @@ type FormSelectOption = {
 type FormSelectProps = React.PropsWithChildren &
   React.InputHTMLAttributes<HTMLInputElement> & {
     callback?: (value: string) => void;
+    defaultValues?: string;
     option: FormSelectOption;
   };
 
@@ -71,9 +72,9 @@ const FormSelect = React.forwardRef(function FormSelect(
   props: FormSelectProps,
   ref: React.Ref<HTMLInputElement>
 ) {
-  const { option, callback, ...rest } = props;
+  const { option, defaultValues, callback, ...rest } = props;
   const containerRef = React.useRef<HTMLDivElement | null>(null);
-  const [selected, setSelected] = React.useState('');
+  const [selected, setSelected] = React.useState(defaultValues || '');
   const [open, setOpen] = React.useState(false);
 
   const onClick = () => {
