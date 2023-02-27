@@ -41,6 +41,11 @@ interface InquiryCarFormState {
   attachments: File[];
 }
 
+interface InquiryMiscFormState {
+  title: string;
+  contents: string;
+}
+
 interface InquiryRegister {
   htmlFor: string;
   type:
@@ -560,7 +565,7 @@ const inquiry = {
     ] as InquiryRegister[],
     misc: [
       {
-        htmlFor: '제목',
+        htmlFor: 'title',
         label: '제목',
         type: 'text',
         placeholder: '제목을 입력해주세요.',
@@ -569,7 +574,7 @@ const inquiry = {
         },
       },
       {
-        htmlFor: '내용',
+        htmlFor: 'contents',
         label: '내용',
         type: 'textarea',
         placeholder: '내용을 입력해주세요.',
@@ -581,5 +586,10 @@ const inquiry = {
   },
 };
 
-export type { InquiryCarFormState, InquiryDealerFormState, InquiryRegister };
+export type {
+  InquiryCarFormState,
+  InquiryDealerFormState,
+  InquiryMiscFormState,
+  InquiryRegister,
+};
 export default inquiry;
