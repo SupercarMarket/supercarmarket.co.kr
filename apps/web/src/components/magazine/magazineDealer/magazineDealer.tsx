@@ -6,41 +6,31 @@ import {
   Wrapper,
 } from '@supercarmarket/ui';
 import Avvvatars from 'avvvatars-react';
-import AuthModal from 'components/common/modal';
-import CounselingModal from 'components/common/modal/counselingModal';
+import AuthModal, { CounselingModal } from 'components/common/modal';
 import ModalContext from 'feature/modalContext';
 import useMagazineCounseling from 'hooks/mutations/magazine/useMagazineCounseling';
-import { useCallback, useContext } from 'react';
+import * as React from 'react';
 import { css } from 'styled-components';
+import { useSession } from 'next-auth/react';
 
 interface MagazineDealerProps {
   postId: string;
 }
 
-const user = {
-  id: 'qwjfkqnwfkjnqwkjfnqwkfnkqwnfk',
-  nickName: 'blan19',
-  email: 'blanzzxz@naver.com',
-  address: '서울특별시 청와대',
-  call: '01012341234',
-  accessToken: '12kqwnflknqwlkfnr123kln',
-  createAt: '',
-  sub: '',
-};
-
 const MagazineDealer = ({ postId }: MagazineDealerProps) => {
   const { mutate } = useMagazineCounseling(postId);
-  const { onOpen, onClose, onClick } = useContext(ModalContext);
+  const session = useSession();
+  const { onOpen, onClose, onClick } = React.useContext(ModalContext);
 
-  const handleCounseling = useCallback(() => {
+  const handleCounseling = React.useCallback(() => {
     mutate();
   }, [mutate]);
 
-  const onModal = useCallback(() => {
-    if (user)
+  const onModal = React.useCallback(() => {
+    if (session && session.data)
       onOpen(
         <CounselingModal
-          user={user}
+          user={session.data}
           handleCounseling={handleCounseling}
           onClose={onClose}
           onClick={onClick}
@@ -56,14 +46,10 @@ const MagazineDealer = ({ postId }: MagazineDealerProps) => {
           description="로그인 후 상담 신청이 가능합니다"
         />
       );
-  }, [handleCounseling, onClick, onClose, onOpen]);
+  }, [handleCounseling, onClick, onClose, onOpen, session]);
 
   return (
-    <Container
-      border="1px solid #EAEAEC"
-      borderRadius="4px"
-      // padding="30px 40px"
-    >
+    <Container border="1px solid #EAEAEC" borderRadius="4px">
       <Wrapper
         css={css`
           display: flex;
