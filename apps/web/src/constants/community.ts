@@ -4,6 +4,7 @@ interface FormState {
   files: File[];
   category: string;
   title: string;
+  temporaryStorage?: boolean;
 }
 
 const community = {

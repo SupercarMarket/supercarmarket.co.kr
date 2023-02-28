@@ -49,7 +49,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       }
     ).then((res) => {
       const { ok, status, ...rest } = res;
-      return rest;
+      return rest.data;
     });
 
   return {

@@ -67,8 +67,16 @@ const CommunityForm = (props: CommunityFormProps) => {
         }))
       );
 
+    methods.setValue('title', initialData.title);
+
     onClose();
-  }, [onClose, initialData?.contents, initialData?.images]);
+  }, [
+    initialData.contents,
+    initialData.images,
+    initialData.title,
+    methods,
+    onClose,
+  ]);
 
   const handleInitEditor = React.useCallback(() => {
     const instance = editor.current?.getInstance();
@@ -87,7 +95,7 @@ const CommunityForm = (props: CommunityFormProps) => {
     });
   }, [id, initialData.contents]);
 
-  const handleEditorHtml = async () => {
+  const handleEditorHtml = React.useCallback(async () => {
     const html = editor.current?.getInstance()?.getHTML();
 
     if (!html) {
@@ -104,7 +112,7 @@ const CommunityForm = (props: CommunityFormProps) => {
     let deleteImgSrcs = null;
     let addImgFiles = null;
 
-    // * case 1-1 @임시저장을 불러옴
+    // * case 1-1 @임시저장을 불러오지 않음
     // * 내부 에디터에 이미지가 존재하지 않는 경우
 
     // ! 본문 임시저장 이미지도 고려해야함
@@ -132,14 +140,16 @@ const CommunityForm = (props: CommunityFormProps) => {
     // * case 2-3 @임시저장 이미지가 존재하고, 내부 에디터에 이미지가 존재하지 않는 경우
 
     if (isTempImg && isInitialize && !isImg) {
+      console.log('check');
+
       deleteImgSrcs = initialData.images;
     }
 
     // * case 2-4 @임시저장 이미지가 존재하고, 내부 에디터에 이미지가 존재해 변동이 생긴 경우
 
     if (isTempImg && isInitialize && isImg) {
-      deleteImgSrcs = initialData.images.filter((i) =>
-        currentImages.some((el) => el.local !== i)
+      deleteImgSrcs = initialData.images.filter(
+        (i) => !currentImages.some((el) => el.local === i)
       );
       const addImg = currentImages.filter((i) => i.local.includes('blob'));
       addImgSrcs = addImg.map((i) => i.local) || null;
@@ -154,130 +164,165 @@ const CommunityForm = (props: CommunityFormProps) => {
       addImgFiles,
       html,
     };
-  };
+  }, [images, initialData.images, initialData.tempId, isInitialize]);
 
-  const handleFiles = async (data: FormState) => {
-    const { files } = data;
+  const handleFiles = React.useCallback(
+    async (data: FormState) => {
+      const { files } = data;
 
-    const isLibrary = initialData?.category === 'information' || null;
-    const isSelecteLibrary = category === '자료실';
+      const isLibrary = initialData?.category === 'information' || null;
+      const isSelecteLibrary = category === '자료실';
 
-    let addFiles = null;
-    let deleteFilesSrcs = null;
+      let addFiles = null;
+      let deleteFilesSrcs = null;
 
-    // * 애초에 카테고리가 자료실이 아닌경우와 자료실인 경우
-    // * - 선택한 카테고리가 자료실인 경우와 아닌경우
-    // *
+      // * 애초에 카테고리가 자료실이 아닌경우와 자료실인 경우
+      // * - 선택한 카테고리가 자료실인 경우와 아닌경우
+      // *
 
-    if (!isInitialize) {
-      // * case 1-1
-      // * 임시저장을 불러오지 않은 경우
-      // * 선택한 카테고리가 자료실이 아닌 경우
+      if (!isInitialize) {
+        // * case 1-1
+        // * 임시저장을 불러오지 않은 경우
+        // * 선택한 카테고리가 자료실이 아닌 경우
 
-      if (!isSelecteLibrary) {
+        if (!isSelecteLibrary) {
+        }
+
+        // * case 1-2
+        // * 선택한 카테고리가 자료실인 경우
+        if (isSelecteLibrary) {
+          addFiles = files;
+        }
       }
 
-      // * case 1-2
-      // * 선택한 카테고리가 자료실인 경우
-      if (isSelecteLibrary) {
-        addFiles = files;
+      // * case 2-1
+      // * 임시저장을 불러온 경우
+      // * 임시저장 카테고리가 자료실이고 선택한 카테고리가 자료실이 아닌 경우
+      if (isInitialize) {
+        const currentTempFiles = initialData?.files || [];
+
+        if (isLibrary && !isSelecteLibrary) {
+          deleteFilesSrcs = initialData.files.map((file) => file.url);
+        }
+
+        // * case 2-2
+        // * 임시저장 카테고리가 자료실이고 선택한 카테고리가 자료실인 경우
+        if (isLibrary && isSelecteLibrary) {
+          deleteFilesSrcs = currentTempFiles
+            .filter((file) => !files.some((f) => f.name === file.name))
+            .map((file) => file.url);
+          addFiles = files.filter(
+            (file) => !currentTempFiles.some((f) => f.name === file.name)
+          );
+        }
       }
-    }
 
-    // * case 2-1
-    // * 임시저장을 불러온 경우
-    // * 임시저장 카테고리가 자료실이고 선택한 카테고리가 자료실이 아닌 경우
-    if (isInitialize) {
-      const currentTempFiles = initialData?.files || [];
-
-      if (isLibrary && !isSelecteLibrary) {
-        deleteFilesSrcs = initialData.files.map((file) => file.url);
-      }
-
-      // * case 2-2
-      // * 임시저장 카테고리가 자료실이고 선택한 카테고리가 자료실인 경우
-      if (isLibrary && isSelecteLibrary) {
-        deleteFilesSrcs = currentTempFiles
-          .filter((file) => !files.some((f) => f.name === file.name))
-          .map((file) => file.url);
-        addFiles = files.filter(
-          (file) => !currentTempFiles.some((f) => f.name === file.name)
-        );
-      }
-    }
-
-    return {
-      addFiles,
-      deleteFilesSrcs,
-    };
-  };
-
-  const handleRequire = async (data: FormState) => {
-    const { title, category } = data;
-
-    if (!title) {
-      methods.setError('title', { message: '제목을 입력해주세요.' });
-      throw 'title is require';
-    }
-
-    if (!category) {
-      methods.setError('title', { message: '카테고리를 입력해주세요.' });
-      throw 'category is require';
-    }
-  };
-
-  const handleSubmit = methods.handleSubmit(async (data) =>
-    handleRequire(data).then(async () => {
-      const { title, category } = data;
-      const {
-        addImgFiles,
-        addImgSrcs,
-        deleteImgSrcs,
-        thumbnail,
-        tempId,
-        html,
-      } = await handleEditorHtml();
-      const { addFiles, deleteFilesSrcs } = await handleFiles(data);
-
-      const formData = new FormData();
-
-      formData.append(
-        'requestDto',
-        new Blob(
-          [
-            JSON.stringify({
-              title,
-              category: reverseFormatter(category),
-              addImgSrcs,
-              thumbnail,
-              tempId,
-              deleteImgSrcs,
-              deleteFilesSrcs,
-              contents: html,
-            }),
-          ],
-          { type: 'application/json' }
-        )
-      );
-
-      if (addImgFiles?.length)
-        addImgFiles.forEach((file) => formData.append('images', file));
-      if (addFiles?.length)
-        addFiles.forEach((file) => formData.append('files', file));
-
-      const options = id ? { method: 'PATCH', params: id } : { method: 'POST' };
-
-      await fetcher('/server/supercar/v1/community', {
-        ...options,
-        headers: {
-          ACCESS_TOKEN: session.data?.accessToken || '',
-        },
-        body: formData,
-      });
-    })
+      return {
+        addFiles,
+        deleteFilesSrcs,
+      };
+    },
+    [category, initialData?.category, initialData.files, isInitialize]
   );
 
-  const handleTemporaryStorage = React.useCallback(() => {}, []);
+  const handleRequire = React.useCallback(
+    async (data: FormState) => {
+      const { title, category } = data;
+
+      if (!title) {
+        methods.setError('title', { message: '제목을 입력해주세요.' });
+        throw 'title is require';
+      }
+
+      if (!category) {
+        methods.setError('title', { message: '카테고리를 입력해주세요.' });
+        throw 'category is require';
+      }
+    },
+    [methods]
+  );
+
+  const handleSubmit = React.useCallback(
+    async (data: FormState) =>
+      handleRequire(data).then(async () => {
+        const { title, category, temporaryStorage } = data;
+        const {
+          addImgFiles,
+          addImgSrcs,
+          deleteImgSrcs,
+          thumbnail,
+          tempId,
+          html,
+        } = await handleEditorHtml();
+        const { addFiles, deleteFilesSrcs } = await handleFiles(data);
+
+        const formData = new FormData();
+
+        formData.append(
+          'requestDto',
+          new Blob(
+            [
+              JSON.stringify({
+                title,
+                category: reverseFormatter(category),
+                addImgSrcs,
+                thumbnail,
+                tempId,
+                deleteImgSrcs,
+                deleteFilesSrcs,
+                contents: html,
+              }),
+            ],
+            { type: 'application/json' }
+          )
+        );
+
+        if (addImgFiles?.length)
+          addImgFiles.forEach((file) => formData.append('images', file));
+        if (addFiles?.length)
+          addFiles.forEach((file) => formData.append('files', file));
+
+        const options = id
+          ? { method: 'PATCH', params: id }
+          : { method: 'POST' };
+
+        let url = '/server/supercar/v1/community';
+
+        if (id) url = `/server/supercar/v1/community/${id}`;
+
+        if (temporaryStorage) url = '/server/supercar/v1/community-temp';
+
+        formData.forEach((v, k) => {
+          console.log(k, v);
+        });
+
+        await fetcher(url, {
+          ...options,
+          headers: {
+            ACCESS_TOKEN: session.data?.accessToken || '',
+          },
+          body: formData,
+        });
+      }),
+    [
+      handleEditorHtml,
+      handleFiles,
+      handleRequire,
+      id,
+      session.data?.accessToken,
+    ]
+  );
+
+  const handleTemporaryStorage = React.useCallback(async () => {
+    const data = {
+      title: methods.getValues('title'),
+      category: methods.getValues('category'),
+      files: methods.getValues('files'),
+      temporaryStorage: true,
+    };
+
+    await handleSubmit(data);
+  }, [handleSubmit, methods]);
 
   // * 임시저장 데이터 불러오기
   React.useEffect(() => {
@@ -296,7 +341,7 @@ const CommunityForm = (props: CommunityFormProps) => {
     <FormProvider {...methods}>
       <Form
         encType="multipart/form-data"
-        onSubmit={handleSubmit}
+        onSubmit={methods.handleSubmit(handleSubmit)}
         css={css`
           display: flex;
           flex-direction: column;
@@ -312,7 +357,7 @@ const CommunityForm = (props: CommunityFormProps) => {
               values: ['제보', '포토갤러리', '내 차 자랑', '자료실'],
             }}
             defaultValues={
-              initialData?.category
+              isInitialize && initialData?.category
                 ? formatter(initialData.category)
                 : undefined
             }
@@ -325,7 +370,9 @@ const CommunityForm = (props: CommunityFormProps) => {
         <FormLabel name="title" label="제목" bold>
           <FormInput
             placeholder="제목을 입력해주세요."
-            defaultValue={initialData?.title ? initialData.title : undefined}
+            defaultValue={
+              isInitialize && initialData?.title ? initialData.title : undefined
+            }
             {...methods.register('title')}
           />
         </FormLabel>

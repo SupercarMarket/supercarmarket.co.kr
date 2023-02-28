@@ -74,7 +74,7 @@ const FormSelect = React.forwardRef(function FormSelect(
 ) {
   const { option, defaultValues, callback, ...rest } = props;
   const containerRef = React.useRef<HTMLDivElement | null>(null);
-  const [selected, setSelected] = React.useState(defaultValues || '');
+  const [selected, setSelected] = React.useState('');
   const [open, setOpen] = React.useState(false);
 
   const onClick = () => {
@@ -98,6 +98,10 @@ const FormSelect = React.forwardRef(function FormSelect(
   React.useEffect(() => {
     if (callback) callback(selected);
   }, [selected]);
+
+  React.useEffect(() => {
+    if (defaultValues) setSelected(defaultValues);
+  }, [defaultValues]);
 
   React.useEffect(() => {
     if (open) document.addEventListener('mousedown', handleClickOutSide);
