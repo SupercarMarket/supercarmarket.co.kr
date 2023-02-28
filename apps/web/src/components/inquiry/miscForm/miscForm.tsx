@@ -7,7 +7,7 @@ import { useSession } from 'next-auth/react';
 import * as React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { css } from 'styled-components';
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 import InquiryFormItem from '../inquiryFormItem';
 
@@ -15,7 +15,6 @@ const MiscForm = () => {
   const session = useSession();
   const { onClose, onOpen } = React.useContext(ModalContext);
   const { replace } = useRouter();
-  const pathname = usePathname();
   const methods = useForm<InquiryMiscFormState>();
   const [error, setError] = React.useState<string | null>(null);
 
