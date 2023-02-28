@@ -9,6 +9,7 @@ import {
   Wrapper,
 } from '@supercarmarket/ui';
 import dynamic from 'next/dynamic';
+import { useRouter } from 'next/navigation';
 import * as React from 'react';
 import { css } from 'styled-components';
 import type { Editor } from '@toast-ui/react-editor';
@@ -17,7 +18,7 @@ import ModalContext from 'feature/modalContext';
 import TemporaryStorageModal from 'components/common/modal/temporaryStorageModal';
 import { FormProvider, useForm } from 'react-hook-form';
 import { FormState } from 'constants/community';
-import { clientApi } from '@supercarmarket/lib';
+import { fetcher } from '@supercarmarket/lib';
 import { useSession } from 'next-auth/react';
 import { formatter, reverseFormatter } from '../communityCard/communityCard';
 
@@ -38,6 +39,7 @@ const CommunityEditor = dynamic(() => import('./communityEditor'), {
 const CommunityForm = (props: CommunityFormProps) => {
   const { id, initialData } = props;
 
+  const { back, replace } = useRouter();
   const session = useSession();
   const [category, setCategory] = React.useState('');
   const [isInitialize, setIsInitialize] = React.useState(false);
@@ -45,6 +47,10 @@ const CommunityForm = (props: CommunityFormProps) => {
   const editor = React.useRef<InstanceType<typeof Editor>>(null);
   const { onClick, onClose, onOpen } = React.useContext(ModalContext);
   const methods = useForm<FormState>();
+
+  const handleCancel = React.useCallback(() => {
+    back();
+  }, [back]);
 
   const handleInitialize = React.useCallback(() => {
     setIsInitialize((prev) => !prev);
@@ -261,15 +267,17 @@ const CommunityForm = (props: CommunityFormProps) => {
 
       const options = id ? { method: 'PATCH', params: id } : { method: 'POST' };
 
-      await clientApi('/server/supercar/v1/community', {
+      await fetcher('/server/supercar/v1/community', {
         ...options,
         headers: {
           ACCESS_TOKEN: session.data?.accessToken || '',
         },
-        data: formData,
+        body: formData,
       });
     })
   );
+
+  const handleTemporaryStorage = React.useCallback(() => {}, []);
 
   // * 임시저장 데이터 불러오기
   React.useEffect(() => {
@@ -287,6 +295,7 @@ const CommunityForm = (props: CommunityFormProps) => {
   return (
     <FormProvider {...methods}>
       <Form
+        encType="multipart/form-data"
         onSubmit={handleSubmit}
         css={css`
           display: flex;
@@ -359,10 +368,14 @@ const CommunityForm = (props: CommunityFormProps) => {
               gap: 9px;
             `}
           >
-            <Button variant="Line" type="button">
+            <Button variant="Line" type="button" onClick={handleCancel}>
               취소
             </Button>
-            <Button variant="Line" type="button">
+            <Button
+              variant="Line"
+              type="button"
+              onClick={handleTemporaryStorage}
+            >
               임시저장
             </Button>
             <Button variant="Primary" type="submit">
