@@ -41,6 +41,33 @@ interface InquiryCarFormState {
   attachments: File[];
 }
 
+interface InquiryMiscFormState {
+  title: string;
+  contents: string;
+}
+
+interface InquiryPartnershipFormState {
+  prtnName: string;
+  representative: string;
+  wireNumber: string;
+  phoneNumber: string;
+  workingTime: string;
+  introduction: string;
+  category: string;
+  treatedItem: string;
+  address: string;
+  website: string;
+  partnershipPhotoAttachment: File[];
+  partnershipAttachment: File[];
+}
+
+interface InquiryADFormState {
+  files: File[];
+  title: string;
+  url: string;
+  contents: string;
+}
+
 interface InquiryRegister {
   htmlFor: string;
   type:
@@ -408,7 +435,7 @@ const inquiry = {
     ] as InquiryRegister[],
     partnership: [
       {
-        htmlFor: '업체 상호',
+        htmlFor: 'prtnName',
         label: '업체 상호',
         type: 'text',
         placeholder: '상호를 입력해주세요.',
@@ -417,7 +444,7 @@ const inquiry = {
         },
       },
       {
-        htmlFor: '대표자',
+        htmlFor: 'representative',
         label: '대표자',
         type: 'text',
         placeholder: '대표자 성함을 입력해주세요.',
@@ -426,7 +453,7 @@ const inquiry = {
         },
       },
       {
-        htmlFor: '업체 전화번호',
+        htmlFor: 'wireNumber',
         label: '업체 전화번호',
         type: 'tel',
         placeholder: '‘-’ 없이 숫자만 입력해주세요.',
@@ -435,8 +462,8 @@ const inquiry = {
         },
       },
       {
-        htmlFor: '휴대폰',
-        label: '휴데폰',
+        htmlFor: 'phoneNumber',
+        label: '휴대폰',
         type: 'tel',
         placeholder: '‘-’ 없이 숫자만 입력해주세요.',
         options: {
@@ -444,7 +471,7 @@ const inquiry = {
         },
       },
       {
-        htmlFor: '업무 시간',
+        htmlFor: 'workingTime',
         label: '업무 시간',
         type: 'text',
         placeholder: '예) 평일 09:00~18:00',
@@ -453,7 +480,7 @@ const inquiry = {
         },
       },
       {
-        htmlFor: '업종 선택',
+        htmlFor: 'category',
         label: '업종 선택',
         type: 'select',
         placeholder: '',
@@ -466,7 +493,7 @@ const inquiry = {
         },
       },
       {
-        htmlFor: '취급 품목',
+        htmlFor: 'treatedItem',
         label: '취급 품목',
         type: 'text',
         placeholder: '취급 품목을 입력해주세요.',
@@ -475,7 +502,7 @@ const inquiry = {
         },
       },
       {
-        htmlFor: '업체 주소',
+        htmlFor: 'address',
         label: '업체 주소',
         type: 'address',
         placeholder: '',
@@ -484,7 +511,7 @@ const inquiry = {
         },
       },
       {
-        htmlFor: '홈페이지 주소',
+        htmlFor: 'website',
         label: '홈페이지 주소',
         type: 'text',
         placeholder: 'https://...',
@@ -493,7 +520,7 @@ const inquiry = {
         },
       },
       {
-        htmlFor: '첨부파일',
+        htmlFor: 'partnershipAttachment',
         label: '첨부파일',
         type: 'file',
         placeholder: '',
@@ -502,7 +529,7 @@ const inquiry = {
         },
       },
       {
-        htmlFor: '업체 소개',
+        htmlFor: 'introduction',
         label: '업체 소개',
         type: 'textarea',
         placeholder: '내용을 입력해주세요.',
@@ -511,7 +538,7 @@ const inquiry = {
         },
       },
       {
-        htmlFor: '업체 사진',
+        htmlFor: 'partnershipPhotoAttachment',
         label: '업체 사진',
         type: 'images',
         placeholder: '내용을 입력해주세요.',
@@ -522,7 +549,7 @@ const inquiry = {
     ] as InquiryRegister[],
     advertisement: [
       {
-        htmlFor: '제목',
+        htmlFor: 'title',
         label: '제목',
         type: 'text',
         placeholder: '제목을 입력해주세요.',
@@ -531,7 +558,7 @@ const inquiry = {
         },
       },
       {
-        htmlFor: '관련 링크',
+        htmlFor: 'url',
         label: '관련 링크',
         type: 'text',
         placeholder: 'https://...',
@@ -540,7 +567,7 @@ const inquiry = {
         },
       },
       {
-        htmlFor: '첨부파일',
+        htmlFor: 'files',
         label: '첨부파일',
         type: 'file',
         placeholder: '',
@@ -549,7 +576,7 @@ const inquiry = {
         },
       },
       {
-        htmlFor: '내용',
+        htmlFor: 'contents',
         label: '내용',
         type: 'textarea',
         placeholder: '내용을 입력해주세요.',
@@ -560,7 +587,7 @@ const inquiry = {
     ] as InquiryRegister[],
     misc: [
       {
-        htmlFor: '제목',
+        htmlFor: 'title',
         label: '제목',
         type: 'text',
         placeholder: '제목을 입력해주세요.',
@@ -569,7 +596,7 @@ const inquiry = {
         },
       },
       {
-        htmlFor: '내용',
+        htmlFor: 'contents',
         label: '내용',
         type: 'textarea',
         placeholder: '내용을 입력해주세요.',
@@ -581,5 +608,12 @@ const inquiry = {
   },
 };
 
-export type { InquiryCarFormState, InquiryDealerFormState, InquiryRegister };
+export type {
+  InquiryCarFormState,
+  InquiryDealerFormState,
+  InquiryPartnershipFormState,
+  InquiryADFormState,
+  InquiryMiscFormState,
+  InquiryRegister,
+};
 export default inquiry;

@@ -169,6 +169,14 @@ const InquiryFormItemContainer = (props: InquiryFormItemContainerProps) => {
                   {...register(htmlFor)}
                 />
               ),
+              tel: (
+                <FormInput
+                  type="tel"
+                  placeholder={placeholder}
+                  suffix={suffix}
+                  {...register(htmlFor)}
+                />
+              ),
               address: (
                 <FormPostcode callback={(value) => setValue(htmlFor, value)} />
               ),

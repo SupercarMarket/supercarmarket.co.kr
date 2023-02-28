@@ -62,9 +62,6 @@ const SaleForm = () => {
         formData.append('productImages', file.file)
       );
       attachments.forEach((file) => formData.append('attachments', file));
-      console.log(data);
-
-      formData.forEach((v, k) => console.log(k, v));
 
       const response = await fetcher('/server/supercar/v1/inquiry-product', {
         method: 'POST',
