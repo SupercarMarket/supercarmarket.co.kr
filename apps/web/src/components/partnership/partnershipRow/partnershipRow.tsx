@@ -3,12 +3,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { WithBlurredImage } from 'types/magazine';
 import { PartnershipDto } from 'types/partnership';
 
-import * as Styled from './partnershipRow.styled';
 import { css } from 'styled-components';
-import { Params } from '@supercarmarket/types/base';
+import { Params, WithBlurredImage } from '@supercarmarket/types/base';
 
 const PartnershipRow = ({
   brdSeq,

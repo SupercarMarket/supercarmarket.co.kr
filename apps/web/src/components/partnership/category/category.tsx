@@ -3,10 +3,10 @@ import { PARTNERSHIP_FILTER_OPTIONS } from 'constants/partnership';
 import { Typography } from '@supercarmarket/ui';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { Params } from 'types/base';
-import { MarketOptionType } from 'types/market';
 
 import * as Styled from './category.styled';
+import { MarketOptionType } from '@supercarmarket/types/market';
+import { Params } from '@supercarmarket/types/base';
 
 interface CategoryProps {
   category: {

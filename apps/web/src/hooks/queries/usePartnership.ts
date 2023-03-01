@@ -1,7 +1,7 @@
 import { clientFetcher } from '@supercarmarket/lib';
+import { WithBlurredImage } from '@supercarmarket/types/base';
 import { useQuery } from '@tanstack/react-query';
 import queries from 'constants/queries';
-import { WithBlurredImage } from 'types/base';
 import { PartnershipDto, PartnershipResponse } from 'types/partnership';
 
 export default function usePartnership(

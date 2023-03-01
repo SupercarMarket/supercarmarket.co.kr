@@ -68,7 +68,7 @@ export const navlinks: Links[] = [
       },
       {
         title: '디테일링',
-        href: 'detail-ring',
+        href: 'detailing',
       },
       {
         title: '도색',

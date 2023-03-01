@@ -1,3 +1,5 @@
+import { Params } from '@supercarmarket/types/base';
+
 const PARTNERSHIP_CATEGORY = [
   {
     option: '전체',
@@ -13,7 +15,7 @@ const PARTNERSHIP_CATEGORY = [
   },
   {
     option: '디테일링',
-    value: 'detail-ring',
+    value: 'detailing',
   },
   {
     option: '도색',
@@ -81,8 +83,18 @@ const PARTNERSHIP_FILTER_OPTIONS = {
   ],
 };
 
+const PARTNERSHIP_API_CATEGORY_MAPPER: Params = {
+  all: 'ALL',
+  'automobile-store': 'DEALER_SHOP',
+  industries: 'CAR_CENTER',
+  detailing: 'DETAILING',
+  painting: 'PAINTING',
+  misc: 'ETC',
+};
+
 export {
   PARTNERSHIP_CATEGORY,
   PARTNERSHIP_FILTER_OPTIONS,
   PARTNERSHIP_TABLE_HEAD,
+  PARTNERSHIP_API_CATEGORY_MAPPER,
 };

@@ -5,7 +5,7 @@ import {
   getErrorMessage,
 } from '@supercarmarket/lib';
 import { Params } from '@supercarmarket/types/base';
-import { PARTNERSHIP_CATEGORY } from 'constants/partnership';
+import { PARTNERSHIP_API_CATEGORY_MAPPER } from 'constants/partnership';
 import type { NextApiHandler } from 'next/types';
 import { getPlaiceholder } from 'plaiceholder';
 import {
@@ -17,18 +17,20 @@ import {
 const partnershipApi: NextApiHandler = async (req, res) => {
   const query = req.query as Params;
 
+  console.log(query.page);
+  query.page = query.page ? String(+query.page + 1) : '1';
+  query.category = PARTNERSHIP_API_CATEGORY_MAPPER[query.category];
   console.log(query);
-
-  query.page = +query.page + 1 + '' ?? 1;
 
   try {
     const response = await fetcher(
       `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/partnership`,
       {
         method: 'get',
-        // query: {
-        //   page: query.page,
-        // },
+        query: {
+          page: query.page,
+          category: query.category,
+        },
       }
     );
 
