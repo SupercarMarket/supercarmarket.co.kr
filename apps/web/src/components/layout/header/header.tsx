@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import {
   Button,
   Container,
-  Logo,
   Searchbar,
   Typography,
   Wrapper,
@@ -22,6 +21,7 @@ import Image from 'next/image';
 
 import searchSrc from '../../../../public/images/search.png';
 import menuSrc from '../../../../public/images/menu.png';
+import { Logo } from 'components/common/logo';
 
 interface HeaderProps {
   navlinks: Links[];

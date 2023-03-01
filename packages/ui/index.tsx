@@ -6,7 +6,6 @@ export type {
   ContainerProps,
   DividerProps,
   InputProps,
-  LogoProps,
   PaginationProps,
   PortalProps,
   SearchbarProps,
