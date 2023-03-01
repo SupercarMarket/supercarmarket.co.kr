@@ -7,8 +7,11 @@ import { css } from 'styled-components';
 import { QueryErrorResetBoundary } from '@tanstack/react-query';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from 'components/fallback';
+import { useSession } from 'next-auth/react';
 
 const CommunityCategory: NextPageWithLayout = () => {
+  const { status } = useSession();
+
   return (
     <Container display="flex" flexDirection="column" gap="27.5px">
       <QueryErrorResetBoundary>
@@ -38,7 +41,13 @@ const CommunityCategory: NextPageWithLayout = () => {
                 `}
               >
                 <Title>제보</Title>
-                <Tab popular variant create="/community/create" />
+                <Tab
+                  popular
+                  variant
+                  create={
+                    status === 'authenticated' ? '/community/create' : undefined
+                  }
+                />
               </Wrapper.Item>
               <CommunityNavbar />
             </Wrapper>
@@ -46,7 +55,7 @@ const CommunityCategory: NextPageWithLayout = () => {
               onReset={reset}
               fallbackRender={(props) => <ErrorFallback {...props} />}
             >
-              <CommunityList />
+              <CommunityList status={status} />
             </ErrorBoundary>
           </>
         )}

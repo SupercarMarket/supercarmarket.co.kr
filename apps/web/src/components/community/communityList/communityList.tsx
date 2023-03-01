@@ -19,10 +19,11 @@ import { CardSkeleton } from 'components/fallback/loading';
 interface CommunityListProps {
   category?: string;
   subject?: 'magazine' | 'paparazzi' | 'partnership';
+  status?: 'authenticated' | 'loading' | 'unauthenticated';
 }
 
 const CommunityList = (props: CommunityListProps) => {
-  const { category: iCategory } = props;
+  const { category: iCategory, status } = props;
   const pathname = usePathname();
   const { push } = useRouter();
   const { variant, category, page, searchType, keyword } = useUrlQuery();
@@ -106,7 +107,10 @@ const CommunityList = (props: CommunityListProps) => {
           padding-bottom: 32px;
         `}
       >
-        <Tab scroll create="/community/create" />
+        <Tab
+          scroll
+          create={status === 'authenticated' ? '/community/create' : undefined}
+        />
         <Pagination pageSize={12} totalCount={1} totalPages={1} />
       </Wrapper>
       <Wrapper
