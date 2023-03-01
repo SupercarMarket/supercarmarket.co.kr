@@ -53,7 +53,7 @@ const CommunityForm = (props: CommunityFormProps) => {
   }, [back]);
 
   const handleInitialize = React.useCallback(() => {
-    setIsInitialize((prev) => !prev);
+    setIsInitialize(true);
     const instance = editor.current?.getInstance();
 
     if (instance && initialData.contents)
@@ -288,13 +288,7 @@ const CommunityForm = (props: CommunityFormProps) => {
 
         let url = '/server/supercar/v1/community';
 
-        if (id) url = `/server/supercar/v1/community/${id}`;
-
         if (temporaryStorage) url = '/server/supercar/v1/community-temp';
-
-        formData.forEach((v, k) => {
-          console.log(k, v);
-        });
 
         await fetcher(url, {
           ...options,
@@ -336,6 +330,10 @@ const CommunityForm = (props: CommunityFormProps) => {
         />
       );
   }, [handleInitialize, onClick, onClose, onOpen, initialData, id]);
+
+  React.useEffect(() => {
+    if (id) handleInitialize();
+  }, [handleInitialize, id]);
 
   return (
     <FormProvider {...methods}>
@@ -418,15 +416,17 @@ const CommunityForm = (props: CommunityFormProps) => {
             <Button variant="Line" type="button" onClick={handleCancel}>
               취소
             </Button>
-            <Button
-              variant="Line"
-              type="button"
-              onClick={handleTemporaryStorage}
-            >
-              임시저장
-            </Button>
+            {!id && (
+              <Button
+                variant="Line"
+                type="button"
+                onClick={handleTemporaryStorage}
+              >
+                임시저장
+              </Button>
+            )}
             <Button variant="Primary" type="submit">
-              작성 완료
+              {id ? '수정 완료' : '작성 완료'}
             </Button>
           </Wrapper.Item>
         </Wrapper>

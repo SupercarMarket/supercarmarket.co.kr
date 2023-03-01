@@ -47,11 +47,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       subject,
       category,
       id,
-      initialData: {
-        title: 'hello world',
-        category: 'boast',
-        contents: '<p>인증..!</p>',
-      },
+      initialData,
     },
   };
 };
