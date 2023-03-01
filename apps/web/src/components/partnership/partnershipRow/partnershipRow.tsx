@@ -20,6 +20,7 @@ const PartnershipRow = ({
   imgSrc,
 }: WithBlurredImage<PartnershipDto>) => {
   const { query } = useRouter();
+  delete query.pid;
   const queryString = new URLSearchParams(query as Params).toString();
 
   return (

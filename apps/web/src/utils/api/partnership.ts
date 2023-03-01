@@ -27,10 +27,7 @@ const partnershipApi: NextApiHandler = async (req, res) => {
       `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/partnership`,
       {
         method: 'get',
-        query: {
-          page: query.page,
-          category: query.category,
-        },
+        query,
       }
     );
 
@@ -60,13 +57,13 @@ const partnershipApi: NextApiHandler = async (req, res) => {
 };
 
 const partnershipDetailApi: NextApiHandler = async (req, res) => {
-  const { pid } = req.query;
+  const { id } = req.query;
 
-  catchNoExist(pid);
+  catchNoExist(id);
 
   try {
     const response = await fetcher(
-      `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/partnership/${pid}`,
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/partnership/${id}`,
       {
         method: 'get',
       }
