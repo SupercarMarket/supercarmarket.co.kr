@@ -38,7 +38,7 @@ const CommunityCategory: NextPageWithLayout = () => {
                 `}
               >
                 <Title>제보</Title>
-                <Tab />
+                <Tab popular variant create="/community/create" />
               </Wrapper.Item>
               <CommunityNavbar />
             </Wrapper>

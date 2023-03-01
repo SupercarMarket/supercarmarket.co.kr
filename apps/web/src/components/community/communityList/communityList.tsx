@@ -6,6 +6,7 @@ import {
   FormSelect,
   Pagination,
   Searchbar,
+  Tab,
   Table,
   Wrapper,
 } from '@supercarmarket/ui';
@@ -54,7 +55,6 @@ const CommunityList = (props: CommunityListProps) => {
         css={css`
           display: flex;
           width: 100%;
-          padding-bottom: 32px;
         `}
       >
         {data?.data && data.data.length > 0 ? (
@@ -96,14 +96,25 @@ const CommunityList = (props: CommunityListProps) => {
           />
         )}
       </Wrapper>
-      <Pagination pageSize={12} totalCount={1} totalPages={1} />
+      <Wrapper
+        css={css`
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+          gap: 32px;
+          padding-top: 20px;
+          padding-bottom: 32px;
+        `}
+      >
+        <Tab scroll create="/community/create" />
+        <Pagination pageSize={12} totalCount={1} totalPages={1} />
+      </Wrapper>
       <Wrapper
         css={css`
           width: 703px;
           display: flex;
           gap: 20px;
           justify-content: center;
-          padding-top: 32px;
           ${applyMediaQuery('mobile')} {
             width: 375px;
           }
