@@ -116,6 +116,8 @@ const CommunityPosting = ({
     return;
   }, [likeMuate, onClick, onClose, onOpen, session]);
 
+  console.log(communityPost);
+
   return (
     <Container display="flex" flexDirection="column" alignItems="center">
       {communityPost && (
@@ -141,6 +143,17 @@ const CommunityPosting = ({
                 목록
               </Link>
             </Button>
+            {communityPost.data.isMyPost && (
+              <Button type="button" variant="Line">
+                <Link
+                  href={{
+                    pathname: `/community/${subject}/${category}/${communityPost.data.id}/update`,
+                  }}
+                >
+                  글수정
+                </Link>
+              </Button>
+            )}
             {session.status === 'authenticated' && (
               <Button type="button">
                 <Link
@@ -165,7 +178,7 @@ const CommunityPosting = ({
             `}
           >
             <PostingHeadCommunity category={category} {...communityPost.data} />
-            <PostingBody contentHtml={communityPost.data.contentHtml} />
+            <PostingBody contentHtml={communityPost.data.contents} />
           </Wrapper>
           <Wrapper
             css={css`

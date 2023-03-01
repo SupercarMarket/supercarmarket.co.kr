@@ -24,11 +24,21 @@ interface CommunityCardProps extends WithBlurredImage<CommunityDto> {
 
 type CommunityCardChildrenProps = Omit<CommunityCardProps, 'variant'>;
 
+const defualtSrc =
+  'https://user-images.githubusercontent.com/66871265/210489106-611e72ee-94f8-49e8-9faa-60f9f20ae50f.png';
+
 export const formatter = (category: string) => {
   if (category === 'report') return '제보';
   if (category === 'gallery') return '포토갤러리';
   if (category === 'boast') return '내 차 자랑';
   return '차량 정보';
+};
+
+export const reverseFormatter = (category: string) => {
+  if (category === '제보') return 'report';
+  if (category === '포토갤러리') return 'gallery';
+  if (category === '내 차 자랑') return 'boast';
+  return 'information';
 };
 
 const getCategoryPathname = (category: string) => {
@@ -93,10 +103,7 @@ const CommunityCardRow = (props: CommunityCardChildrenProps) => {
           `}
         >
           <Image
-            src={
-              imgSrc ||
-              'https://user-images.githubusercontent.com/66871265/210489106-611e72ee-94f8-49e8-9faa-60f9f20ae50f.png'
-            }
+            src={imgSrc || defualtSrc}
             alt="thumbnail"
             width={isMobile ? 64 : 196}
             height={isMobile ? 64 : 124}
@@ -322,6 +329,7 @@ const CommunityCardRow = (props: CommunityCardChildrenProps) => {
 
 const CommunityCardColumn = (props: CommunityCardChildrenProps) => {
   const { id, imgSrc, base64, category, profileSrc, nickname, title } = props;
+
   return (
     <Link
       href={{
@@ -341,7 +349,7 @@ const CommunityCardColumn = (props: CommunityCardChildrenProps) => {
           `}
         >
           <Image
-            src={imgSrc}
+            src={imgSrc || defualtSrc}
             alt="thumbnail"
             fill
             placeholder={base64 ? 'blur' : undefined}

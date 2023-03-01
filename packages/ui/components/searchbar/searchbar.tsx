@@ -21,15 +21,16 @@ const Searchbar = forwardRef(function Searchbar(
     label = 'search',
     border = 'normal',
     variant = 'Grey',
+    width = '100%',
     placeholder,
     className,
-    width = '100%',
+    defaultValue,
     handleClick: handleCallback,
     ...rest
   } = props;
   const input = React.useRef<HTMLInputElement>(null);
   const id = React.useId();
-  const [query, setQuery] = React.useState('');
+  const [query, setQuery] = React.useState((defaultValue as string) || '');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
