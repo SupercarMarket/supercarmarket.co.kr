@@ -1,11 +1,11 @@
 import { Button, Container, Typography, Wrapper } from '@supercarmarket/ui';
 import { ModalContextProps } from 'feature/modalContext';
-import { User } from '@supercarmarket/types/base';
 
 import * as style from './modal.styled';
+import type { Session } from 'next-auth';
 
 interface CounselingModalProps extends ModalContextProps {
-  user: User;
+  user: Session;
   handleCounseling: () => void;
 }
 
@@ -36,7 +36,7 @@ const CounselingModal = ({
           color="primary-darken"
           lineHeight="150%"
         >
-          {user.call}
+          {user.email}
         </Typography>
       </Wrapper>
       <Typography
@@ -52,7 +52,7 @@ const CounselingModal = ({
         담당자가 확인 후 연락드리겠습니다
       </Typography>
       <Wrapper css={style.modalButtonWrapper}>
-        <Button variant="Primary-Line" width="160px" onClick={onClose}>
+        <Button variant="Primary-Line" width="160px" onClick={() => onClose()}>
           <Typography
             as="span"
             fontSize="body-16"

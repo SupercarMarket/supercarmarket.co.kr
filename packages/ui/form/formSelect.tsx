@@ -3,7 +3,7 @@ import { css } from 'styled-components';
 
 import { Container, Input, Typography } from '../components';
 import { Wrapper } from '../components/wrapper';
-import { theme } from '../styles';
+import { applyMediaQuery, theme } from '../styles';
 
 type FormSelectOption = {
   name: string;
@@ -15,6 +15,7 @@ type FormSelectOption = {
 type FormSelectProps = React.PropsWithChildren &
   React.InputHTMLAttributes<HTMLInputElement> & {
     callback?: (value: string) => void;
+    defaultValues?: string;
     option: FormSelectOption;
   };
 
@@ -48,13 +49,17 @@ const FormSelectItem = React.memo(function FormSelectItem({
                 z-index: 999;
                 background: ${theme.color.white};
                 cursor: pointer;
-                font-size: 14px;
+                font-size: ${theme.fontSize['body-14']};
                 line-height: 150%;
                 color: ${theme.color['greyScale-6']};
                 &:hover {
                   background: ${theme.color['greyScale-2']};
                   color: ${theme.color.primary};
                   font-weight: bold;
+                }
+                ${applyMediaQuery('mobile')} {
+                  padding: 12px;
+                  font-size: ${theme.fontSize['body-12']};
                 }
               `}
             >
@@ -71,7 +76,7 @@ const FormSelect = React.forwardRef(function FormSelect(
   props: FormSelectProps,
   ref: React.Ref<HTMLInputElement>
 ) {
-  const { option, callback, ...rest } = props;
+  const { option, defaultValues, callback, ...rest } = props;
   const containerRef = React.useRef<HTMLDivElement | null>(null);
   const [selected, setSelected] = React.useState('');
   const [open, setOpen] = React.useState(false);
@@ -99,6 +104,10 @@ const FormSelect = React.forwardRef(function FormSelect(
   }, [selected]);
 
   React.useEffect(() => {
+    if (defaultValues) setSelected(defaultValues);
+  }, [defaultValues]);
+
+  React.useEffect(() => {
     if (open) document.addEventListener('mousedown', handleClickOutSide);
     return () => {
       document.removeEventListener('mousedown', handleClickOutSide);
@@ -118,6 +127,14 @@ const FormSelect = React.forwardRef(function FormSelect(
         css={css`
           width: 100%;
           position: relative;
+          & > input {
+            font-size: ${theme.fontSize['body-12']} !important;
+          }
+          ${applyMediaQuery('mobile')} {
+            & > input {
+              font-size: 8px !important;
+            }
+          }
         `}
       >
         <Input
@@ -141,9 +158,15 @@ const FormSelect = React.forwardRef(function FormSelect(
             transform: translateY(-50%);
             width: 18px;
             fill: ${theme.color['greyScale-6']};
+            background-color: ${theme.color.white};
+            ${applyMediaQuery('mobile')} {
+              width: 16xpx;
+              display: none;
+            }
           `}
         >
           <svg
+            onClick={onClick}
             viewBox="0 0 24 24"
             fill="current"
             xmlns="http://www.w3.org/2000/svg"

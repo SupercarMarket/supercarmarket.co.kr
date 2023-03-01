@@ -24,11 +24,11 @@ const CommunityList = (props: CommunityListProps) => {
   const { category: iCategory } = props;
   const pathname = usePathname();
   const { push } = useRouter();
-  const { variant, category, page, searchType, keyword, filter } =
-    useUrlQuery();
+  const { variant, category, page, searchType, keyword } = useUrlQuery();
+
   const { data, isFetching, isLoading } = useCommunity({
     category: iCategory || category || 'report',
-    filter: filter ?? null,
+    filter: null,
     searchType: searchType ?? null,
     keyword: keyword ?? null,
     page,
@@ -41,11 +41,20 @@ const CommunityList = (props: CommunityListProps) => {
   }
 
   return (
-    <Container display="flex" flexDirection="column" gap="32px">
-      {variant === 'row' && <Table tab="community" hidden={false} />}
+    <Container display="flex" flexDirection="column" alignItems="center">
       <Wrapper
         css={css`
-          padding-bottom: 16px;
+          width: 100%;
+          padding-bottom: 6px;
+        `}
+      >
+        {variant === 'row' && <Table tab="community" hidden={false} />}
+      </Wrapper>
+      <Wrapper
+        css={css`
+          display: flex;
+          width: 100%;
+          padding-bottom: 32px;
         `}
       >
         {data?.data && data.data.length > 0 ? (
@@ -90,21 +99,28 @@ const CommunityList = (props: CommunityListProps) => {
       <Pagination pageSize={12} totalCount={1} totalPages={1} />
       <Wrapper
         css={css`
-          width: 100%;
+          width: 703px;
           display: flex;
           gap: 20px;
           justify-content: center;
+          padding-top: 32px;
+          ${applyMediaQuery('mobile')} {
+            width: 375px;
+          }
         `}
       >
         <Wrapper.Item
           css={css`
             width: 134px;
+            ${applyMediaQuery('mobile')} {
+              width: 100px;
+            }
           `}
         >
           <FormSelect
             option={{
               name: 'serachType',
-              values: ['제목', '본문', '제목+본문'],
+              values: ['제목', '제목 + 본문', '닉네임'],
             }}
             style={{
               width: '100%',
@@ -115,6 +131,7 @@ const CommunityList = (props: CommunityListProps) => {
         <Searchbar
           variant="Line"
           border="normal"
+          defaultValue={keyword}
           handleClick={(query) =>
             push(
               `${pathname}?category=${category}&variant=${variant}&searchType=${searchType}&keyword=${query}`

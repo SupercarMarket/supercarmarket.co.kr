@@ -19,7 +19,7 @@ interface CommunityPostDto {
   id: number;
   title: string;
   like: number;
-  contentHtml: string;
+  contents: string;
   created: string;
   updated: string;
   nickname: string;
@@ -30,10 +30,24 @@ interface CommunityPostDto {
   view: number;
 }
 
+interface CommunityTemporaryStorageDto {
+  category: string;
+  tempId: string;
+  title: string;
+  contents: string;
+  images: stirng[];
+  files: { url: string; name: string }[];
+}
+
 interface CommunityBestResponse<T> {
   data: T[];
   page: number;
   pageSize: number;
 }
 
-export type { CommunityBestResponse, CommunityDto, CommunityPostDto };
+export type {
+  CommunityBestResponse,
+  CommunityTemporaryStorageDto,
+  CommunityDto,
+  CommunityPostDto,
+};

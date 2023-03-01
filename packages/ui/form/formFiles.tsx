@@ -11,6 +11,7 @@ type FormFilesProps = React.InputHTMLAttributes<HTMLInputElement> & {
   title?: string;
   description?: string;
   size?: number;
+  defaultValues?: File[];
   callback?: (files: File[]) => void;
 };
 
@@ -86,10 +87,11 @@ const FormFiles = React.forwardRef(function FormFiles(
     size,
     title = '파일추가',
     description,
+    defaultValues,
     callback,
     ...rest
   } = props;
-  const [files, setFiles] = React.useState<File[]>([]);
+  const [files, setFiles] = React.useState<File[]>(defaultValues ?? []);
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
 
   const onRemove = React.useCallback((name: string) => {
