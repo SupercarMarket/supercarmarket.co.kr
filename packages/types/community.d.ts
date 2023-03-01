@@ -19,7 +19,7 @@ interface CommunityPostDto {
   id: number;
   title: string;
   like: number;
-  contentHtml: string;
+  contents: string;
   created: string;
   updated: string;
   nickname: string;
