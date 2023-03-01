@@ -26,6 +26,7 @@ export default function useCommunity(
     searchType,
     keyword,
   };
+
   return useQuery<PaginationResponse<CommunityDto[]>>(
     queries.market.lists([
       ...queries.community.lists(),
@@ -35,9 +36,9 @@ export default function useCommunity(
       clientFetcher('/server/supercar/v1/community', {
         method: 'GET',
         query: {
-          category,
           filter,
           page: page + 1,
+          category: category === 'all' ? 'report' : category,
           ...currentQuery,
         },
       }),

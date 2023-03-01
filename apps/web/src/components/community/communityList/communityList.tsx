@@ -24,11 +24,11 @@ const CommunityList = (props: CommunityListProps) => {
   const { category: iCategory } = props;
   const pathname = usePathname();
   const { push } = useRouter();
-  const { variant, category, page, searchType, keyword, filter } =
-    useUrlQuery();
+  const { variant, category, page, searchType, keyword } = useUrlQuery();
+
   const { data, isFetching, isLoading } = useCommunity({
     category: iCategory || category || 'report',
-    filter: filter ?? null,
+    filter: null,
     searchType: searchType ?? null,
     keyword: keyword ?? null,
     page,
