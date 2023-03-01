@@ -1,7 +1,6 @@
 import { Button, Container, Typography, Wrapper } from '@supercarmarket/ui';
 import type { ModalContextProps } from 'feature/modalContext';
 import { ModalProvider } from 'feature/modalContext';
-import Link from 'next/link';
 
 import * as style from './modal.styled';
 
@@ -47,7 +46,13 @@ const TemporaryStorageModal = ({
           {`취소를 누르면 임시저장 글이 삭제되고\n새 글을 작성할 수 있습니다.`}
         </Typography>
         <Wrapper css={style.modalButtonWrapper}>
-          <Button variant="Primary-Line" width="160px" onClick={onClose}>
+          <Button
+            variant="Primary-Line"
+            width="160px"
+            onClick={() => {
+              onClose();
+            }}
+          >
             취소
           </Button>
           <Button variant="Primary" width="116px" onClick={onInit}>
