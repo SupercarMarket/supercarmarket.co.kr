@@ -8,6 +8,8 @@ import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 const CommunityUpdate: NextPageWithLayout = ({
   initialData,
   id,
+  subject,
+  category,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   return (
     <Container display="flex" flexDirection="column" gap="20px">

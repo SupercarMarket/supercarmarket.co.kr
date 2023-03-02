@@ -41,7 +41,7 @@ export const reverseFormatter = (category: string) => {
   return 'information';
 };
 
-const getCategoryPathname = (category: string) => {
+export const getCategoryPathname = (category: string) => {
   if (category === 'information') return `/community/library/${category}`;
   return `/community/paparazzi/${category}`;
 };

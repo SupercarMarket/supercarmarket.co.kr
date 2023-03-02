@@ -1,4 +1,5 @@
 import {
+  Alert,
   Button,
   Form,
   FormFiles,
@@ -18,9 +19,14 @@ import ModalContext from 'feature/modalContext';
 import TemporaryStorageModal from 'components/common/modal/temporaryStorageModal';
 import { FormProvider, useForm } from 'react-hook-form';
 import { FormState } from 'constants/community';
-import { fetcher } from '@supercarmarket/lib';
+import { ErrorCode, fetcher } from '@supercarmarket/lib';
 import { useSession } from 'next-auth/react';
-import { formatter, reverseFormatter } from '../communityCard/communityCard';
+import {
+  formatter,
+  getCategoryPathname,
+  reverseFormatter,
+} from '../communityCard/communityCard';
+import dayjs from 'dayjs';
 
 interface CommunityFormProps {
   id?: string;
@@ -43,10 +49,13 @@ const CommunityForm = (props: CommunityFormProps) => {
   const session = useSession();
   const [category, setCategory] = React.useState('');
   const [isInitialize, setIsInitialize] = React.useState(false);
-  const [images, setImages] = React.useState<CommunityFormEditorImages[]>([]);
+  const [error, setError] = React.useState<string | null>(null);
+  const [success, setSuccess] = React.useState<string | null>(null);
   const editor = React.useRef<InstanceType<typeof Editor>>(null);
+  const [images, setImages] = React.useState<CommunityFormEditorImages[]>([]);
   const { onClick, onClose, onOpen } = React.useContext(ModalContext);
   const methods = useForm<FormState>();
+  const { formState } = methods;
 
   const handleCancel = React.useCallback(() => {
     back();
@@ -245,6 +254,7 @@ const CommunityForm = (props: CommunityFormProps) => {
   const handleSubmit = React.useCallback(
     async (data: FormState) =>
       handleRequire(data).then(async () => {
+        setError(null);
         const { title, category, temporaryStorage } = data;
         const {
           addImgFiles,
@@ -286,28 +296,42 @@ const CommunityForm = (props: CommunityFormProps) => {
           ? { method: 'PATCH', params: id }
           : { method: 'POST' };
 
-        let url = '/server/supercar/v1/community';
+        const url = temporaryStorage
+          ? '/server/supercar/v1/community-temp'
+          : '/server/supercar/v1/community';
 
-        if (temporaryStorage) url = '/server/supercar/v1/community-temp';
-
-        await fetcher(url, {
+        const response = await fetcher(url, {
           ...options,
           headers: {
             ACCESS_TOKEN: session.data?.accessToken || '',
           },
           body: formData,
         });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          setError(result.message || ErrorCode[response.status]);
+          return;
+        }
+
+        if (temporaryStorage) return;
+
+        replace(`${getCategoryPathname(category)}/${result.data}`);
       }),
     [
+      id,
+      session.data?.accessToken,
       handleEditorHtml,
       handleFiles,
       handleRequire,
-      id,
-      session.data?.accessToken,
+      replace,
     ]
   );
 
   const handleTemporaryStorage = React.useCallback(async () => {
+    setSuccess(null);
+
     const data = {
       title: methods.getValues('title'),
       category: methods.getValues('category'),
@@ -315,7 +339,9 @@ const CommunityForm = (props: CommunityFormProps) => {
       temporaryStorage: true,
     };
 
-    await handleSubmit(data);
+    await handleSubmit(data).then(() => {
+      setSuccess(dayjs(new Date()).format('HH:mm'));
+    });
   }, [handleSubmit, methods]);
 
   // * 임시저장 데이터 불러오기
@@ -394,19 +420,22 @@ const CommunityForm = (props: CommunityFormProps) => {
         <CommunityEditor editor={editor} init={handleInitEditor} />
         <Wrapper
           css={css`
+            width: 100%;
             display: flex;
-            justify-content: space-between;
+            justify-content: ${success ? 'space-between' : 'flex-end'};
             align-items: center;
           `}
         >
-          <Typography
-            fontSize="body-16"
-            fontWeight="regular"
-            lineHeight="150%"
-            color="greyScale-5"
-          >
-            00:00 자동저장 되었습니다.
-          </Typography>
+          {success && (
+            <Typography
+              fontSize="body-16"
+              fontWeight="regular"
+              lineHeight="150%"
+              color="greyScale-5"
+            >
+              {success} 임시저장 되었습니다.
+            </Typography>
+          )}
           <Wrapper.Item
             css={css`
               display: flex;
@@ -426,10 +455,17 @@ const CommunityForm = (props: CommunityFormProps) => {
               </Button>
             )}
             <Button variant="Primary" type="submit">
-              {id ? '수정 완료' : '작성 완료'}
+              {id
+                ? formState.isSubmitting
+                  ? '수정 중..'
+                  : '수정 완료'
+                : formState.isSubmitting
+                ? '작성 중..'
+                : '작성 완료'}
             </Button>
           </Wrapper.Item>
         </Wrapper>
+        {error && <Alert severity="error" title={error} />}
       </Form>
     </FormProvider>
   );

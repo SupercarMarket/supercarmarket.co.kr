@@ -188,7 +188,11 @@ const Header = ({ navlinks }: HeaderProps) => {
                 </Link>
               </>
             )}
-            <Button variant="Line">문의하기</Button>
+            <Link href="/inquiry">
+              <Button variant="Line" type="button">
+                문의하기
+              </Button>
+            </Link>
           </Wrapper.Item>
         </Wrapper>
         <Wrapper.Item
