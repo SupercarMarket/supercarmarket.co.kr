@@ -61,6 +61,11 @@ const CommunityForm = (props: CommunityFormProps) => {
     back();
   }, [back]);
 
+  const handleUnload = React.useCallback((e: BeforeUnloadEvent) => {
+    e.preventDefault();
+    e.returnValue = '';
+  }, []);
+
   const handleInitialize = React.useCallback(() => {
     setIsInitialize(true);
     const instance = editor.current?.getInstance();
@@ -317,7 +322,9 @@ const CommunityForm = (props: CommunityFormProps) => {
 
         if (temporaryStorage) return;
 
-        replace(`${getCategoryPathname(category)}/${result.data}`);
+        replace(
+          `${getCategoryPathname(reverseFormatter(category))}/${result.data.id}`
+        );
       }),
     [
       id,
@@ -360,6 +367,16 @@ const CommunityForm = (props: CommunityFormProps) => {
   React.useEffect(() => {
     if (id) handleInitialize();
   }, [handleInitialize, id]);
+
+  React.useEffect(() => {
+    (() => {
+      window.addEventListener('beforeunload', handleUnload);
+    })();
+
+    return () => {
+      window.removeEventListener('beforeunload', handleUnload);
+    };
+  }, []);
 
   return (
     <FormProvider {...methods}>
