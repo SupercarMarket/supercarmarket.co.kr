@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import {
   Button,
   Container,
-  Logo,
   Searchbar,
   Typography,
   Wrapper,
@@ -22,6 +21,7 @@ import Image from 'next/image';
 
 import searchSrc from '../../../../public/images/search.png';
 import menuSrc from '../../../../public/images/menu.png';
+import { Logo } from 'components/common/logo';
 
 interface HeaderProps {
   navlinks: Links[];
@@ -188,7 +188,11 @@ const Header = ({ navlinks }: HeaderProps) => {
                 </Link>
               </>
             )}
-            <Button variant="Line">문의하기</Button>
+            <Link href="/inquiry">
+              <Button variant="Line" type="button">
+                문의하기
+              </Button>
+            </Link>
           </Wrapper.Item>
         </Wrapper>
         <Wrapper.Item

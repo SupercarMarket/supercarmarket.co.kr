@@ -10,8 +10,6 @@ export { Divider } from './divider';
 export type { DividerProps } from './divider';
 export { Input } from './input';
 export type { InputProps } from './input';
-export { Logo } from './logo';
-export type { LogoProps } from './logo';
 export { Pagination } from './pagination';
 export type { PaginationProps } from './pagination';
 export { Searchbar } from './searchbar';

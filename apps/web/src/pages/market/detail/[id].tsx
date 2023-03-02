@@ -1,4 +1,4 @@
-import { Button, Searchbar, Wrapper } from '@supercarmarket/ui';
+import { Searchbar, Tab, Wrapper } from '@supercarmarket/ui';
 import type { NextPageWithLayout, Params } from '@supercarmarket/types/base';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import layout from 'components/layout';
@@ -17,18 +17,13 @@ const makeQuery = (query: Params) =>
 
 const MarketDetailPage: NextPageWithLayout = ({
   id,
+  category,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const { push, query } = useRouter();
   const { data } = useMarketDetail(id);
   const keywordRef = React.useRef<HTMLInputElement>(null);
 
   if (!data) return <div>로딩중?</div>;
-
-  const scrollToTop = () =>
-    window.scrollTo({
-      behavior: 'smooth',
-      top: 0,
-    });
 
   const keydownHandler = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && keywordRef.current !== null) {
@@ -43,13 +38,6 @@ const MarketDetailPage: NextPageWithLayout = ({
     }
   };
 
-  const backToMarketList = () => {
-    delete query.id;
-    const queryString = makeQuery(query as Params);
-
-    push(`/market/${query.category}?${queryString}`);
-  };
-
   return (
     <Wrapper
       css={css`
@@ -62,18 +50,11 @@ const MarketDetailPage: NextPageWithLayout = ({
       <MarketContents id={id} />
       <Wrapper
         css={css`
-          display: flex;
-          justify-content: flex-end;
+          width: 100%;
           margin-bottom: 36px;
-          gap: 9px;
         `}
       >
-        <Button variant="Line" onClick={backToMarketList}>
-          목록
-        </Button>
-        <Button variant="Line" onClick={scrollToTop}>
-          맨위로 ↑
-        </Button>
+        <Tab list={`/market/${category}`} scroll />
       </Wrapper>
       <Wrapper
         css={css`
@@ -98,7 +79,7 @@ const MarketDetailPage: NextPageWithLayout = ({
 MarketDetailPage.Layout = layout;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { id } = ctx.query as Params;
+  const { id, category } = ctx.query as Params;
   const queryClient = new QueryClient();
 
   queryClient.prefetchQuery(queries.market.detail(id), () =>
@@ -110,6 +91,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   return {
     props: {
       id,
+      category,
       dehydratedState: dehydrate(queryClient),
     },
   };
