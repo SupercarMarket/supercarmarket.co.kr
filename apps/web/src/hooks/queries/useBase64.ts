@@ -14,7 +14,8 @@ export default function useBase64(
 ) {
   const { category = 'market', id, detail = false, idx } = query;
 
-  const detailImage = detail ? [detail] : [detail, idx];
+  const detailImage = detail ? [detail, idx] : [detail];
+  console.log(category, id, ...detailImage);
 
   return useQuery<ServerResponse<{ base64: string }>>(
     [category, id, ...detailImage],

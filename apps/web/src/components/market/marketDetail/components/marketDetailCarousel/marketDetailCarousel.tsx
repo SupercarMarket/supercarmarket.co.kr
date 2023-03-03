@@ -24,41 +24,8 @@ interface MarketDetailCarouselItemProps {
   handleClick: () => void;
 }
 
-const MarketDetailCarouselFirst = (
-  props: Omit<MarketDetailCarouselItemProps, 'handleClick' | 'current'>
-) => {
-  const { imgSrc, idx, id } = props;
-
-  const { data, isFetching, isLoading } = useBase64(imgSrc, {
-    category: 'market',
-    detail: true,
-    id,
-    idx,
-  });
-
-  if (isFetching || isLoading)
-    return (
-      <Wrapper.Top css={Styled.top}>
-        <Skeleton width={1200} height={757} />
-      </Wrapper.Top>
-    );
-
-  return (
-    <Wrapper.Top css={Styled.top}>
-      <Image
-        width={1200}
-        height={757}
-        alt="image"
-        placeholder="blur"
-        blurDataURL={data?.data.base64}
-        src={imgSrc}
-      />
-    </Wrapper.Top>
-  );
-};
-
 const MarketDetailCarouselItem = (props: MarketDetailCarouselItemProps) => {
-  const { imgSrc, current, idx, id } = props;
+  const { imgSrc, current, idx, id, handleClick } = props;
 
   const { data, isFetching, isLoading } = useBase64(imgSrc, {
     category: 'market',
@@ -70,7 +37,7 @@ const MarketDetailCarouselItem = (props: MarketDetailCarouselItemProps) => {
   if (isFetching || isLoading) return <Skeleton width={141} height={89} />;
 
   return (
-    <Styled.CarouselImageWrapper>
+    <Styled.CarouselImageWrapper onClick={handleClick}>
       <Image
         width={141}
         height={89}
@@ -95,6 +62,12 @@ const MarketDetailCarouselItem = (props: MarketDetailCarouselItemProps) => {
 const MarketDetailCarousel = ({ imgSrc, id }: MarketDetailCarouselProps) => {
   const [current, setCurrent] = React.useState<number>(0);
   const [page, setPage] = React.useState<number>(1);
+  const { data, isFetching, isLoading } = useBase64(imgSrc[current], {
+    category: 'market',
+    detail: true,
+    id,
+    idx: current,
+  });
   const isFirst = page === 1;
   const isLast = page === Math.ceil(imgSrc.length / 8);
 
@@ -114,11 +87,20 @@ const MarketDetailCarousel = ({ imgSrc, id }: MarketDetailCarouselProps) => {
         margin-bottom: 60px;
       `}
     >
-      <MarketDetailCarouselFirst
-        idx={current}
-        imgSrc={imgSrc[current]}
-        id={id}
-      />
+      <Wrapper.Top css={Styled.top}>
+        {isFetching || isLoading ? (
+          <Skeleton width={1200} height={757} />
+        ) : (
+          <Image
+            width={1200}
+            height={757}
+            alt="image"
+            placeholder="blur"
+            src={imgSrc[current]}
+            blurDataURL={data?.data.base64}
+          />
+        )}
+      </Wrapper.Top>
       <Wrapper.Bottom css={Styled.bottom}>
         <Styled.ArrowButton position="left" onClick={prev} disabled={isFirst}>
           <ArrowLeftIcon width="30px" height="30px" />
