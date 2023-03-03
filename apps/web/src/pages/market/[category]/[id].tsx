@@ -1,14 +1,19 @@
 import { Searchbar, Tab, Wrapper } from '@supercarmarket/ui';
 import type { NextPageWithLayout, Params } from '@supercarmarket/types/base';
-import { dehydrate, QueryClient } from '@tanstack/react-query';
+import {
+  dehydrate,
+  QueryClient,
+  QueryErrorResetBoundary,
+} from '@tanstack/react-query';
 import layout from 'components/layout';
 import MarketContents from 'components/market/marketContents';
 import queries from 'constants/queries';
-import useMarketDetail from 'hooks/queries/useMarketDetail';
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { css } from 'styled-components';
+import { ErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from 'components/fallback';
 
 const makeQuery = (query: Params) =>
   Object.entries(query)
@@ -20,10 +25,7 @@ const MarketDetailPage: NextPageWithLayout = ({
   category,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const { push, query } = useRouter();
-  const { data } = useMarketDetail(id);
   const keywordRef = React.useRef<HTMLInputElement>(null);
-
-  if (!data) return <div>로딩중?</div>;
 
   const keydownHandler = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && keywordRef.current !== null) {
@@ -47,31 +49,42 @@ const MarketDetailPage: NextPageWithLayout = ({
         margin: 20px 0 0 0;
       `}
     >
-      <MarketContents id={id} />
-      <Wrapper
-        css={css`
-          width: 100%;
-          margin-bottom: 36px;
-        `}
-      >
-        <Tab list={`/market/${category}`} scroll />
-      </Wrapper>
-      <Wrapper
-        css={css`
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          margin-bottom: 160px;
-        `}
-      >
-        <Searchbar
-          variant="Line"
-          width="540px"
-          placeholder="검색어를 입력하세요"
-          onKeyDown={keydownHandler}
-          ref={keywordRef}
-        />
-      </Wrapper>
+      <QueryErrorResetBoundary>
+        {({ reset }) => (
+          <>
+            <ErrorBoundary
+              onReset={reset}
+              fallbackRender={(props) => <ErrorFallback {...props} />}
+            >
+              <MarketContents id={id} />
+            </ErrorBoundary>
+            <Wrapper
+              css={css`
+                width: 100%;
+                margin-bottom: 36px;
+              `}
+            >
+              <Tab list={`/market/${category}`} scroll />
+            </Wrapper>
+            <Wrapper
+              css={css`
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-bottom: 160px;
+              `}
+            >
+              <Searchbar
+                variant="Line"
+                width="540px"
+                placeholder="검색어를 입력하세요"
+                onKeyDown={keydownHandler}
+                ref={keywordRef}
+              />
+            </Wrapper>
+          </>
+        )}
+      </QueryErrorResetBoundary>
     </Wrapper>
   );
 };
@@ -91,7 +104,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   return {
     props: {
       id,
-      category,
+      category: 'asda',
       dehydratedState: dehydrate(queryClient),
     },
   };

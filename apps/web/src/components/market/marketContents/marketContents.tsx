@@ -22,7 +22,7 @@ const MarketContents = (props: MarketContentsProps) => {
       <Container>
         {data && (
           <>
-            <MarketDetail data={data.data} />
+            <MarketDetail data={data.data} id={id} />
             <Wrapper
               css={css`
                 display: flex;

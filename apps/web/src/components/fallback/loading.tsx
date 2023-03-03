@@ -136,4 +136,13 @@ const LinkSkeleton = () => {
   return <Skeleton />;
 };
 
-export { CardSkeleton, LinkSkeleton, MagazineBannerSkeleton };
+const MarketDetailCarouselItemSkeleton = () => {
+  return <Skeleton width={141} height={89} />;
+};
+
+export {
+  CardSkeleton,
+  LinkSkeleton,
+  MagazineBannerSkeleton,
+  MarketDetailCarouselItemSkeleton,
+};

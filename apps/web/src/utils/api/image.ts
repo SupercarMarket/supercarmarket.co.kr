@@ -1,14 +1,20 @@
-import { catchNoExist, ErrorCode, fetcher } from '@supercarmarket/lib';
-import type { Params } from '@supercarmarket/types/base';
 import type { NextApiHandler } from 'next';
 import { getPlaiceholder } from 'plaiceholder';
 
-const base64: NextApiHandler = async (req, res) => {
-  return res.status(200).json({});
+const base64Api: NextApiHandler = async (req, res) => {
+  const { src } = req.body;
+
+  console.log(src);
+
+  if (!src) return res.status(450).json({ message: 'src is require' });
+
+  const { base64 } = await getPlaiceholder(src);
+
+  return res.status(200).json({
+    data: {
+      base64,
+    },
+  });
 };
 
-const size: NextApiHandler = async (req, res) => {
-  return res.status(200).json({});
-};
-
-export { base64, size };
+export { base64Api };
