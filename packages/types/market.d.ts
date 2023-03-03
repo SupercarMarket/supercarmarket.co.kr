@@ -34,6 +34,7 @@ interface MarketDto {
   price: number;
   dealer: string;
   imgSrc: string;
+  category: string;
 }
 
 type WithBlurredImage<T> = {

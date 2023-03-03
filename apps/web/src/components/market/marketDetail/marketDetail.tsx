@@ -1,8 +1,5 @@
 import { Typography } from '@supercarmarket/ui';
-import type {
-  MarketDetailDto,
-  WithBlurredImage,
-} from '@supercarmarket/types/market';
+import type { MarketDetailDto } from '@supercarmarket/types/market';
 import {
   MarketDetailAttached,
   MarketDetailCar,
@@ -14,10 +11,11 @@ import {
 } from 'components/market/marketDetail/components';
 
 interface MarketDetailProps {
-  data: MarketDetailDto<WithBlurredImage<{ imgSrc: string }>>;
+  data: MarketDetailDto<string>;
+  id: string;
 }
 
-const MarketDetail = ({ data }: MarketDetailProps) => {
+const MarketDetail = ({ data, id }: MarketDetailProps) => {
   const {
     carName,
     year,
@@ -53,7 +51,7 @@ const MarketDetail = ({ data }: MarketDetailProps) => {
         viewCount={view}
         createdDate={createdDate}
       />
-      <MarketDetailCarousel imgSrc={imgSrc} />
+      <MarketDetailCarousel imgSrc={imgSrc} id={id} />
       <Typography fontSize="header-24" fontWeight="bold">
         딜러정보
       </Typography>

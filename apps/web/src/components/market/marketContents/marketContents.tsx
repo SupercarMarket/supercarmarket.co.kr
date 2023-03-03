@@ -6,6 +6,7 @@ import { css } from 'styled-components';
 import MarketCard from '../marketCard';
 import { MarketDetail } from '../marketDetail';
 import { ModalProvider } from 'feature/modalContext';
+import { MarketDetailSkeleton } from 'components/fallback/loading';
 
 interface MarketContentsProps {
   id: string;
@@ -15,14 +16,14 @@ const MarketContents = (props: MarketContentsProps) => {
   const { id } = props;
   const { data, isFetching, isLoading } = useMarketDetail(id);
 
-  if (isFetching || isLoading) return <div>로딩중?</div>;
+  if (isFetching || isLoading) return <MarketDetailSkeleton />;
 
   return (
     <ModalProvider>
       <Container>
         {data && (
           <>
-            <MarketDetail data={data.data} />
+            <MarketDetail data={data.data} id={id} />
             <Wrapper
               css={css`
                 display: flex;

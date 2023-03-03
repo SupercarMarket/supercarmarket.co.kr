@@ -37,6 +37,7 @@ const MarketColumn = ({
   mileage,
   price,
   year,
+  category,
 }: WithBlurredImage<MarketDto>) => {
   const { query } = useRouter();
   const queryString = new URLSearchParams(query as Params).toString();
@@ -44,7 +45,7 @@ const MarketColumn = ({
   const formatter = Intl.NumberFormat('ko-KR', { notation: 'compact' }).format;
 
   return (
-    <Link href={`/market/detail/${id}?${queryString}`}>
+    <Link href={`/market/${category}/${id}?${queryString}`}>
       <Container width="100%" display="flex" flexDirection="column" key={id}>
         <Styled.DivideArea style={{ marginBottom: '20px' }}>
           <Wrapper.Item
