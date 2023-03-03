@@ -1,8 +1,5 @@
 import { Typography } from '@supercarmarket/ui';
-import type {
-  MarketDetailDto,
-  MarketDetailResponse,
-} from '@supercarmarket/types/market';
+import type { MarketDetailDto } from '@supercarmarket/types/market';
 import {
   MarketDetailAttached,
   MarketDetailCar,

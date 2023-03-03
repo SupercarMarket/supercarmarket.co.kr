@@ -136,13 +136,72 @@ const LinkSkeleton = () => {
   return <Skeleton />;
 };
 
-const MarketDetailCarouselItemSkeleton = () => {
-  return <Skeleton width={141} height={89} />;
+const MarketDetailSkeleton = () => {
+  return (
+    <Container width="100%" display="flex" flexDirection="column">
+      <Wrapper
+        css={css`
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin-bottom: 20px;
+        `}
+      >
+        <Skeleton width={250} height={50} />
+        <Skeleton width={70} height={35} />
+      </Wrapper>
+      <Wrapper
+        css={css`
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        `}
+      >
+        <Skeleton width={160} height={20} />
+        <Skeleton width={180} height={20} />
+      </Wrapper>
+      <Wrapper
+        css={css`
+          margin-top: 24px;
+          margin-bottom: 10px;
+        `}
+      >
+        <Skeleton height={757} />
+      </Wrapper>
+      <Wrapper
+        css={css`
+          display: flex;
+          gap: 10.5px;
+        `}
+      >
+        {Array.from({ length: 8 }).map((_, idx) => (
+          <Skeleton key={idx} width={141} height={89} />
+        ))}
+      </Wrapper>
+      {Array.from({ length: 3 }).map((_, idx) => (
+        <Wrapper
+          key={idx}
+          css={css`
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 60px;
+            margin-bottom: 25px;
+          `}
+        >
+          <Skeleton width={83} height={24} />
+          <Skeleton height={140} />
+        </Wrapper>
+      ))}
+    </Container>
+  );
 };
 
 export {
   CardSkeleton,
   LinkSkeleton,
   MagazineBannerSkeleton,
-  MarketDetailCarouselItemSkeleton,
+  MarketDetailSkeleton,
 };

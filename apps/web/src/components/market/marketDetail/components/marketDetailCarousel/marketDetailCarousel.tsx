@@ -1,5 +1,4 @@
 import { Wrapper } from '@supercarmarket/ui';
-import type { WithBlurredImage } from '@supercarmarket/types/market';
 import theme from 'constants/theme';
 import Image from 'next/image';
 import * as React from 'react';
@@ -10,7 +9,6 @@ import ArrowRightIcon from '../../../../../assets/svg/arrow-right.svg';
 import CheckIcon from '../../../../../assets/svg/check.svg';
 import * as Styled from './marketDetailCarousel.styled';
 import useBase64 from 'hooks/queries/useBase64';
-import { MarketDetailCarouselItemSkeleton } from 'components/fallback/loading';
 import Skeleton from 'react-loading-skeleton';
 
 interface MarketDetailCarouselProps {
@@ -69,7 +67,7 @@ const MarketDetailCarouselItem = (props: MarketDetailCarouselItemProps) => {
     idx,
   });
 
-  if (isFetching || isLoading) return <MarketDetailCarouselItemSkeleton />;
+  if (isFetching || isLoading) return <Skeleton width={141} height={89} />;
 
   return (
     <Styled.CarouselImageWrapper>

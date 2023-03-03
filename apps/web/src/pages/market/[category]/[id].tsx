@@ -14,6 +14,7 @@ import * as React from 'react';
 import { css } from 'styled-components';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from 'components/fallback';
+import { serverFetcher } from '@supercarmarket/lib';
 
 const makeQuery = (query: Params) =>
   Object.entries(query)
@@ -92,19 +93,23 @@ const MarketDetailPage: NextPageWithLayout = ({
 MarketDetailPage.Layout = layout;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { id, category } = ctx.query as Params;
+  const { id, category = 'sports-car' } = ctx.query as Params;
   const queryClient = new QueryClient();
 
   queryClient.prefetchQuery(queries.market.detail(id), () =>
-    fetch(`/api/market/${id}`, {
+    serverFetcher(`${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/shop`, {
       method: 'GET',
-    }).then((res) => res.json())
+      params: id,
+    }).then((res) => {
+      const { ok, status, ...rest } = res;
+      return rest;
+    })
   );
 
   return {
     props: {
       id,
-      category: 'asda',
+      category,
       dehydratedState: dehydrate(queryClient),
     },
   };
