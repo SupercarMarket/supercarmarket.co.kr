@@ -96,8 +96,8 @@ const MarketDetailCarousel = ({ imgSrc, id }: MarketDetailCarouselProps) => {
             height={757}
             alt="image"
             placeholder="blur"
-            src={imgSrc[current]}
             blurDataURL={data?.data.base64}
+            src={imgSrc[current]}
           />
         )}
       </Wrapper.Top>
