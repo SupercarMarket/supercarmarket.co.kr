@@ -18,48 +18,50 @@ import { baseFetch } from 'utils/api/fetcher';
 
 const Home: NextPageWithLayout = () => {
   return (
-    <Container>
-      <QueryErrorResetBoundary>
-        {({ reset }) => (
-          <>
-            <Title marginBottom="20px">슈마매거진</Title>
-            <ErrorBoundary
-              onReset={reset}
-              fallbackRender={(props) => <ErrorFallback {...props} />}
-            >
-              <Magazine />
-            </ErrorBoundary>
-            <Title marginTop="80px" marginBottom="20px">
-              매물 관심 베스트
-            </Title>
-            <ErrorBoundary
-              onReset={reset}
-              fallbackRender={(props) => <ErrorFallback {...props} />}
-            >
-              <MarketBest />
-            </ErrorBoundary>
-            <Title marginTop="40px" marginBottom="20px">
-              최신 매물
-            </Title>
-            <ErrorBoundary
-              onReset={reset}
-              fallbackRender={(props) => <ErrorFallback {...props} />}
-            >
-              <MarketNew />
-            </ErrorBoundary>
-            <Title marginTop="80px" marginBottom="20px">
-              커뮤니티 인기글
-            </Title>
-            <ErrorBoundary
-              onReset={reset}
-              fallbackRender={(props) => <ErrorFallback {...props} />}
-            >
-              <Community />
-            </ErrorBoundary>
-          </>
-        )}
-      </QueryErrorResetBoundary>
-    </Container>
+    <>
+      <Container>
+        <QueryErrorResetBoundary>
+          {({ reset }) => (
+            <>
+              <Title marginBottom="20px">슈마매거진</Title>
+              <ErrorBoundary
+                onReset={reset}
+                fallbackRender={(props) => <ErrorFallback {...props} />}
+              >
+                <Magazine />
+              </ErrorBoundary>
+              <Title marginTop="80px" marginBottom="20px">
+                매물 관심 베스트
+              </Title>
+              <ErrorBoundary
+                onReset={reset}
+                fallbackRender={(props) => <ErrorFallback {...props} />}
+              >
+                <MarketBest />
+              </ErrorBoundary>
+              <Title marginTop="40px" marginBottom="20px">
+                최신 매물
+              </Title>
+              <ErrorBoundary
+                onReset={reset}
+                fallbackRender={(props) => <ErrorFallback {...props} />}
+              >
+                <MarketNew />
+              </ErrorBoundary>
+              <Title marginTop="80px" marginBottom="20px">
+                커뮤니티 인기글
+              </Title>
+              <ErrorBoundary
+                onReset={reset}
+                fallbackRender={(props) => <ErrorFallback {...props} />}
+              >
+                <Community />
+              </ErrorBoundary>
+            </>
+          )}
+        </QueryErrorResetBoundary>
+      </Container>
+    </>
   );
 };
 

@@ -10,6 +10,8 @@ import type { FC, ReactNode } from 'react';
 import { useState } from 'react';
 import { ThemeProvider } from 'styled-components';
 import GlobalStyle from 'styles/globalStyles';
+import { DefaultSeo } from 'next-seo';
+import { seoConfig } from 'utils/next-seo.config';
 
 const Nope: FC<{ children?: ReactNode }> = ({ children }) => <>{children}</>;
 
@@ -40,6 +42,12 @@ function MyApp({
       <QueryClientProvider client={queryClient}>
         <Hydrate state={dehydratedState}>
           <SessionProvider session={session}>
+            <DefaultSeo
+              openGraph={{
+                ...seoConfig.headSeo,
+              }}
+              {...seoConfig.defaultNextSeo}
+            />
             <GlobalStyle />
             <Layout {...pageProps}>
               <Component {...pageProps} />

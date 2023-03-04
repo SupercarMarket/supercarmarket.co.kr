@@ -43,6 +43,7 @@ importers:
       i: ^0.3.7
       next: ^13.1.6
       next-auth: ^4.19.2
+      next-seo: ^5.15.0
       npm: ^9.6.0
       plaiceholder: ^2.5.0
       prettier: ^2.8.4
@@ -77,6 +78,7 @@ importers:
       i: 0.3.7
       next: 13.1.6_pjwopsidmaokadturxaafygjp4
       next-auth: 4.19.2_3vryta7zmbcsw4rrqf4axjqggm
+      next-seo: 5.15.0_3vryta7zmbcsw4rrqf4axjqggm
       npm: 9.6.0
       plaiceholder: 2.5.0_sharp@0.31.3
       react: 18.2.0
@@ -4213,6 +4215,18 @@ packages:
       preact-render-to-string: 5.2.6_preact@10.12.1
       react: 18.2.0
       uuid: 8.3.2
+    dev: false
+
+  /next-seo/5.15.0_3vryta7zmbcsw4rrqf4axjqggm:
+    resolution: {integrity: sha512-LGbcY91yDKGMb7YI+28n3g+RuChUkt6pXNpa8FkfKkEmNiJkeRDEXTnnjVtwT9FmMhG6NH8qwHTelGrlYm9rgg==}
+    peerDependencies:
+      next: ^8.1.1-canary.54 || >=9.0.0
+      react: '>=16.0.0'
+      react-dom: '>=16.0.0'
+    dependencies:
+      next: 13.1.6_pjwopsidmaokadturxaafygjp4
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
     dev: false
 
   /next/13.1.6_pjwopsidmaokadturxaafygjp4:
