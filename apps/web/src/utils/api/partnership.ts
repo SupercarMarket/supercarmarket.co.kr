@@ -17,10 +17,8 @@ import {
 const partnershipApi: NextApiHandler = async (req, res) => {
   const query = req.query as Params;
 
-  console.log(query.page);
   query.page = query.page ? String(+query.page + 1) : '1';
   query.category = PARTNERSHIP_API_CATEGORY_MAPPER[query.category];
-  console.log(query);
 
   try {
     const response = await fetcher(
@@ -77,24 +75,7 @@ const partnershipDetailApi: NextApiHandler = async (req, res) => {
     const partnerships: PartnershipDetailResponse<string> =
       await response.json();
 
-    const partnershipDetailBluredImage = await Promise.all(
-      partnerships.data.imgSrc.map(async (m) => {
-        const { base64 } = await getPlaiceholder(m);
-        return {
-          base64,
-          imgSrc: m,
-        };
-      })
-    ).then((v) => v);
-
-    const partnershipsData = {
-      ...partnerships.data,
-      imgSrc: partnershipDetailBluredImage,
-    };
-
-    res.status(200).json({
-      data: partnershipsData,
-    });
+    res.status(200).json(partnerships);
   } catch (err) {
     console.log(err);
     res.json({});

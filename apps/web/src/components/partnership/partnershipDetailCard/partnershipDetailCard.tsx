@@ -27,7 +27,6 @@ const PartnershipDetailCard = ({ info }: PartnershipDetailCard) => {
     <Wrapper.Top
       css={css`
         width: 100%;
-        height: 100%;
         padding: 30px 40px;
         border: 1px solid ${({ theme }) => theme.color['greyScale-5']};
         border-radius: 4px;

@@ -5,6 +5,9 @@ import { popping } from 'styles/keyframes';
 
 const top = css`
   width: 100%;
+  display: flex;
+  gap: 20px;
+  margin-bottom: 10px;
 `;
 
 const bottom = css`
@@ -15,7 +18,7 @@ const bottom = css`
 
 const CarouselArea = styled.div`
   width: 100%;
-  height: 89px;
+  height: 90px;
   overflow: hidden;
   position: relative;
 `;

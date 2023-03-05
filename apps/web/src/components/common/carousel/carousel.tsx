@@ -4,20 +4,23 @@ import Image from 'next/image';
 import React from 'react';
 import { css } from 'styled-components';
 import { fadeIn } from 'styles/keyframes';
-import { WithBlurredImage } from 'types/market';
 
 import ArrowLeftIcon from '../../../assets/svg/arrow-left.svg';
 import ArrowRightIcon from '../../../assets/svg/arrow-right.svg';
 import CheckIcon from '../../../assets/svg/check.svg';
 import * as Styled from './carousel.styled';
+import useBase64 from 'hooks/queries/useBase64';
+import Skeleton from 'react-loading-skeleton';
 
 interface ICarousel {
   current: number;
   changeCurrent: (n: number) => void;
   page: number;
   changePage: (n: number) => void;
-  imgList: WithBlurredImage<{ imgSrc: string }>[];
-  changeImgList: (i: WithBlurredImage<{ imgSrc: string }>[]) => void;
+  imgSrc: string[];
+  changeImgList: (i: string[]) => void;
+  carouselId: string;
+  carouselCategory: 'market' | 'partnership';
 }
 
 const CarouselContext = React.createContext<ICarousel | null>(null);
@@ -33,27 +36,36 @@ const useCarouselContext = (component: string) => {
 
 interface CarouselProviderProps {
   children?: React.ReactNode;
+  imgList: string[];
+  id: string;
+  category: 'market' | 'partnership';
 }
 
-const CarouselProvider = ({ children }: CarouselProviderProps) => {
+const CarouselProvider = ({
+  children,
+  id,
+  imgList,
+  category,
+}: CarouselProviderProps) => {
   const [current, setCurrent] = React.useState<number>(0);
   const [page, setPage] = React.useState<number>(1);
-  const [imgList, setImgList] = React.useState<
-    WithBlurredImage<{ imgSrc: string }>[]
-  >([]);
+  const [imgSrc, setImgList] = React.useState<string[]>(imgList);
+  const carouselId = React.useMemo(() => id, [id]);
+  const carouselCategory = React.useMemo(() => category, [category]);
 
   const changeCurrent = (n: number) => setCurrent(n);
   const changePage = (n: number) => setPage(n);
-  const changeImgList = (n: WithBlurredImage<{ imgSrc: string }>[]) =>
-    setImgList(n);
+  const changeImgList = (n: string[]) => setImgList(n);
 
   const value = {
     current,
     changeCurrent,
     page,
     changePage,
-    imgList,
+    imgSrc,
     changeImgList,
+    carouselId,
+    carouselCategory,
   };
 
   return (
@@ -65,106 +77,73 @@ const CarouselProvider = ({ children }: CarouselProviderProps) => {
 
 interface CarouselProps {
   children?: React.ReactNode;
+  imgSrc: string[];
+  id: string;
+  category: 'market' | 'partnership';
 }
 
-const Carousel = ({ children }: CarouselProps) => {
-  return <CarouselProvider>{children}</CarouselProvider>;
-};
-
-interface CarouselWrapperProps {
-  children?: React.ReactNode;
-  imgList: WithBlurredImage<{ imgSrc: string }>[];
-  margin?: React.CSSProperties['margin'];
-}
-
-const CarouselWrapper = ({
-  imgList,
-  children,
-  margin = '0px',
-}: CarouselWrapperProps) => {
-  const { changeImgList } = useCarouselContext('Carousel');
-
-  React.useEffect(() => {
-    changeImgList(imgList);
-  }, [changeImgList, imgList]);
-
+const Carousel = ({ children, id, imgSrc, category }: CarouselProps) => {
   return (
-    <Wrapper
-      css={css`
-        margin: ${margin};
-      `}
-    >
+    <CarouselProvider id={id} imgList={imgSrc} category={category}>
       {children}
-    </Wrapper>
+    </CarouselProvider>
   );
 };
 
 interface CarouselTopProps {
-  width?: number;
-  height?: number;
   children?: React.ReactNode;
-  display?: React.CSSProperties['display'];
 }
 
-const CarouselTop = ({
+const CarouselTop = ({ children }: CarouselTopProps) => {
+  return <Wrapper.Top css={Styled.top}>{children}</Wrapper.Top>;
+};
+
+interface CarouselMainImageProps {
+  width?: number;
+  height?: number;
+}
+
+const CarouselMainImage = ({
   width = 1200,
   height = 757,
-  children,
-  display,
-}: CarouselTopProps) => {
-  const { imgList, current } = useCarouselContext('CarouselTop');
-
-  // console.log('CarouselTop', imgList);
+}: CarouselMainImageProps) => {
+  const { carouselId, imgSrc, current } =
+    useCarouselContext('CarouselMainImage');
+  const { data, isFetching, isLoading } = useBase64(imgSrc[current], {
+    category: 'market',
+    detail: true,
+    id: carouselId,
+    idx: current,
+  });
 
   return (
-    <Wrapper.Top css={Styled.top} key={current}>
-      <Wrapper.Top
-        css={css`
-          display: ${display};
-          margin-bottom: 10px;
-          gap: 20px;
-        `}
-      >
-        <Wrapper.Left
-          css={css`
-            opacity: 0;
-            animation: ${fadeIn} 0.5s ease-in-out forwards;
-          `}
-        >
-          {imgList && imgList[current] && (
-            <Image
-              width={width}
-              height={height}
-              alt="image"
-              placeholder="blur"
-              src={imgList[current].imgSrc}
-              blurDataURL={imgList[current].base64}
-            />
-          )}
-        </Wrapper.Left>
-        <Wrapper.Right
-          css={css`
-            width: 100%;
-            margin-bottom: 3px;
-          `}
-        >
-          {children}
-        </Wrapper.Right>
-      </Wrapper.Top>
-    </Wrapper.Top>
+    <Wrapper.Left
+      css={css`
+        opacity: 0;
+        animation: ${fadeIn} 0.5s ease-in-out forwards;
+      `}
+    >
+      {isFetching || isLoading ? (
+        <Skeleton width={width} height={height} />
+      ) : (
+        <Image
+          width={width}
+          height={height}
+          alt="image"
+          placeholder="blur"
+          src={imgSrc[current]}
+          blurDataURL={data?.data.base64}
+        />
+      )}
+    </Wrapper.Left>
   );
 };
 
 const CarouselBottom = () => {
-  const { imgList, current, page, changeCurrent, changePage } =
-    useCarouselContext('CarouselBottom');
-
-  if (!imgList) return <></>;
+  const { imgSrc, page, changePage } = useCarouselContext('CarouselBottom');
 
   const isFirst = page === 1;
-  const isLast = page === Math.ceil(imgList.length / 8);
-
-  const selectImage = (idx: number) => changeCurrent(idx);
+  const isLast = page === Math.ceil(imgSrc.length / 8);
 
   const prev = () => {
     if (!isFirst) changePage(page - 1);
@@ -181,29 +160,8 @@ const CarouselBottom = () => {
       </Styled.ArrowButton>
       <Styled.CarouselArea>
         <Styled.CarouselBox page={page}>
-          {imgList.map(({ imgSrc, base64 }, idx) => (
-            <Styled.CarouselImageWrapper
-              key={idx}
-              onClick={() => selectImage(idx)}
-            >
-              <Image
-                width={141}
-                height={89}
-                alt="image"
-                placeholder="blur"
-                src={imgSrc}
-                blurDataURL={base64}
-              />
-              {current === idx && (
-                <Styled.CheckBox>
-                  <CheckIcon
-                    width="30px"
-                    height="30px"
-                    fill={theme.color['greyScale-1']}
-                  />
-                </Styled.CheckBox>
-              )}
-            </Styled.CarouselImageWrapper>
+          {imgSrc.map((src, idx) => (
+            <CarouselItem key={src} idx={idx} />
           ))}
         </Styled.CarouselBox>
       </Styled.CarouselArea>
@@ -214,8 +172,50 @@ const CarouselBottom = () => {
   );
 };
 
-Carousel.CarouselWrapper = CarouselWrapper;
+interface CarouselItemProps {
+  idx: number;
+}
+
+const CarouselItem = ({ idx }: CarouselItemProps) => {
+  const { imgSrc, current, changeCurrent, carouselId, carouselCategory } =
+    useCarouselContext('CarouselItem');
+
+  const { data, isFetching, isLoading } = useBase64(imgSrc[idx], {
+    category: carouselCategory,
+    detail: true,
+    id: carouselId,
+    idx,
+  });
+
+  const selectImage = (idx: number) => changeCurrent(idx);
+
+  if (isFetching || isLoading) return <Skeleton width={141} height={89} />;
+
+  return (
+    <Styled.CarouselImageWrapper key={idx} onClick={() => selectImage(idx)}>
+      <Image
+        width={141}
+        height={89}
+        alt="image"
+        placeholder="blur"
+        src={imgSrc[idx]}
+        blurDataURL={data?.data.base64}
+      />
+      {current === idx && (
+        <Styled.CheckBox>
+          <CheckIcon
+            width="30px"
+            height="30px"
+            fill={theme.color['greyScale-1']}
+          />
+        </Styled.CheckBox>
+      )}
+    </Styled.CarouselImageWrapper>
+  );
+};
+
 Carousel.CarouselTop = CarouselTop;
+Carousel.CarouselMainImage = CarouselMainImage;
 Carousel.CarouselBottom = CarouselBottom;
 
 export default Carousel;

@@ -6,6 +6,7 @@ import PartnershipIntroduction from '../partnershipIntroduction/partnershipIntro
 import Comment from 'components/common/comment/comment';
 import { Wrapper } from '@supercarmarket/ui';
 import { css } from 'styled-components';
+import { PartnershipDetailSkeleton } from 'components/fallback/loading';
 
 interface Props {
   pid: string;
@@ -14,7 +15,9 @@ interface Props {
 const PartnershipDetail = ({ pid }: Props) => {
   const { data: partnerships, isLoading } = usePartnershipDetail(pid);
 
-  if (isLoading) return <div>로딩 중???</div>;
+  if (isLoading) return <PartnershipDetailSkeleton />;
+
+  console.log('partnerships?.data.imgSrc', partnerships?.data);
 
   return (
     <Wrapper
@@ -24,17 +27,23 @@ const PartnershipDetail = ({ pid }: Props) => {
     >
       {partnerships && (
         <>
-          <Carousel>
-            <Carousel.CarouselWrapper
-              imgList={partnerships.data.imgSrc}
-              margin="0 0 80px 0"
+          <Wrapper.Top
+            css={css`
+              margin-bottom: 80px;
+            `}
+          >
+            <Carousel
+              id={pid}
+              category="partnership"
+              imgSrc={partnerships.data.imgSrc}
             >
-              <Carousel.CarouselTop width={578} height={386} display="flex">
+              <Carousel.CarouselTop>
+                <Carousel.CarouselMainImage width={578} height={386} />
                 <PartnershipDetailCard info={partnerships.data} />
               </Carousel.CarouselTop>
               <Carousel.CarouselBottom />
-            </Carousel.CarouselWrapper>
-          </Carousel>
+            </Carousel>
+          </Wrapper.Top>
           <PartnershipIntroduction
             introduction={partnerships.data.introduction}
           />
