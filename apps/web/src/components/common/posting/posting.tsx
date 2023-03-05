@@ -1,6 +1,7 @@
 import {
   Button,
   Container,
+  Tab,
   theme,
   Typography,
   Wrapper,
@@ -8,6 +9,7 @@ import {
 import useCommunityPost from 'hooks/queries/community/useCommunityPost';
 
 import useMagazinePost from 'hooks/queries/useMagazinePost';
+import useRemoveCommunityPost from 'hooks/mutations/community/useRemoveCommunityPost';
 import { useSession } from 'next-auth/react';
 import * as React from 'react';
 import { css } from 'styled-components';
@@ -16,7 +18,6 @@ import PostingBody from './postingBody';
 import { PostingHeadCommunity, PostingHeadMagainze } from './postingHead';
 
 import dynamic from 'next/dynamic';
-import Link from 'next/link';
 import useLikeCommunityPost from 'hooks/mutations/community/useLikeCommunityPost';
 import ModalContext from 'feature/modalContext';
 import AuthModal from '../modal/authModal';
@@ -99,6 +100,16 @@ const CommunityPosting = ({
     category,
     id: postId,
   });
+  const { mutate: removeMutate } = useRemoveCommunityPost({
+    subject,
+    category,
+    id: postId,
+  });
+
+  const handleRemove = React.useCallback(() => {
+    if (!session.data) return;
+    removeMutate(session.data.accessToken);
+  }, [removeMutate, session.data]);
 
   const handleLike = React.useCallback(() => {
     if (session.status === 'unauthenticated') {
@@ -116,56 +127,18 @@ const CommunityPosting = ({
     return;
   }, [likeMuate, onClick, onClose, onOpen, session]);
 
-  console.log(communityPost);
-
   return (
     <Container display="flex" flexDirection="column" alignItems="center">
       {communityPost && (
         <>
-          <Wrapper
-            css={css`
-              width: 100%;
-              display: flex;
-              justify-content: flex-end;
-              gap: 9px;
-              margin-bottom: 20px;
-            `}
-          >
-            <Button type="button" variant="Line">
-              <Link
-                href={{
-                  pathname: `/community/${subject}`,
-                  query: {
-                    category,
-                  },
-                }}
-              >
-                목록
-              </Link>
-            </Button>
-            {communityPost.data.isMyPost && (
-              <Button type="button" variant="Line">
-                <Link
-                  href={{
-                    pathname: `/community/${subject}/${category}/${communityPost.data.id}/update`,
-                  }}
-                >
-                  글수정
-                </Link>
-              </Button>
-            )}
-            {session.status === 'authenticated' && (
-              <Button type="button">
-                <Link
-                  href={{
-                    pathname: '/community/create',
-                  }}
-                >
-                  글쓰기
-                </Link>
-              </Button>
-            )}
-          </Wrapper>
+          <Tab
+            create={
+              session.status === 'authenticated'
+                ? '/community/create'
+                : undefined
+            }
+            list={`/community/${subject}`}
+          />
           <Wrapper
             css={css`
               width: 100%;
@@ -175,6 +148,7 @@ const CommunityPosting = ({
               border: 1px solid #eaeaec;
               border-radius: 4px;
               box-sizing: border-box;
+              margin-top: 20px;
             `}
           >
             <PostingHeadCommunity category={category} {...communityPost.data} />
@@ -253,37 +227,23 @@ const CommunityPosting = ({
               margin-bottom: 80px;
             `}
           >
-            <Wrapper.Item
-              css={css`
-                display: flex;
-                gap: 9px;
-              `}
-            >
-              {communityPost.data.isMyPost && (
-                <>
-                  <Button type="button" variant="Line">
-                    수정
-                  </Button>
-                  <Button type="button" variant="Line">
-                    삭제
-                  </Button>
-                </>
-              )}
-            </Wrapper.Item>
-            <Wrapper.Item
-              css={css`
-                display: flex;
-                gap: 9px;
-              `}
-            >
-              <Button type="button" variant="Line">
-                목록
-              </Button>
-              <Button type="button" variant="Line">
-                맨 위로
-              </Button>
-              <Button type="button">글쓰기</Button>
-            </Wrapper.Item>
+            <Tab
+              create={
+                session.status === 'authenticated'
+                  ? '/community/create'
+                  : undefined
+              }
+              list={`/community/${subject}`}
+              update={
+                communityPost.data.isMyPost
+                  ? `/community/${subject}/${category}/${postId}/update`
+                  : undefined
+              }
+              handleRemove={
+                communityPost.data.isMyPost ? handleRemove : undefined
+              }
+              scroll
+            />
           </Wrapper>
         </>
       )}
