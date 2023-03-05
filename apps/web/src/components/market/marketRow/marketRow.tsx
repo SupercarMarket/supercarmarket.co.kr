@@ -18,6 +18,7 @@ const MarketRow = ({
   price,
   dealer,
   year,
+  category,
 }: WithBlurredImage<MarketDto>) => {
   const { query } = useRouter();
   const queryString = new URLSearchParams(query as Params).toString();
@@ -25,7 +26,7 @@ const MarketRow = ({
   const formatter = Intl.NumberFormat('ko-KR', { notation: 'compact' }).format;
 
   return (
-    <Link href={`/market/detail/${id}?${queryString}`}>
+    <Link href={`/market/${category}/${id}?${queryString}`}>
       <Container width="100%" display="flex" alignItems="center">
         <Image
           width={196}
