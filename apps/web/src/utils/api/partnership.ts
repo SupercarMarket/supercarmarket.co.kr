@@ -5,14 +5,14 @@ import {
   getErrorMessage,
 } from '@supercarmarket/lib';
 import { Params } from '@supercarmarket/types/base';
-import { PARTNERSHIP_API_CATEGORY_MAPPER } from 'constants/partnership';
-import type { NextApiHandler } from 'next/types';
-import { getPlaiceholder } from 'plaiceholder';
 import {
   PartnershipDetailResponse,
   PartnershipDto,
   PartnershipResponse,
-} from 'types/partnership';
+} from '@supercarmarket/types/partnership';
+import { PARTNERSHIP_API_CATEGORY_MAPPER } from 'constants/partnership';
+import type { NextApiHandler } from 'next/types';
+import { getPlaiceholder } from 'plaiceholder';
 
 const partnershipApi: NextApiHandler = async (req, res) => {
   const query = req.query as Params;

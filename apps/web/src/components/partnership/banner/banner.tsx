@@ -1,9 +1,9 @@
 import { useRouter } from 'next/router';
 import React, { memo } from 'react';
 
+import { Button, Typography } from '@supercarmarket/ui';
 import ArrowRight from '../../../assets/svg/arrow-right.svg';
 import * as Styled from './banner.styled';
-import { Button, Typography } from '@supercarmarket/ui';
 
 interface BannerProps {
   title: string;

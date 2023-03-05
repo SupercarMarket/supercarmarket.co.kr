@@ -1,8 +1,8 @@
 import { Typography } from '@supercarmarket/ui';
 import PartnershipRow from 'components/partnership/partnershipRow';
 import React from 'react';
-import { WithBlurredImage } from 'types/base';
-import { PartnershipDto } from 'types/partnership';
+import { WithBlurredImage } from '@supercarmarket/types/base';
+import { PartnershipDto } from '@supercarmarket/types/partnership';
 
 import * as Styled from './table.styled';
 

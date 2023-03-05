@@ -30,10 +30,4 @@ const TableHead = styled.th<TableHeadProps>`
       width: ${width}px;
     `}
 `;
-export {
-  Table,
-  TableHead,
-  TableRow,
-  TBody,
-  THead,
-};
+export { Table, TableHead, TableRow, TBody, THead };

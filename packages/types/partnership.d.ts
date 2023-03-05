@@ -1,5 +1,3 @@
-import { WithBlurredImage } from './base';
-
 interface PartnershipDto {
   brdSeq: string;
   partnerName: string;
