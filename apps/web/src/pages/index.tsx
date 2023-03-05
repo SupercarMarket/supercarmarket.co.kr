@@ -15,10 +15,13 @@ import { GetStaticProps } from 'next';
 import * as React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { baseFetch } from 'utils/api/fetcher';
+import HeadSeo from 'components/common/headSeo';
+import { APP_NAME } from 'constants/core';
 
 const Home: NextPageWithLayout = () => {
   return (
     <>
+      <HeadSeo title={APP_NAME} description="안녕하세요 슈퍼카마켓입니다." />
       <Container>
         <QueryErrorResetBoundary>
           {({ reset }) => (
