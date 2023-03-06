@@ -199,9 +199,34 @@ const MarketDetailSkeleton = () => {
   );
 };
 
+const PartnershipDetailSkeleton = () => {
+  return (
+    <Container>
+      <Wrapper
+        css={css`
+          display: flex;
+          gap: 20px;
+          margin-bottom: 220px;
+        `}
+      >
+        <Skeleton width={590} height={386} />
+        <Skeleton width={590} height={386} />
+      </Wrapper>
+      <Wrapper
+        css={css`
+          width: 100%;
+        `}
+      >
+        <Skeleton height={500} />
+      </Wrapper>
+    </Container>
+  );
+};
+
 export {
   CardSkeleton,
   LinkSkeleton,
   MagazineBannerSkeleton,
   MarketDetailSkeleton,
+  PartnershipDetailSkeleton,
 };

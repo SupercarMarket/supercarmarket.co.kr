@@ -17,19 +17,13 @@ export default function useMarketUrlQuery() {
   const maxPrice = searchParams.get('maxPrice');
   const accident = searchParams.get('accident');
   const transmission = searchParams.get('transmission');
-  const size = searchParams.get('size');
-  const variant = searchParams.get('variant');
-  const searchType = searchParams.get('searchType');
-  const region = searchParams.get('region');
 
   return {
     page: page ? parseInt(page) : 0,
     orderBy: orderBy ?? 'DESC',
     filter: filter ?? 'created_date',
     category: category ?? 'all',
-    variant: variant ? variant : 'row',
-    searchType: searchType ? searchType : 'title',
-    keyword: keyword ?? undefined,
+    keyword: keyword ? keyword : undefined,
     minDate: minDate ?? undefined,
     maxDate: maxDate ?? undefined,
     fuel: fuel ?? undefined,
@@ -39,7 +33,5 @@ export default function useMarketUrlQuery() {
     maxPrice: maxPrice ?? undefined,
     accident: accident ?? undefined,
     transmission: transmission ?? undefined,
-    size: size ? size : undefined,
-    region: region ? region : undefined,
   };
 }

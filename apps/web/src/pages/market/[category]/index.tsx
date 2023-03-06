@@ -22,32 +22,19 @@ import { CATEGORY_VALUES } from 'constants/market';
 import queries from 'constants/queries';
 import useMarket from 'hooks/queries/useMarket';
 import { useUrlQuery } from '@supercarmarket/hooks';
-import { useRouter } from 'next/router';
 import type { NextPageContext } from 'next/types';
 import * as React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
+import { useSearchKeyword } from 'hooks/useSearchKeyword';
 import { css } from 'styled-components';
 
 const MarketFilterPage: NextPageWithLayout = () => {
-  const { push, query } = useRouter();
   const marketQuery = useUrlQuery();
-  const keywordRef = React.useRef<HTMLInputElement>(null);
+  const { keydownHandler, keywordRef } = useSearchKeyword({
+    domain: 'partnership',
+  });
 
   const { data: markets } = useMarket(marketQuery, { keepPreviousData: true });
-
-  const keydownHandler = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && keywordRef.current !== null) {
-      const queries = { ...query };
-
-      queries.keyword = keywordRef.current.value;
-      keywordRef.current.value = '';
-
-      const queryString = Object.entries(queries)
-        .map(([key, value]) => `${key}=${value}`)
-        .join('&');
-      push(`/market/${query.category}?${queryString}`);
-    }
-  };
 
   return (
     <Container display="flex" flexDirection="column" margin="20px 0 0 0">
