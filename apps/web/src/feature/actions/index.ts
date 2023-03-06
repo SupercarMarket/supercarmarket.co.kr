@@ -1,4 +1,4 @@
-import type { Dispatch } from 'feature';
+import type { Dispatch } from '../';
 
 export default function createAsyncDispatcher<
   ActionType extends string,
