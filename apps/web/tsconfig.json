@@ -1,7 +1,18 @@
 {
   "extends": "@supercarmarket/tsconfig/nextjs.json",
   "compilerOptions": {
-    "baseUrl": "./src"
+    "baseUrl": ".",
+    "paths": {
+      "components/*": ["src/components/*"],
+      "utils/*": ["src/utils/*"],
+      "assets/*": ["src/assets/*"],
+      "constants/*": ["src/constants/*"],
+      "feature/*": ["src/feature/*"],
+      "hooks/*": ["src/hooks/*"],
+      "pages/*": ["src/pages/*"],
+      "styles/*": ["src/styles/*"],
+      "types/*": ["src/types/*"]
+    }
   },
   "include": [
     "next-env.d.ts",

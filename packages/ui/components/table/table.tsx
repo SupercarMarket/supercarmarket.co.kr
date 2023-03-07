@@ -8,7 +8,13 @@ import { Typography } from '../typography';
 import { Wrapper } from '../wrapper';
 
 interface TableProps {
-  tab: 'product' | 'magazine' | 'inquiry' | 'community' | 'comment';
+  tab:
+    | 'product'
+    | 'magazine'
+    | 'inquiry'
+    | 'community'
+    | 'comment'
+    | 'partnership';
   hidden?: boolean;
   handleCheckbox?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   padding?: React.CSSProperties['padding'];
@@ -37,6 +43,16 @@ const Table = (props: TableProps) => {
         { title: '작성일', width: '80px' },
         { title: '조회', width: '80px' },
         { title: '추천', width: '80px' },
+      ];
+    if (tab === 'partnership')
+      return [
+        { title: '사진', width: '196px' },
+        { title: '업체명', width: '404px' },
+        { title: '업종', width: '120px' },
+        { title: '영업시간', width: '118px' },
+        { title: '전화', width: '145px' },
+        { title: '지역', width: '134px' },
+        { title: '사이트', width: '85px' },
       ];
     return [
       { title: '문의 유형', width: '196px' },

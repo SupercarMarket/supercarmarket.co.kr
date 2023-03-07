@@ -26,6 +26,7 @@ import { useRouter } from 'next/router';
 import type { InferGetServerSidePropsType, NextPageContext } from 'next/types';
 import * as React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
+import { useSearchKeyword } from 'hooks/useSearchKeyword';
 import { css } from 'styled-components';
 import HeadSeo from 'components/common/headSeo';
 
@@ -34,23 +35,11 @@ const MarketFilterPage: NextPageWithLayout = ({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const { push, query } = useRouter();
   const marketQuery = useUrlQuery();
-  const keywordRef = React.useRef<HTMLInputElement>(null);
+  const { keydownHandler, keywordRef } = useSearchKeyword({
+    domain: 'partnership',
+  });
 
   const { data: markets } = useMarket(marketQuery, { keepPreviousData: true });
-
-  const keydownHandler = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && keywordRef.current !== null) {
-      const queries = { ...query };
-
-      queries.keyword = keywordRef.current.value;
-      keywordRef.current.value = '';
-
-      const queryString = Object.entries(queries)
-        .map(([key, value]) => `${key}=${value}`)
-        .join('&');
-      push(`/market/${query.category}?${queryString}`);
-    }
-  };
 
   return (
     <>
