@@ -36,20 +36,22 @@ const DOMAIN =
 const formatted = (sitemap) => prettier.format(sitemap, { parser: 'html' });
 
 const createSiteMap = async (target) => {
-  const { title, url, query: _query } = target;
+  const { fetcher } = await import('@supercarmarket/lib');
+
+  const { title, url, query } = target;
 
   const list = [];
   let page = 1;
 
   while (true) {
-    const query = `?${new URLSearchParams({ ..._query, page })}`;
-
-    const response = await fetch(
-      `${
-        process.env.NEXT_PUBLIC_SERVER_URL || 'http://3.37.88.125:8080'
-      }${url}${query}`,
+    const response = await fetcher(
+      `${process.env.NEXT_PUBLIC_SERVER_URL}${url}`,
       {
         method: 'GET',
+        query: {
+          ...query,
+          page,
+        },
       }
     );
 
