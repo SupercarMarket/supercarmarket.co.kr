@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 const fs = require('fs');
-const fetch = require('node-fetch');
+const fetch = require('node-fetch-commonjs');
 const prettier = require('prettier');
 
 const targets = [

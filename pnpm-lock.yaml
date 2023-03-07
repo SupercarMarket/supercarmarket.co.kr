@@ -46,7 +46,7 @@ importers:
       next: ^13.1.6
       next-auth: ^4.19.2
       next-seo: ^5.15.0
-      node-fetch: ^3.3.0
+      node-fetch-commonjs: ^3.2.4
       npm: ^9.6.0
       plaiceholder: ^2.5.0
       prettier: ^2.8.4
@@ -108,7 +108,7 @@ importers:
       babel-loader: 9.1.2_la66t7xldg4uecmyawueag5wkm
       dotenv: 16.0.3
       globby: 13.1.3
-      node-fetch: 3.3.0
+      node-fetch-commonjs: 3.2.4
       prettier: 2.8.4
       typescript: 4.9.5
       webpack: 5.75.0
@@ -2815,11 +2815,6 @@ packages:
     resolution: {integrity: sha512-sdQSFB7+llfUcQHUQO3+B8ERRj0Oa4w9POWMI/puGtuf7gFywGmkaLCElnudfTiKZV+NvHqL0ifzdrI8Ro7ESA==}
     dev: false
 
-  /data-uri-to-buffer/4.0.1:
-    resolution: {integrity: sha512-0R9ikRb668HB7QDxT1vkpuUBtqc53YyAwMwGeUFKRojY/NWKvdZ+9UYtRfGmhqNbRkTSVpMbmyhXipFFv2cb/A==}
-    engines: {node: '>= 12'}
-    dev: true
-
   /dayjs/1.11.7:
     resolution: {integrity: sha512-+Yw9U6YO5TQohxLcIkrXBeY73WP3ejHWVvx8XCk3gxvQDCTEmS48ZrSZCKciI7Bhl/uCMyxYtE9UqRILmFphkQ==}
     dev: false
@@ -4364,6 +4359,14 @@ packages:
     engines: {node: '>=10.5.0'}
     dev: true
 
+  /node-fetch-commonjs/3.2.4:
+    resolution: {integrity: sha512-bZW7+ldcuuMPLTJk8DufhT6qHDRdljYD0jqBjmrYfcInaYcReX5kK42SQsu/jvtit/tER28yYjnk63PEEmNPtg==}
+    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+    dependencies:
+      formdata-polyfill: 4.0.10
+      web-streams-polyfill: 3.2.1
+    dev: true
+
   /node-fetch/2.6.7_encoding@0.1.13:
     resolution: {integrity: sha512-ZjMPFEfVx5j+y2yF35Kzx5sF7kDzxuDj6ziH4FFbOp87zKDZNx8yExJIb05OGF4Nlt9IHFIMBkRl41VdvcNdbQ==}
     engines: {node: 4.x || >=6.0.0}
@@ -4376,15 +4379,6 @@ packages:
       encoding: 0.1.13
       whatwg-url: 5.0.0
     dev: false
-
-  /node-fetch/3.3.0:
-    resolution: {integrity: sha512-BKwRP/O0UvoMKp7GNdwPlObhYGB5DQqwhEDQlNKuoqwVYSxkSZCSbHjnFFmUEtwSKRPU4kNK8PbDYYitwaE3QA==}
-    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
-    dependencies:
-      data-uri-to-buffer: 4.0.1
-      fetch-blob: 3.2.0
-      formdata-polyfill: 4.0.10
-    dev: true
 
   /node-releases/2.0.10:
     resolution: {integrity: sha512-5GFldHPXVG/YZmFzJvKK2zDSzPKhEp0+ZR5SVaoSag9fsL5YgHbUHDfnG5494ISANDcK4KwPXAx2xqVEydmd7w==}
