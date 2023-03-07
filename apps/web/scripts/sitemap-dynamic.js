@@ -49,9 +49,9 @@ const createSiteMap = async (target) => {
       {
         method: 'GET',
       }
-    );
-
-    if (!response.ok) throw 'fail to creat dynamic sitemap';
+    ).catch(function () {
+      throw 'failed to create dynamic sitemap';
+    });
 
     const result = await response.json();
 
