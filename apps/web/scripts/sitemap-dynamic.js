@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 const fs = require('fs');
+const fetch = require('node-fetch');
 const prettier = require('prettier');
 
 const targets = [
@@ -30,8 +31,7 @@ const targets = [
 
 const today = new Date().toISOString().slice(0, 10);
 
-const DOMAIN =
-  process.env.NEXT_PUBLIC_URL || 'https://supercar-market.vercel.app';
+const DOMAIN = process.env.NEXT_PUBLIC_URL;
 
 const formatted = (sitemap) => prettier.format(sitemap, { parser: 'html' });
 
@@ -40,8 +40,6 @@ const createSiteMap = async (target) => {
 
   const list = [];
   let page = 1;
-
-  const fetch = await import('node-fetch');
 
   while (true) {
     const query = `?${new URLSearchParams({ ..._query, page })}`;

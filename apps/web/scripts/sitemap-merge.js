@@ -4,8 +4,7 @@ const fs = require('fs');
 const prettier = require('prettier');
 
 const date = new Date().toISOString().slice(0, 10);
-const DOMAIN =
-  process.env.NEXT_PUBLIC_URL || 'https://supercar-market.vercel.app';
+const DOMAIN = process.env.NEXT_PUBLIC_URL;
 
 const formatted = (sitemap) => prettier.format(sitemap, { parser: 'html' });
 
