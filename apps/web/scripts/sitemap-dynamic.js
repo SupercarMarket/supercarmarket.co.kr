@@ -23,7 +23,7 @@ const targets = [
     title: 'community',
     url: '/supercar/v1/community',
     query: {
-      category: 'report',
+      category: 'all',
     },
   },
 ];
@@ -36,22 +36,20 @@ const DOMAIN =
 const formatted = (sitemap) => prettier.format(sitemap, { parser: 'html' });
 
 const createSiteMap = async (target) => {
-  const { fetcher } = await import('@supercarmarket/lib');
-
-  const { title, url, query } = target;
+  const { title, url, query: _query } = target;
 
   const list = [];
   let page = 1;
 
+  const fetch = await import('node-fetch');
+
   while (true) {
-    const response = await fetcher(
-      `${process.env.NEXT_PUBLIC_SERVER_URL}${url}`,
+    const query = `?${new URLSearchParams({ ..._query, page })}`;
+
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_SERVER_URL}${url}${query}`,
       {
         method: 'GET',
-        query: {
-          ...query,
-          page,
-        },
       }
     );
 
