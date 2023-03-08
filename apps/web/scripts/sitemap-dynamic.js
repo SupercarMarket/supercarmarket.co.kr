@@ -35,6 +35,11 @@ const DOMAIN = process.env.NEXT_PUBLIC_URL;
 
 const formatted = (sitemap) => prettier.format(sitemap, { parser: 'html' });
 
+const getCategorySubject = (category) => {
+  if (category === 'information') return 'library';
+  return 'paparazzi';
+};
+
 const createSiteMap = async (target) => {
   const { title, url, query: _query } = target;
 
@@ -68,25 +73,36 @@ const createSiteMap = async (target) => {
 
   const siteMap = `${list
     .map((data) => {
-      if (title !== 'magazine') {
+      if (title === 'magazine') {
         return `
-          <url>
-              <loc>${DOMAIN}/${title}/${data.category.toLowerCase()}/${
-          data.id || data.brdSeq
-        }</loc>
-              <lastmod>${today}</lastmod>
-          </url>
-          `;
-      }
-      return `
           <url>
               <loc>${DOMAIN}/${title}/${data.id}</loc>
               <lastmod>${today}</lastmod>
           </url>
           `;
+      }
+
+      if (title === 'community') {
+        return `
+          <url>
+              <loc>${DOMAIN}/${title}/${getCategorySubject(data.category)}/${
+          data.category
+        }/${data.id}</loc>
+              <lastmod>${today}</lastmod>
+          </url>
+          `;
+      }
+
+      return `
+          <url>
+              <loc>${DOMAIN}/${title}/${data.category.toLowerCase()}/${
+        data.id || data.brdSeq
+      }</loc>
+              <lastmod>${today}</lastmod>
+          </url>
+          `;
     })
-    .join('')}
-    `;
+    .join('')}`;
 
   const generatedSitemap = `
         <?xml version="1.0" encoding="UTF-8"?>
