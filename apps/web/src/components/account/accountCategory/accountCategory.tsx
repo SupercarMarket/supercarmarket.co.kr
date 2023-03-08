@@ -79,7 +79,7 @@ const AccountCategory = React.memo(function AccountCategory({
   if (isFetching || isLoading) return <CardSkeleton variant="row" />;
 
   return (
-    <Container margin="80px 0">
+    <Container>
       <Table tab={tab} hidden={hidden} padding="0 0 6px 0" />
       {data?.data.length < 1 ? (
         <Wrapper

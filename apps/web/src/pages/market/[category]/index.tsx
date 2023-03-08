@@ -2,6 +2,7 @@
 
 import {
   applyMediaQuery,
+  Category,
   Container,
   Searchbar,
   Wrapper,
@@ -15,10 +16,9 @@ import {
 import { ErrorFallback } from 'components/fallback';
 import layout from 'components/layout';
 import MarketBanner from 'components/market/marketBanner';
-import MarketCarKind from 'components/market/marketCarKind';
 import MarketCarList from 'components/market/marketCarList';
 import MarketFilter from 'components/market/marketFilter';
-import { CATEGORY, CATEGORY_VALUES } from 'constants/market';
+import { CATEGORY, CATEGORY_VALUES, MARKET_LINKS } from 'constants/market';
 import queries from 'constants/queries';
 import useMarket from 'hooks/queries/useMarket';
 import { useUrlQuery } from '@supercarmarket/hooks';
@@ -84,7 +84,7 @@ const MarketFilterPage: NextPageWithLayout = ({
               onReset={reset}
               fallbackRender={(props) => <ErrorFallback {...props} />}
             >
-              <MarketCarKind />
+              <Category links={MARKET_LINKS} category={category} />
               <MarketFilter />
               {markets && (
                 <MarketCarList data={markets} page={marketQuery.page} />

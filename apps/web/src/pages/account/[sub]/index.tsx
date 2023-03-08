@@ -1,8 +1,8 @@
-import { Container, Wrapper } from '@supercarmarket/ui';
+import { Category, Container, Wrapper } from '@supercarmarket/ui';
 import { BaseApiHandlerResponse, serverFetcher } from '@supercarmarket/lib';
 import type { Profile as ProfileType } from '@supercarmarket/types/account';
 import type { Params, NextPageWithLayout } from '@supercarmarket/types/base';
-import { AccountCategory, AccountNavbar, Profile } from 'components/account';
+import { AccountCategory, Profile } from 'components/account';
 import AccountLayout from 'components/layout/accountLayout';
 import * as style from 'components/layout/layout.styled';
 import type { AccountTab } from 'constants/account';
@@ -47,7 +47,7 @@ const Account: NextPageWithLayout = ({
                 <Profile isMyAccountPage={isMyAccountPage} profile={profile} />
               </ErrorBoundary>
               <Wrapper css={style.account}>
-                <AccountNavbar tab={tab} accountRoutes={accountRoutes} />
+                <Category links={accountRoutes} category={tab} />
                 <ErrorBoundary
                   onReset={reset}
                   fallbackRender={(props) => (

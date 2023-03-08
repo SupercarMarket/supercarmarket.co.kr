@@ -1,29 +1,55 @@
 import { Params } from '@supercarmarket/types/base';
 
-const PARTNERSHIP_CATEGORY = [
+const PARTNERSHIP_LINKS = [
   {
-    option: '전체',
-    value: 'all',
+    title: '전체',
+    href: {
+      pathname: '/partnership',
+      query: {
+        category: 'all',
+      },
+    },
+    category: 'all',
   },
   {
-    option: '자동차매장',
-    value: 'dealer_shop',
+    title: '자동차매장',
+    href: {
+      pathname: '/partnership',
+      query: {
+        category: 'dealer_shop',
+      },
+    },
+    category: 'dealer_shop',
   },
   {
-    option: '공업사',
-    value: 'car_center',
+    title: '디테일링',
+    href: {
+      pathname: '/partnership',
+      query: {
+        category: 'detailing',
+      },
+    },
+    category: 'detailing',
   },
   {
-    option: '디테일링',
-    value: 'detailing',
+    title: '도색',
+    href: {
+      pathname: '/partnership',
+      query: {
+        category: 'painting',
+      },
+    },
+    category: 'painting',
   },
   {
-    option: '도색',
-    value: 'painting',
-  },
-  {
-    option: '기타',
-    value: 'etc',
+    title: '기타',
+    href: {
+      pathname: '/partnership',
+      query: {
+        category: 'etc',
+      },
+    },
+    category: 'etc',
   },
 ];
 
@@ -93,7 +119,7 @@ const PARTNERSHIP_API_CATEGORY_MAPPER: Params = {
 };
 
 export {
-  PARTNERSHIP_CATEGORY,
+  PARTNERSHIP_LINKS,
   PARTNERSHIP_FILTER_OPTIONS,
   PARTNERSHIP_TABLE_HEAD,
   PARTNERSHIP_API_CATEGORY_MAPPER,

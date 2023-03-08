@@ -41,26 +41,56 @@ const account = {
     myAccount: (sub: string) => [
       {
         title: '스크랩 매물',
-        route: `/account/${sub}?tab=product`,
+        href: {
+          pathname: `/account/${sub}`,
+          query: {
+            tab: 'product',
+          },
+        },
+        category: 'product',
       },
       {
         title: '스크랩 글',
-        route: `/account/${sub}?tab=magazine`,
+        href: {
+          pathname: `/account/${sub}`,
+          query: {
+            tab: 'magazine',
+          },
+        },
+        category: 'magazine',
       },
       ...account.accountRoutes.someoneAccount(sub),
       {
         title: '문의신청내역',
-        route: `/account/${sub}?tab=inquiry`,
+        href: {
+          pathname: `/account/${sub}`,
+          query: {
+            tab: 'inquiry',
+          },
+        },
+        category: 'inquiry',
       },
     ],
     someoneAccount: (sub: string) => [
       {
         title: '작성한 글',
-        route: `/account/${sub}?tab=community`,
+        href: {
+          pathname: `/account/${sub}`,
+          query: {
+            tab: 'community',
+          },
+        },
+        category: 'community',
       },
       {
         title: '댓글단 글',
-        route: `/account/${sub}?tab=comment`,
+        href: {
+          pathname: `/account/${sub}`,
+          query: {
+            tab: 'comment',
+          },
+        },
+        category: 'comment',
       },
     ],
   },
