@@ -8,59 +8,65 @@ import { QueryErrorResetBoundary } from '@tanstack/react-query';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from 'components/fallback';
 import { useSession } from 'next-auth/react';
+import HeadSeo from 'components/common/headSeo';
 
 const CommunityCategory: NextPageWithLayout = () => {
   const { status } = useSession();
 
   return (
-    <Container display="flex" flexDirection="column" gap="27.5px">
-      <QueryErrorResetBoundary>
-        {({ reset }) => (
-          <>
-            <Title>커뮤니티 인기글</Title>
-            <ErrorBoundary
-              onReset={reset}
-              fallbackRender={(props) => <ErrorFallback {...props} />}
-            >
-              <CommunityBestList />
-            </ErrorBoundary>
-            <Wrapper
-              css={css`
-                position: relative;
-                display: flex;
-                flex-direction: column;
-                gap: 27.5px;
-              `}
-            >
-              <Wrapper.Item
+    <>
+      <HeadSeo title="커뮤니티" description="슈퍼카를 위한 커뮤니티" />
+      <Container display="flex" flexDirection="column" gap="27.5px">
+        <QueryErrorResetBoundary>
+          {({ reset }) => (
+            <>
+              <Title>커뮤니티 인기글</Title>
+              <ErrorBoundary
+                onReset={reset}
+                fallbackRender={(props) => <ErrorFallback {...props} />}
+              >
+                <CommunityBestList />
+              </ErrorBoundary>
+              <Wrapper
                 css={css`
-                  width: 100%;
+                  position: relative;
                   display: flex;
-                  justify-content: space-between;
-                  align-items: center;
+                  flex-direction: column;
+                  gap: 27.5px;
                 `}
               >
-                <Title>제보</Title>
-                <Tab
-                  popular
-                  variant
-                  create={
-                    status === 'authenticated' ? '/community/create' : undefined
-                  }
-                />
-              </Wrapper.Item>
-              <CommunityNavbar />
-            </Wrapper>
-            <ErrorBoundary
-              onReset={reset}
-              fallbackRender={(props) => <ErrorFallback {...props} />}
-            >
-              <CommunityList status={status} />
-            </ErrorBoundary>
-          </>
-        )}
-      </QueryErrorResetBoundary>
-    </Container>
+                <Wrapper.Item
+                  css={css`
+                    width: 100%;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                  `}
+                >
+                  <Title>제보</Title>
+                  <Tab
+                    popular
+                    variant
+                    create={
+                      status === 'authenticated'
+                        ? '/community/create'
+                        : undefined
+                    }
+                  />
+                </Wrapper.Item>
+                <CommunityNavbar />
+              </Wrapper>
+              <ErrorBoundary
+                onReset={reset}
+                fallbackRender={(props) => <ErrorFallback {...props} />}
+              >
+                <CommunityList status={status} />
+              </ErrorBoundary>
+            </>
+          )}
+        </QueryErrorResetBoundary>
+      </Container>
+    </>
   );
 };
 

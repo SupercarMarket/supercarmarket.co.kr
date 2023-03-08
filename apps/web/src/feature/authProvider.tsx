@@ -1,4 +1,4 @@
-import { Dispatch } from 'feature';
+import { Dispatch } from './';
 import { createContext, useContext, useReducer } from 'react';
 import { User } from '@supercarmarket/types/base';
 import { BaseApiHandlerResponse } from 'utils/api/fetcher';

@@ -23,6 +23,7 @@ import ModalContext from 'feature/modalContext';
 import AuthModal from '../modal/authModal';
 
 import LikeIcon from '../../../assets/svg/thumb-up.svg';
+import HeadSeo from '../headSeo/headSeo';
 
 const Comment = dynamic(() => import('components/common/comment'), {
   ssr: false,
@@ -56,24 +57,34 @@ const MagazinePosting = ({ postId }: Omit<PostingProps, 'type'>) => {
   });
 
   return (
-    <Container>
+    <>
       {magazinePost && (
         <>
-          <PostingHeadMagainze {...magazinePost.data} />
-          <Container
-            width="100%"
-            display="flex"
-            flexDirection="column"
-            padding="0 40px"
-            border="1px solid #EAEAEC"
-            borderRadius="4px"
-            boxSizing="border-box"
-          >
-            <PostingBody contentHtml={magazinePost.data.contentHtml} />
+          <HeadSeo
+            title={magazinePost.data.title}
+            description={magazinePost.data.contentHtml}
+          />
+          <Container>
+            {magazinePost && (
+              <>
+                <PostingHeadMagainze {...magazinePost.data} />
+                <Container
+                  width="100%"
+                  display="flex"
+                  flexDirection="column"
+                  padding="0 40px"
+                  border="1px solid #EAEAEC"
+                  borderRadius="4px"
+                  boxSizing="border-box"
+                >
+                  <PostingBody contentHtml={magazinePost.data.contentHtml} />
+                </Container>
+              </>
+            )}
           </Container>
         </>
       )}
-    </Container>
+    </>
   );
 };
 
@@ -128,126 +139,137 @@ const CommunityPosting = ({
   }, [likeMuate, onClick, onClose, onOpen, session]);
 
   return (
-    <Container display="flex" flexDirection="column" alignItems="center">
+    <>
       {communityPost && (
         <>
-          <Tab
-            create={
-              session.status === 'authenticated'
-                ? '/community/create'
-                : undefined
-            }
-            list={`/community/${subject}`}
+          <HeadSeo
+            title={communityPost.data.title}
+            description={communityPost.data.contents}
           />
-          <Wrapper
-            css={css`
-              width: 100%;
-              display: flex;
-              flex-direction: column;
-              padding: 40px;
-              border: 1px solid #eaeaec;
-              border-radius: 4px;
-              box-sizing: border-box;
-              margin-top: 20px;
-            `}
-          >
-            <PostingHeadCommunity category={category} {...communityPost.data} />
-            <PostingBody contentHtml={communityPost.data.contents} />
-          </Wrapper>
-          <Wrapper
-            css={css`
-              margin: 80px 0;
-            `}
-          >
-            <Button
-              type="button"
-              variant="Line"
-              width="95px"
-              onClick={handleLike}
-            >
-              <Wrapper.Item
+          <Container display="flex" flexDirection="column" alignItems="center">
+            <>
+              <Tab
+                create={
+                  session.status === 'authenticated'
+                    ? '/community/create'
+                    : undefined
+                }
+                list={`/community/${subject}`}
+              />
+              <Wrapper
                 css={css`
+                  width: 100%;
                   display: flex;
                   flex-direction: column;
-                  align-items: center;
-                  gap: 4px;
+                  padding: 40px;
+                  border: 1px solid #eaeaec;
+                  border-radius: 4px;
+                  box-sizing: border-box;
+                  margin-top: 20px;
                 `}
               >
-                <Typography
-                  fontSize="body-14"
-                  fontWeight="regular"
-                  color="system-1"
-                  lineHeight="150%"
-                >
-                  {communityPost.data.like}
-                </Typography>
-                <Typography
-                  fontSize="body-14"
-                  fontWeight="regular"
-                  color={
-                    communityPost.data.isLiked ? 'system-1' : 'greyScale-6'
-                  }
-                  lineHeight="150%"
+                <PostingHeadCommunity
+                  category={category}
+                  {...communityPost.data}
+                />
+                <PostingBody contentHtml={communityPost.data.contents} />
+              </Wrapper>
+              <Wrapper
+                css={css`
+                  margin: 80px 0;
+                `}
+              >
+                <Button
+                  type="button"
+                  variant="Line"
+                  width="95px"
+                  onClick={handleLike}
                 >
                   <Wrapper.Item
                     css={css`
                       display: flex;
+                      flex-direction: column;
                       align-items: center;
-                      gap: 4.5px;
+                      gap: 4px;
                     `}
                   >
-                    <Wrapper.Left
-                      css={css`
-                        display: flex;
-                        align-items: center;
-                        & > svg {
-                          width: 18px;
-                          height: 18px;
-                          fill: ${communityPost.data.isLiked
-                            ? theme.color['system-1']
-                            : theme.color['greyScale-6']};
-                        }
-                      `}
+                    <Typography
+                      fontSize="body-14"
+                      fontWeight="regular"
+                      color="system-1"
+                      lineHeight="150%"
                     >
-                      <LikeIcon />
-                    </Wrapper.Left>
-                    <Wrapper.Right>추천</Wrapper.Right>
+                      {communityPost.data.like}
+                    </Typography>
+                    <Typography
+                      fontSize="body-14"
+                      fontWeight="regular"
+                      color={
+                        communityPost.data.isLiked ? 'system-1' : 'greyScale-6'
+                      }
+                      lineHeight="150%"
+                    >
+                      <Wrapper.Item
+                        css={css`
+                          display: flex;
+                          align-items: center;
+                          gap: 4.5px;
+                        `}
+                      >
+                        <Wrapper.Left
+                          css={css`
+                            display: flex;
+                            align-items: center;
+                            & > svg {
+                              width: 18px;
+                              height: 18px;
+                              fill: ${communityPost.data.isLiked
+                                ? theme.color['system-1']
+                                : theme.color['greyScale-6']};
+                            }
+                          `}
+                        >
+                          <LikeIcon />
+                        </Wrapper.Left>
+                        <Wrapper.Right>추천</Wrapper.Right>
+                      </Wrapper.Item>
+                    </Typography>
                   </Wrapper.Item>
-                </Typography>
-              </Wrapper.Item>
-            </Button>
-          </Wrapper>
-          <Comment id={postId} category={subject} />
-          <Wrapper
-            css={css`
-              width: 100%;
-              display: flex;
-              justify-content: space-between;
-              margin-top: 20px;
-              margin-bottom: 80px;
-            `}
-          >
-            <Tab
-              create={
-                session.status === 'authenticated'
-                  ? '/community/create'
-                  : undefined
-              }
-              list={`/community/${subject}`}
-              update={
-                communityPost.data.isMyPost
-                  ? `/community/${subject}/${category}/${postId}/update`
-                  : undefined
-              }
-              handleRemove={
-                communityPost.data.isMyPost ? handleRemove : undefined
-              }
-              scroll
-            />
-          </Wrapper>
+                </Button>
+              </Wrapper>
+              <Comment id={postId} category={subject} />
+              <Wrapper
+                css={css`
+                  width: 100%;
+                  display: flex;
+                  justify-content: space-between;
+                  margin-top: 20px;
+                  margin-bottom: 80px;
+                `}
+              >
+                <Tab
+                  create={
+                    session.status === 'authenticated'
+                      ? '/community/create'
+                      : undefined
+                  }
+                  list={`/community/${subject}`}
+                  update={
+                    communityPost.data.isMyPost
+                      ? `/community/${subject}/${category}/${postId}/update`
+                      : undefined
+                  }
+                  handleRemove={
+                    communityPost.data.isMyPost ? handleRemove : undefined
+                  }
+                  scroll
+                />
+              </Wrapper>
+            </>
+          </Container>
         </>
       )}
-    </Container>
+    </>
   );
 };
 

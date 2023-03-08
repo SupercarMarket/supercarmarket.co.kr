@@ -1,41 +1,29 @@
-'use client';
-
-import React from 'react';
 import { css } from 'styled-components';
-import { useRouter } from 'next/router';
 import { ErrorBoundary } from 'react-error-boundary';
-import { NextPageContext } from 'next/types';
+import { InferGetServerSidePropsType, NextPageContext } from 'next/types';
 import { NextPageWithLayout, Params } from '@supercarmarket/types/base';
-import { Pagination, Searchbar, Table, Wrapper } from '@supercarmarket/ui';
+import { Searchbar, Wrapper } from '@supercarmarket/ui';
 import {
   dehydrate,
   QueryClient,
   QueryErrorResetBoundary,
 } from '@tanstack/react-query';
-import type { ParsedUrlQuery } from 'querystring';
 
 import queries from 'constants/queries';
 import layout from 'components/layout';
 import Banner from 'components/partnership/banner';
 import Category from 'components/partnership/category';
-import PartnershipRow from 'components/partnership/partnershipRow';
-import usePartnership from 'hooks/queries/usePartnership';
 import { ErrorFallback } from 'components/fallback';
 import { useSearchKeyword } from 'hooks/useSearchKeyword';
 import { PARTNERSHIP_CATEGORY } from 'constants/partnership';
+import PartnershipList from 'components/partnership/partnershipList';
 
-interface IParams extends ParsedUrlQuery {
-  category: string;
-}
-
-const PartnershipPage: NextPageWithLayout = () => {
-  const { query } = useRouter();
-  const { data: partnerships, isLoading } = usePartnership(query as Params);
+const PartnershipPage: NextPageWithLayout = ({
+  category,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const { keydownHandler, keywordRef } = useSearchKeyword({
     domain: 'partnership',
   });
-
-  if (isLoading) return <div>로딩 중???</div>;
 
   return (
     <>
@@ -67,28 +55,7 @@ const PartnershipPage: NextPageWithLayout = () => {
             onReset={reset}
             fallbackRender={(props) => <ErrorFallback {...props} />}
           >
-            {partnerships && (
-              <>
-                <Wrapper
-                  css={css`
-                    width: 100%;
-                    display: flex;
-                    flex-direction: column;
-                    margin-bottom: 80px;
-                  `}
-                >
-                  <Table tab="partnership" hidden={false} />
-                  {partnerships.data.map((p) => (
-                    <PartnershipRow key={p.brdSeq} {...p} />
-                  ))}
-                </Wrapper>
-                <Pagination
-                  pageSize={20}
-                  totalCount={partnerships.totalCount}
-                  totalPages={partnerships.totalPages}
-                />
-              </>
-            )}
+            <PartnershipList category={category} />
           </ErrorBoundary>
         )}
       </QueryErrorResetBoundary>
@@ -99,7 +66,8 @@ const PartnershipPage: NextPageWithLayout = () => {
 PartnershipPage.Layout = layout;
 
 export const getServerSideProps = async (ctx: NextPageContext) => {
-  const { category } = ctx.query as IParams;
+  const { query } = ctx;
+  const { category } = query as Params;
 
   const queryClient = new QueryClient();
 
@@ -122,6 +90,7 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
 
   return {
     props: {
+      category,
       dehydratedState: dehydrate(queryClient),
     },
   };

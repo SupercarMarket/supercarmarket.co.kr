@@ -1,5 +1,5 @@
 import { Typography } from '@supercarmarket/ui';
-import PartnershipRow from 'components/partnership/partnershipRow';
+import PartnershipCard from 'components/partnership/partnershipCard';
 import React from 'react';
 import { WithBlurredImage } from '@supercarmarket/types/base';
 import { PartnershipDto } from '@supercarmarket/types/partnership';
@@ -29,7 +29,7 @@ const Table = ({ data, tableHeaders, marginBottom = '80px' }: TableProps) => {
       </Styled.THead>
       <Styled.TBody>
         {data.map((p) => (
-          <PartnershipRow key={p.brdSeq} {...p} />
+          <PartnershipCard key={p.brdSeq} {...p} />
         ))}
       </Styled.TBody>
     </Styled.Table>

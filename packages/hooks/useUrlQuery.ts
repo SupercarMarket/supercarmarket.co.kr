@@ -1,6 +1,6 @@
 import { useSearchParams } from 'next/navigation';
 
-export default function useMarketUrlQuery() {
+export default function useUrlQuery() {
   const searchParams = useSearchParams();
 
   const page = searchParams.get('page');

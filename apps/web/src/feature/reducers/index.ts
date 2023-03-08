@@ -1,4 +1,4 @@
-import type { Action } from 'feature';
+import type { Action } from '../';
 
 const loadingState = {
   loading: true,

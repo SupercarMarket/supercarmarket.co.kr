@@ -7,30 +7,38 @@ import { css } from 'styled-components';
 import queries from 'constants/queries';
 import { serverApi } from '@supercarmarket/lib';
 import { SearchList } from 'components/search';
+import HeadSeo from 'components/common/headSeo';
 
 const Search: NextPageWithLayout = ({
+  keyword,
   isKeyword,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   return (
-    <Container>
-      <Wrapper
-        css={css`
-          transform: translateY();
-        `}
-      >
-        {isKeyword ? (
-          <SearchList />
-        ) : (
-          <Wrapper.Item
-            css={css`
-              padding-top: 100px;
-            `}
-          >
-            <Alert severity="info" title="검색어를 입력해주세요" />
-          </Wrapper.Item>
-        )}
-      </Wrapper>
-    </Container>
+    <>
+      <HeadSeo
+        title="검색결과"
+        description={`${keyword}에 대한 검색결과입니다.`}
+      />
+      <Container>
+        <Wrapper
+          css={css`
+            transform: translateY();
+          `}
+        >
+          {isKeyword ? (
+            <SearchList />
+          ) : (
+            <Wrapper.Item
+              css={css`
+                padding-top: 100px;
+              `}
+            >
+              <Alert severity="info" title="검색어를 입력해주세요" />
+            </Wrapper.Item>
+          )}
+        </Wrapper>
+      </Container>
+    </>
   );
 };
 
@@ -52,6 +60,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     return {
       props: {
         isKeyword,
+        keyword,
       },
     };
   }

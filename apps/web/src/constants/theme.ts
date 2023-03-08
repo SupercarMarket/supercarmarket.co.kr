@@ -14,6 +14,9 @@ export const pretendard = localFont({
       style: 'normal',
     },
   ],
+  preload: true,
+  display: 'swap',
+  variable: '--pretendard',
   fallback: [
     '../../public/fonts/Pretendard-Bold.woff',
     '../../public/fonts/Pretendard-Regular.woff',

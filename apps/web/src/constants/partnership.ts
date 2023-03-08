@@ -7,11 +7,11 @@ const PARTNERSHIP_CATEGORY = [
   },
   {
     option: '자동차매장',
-    value: 'automobile-store',
+    value: 'dealer_shop',
   },
   {
     option: '공업사',
-    value: 'industries',
+    value: 'car_center',
   },
   {
     option: '디테일링',
@@ -23,7 +23,7 @@ const PARTNERSHIP_CATEGORY = [
   },
   {
     option: '기타',
-    value: 'misc',
+    value: 'etc',
   },
 ];
 

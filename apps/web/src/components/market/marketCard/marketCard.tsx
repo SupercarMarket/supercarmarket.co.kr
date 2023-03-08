@@ -21,24 +21,26 @@ interface MarketCardProps extends WithBlurredImage<MarketDto> {
 
 const MarketCard = (props: MarketCardProps) => {
   const { variant = 'column', ...rest } = props;
+
   return {
     column: <MarketColumn {...rest} />,
     row: <MarketRow {...rest} />,
   }[variant];
 };
 
-const MarketColumn = ({
-  id,
-  carName,
-  description,
-  fuel,
-  base64,
-  imgSrc,
-  mileage,
-  price,
-  year,
-  category,
-}: WithBlurredImage<MarketDto>) => {
+const MarketColumn = (props: WithBlurredImage<MarketDto>) => {
+  const {
+    id,
+    carName,
+    description,
+    fuel,
+    base64,
+    imgSrc,
+    mileage,
+    price,
+    year,
+    category,
+  } = props;
   const { query } = useRouter();
   const queryString = new URLSearchParams(query as Params).toString();
 

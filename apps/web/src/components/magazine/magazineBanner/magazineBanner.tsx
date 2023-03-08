@@ -16,6 +16,7 @@ import Image from 'next/image';
 import { css } from 'styled-components';
 
 import Arrow from '../../../assets/svg/arrow-right.svg';
+import Link from 'next/link';
 
 interface MagazineBannerProps {
   reverse?: boolean;
@@ -103,21 +104,23 @@ const MagazineBanner = ({
               {magazine.data[0].contents}
             </Typography>
             {button && (
-              <Wrapper.Item
-                css={css`
-                  width: 100%;
-                  display: flex;
-                `}
-              >
-                <Button
-                  variant="Black"
-                  border="rounded"
-                  type="button"
-                  suffix={<Arrow />}
+              <Link href={`/magazine/${magazine.data[0].id}`}>
+                <Wrapper.Item
+                  css={css`
+                    width: 100%;
+                    display: flex;
+                  `}
                 >
-                  보러가기
-                </Button>
-              </Wrapper.Item>
+                  <Button
+                    variant="Black"
+                    border="rounded"
+                    type="button"
+                    suffix={<Arrow />}
+                  >
+                    보러가기
+                  </Button>
+                </Wrapper.Item>
+              </Link>
             )}
           </Wrapper.Item>
           <Wrapper.Item
