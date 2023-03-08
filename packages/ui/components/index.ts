@@ -32,3 +32,5 @@ export { Highlight } from './highlight';
 export type { HighlightProps } from './highlight';
 export { Link } from './link';
 export type { LinkProps } from './link';
+export { Category } from './category';
+export type { CategoryProps } from './category';

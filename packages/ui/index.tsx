@@ -17,6 +17,7 @@ export type {
   WrapperProps,
   HighlightProps,
   LinkProps,
+  CategoryProps,
 } from './components';
 export * from './form';
 export type {
