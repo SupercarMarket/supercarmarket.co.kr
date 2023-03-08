@@ -9,15 +9,17 @@ import { css } from 'styled-components';
 import { PartnershipDetailSkeleton } from 'components/fallback/loading';
 
 interface Props {
-  pid: string;
+  id: string;
 }
 
-const PartnershipDetail = ({ pid }: Props) => {
-  const { data: partnerships, isLoading } = usePartnershipDetail(pid);
+const PartnershipDetail = ({ id }: Props) => {
+  const {
+    data: partnerships,
+    isLoading,
+    isFetching,
+  } = usePartnershipDetail(id);
 
-  if (isLoading) return <PartnershipDetailSkeleton />;
-
-  console.log('partnerships?.data.imgSrc', partnerships?.data);
+  if (isLoading || isFetching) return <PartnershipDetailSkeleton />;
 
   return (
     <Wrapper
@@ -33,7 +35,7 @@ const PartnershipDetail = ({ pid }: Props) => {
             `}
           >
             <Carousel
-              id={pid}
+              id={id}
               category="partnership"
               imgSrc={partnerships.data.imgSrc}
             >
@@ -50,7 +52,7 @@ const PartnershipDetail = ({ pid }: Props) => {
         </>
       )}
       <React.Suspense fallback={<div>loading..</div>}>
-        <Comment id={pid} />
+        <Comment id={id} />
       </React.Suspense>
     </Wrapper>
   );

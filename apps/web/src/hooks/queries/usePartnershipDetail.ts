@@ -7,7 +7,11 @@ import queries from 'constants/queries';
 export default function usePartnershipDetail(id: string, options = {}) {
   return useQuery<PartnershipDetailResponse<string>>(
     queries.partnership.id(id),
-    () => clientFetcher(`/api/partnership/${id}`, { method: 'GET' }),
+    () =>
+      clientFetcher(`/server/supercar/v1/partnership`, {
+        method: 'GET',
+        params: id,
+      }),
     options
   );
 }

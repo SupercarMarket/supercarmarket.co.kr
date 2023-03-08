@@ -1,14 +1,13 @@
 import { Container, Typography, Wrapper } from '@supercarmarket/ui';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import React from 'react';
 
 import { css } from 'styled-components';
-import { Params, WithBlurredImage } from '@supercarmarket/types/base';
+import { WithBlurredImage } from '@supercarmarket/types/base';
 import { PartnershipDto } from '@supercarmarket/types/partnership';
 
-const PartnershipRow = ({
+const PartnershipCard = ({
   brdSeq,
   base64,
   partnerName,
@@ -19,10 +18,6 @@ const PartnershipRow = ({
   siteUrl,
   imgSrc,
 }: WithBlurredImage<PartnershipDto>) => {
-  const { query } = useRouter();
-  delete query.pid;
-  const queryString = new URLSearchParams(query as Params).toString();
-
   return (
     <Container
       width="100%"
@@ -31,7 +26,7 @@ const PartnershipRow = ({
       borderBottom="1px solid #EAEAEC"
     >
       <Link
-        href={`/partnership/detail/${brdSeq}?${queryString}`}
+        href={`/partnership/${category.toLowerCase()}/${brdSeq}`}
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -116,4 +111,4 @@ const PartnershipRow = ({
   );
 };
 
-export default PartnershipRow;
+export default PartnershipCard;
