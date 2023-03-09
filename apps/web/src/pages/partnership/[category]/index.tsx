@@ -2,7 +2,7 @@ import { css } from 'styled-components';
 import { ErrorBoundary } from 'react-error-boundary';
 import { InferGetServerSidePropsType, NextPageContext } from 'next/types';
 import { NextPageWithLayout, Params } from '@supercarmarket/types/base';
-import { Searchbar, Wrapper } from '@supercarmarket/ui';
+import { Category, Searchbar, Wrapper } from '@supercarmarket/ui';
 import {
   dehydrate,
   QueryClient,
@@ -12,10 +12,9 @@ import {
 import queries from 'constants/queries';
 import layout from 'components/layout';
 import Banner from 'components/partnership/banner';
-import Category from 'components/partnership/category';
 import { ErrorFallback } from 'components/fallback';
 import { useSearchKeyword } from 'hooks/useSearchKeyword';
-import { PARTNERSHIP_CATEGORY } from 'constants/partnership';
+import { PARTNERSHIP_LINKS } from 'constants/partnership';
 import PartnershipList from 'components/partnership/partnershipList';
 
 const PartnershipPage: NextPageWithLayout = ({
@@ -48,7 +47,7 @@ const PartnershipPage: NextPageWithLayout = ({
           ref={keywordRef}
         />
       </Wrapper.Top>
-      <Category category={PARTNERSHIP_CATEGORY} />
+      <Category links={PARTNERSHIP_LINKS} category={category} />
       <QueryErrorResetBoundary>
         {({ reset }) => (
           <ErrorBoundary
@@ -73,7 +72,7 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
 
   if (
     !category ||
-    !PARTNERSHIP_CATEGORY.map(({ value }) => value).includes(category as string)
+    !PARTNERSHIP_LINKS.map((link) => link.category).includes(category)
   )
     return {
       redirect: {

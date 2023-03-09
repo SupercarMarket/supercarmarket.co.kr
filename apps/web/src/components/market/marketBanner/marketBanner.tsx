@@ -1,10 +1,12 @@
 import { Button, Typography } from '@supercarmarket/ui';
+import { CATEGORY } from 'constants/market';
 import * as React from 'react';
 
 import ArrowRight from '../../../assets/svg/arrow-right.svg';
 import * as Styled from './marketBanner.styled';
 
 const MarketBanner = () => {
+  CATEGORY;
   return (
     <Styled.MarketBannerContainer>
       <Styled.Paragraph>

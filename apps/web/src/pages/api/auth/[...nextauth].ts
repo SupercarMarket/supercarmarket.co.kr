@@ -1,3 +1,4 @@
+import { serverApi } from '@supercarmarket/lib';
 import type { NextApiHandler } from 'next';
 import type {
   Account,
@@ -10,7 +11,6 @@ import type { Provider } from 'next-auth/providers';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
 import KakaoProvider from 'next-auth/providers/kakao';
-import { PhoneRegisterResponse } from 'utils/api/auth/phone';
 import { isExpire, refreshToken } from 'utils/api/auth/token';
 import { baseApi, baseFetcher } from 'utils/api/fetcher';
 import { SupercarMarketApiError } from 'utils/error';
@@ -77,29 +77,31 @@ const providers: Provider[] = [
 
       const { phone, authentication, uuid } = credentials;
 
-      const { status, ok, data } = await baseApi<PhoneRegisterResponse>(
-        `${process.env.NEXT_PUBLIC_URL}/api/auth/phone/register-phone`,
+      const { status, ok, data } = await serverApi(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/user/register-phone`,
         {
           method: 'POST',
-          data: { phone, authentication, uuid },
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          data: { phone, code: authentication, token: uuid },
         }
       );
 
       if (!ok) throw new SupercarMarketApiError(status);
 
-      const { access_token, refresh_token, exp, newUser, provider, sub, name } =
-        data;
+      const { access_token, refresh_token, exp, newUser, user } = data;
 
       if (data)
         return {
-          id: sub,
-          sub: sub,
+          id: user.id,
+          sub: user.id,
           accessToken: access_token,
           refreshToken: refresh_token,
           expire: exp,
           newUser: newUser,
-          provider: provider,
-          nickname: name,
+          provider: user.provider,
+          nickname: user.name,
         };
 
       return null;
@@ -216,7 +218,7 @@ const callbacks: Partial<CallbacksOptions<Profile, Account>> | undefined = {
       );
 
       const {
-        data: { newUser, token, access_token, refresh_token, exp },
+        data: { newUser, token, access_token, refresh_token, exp, user: _user },
       } = oauth;
 
       user.newUser = newUser;
@@ -229,6 +231,7 @@ const callbacks: Partial<CallbacksOptions<Profile, Account>> | undefined = {
       user.accessToken = access_token;
       user.refreshToken = refresh_token;
       user.expire = exp;
+      user.sub = _user.id;
 
       return true;
     }

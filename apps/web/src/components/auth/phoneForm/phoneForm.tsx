@@ -32,10 +32,11 @@ const PhoneForm = ({ uuid }: PhoneFormProps) => {
       phone,
       authentication,
       uuid,
+      redirect: false,
     });
 
     if (!response) setErrorMessage(ErrorCode[450]);
-    else if (!response.error) replace('/');
+    else if (response.ok) replace('/');
     else setErrorMessage(ErrorCode[450]);
   });
   return (
