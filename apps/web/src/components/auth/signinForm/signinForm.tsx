@@ -87,7 +87,7 @@ const LocalFormItem = () => {
     });
 
     if (!response) setErrorMessage(ErrorCode[420]);
-    else if (!response.error) replace('/');
+    else if (response.ok) replace('/');
     else setErrorMessage(ErrorCode[450]);
   });
   return (

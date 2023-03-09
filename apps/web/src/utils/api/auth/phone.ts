@@ -57,8 +57,6 @@ const confirmPhoneAuthApi: NextApiHandler = async (req, res) => {
 
   catchNoExist(phone, authorization);
 
-  console.log(phone, authorization);
-
   try {
     const authNumber = await baseFetcher(
       `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/message/auth/code/${phone}`,
