@@ -1,5 +1,6 @@
 import { Container, Typography, Wrapper } from '@supercarmarket/ui';
-import Avvvatars from 'avvvatars-react';
+import Avatar from 'components/common/avatar';
+import { ratingFormatter } from 'components/common/avatar/avatar';
 import dayjs from 'dayjs';
 import Link from 'next/link';
 
@@ -58,7 +59,7 @@ const ProfileInfo = ({ isMyAccountPage, profile }: ProfileInfoProps) => {
       padding="40px 50px"
       gap="24px"
     >
-      <Avvvatars value="blan19" size={116} />
+      <Avatar rating={profile.userRating} size={116} />
       <Wrapper css={style.nickname}>
         <Typography
           as="span"
@@ -87,7 +88,10 @@ const ProfileInfo = ({ isMyAccountPage, profile }: ProfileInfoProps) => {
         {profile.description ? profile.description : '소개글을 작성해주세요.'}
       </Typography>
       <Wrapper>
-        <ProfileInfoDetail title="등급" content="브론즈" />
+        <ProfileInfoDetail
+          title="등급"
+          content={ratingFormatter(profile.userRating, { reverse: true })}
+        />
         <ProfileInfoDetail
           title="가입일"
           content={dayjs(profile.createdDate).format('YYYY.MM.DD')}

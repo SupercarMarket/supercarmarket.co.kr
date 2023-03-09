@@ -1,7 +1,5 @@
 export { Alert } from './alert';
 export type { AlertProps } from './alert';
-export { Avatar } from './avatar';
-export type { AvatarProps } from './avatar';
 export { Button } from './button';
 export type { ButtonProps } from './button';
 export { Container } from './container';
