@@ -29,7 +29,6 @@ const SearchList = () => {
     category: category,
     page,
   });
-  console.log(data);
 
   return (
     <Container>
@@ -45,9 +44,9 @@ const SearchList = () => {
                   data={data.data as SearchAllType}
                 />
               ),
-              paparazzi: <SearchCommunity data={data.data as CommunityDto[]} />,
-              product: <SearchMarket data={data.data as MarketDto[]} />,
-              magazine: <SearchMagazine data={data.data as MagazineDto[]} />,
+              paparazzi: <SearchCommunity data={data.data.paparazzi} />,
+              product: <SearchMarket data={data.data.product} />,
+              magazine: <SearchMagazine data={data.data.magazine} />,
             }[category]
           }
         </>

@@ -1,7 +1,4 @@
 import type { PaginationResponse, Query } from '@supercarmarket/types/base';
-import type { CommunityDto } from '@supercarmarket/types/community';
-import type { MagazineDto } from '@supercarmarket/types/magazine';
-import type { MarketDto } from '@supercarmarket/types/market';
 import type { SearchAll } from '@supercarmarket/types/search';
 import { useQuery } from '@tanstack/react-query';
 import queries from 'constants/queries';
@@ -24,9 +21,7 @@ export default function useSearch(
   if (filter !== 'created_date')
     currentQuery = { ...currentQuery, filter, orderBy };
 
-  return useQuery<
-    PaginationResponse<SearchAll | MarketDto[] | CommunityDto[] | MagazineDto[]>
-  >(
+  return useQuery<PaginationResponse<SearchAll>>(
     [...queries.search.all, ...queries.search.query(query)],
     () =>
       clientFetcher('/server/supercar/v1/search', {

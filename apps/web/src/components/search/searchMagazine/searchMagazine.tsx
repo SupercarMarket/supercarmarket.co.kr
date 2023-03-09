@@ -8,7 +8,8 @@ interface SearchAllProps {
 }
 
 const SearchMagazine = ({ data }: SearchAllProps) => {
-  const isMagazine = data.length > 0;
+  const isMagazine = data && data.length > 0;
+
   return (
     <Container width="100%">
       {isMagazine ? (

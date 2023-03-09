@@ -14,7 +14,7 @@ interface SearchMarketProps {
 }
 
 const SearchMarket = ({ data }: SearchMarketProps) => {
-  const isProduct = data.length > 0;
+  const isProduct = data && data.length > 0;
   return (
     <Container display="flex" flexDirection="column" gap="80px">
       <Wrapper
