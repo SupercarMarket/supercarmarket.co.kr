@@ -22,7 +22,7 @@ const MarketList = (props: MarketListProps) => {
             css={css`
               width: 100%;
               display: flex;
-              flex-direction: column;
+              flex-wrap: wrap;
               margin-bottom: 80px;
               gap: 13px;
             `}
