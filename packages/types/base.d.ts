@@ -1,6 +1,7 @@
 import type { NextPage } from 'next';
 import type { AppProps } from 'next/app';
 import { ReactElement, ReactNode } from 'react';
+import { Rating } from './account';
 
 interface Links {
   title: string;
@@ -15,7 +16,7 @@ interface User {
   address: string;
   email: string;
   call: string;
-  profileSrc?: string;
+  rate: Rating;
   createAt: string;
 }
 

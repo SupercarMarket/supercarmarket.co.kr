@@ -8,7 +8,6 @@ import {
   Wrapper,
 } from '@supercarmarket/ui';
 
-import Avvvatars from 'avvvatars-react';
 import useLikeComment from 'hooks/mutations/comment/useLikeComment';
 import useRemoveComment from 'hooks/mutations/comment/useRemoveComment';
 import * as React from 'react';
@@ -18,6 +17,7 @@ import LikeIcon from '../../../assets/svg/thumb-up.svg';
 import * as style from './comment.styled';
 import CommentArea from './commentArea';
 import { css } from 'styled-components';
+import Avatar from '../avatar';
 
 const CommentCard = ({
   isMyComment = true,
@@ -100,7 +100,7 @@ const CommentCard = ({
               }
             `}
           >
-            <Avvvatars value={user.nickName} size={40} radius={20} />
+            <Avatar rating={user.rate} size={40} />
           </Wrapper>
           <Wrapper css={style.cardWrapper}>
             <Wrapper.Top css={style.cardInfo}>
