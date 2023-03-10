@@ -46,7 +46,7 @@ const Tab = ({
     });
 
   return (
-    <Container width="100%">
+    <Container width="fit-content">
       <Wrapper
         css={css`
           width: 100%;

@@ -1,5 +1,3 @@
-'use client';
-
 import {
   applyMediaQuery,
   Category,
@@ -16,13 +14,12 @@ import {
 import { ErrorFallback } from 'components/fallback';
 import layout from 'components/layout';
 import MarketBanner from 'components/market/marketBanner';
-import MarketCarList from 'components/market/marketCarList';
+import MarketCar from 'components/market/marketCar';
 import MarketFilter from 'components/market/marketFilter';
 import { CATEGORY, CATEGORY_VALUES, MARKET_LINKS } from 'constants/market';
 import queries from 'constants/queries';
 import useMarket from 'hooks/queries/useMarket';
 import { useUrlQuery } from '@supercarmarket/hooks';
-import { useRouter } from 'next/router';
 import type { InferGetServerSidePropsType, NextPageContext } from 'next/types';
 import * as React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -33,7 +30,6 @@ import HeadSeo from 'components/common/headSeo';
 const MarketFilterPage: NextPageWithLayout = ({
   category,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const { push, query } = useRouter();
   const marketQuery = useUrlQuery();
   const { keydownHandler, keywordRef } = useSearchKeyword({
     domain: 'partnership',
@@ -86,9 +82,7 @@ const MarketFilterPage: NextPageWithLayout = ({
             >
               <Category links={MARKET_LINKS} category={category} />
               <MarketFilter />
-              {markets && (
-                <MarketCarList data={markets} page={marketQuery.page} />
-              )}
+              <MarketCar />
             </ErrorBoundary>
           )}
         </QueryErrorResetBoundary>
@@ -107,7 +101,7 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
   if (!category || !CATEGORY_VALUES.includes(category))
     return {
       redirect: {
-        destination: '/market/all',
+        destination: '/market?category=all',
         permanent: false,
       },
     };

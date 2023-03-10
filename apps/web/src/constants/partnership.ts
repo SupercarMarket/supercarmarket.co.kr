@@ -22,6 +22,16 @@ const PARTNERSHIP_LINKS = [
     category: 'dealer_shop',
   },
   {
+    title: '공업사',
+    href: {
+      pathname: '/partnership',
+      query: {
+        category: 'car_center',
+      },
+    },
+    category: 'car_center',
+  },
+  {
     title: '디테일링',
     href: {
       pathname: '/partnership',

@@ -76,7 +76,7 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
   )
     return {
       redirect: {
-        destination: '/partnership/all',
+        destination: '/partnership?category=all',
         permanent: false,
       },
     };
