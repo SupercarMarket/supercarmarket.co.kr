@@ -16,23 +16,23 @@ export const navlinks: Links[] = [
     children: [
       {
         title: '스포츠카',
-        href: 'sports-car',
+        href: '?category=sports-car',
       },
       {
         title: '세단',
-        href: 'saloon',
+        href: '?category=saloon',
       },
       {
         title: 'SUV',
-        href: 'suv',
+        href: '?category=suv',
       },
       {
         title: '픽업트럭',
-        href: 'pickup-truck',
+        href: '?category=pickup-truck',
       },
       {
         title: '클래식카&올드카',
-        href: 'classic-car',
+        href: '?category=classic-car',
       },
     ],
   },
@@ -60,23 +60,23 @@ export const navlinks: Links[] = [
     children: [
       {
         title: '자동차매장',
-        href: 'automobile-store',
+        href: '?category=automobile-store',
       },
       {
         title: '공업사',
-        href: 'industries',
+        href: '?category=industries',
       },
       {
         title: '디테일링',
-        href: 'detailing',
+        href: '?category=detailing',
       },
       {
         title: '도색',
-        href: 'painting',
+        href: '?category=painting',
       },
       {
         title: '기타',
-        href: 'misc',
+        href: '?category=misc',
       },
     ],
   },

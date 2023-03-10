@@ -1,3 +1,8 @@
+import type {
+  MarketDto,
+  MarketResponse,
+  WithBlurredImage,
+} from '@supercarmarket/types/market';
 import { useQuery } from '@tanstack/react-query';
 import queries from 'constants/queries';
 import { clientFetcher } from 'utils/api/fetcher';
@@ -26,7 +31,7 @@ export default function useMarket(
   const queryKeys = entries.map(([, val]) => val + '');
   const serverQuery = Object.fromEntries(entries);
 
-  return useQuery(
+  return useQuery<MarketResponse<WithBlurredImage<MarketDto>>>(
     queries.market.lists([...queryKeys]),
     () =>
       clientFetcher('/api/market', {

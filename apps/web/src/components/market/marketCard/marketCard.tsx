@@ -16,16 +16,22 @@ import { useRouter } from 'next/router';
 import { Params } from '@supercarmarket/types/base';
 
 interface MarketCardProps extends WithBlurredImage<MarketDto> {
-  variant?: 'row' | 'column';
+  variant?: string;
 }
 
 const MarketCard = (props: MarketCardProps) => {
   const { variant = 'column', ...rest } = props;
 
-  return {
-    column: <MarketColumn {...rest} />,
-    row: <MarketRow {...rest} />,
-  }[variant];
+  return (
+    <>
+      {
+        {
+          column: <MarketColumn {...rest} />,
+          row: <MarketRow {...rest} />,
+        }[variant]
+      }
+    </>
+  );
 };
 
 const MarketColumn = (props: WithBlurredImage<MarketDto>) => {
