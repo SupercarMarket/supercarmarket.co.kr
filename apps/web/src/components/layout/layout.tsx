@@ -60,11 +60,11 @@ export const navlinks: Links[] = [
     children: [
       {
         title: '자동차매장',
-        href: '?category=automobile-store',
+        href: '?category=dealer_shop',
       },
       {
         title: '공업사',
-        href: '?category=industries',
+        href: '?category=car_center',
       },
       {
         title: '디테일링',
@@ -76,7 +76,7 @@ export const navlinks: Links[] = [
       },
       {
         title: '기타',
-        href: '?category=misc',
+        href: '?category=etc',
       },
     ],
   },
