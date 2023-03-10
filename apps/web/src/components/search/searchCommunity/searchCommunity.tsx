@@ -14,11 +14,13 @@ interface SearchAllProps {
 }
 
 const SearchCommunity = ({ data }: SearchAllProps) => {
-  const isPaparazzi = data.length > 0;
+  const isPaparazzi = data && data.length > 0;
+
   return (
-    <Container display="flex" flexDirection="column" gap="80px">
+    <Container width="100%" display="flex" flexDirection="column" gap="80px">
       <Wrapper
         css={css`
+          width: 100%;
           padding-top: 20px;
           display: flex;
           flex-direction: column;

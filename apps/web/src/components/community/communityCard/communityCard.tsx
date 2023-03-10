@@ -8,7 +8,6 @@ import {
 } from '@supercarmarket/ui';
 import type { CommunityDto } from '@supercarmarket/types/community';
 import type { WithBlurredImage } from '@supercarmarket/types/magazine';
-import Avvvatars from 'avvvatars-react';
 import dayjs from 'dayjs';
 import Image from 'next/image';
 import { css } from 'styled-components';
@@ -17,6 +16,7 @@ import { useMedia } from '@supercarmarket/hooks';
 
 import ViewIcon from '../../../assets/svg/eye.svg';
 import LikeIcon from '../../../assets/svg/thumb-up.svg';
+import Avatar from 'components/common/avatar';
 
 interface CommunityCardProps extends WithBlurredImage<CommunityDto> {
   variant: string;
@@ -71,6 +71,7 @@ const CommunityCardRow = (props: CommunityCardChildrenProps) => {
     imgSrc,
     view,
     created,
+    rate,
   } = props;
   const { isMobile } = useMedia({ deviceQuery });
 
@@ -187,7 +188,7 @@ const CommunityCardRow = (props: CommunityCardChildrenProps) => {
               }
             `}
           >
-            <Avvvatars size={40} value={nickname} />
+            <Avatar size={40} rating={rate} />
             <Typography
               fontSize="body-14"
               fontWeight="regular"
@@ -328,7 +329,8 @@ const CommunityCardRow = (props: CommunityCardChildrenProps) => {
 };
 
 const CommunityCardColumn = (props: CommunityCardChildrenProps) => {
-  const { id, imgSrc, base64, category, profileSrc, nickname, title } = props;
+  const { id, imgSrc, base64, category, profileSrc, nickname, title, rate } =
+    props;
 
   return (
     <Link
@@ -364,19 +366,7 @@ const CommunityCardColumn = (props: CommunityCardChildrenProps) => {
             margin-top: 20px;
           `}
         >
-          {profileSrc ? (
-            <Image
-              src={profileSrc}
-              alt="profile"
-              width={24}
-              height={24}
-              style={{
-                borderRadius: '12px',
-              }}
-            />
-          ) : (
-            <Avvvatars value={nickname} size={24} radius={12} />
-          )}
+          <Avatar rating={rate} size={24} />
           <Typography
             as="span"
             fontSize="body-16"

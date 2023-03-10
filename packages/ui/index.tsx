@@ -1,7 +1,6 @@
 export * from './components';
 export type {
   AlertProps,
-  AvatarProps,
   ButtonProps,
   ContainerProps,
   DividerProps,

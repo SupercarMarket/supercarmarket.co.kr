@@ -104,9 +104,15 @@ const SearchAll = ({ keyword, data }: SearchAllProps) => {
         `}
       >
         {isPaparazzi ? (
-          paparazzi.map((p) => (
-            <CommunityCard key={p.id} variant="row" {...p} />
-          ))
+          <Wrapper.Item
+            css={css`
+              width: 100%;
+            `}
+          >
+            {paparazzi.map((p) => (
+              <CommunityCard key={p.id} variant="row" {...p} />
+            ))}
+          </Wrapper.Item>
         ) : (
           <SearchNotify keyword={keyword} totalCount={paparazzi.length} />
         )}

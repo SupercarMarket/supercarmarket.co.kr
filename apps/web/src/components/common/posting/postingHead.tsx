@@ -6,7 +6,6 @@ import {
   Wrapper,
 } from '@supercarmarket/ui';
 
-import Avvvatars from 'avvvatars-react';
 import dayjs from 'dayjs';
 import Image from 'next/image';
 import { Posting } from '@supercarmarket/types/base';
@@ -17,6 +16,7 @@ import * as style from './posting.styled';
 import { PostingProps } from './posting';
 import { formatter } from 'components/community/communityCard/communityCard';
 import { css } from 'styled-components';
+import Avatar from '../avatar';
 
 const PostingHeadMagainze = ({
   title,
@@ -92,16 +92,14 @@ const PostingHeadMagainze = ({
           `}
         >
           <Wrapper.Left css={style.magazineHeadLeft}>
-            <Avvvatars value={user.nickName} size={40} />
-            <Typography
-              as="span"
-              fontSize="body-14"
-              fontWeight="regular"
-              color="white"
-              lineHeight="120%"
-            >
-              {user.nickName}
-            </Typography>
+            <Avatar
+              rating="6"
+              size={40}
+              nickname={user.nickName}
+              option={{
+                darkMode: true,
+              }}
+            />
             <Typography
               as="span"
               fontSize="body-14"
@@ -173,6 +171,7 @@ const PostingHeadCommunity = ({
   comments,
   created,
   updated,
+  rate,
   category = 'report',
 }: CommunityPostDto & Pick<PostingProps, 'category'>) => {
   return (
@@ -210,16 +209,7 @@ const PostingHeadCommunity = ({
       </Wrapper.Top>
       <Wrapper.Bottom css={style.bottom}>
         <Wrapper.Left css={style.left}>
-          <Avvvatars value={nickname} size={40} />
-          <Typography
-            as="span"
-            fontSize="body-14"
-            fontWeight="regular"
-            color="greyScale-6"
-            lineHeight="120%"
-          >
-            {nickname}
-          </Typography>
+          <Avatar rating={rate} size={40} nickname={nickname} />
           <Typography
             as="span"
             fontSize="body-14"
