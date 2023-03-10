@@ -35,8 +35,6 @@
 
 <img src="https://img.shields.io/badge/React_Hook_Form-EC5A90?style=for-the-badge&logo=react_hook_form&logoColor=white">
 
-<br />
-
 <img src="https://img.shields.io/badge/Turborepo-000000?style=for-the-badge&logo=react_hook_form&logoColor=white">
 
 <img src="https://img.shields.io/badge/Typescript-3278C6?style=for-the-badge&logo=react_hook_form&logoColor=white">
@@ -70,6 +68,10 @@ cd supercarmarket.com
 pnpm install
 npm run dev
 ```
+
+### Roadmap
+
+See the [roadmap project](https://github.com/calcom/cal.com/milestones) for a list of proposed features (and known issues). You can change the view to see planned tagged releases.
 
 ### Flow on project
 
