@@ -23,7 +23,7 @@ interface FormState {
 interface Forms {
   htmlFor: keyof FormState;
   label?: string;
-  type?: React.HTMLInputTypeAttribute;
+  type?: 'text' | 'email' | 'password' | 'tel' | 'agreement';
   placeholder?: string;
   tooltip?: string;
   options?: RegisterOptions;
