@@ -101,7 +101,7 @@ const CommentCard = ({
               }
             `}
           >
-            <Avatar rating={user.rate} size={40} />
+            <Avatar rating={user.rate} size={40} option={{ mobile: '24' }} />
           </Wrapper>
           <Wrapper css={style.cardWrapper}>
             <Wrapper.Top css={style.cardInfo}>

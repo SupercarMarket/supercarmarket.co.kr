@@ -73,25 +73,28 @@ Account.Layout = AccountLayout;
 
 export const getUserPageProps = async (
   ctx: GetServerSidePropsContext,
-  session: Session
+  session: Session | null
 ) => {
   const { query } = ctx;
   const { sub, tab } = query as AccountParams;
 
-  const isMyAccountPage = session.sub == sub;
+  const isMyAccountPage = session && session.sub == sub;
   const isCorrectTab = tab && account.accountTab.includes(tab);
   const accountRoutes = isMyAccountPage
     ? account.accountRoutes.myAccount(sub)
     : account.accountRoutes.someoneAccount(sub);
+  const header = session
+    ? {
+        ACCESS_TOKEN: session.accessToken,
+      }
+    : undefined;
 
   const user: BaseApiHandlerResponse<{ data: ProfileType }> =
     await serverFetcher(
       `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/userpage`,
       {
         method: 'GET',
-        headers: {
-          ACCESS_TOKEN: session.accessToken,
-        },
+        headers: header,
         query: {
           id: sub,
         },
