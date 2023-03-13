@@ -11,6 +11,7 @@ import { Container } from '../container';
 import { Wrapper } from '../wrapper';
 
 interface TabProps {
+  full?: boolean;
   popular?: boolean;
   variant?: boolean;
   scroll?: boolean;
@@ -21,6 +22,7 @@ interface TabProps {
 }
 
 const Tab = ({
+  full = true,
   create,
   list,
   popular,
@@ -46,7 +48,7 @@ const Tab = ({
     });
 
   return (
-    <Container width="fit-content">
+    <Container width={full ? '100%' : 'fit-content'}>
       <Wrapper
         css={css`
           width: 100%;

@@ -17,7 +17,7 @@ const MarketCar = () => {
           <Styled.SelectBox width="100px">
             <Select options={SHOW_COUNT_OPTIONS} />
           </Styled.SelectBox>
-          <Tab variant />
+          <Tab variant full={false} />
         </Styled.ButtonBox>
       </Styled.ListFilter>
       <MarketList pagination />
