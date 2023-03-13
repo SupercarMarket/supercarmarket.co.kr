@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import * as React from 'react';
 import { forwardRef } from 'react';
-import { theme } from '../../styles';
+import { deviceQuery, theme } from '../../styles';
 
 export interface SearchbarProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -95,8 +95,6 @@ const Searchbar = forwardRef(function Searchbar(
           onClick={handleClick}
         >
           <svg
-            width="24"
-            height="24"
             viewBox="0 0 24 24"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -179,6 +177,10 @@ const Searchbar = forwardRef(function Searchbar(
           transform: translateY(-50%);
           cursor: pointer;
         }
+        .search-icon > svg {
+          width: 24px;
+          height: 24px;
+        }
         .search-icon.search-Grey {
           background: none;
           padding: 0;
@@ -207,6 +209,66 @@ const Searchbar = forwardRef(function Searchbar(
         .search-container {
           position: relative;
           width: ${width};
+        }
+        @media (${deviceQuery.mobile}) {
+          .search {
+            padding: 12px 0;
+            font-size: 14px;
+            height: 45px;
+          }
+          .search-rounded {
+            border-radius: 20px;
+          }
+          .search-normal {
+            border-radius: 4px;
+          }
+          .search-Grey {
+            background-color: #f7f7f8;
+            padding-left: 34px;
+            padding-right: 34px;
+          }
+          .search-Line {
+            box-sizing: border-box;
+            background-color: #ffffff;
+            border: 1px solid #c3c3c7;
+            padding-left: 13.5px;
+            padding-right: 34px;
+          }
+          .search-icon {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+          }
+          .search-icon > svg {
+            width: 18px;
+            height: 18px;
+          }
+          .search-icon.search-Grey {
+            background: none;
+            padding: 0;
+            left: 13.5px;
+          }
+          .search-icon.search-Line {
+            background: none;
+            border: none;
+            padding: 0;
+            right: 13.5px;
+          }
+          .close-icon {
+            width: 18px;
+            height: 18px;
+            background: ${theme.color['greyScale-5']};
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            right: 13.5px;
+            border-radius: 9px;
+          }
         }
       `}</style>
     </>

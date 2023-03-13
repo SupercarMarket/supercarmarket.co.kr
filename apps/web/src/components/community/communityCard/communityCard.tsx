@@ -345,8 +345,8 @@ const CommunityCardColumn = (props: CommunityCardChildrenProps) => {
             width: 285px;
             height: 180px;
             ${applyMediaQuery('mobile')} {
-              width: 178px;
-              height: 120px;
+              width: 167.5px;
+              height: 101px;
             }
           `}
         >
@@ -356,6 +356,9 @@ const CommunityCardColumn = (props: CommunityCardChildrenProps) => {
             fill
             placeholder={base64 ? 'blur' : undefined}
             blurDataURL={base64 ? base64 : undefined}
+            style={{
+              borderRadius: '4px',
+            }}
           />
         </Wrapper.Item>
         <Wrapper.Item

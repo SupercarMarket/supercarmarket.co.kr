@@ -3,7 +3,7 @@ import {
   QueryClient,
   QueryErrorResetBoundary,
 } from '@tanstack/react-query';
-import { Container, Title } from '@supercarmarket/ui';
+import { Container, Wrapper, Title } from '@supercarmarket/ui';
 import type { NextPageWithLayout } from '@supercarmarket/types/base';
 import { ErrorFallback } from 'components/fallback';
 import Community from 'components/home/community';
@@ -17,6 +17,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { baseFetch } from 'utils/api/fetcher';
 import HeadSeo from 'components/common/headSeo';
 import { APP_NAME } from 'constants/core';
+import { css } from 'styled-components';
 
 const Home: NextPageWithLayout = () => {
   return (
@@ -25,7 +26,11 @@ const Home: NextPageWithLayout = () => {
       <Container>
         <QueryErrorResetBoundary>
           {({ reset }) => (
-            <>
+            <Wrapper
+              css={css`
+                padding: 0 16px;
+              `}
+            >
               <Title marginBottom="20px">슈마매거진</Title>
               <ErrorBoundary
                 onReset={reset}
@@ -60,7 +65,7 @@ const Home: NextPageWithLayout = () => {
               >
                 <Community />
               </ErrorBoundary>
-            </>
+            </Wrapper>
           )}
         </QueryErrorResetBoundary>
       </Container>

@@ -63,7 +63,7 @@ const MagazineBanner = ({
               fill: #fff;
 
               ${applyMediaQuery('mobile')} {
-                width: 375px;
+                width: 343px;
                 height: 233px;
                 display: flex;
                 flex-direction: column;
@@ -130,7 +130,7 @@ const MagazineBanner = ({
               height: 394px;
               gap: 16px;
               ${applyMediaQuery('mobile')} {
-                width: 375px;
+                width: 343px;
                 height: 264px;
               }
             `}

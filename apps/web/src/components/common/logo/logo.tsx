@@ -1,3 +1,4 @@
+import { applyMediaQuery, deviceQuery } from '@supercarmarket/ui';
 import clsx from 'clsx';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -23,20 +24,19 @@ const Logo = (props: LogoProps) => {
             className
           )}
         >
-          <Image
-            src={logoSrc}
-            placeholder="blur"
-            alt="로고"
-            width={231}
-            height={56}
-          />
+          <Image src={logoSrc} placeholder="blur" alt="로고" fill />
         </div>
       </Link>
       <style jsx>{`
         .logo {
+          position: relative;
+          width: 231px;
+          height: 56px;
           display: flex;
-          gap: 12px;
+          align-items: center;
+          justify-content: center;
           cursor: pointer;
+          box-sizing: border-box;
         }
         .logo-horizontal {
           flex-direction: row;
@@ -54,6 +54,12 @@ const Logo = (props: LogoProps) => {
           align-items: center;
           justify-content: center;
           gap: 9.27px;
+        }
+        @media (${deviceQuery.mobile}) {
+          .logo {
+            width: 115.5px;
+            height: 28px;
+          }
         }
       `}</style>
     </>

@@ -25,6 +25,8 @@ const MarketNew = () => {
           row-gap: 40px;
           margin-bottom: 40px;
           ${applyMediaQuery('mobile')} {
+            column-gap: 8px;
+            row-gap: 16px;
             grid-template-columns: 1fr 1fr;
           }
         `}
