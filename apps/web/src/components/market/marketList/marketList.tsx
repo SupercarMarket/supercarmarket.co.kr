@@ -1,5 +1,11 @@
 import { useUrlQuery } from '@supercarmarket/hooks';
-import { Container, Pagination, Table, Wrapper } from '@supercarmarket/ui';
+import {
+  applyMediaQuery,
+  Container,
+  Pagination,
+  Table,
+  Wrapper,
+} from '@supercarmarket/ui';
 import useMarket from 'hooks/queries/useMarket';
 import { css } from 'styled-components';
 import MarketCard from '../marketCard';
@@ -25,6 +31,10 @@ const MarketList = (props: MarketListProps) => {
               flex-wrap: wrap;
               margin-bottom: 80px;
               gap: 13px;
+              ${applyMediaQuery('mobile')} {
+                column-gap: 8px;
+                row-gap: 16px;
+              }
             `}
           >
             {query.variant === 'row' && <Table tab="product" hidden={false} />}

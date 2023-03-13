@@ -25,7 +25,7 @@ const MagazineList = () => {
           }
         `}
       >
-        <Searchbar width="375px" variant="Line" border="normal" />
+        <Searchbar width="343px" variant="Line" border="normal" />
       </Wrapper>
       {magazine && (
         <>
@@ -40,6 +40,8 @@ const MagazineList = () => {
 
               ${applyMediaQuery('mobile')} {
                 margin-top: 32px;
+                column-gap: 8px;
+                row-gap: 16px;
                 grid-template-columns: 1fr 1fr;
               }
             `}

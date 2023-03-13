@@ -1,4 +1,4 @@
-import { Container, Title } from '@supercarmarket/ui';
+import { applyMediaQuery, Container, Title, Wrapper } from '@supercarmarket/ui';
 import type { NextPageWithLayout } from '@supercarmarket/types/base';
 import { clientFetcher } from '@supercarmarket/lib';
 import {
@@ -13,6 +13,7 @@ import queries from 'constants/queries';
 import type { GetStaticProps } from 'next/types';
 import { ErrorBoundary } from 'react-error-boundary';
 import HeadSeo from 'components/common/headSeo';
+import { css } from 'styled-components';
 
 const MagazinePage: NextPageWithLayout = () => {
   return (
@@ -21,16 +22,20 @@ const MagazinePage: NextPageWithLayout = () => {
         title="슈마매거진"
         description="슈퍼카에 대한 모든 최신소식을 만나보세요!"
       />
-      <Container
-        display="flex"
-        flexDirection="column"
-        alignItems="center"
-        margin="20px 0 0 0"
-      >
-        <Title marginBottom="20px">따끈따끈한 최근 소식</Title>
+      <Container margin="20px 0 0 0">
         <QueryErrorResetBoundary>
           {({ reset }) => (
-            <>
+            <Wrapper
+              css={css`
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                ${applyMediaQuery('mobile')} {
+                  padding: 0 16px;
+                }
+              `}
+            >
+              <Title marginBottom="20px">따끈따끈한 최근 소식</Title>
               <ErrorBoundary
                 onReset={reset}
                 fallbackRender={(props) => (
@@ -40,7 +45,7 @@ const MagazinePage: NextPageWithLayout = () => {
                 <MagazineBanner />
                 <MagazineList />
               </ErrorBoundary>
-            </>
+            </Wrapper>
           )}
         </QueryErrorResetBoundary>
       </Container>

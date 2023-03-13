@@ -1,4 +1,4 @@
-import { Searchbar, Tab, Wrapper } from '@supercarmarket/ui';
+import { applyMediaQuery, Searchbar, Tab, Wrapper } from '@supercarmarket/ui';
 import type { NextPageWithLayout, Params } from '@supercarmarket/types/base';
 import {
   dehydrate,
@@ -48,6 +48,9 @@ const MarketDetailPage: NextPageWithLayout = ({
         display: flex;
         flex-direction: column;
         margin: 20px 0 0 0;
+        ${applyMediaQuery('mobile')} {
+          padding: 0 16px;
+        }
       `}
     >
       <QueryErrorResetBoundary>

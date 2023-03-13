@@ -1,5 +1,6 @@
 'use client';
 
+import { applyMediaQuery } from '@supercarmarket/ui';
 import styled from 'styled-components';
 
 const BannerContainer = styled.div`
@@ -8,10 +9,14 @@ const BannerContainer = styled.div`
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  height: 122px;
   padding: 34px 40px;
   background: ${({ theme }) => theme.color['greyScale-2']};
   border-radius: 4px;
+  ${applyMediaQuery('mobile')} {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
 `;
 
 const Paragraph = styled.div`

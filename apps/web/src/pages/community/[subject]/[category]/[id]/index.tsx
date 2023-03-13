@@ -1,4 +1,4 @@
-import { Container, Title } from '@supercarmarket/ui';
+import { Container, Title, Wrapper } from '@supercarmarket/ui';
 import type { NextPageWithLayout, Params } from '@supercarmarket/types/base';
 import layout from 'components/layout';
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
@@ -15,6 +15,7 @@ import { ErrorFallback } from 'components/fallback';
 import Posting from 'components/common/posting';
 import { CommunityPostingList } from 'components/community';
 import { ModalProvider } from 'feature/modalContext';
+import { css } from 'styled-components';
 
 const CommunityPost: NextPageWithLayout = ({
   subject,
@@ -23,16 +24,20 @@ const CommunityPost: NextPageWithLayout = ({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   return (
     <Container>
-      <Title>커뮤니티 게시글</Title>
       <QueryErrorResetBoundary>
         {({ reset }) => (
-          <>
+          <Wrapper
+            css={css`
+              padding: 0 16px;
+            `}
+          >
             <ErrorBoundary
               onReset={reset}
               fallbackRender={(props) => (
                 <ErrorFallback margin="100px 0" {...props} />
               )}
             >
+              <Title>커뮤니티 게시글</Title>
               <ModalProvider>
                 <Posting
                   type="community"
@@ -50,7 +55,7 @@ const CommunityPost: NextPageWithLayout = ({
             >
               <CommunityPostingList category={category} subject={subject} />
             </ErrorBoundary>
-          </>
+          </Wrapper>
         )}
       </QueryErrorResetBoundary>
     </Container>
