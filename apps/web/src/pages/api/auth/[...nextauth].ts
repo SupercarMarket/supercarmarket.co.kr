@@ -12,7 +12,7 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
 import KakaoProvider from 'next-auth/providers/kakao';
 import { isExpire, refreshToken } from 'utils/api/auth/token';
-import { baseApi, baseFetcher } from 'utils/api/fetcher';
+import { baseFetcher } from 'utils/api/fetcher';
 import { SupercarMarketApiError } from 'utils/error';
 
 const providers: Provider[] = [
@@ -33,27 +33,26 @@ const providers: Provider[] = [
 
       const { id, password } = credentials;
 
-      const { status, ok, ...data } = await baseApi<{
-        access_token: string;
-        refresh_token: string;
-        exp: number;
-      }>(`${process.env.NEXT_PUBLIC_URL}/api/auth/user/signin`, {
-        method: 'POST',
-        data: { id, password },
-      });
+      const { status, ok, ...data } = await serverApi(
+        `${process.env.NEXT_PUBLIC_URL}/api/auth/user/signin`,
+        {
+          method: 'POST',
+          data: { id, password },
+        }
+      );
 
       if (!ok) throw new SupercarMarketApiError(status);
 
       if (data)
         return {
-          id: credentials.id,
-          sub: credentials.id,
+          id: data.user.id,
+          sub: data.user.id,
           accessToken: data.access_token,
           refreshToken: data.refresh_token,
           expire: data.exp,
           newUser: true,
           provider: 'local',
-          nickname: credentials.id,
+          nickname: data.user.name,
         };
 
       return null;

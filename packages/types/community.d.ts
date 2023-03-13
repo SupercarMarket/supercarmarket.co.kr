@@ -1,5 +1,5 @@
 import { Rating } from './account';
-import { Posting } from './base';
+import { Posting, User } from './base';
 
 interface CommunityDto {
   id: string;
@@ -24,12 +24,11 @@ interface CommunityPostDto {
   contents: string;
   created: string;
   updated: string;
-  nickname: string;
   comments: number;
   isLiked: boolean;
   isMyPost: boolean;
   view: number;
-  rate: Rating;
+  user: User;
 }
 
 interface CommunityTemporaryStorageDto {

@@ -12,7 +12,7 @@ interface Links {
 interface User {
   id: string;
   sub: string;
-  nickName: string;
+  nickname: string;
   address: string;
   email: string;
   call: string;

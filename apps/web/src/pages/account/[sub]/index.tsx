@@ -77,7 +77,8 @@ export const getUserPageProps = async (
 ) => {
   const { query } = ctx;
   const { sub, tab } = query as AccountParams;
-  const isMyAccountPage = session.sub === sub;
+
+  const isMyAccountPage = session.sub == sub;
   const isCorrectTab = tab && account.accountTab.includes(tab);
   const accountRoutes = isMyAccountPage
     ? account.accountRoutes.myAccount(sub)
@@ -92,7 +93,7 @@ export const getUserPageProps = async (
           ACCESS_TOKEN: session.accessToken,
         },
         query: {
-          id: session.sub,
+          id: sub,
         },
       }
     );
