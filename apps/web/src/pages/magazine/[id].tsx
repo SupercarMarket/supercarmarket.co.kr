@@ -1,4 +1,4 @@
-import { Container } from '@supercarmarket/ui';
+import { applyMediaQuery, Container, Wrapper } from '@supercarmarket/ui';
 import type { NextPageWithLayout } from '@supercarmarket/types/base';
 import {
   dehydrate,
@@ -17,6 +17,7 @@ import type { ParsedUrlQuery } from 'querystring';
 import * as React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { baseFetch } from 'utils/api/fetcher';
+import { css } from 'styled-components';
 
 const Comment = dynamic(() => import('components/common/comment'), {
   ssr: false,
@@ -31,16 +32,21 @@ const MagazinePost: NextPageWithLayout = ({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   return (
     <ModalProvider>
-      <Container
-        display="flex"
-        alignItems="center"
-        justifyContent="flex-start"
-        flexDirection="column"
-        gap="80px"
-      >
+      <Container>
         <QueryErrorResetBoundary>
           {({ reset }) => (
-            <>
+            <Wrapper
+              css={css`
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: flex-start;
+                gap: 80px;
+                ${applyMediaQuery('mobile')} {
+                  padding: 0 16px;
+                }
+              `}
+            >
               <ErrorBoundary
                 onReset={reset}
                 fallbackRender={(props) => (
@@ -64,7 +70,7 @@ const MagazinePost: NextPageWithLayout = ({
                   <Comment id={id} />
                 </React.Suspense>
               </ErrorBoundary>
-            </>
+            </Wrapper>
           )}
         </QueryErrorResetBoundary>
       </Container>

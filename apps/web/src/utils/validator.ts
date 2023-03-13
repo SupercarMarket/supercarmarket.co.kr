@@ -59,6 +59,14 @@ const email = (value: string) => {
   return true;
 };
 
+const service = () => {
+  return true;
+};
+
+const privacy = () => {
+  return true;
+};
+
 export {
   authentication,
   email,
@@ -68,4 +76,6 @@ export {
   password,
   passwordConfirm,
   phone,
+  service,
+  privacy,
 };

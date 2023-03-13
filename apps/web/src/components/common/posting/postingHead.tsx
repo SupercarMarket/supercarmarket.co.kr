@@ -95,7 +95,7 @@ const PostingHeadMagainze = ({
             <Avatar
               rating="6"
               size={40}
-              nickname={user.nickName}
+              nickname={user.nickname}
               option={{
                 darkMode: true,
               }}
@@ -166,12 +166,11 @@ const PostingHeadMagainze = ({
 
 const PostingHeadCommunity = ({
   title,
-  nickname,
+  user,
   view,
   comments,
   created,
   updated,
-  rate,
   category = 'report',
 }: CommunityPostDto & Pick<PostingProps, 'category'>) => {
   return (
@@ -209,7 +208,7 @@ const PostingHeadCommunity = ({
       </Wrapper.Top>
       <Wrapper.Bottom css={style.bottom}>
         <Wrapper.Left css={style.left}>
-          <Avatar rating={rate} size={40} nickname={nickname} />
+          <Avatar rating={user.rate} size={40} nickname={user.nickname} />
           <Typography
             as="span"
             fontSize="body-14"

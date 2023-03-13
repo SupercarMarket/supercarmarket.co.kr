@@ -1,9 +1,13 @@
 import { serverFetcher } from '@supercarmarket/lib';
 import { NextPageWithLayout, Params } from '@supercarmarket/types/base';
-import { Container, Title } from '@supercarmarket/ui';
+import { Container, Title, Wrapper } from '@supercarmarket/ui';
+import { QueryErrorResetBoundary } from '@tanstack/react-query';
 import { CommunityForm } from 'components/community';
+import { ErrorFallback } from 'components/fallback';
 import Layout from 'components/layout';
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import { ErrorBoundary } from 'react-error-boundary';
+import { css } from 'styled-components';
 
 const CommunityUpdate: NextPageWithLayout = ({
   initialData,
@@ -12,9 +16,29 @@ const CommunityUpdate: NextPageWithLayout = ({
   category,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   return (
-    <Container display="flex" flexDirection="column" gap="20px">
-      <Title>게시글 수정</Title>
-      <CommunityForm initialData={initialData} id={id} />
+    <Container>
+      <QueryErrorResetBoundary>
+        {({ reset }) => (
+          <Wrapper
+            css={css`
+              display: flex;
+              flex-direction: column;
+              gap: 20px;
+              padding: 0 16px;
+            `}
+          >
+            <Title>게시글 수정</Title>
+            <ErrorBoundary
+              onReset={reset}
+              fallbackRender={(props) => (
+                <ErrorFallback margin="100px 0" {...props} />
+              )}
+            >
+              <CommunityForm initialData={initialData} id={id} />
+            </ErrorBoundary>
+          </Wrapper>
+        )}
+      </QueryErrorResetBoundary>
     </Container>
   );
 };

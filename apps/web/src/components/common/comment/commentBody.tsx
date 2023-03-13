@@ -18,6 +18,7 @@ import * as style from './comment.styled';
 import CommentArea from './commentArea';
 import { css } from 'styled-components';
 import Avatar from '../avatar';
+import Link from 'next/link';
 
 const CommentCard = ({
   isMyComment = true,
@@ -100,20 +101,22 @@ const CommentCard = ({
               }
             `}
           >
-            <Avatar rating={user.rate} size={40} />
+            <Avatar rating={user.rate} size={40} option={{ mobile: '24' }} />
           </Wrapper>
           <Wrapper css={style.cardWrapper}>
             <Wrapper.Top css={style.cardInfo}>
               <Wrapper css={style.cardInfoWrapper}>
-                <Typography
-                  as="p"
-                  fontSize="header-14"
-                  fontWeight="bold"
-                  lineHeight="120%"
-                  color="greyScale-6"
-                >
-                  {user.nickName}
-                </Typography>
+                <Link href={`/account/${user.id}`}>
+                  <Typography
+                    as="p"
+                    fontSize="header-14"
+                    fontWeight="bold"
+                    lineHeight="120%"
+                    color="greyScale-6"
+                  >
+                    {user.nickName}
+                  </Typography>
+                </Link>
                 <Typography
                   fontSize="body-14"
                   fontWeight="regular"

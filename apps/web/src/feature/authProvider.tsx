@@ -54,6 +54,16 @@ interface AuthInitialState {
     data: null | boolean;
     loading: boolean;
   };
+  service: {
+    error: null | Error;
+    data: null | boolean;
+    loading: boolean;
+  };
+  privacy: {
+    error: null | Error;
+    data: null | boolean;
+    loading: boolean;
+  };
   signup: {
     error: null | Error;
     data: null | boolean;
@@ -112,6 +122,16 @@ const initialState: AuthInitialState = {
     loading: false,
   },
   nickname: {
+    error: null,
+    data: null,
+    loading: false,
+  },
+  service: {
+    error: null,
+    data: null,
+    loading: false,
+  },
+  privacy: {
     error: null,
     data: null,
     loading: false,

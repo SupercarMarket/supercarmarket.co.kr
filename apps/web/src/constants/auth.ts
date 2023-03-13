@@ -18,12 +18,14 @@ interface FormState {
   phone: string;
   authentication: string;
   email: string;
+  service: string;
+  privacy: string;
 }
 
 interface Forms {
   htmlFor: keyof FormState;
   label?: string;
-  type?: React.HTMLInputTypeAttribute;
+  type?: 'text' | 'email' | 'password' | 'tel' | 'agreement';
   placeholder?: string;
   tooltip?: string;
   options?: RegisterOptions;
@@ -113,7 +115,7 @@ const auth = {
   authentication: {
     htmlFor: 'authentication',
     label: '인증번호',
-    type: 'text',
+    type: 'tel',
     placeholder: '인증번호를 입력해주세요',
     button: '인증번호 확인',
     buttonWidth: '120px',
@@ -135,6 +137,26 @@ const auth = {
     },
     errorMessage: '사용 불가능한 이메일입니다',
     successMessage: '사용 가능한 이메일입니다',
+  } as Forms,
+  service: {
+    htmlFor: 'service',
+    label: '서비스',
+    type: 'agreement',
+    placeholder: '내용을 입력해주세요.',
+    tooltip: '개인정보 수집 이용에 동의합니다.',
+    options: {
+      required: true,
+    },
+  } as Forms,
+  privacy: {
+    htmlFor: 'privacy',
+    label: '개인정보',
+    type: 'agreement',
+    placeholder: '내용을 입력해주세요.',
+    tooltip: '서비스 이용약관 내용에 동의합니다.',
+    options: {
+      required: true,
+    },
   } as Forms,
   phoneAuth: () => [auth.phone, auth.authentication],
   findId: () => [auth.name, ...auth.phoneAuth()],

@@ -41,19 +41,14 @@ const Header = ({ navlinks }: HeaderProps) => {
   }, []);
 
   return (
-    <Container
-      width="100%"
-      height="96px"
-      display="flex"
-      alignItems="center"
-      justifyContent="space-between"
-    >
+    <Container width="100%" display="flex">
       <Wrapper
         className={clsx({
           hidden: search,
         })}
         css={css`
           width: 100%;
+          height: 96px;
           display: flex;
           align-items: center;
           justify-content: space-between;
@@ -63,6 +58,10 @@ const Header = ({ navlinks }: HeaderProps) => {
             visibility: hidden;
             opacity: 0;
             margin-left: -100%;
+          }
+          ${applyMediaQuery('mobile')} {
+            height: 56px;
+            padding: 0 16px;
           }
         `}
       >
@@ -226,6 +225,7 @@ const Header = ({ navlinks }: HeaderProps) => {
           align-items: center;
           justify-content: space-between;
           transition: all 0.5s ease-in-out;
+          padding: 0 16px;
           ${search && ' transition-delay: 0.5s;'}
           &.hidden {
             visibility: hidden;
@@ -238,7 +238,8 @@ const Header = ({ navlinks }: HeaderProps) => {
           variant="Grey"
           border="rounded"
           placeholder="검색어를 입력해주세요."
-          width="340px"
+          width="300px"
+          height="30px"
           handleClick={(query) => push(`/search?keyword=${query}&category=all`)}
         />
         <Button variant="Init" onClick={() => setSearch(false)}>

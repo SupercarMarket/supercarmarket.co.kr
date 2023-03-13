@@ -6,7 +6,7 @@ import {
   QueryClient,
   QueryErrorResetBoundary,
 } from '@tanstack/react-query';
-import { Searchbar, Tab, Wrapper } from '@supercarmarket/ui';
+import { applyMediaQuery, Searchbar, Tab, Wrapper } from '@supercarmarket/ui';
 import { ErrorBoundary } from 'react-error-boundary';
 import Layout from 'components/layout';
 import { ErrorFallback } from 'components/fallback';
@@ -30,6 +30,9 @@ const PartnershipDetailPage: NextPageWithLayout = ({
         display: flex;
         flex-direction: column;
         margin: 20px 0 0 0;
+        ${applyMediaQuery('mobile')} {
+          padding: 0 16px;
+        }
       `}
     >
       <QueryErrorResetBoundary>

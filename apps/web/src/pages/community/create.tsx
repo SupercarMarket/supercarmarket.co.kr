@@ -1,4 +1,4 @@
-import { Container, Title } from '@supercarmarket/ui';
+import { Container, Title, Wrapper } from '@supercarmarket/ui';
 import type { NextPageWithLayout } from '@supercarmarket/types/base';
 import { CommunityForm } from 'components/community';
 import layout from 'components/layout';
@@ -7,16 +7,40 @@ import { getSession } from 'utils/api/auth/user';
 import { serverFetcher } from '@supercarmarket/lib';
 import { ModalProvider } from 'feature/modalContext';
 import { CommunityTemporaryStorageDto } from '@supercarmarket/types/community';
+import { QueryErrorResetBoundary } from '@tanstack/react-query';
+import { ErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from 'components/fallback';
+import { css } from 'styled-components';
 
 const Create: NextPageWithLayout = ({
   temporaryStorage,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   return (
-    <Container display="flex" flexDirection="column" gap="20px">
-      <Title>게시글 작성</Title>
-      <ModalProvider>
-        <CommunityForm initialData={temporaryStorage} />
-      </ModalProvider>
+    <Container>
+      <QueryErrorResetBoundary>
+        {({ reset }) => (
+          <Wrapper
+            css={css`
+              display: flex;
+              flex-direction: column;
+              gap: 20px;
+              padding: 0 16px;
+            `}
+          >
+            <Title>게시글 작성</Title>
+            <ErrorBoundary
+              onReset={reset}
+              fallbackRender={(props) => (
+                <ErrorFallback margin="100px 0" {...props} />
+              )}
+            >
+              <ModalProvider>
+                <CommunityForm initialData={temporaryStorage} />
+              </ModalProvider>
+            </ErrorBoundary>
+          </Wrapper>
+        )}
+      </QueryErrorResetBoundary>
     </Container>
   );
 };

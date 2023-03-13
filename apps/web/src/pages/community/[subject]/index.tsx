@@ -1,4 +1,10 @@
-import { Container, Tab, Title, Wrapper } from '@supercarmarket/ui';
+import {
+  applyMediaQuery,
+  Container,
+  Tab,
+  Title,
+  Wrapper,
+} from '@supercarmarket/ui';
 import type { NextPageWithLayout } from '@supercarmarket/types/base';
 import { CommunityBestList, CommunityList } from 'components/community';
 import CommunityNavbar from 'components/community/communityNavbar';
@@ -16,10 +22,19 @@ const CommunityCategory: NextPageWithLayout = () => {
   return (
     <>
       <HeadSeo title="커뮤니티" description="슈퍼카를 위한 커뮤니티" />
-      <Container display="flex" flexDirection="column" gap="27.5px">
+      <Container>
         <QueryErrorResetBoundary>
           {({ reset }) => (
-            <>
+            <Wrapper
+              css={css`
+                display: flex;
+                flex-direction: column;
+                gap: 27.5px;
+                ${applyMediaQuery('mobile')} {
+                  padding: 0 16px;
+                }
+              `}
+            >
               <Title>커뮤니티 인기글</Title>
               <ErrorBoundary
                 onReset={reset}
@@ -62,7 +77,7 @@ const CommunityCategory: NextPageWithLayout = () => {
               >
                 <CommunityList status={status} />
               </ErrorBoundary>
-            </>
+            </Wrapper>
           )}
         </QueryErrorResetBoundary>
       </Container>

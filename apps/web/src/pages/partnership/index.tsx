@@ -2,7 +2,12 @@ import { css } from 'styled-components';
 import { ErrorBoundary } from 'react-error-boundary';
 import { InferGetServerSidePropsType, NextPageContext } from 'next/types';
 import { NextPageWithLayout, Params } from '@supercarmarket/types/base';
-import { Category, Searchbar, Wrapper } from '@supercarmarket/ui';
+import {
+  applyMediaQuery,
+  Category,
+  Searchbar,
+  Wrapper,
+} from '@supercarmarket/ui';
 import {
   dehydrate,
   QueryClient,
@@ -25,7 +30,13 @@ const PartnershipPage: NextPageWithLayout = ({
   });
 
   return (
-    <>
+    <Wrapper
+      css={css`
+        ${applyMediaQuery('mobile')} {
+          padding: 0 16px;
+        }
+      `}
+    >
       <Banner
         title="제휴업체 등록을 원하시나요?"
         btnTitle="등록 문의하기"
@@ -39,13 +50,22 @@ const PartnershipPage: NextPageWithLayout = ({
           justify-content: center;
         `}
       >
-        <Searchbar
-          width="880px"
-          variant="Line"
-          placeholder="원하시는 업체를 검색하세요"
-          onKeyDown={keydownHandler}
-          ref={keywordRef}
-        />
+        <Wrapper.Item
+          css={css`
+            width: 880px;
+            ${applyMediaQuery('mobile')} {
+              width: 100%;
+            }
+          `}
+        >
+          <Searchbar
+            width="100%"
+            variant="Line"
+            placeholder="원하시는 업체를 검색하세요"
+            onKeyDown={keydownHandler}
+            ref={keywordRef}
+          />
+        </Wrapper.Item>
       </Wrapper.Top>
       <Category links={PARTNERSHIP_LINKS} category={category} />
       <QueryErrorResetBoundary>
@@ -58,7 +78,7 @@ const PartnershipPage: NextPageWithLayout = ({
           </ErrorBoundary>
         )}
       </QueryErrorResetBoundary>
-    </>
+    </Wrapper>
   );
 };
 

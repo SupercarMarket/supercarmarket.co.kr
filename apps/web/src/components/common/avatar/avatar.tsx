@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Typography, Wrapper } from '@supercarmarket/ui';
+import { applyMediaQuery, Typography, Wrapper } from '@supercarmarket/ui';
 import { css } from 'styled-components';
 
 import Image from 'next/image';
@@ -18,7 +18,7 @@ interface AvvatarProps {
   gap?: number;
   option?: {
     darkMode?: boolean;
-    mobile?: boolean;
+    mobile?: string;
   };
 }
 
@@ -66,7 +66,6 @@ const Avatar = React.memo(function Avatar({
   gap = 8,
   option = {
     darkMode: false,
-    mobile: false,
   },
 }: AvvatarProps) {
   return (
@@ -78,6 +77,12 @@ const Avatar = React.memo(function Avatar({
         & > img {
           width: ${size}px;
           height: ${size}px;
+        }
+        ${applyMediaQuery('mobile')} {
+          & > img {
+            ${option.mobile && `width: ${option.mobile}px;`}
+            ${option.mobile && `height: ${option.mobile}px;`}
+          }
         }
       `}
     >

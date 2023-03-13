@@ -1,7 +1,7 @@
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import type { NextPageWithLayout, Params } from '@supercarmarket/types/base';
-import { Alert, Container, Wrapper } from '@supercarmarket/ui';
+import { Alert, applyMediaQuery, Container, Wrapper } from '@supercarmarket/ui';
 import Layout from 'components/layout';
 import { css } from 'styled-components';
 import queries from 'constants/queries';
@@ -23,6 +23,9 @@ const Search: NextPageWithLayout = ({
         <Wrapper
           css={css`
             transform: translateY();
+            ${applyMediaQuery('mobile')} {
+              padding: 0 16px;
+            }
           `}
         >
           {isKeyword ? (

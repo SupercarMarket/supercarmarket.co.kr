@@ -18,8 +18,6 @@ import MarketCar from 'components/market/marketCar';
 import MarketFilter from 'components/market/marketFilter';
 import { CATEGORY, CATEGORY_VALUES, MARKET_LINKS } from 'constants/market';
 import queries from 'constants/queries';
-import useMarket from 'hooks/queries/useMarket';
-import { useUrlQuery } from '@supercarmarket/hooks';
 import type { InferGetServerSidePropsType, NextPageContext } from 'next/types';
 import * as React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -30,12 +28,9 @@ import HeadSeo from 'components/common/headSeo';
 const MarketFilterPage: NextPageWithLayout = ({
   category,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const marketQuery = useUrlQuery();
   const { keydownHandler, keywordRef } = useSearchKeyword({
     domain: 'partnership',
   });
-
-  const { data: markets } = useMarket(marketQuery, { keepPreviousData: true });
 
   return (
     <>
@@ -46,7 +41,15 @@ const MarketFilterPage: NextPageWithLayout = ({
         }에 대한 매물`}
       />
       <Container display="flex" flexDirection="column" margin="20px 0 0 0">
-        <MarketBanner />
+        <Wrapper
+          css={css`
+            ${applyMediaQuery('mobile')} {
+              padding: 0 16px;
+            }
+          `}
+        >
+          <MarketBanner />
+        </Wrapper>
         <Wrapper
           css={css`
             display: flex;
@@ -55,6 +58,7 @@ const MarketFilterPage: NextPageWithLayout = ({
             margin: 80px 0;
             ${applyMediaQuery('mobile')} {
               margin: 32px 0;
+              padding: 0 16px;
             }
           `}
         >
@@ -76,14 +80,22 @@ const MarketFilterPage: NextPageWithLayout = ({
         </Wrapper>
         <QueryErrorResetBoundary>
           {({ reset }) => (
-            <ErrorBoundary
-              onReset={reset}
-              fallbackRender={(props) => <ErrorFallback {...props} />}
+            <Wrapper
+              css={css`
+                ${applyMediaQuery('mobile')} {
+                  padding: 0 16px;
+                }
+              `}
             >
-              <Category links={MARKET_LINKS} category={category} />
-              <MarketFilter />
-              <MarketCar />
-            </ErrorBoundary>
+              <ErrorBoundary
+                onReset={reset}
+                fallbackRender={(props) => <ErrorFallback {...props} />}
+              >
+                <Category links={MARKET_LINKS} category={category} />
+                <MarketFilter />
+                <MarketCar />
+              </ErrorBoundary>
+            </Wrapper>
           )}
         </QueryErrorResetBoundary>
       </Container>

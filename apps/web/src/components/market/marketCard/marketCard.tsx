@@ -62,8 +62,8 @@ const MarketColumn = (props: WithBlurredImage<MarketDto>) => {
               width: 285px;
               height: 180px;
               ${applyMediaQuery('mobile')} {
-                width: 178px;
-                height: 120px;
+                width: 167.5px;
+                height: 106px;
               }
             `}
           >
