@@ -13,6 +13,7 @@ interface User {
   id: string;
   sub: string;
   nickname: string;
+  nickName: string;
   address: string;
   email: string;
   call: string;
