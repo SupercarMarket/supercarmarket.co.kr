@@ -47,10 +47,8 @@ const FormLabel = (props: FormLabelProps) => {
     >
       <Wrapper.Item
         css={css`
-          padding-top: ${paddingTop};
-          ${applyMediaQuery('mobile')} {
-            padding-top: 0;
-          }
+          display: flex;
+          align-items: center;
         `}
       >
         <Typography

@@ -1,6 +1,9 @@
 import {
   applyMediaQuery,
+  Divider,
+  FormAgreement,
   FormInput,
+  FormLabel,
   FormMessage,
   Wrapper,
 } from '@supercarmarket/ui';
@@ -20,12 +23,11 @@ import type {
   FieldValues,
   Merge,
   UseFormRegister,
+  UseFormSetValue,
 } from 'react-hook-form';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { css } from 'styled-components';
 import * as validator from 'utils/validator';
-
-import * as style from './authFormItem.styled';
 
 type InputBtnAttr = {
   button?: boolean;
@@ -44,6 +46,7 @@ interface AuthFormItemProps extends Forms {
 
 interface AuthFormItemContainerProps extends Omit<AuthFormItemProps, 'state'> {
   register: UseFormRegister<FieldValues>;
+  setValue: UseFormSetValue<FieldValues>;
   authState?:
     | {
         error: null | Error;
@@ -86,6 +89,7 @@ const AuthFormItem = (props: AuthFormItemProps) => {
   }, [state, htmlFor]);
   const {
     register,
+    setValue,
     formState: { errors, isSubmitSuccessful },
   } = useFormContext();
   const patternError = errors[htmlFor];
@@ -93,6 +97,7 @@ const AuthFormItem = (props: AuthFormItemProps) => {
   return (
     <AuthFormItemContainer
       register={register}
+      setValue={setValue}
       target={target}
       htmlFor={htmlFor}
       authState={authState}
@@ -109,6 +114,7 @@ const AuthFormItemContainer = React.memo(function AuthFormItem({
   button,
   placeholder,
   tooltip,
+  label,
   type = 'text',
   options,
   buttonWidth,
@@ -120,6 +126,7 @@ const AuthFormItemContainer = React.memo(function AuthFormItem({
   phone,
   isSubmitSuccessful,
   register,
+  setValue,
   dispatch,
 }: AuthFormItemContainerProps) {
   const [error, setError] = React.useState(false);
@@ -189,132 +196,107 @@ const AuthFormItemContainer = React.memo(function AuthFormItem({
     if (authState && !authState.data) setSuccess(false);
     if (authState && !authState.error) setError(false);
   }, [authState]);
-  return {
-    text: (
-      <Wrapper css={style.label}>
-        <FormInput
-          id={htmlFor}
-          type={type}
-          button={!!button}
-          buttonText={button}
-          buttonWidth={buttonWidth}
-          buttonVariant="Primary-Line"
-          buttonCallback={handleCallback}
-          buttonDisabled={success}
-          placeholder={placeholder}
-          readOnly={success}
-          {...register(htmlFor, { ...options })}
-        />
-        <FormMessage
-          tooltip={tooltip}
-          success={success ? successMessage : undefined}
-          error={fieldErrorMessage}
-          padding="0 0 0 14px"
-        />
-      </Wrapper>
-    ),
-    email: (
-      <Wrapper css={style.label}>
-        <FormInput
-          id={htmlFor}
-          type={type}
-          button={!!button}
-          buttonText={button}
-          buttonWidth={buttonWidth}
-          buttonVariant="Primary-Line"
-          buttonCallback={handleCallback}
-          buttonDisabled={success}
-          placeholder={placeholder}
-          readOnly={success}
-          {...register(htmlFor, { ...options })}
-        />
-        <FormMessage
-          tooltip={tooltip}
-          success={success ? successMessage : undefined}
-          error={fieldErrorMessage}
-          padding="0 0 0 14px"
-        />
-      </Wrapper>
-    ),
-    password: (
-      <Wrapper css={style.label}>
-        <FormInput
-          id={htmlFor}
-          type={type}
-          button={!!button}
-          buttonText={button}
-          buttonWidth={buttonWidth}
-          buttonVariant="Primary-Line"
-          buttonCallback={handleCallback}
-          buttonDisabled={success}
-          placeholder={placeholder}
-          readOnly={success}
-          {...register(htmlFor, { ...options })}
-        />
-        <FormMessage
-          tooltip={tooltip}
-          success={success ? successMessage : undefined}
-          error={fieldErrorMessage}
-          padding="0 0 0 14px"
-        />
-      </Wrapper>
-    ),
-    tel: (
-      <Wrapper css={style.label}>
-        <FormInput
-          {...attr}
-          {...phoneBtnAttr}
-          buttonCallback={handlePhoneAuth}
-          buttonDisabled={buttonDisabled()}
-          placeholder={placeholder}
-          readOnly={success}
-          count={count}
-          {...register(htmlFor, { ...options })}
-        />
-        <FormMessage
-          tooltip={tooltip}
-          success={success ? successMessage : undefined}
-          error={fieldErrorMessage}
-          padding="0 0 0 14px"
-        />
-      </Wrapper>
-    ),
-    agreement: (
-      <Wrapper
-        css={css`
-          width: 660px;
-          display: flex;
-          flex-direction: column;
-          align-items: flex-start;
-          justify-content: space-between;
-          gap: 6px;
-          ${applyMediaQuery('mobile')} {
-            width: 100%;
-          }
-        `}
+  return (
+    <>
+      <FormLabel
+        key={htmlFor}
+        name={htmlFor}
+        label={label}
+        paddingTop={htmlFor}
       >
-        <FormInput
-          id={htmlFor}
-          type={type}
-          button={!!button}
-          buttonText={button}
-          buttonWidth={buttonWidth}
-          buttonVariant="Primary-Line"
-          buttonCallback={handleCallback}
-          buttonDisabled={success}
-          placeholder={placeholder}
-          readOnly={success}
-          {...register(htmlFor, { ...options })}
-        />
-        <FormMessage
-          tooltip={tooltip}
-          success={success ? successMessage : undefined}
-          error={fieldErrorMessage}
-          padding="0 0 0 14px"
-        />
-      </Wrapper>
-    ),
-  }[type];
+        <Wrapper
+          css={css`
+            width: 660px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 6px;
+            ${applyMediaQuery('mobile')} {
+              width: 100%;
+            }
+          `}
+        >
+          {
+            {
+              text: (
+                <FormInput
+                  id={htmlFor}
+                  type={type}
+                  button={!!button}
+                  buttonText={button}
+                  buttonWidth={buttonWidth}
+                  buttonVariant="Primary-Line"
+                  buttonCallback={handleCallback}
+                  buttonDisabled={success}
+                  placeholder={placeholder}
+                  readOnly={success}
+                  {...register(htmlFor, { ...options })}
+                />
+              ),
+              email: (
+                <FormInput
+                  id={htmlFor}
+                  type={type}
+                  button={!!button}
+                  buttonText={button}
+                  buttonWidth={buttonWidth}
+                  buttonVariant="Primary-Line"
+                  buttonCallback={handleCallback}
+                  buttonDisabled={success}
+                  placeholder={placeholder}
+                  readOnly={success}
+                  {...register(htmlFor, { ...options })}
+                />
+              ),
+              password: (
+                <FormInput
+                  id={htmlFor}
+                  type={type}
+                  button={!!button}
+                  buttonText={button}
+                  buttonWidth={buttonWidth}
+                  buttonVariant="Primary-Line"
+                  buttonCallback={handleCallback}
+                  buttonDisabled={success}
+                  placeholder={placeholder}
+                  readOnly={success}
+                  {...register(htmlFor, { ...options })}
+                />
+              ),
+              tel: (
+                <FormInput
+                  {...attr}
+                  {...phoneBtnAttr}
+                  buttonCallback={handlePhoneAuth}
+                  buttonDisabled={buttonDisabled()}
+                  placeholder={placeholder}
+                  readOnly={success}
+                  count={count}
+                  {...register(htmlFor, { ...options })}
+                />
+              ),
+              agreement: (
+                <FormAgreement
+                  {...attr}
+                  content={tooltip}
+                  onChange={(e) => setValue(htmlFor, e.target.checked)}
+                />
+              ),
+            }[type]
+          }
+          <FormMessage
+            success={success ? successMessage : undefined}
+            error={fieldErrorMessage}
+            padding="0 0 0 14px"
+          />
+        </Wrapper>
+      </FormLabel>
+      {htmlFor === 'email' && (
+        <Divider width="100%" height="1px" color="#EAEAEC" />
+      )}
+    </>
+  );
 });
 
 export default AuthFormItem;

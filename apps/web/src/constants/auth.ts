@@ -170,6 +170,8 @@ const auth = {
     auth.nickname,
     ...auth.phoneAuth(),
     auth.email,
+    auth.service,
+    auth.privacy,
   ],
   resultPassword: () => [auth.newPassword, auth.passwordConfirm],
 };

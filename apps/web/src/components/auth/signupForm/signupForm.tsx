@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, Form, FormLabel } from '@supercarmarket/ui';
+import { Alert, Button, Divider, Form, FormLabel } from '@supercarmarket/ui';
 import { catchNoExist } from '@supercarmarket/lib';
 import auth from 'constants/auth';
 import { signUp } from 'feature/actions/authActions';
@@ -35,6 +35,30 @@ const SignupForm = () => {
   const dispatch = useAuthDispatch();
   const { signup: signupResult } = state;
 
+  const handleRequire = async (data: FormState) => {
+    Object.entries(data).forEach(([key, value]) => {
+      if (value) {
+        return;
+      }
+
+      if (key === 'service' || key === 'privacy') {
+        if (!value) {
+          methods.setError(key as keyof FormState, {
+            message: `${key}을/를 체크해주세요.`,
+          });
+          throw 'field is require';
+        }
+      }
+
+      if (!value) {
+        methods.setError(key as keyof FormState, {
+          message: `${key}을/를 입력해주세요.`,
+        });
+        throw 'field is require';
+      }
+    });
+  };
+
   const onSubmit = React.useCallback(
     (data: FormState) => {
       catchNoExist(
@@ -63,15 +87,21 @@ const SignupForm = () => {
   return (
     <AuthProvider>
       <FormProvider {...methods}>
-        <Form css={style.form} onSubmit={methods.handleSubmit(onSubmit)}>
+        <Form
+          css={style.form}
+          onSubmit={methods.handleSubmit((data) =>
+            handleRequire(data).then(() => {
+              onSubmit(data);
+            })
+          )}
+        >
           {auth.signup().map((props) => (
-            <FormLabel
+            <AuthFormItem
               key={props.htmlFor}
-              name={props.htmlFor}
-              label={props.label}
-            >
-              <AuthFormItem state={state} dispatch={dispatch} {...props} />
-            </FormLabel>
+              state={state}
+              dispatch={dispatch}
+              {...props}
+            />
           ))}
           <Button width="340px" type="submit" variant="Primary">
             가입하기
