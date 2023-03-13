@@ -114,7 +114,7 @@ const CommentCard = ({
                     lineHeight="120%"
                     color="greyScale-6"
                   >
-                    {user.nickName}
+                    {user.nickname}
                   </Typography>
                 </Link>
                 <Typography
