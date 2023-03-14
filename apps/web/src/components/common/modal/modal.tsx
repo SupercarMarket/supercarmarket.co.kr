@@ -1,4 +1,4 @@
-import { Button, Container, Typography, Wrapper } from '@supercarmarket/ui';
+import { Button, Typography, Wrapper } from '@supercarmarket/ui';
 import { ModalProvider } from 'feature/modalContext';
 import { css } from 'styled-components';
 
@@ -33,7 +33,10 @@ const Modal = ({
           right: '0',
           zIndex: 99999,
         }}
-        onClick={onCancel}
+        onClick={(e) => {
+          if (e.currentTarget !== e.target) return;
+          onCancel();
+        }}
       >
         <Wrapper
           css={css`
@@ -58,7 +61,7 @@ const Modal = ({
               marginBottom: '16px',
             }}
           >
-            로그인이 필요합니다
+            {title}
           </Typography>
           <Typography
             as="p"

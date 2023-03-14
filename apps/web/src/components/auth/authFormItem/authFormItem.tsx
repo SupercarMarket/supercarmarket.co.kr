@@ -7,7 +7,7 @@ import {
   FormMessage,
   Wrapper,
 } from '@supercarmarket/ui';
-import { Forms } from 'constants/auth';
+import { Forms, FormState } from 'constants/auth';
 import {
   confirmPhoneAuth,
   duplicateEmailAuth,
@@ -42,6 +42,7 @@ type InputBtnAttr = {
 interface AuthFormItemProps extends Forms {
   state: AuthInitialState;
   dispatch: AuthDispatch;
+  handleModal: (htmlFor: keyof FormState) => void;
 }
 
 interface AuthFormItemContainerProps extends Omit<AuthFormItemProps, 'state'> {
@@ -78,7 +79,7 @@ interface AuthFormItemContainerProps extends Omit<AuthFormItemProps, 'state'> {
 }
 
 const AuthFormItem = (props: AuthFormItemProps) => {
-  const { htmlFor, state, ...rest } = props;
+  const { htmlFor, state, handleModal, ...rest } = props;
   const authState = React.useMemo(() => {
     if (
       htmlFor !== 'password' &&
@@ -98,6 +99,7 @@ const AuthFormItem = (props: AuthFormItemProps) => {
     <AuthFormItemContainer
       register={register}
       setValue={setValue}
+      handleModal={handleModal}
       target={target}
       htmlFor={htmlFor}
       authState={authState}
@@ -128,6 +130,7 @@ const AuthFormItemContainer = React.memo(function AuthFormItem({
   register,
   setValue,
   dispatch,
+  handleModal,
 }: AuthFormItemContainerProps) {
   const [error, setError] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
@@ -221,45 +224,39 @@ const AuthFormItemContainer = React.memo(function AuthFormItem({
             {
               text: (
                 <FormInput
-                  id={htmlFor}
-                  type={type}
+                  {...attr}
                   button={!!button}
                   buttonText={button}
                   buttonWidth={buttonWidth}
                   buttonVariant="Primary-Line"
                   buttonCallback={handleCallback}
                   buttonDisabled={success}
-                  placeholder={placeholder}
                   readOnly={success}
                   {...register(htmlFor, { ...options })}
                 />
               ),
               email: (
                 <FormInput
-                  id={htmlFor}
-                  type={type}
+                  {...attr}
                   button={!!button}
                   buttonText={button}
                   buttonWidth={buttonWidth}
                   buttonVariant="Primary-Line"
                   buttonCallback={handleCallback}
                   buttonDisabled={success}
-                  placeholder={placeholder}
                   readOnly={success}
                   {...register(htmlFor, { ...options })}
                 />
               ),
               password: (
                 <FormInput
-                  id={htmlFor}
-                  type={type}
+                  {...attr}
                   button={!!button}
                   buttonText={button}
                   buttonWidth={buttonWidth}
                   buttonVariant="Primary-Line"
                   buttonCallback={handleCallback}
                   buttonDisabled={success}
-                  placeholder={placeholder}
                   readOnly={success}
                   {...register(htmlFor, { ...options })}
                 />
@@ -270,7 +267,6 @@ const AuthFormItemContainer = React.memo(function AuthFormItem({
                   {...phoneBtnAttr}
                   buttonCallback={handlePhoneAuth}
                   buttonDisabled={buttonDisabled()}
-                  placeholder={placeholder}
                   readOnly={success}
                   count={count}
                   {...register(htmlFor, { ...options })}
@@ -278,9 +274,10 @@ const AuthFormItemContainer = React.memo(function AuthFormItem({
               ),
               agreement: (
                 <FormAgreement
-                  {...attr}
                   content={tooltip}
+                  name={htmlFor}
                   onChange={(e) => setValue(htmlFor, e.target.checked)}
+                  handleCick={() => handleModal(htmlFor)}
                 />
               ),
             }[type]

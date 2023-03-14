@@ -2,6 +2,7 @@ import { Container, Title } from '@supercarmarket/ui';
 import type { NextPageWithLayout } from '@supercarmarket/types/base';
 import { SignupForm } from 'components/auth';
 import AuthLayout from 'components/layout/authLayout';
+import { ModalProvider } from 'feature/modalContext';
 
 const Signup: NextPageWithLayout = () => {
   return (
@@ -13,7 +14,9 @@ const Signup: NextPageWithLayout = () => {
       gap="60px"
     >
       <Title textAlign="center">회원가입</Title>
-      <SignupForm />
+      <ModalProvider>
+        <SignupForm />
+      </ModalProvider>
     </Container>
   );
 };
