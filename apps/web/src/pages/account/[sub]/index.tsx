@@ -44,7 +44,11 @@ const Account: NextPageWithLayout = ({
                 onReset={reset}
                 fallbackRender={(props) => <ErrorFallback {...props} />}
               >
-                <Profile isMyAccountPage={isMyAccountPage} profile={profile} />
+                <Profile
+                  isMyAccountPage={isMyAccountPage}
+                  sub={sub}
+                  profile={profile}
+                />
               </ErrorBoundary>
               <Wrapper css={style.account}>
                 <Category links={accountRoutes} category={tab} />

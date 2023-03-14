@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, Form } from '@supercarmarket/ui';
+import { Alert, Button, Form, FormLabel } from '@supercarmarket/ui';
 import type { FormState } from 'constants/account';
 import account from 'constants/account';
 import { update } from 'feature/actions/authActions';
@@ -141,6 +141,11 @@ const AccountUpdateForm = () => {
                 {...form}
               />
             ))}
+            <FormLabel label="회원탈퇴">
+              <Button type="button" variant="Line">
+                탈퇴하기
+              </Button>
+            </FormLabel>
             <Button type="submit" variant="Primary" width="340px">
               수정하기
             </Button>

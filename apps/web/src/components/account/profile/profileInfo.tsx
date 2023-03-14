@@ -8,7 +8,7 @@ import CreateIcon from '../../../assets/svg/create.svg';
 import { ProfileProps } from './profile';
 import * as style from './profile.styled';
 
-type ProfileInfoProps = Omit<ProfileProps, ''>;
+type ProfileInfoProps = ProfileProps & { sub: string };
 
 interface ProfileInfoDetailProps {
   title: string;
@@ -44,7 +44,7 @@ const ProfileInfoDetail = ({ title, content }: ProfileInfoDetailProps) => {
   );
 };
 
-const ProfileInfo = ({ isMyAccountPage, profile }: ProfileInfoProps) => {
+const ProfileInfo = ({ isMyAccountPage, profile, sub }: ProfileInfoProps) => {
   return (
     <Container
       display="flex"
@@ -71,7 +71,7 @@ const ProfileInfo = ({ isMyAccountPage, profile }: ProfileInfoProps) => {
           {profile.nickname}
         </Typography>
         {isMyAccountPage && (
-          <Link href="/account/blan19/update">
+          <Link href={`/account/${sub}/update`}>
             <Wrapper.Item css={style.svg}>
               <CreateIcon />
             </Wrapper.Item>

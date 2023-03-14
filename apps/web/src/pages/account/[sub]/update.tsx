@@ -29,7 +29,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { sub } = params as Params;
   const session = await getSession({ req });
 
-  if (sub !== session?.sub) {
+  if (sub != session?.sub) {
     return {
       notFound: true,
     };
