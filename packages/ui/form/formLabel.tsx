@@ -34,6 +34,7 @@ const FormLabel = (props: FormLabelProps) => {
     <Wrapper
       className={className}
       css={css`
+        width: 100%;
         display: flex;
         flex-direction: ${flexDirection};
         gap: ${gap};

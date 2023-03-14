@@ -144,8 +144,7 @@ const auth = {
     htmlFor: 'service',
     label: '서비스',
     type: 'agreement',
-    placeholder: '내용을 입력해주세요.',
-    tooltip: '서비스 이용약관 내용에 동의합니다. (필수)',
+    placeholder: '서비스 이용약관 내용에 동의합니다. (필수)',
     options: {
       validate: service,
     },
@@ -154,8 +153,7 @@ const auth = {
     htmlFor: 'privacy',
     label: '개인정보',
     type: 'agreement',
-    placeholder: '내용을 입력해주세요.',
-    tooltip: '개인정보 수집 이용에 동의합니다. (필수)',
+    placeholder: '개인정보 수집 이용에 동의합니다. (필수)',
     options: {
       validate: privacy,
     },

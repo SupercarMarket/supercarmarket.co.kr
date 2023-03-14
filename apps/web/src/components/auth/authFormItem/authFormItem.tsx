@@ -1,9 +1,7 @@
 import {
   applyMediaQuery,
-  Divider,
   FormAgreement,
   FormInput,
-  FormLabel,
   FormMessage,
   Wrapper,
 } from '@supercarmarket/ui';
@@ -42,7 +40,7 @@ type InputBtnAttr = {
 interface AuthFormItemProps extends Forms {
   state: AuthInitialState;
   dispatch: AuthDispatch;
-  handleModal: (htmlFor: keyof FormState) => void;
+  handleModal?: (htmlFor: keyof FormState) => void;
 }
 
 interface AuthFormItemContainerProps extends Omit<AuthFormItemProps, 'state'> {
@@ -200,99 +198,90 @@ const AuthFormItemContainer = React.memo(function AuthFormItem({
     if (authState && !authState.error) setError(false);
   }, [authState]);
   return (
-    <>
-      <FormLabel
-        key={htmlFor}
-        name={htmlFor}
-        label={label}
-        paddingTop={htmlFor}
-      >
-        <Wrapper
-          css={css`
-            width: 660px;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            justify-content: space-between;
-            gap: 6px;
-            ${applyMediaQuery('mobile')} {
-              width: 100%;
-            }
-          `}
-        >
-          {
-            {
-              text: (
-                <FormInput
-                  {...attr}
-                  button={!!button}
-                  buttonText={button}
-                  buttonWidth={buttonWidth}
-                  buttonVariant="Primary-Line"
-                  buttonCallback={handleCallback}
-                  buttonDisabled={success}
-                  readOnly={success}
-                  {...register(htmlFor, { ...options })}
-                />
-              ),
-              email: (
-                <FormInput
-                  {...attr}
-                  button={!!button}
-                  buttonText={button}
-                  buttonWidth={buttonWidth}
-                  buttonVariant="Primary-Line"
-                  buttonCallback={handleCallback}
-                  buttonDisabled={success}
-                  readOnly={success}
-                  {...register(htmlFor, { ...options })}
-                />
-              ),
-              password: (
-                <FormInput
-                  {...attr}
-                  button={!!button}
-                  buttonText={button}
-                  buttonWidth={buttonWidth}
-                  buttonVariant="Primary-Line"
-                  buttonCallback={handleCallback}
-                  buttonDisabled={success}
-                  readOnly={success}
-                  {...register(htmlFor, { ...options })}
-                />
-              ),
-              tel: (
-                <FormInput
-                  {...attr}
-                  {...phoneBtnAttr}
-                  buttonCallback={handlePhoneAuth}
-                  buttonDisabled={buttonDisabled()}
-                  readOnly={success}
-                  count={count}
-                  {...register(htmlFor, { ...options })}
-                />
-              ),
-              agreement: (
-                <FormAgreement
-                  content={tooltip}
-                  name={htmlFor}
-                  onChange={(e) => setValue(htmlFor, e.target.checked)}
-                  handleCick={() => handleModal(htmlFor)}
-                />
-              ),
-            }[type]
-          }
-          <FormMessage
-            success={success ? successMessage : undefined}
-            error={fieldErrorMessage}
-            padding="0 0 0 14px"
-          />
-        </Wrapper>
-      </FormLabel>
-      {htmlFor === 'email' && (
-        <Divider width="100%" height="1px" color="#EAEAEC" />
-      )}
-    </>
+    <Wrapper
+      css={css`
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 6px;
+        ${applyMediaQuery('mobile')} {
+          width: 100%;
+        }
+      `}
+    >
+      {
+        {
+          text: (
+            <FormInput
+              {...attr}
+              button={!!button}
+              buttonText={button}
+              buttonWidth={buttonWidth}
+              buttonVariant="Primary-Line"
+              buttonCallback={handleCallback}
+              buttonDisabled={success}
+              readOnly={success}
+              {...register(htmlFor, { ...options })}
+            />
+          ),
+          email: (
+            <FormInput
+              {...attr}
+              button={!!button}
+              buttonText={button}
+              buttonWidth={buttonWidth}
+              buttonVariant="Primary-Line"
+              buttonCallback={handleCallback}
+              buttonDisabled={success}
+              readOnly={success}
+              {...register(htmlFor, { ...options })}
+            />
+          ),
+          password: (
+            <FormInput
+              {...attr}
+              button={!!button}
+              buttonText={button}
+              buttonWidth={buttonWidth}
+              buttonVariant="Primary-Line"
+              buttonCallback={handleCallback}
+              buttonDisabled={success}
+              readOnly={success}
+              {...register(htmlFor, { ...options })}
+            />
+          ),
+          tel: (
+            <FormInput
+              {...attr}
+              {...phoneBtnAttr}
+              buttonCallback={handlePhoneAuth}
+              buttonDisabled={buttonDisabled()}
+              readOnly={success}
+              count={count}
+              {...register(htmlFor, { ...options })}
+            />
+          ),
+          agreement: (
+            <FormAgreement
+              content={placeholder}
+              name={htmlFor}
+              onChange={(e) => setValue(htmlFor, e.target.checked)}
+              handleCick={() => {
+                if (handleModal) handleModal(htmlFor);
+              }}
+            />
+          ),
+        }[type]
+      }
+      <FormMessage
+        tooltip={tooltip}
+        success={success ? successMessage : undefined}
+        error={fieldErrorMessage}
+        padding="0 0 0 14px"
+      />
+    </Wrapper>
   );
 });
 

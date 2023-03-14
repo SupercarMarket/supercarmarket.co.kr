@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, Form } from '@supercarmarket/ui';
+import { Alert, Button, Divider, Form, FormLabel } from '@supercarmarket/ui';
 import { catchNoExist } from '@supercarmarket/lib';
 import auth, { FormState } from 'constants/auth';
 import { signUp } from 'feature/actions/authActions';
@@ -100,13 +100,25 @@ const SignupForm = () => {
           )}
         >
           {auth.signup().map((props) => (
-            <AuthFormItem
-              key={props.htmlFor}
-              state={state}
-              dispatch={dispatch}
-              handleModal={handleModal}
-              {...props}
-            />
+            <>
+              <FormLabel
+                key={props.htmlFor}
+                name={props.htmlFor}
+                label={props.label}
+                paddingTop={props.htmlFor}
+              >
+                <AuthFormItem
+                  key={props.htmlFor}
+                  state={state}
+                  dispatch={dispatch}
+                  handleModal={handleModal}
+                  {...props}
+                />
+              </FormLabel>
+              {props.htmlFor === 'email' && (
+                <Divider width="100%" height="1px" color="#EAEAEC" />
+              )}
+            </>
           ))}
           <Button width="340px" type="submit" variant="Primary">
             가입하기
