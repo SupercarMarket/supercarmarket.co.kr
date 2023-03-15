@@ -1,7 +1,9 @@
+import * as React from 'react';
 import {
   applyMediaQuery,
   Button,
   Container,
+  theme,
   Wrapper,
 } from '@supercarmarket/ui';
 import { Profile as ProfileType } from '@supercarmarket/types/account';
@@ -15,6 +17,12 @@ import Skeleton from 'react-loading-skeleton';
 import { useSession } from 'next-auth/react';
 import type { Session } from 'next-auth';
 import { clientApi, clientFetcher } from '@supercarmarket/lib';
+import useAccount from 'hooks/queries/useAccount';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import queries from 'constants/queries';
+
+import UploadIcon from '../../../../public/svg/create.svg';
+import RemoveIcon from '../../../../public/svg/delete.svg';
 
 const baseSrc =
   'https://user-images.githubusercontent.com/66871265/210207112-a0d7b276-e24b-4ae9-80a1-8e48d5cc45f2.png';
@@ -43,6 +51,7 @@ const ProfileBackground = ({
   isMyAccountPage,
 }: ProfileBackgroundProps) => {
   const src = _src ? _src : baseSrc;
+  const queryClient = useQueryClient();
   const { data, isFetching, isLoading } = useBase64(src, {
     category: 'account',
     id: sub,
@@ -50,44 +59,46 @@ const ProfileBackground = ({
     idx: 0,
   });
 
-  const handleBackgroundUpload = async (files: FileList) => {
-    if (!session) return;
+  const uploadMutation = useMutation({
+    mutationFn: async (files: FileList) => {
+      if (!session) return;
 
-    const formData = new FormData();
+      const formData = new FormData();
 
-    Array.from(files).forEach((file) => {
-      formData.append('background', file);
-    });
+      Array.from(files).forEach((file) => {
+        formData.append('background', file);
+      });
 
-    const response = await clientFetcher(
-      '/server/supercar/v1/user/background',
-      {
+      return await clientFetcher('/server/supercar/v1/user/background', {
         method: 'POST',
         headers: {
           ACCESS_TOKEN: session.accessToken,
         },
         body: formData,
-      }
-    );
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(queries.account.id(sub));
+    },
+  });
 
-    return response;
-  };
+  const removeMutation = useMutation({
+    mutationFn: async (url: string) => {
+      if (!session) return;
 
-  const handleBackgroundRemove = async (url: string) => {
-    if (!session) return;
-    if (url === baseSrc) return;
-
-    const response = await clientApi('/server/supercar/v1/user/background', {
-      method: 'DELETE',
-      headers: {
-        ACCESS_TOKEN: session.accessToken,
-        'Content-Type': 'application/json',
-      },
-      data: { url },
-    });
-
-    return response;
-  };
+      return await clientApi('/server/supercar/v1/user/background', {
+        method: 'DELETE',
+        headers: {
+          ACCESS_TOKEN: session.accessToken,
+          'Content-Type': 'application/json',
+        },
+        data: { url },
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(queries.account.id(sub));
+    },
+  });
 
   return (
     <Container position="absolute">
@@ -138,22 +149,67 @@ const ProfileBackground = ({
               bottom: 24px;
               right: 24px;
               gap: 12px;
+              div {
+                padding: 12px;
+                display: flex;
+                align-items: center;
+                gap: 4px;
+              }
+              label {
+                cursor: pointer;
+                line-height: 24px;
+              }
+              svg {
+                width: 18px !important;
+                height: 18px !important;
+                fill: ${theme.color['greyScale-6']} !important;
+              }
               ${applyMediaQuery('mobile')} {
                 bottom: 16px;
                 right: 16px;
               }
             `}
           >
-            <Button type="button" variant="Line">
-              <input id="background" type="file" hidden />
-              <label htmlFor="background">배경 이미지 수정</label>
+            <Button
+              type="button"
+              variant="Line"
+              style={{
+                height: '100%',
+                padding: 0,
+              }}
+            >
+              <div>
+                <input
+                  id="background"
+                  type="file"
+                  hidden
+                  onChange={(e) => {
+                    const files = e.target.files;
+                    if (!files?.length) return;
+                    uploadMutation.mutate(files);
+                  }}
+                />
+                <label htmlFor="background">배경 이미지 수정</label>
+                <UploadIcon />
+              </div>
             </Button>
             <Button
               type="button"
               variant="Line"
-              onClick={() => handleBackgroundRemove(src)}
+              onClick={() => {
+                if (src === baseSrc) return;
+
+                removeMutation.mutate(src);
+              }}
+              style={{
+                height: '100%',
+                padding: 0,
+              }}
             >
-              삭제
+              <div>
+                <label>삭제</label>
+                <RemoveIcon />
+              </div>
             </Button>
           </Wrapper.Item>
         )}
@@ -238,25 +294,33 @@ const ProfileRepresentative = ({ images }: ProfileRepresentativeProps) => {
 };
 
 const Profile = (props: ProfileProps) => {
-  const { data } = useSession();
   const { profile, sub, isMyAccountPage, ...rest } = props;
+  const { data: session } = useSession();
+  const { data: account } = useAccount(sub, session?.accessToken, {
+    enabled: !!session,
+  });
+
   return (
     <Container position="relative" padding="0 0 80px 0">
-      <ProfileBackground
-        src={profile.background}
-        sub={sub}
-        session={data}
-        isMyAccountPage={isMyAccountPage}
-      />
-      <Wrapper css={style.wrapper}>
-        <ProfileInfo
-          profile={profile}
-          sub={sub}
-          isMyAccountPage={isMyAccountPage}
-          {...rest}
-        />
-        <ProfileRepresentative images={profile.gallery} />
-      </Wrapper>
+      {account && (
+        <>
+          <ProfileBackground
+            src={account.data.background}
+            sub={sub}
+            session={session}
+            isMyAccountPage={isMyAccountPage}
+          />
+          <Wrapper css={style.wrapper}>
+            <ProfileInfo
+              profile={account.data}
+              sub={sub}
+              isMyAccountPage={isMyAccountPage}
+              {...rest}
+            />
+            <ProfileRepresentative images={account.data.gallery} />
+          </Wrapper>
+        </>
+      )}
     </Container>
   );
 };
