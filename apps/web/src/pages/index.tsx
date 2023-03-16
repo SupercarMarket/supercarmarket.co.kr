@@ -3,7 +3,13 @@ import {
   QueryClient,
   QueryErrorResetBoundary,
 } from '@tanstack/react-query';
-import { Container, Wrapper, Title, applyMediaQuery } from '@supercarmarket/ui';
+import {
+  Container,
+  Wrapper,
+  Title,
+  applyMediaQuery,
+  Alert,
+} from '@supercarmarket/ui';
 import type { NextPageWithLayout } from '@supercarmarket/types/base';
 import { ErrorFallback } from 'components/fallback';
 import Community from 'components/home/community';
