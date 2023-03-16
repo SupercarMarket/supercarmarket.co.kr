@@ -41,7 +41,7 @@ const Header = ({ navlinks }: HeaderProps) => {
   }, []);
 
   return (
-    <Container width="100%" display="flex">
+    <Container as="header" width="100%" display="flex">
       <Wrapper
         className={clsx({
           hidden: search,

@@ -43,6 +43,8 @@ const HamburgerLinkItem = React.memo(function HamburgerLinkItem({
   }
   return (
     <Container
+      as="menu"
+      role="menu"
       width="100%"
       display="flex"
       flexDirection="column"

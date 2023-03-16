@@ -18,7 +18,7 @@ const Highlight = (props: HighlightProps) => {
     children,
   } = props;
   return (
-    <b className={clsx('highlight')}>
+    <b role="note" className={clsx('highlight')}>
       {children}
       <style jsx>{`
         .highlight {

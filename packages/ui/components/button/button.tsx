@@ -42,6 +42,7 @@ const Button = forwardRef(function Button(
     <>
       <button
         ref={ref}
+        role="button"
         type={type}
         id={buttonId}
         aria-pressed={active}

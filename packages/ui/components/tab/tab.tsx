@@ -48,7 +48,7 @@ const Tab = ({
     });
 
   return (
-    <Container width={full ? '100%' : 'fit-content'}>
+    <Container role="group" width={full ? '100%' : 'fit-content'}>
       <Wrapper
         css={css`
           width: 100%;

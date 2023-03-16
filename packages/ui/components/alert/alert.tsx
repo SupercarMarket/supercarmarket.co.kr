@@ -26,7 +26,7 @@ const Alert = (props: AlertProps) => {
   const [bgColor, contentColor] = getSeverityColor(severity);
 
   return (
-    <div className={clsx('alert')}>
+    <div role="alert" className={clsx('alert')}>
       <div className={clsx('alert-icon')}>
         {severity === 'waring' && (
           <svg

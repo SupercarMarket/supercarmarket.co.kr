@@ -4,7 +4,7 @@ import * as style from './footer.styled';
 
 const Footer = () => {
   return (
-    <Container background="#F7F7F8">
+    <Container as="footer" role="contentinfo" background="#F7F7F8">
       <Wrapper css={style.footer}>
         <Wrapper.Left css={style.footerLeft}>
           <Wrapper.Item css={style.footerLeftItem}>

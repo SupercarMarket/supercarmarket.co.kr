@@ -26,7 +26,7 @@ const AccountLayout = (props: AccountLayoutProps) => {
           <Header navlinks={navlinks} />
           <Navbar navlinks={navlinks} />
         </Wrapper>
-        <Wrapper>{children}</Wrapper>
+        <Wrapper role="main">{children}</Wrapper>
       </Container>
       <Footer />
     </>

@@ -5,6 +5,7 @@ import { css } from 'styled-components';
 const Toggle = () => {
   return (
     <Wrapper
+      role="button"
       css={css`
         position: fixed;
         bottom: 0;
