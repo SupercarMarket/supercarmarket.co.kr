@@ -51,6 +51,11 @@ export default class MyDocument extends Document {
           <meta name="mobile-web-app-capable" content="yes" />
           <meta name="theme-color" content="#FFFFFF" />
           <meta name="msapplication-TileColor" content="#ffffff" />
+          {/* 서치 콘솔 */}
+          <meta
+            name="naver-site-verification"
+            content="64a0a231db514bb40ad2899c67e3595109ef6b93"
+          />
           {/* favicon */}
           <link
             rel="apple-touch-icon"
