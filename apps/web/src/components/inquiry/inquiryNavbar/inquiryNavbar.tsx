@@ -4,7 +4,30 @@ import Link from 'next/link';
 
 import { css } from 'styled-components';
 
-const InquiryNavbar = ({ title, description, link }: InquiryLink) => {
+import Tr1Icon from '../../../../public/images/icons/tr_1.svg';
+import Tr2Icon from '../../../../public/images/icons/tr_2.svg';
+import Tr3Icon from '../../../../public/images/icons/tr_3.svg';
+import Tr4Icon from '../../../../public/images/icons/tr_4.svg';
+import Tr5Icon from '../../../../public/images/icons/tr_5.svg';
+
+const getSvgIcon = (index: number) => {
+  return {
+    0: <Tr1Icon width="100%" height="100%" />,
+    1: <Tr2Icon width="100%" height="100%" />,
+    2: <Tr3Icon width="100%" height="100%" />,
+    3: <Tr4Icon width="100%" height="100%" />,
+    4: <Tr5Icon width="100%" height="100%" />,
+  }[index];
+};
+
+const InquiryNavbar = ({
+  title,
+  description,
+  link,
+  index,
+}: InquiryLink & {
+  index: number;
+}) => {
   return (
     <Container
       display="flex"
@@ -19,14 +42,14 @@ const InquiryNavbar = ({ title, description, link }: InquiryLink) => {
           gap: 40px;
         `}
       >
-        <div
-          style={{
-            width: '100px',
-            height: '100px',
-            borderRadius: '50px',
-            background: '#D9D9D9',
-          }}
-        />
+        <Wrapper.Item
+          css={css`
+            width: 100px;
+            height: 100px;
+          `}
+        >
+          {getSvgIcon(index)}
+        </Wrapper.Item>
         <Wrapper.Item
           css={css`
             position: relative;

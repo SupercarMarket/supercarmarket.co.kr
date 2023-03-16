@@ -19,8 +19,8 @@ const Inquiry: NextPageWithLayout = () => {
         `}
       >
         <Title>어떤 문의를 원하시나요?</Title>
-        {inquiry.links.map((list) => (
-          <InquiryNavbar key={list.title} {...list} />
+        {inquiry.links.map((list, index) => (
+          <InquiryNavbar key={list.title} index={index} {...list} />
         ))}
       </Wrapper>
     </Container>
