@@ -12,7 +12,7 @@ const Divider = (props: DividerProps) => {
   const { width, height, margin, color, className = 'divider' } = props;
   return (
     <>
-      <div className={className} />
+      <div role="separator" className={className} />
       <style jsx>{`
         .divider {
           width: ${width};

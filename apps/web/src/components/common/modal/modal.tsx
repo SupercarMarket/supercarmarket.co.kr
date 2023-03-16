@@ -7,6 +7,7 @@ const Modal = ({
   description = '로그인이 필요한 서비스입니다.',
   closeText,
   clickText,
+  background = 'none',
   onClose,
   onClick,
   onCancel,
@@ -15,8 +16,9 @@ const Modal = ({
   description?: string;
   closeText?: string;
   clickText?: string;
-  onClose: () => void;
-  onClick: () => void;
+  background?: string;
+  onClose?: () => void;
+  onClick?: () => void;
   onCancel: () => void;
 }) => {
   return (
@@ -32,6 +34,7 @@ const Modal = ({
           left: '0',
           right: '0',
           zIndex: 99999,
+          background,
         }}
         onClick={(e) => {
           if (e.currentTarget !== e.target) return;

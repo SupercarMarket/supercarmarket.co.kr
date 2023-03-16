@@ -88,7 +88,7 @@ const Layout = ({ children }: LayoutProps) => {
       <Styled.Container>
         <Header navlinks={navlinks} />
         <Navbar navlinks={navlinks} />
-        <main>{children}</main>
+        <main role="main">{children}</main>
       </Styled.Container>
       <Footer />
       <Toggle />

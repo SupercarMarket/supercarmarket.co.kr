@@ -86,6 +86,8 @@ const NavLink = memo(function NavLink({
 const Navbar = ({ navlinks }: NavbarProps) => {
   return (
     <Container
+      as="nav"
+      role="navigation"
       className="navbar"
       width="100%"
       position="relative"

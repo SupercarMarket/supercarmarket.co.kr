@@ -1,20 +1,25 @@
 'use client';
 
-import { Alert, Button, Form, FormLabel } from '@supercarmarket/ui';
+import { Alert, Button, Form, FormLabel, theme } from '@supercarmarket/ui';
 import type { FormState } from 'constants/account';
 import account from 'constants/account';
 import { update } from 'feature/actions/authActions';
 import { useAuthDispatch, useAuthState } from 'feature/authProvider';
 import useUpdateInfo from 'hooks/queries/useUpdateInfo';
 import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import * as React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { css } from 'styled-components';
 
 import AccountFormItem from '../accountFormItem';
+import ModalContext from 'feature/modalContext';
+import { Modal } from 'components/common/modal';
+import { clientFetcher } from '@supercarmarket/lib';
 
 const AccountUpdateForm = () => {
+  const { onOpen, onClose } = React.useContext(ModalContext);
+  const [error, setError] = React.useState<string | null>(null);
   const { data: session } = useSession();
   const { data: updateInfo, refetch } = useUpdateInfo(
     session?.accessToken as string
@@ -23,6 +28,46 @@ const AccountUpdateForm = () => {
   const methods = useForm<FormState>();
   const state = useAuthState();
   const dispatch = useAuthDispatch();
+
+  const handleWithdrawal = React.useCallback(async () => {
+    setError(null);
+
+    if (!session) return;
+
+    const response = await clientFetcher('/server', {
+      method: 'DELETE',
+      headers: {
+        ACCESS_TOKEN: session.accessToken,
+        REFRESH_TOKEN: session.refreshToken,
+      },
+    }).catch((error) => {
+      setError(error.message);
+    });
+
+    if (!response?.data) return;
+
+    onClose();
+    signOut({ redirect: true });
+  }, [onClose, session]);
+
+  const handleModal = React.useCallback(() => {
+    onOpen(
+      <Modal
+        title="회원 탈퇴"
+        description="회원 탈퇴 시, 정보를 복구할 수 없습니다."
+        background={theme.color['greyScale-6']}
+        closeText="취소"
+        clickText="탈퇴하기"
+        onClose={() => {
+          onClose();
+        }}
+        onCancel={() => {
+          onClose();
+        }}
+        onClick={handleWithdrawal}
+      />
+    );
+  }, [handleWithdrawal, onClose, onOpen]);
 
   /**
    * @function handleRequire
@@ -114,7 +159,7 @@ const AccountUpdateForm = () => {
               />
             ))}
             <FormLabel label="회원탈퇴">
-              <Button type="button" variant="Line">
+              <Button type="button" variant="Line" onClick={handleModal}>
                 탈퇴하기
               </Button>
             </FormLabel>
@@ -126,6 +171,7 @@ const AccountUpdateForm = () => {
         {state.update.error && (
           <Alert title={state.update.error.message} severity="error" />
         )}
+        {error && <Alert title={error} severity="error" />}
       </Form>
     </FormProvider>
   );

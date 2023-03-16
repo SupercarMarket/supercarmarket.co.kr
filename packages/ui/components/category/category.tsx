@@ -20,7 +20,7 @@ const Category = (props: CategoryProps) => {
   const { links, category } = props;
 
   return (
-    <Container width="100%">
+    <Container role="navigation" width="100%">
       <Wrapper
         css={css`
           display: flex;
