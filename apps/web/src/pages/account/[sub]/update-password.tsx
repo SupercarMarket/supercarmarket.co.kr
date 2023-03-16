@@ -1,11 +1,13 @@
 import { Container, Title } from '@supercarmarket/ui';
 import type { NextPageWithLayout, Params } from '@supercarmarket/types/base';
 import layout from 'components/layout';
-import { GetServerSideProps } from 'next';
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { getSession } from 'utils/api/auth/user';
 import { AccountPasswordForm } from 'components/account';
 
-const ProfilePasswordUpdate: NextPageWithLayout = () => {
+const ProfilePasswordUpdate: NextPageWithLayout = ({
+  sub,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   return (
     <Container
       display="flex"
@@ -14,7 +16,7 @@ const ProfilePasswordUpdate: NextPageWithLayout = () => {
       margin="80px 0"
     >
       <Title textAlign="center">비밀번호 수정</Title>
-      <AccountPasswordForm />
+      <AccountPasswordForm sub={sub} />
     </Container>
   );
 };
