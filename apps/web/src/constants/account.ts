@@ -1,4 +1,5 @@
 import * as React from 'react-hook-form';
+import { password } from 'utils/validator';
 
 type AccountTab = 'product' | 'magazine' | 'inquiry' | 'community' | 'comment';
 
@@ -17,8 +18,14 @@ interface FormState {
   description: string;
 }
 
-interface Forms {
-  htmlFor: keyof FormState;
+interface AccountPasswordUpdateFormState {
+  password: string;
+  newPassword: string;
+  newPasswordCheck: string;
+}
+
+interface Forms<T> {
+  htmlFor: keyof T;
   type: 'text' | 'email' | 'password' | 'tel';
   label?: string;
   placeholder?: string;
@@ -89,7 +96,7 @@ const account = {
       },
     ],
   },
-  forms: [
+  update: [
     {
       htmlFor: 'id',
       label: '아이디',
@@ -158,8 +165,44 @@ const account = {
       placeholder: '소개를 입력해주세요 (최대 50자)',
       options: {},
     },
-  ] as Forms[],
-} as const;
+  ] as Forms<FormState>[],
+  updatePassword: [
+    {
+      htmlFor: 'password',
+      label: '비밀번호',
+      type: 'password',
+      placeholder: '비밀번호를 입력해주세요',
+      options: {
+        validate: password,
+      },
+    },
+    {
+      htmlFor: 'newPassword',
+      label: '새 비밀번호',
+      type: 'password',
+      placeholder: '새 비밀번호를 입력해주세요.',
+      tooltip: '영문/숫자/특수문자 중 2가지 이상, 8자 이상',
+      options: {
+        validate: password,
+      },
+    },
+    {
+      htmlFor: 'newPasswordCheck',
+      label: '새 비밀번호 확인',
+      type: 'password',
+      placeholder: '새 비밀번호를 한번 더 입력해주세요.',
+      options: {
+        validate: password,
+      },
+    },
+  ] as Forms<AccountPasswordUpdateFormState>[],
+};
 
-export type { AccountRoute, AccountTab, Forms, FormState };
+export type {
+  AccountRoute,
+  AccountTab,
+  Forms,
+  FormState,
+  AccountPasswordUpdateFormState,
+};
 export default account;

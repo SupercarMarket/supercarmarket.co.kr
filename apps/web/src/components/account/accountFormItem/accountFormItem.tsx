@@ -1,6 +1,5 @@
 import { Wrapper, FormInput, FormLabel, FormMessage } from '@supercarmarket/ui';
-import { clientApi, clientFetcher } from '@supercarmarket/lib';
-import type { Forms } from 'constants/account';
+import type { Forms, FormState } from 'constants/account';
 import {
   confirmPhoneAuth,
   duplicateEmailAuth,
@@ -8,7 +7,6 @@ import {
   requestPhoneAuth,
 } from 'feature/actions/authActions';
 import { AuthDispatch, AuthInitialState } from 'feature/authProvider';
-import type { Session } from 'next-auth';
 import * as React from 'react';
 import {
   FieldError,
@@ -30,10 +28,9 @@ type InputBtnAttr = {
   buttonCallback?: () => void;
 };
 
-interface AccountFormItemProps extends Forms {
+interface AccountFormItemProps extends Forms<FormState> {
   defaultValue?: string | string[];
   state: AuthInitialState;
-  session: Session | null;
   dispatch: AuthDispatch;
 }
 
@@ -117,7 +114,6 @@ const AccountFormItemContainer = React.memo(function AccountFormItemContainer({
   isSubmitSuccessful,
   infoState,
   phone,
-  session,
   dispatch,
   regsiter,
 }: AccountFormItemContainerProps) {
@@ -153,79 +149,6 @@ const AccountFormItemContainer = React.memo(function AccountFormItemContainer({
     if (success) return true;
     if (htmlFor === 'authentication') return !phone;
     return undefined;
-  };
-
-  const handleGalleryUpload = async (files: FileList) => {
-    if (!session) return;
-
-    const formData = new FormData();
-
-    Array.from(files).forEach((file) => {
-      formData.append('gallery', file);
-    });
-
-    const response = await clientFetcher('/server/supercar/v1/user/gallery', {
-      method: 'POST',
-      headers: {
-        ACCESS_TOKEN: session.accessToken,
-      },
-      body: formData,
-    });
-
-    return response;
-  };
-
-  const handleBackgroundUpload = async (files: FileList) => {
-    if (!session) return;
-
-    const formData = new FormData();
-
-    Array.from(files).forEach((file) => {
-      formData.append('background', file);
-    });
-
-    const response = await clientFetcher(
-      '/server/supercar/v1/user/background',
-      {
-        method: 'POST',
-        headers: {
-          ACCESS_TOKEN: session.accessToken,
-        },
-        body: formData,
-      }
-    );
-
-    return response;
-  };
-
-  const handleBackgroundRemove = async (url: string) => {
-    if (!session) return;
-
-    const response = await clientApi('/server/supercar/v1/user/background', {
-      method: 'DELETE',
-      headers: {
-        ACCESS_TOKEN: session.accessToken,
-        'Content-Type': 'application/json',
-      },
-      data: { url },
-    });
-
-    return response;
-  };
-
-  const handleGalleryRemove = async (url: string) => {
-    if (!session) return;
-
-    const response = await clientApi('/server/supercar/v1/user/gallery', {
-      method: 'DELETE',
-      headers: {
-        ACCESS_TOKEN: session.accessToken,
-        'Content-Type': 'application/json',
-      },
-      data: { url },
-    });
-
-    return response;
   };
 
   const handlePhoneAuth = () => {

@@ -49,12 +49,14 @@ interface ProfileRepresentativeProps {
   session: Session | null;
   sub: string;
   images?: string[];
+  isMyAccountPage: boolean;
 }
 
 interface ProfileRepresentativeItemProps {
   session: Session | null;
   sub: string;
   queryClient: QueryClient;
+  isMyAccountPage: boolean;
   src?: string;
 }
 
@@ -237,6 +239,7 @@ const ProfileRepresentative = ({
   images,
   session,
   sub,
+  isMyAccountPage,
 }: ProfileRepresentativeProps) => {
   const queryClient = useQueryClient();
   return (
@@ -255,6 +258,7 @@ const ProfileRepresentative = ({
             session={session}
             sub={sub}
             queryClient={queryClient}
+            isMyAccountPage={isMyAccountPage}
           />
         ))}
       {images &&
@@ -264,6 +268,7 @@ const ProfileRepresentative = ({
             session={session}
             queryClient={queryClient}
             sub={sub}
+            isMyAccountPage={isMyAccountPage}
           />
         ))}
     </Container>
@@ -271,12 +276,13 @@ const ProfileRepresentative = ({
 };
 
 const ProfileRepresentativeItem = (props: ProfileRepresentativeItemProps) => {
-  const { src, session, sub, queryClient } = props;
+  const { src, session, sub, queryClient, isMyAccountPage } = props;
   const [hidden, setHidden] = React.useState(true);
 
   const handleClick = React.useCallback(() => {
+    if (!isMyAccountPage) return;
     setHidden((prev) => !prev);
-  }, []);
+  }, [isMyAccountPage]);
 
   const uploadMutation = useMutation({
     mutationFn: async (files: FileList) => {
@@ -376,7 +382,7 @@ const ProfileRepresentativeItem = (props: ProfileRepresentativeItemProps) => {
             hidden: !hidden,
           })}
         >
-          <div onClick={() => setHidden(false)}>
+          <div onClick={handleClick}>
             <svg
               width="28"
               height="28"
@@ -399,96 +405,100 @@ const ProfileRepresentativeItem = (props: ProfileRepresentativeItemProps) => {
           </div>
         </Wrapper.Item>
       )}
-      <Wrapper.Item
-        css={css`
-          position: absolute;
-          width: 100%;
-          height: 100%;
-          transition: all 0.3s;
-          & > div {
-            display: flex;
-            align-items: flex-end;
-            justify-content: flex-end;
+      {isMyAccountPage && (
+        <Wrapper.Item
+          css={css`
+            position: absolute;
             width: 100%;
             height: 100%;
-            background-color: ${theme.color['greyScale-6']};
-            opacity: 0.95;
-            z-index: 999;
-            cursor: pointer;
-          }
-          div[role='button'] {
-            display: flex;
-            gap: 12px;
-            padding: 12px;
-          }
-          label {
-            cursor: pointer;
-            width: 24px;
-            height: 24px;
-          }
-          svg {
-            width: 24px !important;
-            height: 24px !important;
-            fill: ${theme.color['greyScale-6']} !important;
-          }
-          &.hidden {
-            visibility: hidden;
-            opacity: 0;
-          }
-        `}
-        className={clsx({
-          hidden: hidden,
-        })}
-      >
-        <div
-          onClick={(e) => {
-            if (e.currentTarget !== e.target) return;
-            setHidden(true);
-          }}
+            transition: all 0.3s;
+            & > div {
+              display: flex;
+              align-items: flex-end;
+              justify-content: flex-end;
+              width: 100%;
+              height: 100%;
+              background-color: ${theme.color['greyScale-6']};
+              opacity: 0.95;
+              z-index: 999;
+              cursor: pointer;
+            }
+            div[role='button'] {
+              display: flex;
+              gap: 12px;
+              padding: 12px;
+            }
+            label {
+              cursor: pointer;
+              width: 24px;
+              height: 24px;
+            }
+            svg {
+              width: 24px !important;
+              height: 24px !important;
+              fill: ${theme.color['greyScale-6']} !important;
+            }
+            &.hidden {
+              visibility: hidden;
+              opacity: 0;
+            }
+          `}
+          className={clsx({
+            hidden: hidden,
+          })}
         >
-          <div role="button">
-            {!src && (
-              <Button
-                type="button"
-                variant="Line"
-                style={{
-                  height: '100%',
-                  padding: '10px',
-                }}
-              >
-                <input
-                  id="representative"
-                  type="file"
-                  accept="image/jpg, image/png, image/jpeg"
-                  hidden
-                  onChange={(e) => {
-                    const files = e.target.files;
-                    if (!files?.length) return;
-                    uploadMutation.mutate(files);
+          <div
+            onClick={(e) => {
+              if (e.currentTarget !== e.target) return;
+              handleClick();
+            }}
+          >
+            <div role="button">
+              {!src && (
+                <Button
+                  type="button"
+                  variant="Line"
+                  style={{
+                    height: '100%',
+                    padding: '10px',
                   }}
-                />
-                <label htmlFor="representative">
-                  <UploadIcon />
-                </label>
-              </Button>
-            )}
-            <Button
-              type="button"
-              variant="Line"
-              style={{
-                height: '100%',
-                padding: '10px',
-              }}
-              onClick={() => {
-                if (!src) return;
-                removeMutation.mutate(src);
-              }}
-            >
-              <RemoveIcon />
-            </Button>
+                >
+                  <input
+                    id="representative"
+                    type="file"
+                    accept="image/jpg, image/png, image/jpeg"
+                    hidden
+                    onChange={(e) => {
+                      const files = e.target.files;
+                      if (!files?.length) return;
+                      uploadMutation.mutate(files);
+                    }}
+                  />
+                  <label htmlFor="representative">
+                    <UploadIcon />
+                  </label>
+                </Button>
+              )}
+              {src && (
+                <Button
+                  type="button"
+                  variant="Line"
+                  style={{
+                    height: '100%',
+                    padding: '10px',
+                  }}
+                  onClick={() => {
+                    if (!src) return;
+                    removeMutation.mutate(src);
+                  }}
+                >
+                  <RemoveIcon />
+                </Button>
+              )}
+            </div>
           </div>
-        </div>
-      </Wrapper.Item>
+        </Wrapper.Item>
+      )}
     </Wrapper>
   );
 };
@@ -518,6 +528,7 @@ const Profile = (props: ProfileProps) => {
               {...rest}
             />
             <ProfileRepresentative
+              isMyAccountPage={isMyAccountPage}
               images={account.data.gallery}
               session={session}
               sub={sub}

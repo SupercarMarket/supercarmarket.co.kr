@@ -100,7 +100,7 @@ const AccountUpdateForm = () => {
       >
         {updateInfo && (
           <>
-            {account.forms.map((form) => (
+            {account.update.map((form) => (
               <AccountFormItem
                 key={form.htmlFor}
                 defaultValue={
@@ -109,7 +109,6 @@ const AccountUpdateForm = () => {
                     : undefined
                 }
                 state={state}
-                session={session}
                 dispatch={dispatch}
                 {...form}
               />
