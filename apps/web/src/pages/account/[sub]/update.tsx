@@ -5,6 +5,7 @@ import layout from 'components/layout';
 import { AuthProvider } from 'feature/authProvider';
 import type { GetServerSideProps } from 'next';
 import { getSession } from 'utils/api/auth/user';
+import { ModalProvider } from 'feature/modalContext';
 
 const ProfileUpdate: NextPageWithLayout = () => {
   return (
@@ -15,9 +16,11 @@ const ProfileUpdate: NextPageWithLayout = () => {
       margin="80px 0"
     >
       <Title textAlign="center">개인정보 수정</Title>
-      <AuthProvider>
-        <AccountUpdateForm />
-      </AuthProvider>
+      <ModalProvider>
+        <AuthProvider>
+          <AccountUpdateForm />
+        </AuthProvider>
+      </ModalProvider>
     </Container>
   );
 };
