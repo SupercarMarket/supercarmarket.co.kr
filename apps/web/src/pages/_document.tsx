@@ -56,6 +56,10 @@ export default class MyDocument extends Document {
             name="naver-site-verification"
             content="64a0a231db514bb40ad2899c67e3595109ef6b93"
           />
+          <meta
+            name="google-site-verification"
+            content="Py_afcHdJUFmCzWGXB-EmHItssuvcAhBGPpHjCoa05c"
+          />
           {/* favicon */}
           <link
             rel="apple-touch-icon"
