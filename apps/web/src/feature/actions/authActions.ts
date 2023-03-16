@@ -22,8 +22,6 @@ type ResetPassword = FindAuth & { password: string; id: string };
 type Update = [
   Omit<FormState, 'gallery' | 'background' | 'newPassword'> & {
     code: string;
-    newPassword: string | null;
-    newPasswordCheck: string | null;
   },
   string
 ];

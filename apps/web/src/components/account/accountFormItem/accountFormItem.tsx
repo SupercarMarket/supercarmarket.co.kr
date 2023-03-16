@@ -1,10 +1,4 @@
-import {
-  Wrapper,
-  FormImages,
-  FormInput,
-  FormLabel,
-  FormMessage,
-} from '@supercarmarket/ui';
+import { Wrapper, FormInput, FormLabel, FormMessage } from '@supercarmarket/ui';
 import { clientApi, clientFetcher } from '@supercarmarket/lib';
 import type { Forms } from 'constants/account';
 import {
@@ -78,16 +72,7 @@ interface AccountFormItemContainerProps extends AccountFormItemProps {
 const AccountFormItem = (props: AccountFormItemProps) => {
   const { htmlFor, state } = props;
   const infoState = React.useMemo(() => {
-    if (
-      htmlFor !== 'password' &&
-      htmlFor !== 'newPassword' &&
-      htmlFor !== 'newPasswordConfirm' &&
-      htmlFor !== 'name' &&
-      htmlFor !== 'description' &&
-      htmlFor !== 'gallery' &&
-      htmlFor !== 'background'
-    )
-      return state[htmlFor];
+    if (htmlFor !== 'name' && htmlFor !== 'description') return state[htmlFor];
   }, [state, htmlFor]);
   const {
     register,
@@ -132,7 +117,6 @@ const AccountFormItemContainer = React.memo(function AccountFormItemContainer({
   isSubmitSuccessful,
   infoState,
   phone,
-  defaultValue,
   session,
   dispatch,
   regsiter,
@@ -332,26 +316,6 @@ const AccountFormItemContainer = React.memo(function AccountFormItemContainer({
               />
             ),
             password: <FormInput {...attr} {...regsiter(htmlFor, options)} />,
-            images: (
-              <FormImages
-                {...attr}
-                size={3}
-                name={htmlFor}
-                defaultValue={defaultValue as string[]}
-                handleUpload={handleGalleryUpload}
-                handleRemove={handleGalleryRemove}
-              />
-            ),
-            image: (
-              <FormImages
-                size={1}
-                name={htmlFor}
-                {...attr}
-                defaultValue={[defaultValue] as string[]}
-                handleUpload={handleBackgroundUpload}
-                handleRemove={handleBackgroundRemove}
-              />
-            ),
           }[type]
         }
         <FormMessage
