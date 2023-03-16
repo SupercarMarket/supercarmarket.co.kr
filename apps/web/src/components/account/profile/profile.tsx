@@ -1,59 +1,247 @@
-import { applyMediaQuery, Container, Wrapper } from '@supercarmarket/ui';
+import * as React from 'react';
+import {
+  applyMediaQuery,
+  Button,
+  Container,
+  theme,
+  Wrapper,
+} from '@supercarmarket/ui';
 import { Profile as ProfileType } from '@supercarmarket/types/account';
 import Image from 'next/image';
 import { css } from 'styled-components';
 
 import * as style from './profile.styled';
 import ProfileInfo from './profileInfo';
+import useBase64 from 'hooks/queries/useBase64';
+import Skeleton from 'react-loading-skeleton';
+import { useSession } from 'next-auth/react';
+import type { Session } from 'next-auth';
+import { clientApi, clientFetcher } from '@supercarmarket/lib';
+import useAccount from 'hooks/queries/useAccount';
+import {
+  QueryClient,
+  useMutation,
+  useQueryClient,
+} from '@tanstack/react-query';
+import queries from 'constants/queries';
+
+import UploadIcon from '../../../../public/svg/create.svg';
+import RemoveIcon from '../../../../public/svg/delete.svg';
+import clsx from 'clsx';
+
+const baseSrc =
+  'https://user-images.githubusercontent.com/66871265/210207112-a0d7b276-e24b-4ae9-80a1-8e48d5cc45f2.png';
 
 export interface ProfileProps {
   isMyAccountPage: boolean;
+  sub: string;
   profile: ProfileType;
 }
 
 interface ProfileBackgroundProps {
   src: string | null;
+  sub: string;
+  session: Session | null;
+  isMyAccountPage: boolean;
 }
 
 interface ProfileRepresentativeProps {
+  session: Session | null;
+  sub: string;
   images?: string[];
+  isMyAccountPage: boolean;
 }
 
-const ProfileBackground = ({ src }: ProfileBackgroundProps) => {
+interface ProfileRepresentativeItemProps {
+  session: Session | null;
+  sub: string;
+  queryClient: QueryClient;
+  isMyAccountPage: boolean;
+  src?: string;
+}
+
+const ProfileBackground = ({
+  src: _src,
+  sub,
+  session,
+  isMyAccountPage,
+}: ProfileBackgroundProps) => {
+  const src = _src ? _src : baseSrc;
+  const queryClient = useQueryClient();
+  const { data, isFetching, isLoading } = useBase64(src, {
+    category: 'account',
+    id: sub,
+    detail: true,
+    idx: 0,
+  });
+
+  const uploadMutation = useMutation({
+    mutationFn: async (files: FileList) => {
+      if (!session) return;
+
+      const formData = new FormData();
+
+      Array.from(files).forEach((file) => {
+        formData.append('background', file);
+      });
+
+      return await clientFetcher('/server/supercar/v1/user/background', {
+        method: 'POST',
+        headers: {
+          ACCESS_TOKEN: session.accessToken,
+        },
+        body: formData,
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(queries.account.id(sub));
+    },
+  });
+
+  const removeMutation = useMutation({
+    mutationFn: async (url: string) => {
+      if (!session) return;
+
+      return await clientApi('/server/supercar/v1/user/background', {
+        method: 'DELETE',
+        headers: {
+          ACCESS_TOKEN: session.accessToken,
+          'Content-Type': 'application/json',
+        },
+        data: { url },
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(queries.account.id(sub));
+    },
+  });
+
   return (
     <Container position="absolute">
       <Wrapper
         css={css`
+          position: relative;
           width: 100%;
           height: 400px;
-
           ${applyMediaQuery('mobile')} {
-            height: 200px;
+            height: 184px;
           }
         `}
       >
-        <Image
-          src={
-            src
-              ? src
-              : 'https://user-images.githubusercontent.com/66871265/210207112-a0d7b276-e24b-4ae9-80a1-8e48d5cc45f2.png'
-          }
-          alt="background"
-          width={1920}
-          height={400}
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            zIndex: -1,
-          }}
-        />
+        {isFetching || isLoading ? (
+          <Wrapper.Item
+            css={css`
+              .react-loading-skeleton {
+                z-index: unset;
+                height: 400px;
+                ${applyMediaQuery('mobile')} {
+                  height: 184px;
+                }
+              }
+            `}
+          >
+            <Skeleton width="100%" />
+          </Wrapper.Item>
+        ) : (
+          <Image
+            src={src}
+            alt="background"
+            placeholder="blur"
+            blurDataURL={data?.data.base64}
+            fill
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              zIndex: -1,
+            }}
+          />
+        )}
+        {isMyAccountPage && (
+          <Wrapper.Item
+            css={css`
+              position: absolute;
+              display: flex;
+              bottom: 24px;
+              right: 24px;
+              gap: 12px;
+              div {
+                padding: 12px;
+                display: flex;
+                align-items: center;
+                gap: 4px;
+              }
+              label {
+                cursor: pointer;
+                line-height: 24px;
+              }
+              svg {
+                width: 18px !important;
+                height: 18px !important;
+                fill: ${theme.color['greyScale-6']} !important;
+              }
+              ${applyMediaQuery('mobile')} {
+                bottom: 16px;
+                right: 16px;
+              }
+            `}
+          >
+            <Button
+              type="button"
+              variant="Line"
+              style={{
+                height: '100%',
+                padding: 0,
+              }}
+            >
+              <div>
+                <input
+                  id="background"
+                  type="file"
+                  accept="image/jpg, image/png, image/jpeg"
+                  hidden
+                  onChange={(e) => {
+                    const files = e.target.files;
+                    if (!files?.length) return;
+                    uploadMutation.mutate(files);
+                  }}
+                />
+                <label htmlFor="background">배경 이미지 수정</label>
+                <UploadIcon />
+              </div>
+            </Button>
+            <Button
+              type="button"
+              variant="Line"
+              onClick={() => {
+                if (src === baseSrc) return;
+
+                removeMutation.mutate(src);
+              }}
+              style={{
+                height: '100%',
+                padding: 0,
+              }}
+            >
+              <div>
+                <label>삭제</label>
+                <RemoveIcon />
+              </div>
+            </Button>
+          </Wrapper.Item>
+        )}
       </Wrapper>
     </Container>
   );
 };
 
-const ProfileRepresentative = ({ images }: ProfileRepresentativeProps) => {
+const ProfileRepresentative = ({
+  images,
+  session,
+  sub,
+  isMyAccountPage,
+}: ProfileRepresentativeProps) => {
+  const queryClient = useQueryClient();
   return (
     <Container
       display="grid"
@@ -64,33 +252,91 @@ const ProfileRepresentative = ({ images }: ProfileRepresentativeProps) => {
     >
       {images &&
         images.map((image) => (
-          <Wrapper
+          <ProfileRepresentativeItem
             key={image}
-            css={css`
-              width: 260px;
-              height: 260px;
-            `}
-          >
-            <Image
-              src={image}
-              alt="대표이미지"
-              width={260}
-              height={260}
-              style={{
-                width: '100%',
-                height: 'auto',
-                objectFit: 'cover',
-                zIndex: 999,
-                borderRadius: '20px',
-              }}
-            />
-          </Wrapper>
+            src={image}
+            session={session}
+            sub={sub}
+            queryClient={queryClient}
+            isMyAccountPage={isMyAccountPage}
+          />
         ))}
       {images &&
         Array.from({ length: 3 - images.length }).map((_, index) => (
-          <Wrapper
+          <ProfileRepresentativeItem
             key={index}
-            css={css`
+            session={session}
+            queryClient={queryClient}
+            sub={sub}
+            isMyAccountPage={isMyAccountPage}
+          />
+        ))}
+    </Container>
+  );
+};
+
+const ProfileRepresentativeItem = (props: ProfileRepresentativeItemProps) => {
+  const { src, session, sub, queryClient, isMyAccountPage } = props;
+  const [hidden, setHidden] = React.useState(true);
+
+  const handleClick = React.useCallback(() => {
+    if (!isMyAccountPage) return;
+    setHidden((prev) => !prev);
+  }, [isMyAccountPage]);
+
+  const uploadMutation = useMutation({
+    mutationFn: async (files: FileList) => {
+      const formData = new FormData();
+
+      Array.from(files).forEach((file) => {
+        formData.append('gallery', file);
+      });
+      return await clientFetcher('/server/supercar/v1/user/gallery', {
+        method: 'POST',
+        headers: {
+          ACCESS_TOKEN: session?.accessToken || '',
+        },
+        body: formData,
+      });
+    },
+    onSuccess: () => {
+      setHidden(true);
+      queryClient.invalidateQueries(queries.account.id(sub));
+    },
+  });
+
+  const removeMutation = useMutation({
+    mutationFn: async (url: string) => {
+      if (!session) return;
+
+      return await clientApi('/server/supercar/v1/user/gallery', {
+        method: 'DELETE',
+        headers: {
+          ACCESS_TOKEN: session.accessToken,
+          'Content-Type': 'application/json',
+        },
+        data: { url },
+      });
+    },
+    onSuccess: () => {
+      setHidden(true);
+      queryClient.invalidateQueries(queries.account.id(sub));
+    },
+  });
+
+  return (
+    <Wrapper
+      css={
+        src
+          ? css`
+              position: relative;
+              width: 260px;
+              height: 260px;
+              border-radius: 20px;
+              overflow: hidden;
+            `
+          : css`
+              position: relative;
               width: 260px;
               height: 260px;
               box-sizing: border-box;
@@ -100,9 +346,43 @@ const ProfileRepresentative = ({ images }: ProfileRepresentativeProps) => {
               background: ${({ theme }) => theme.color['greyScale-2']};
               border: 1px solid ${({ theme }) => theme.color['greyScale-4']};
               border-radius: 20px;
-              z-index: 999;
-            `}
-          >
+              overflow: hidden;
+            `
+      }
+    >
+      {src ? (
+        <Image
+          src={src}
+          alt="대표이미지"
+          fill
+          style={{
+            cursor: 'pointer',
+            objectFit: 'cover',
+          }}
+          onClick={handleClick}
+        />
+      ) : (
+        <Wrapper.Item
+          css={css`
+            width: 100%;
+            height: 100%;
+            div {
+              width: 100%;
+              height: 100%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              cursor: pointer;
+              &.hidden {
+                display: none;
+              }
+            }
+          `}
+          className={clsx({
+            hidden: !hidden,
+          })}
+        >
+          <div onClick={handleClick}>
             <svg
               width="28"
               height="28"
@@ -122,21 +402,140 @@ const ProfileRepresentative = ({ images }: ProfileRepresentativeProps) => {
                 </clipPath>
               </defs>
             </svg>
-          </Wrapper>
-        ))}
-    </Container>
+          </div>
+        </Wrapper.Item>
+      )}
+      {isMyAccountPage && (
+        <Wrapper.Item
+          css={css`
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transition: all 0.3s;
+            & > div {
+              display: flex;
+              align-items: flex-end;
+              justify-content: flex-end;
+              width: 100%;
+              height: 100%;
+              background-color: ${theme.color['greyScale-6']};
+              opacity: 0.95;
+              z-index: 999;
+              cursor: pointer;
+            }
+            div[role='button'] {
+              display: flex;
+              gap: 12px;
+              padding: 12px;
+            }
+            label {
+              cursor: pointer;
+              width: 24px;
+              height: 24px;
+            }
+            svg {
+              width: 24px !important;
+              height: 24px !important;
+              fill: ${theme.color['greyScale-6']} !important;
+            }
+            &.hidden {
+              visibility: hidden;
+              opacity: 0;
+            }
+          `}
+          className={clsx({
+            hidden: hidden,
+          })}
+        >
+          <div
+            onClick={(e) => {
+              if (e.currentTarget !== e.target) return;
+              handleClick();
+            }}
+          >
+            <div role="button">
+              {!src && (
+                <Button
+                  type="button"
+                  variant="Line"
+                  style={{
+                    height: '100%',
+                    padding: '10px',
+                  }}
+                >
+                  <input
+                    id="representative"
+                    type="file"
+                    accept="image/jpg, image/png, image/jpeg"
+                    hidden
+                    onChange={(e) => {
+                      const files = e.target.files;
+                      if (!files?.length) return;
+                      uploadMutation.mutate(files);
+                    }}
+                  />
+                  <label htmlFor="representative">
+                    <UploadIcon />
+                  </label>
+                </Button>
+              )}
+              {src && (
+                <Button
+                  type="button"
+                  variant="Line"
+                  style={{
+                    height: '100%',
+                    padding: '10px',
+                  }}
+                  onClick={() => {
+                    if (!src) return;
+                    removeMutation.mutate(src);
+                  }}
+                >
+                  <RemoveIcon />
+                </Button>
+              )}
+            </div>
+          </div>
+        </Wrapper.Item>
+      )}
+    </Wrapper>
   );
 };
 
 const Profile = (props: ProfileProps) => {
-  const { profile, ...rest } = props;
+  const { profile, sub, isMyAccountPage, ...rest } = props;
+  const { data: session } = useSession();
+  const { data: account } = useAccount(sub, session?.accessToken, {
+    enabled: !!session,
+  });
+
   return (
     <Container position="relative" padding="0 0 80px 0">
-      <ProfileBackground src={profile.background} />
-      <Wrapper css={style.wrapper}>
-        <ProfileInfo profile={profile} {...rest} />
-        <ProfileRepresentative images={profile.gallery} />
-      </Wrapper>
+      {account && (
+        <>
+          <ProfileBackground
+            src={account.data.background}
+            sub={sub}
+            session={session}
+            isMyAccountPage={isMyAccountPage}
+          />
+          <Wrapper css={style.wrapper}>
+            <ProfileInfo
+              profile={account.data}
+              sub={sub}
+              isMyAccountPage={isMyAccountPage}
+              {...rest}
+            />
+            <ProfileRepresentative
+              isMyAccountPage={isMyAccountPage}
+              images={account.data.gallery}
+              session={session}
+              sub={sub}
+            />
+          </Wrapper>
+        </>
+      )}
     </Container>
   );
 };

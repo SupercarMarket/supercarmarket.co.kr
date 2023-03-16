@@ -1,4 +1,5 @@
 import * as React from 'react-hook-form';
+import { password } from 'utils/validator';
 
 type AccountTab = 'product' | 'magazine' | 'inquiry' | 'community' | 'comment';
 
@@ -9,22 +10,23 @@ interface AccountRoute {
 
 interface FormState {
   id: string;
-  password: string;
-  newPassword: string;
-  newPasswordConfirm: string;
   name: string;
   nickname: string;
   phone: string;
   authentication: string;
   email: string;
   description: string;
-  gallery: string[];
-  background: string[];
 }
 
-interface Forms {
-  htmlFor: keyof FormState;
-  type: 'text' | 'email' | 'password' | 'tel' | 'images' | 'image';
+interface AccountPasswordUpdateFormState {
+  password: string;
+  newPassword: string;
+  newPasswordCheck: string;
+}
+
+interface Forms<T> {
+  htmlFor: keyof T;
+  type: 'text' | 'email' | 'password' | 'tel';
   label?: string;
   placeholder?: string;
   tooltip?: string;
@@ -94,7 +96,7 @@ const account = {
       },
     ],
   },
-  forms: [
+  update: [
     {
       htmlFor: 'id',
       label: '아이디',
@@ -103,28 +105,6 @@ const account = {
       options: {},
       errorMessage: '사용 불가능한 아이디입니다',
       successMessage: '사용 가능한 아이디입니다',
-    },
-    {
-      htmlFor: 'password',
-      label: '현재 비밀번호',
-      type: 'password',
-      placeholder: '비밀번호를 입력해주세요',
-      options: {},
-    },
-    {
-      htmlFor: 'newPassword',
-      label: '새 비밀번호',
-      type: 'password',
-      placeholder: '비밀번호를 입력해주세요',
-      tooltip: '영문/숫자/특수문자 중 2가지 이상, 8자 이상',
-      options: {},
-    },
-    {
-      htmlFor: 'newPasswordConfirm',
-      label: '새 비밀번호 확인',
-      type: 'password',
-      placeholder: '비밀번호를 한번 더 입력해주세요',
-      options: {},
     },
     {
       htmlFor: 'name',
@@ -185,20 +165,44 @@ const account = {
       placeholder: '소개를 입력해주세요 (최대 50자)',
       options: {},
     },
+  ] as Forms<FormState>[],
+  updatePassword: [
     {
-      htmlFor: 'gallery',
-      label: '갤러리',
-      type: 'images',
-      options: {},
+      htmlFor: 'password',
+      label: '비밀번호',
+      type: 'password',
+      placeholder: '비밀번호를 입력해주세요',
+      options: {
+        validate: password,
+      },
     },
     {
-      htmlFor: 'background',
-      label: '배경',
-      type: 'image',
-      options: {},
+      htmlFor: 'newPassword',
+      label: '새 비밀번호',
+      type: 'password',
+      placeholder: '새 비밀번호를 입력해주세요.',
+      tooltip: '영문/숫자/특수문자 중 2가지 이상, 8자 이상',
+      options: {
+        validate: password,
+      },
     },
-  ] as Forms[],
-} as const;
+    {
+      htmlFor: 'newPasswordCheck',
+      label: '새 비밀번호 확인',
+      type: 'password',
+      placeholder: '새 비밀번호를 한번 더 입력해주세요.',
+      options: {
+        validate: password,
+      },
+    },
+  ] as Forms<AccountPasswordUpdateFormState>[],
+};
 
-export type { AccountRoute, AccountTab, Forms, FormState };
+export type {
+  AccountRoute,
+  AccountTab,
+  Forms,
+  FormState,
+  AccountPasswordUpdateFormState,
+};
 export default account;

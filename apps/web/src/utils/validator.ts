@@ -59,11 +59,13 @@ const email = (value: string) => {
   return true;
 };
 
-const service = () => {
+const service = (value: string) => {
+  if (!value) return '서비스 이용약관에 동의해주세요.';
   return true;
 };
 
-const privacy = () => {
+const privacy = (value: string) => {
+  if (!value) return '개인정보 수집 이용에 동의해주세요.';
   return true;
 };
 

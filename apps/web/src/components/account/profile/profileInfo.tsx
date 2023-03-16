@@ -1,14 +1,13 @@
-import { Container, Typography, Wrapper } from '@supercarmarket/ui';
+import { Button, Container, Typography, Wrapper } from '@supercarmarket/ui';
 import Avatar from 'components/common/avatar';
 import { ratingFormatter } from 'components/common/avatar/avatar';
 import dayjs from 'dayjs';
 import Link from 'next/link';
-
-import CreateIcon from '../../../assets/svg/create.svg';
+import { css } from 'styled-components';
 import { ProfileProps } from './profile';
 import * as style from './profile.styled';
 
-type ProfileInfoProps = Omit<ProfileProps, ''>;
+type ProfileInfoProps = ProfileProps & { sub: string };
 
 interface ProfileInfoDetailProps {
   title: string;
@@ -44,7 +43,7 @@ const ProfileInfoDetail = ({ title, content }: ProfileInfoDetailProps) => {
   );
 };
 
-const ProfileInfo = ({ isMyAccountPage, profile }: ProfileInfoProps) => {
+const ProfileInfo = ({ isMyAccountPage, profile, sub }: ProfileInfoProps) => {
   return (
     <Container
       display="flex"
@@ -70,13 +69,6 @@ const ProfileInfo = ({ isMyAccountPage, profile }: ProfileInfoProps) => {
         >
           {profile.nickname}
         </Typography>
-        {isMyAccountPage && (
-          <Link href="/account/blan19/update">
-            <Wrapper.Item css={style.svg}>
-              <CreateIcon />
-            </Wrapper.Item>
-          </Link>
-        )}
       </Wrapper>
       <Typography
         as="p"
@@ -109,6 +101,41 @@ const ProfileInfo = ({ isMyAccountPage, profile }: ProfileInfoProps) => {
           content={`${profile.visitCount}`}
         />
       </Wrapper>
+      {isMyAccountPage && (
+        <Wrapper
+          css={css`
+            display: flex;
+            gap: 16px;
+          `}
+        >
+          <Link href={`/account/${sub}/update`}>
+            <Typography
+              fontSize="body-12"
+              fontWeight="regular"
+              lineHeight="150%"
+              color="greyScale-5"
+              style={{
+                textDecoration: 'underline',
+              }}
+            >
+              회원정보 수정
+            </Typography>
+          </Link>
+          <Link href={`/account/${sub}/update-password`}>
+            <Typography
+              fontSize="body-12"
+              fontWeight="regular"
+              lineHeight="150%"
+              color="greyScale-5"
+              style={{
+                textDecoration: 'underline',
+              }}
+            >
+              비밀번호 수정
+            </Typography>
+          </Link>
+        </Wrapper>
+      )}
     </Container>
   );
 };

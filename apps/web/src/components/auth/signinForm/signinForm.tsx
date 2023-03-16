@@ -101,7 +101,12 @@ const LocalFormItem = () => {
               label={form.label}
               hidden
             >
-              <AuthFormItem state={state} dispatch={dispatch} {...form} />
+              <AuthFormItem
+                {...form}
+                state={state}
+                dispatch={dispatch}
+                tooltip=""
+              />
             </FormLabel>
           ))}
         </Wrapper>

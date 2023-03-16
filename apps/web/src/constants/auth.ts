@@ -7,6 +7,8 @@ import {
   nickname,
   password,
   phone,
+  privacy,
+  service,
 } from 'utils/validator';
 
 interface FormState {
@@ -142,20 +144,18 @@ const auth = {
     htmlFor: 'service',
     label: '서비스',
     type: 'agreement',
-    placeholder: '내용을 입력해주세요.',
-    tooltip: '개인정보 수집 이용에 동의합니다.',
+    placeholder: '서비스 이용약관 내용에 동의합니다. (필수)',
     options: {
-      required: true,
+      validate: service,
     },
   } as Forms,
   privacy: {
     htmlFor: 'privacy',
     label: '개인정보',
     type: 'agreement',
-    placeholder: '내용을 입력해주세요.',
-    tooltip: '서비스 이용약관 내용에 동의합니다.',
+    placeholder: '개인정보 수집 이용에 동의합니다. (필수)',
     options: {
-      required: true,
+      validate: privacy,
     },
   } as Forms,
   phoneAuth: () => [auth.phone, auth.authentication],
@@ -170,6 +170,8 @@ const auth = {
     auth.nickname,
     ...auth.phoneAuth(),
     auth.email,
+    auth.service,
+    auth.privacy,
   ],
   resultPassword: () => [auth.newPassword, auth.passwordConfirm],
 };

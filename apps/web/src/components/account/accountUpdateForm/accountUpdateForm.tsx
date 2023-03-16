@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, Form } from '@supercarmarket/ui';
+import { Alert, Button, Form, FormLabel } from '@supercarmarket/ui';
 import type { FormState } from 'constants/account';
 import account from 'constants/account';
 import { update } from 'feature/actions/authActions';
@@ -31,16 +31,9 @@ const AccountUpdateForm = () => {
    * 각 필드마다 입력을 받았을 때, 다른 필드의 입력이 필수인지 아닌지 핸들링하는 함수
    */
   const handleRequire = (data: FormState) => {
-    const { authentication, password, newPassword, newPasswordConfirm } = data;
+    const { authentication } = data;
 
     return new Promise((resolve, reject) => {
-      if (!password) {
-        methods.setError('password', { message: '비밀번호를 입력해주세요.' });
-        reject();
-      }
-
-      const isNewPasswordRequire = newPasswordConfirm && !newPassword;
-      const isNewPasswordConfirmRequire = newPassword && !newPasswordConfirm;
       const isPhoneAuthRequire = state.phone.data && !authentication;
       const isNicknameRequire =
         updateInfo?.data.nickname !== data.nickname && !state.nickname.data;
@@ -61,20 +54,6 @@ const AccountUpdateForm = () => {
         reject();
       }
 
-      if (isNewPasswordRequire) {
-        methods.setError('newPassword', {
-          message: '새 비밀번호를 입력해주세요.',
-        });
-        reject();
-      }
-
-      if (isNewPasswordConfirmRequire) {
-        methods.setError('newPasswordConfirm', {
-          message: '새 비밀번호 확인을 입력해주세요.',
-        });
-        reject();
-      }
-
       if (isPhoneAuthRequire) {
         methods.setError('authentication', {
           message: '인증번호를 입력해주세요.',
@@ -90,12 +69,9 @@ const AccountUpdateForm = () => {
     handleRequire(data).then(() => {
       if (!session?.accessToken) return;
 
-      const { gallery, background, ...rest } = data;
       const formData = {
-        ...rest,
-        newPasswordCheck: rest.newPasswordConfirm || null,
-        newPassword: rest.newPassword || null,
-        code: rest.authentication,
+        ...data,
+        code: data.authentication,
       };
 
       update(dispatch, formData, session.accessToken).then(() => {
@@ -124,23 +100,24 @@ const AccountUpdateForm = () => {
       >
         {updateInfo && (
           <>
-            {account.forms.map((form) => (
+            {account.update.map((form) => (
               <AccountFormItem
                 key={form.htmlFor}
                 defaultValue={
-                  form.htmlFor !== 'authentication' &&
-                  form.htmlFor !== 'password' &&
-                  form.htmlFor !== 'newPassword' &&
-                  form.htmlFor !== 'newPasswordConfirm'
+                  form.htmlFor !== 'authentication'
                     ? updateInfo?.data[form.htmlFor]
                     : undefined
                 }
                 state={state}
-                session={session}
                 dispatch={dispatch}
                 {...form}
               />
             ))}
+            <FormLabel label="회원탈퇴">
+              <Button type="button" variant="Line">
+                탈퇴하기
+              </Button>
+            </FormLabel>
             <Button type="submit" variant="Primary" width="340px">
               수정하기
             </Button>

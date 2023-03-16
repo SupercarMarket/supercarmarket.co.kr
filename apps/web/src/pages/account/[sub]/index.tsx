@@ -14,10 +14,15 @@ import type {
 } from 'next';
 import type { Session } from 'next-auth';
 import { getSession } from 'utils/api/auth/user';
-import { QueryErrorResetBoundary } from '@tanstack/react-query';
+import {
+  dehydrate,
+  QueryClient,
+  QueryErrorResetBoundary,
+} from '@tanstack/react-query';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from 'components/fallback';
 import HeadSeo from 'components/common/headSeo/headSeo';
+import queries from 'constants/queries';
 
 type AccountParams = Params & {
   tab: AccountTab | null;
@@ -44,7 +49,11 @@ const Account: NextPageWithLayout = ({
                 onReset={reset}
                 fallbackRender={(props) => <ErrorFallback {...props} />}
               >
-                <Profile isMyAccountPage={isMyAccountPage} profile={profile} />
+                <Profile
+                  isMyAccountPage={isMyAccountPage}
+                  sub={sub}
+                  profile={profile}
+                />
               </ErrorBoundary>
               <Wrapper css={style.account}>
                 <Category links={accountRoutes} category={tab} />
@@ -89,6 +98,8 @@ export const getUserPageProps = async (
       }
     : undefined;
 
+  const queryClient = new QueryClient();
+
   const user: BaseApiHandlerResponse<{ data: ProfileType }> =
     await serverFetcher(
       `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/userpage`,
@@ -106,6 +117,12 @@ export const getUserPageProps = async (
       notFound: true,
     };
   }
+
+  await queryClient.prefetchQuery(queries.account.id(sub), async () => {
+    const { ok, status, ...rest } = user;
+
+    return rest;
+  });
 
   /**
    * 타유저인 경우 작성글과 댓글단 글만 볼 수 있다.
@@ -138,6 +155,7 @@ export const getUserPageProps = async (
         tab,
         sub,
         profile: user.data,
+        dehydratedState: dehydrate(queryClient),
       },
     };
 

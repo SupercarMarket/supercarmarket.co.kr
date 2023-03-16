@@ -6,12 +6,13 @@ import {
   Wrapper,
 } from '@supercarmarket/ui';
 import Avvvatars from 'avvvatars-react';
-import AuthModal, { CounselingModal } from 'components/common/modal';
+import { CounselingModal, Modal } from 'components/common/modal';
 import ModalContext from 'feature/modalContext';
 import useMagazineCounseling from 'hooks/mutations/magazine/useMagazineCounseling';
 import * as React from 'react';
 import { css } from 'styled-components';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 interface MagazineDealerProps {
   postId: string;
@@ -21,6 +22,7 @@ const MagazineDealer = ({ postId }: MagazineDealerProps) => {
   const { mutate } = useMagazineCounseling(postId);
   const session = useSession();
   const { onOpen, onClose, onClick } = React.useContext(ModalContext);
+  const { push } = useRouter();
 
   const handleCounseling = React.useCallback(() => {
     mutate();
@@ -39,14 +41,25 @@ const MagazineDealer = ({ postId }: MagazineDealerProps) => {
       );
     else
       onOpen(
-        <AuthModal
-          onClose={onClose}
-          onClick={onClick}
-          onOpen={onOpen}
-          description="로그인 후 상담 신청이 가능합니다"
+        <Modal
+          onCancel={() => {
+            onClose();
+          }}
+          onClose={() =>
+            onClose(() => {
+              push('/auth/signin');
+            })
+          }
+          onClick={() =>
+            onClose(() => {
+              push('/auth/signup');
+            })
+          }
+          closeText="로그인"
+          clickText="회원가입"
         />
       );
-  }, [handleCounseling, onClick, onClose, onOpen, session]);
+  }, [handleCounseling, onClick, onClose, onOpen, push, session]);
 
   return (
     <Container border="1px solid #EAEAEC" borderRadius="4px">

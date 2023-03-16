@@ -99,6 +99,7 @@ const PartnershipForm = () => {
           clickText="확인"
           onClick={() => handleModal('/')}
           onClose={() => handleModal('/inquiry')}
+          onCancel={() => handleModal('/inquiry')}
         />
       );
     })
