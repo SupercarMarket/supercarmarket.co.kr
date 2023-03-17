@@ -219,15 +219,44 @@ const AccountCategory = React.memo(function AccountCategory({
         </Wrapper>
       ) : (
         {
-          product: data.data.map((d: MarketDto) => (
-            <AccountCategoryItemWrapper
-              key={d.id}
-              id={d.id}
-              hidden={isDeleteTarget}
+          product: (
+            <Wrapper.Item
+              css={css`
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+              `}
             >
-              <MarketCard {...d} />
-            </AccountCategoryItemWrapper>
-          )),
+              {data.data.map((d: MarketDto) => (
+                <AccountCategoryItemWrapper
+                  key={d.id}
+                  id={d.id}
+                  hidden={isDeleteTarget}
+                >
+                  <MarketCard variant="row" {...d} />
+                </AccountCategoryItemWrapper>
+              ))}
+            </Wrapper.Item>
+          ),
+          'dealer-product': (
+            <Wrapper.Item
+              css={css`
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+              `}
+            >
+              {data.data.map((d: MarketDto) => (
+                <AccountCategoryItemWrapper
+                  key={d.id}
+                  id={d.id}
+                  hidden={isDeleteTarget}
+                >
+                  <MarketCard variant="row" {...d} />
+                </AccountCategoryItemWrapper>
+              ))}
+            </Wrapper.Item>
+          ),
           magazine: data.data.map((d: MagazineDto) => (
             <AccountCategoryItemWrapper
               key={d.id}
