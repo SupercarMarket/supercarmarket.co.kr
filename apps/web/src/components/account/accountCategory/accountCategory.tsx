@@ -23,6 +23,8 @@ import {
   Wrapper,
 } from '@supercarmarket/ui';
 import useRemoveCommunityPost from 'hooks/mutations/community/useRemoveCommunityPost';
+import { useQueryClient } from '@tanstack/react-query';
+import queries from 'constants/queries';
 
 interface AccountCategoryProps {
   sub: string;
@@ -122,6 +124,7 @@ const AccountCategory = React.memo(function AccountCategory({
   >([]);
   const [allChecked, setAllChecked] = React.useState(false);
   const session = useSession();
+  const queryClient = useQueryClient();
   const isDeleteTarget = isMyAccountPage && tab === 'community';
   const { data, isLoading, isFetching, refetch } = useAccountCategory(
     sub,
@@ -133,7 +136,12 @@ const AccountCategory = React.memo(function AccountCategory({
     }
   );
   const removeCategoryMutation = useRemoveCommunityPost({
-    id: sub,
+    onSuccess: () => {
+      queryClient.invalidateQueries([
+        ...queries.account.id(sub),
+        queries.account.category(tab),
+      ]);
+    },
   });
 
   const handleCheckbox = React.useCallback(() => {
@@ -180,7 +188,16 @@ const AccountCategory = React.memo(function AccountCategory({
           `}
         >
           {isDeleteTarget && (
-            <Button type="button" variant="Primary-Line" onClick={handleDelete}>
+            <Button
+              type="button"
+              variant="Primary-Line"
+              width="92px"
+              onClick={handleDelete}
+              style={{
+                padding: 0,
+                height: '44px',
+              }}
+            >
               삭제
             </Button>
           )}

@@ -1,19 +1,12 @@
 import { clientApi } from '@supercarmarket/lib';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 
 export type UseRemoveCommunityPostData = {
   id: string;
   category?: string;
 };
 
-export default function useRemoveCommunityPost(
-  query: {
-    id: string;
-  },
-  options = {}
-) {
-  const { id } = query;
-
+export default function useRemoveCommunityPost(options = {}) {
   return useMutation({
     mutationFn: ({
       data,
@@ -28,7 +21,6 @@ export default function useRemoveCommunityPost(
           'Content-Type': 'application/json',
           ACCESS_TOKEN: token,
         },
-        params: id,
         data,
       }),
     useErrorBoundary: true,
