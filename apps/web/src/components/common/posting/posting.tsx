@@ -112,15 +112,21 @@ const CommunityPosting = ({
     id: postId,
   });
   const { mutate: removeMutate } = useRemoveCommunityPost({
-    subject,
-    category,
     id: postId,
   });
 
   const handleRemove = React.useCallback(() => {
     if (!session.data) return;
-    removeMutate(session.data.accessToken);
-  }, [removeMutate, session.data]);
+    removeMutate({
+      data: [
+        {
+          id: postId,
+          category,
+        },
+      ],
+      token: session.data.accessToken,
+    });
+  }, [category, postId, removeMutate, session.data]);
 
   const handleLike = React.useCallback(() => {
     if (session.status === 'unauthenticated') {

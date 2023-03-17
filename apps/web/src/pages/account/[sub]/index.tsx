@@ -56,7 +56,6 @@ const Account: NextPageWithLayout = ({
                 />
               </ErrorBoundary>
               <Wrapper css={style.account}>
-                <Category links={accountRoutes} category={tab} />
                 <ErrorBoundary
                   onReset={reset}
                   fallbackRender={(props) => (
@@ -67,6 +66,7 @@ const Account: NextPageWithLayout = ({
                     sub={sub}
                     tab={tab}
                     isMyAccountPage={isMyAccountPage}
+                    accountRoutes={accountRoutes}
                   />
                 </ErrorBoundary>
               </Wrapper>
