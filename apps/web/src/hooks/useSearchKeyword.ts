@@ -20,7 +20,7 @@ const useSearchKeyword = ({ domain }: SearchParams) => {
       const queryString = Object.entries(queries)
         .map(([key, value]) => `${key}=${value}`)
         .join('&');
-      push(`/${domain}/${query.category}?${queryString}`);
+      push(`/${domain}?${queryString}`);
     }
   };
 
