@@ -180,20 +180,20 @@ const ProfileBackground = ({
                 height: 18px !important;
                 fill: ${theme.color['greyScale-6']} !important;
               }
+              button {
+                height: 100% !important;
+                padding: 0 !important;
+              }
               ${applyMediaQuery('mobile')} {
-                bottom: 16px;
+                bottom: 36px;
                 right: 16px;
+                button {
+                  height: 40px !important;
+                }
               }
             `}
           >
-            <Button
-              type="button"
-              variant="Line"
-              style={{
-                height: '100%',
-                padding: 0,
-              }}
-            >
+            <Button type="button" variant="Line">
               <div>
                 <input
                   id="background"
@@ -249,6 +249,9 @@ const ProfileRepresentative = ({
       gap="20px"
       alignItems="center"
       gridTemplateColumns="1fr 1fr 1fr"
+      style={{
+        overflowX: 'scroll',
+      }}
     >
       {images &&
         images.map((image) => (
@@ -334,6 +337,11 @@ const ProfileRepresentativeItem = (props: ProfileRepresentativeItemProps) => {
               height: 260px;
               border-radius: 20px;
               overflow: hidden;
+              ${applyMediaQuery('mobile')} {
+                width: 160px;
+                height: 160px;
+                border-radius: 12px;
+              }
             `
           : css`
               position: relative;
@@ -347,6 +355,11 @@ const ProfileRepresentativeItem = (props: ProfileRepresentativeItemProps) => {
               border: 1px solid ${({ theme }) => theme.color['greyScale-4']};
               border-radius: 20px;
               overflow: hidden;
+              ${applyMediaQuery('mobile')} {
+                width: 160px;
+                height: 160px;
+                border-radius: 12px;
+              }
             `
       }
     >
@@ -358,6 +371,7 @@ const ProfileRepresentativeItem = (props: ProfileRepresentativeItemProps) => {
           style={{
             cursor: 'pointer',
             objectFit: 'cover',
+            borderRadius: '12px',
           }}
           onClick={handleClick}
         />
@@ -422,6 +436,7 @@ const ProfileRepresentativeItem = (props: ProfileRepresentativeItemProps) => {
               opacity: 0.95;
               z-index: 999;
               cursor: pointer;
+              border-radius: 12px;
             }
             div[role='button'] {
               display: flex;

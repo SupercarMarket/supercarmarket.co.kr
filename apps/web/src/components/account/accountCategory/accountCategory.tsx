@@ -14,6 +14,7 @@ import type { MagazineDto } from '@supercarmarket/types/magazine';
 import type { MarketDto } from '@supercarmarket/types/market';
 import {
   Alert,
+  applyMediaQuery,
   Button,
   Category,
   CategoryProps,
@@ -90,9 +91,12 @@ const AccountCategoryItemWrapper = ({
   return (
     <Container display="flex" alignItems="center">
       {hidden && (
-        <Wrapper
+        <Wrapper.Item
           css={css`
             padding: 0 11.5px;
+            ${applyMediaQuery('mobile')} {
+              display: none;
+            }
           `}
         >
           <FormCheckbox
@@ -103,9 +107,15 @@ const AccountCategoryItemWrapper = ({
             onClick={handleClick}
             readOnly
           />
-        </Wrapper>
+        </Wrapper.Item>
       )}
-      {children}
+      <Wrapper.Item
+        css={css`
+          flex: 1;
+        `}
+      >
+        {children}
+      </Wrapper.Item>
     </Container>
   );
 };
@@ -185,6 +195,9 @@ const AccountCategory = React.memo(function AccountCategory({
           css={css`
             display: flex;
             gap: 8px;
+            ${applyMediaQuery('mobile')} {
+              display: none;
+            }
           `}
         >
           {isDeleteTarget && (
@@ -266,15 +279,23 @@ const AccountCategory = React.memo(function AccountCategory({
               <MagazineCard key={d.id} {...d} />
             </AccountCategoryItemWrapper>
           )),
-          comment: data.data.map((d: CommunityDto) => (
-            <AccountCategoryItemWrapper
-              key={d.id}
-              id={d.id}
-              hidden={isDeleteTarget}
+          comment: (
+            <Wrapper
+              css={css`
+                width: 100%;
+              `}
             >
-              <CommunityCard key={d.id} variant="row" {...d} />
-            </AccountCategoryItemWrapper>
-          )),
+              {data.data.map((d: CommunityDto) => (
+                <AccountCategoryItemWrapper
+                  key={d.id}
+                  id={d.id}
+                  hidden={isDeleteTarget}
+                >
+                  <CommunityCard key={d.id} variant="row" {...d} />
+                </AccountCategoryItemWrapper>
+              ))}
+            </Wrapper>
+          ),
           community: data.data.map((d: CommunityDto) => (
             <AccountCategoryItemWrapper
               key={d.id}
