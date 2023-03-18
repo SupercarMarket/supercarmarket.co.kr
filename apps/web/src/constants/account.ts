@@ -38,9 +38,26 @@ interface Forms<T> {
 }
 
 const account = {
-  accountTab: ['product', 'magazine', 'inquiry', 'community', 'comment'],
+  accountTab: [
+    'dealer-product',
+    'product',
+    'magazine',
+    'inquiry',
+    'community',
+    'comment',
+  ],
   accountRoutes: {
     myAccount: (sub: string) => [
+      {
+        title: '업로드 매물',
+        href: {
+          pathname: `/account/${sub}`,
+          query: {
+            tab: 'dealer-product',
+          },
+        },
+        category: 'dealer-product',
+      },
       {
         title: '스크랩 매물',
         href: {

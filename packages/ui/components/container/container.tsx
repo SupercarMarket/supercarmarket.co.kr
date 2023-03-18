@@ -63,6 +63,7 @@ const Container = React.forwardRef(function Container<
     bottom,
     left,
     right,
+    style,
     children,
   } = props as ContainerProps;
 
@@ -99,6 +100,7 @@ const Container = React.forwardRef(function Container<
         left,
         right,
         ...borderAttr,
+        ...style,
       }}
     >
       {children}

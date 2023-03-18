@@ -24,6 +24,8 @@ import AuthModal from '../modal/authModal';
 
 import LikeIcon from '../../../assets/svg/thumb-up.svg';
 import HeadSeo from '../headSeo/headSeo';
+import { useQueryClient } from '@tanstack/react-query';
+import queries from 'constants/queries';
 
 const Comment = dynamic(() => import('components/common/comment'), {
   ssr: false,
@@ -95,6 +97,7 @@ const CommunityPosting = ({
 }: Omit<PostingProps, 'type'>) => {
   const session = useSession();
   const { onOpen, onClose, onClick } = React.useContext(ModalContext);
+  const queryClient = useQueryClient();
   const { data: communityPost } = useCommunityPost(
     session.data?.accessToken || null,
     {
@@ -112,15 +115,25 @@ const CommunityPosting = ({
     id: postId,
   });
   const { mutate: removeMutate } = useRemoveCommunityPost({
-    subject,
-    category,
-    id: postId,
+    onSuccess: () => {
+      queryClient.invalidateQueries(
+        queries.community.detail(subject, category, postId)
+      );
+    },
   });
 
   const handleRemove = React.useCallback(() => {
     if (!session.data) return;
-    removeMutate(session.data.accessToken);
-  }, [removeMutate, session.data]);
+    removeMutate({
+      data: [
+        {
+          id: postId,
+          category,
+        },
+      ],
+      token: session.data.accessToken,
+    });
+  }, [category, postId, removeMutate, session.data]);
 
   const handleLike = React.useCallback(() => {
     if (session.status === 'unauthenticated') {

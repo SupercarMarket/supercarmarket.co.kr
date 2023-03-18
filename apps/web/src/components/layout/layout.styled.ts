@@ -15,7 +15,7 @@ const Container = styled.div`
     width: ${availableWidth[device]};
   }`
   ).join('')}
-  min-height: calc(100vh - 1.25rem);
+  min-height: calc(100vh - 17.5rem);
   padding-bottom: 85px;
   ${applyMediaQuery('mobile')} {
     & > .navbar {
@@ -43,6 +43,11 @@ const account = css`
       width: ${availableWidth[device]};
     }`
   ).join('')}
+  ${applyMediaQuery('mobile')} {
+    & > .navbar {
+      display: none !important;
+    }
+  }
 `;
 
 export { account, Container, footer };
