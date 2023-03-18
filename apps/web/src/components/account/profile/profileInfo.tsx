@@ -1,4 +1,11 @@
-import { Button, Container, Typography, Wrapper } from '@supercarmarket/ui';
+import {
+  applyMediaQuery,
+  Button,
+  Container,
+  theme,
+  Typography,
+  Wrapper,
+} from '@supercarmarket/ui';
 import Avatar from 'components/common/avatar';
 import { ratingFormatter } from 'components/common/avatar/avatar';
 import dayjs from 'dayjs';
@@ -45,21 +52,47 @@ const ProfileInfoDetail = ({ title, content }: ProfileInfoDetailProps) => {
 
 const ProfileInfo = ({ isMyAccountPage, profile, sub }: ProfileInfoProps) => {
   return (
-    <Container
-      display="flex"
-      position="relative"
-      flexDirection="column"
-      width="330px"
-      height="490px"
-      boxSizing="border-box"
-      border="1px solid #C3C3C7"
-      borderRadius="20px"
-      background="#fff"
-      padding="40px 50px"
-      gap="24px"
+    <Wrapper
+      css={css`
+        display: flex;
+        position: relative;
+        flex-direction: column;
+        width: 330px;
+        height: 490px;
+        box-sizing: border-box;
+        border: 1px solid #c3c3c7;
+        border-radius: 20px;
+        background: #fff;
+        padding: 40px 50px;
+        gap: 24px;
+        ${applyMediaQuery('mobile')} {
+          width: 100vw;
+          margin-left: calc(-50vw + 50%);
+          padding: 24px;
+          height: 100%;
+          border: 1px solid ${theme.color.white};
+        }
+      `}
     >
-      <Avatar rating={profile.userRating} size={116} />
-      <Wrapper css={style.nickname}>
+      <Wrapper.Item
+        css={css`
+          display: flex;
+          flex-direction: column;
+          ${applyMediaQuery('mobile')} {
+            flex-direction: row-reverse;
+            width: 100%;
+            justify-content: space-between;
+            align-items: flex-end;
+          }
+        `}
+      >
+        <Avatar
+          rating={profile.userRating}
+          size={116}
+          option={{
+            mobile: '78',
+          }}
+        />
         <Typography
           as="span"
           fontSize="header-20"
@@ -69,7 +102,7 @@ const ProfileInfo = ({ isMyAccountPage, profile, sub }: ProfileInfoProps) => {
         >
           {profile.nickname}
         </Typography>
-      </Wrapper>
+      </Wrapper.Item>
       <Typography
         as="p"
         fontSize="body-14"
@@ -79,7 +112,7 @@ const ProfileInfo = ({ isMyAccountPage, profile, sub }: ProfileInfoProps) => {
       >
         {profile.description ? profile.description : '소개글을 작성해주세요.'}
       </Typography>
-      <Wrapper>
+      <Wrapper.Item>
         <ProfileInfoDetail
           title="등급"
           content={ratingFormatter(profile.userRating, { reverse: true })}
@@ -100,9 +133,9 @@ const ProfileInfo = ({ isMyAccountPage, profile, sub }: ProfileInfoProps) => {
           title="방문일 수"
           content={`${profile.visitCount}`}
         />
-      </Wrapper>
+      </Wrapper.Item>
       {isMyAccountPage && (
-        <Wrapper
+        <Wrapper.Item
           css={css`
             display: flex;
             gap: 16px;
@@ -134,9 +167,9 @@ const ProfileInfo = ({ isMyAccountPage, profile, sub }: ProfileInfoProps) => {
               비밀번호 수정
             </Typography>
           </Link>
-        </Wrapper>
+        </Wrapper.Item>
       )}
-    </Container>
+    </Wrapper>
   );
 };
 
