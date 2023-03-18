@@ -8,7 +8,7 @@ import {
 import Posting from 'components/common/posting';
 import { ErrorFallback } from 'components/fallback';
 import layout from 'components/layout';
-import { MagazineDealer, MagazineScrape } from 'components/magazine';
+import { MagazineDealer } from 'components/magazine';
 import queries from 'constants/queries';
 import { ModalProvider } from 'feature/modalContext';
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
@@ -55,12 +55,6 @@ const MagazinePost: NextPageWithLayout = ({
               >
                 <Posting postId={id} type="magazine" />
               </ErrorBoundary>
-              {/* {magazinePost && (
-                <MagazineScrape
-                  postId={id}
-                  isScraped={magazinePost?.isScraped}
-                />
-              )} */}
               <MagazineDealer postId={id} />
               <ErrorBoundary
                 onReset={reset}

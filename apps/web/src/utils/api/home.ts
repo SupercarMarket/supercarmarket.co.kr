@@ -7,10 +7,10 @@ import type {
   MagazineResponse,
 } from '@supercarmarket/types/magazine';
 import type { MarketDto } from '@supercarmarket/types/market';
-import { ErrorCode } from 'utils/error';
 import { catchNoExist } from 'utils/misc';
 
 import fetcher from './fetcher';
+import { ErrorCode } from '@supercarmarket/lib';
 
 const homeApi: NextApiHandler = async (req, res) => {
   const { query } = req;

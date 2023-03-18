@@ -98,7 +98,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       }),
     ],
     () =>
-      serverApi(`${process.env.NEXT_PUBLIC_SERVER_URL}//supercar/v1/search`, {
+      serverApi(`${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/search`, {
         method: 'GET',
         query: currentQuery,
       }).then((res) => {
