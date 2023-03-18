@@ -37,7 +37,7 @@ const MagazineBanner = ({
 
   return (
     <Container width="100%" className={className}>
-      {magazine && (
+      {magazine && magazine.data.length > 0 && (
         <Wrapper
           css={css`
             display: flex;
