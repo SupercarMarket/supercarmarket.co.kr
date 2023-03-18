@@ -27,7 +27,7 @@ const Table = (props: TableProps) => {
     if (tab === 'product')
       return [
         { title: '사진', width: '196px' },
-        { title: '차량정보', width: '100%' },
+        { title: '차량정보', width: '504px' },
         { title: '연식', width: '100px' },
         { title: '연료', width: '100px' },
         { title: '주행', width: '100px' },

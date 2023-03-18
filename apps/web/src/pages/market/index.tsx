@@ -29,7 +29,7 @@ const MarketFilterPage: NextPageWithLayout = ({
   category,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const { keydownHandler, keywordRef } = useSearchKeyword({
-    domain: 'partnership',
+    domain: 'market',
   });
 
   return (

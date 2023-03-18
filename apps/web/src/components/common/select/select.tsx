@@ -44,7 +44,7 @@ const Select = ({ options, width = '100%', align }: SelectProps) => {
       value
     );
 
-    push(`/market/${queryObj.category}?${url}`, undefined, {
+    push(`/market?${url}`, undefined, {
       scroll: false,
     });
 

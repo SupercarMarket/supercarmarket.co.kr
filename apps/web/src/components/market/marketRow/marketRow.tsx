@@ -1,4 +1,9 @@
-import { Container, Typography, Wrapper } from '@supercarmarket/ui';
+import {
+  Container,
+  Typography,
+  Wrapper,
+  applyMediaQuery,
+} from '@supercarmarket/ui';
 import Image from 'next/image';
 import Link from 'next/link';
 import { css } from 'styled-components';
@@ -27,66 +32,159 @@ const MarketRow = ({
 
   return (
     <Link href={`/market/${category}/${id}?${queryString}`}>
-      <Container width="100%" display="flex" alignItems="center">
-        <Image
-          width={196}
-          height={124}
-          placeholder={base64 ? 'blur' : undefined}
-          blurDataURL={base64 ? base64 : undefined}
-          src={imgSrc}
-          alt="thumbnail"
-          style={{ borderRadius: '4px' }}
-          sizes="100%"
-        />
+      <Wrapper
+        css={css`
+          width: 100%;
+          display: flex;
+          align-items: center;
+          ${applyMediaQuery('mobile')} {
+            align-items: flex-start;
+          }
+        `}
+      >
         <Wrapper.Item
           css={css`
-            flex: 1;
-            width: 504px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            gap: 8px;
-          `}
-        >
-          <Typography
-            fontSize="body-24"
-            fontWeight="bold"
-            style={{
-              padding: '0 30px',
-            }}
-          >
-            {carName}
-          </Typography>
-          <Typography
-            fontSize="body-14"
-            color="greyScale-5"
-            style={{
-              padding: '0 30px',
-            }}
-          >
-            {description}
-          </Typography>
-        </Wrapper.Item>
-        <Wrapper.Item
-          css={css`
-            display: flex;
-            & > span {
-              width: 100px;
-              text-align: center;
+            position: relative;
+            overflow: hidden;
+            width: 196px;
+            height: 124px;
+            ${applyMediaQuery('mobile')} {
+              width: 126px;
+              height: 126px;
+              & > img {
+                object-fit: cover;
+              }
             }
           `}
         >
-          <Typography fontSize="body-14">{year}</Typography>
-          <Typography fontSize="body-14">{fuel}</Typography>
-          <Typography fontSize="body-14">{`${formatter(
-            mileage
-          )}km`}</Typography>
-          <Typography fontSize="body-14" fontWeight="bold" color="system-1">
-            {price ? `${formatter(price * 10000)}원` : '상담'}
-          </Typography>
-          <Typography fontSize="body-14">{dealer}</Typography>
+          <Image
+            placeholder={base64 ? 'blur' : undefined}
+            blurDataURL={base64 ? base64 : undefined}
+            src={imgSrc}
+            alt="thumbnail"
+            style={{ borderRadius: '4px' }}
+            fill
+          />
         </Wrapper.Item>
-      </Container>
+        <Wrapper.Item
+          css={css`
+            flex: 1;
+            display: flex;
+            align-items: center;
+            ${applyMediaQuery('mobile')} {
+              width: auto;
+              flex-direction: column;
+              align-items: flex-start;
+              gap: 8px;
+            }
+          `}
+        >
+          <Wrapper.Item
+            css={css`
+              width: 504px;
+              display: flex;
+              flex-direction: column;
+              box-sizing: border-box;
+              padding-left: 30px;
+              gap: 8px;
+
+              ${applyMediaQuery('mobile')} {
+                width: 100%;
+                padding: 0 15px;
+
+                & span {
+                  width: 200px;
+                  display: -webkit-box;
+                  overflow: hidden;
+                  white-space: normal;
+                  text-overflow: ellipsis;
+                  -webkit-line-clamp: 2;
+                  -webkit-box-orient: vertical;
+                  word-break: break-all;
+                }
+              }
+            `}
+          >
+            <Typography
+              className="car-name"
+              fontSize="body-24"
+              fontWeight="bold"
+              lineHeight="120%"
+              space
+            >
+              {carName}
+            </Typography>
+            <Typography fontSize="body-14" color="greyScale-5">
+              {description}
+            </Typography>
+          </Wrapper.Item>
+          <Wrapper.Item
+            css={css`
+              display: flex;
+              & > span {
+                width: 100px;
+                text-align: center;
+              }
+              ${applyMediaQuery('mobile')} {
+                flex-direction: column;
+                padding: 0 15px;
+                gap: 8px;
+                & > span {
+                  width: auto;
+                }
+              }
+            `}
+          >
+            <Wrapper.Item
+              css={css`
+                display: flex;
+                & > span {
+                  width: 100px;
+                  text-align: center;
+                }
+                ${applyMediaQuery('mobile')} {
+                  gap: 8px;
+                  & > span {
+                    width: auto;
+                    :not(:first-child):before {
+                    }
+                  }
+                }
+              `}
+            >
+              <Typography fontSize="body-14">{year}</Typography>
+              <Typography fontSize="body-14">{fuel}</Typography>
+              <Typography fontSize="body-14">{`${formatter(
+                mileage
+              )}km`}</Typography>
+            </Wrapper.Item>
+            <Wrapper.Item
+              css={css`
+                width: 100px;
+                text-align: center;
+                ${applyMediaQuery('mobile')} {
+                  text-align: initial;
+                }
+              `}
+            >
+              <Typography fontSize="body-14" fontWeight="bold" color="system-1">
+                {price ? `${formatter(price * 10000)}원` : '상담'}
+              </Typography>
+            </Wrapper.Item>
+            <Wrapper.Item
+              css={css`
+                width: 100px;
+                text-align: center;
+                ${applyMediaQuery('mobile')} {
+                  display: none;
+                }
+              `}
+            >
+              <Typography fontSize="body-14">{dealer}</Typography>
+            </Wrapper.Item>
+          </Wrapper.Item>
+        </Wrapper.Item>
+      </Wrapper>
     </Link>
   );
 };
