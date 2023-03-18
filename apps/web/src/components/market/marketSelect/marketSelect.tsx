@@ -19,7 +19,7 @@ const MarketSelect = ({ options1, options2 }: SelectWrapperProps) => {
 
     if (+op1 > +op2) {
       const url = makeSelectQuery(query, options1.optionSet[0].dataName, op2);
-      push(`/market/${query.category}?${url}`, undefined, { scroll: false });
+      push(`/market?${url}`, undefined, { scroll: false });
     }
   }
 

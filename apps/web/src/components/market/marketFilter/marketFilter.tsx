@@ -30,11 +30,11 @@ const MarketFilter = () => {
     const filtered = queries.filter(([key]) => !key.match(pattern));
     const url = filtered.map(([key, value]) => `${key}=${value}`).join('&');
 
-    push(`/market/${query.category}?${url}`, undefined, { scroll: false });
+    push(`/market?${url}`, undefined, { scroll: false });
   };
 
   const resetfilter = () => {
-    push(`/market/${query.category}?category=${query.category}`, undefined, {
+    push(`/market?category=${query.category}`, undefined, {
       scroll: false,
     });
   };
