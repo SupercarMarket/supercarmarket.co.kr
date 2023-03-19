@@ -13,8 +13,6 @@ import useRemoveCommunityPost from 'hooks/mutations/community/useRemoveCommunity
 import { useSession } from 'next-auth/react';
 import * as React from 'react';
 import { css } from 'styled-components';
-
-import PostingBody from './postingBody';
 import { PostingHeadCommunity, PostingHeadMagainze } from './postingHead';
 
 import dynamic from 'next/dynamic';
@@ -26,7 +24,11 @@ import LikeIcon from '../../../assets/svg/thumb-up.svg';
 import HeadSeo from '../headSeo/headSeo';
 import { useQueryClient } from '@tanstack/react-query';
 import queries from 'constants/queries';
+import { MagazineScrape } from 'components/magazine';
 
+const PostingBody = dynamic(() => import('./postingBody'), {
+  ssr: false,
+});
 const Comment = dynamic(() => import('components/common/comment'), {
   ssr: false,
 });
@@ -84,6 +86,7 @@ const MagazinePosting = ({ postId }: Omit<PostingProps, 'type'>) => {
               </>
             )}
           </Container>
+          <MagazineScrape postId={postId} isScraped={magazinePost.isScraped} />
         </>
       )}
     </>

@@ -1,7 +1,13 @@
 import * as React from 'react-hook-form';
 import { password } from 'utils/validator';
 
-type AccountTab = 'product' | 'magazine' | 'inquiry' | 'community' | 'comment';
+type AccountTab =
+  | 'dealer-product'
+  | 'product'
+  | 'magazine'
+  | 'inquiry'
+  | 'community'
+  | 'comment';
 
 interface AccountRoute {
   title: string;
@@ -48,16 +54,6 @@ const account = {
   ],
   accountRoutes: {
     myAccount: (sub: string) => [
-      {
-        title: '업로드 매물',
-        href: {
-          pathname: `/account/${sub}`,
-          query: {
-            tab: 'dealer-product',
-          },
-        },
-        category: 'dealer-product',
-      },
       {
         title: '스크랩 매물',
         href: {
@@ -111,6 +107,19 @@ const account = {
         },
         category: 'comment',
       },
+    ],
+    dealerAccount: (sub: string) => [
+      {
+        title: '업로드 매물',
+        href: {
+          pathname: `/account/${sub}`,
+          query: {
+            tab: 'dealer-product',
+          },
+        },
+        category: 'dealer-product',
+      },
+      ...account.accountRoutes.myAccount(sub),
     ],
   },
   update: [

@@ -1,4 +1,5 @@
 import {
+  Alert,
   applyMediaQuery,
   Container,
   Pagination,
@@ -27,7 +28,7 @@ const MagazineList = () => {
       >
         <Searchbar width="343px" variant="Line" border="normal" />
       </Wrapper>
-      {magazine && (
+      {magazine ? (
         <>
           <Wrapper
             css={css`
@@ -56,6 +57,8 @@ const MagazineList = () => {
             totalPages={magazine.totalPages}
           />
         </>
+      ) : (
+        <Alert severity="info" title="매거진이 존재하지 않습니다." />
       )}
     </Container>
   );
