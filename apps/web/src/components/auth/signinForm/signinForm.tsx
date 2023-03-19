@@ -10,7 +10,6 @@ import {
 } from '@supercarmarket/ui';
 import { catchNoExist, ErrorCode } from '@supercarmarket/lib';
 import auth from 'constants/auth';
-import { useAuthDispatch, useAuthState } from 'feature/authProvider';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
@@ -21,6 +20,7 @@ import GoogleIcon from '../../../assets/svg/google.svg';
 import KakaoIcon from '../../../assets/svg/kakao.svg';
 import AuthFormItem from '../authFormItem/authFormItem';
 import * as style from './signinForm.styled';
+import useAuth from 'hooks/useAuth';
 
 const oauth = [
   { provider: 'kakao', title: '카카오', icon: <KakaoIcon /> },
@@ -67,8 +67,7 @@ const Links = () => {
 
 const LocalFormItem = () => {
   const methods = useForm<FormState>();
-  const dispatch = useAuthDispatch();
-  const state = useAuthState();
+  const { authState } = useAuth();
   const { replace } = useRouter();
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
 
@@ -101,12 +100,7 @@ const LocalFormItem = () => {
               label={form.label}
               hidden
             >
-              <AuthFormItem
-                {...form}
-                state={state}
-                dispatch={dispatch}
-                tooltip=""
-              />
+              <AuthFormItem {...form} state={authState} tooltip="" />
             </FormLabel>
           ))}
         </Wrapper>

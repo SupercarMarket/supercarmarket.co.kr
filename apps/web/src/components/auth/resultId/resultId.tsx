@@ -1,21 +1,33 @@
 import { Button, Container, Typography, Wrapper } from '@supercarmarket/ui';
-import { useAuthState } from 'feature/authProvider';
+import type { UseAuth } from 'hooks/useAuth';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import * as React from 'react';
+import { useRouter } from 'next/navigation';
 
 import * as style from './resultId.styled';
+import { useFormContext } from 'react-hook-form';
 
-const ResultId = () => {
-  const { findId } = useAuthState();
-  const { replace } = useRouter();
+interface ResultIdProps {
+  authState: UseAuth['authState'];
+  resetField: UseAuth['resetField'];
+}
 
-  React.useEffect(() => {
-    if (!findId.data) replace('/');
-  }, [findId.data, replace]);
+const ResultId = (props: ResultIdProps) => {
+  const { reset } = useFormContext();
+  const { authState, resetField } = props;
+  const { push } = useRouter();
+
+  const { findIdResult } = authState;
+
+  const handleClick = React.useCallback(() => {
+    resetField();
+    reset();
+    push('/auth/find?type=password');
+  }, [push, reset, resetField]);
+
   return (
     <Container display="flex" flexDirection="column" width="340px" gap="60px">
-      {findId.data && (
+      {findIdResult.success && (
         <>
           <Wrapper css={style.content}>
             <Wrapper.Item css={style.desc}>
@@ -46,22 +58,25 @@ const ResultId = () => {
                 color="greyScale-6"
                 lineHeight="120%"
               >
-                {findId.data.data.id}
+                {findIdResult.success.id}
               </Typography>
               <Typography
                 fontSize="body-14"
                 fontWeight="regular"
                 color="greyScale-5"
                 lineHeight="150%"
-              >{`가입일 ${findId.data.data.createAt}`}</Typography>
+              >{`가입일 ${findIdResult.success.createAt}`}</Typography>
             </Wrapper.Item>
           </Wrapper>
           <Wrapper css={style.button}>
-            <Link href="/auth/find?type=password" shallow>
-              <Button type="button" variant="Primary-Line" fullWidth>
-                비밀번호 찾기
-              </Button>
-            </Link>
+            <Button
+              type="button"
+              variant="Primary-Line"
+              fullWidth
+              onClick={handleClick}
+            >
+              비밀번호 찾기
+            </Button>
             <Link href="/auth/signin" shallow>
               <Button type="button" variant="Primary" fullWidth>
                 로그인

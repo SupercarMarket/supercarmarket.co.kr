@@ -3,8 +3,6 @@
 import { Alert, Button, Form, FormLabel, theme } from '@supercarmarket/ui';
 import type { FormState } from 'constants/account';
 import account from 'constants/account';
-import { update } from 'feature/actions/authActions';
-import { useAuthDispatch, useAuthState } from 'feature/authProvider';
 import useUpdateInfo from 'hooks/queries/useUpdateInfo';
 import { useRouter } from 'next/navigation';
 import { signOut, useSession } from 'next-auth/react';
@@ -12,10 +10,11 @@ import * as React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { css } from 'styled-components';
 
-import AccountFormItem from '../accountFormItem';
 import ModalContext from 'feature/modalContext';
 import { Modal } from 'components/common/modal';
 import { clientFetcher } from '@supercarmarket/lib';
+import AuthFormItem from 'components/auth/authFormItem/authFormItem';
+import useAuth from 'hooks/useAuth';
 
 const AccountUpdateForm = () => {
   const { onOpen, onClose } = React.useContext(ModalContext);
@@ -26,8 +25,7 @@ const AccountUpdateForm = () => {
   );
   const { replace } = useRouter();
   const methods = useForm<FormState>();
-  const state = useAuthState();
-  const dispatch = useAuthDispatch();
+  const { authState, sendPhone, sendCode, update } = useAuth();
 
   const handleWithdrawal = React.useCallback(async () => {
     setError(null);
@@ -75,39 +73,36 @@ const AccountUpdateForm = () => {
    * 내 정보 수정하기의 필드는 모두 require 필드가 아님
    * 각 필드마다 입력을 받았을 때, 다른 필드의 입력이 필수인지 아닌지 핸들링하는 함수
    */
-  const handleRequire = (data: FormState) => {
+  const handleRequire = async (data: FormState) => {
     const { authentication } = data;
+    const { phone, email, nickname } = authState;
 
-    return new Promise((resolve, reject) => {
-      const isPhoneAuthRequire = state.phone.data && !authentication;
-      const isNicknameRequire =
-        updateInfo?.data.nickname !== data.nickname && !state.nickname.data;
-      const isEmailRequire =
-        updateInfo?.data.email !== data.email && !state.email.data;
+    const isPhoneAuthRequire = phone.success && !authentication;
+    const isNicknameRequire =
+      updateInfo?.data.nickname !== data.nickname && !nickname.success;
+    const isEmailRequire =
+      updateInfo?.data.email !== data.email && !email.success;
 
-      if (isNicknameRequire) {
-        methods.setError('nickname', {
-          message: '중복검사가 필요합니다.',
-        });
-        reject();
-      }
+    if (isNicknameRequire) {
+      methods.setError('nickname', {
+        message: '중복검사가 필요합니다.',
+      });
+      throw '';
+    }
 
-      if (isEmailRequire) {
-        methods.setError('email', {
-          message: '중복검사가 필요합니다.',
-        });
-        reject();
-      }
+    if (isEmailRequire) {
+      methods.setError('email', {
+        message: '중복검사가 필요합니다.',
+      });
+      throw '';
+    }
 
-      if (isPhoneAuthRequire) {
-        methods.setError('authentication', {
-          message: '인증번호를 입력해주세요.',
-        });
-        reject();
-      }
-
-      resolve(true);
-    });
+    if (isPhoneAuthRequire) {
+      methods.setError('authentication', {
+        message: '인증번호를 입력해주세요.',
+      });
+      throw '';
+    }
   };
 
   const onSubmit = methods.handleSubmit((data) =>
@@ -119,15 +114,11 @@ const AccountUpdateForm = () => {
         code: data.authentication,
       };
 
-      update(dispatch, formData, session.accessToken).then(() => {
+      update(formData, session.accessToken).then(() => {
         refetch();
       });
     })
   );
-
-  React.useEffect(() => {
-    if (state.update.data) return replace('/');
-  }, [replace, state.update.data]);
 
   return (
     <FormProvider {...methods}>
@@ -146,17 +137,23 @@ const AccountUpdateForm = () => {
         {updateInfo && (
           <>
             {account.update.map((form) => (
-              <AccountFormItem
+              <FormLabel
                 key={form.htmlFor}
-                defaultValue={
-                  form.htmlFor !== 'authentication'
-                    ? updateInfo?.data[form.htmlFor]
-                    : undefined
-                }
-                state={state}
-                dispatch={dispatch}
-                {...form}
-              />
+                name={form.htmlFor}
+                label={form.label}
+              >
+                <AuthFormItem
+                  defaultValue={
+                    form.htmlFor !== 'authentication'
+                      ? updateInfo?.data[form.htmlFor]
+                      : undefined
+                  }
+                  state={authState}
+                  sendPhone={sendPhone}
+                  sendCode={sendCode}
+                  {...form}
+                />
+              </FormLabel>
             ))}
             <FormLabel label="회원탈퇴">
               <Button type="button" variant="Line" onClick={handleModal}>
@@ -168,9 +165,7 @@ const AccountUpdateForm = () => {
             </Button>
           </>
         )}
-        {state.update.error && (
-          <Alert title={state.update.error.message} severity="error" />
-        )}
+        {error && <Alert title={error} severity="error" />}
         {error && <Alert title={error} severity="error" />}
       </Form>
     </FormProvider>

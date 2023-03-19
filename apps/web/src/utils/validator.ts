@@ -59,6 +59,10 @@ const email = (value: string) => {
   return true;
 };
 
+const description = (value: string) => {
+  return true;
+};
+
 const service = (value: string) => {
   if (!value) return '서비스 이용약관에 동의해주세요.';
   return true;
@@ -78,6 +82,7 @@ export {
   password,
   passwordConfirm,
   phone,
+  description,
   service,
   privacy,
 };
