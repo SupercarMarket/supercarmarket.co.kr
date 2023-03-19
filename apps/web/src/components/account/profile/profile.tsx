@@ -211,24 +211,26 @@ const ProfileBackground = ({
                 <UploadIcon />
               </div>
             </Button>
-            <Button
-              type="button"
-              variant="Line"
-              onClick={() => {
-                if (src === baseSrc) return;
+            {src !== baseSrc && (
+              <Button
+                type="button"
+                variant="Line"
+                onClick={() => {
+                  if (src === baseSrc) return;
 
-                removeMutation.mutate(src);
-              }}
-              style={{
-                height: '100%',
-                padding: 0,
-              }}
-            >
-              <div>
-                <label>삭제</label>
-                <RemoveIcon />
-              </div>
-            </Button>
+                  removeMutation.mutate(src);
+                }}
+                style={{
+                  height: '100%',
+                  padding: 0,
+                }}
+              >
+                <div>
+                  <label>삭제</label>
+                  <RemoveIcon />
+                </div>
+              </Button>
+            )}
           </Wrapper.Item>
         )}
       </Wrapper>

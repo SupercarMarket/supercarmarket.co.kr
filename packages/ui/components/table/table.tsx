@@ -3,12 +3,12 @@ import { css } from 'styled-components';
 import { FormCheckbox } from '../../form';
 import { applyMediaQuery, theme } from '../../styles';
 
-import { Container } from '../container';
 import { Typography } from '../typography';
 import { Wrapper } from '../wrapper';
 
 interface TableProps {
   tab:
+    | 'dealer-product'
     | 'product'
     | 'magazine'
     | 'inquiry'
