@@ -97,6 +97,7 @@ const SignupForm = () => {
             <Modal
               title="회원가입 성공 🎉🎊"
               description="Welcome to 슈퍼카마켓"
+              background="rgba(30, 30, 32, 0.5)"
               onCancel={() => {
                 onClose();
                 replace('/auth/signin');
