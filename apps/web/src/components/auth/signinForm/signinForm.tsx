@@ -85,9 +85,9 @@ const LocalFormItem = () => {
       redirect: false,
     });
 
-    if (!response) setErrorMessage(ErrorCode[420]);
+    if (!response) setErrorMessage(ErrorCode[450]);
     else if (response.ok) replace('/');
-    else setErrorMessage(ErrorCode[450]);
+    else setErrorMessage(response?.error || ErrorCode[450]);
   });
   return (
     <FormProvider {...methods}>
