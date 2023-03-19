@@ -43,6 +43,7 @@ const auth = {
     label: '아이디',
     type: 'text',
     placeholder: '아이디를 입력해주세요',
+    tooltip: '영문/숫자/ 3자 이상 10자 미만으로 입력해주세요.',
     options: {
       validate: id,
     },
@@ -73,7 +74,7 @@ const auth = {
     label: '새 비밀번호',
     type: 'password',
     placeholder: '비밀번호를 입력해주세요',
-    tooltip: '영문/숫자/특수문자 중 2가지 이상, 8자 이상',
+    tooltip: '영문/숫자/특수문자를 포함하여 8자 이상으로 입력해주세요.',
     options: {
       validate: password,
     },
@@ -105,7 +106,7 @@ const auth = {
     htmlFor: 'phone',
     label: '휴대폰',
     type: 'tel',
-    placeholder: '숫자만 입력해주세요',
+    placeholder: '"-" 를 제외한, 숫자만 입력해주세요',
     button: '인증번호 받기',
     buttonWidth: '120px',
     options: {

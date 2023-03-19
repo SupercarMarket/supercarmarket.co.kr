@@ -100,9 +100,8 @@ const SignupForm = () => {
           )}
         >
           {auth.signup().map((props) => (
-            <>
+            <React.Fragment key={props.htmlFor}>
               <FormLabel
-                key={props.htmlFor}
                 name={props.htmlFor}
                 label={props.label}
                 paddingTop={props.htmlFor}
@@ -118,7 +117,7 @@ const SignupForm = () => {
               {props.htmlFor === 'email' && (
                 <Divider width="100%" height="1px" color="#EAEAEC" />
               )}
-            </>
+            </React.Fragment>
           ))}
           <Button width="340px" type="submit" variant="Primary">
             가입하기

@@ -19,7 +19,7 @@ const passwordConfirm = (value: string) => {
       value
     )
   )
-    return '영문/숫자/특수문자 중 2가지 이상, 8자 이상으로 입력해주세요.';
+    return '영문/숫자/특수문자를 포함하여 8자 이상으로 입력해주세요.';
   return true;
 };
 
