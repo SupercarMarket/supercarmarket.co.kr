@@ -65,7 +65,7 @@ const ResultId = (props: ResultIdProps) => {
                 fontWeight="regular"
                 color="greyScale-5"
                 lineHeight="150%"
-              >{`가입일 ${findIdResult.success.createAt}`}</Typography>
+              >{`가입일 ${findIdResult.success.createdDate}`}</Typography>
             </Wrapper.Item>
           </Wrapper>
           <Wrapper css={style.button}>

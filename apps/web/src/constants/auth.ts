@@ -163,7 +163,15 @@ const auth = {
   phoneAuth: () => [auth.phone, auth.authentication],
   findId: () => [auth.name, ...auth.phoneAuth()],
   findPassword: () => [auth.id, ...auth.phoneAuth()],
-  signin: () => [auth.id, auth.password],
+  signin: () => [
+    auth.id,
+    {
+      ...auth.password,
+      options: {
+        required: '비밀번호를 입력해주세요.',
+      },
+    },
+  ],
   signup: () => [
     { ...auth.id, button: '중복 확인', buttonWidth: '120px' },
     auth.password,

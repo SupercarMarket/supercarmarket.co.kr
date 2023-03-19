@@ -155,6 +155,8 @@ const FindForm = ({ type }: FindFormProps) => {
     return () => resetField();
   }, []);
 
+  console.log(authState.findIdResult.success);
+
   return (
     <FormProvider {...methods}>
       {!authState.findIdResult.success && (
