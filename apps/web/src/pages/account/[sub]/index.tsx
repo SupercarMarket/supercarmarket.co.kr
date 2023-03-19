@@ -89,9 +89,6 @@ export const getUserPageProps = async (
 
   const isMyAccountPage = session && session.sub == sub;
   const isCorrectTab = tab && account.accountTab.includes(tab);
-  const accountRoutes = isMyAccountPage
-    ? account.accountRoutes.myAccount(sub)
-    : account.accountRoutes.someoneAccount(sub);
   const header = session
     ? {
         ACCESS_TOKEN: session.accessToken,
@@ -118,6 +115,12 @@ export const getUserPageProps = async (
     };
   }
 
+  const accountRoutes = isMyAccountPage
+    ? user.data.role == 'user'
+      ? account.accountRoutes.myAccount(sub)
+      : account.accountRoutes.dealerAccount(sub)
+    : account.accountRoutes.someoneAccount(sub);
+
   await queryClient.prefetchQuery(queries.account.id(sub), async () => {
     const { ok, status, ...rest } = user;
 
@@ -126,12 +129,13 @@ export const getUserPageProps = async (
 
   /**
    * 타유저인 경우 작성글과 댓글단 글만 볼 수 있다.
+   * 딜러가 아닌 경우 제한 처리
    * 이에 따라 쿼리 접근 제한 처리
    */
   if (isMyAccountPage && !isCorrectTab) {
     return {
       redirect: {
-        destination: `/account/${sub}?tab=${account.accountTab[0]}`,
+        destination: `/account/${sub}?tab=${account.accountTab[1]}`,
         permanent: false,
       },
     };
@@ -147,6 +151,16 @@ export const getUserPageProps = async (
       },
     };
   }
+
+  if (user.data.role !== 'dealer' && tab === 'dealer-product') {
+    return {
+      redirect: {
+        destination: `/account/${sub}?tab=${account.accountTab[1]}`,
+        permanent: false,
+      },
+    };
+  }
+
   if ((isMyAccountPage && isCorrectTab) || (!isMyAccountPage && isCorrectTab))
     return {
       props: {
