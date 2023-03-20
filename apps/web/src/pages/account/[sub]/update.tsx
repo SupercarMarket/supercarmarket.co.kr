@@ -2,7 +2,6 @@ import { Container, Title } from '@supercarmarket/ui';
 import type { NextPageWithLayout, Params } from '@supercarmarket/types/base';
 import { AccountUpdateForm } from 'components/account';
 import layout from 'components/layout';
-import { AuthProvider } from 'feature/authProvider';
 import type { GetServerSideProps } from 'next';
 import { getSession } from 'utils/api/auth/user';
 import { ModalProvider } from 'feature/modalContext';
@@ -17,9 +16,7 @@ const ProfileUpdate: NextPageWithLayout = () => {
     >
       <Title textAlign="center">개인정보 수정</Title>
       <ModalProvider>
-        <AuthProvider>
-          <AccountUpdateForm />
-        </AuthProvider>
+        <AccountUpdateForm />
       </ModalProvider>
     </Container>
   );
