@@ -34,7 +34,7 @@ const FormFile = React.memo(function FormFile({
           fontWeight="regular"
           color="greyScale-6"
           lineHeight="150%"
-        >{`파일 ${index}`}</Typography>
+        >{`파일 ${index + 1}`}</Typography>
         <Typography
           fontSize="body-14"
           fontWeight="regular"
