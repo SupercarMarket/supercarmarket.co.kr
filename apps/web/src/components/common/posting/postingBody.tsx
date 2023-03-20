@@ -1,32 +1,54 @@
-import { Container } from '@supercarmarket/ui';
+import { Container, Wrapper } from '@supercarmarket/ui';
+import { css } from 'styled-components';
 
 interface PostingBodyProps {
   contentHtml: string;
 }
 
-const convertHtml = (html: string) => {
-  const document = new DOMParser().parseFromString(html, 'text/html');
-
-  const images = Array.from(document.querySelectorAll('img'));
-
-  images.forEach((element) => {
-    if (element.width > 261) {
-      element.style.width = '100%';
-      element.style.height = 'auto';
-    }
-  });
-
-  return document.body.innerHTML;
-};
-
 const PostingBody = ({ contentHtml }: PostingBodyProps) => {
   return (
     <Container margin="40px 0">
-      <div
-        dangerouslySetInnerHTML={{
-          __html: convertHtml(contentHtml),
-        }}
-      />
+      <Wrapper
+        css={css`
+          p {
+            line-height: 160%;
+          }
+          code {
+            color: #c1798b;
+            background-color: #f9f2f4;
+            padding: 2px 3px px;
+            letter-spacing: -0.3px;
+            border-radius: 2px;
+          }
+          hr {
+            border-top: 1px solid #eee;
+            margin: 16px 0;
+          }
+          strong {
+            font-weight: bold;
+          }
+          del {
+            color: #999;
+          }
+          a {
+            color: #1f70de;
+            cursor: pointer;
+            text-decoration: underline;
+          }
+          img {
+            margin: 4px 0 10px;
+            box-sizing: border-box;
+            vertical-align: top;
+            max-width: 100%;
+          }
+        `}
+      >
+        <div
+          dangerouslySetInnerHTML={{
+            __html: contentHtml,
+          }}
+        />
+      </Wrapper>
     </Container>
   );
 };

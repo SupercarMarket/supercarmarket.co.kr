@@ -25,9 +25,8 @@ const CommunityEditor = (props: CommunityEditorProps) => {
       initialValue=" "
       language="ko"
       toolbarItems={[
-        ['heading', 'bold', 'italic', 'strike'],
-        ['hr', 'quote'],
-        ['ul', 'ol', 'task', 'indent', 'outdent'],
+        ['bold', 'strike'],
+        ['hr'],
         ['image', 'link'],
         ['code', 'codeblock'],
       ]}
