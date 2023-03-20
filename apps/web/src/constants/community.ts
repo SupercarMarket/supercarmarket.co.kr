@@ -5,6 +5,7 @@ interface FormState {
   category: string;
   title: string;
   temporaryStorage?: boolean;
+  tempId?: string;
 }
 
 const community = {

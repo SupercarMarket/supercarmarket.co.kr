@@ -28,10 +28,7 @@ export default function useCommunity(
   };
 
   return useQuery<PaginationResponse<CommunityDto[]>>(
-    queries.market.lists([
-      ...queries.community.lists(),
-      ...queries.community.query(query),
-    ]),
+    [...queries.community.lists(), ...queries.community.query(query)],
     () =>
       clientFetcher('/server/supercar/v1/community', {
         method: 'GET',

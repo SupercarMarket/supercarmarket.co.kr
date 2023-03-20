@@ -16,7 +16,6 @@ import { css } from 'styled-components';
 import type { Editor } from '@toast-ui/react-editor';
 import type { CommunityTemporaryStorageDto } from '@supercarmarket/types/community';
 import ModalContext from 'feature/modalContext';
-import TemporaryStorageModal from 'components/common/modal/temporaryStorageModal';
 import { FormProvider, useForm } from 'react-hook-form';
 import { FormState } from 'constants/community';
 import { ErrorCode, fetcher } from '@supercarmarket/lib';
@@ -27,6 +26,9 @@ import {
   reverseFormatter,
 } from '../communityCard/communityCard';
 import dayjs from 'dayjs';
+import { Modal } from 'components/common/modal';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import queries from 'constants/queries';
 
 interface CommunityFormProps {
   id?: string;
@@ -45,7 +47,7 @@ const CommunityEditor = dynamic(() => import('./communityEditor'), {
 const CommunityForm = (props: CommunityFormProps) => {
   const { id, initialData } = props;
 
-  const { back, replace } = useRouter();
+  const { back, push } = useRouter();
   const session = useSession();
   const [category, setCategory] = React.useState('');
   const [isInitialize, setIsInitialize] = React.useState(false);
@@ -55,6 +57,7 @@ const CommunityForm = (props: CommunityFormProps) => {
   const [images, setImages] = React.useState<CommunityFormEditorImages[]>([]);
   const { onClick, onClose, onOpen } = React.useContext(ModalContext);
   const methods = useForm<FormState>();
+  const queryClient = useQueryClient();
   const { formState } = methods;
 
   const handleCancel = React.useCallback(() => {
@@ -263,17 +266,17 @@ const CommunityForm = (props: CommunityFormProps) => {
     [methods]
   );
 
-  const handleSubmit = React.useCallback(
-    async (data: FormState) =>
+  const uploadMutation = useMutation({
+    mutationFn: async (data: FormState) =>
       handleRequire(data).then(async () => {
         setError(null);
-        const { title, category, temporaryStorage } = data;
+        const { title, category, temporaryStorage, tempId } = data;
         const {
           addImgFiles,
           addImgSrcs,
           deleteImgSrcs,
           thumbnail,
-          tempId,
+          tempId: _tempId,
           html,
         } = await handleEditorHtml();
         const { addFiles, deleteFilesSrcs } = await handleFiles(data);
@@ -289,7 +292,7 @@ const CommunityForm = (props: CommunityFormProps) => {
                 category: reverseFormatter(category),
                 addImgSrcs,
                 thumbnail,
-                tempId,
+                tempId: tempId || _tempId,
                 deleteImgSrcs,
                 deleteFilesSrcs,
                 contents: html,
@@ -317,31 +320,52 @@ const CommunityForm = (props: CommunityFormProps) => {
           headers: {
             ACCESS_TOKEN: session.data?.accessToken || '',
           },
+          params: id,
           body: formData,
         });
 
         const result = await response.json();
 
-        if (!response.ok) {
+        if (!response.ok)
           setError(result.message || ErrorCode[response.status]);
-          return;
-        }
 
-        if (temporaryStorage) return;
-
-        replace(
-          `${getCategoryPathname(reverseFormatter(category))}/${result.data.id}`
-        );
+        return {
+          id: result.data.id,
+          tempId: result.data.tempId,
+          temporaryStorage,
+        };
       }),
-    [
-      id,
-      session.data?.accessToken,
-      handleEditorHtml,
-      handleFiles,
-      handleRequire,
-      replace,
-    ]
-  );
+    onSuccess: async ({ id: _id, temporaryStorage }) => {
+      if (temporaryStorage) {
+        setSuccess(dayjs(new Date()).format('HH:mm'));
+        return;
+      }
+
+      if (id)
+        queryClient.refetchQueries({
+          queryKey: queries.community.detail(
+            category === 'information' ? 'library' : 'paparazzi',
+            reverseFormatter(category),
+            id
+          ),
+        });
+
+      queryClient.invalidateQueries({
+        queryKey: [
+          ...queries.community.lists(),
+          ...queries.community.query({
+            category,
+            filter: 'null',
+            searchType: 'null',
+            keyword: 'null',
+            page: 0,
+          }),
+        ],
+      });
+
+      push(`${getCategoryPathname(reverseFormatter(category))}/${_id}`);
+    },
+  });
 
   const handleTemporaryStorage = React.useCallback(async () => {
     setSuccess(null);
@@ -353,20 +377,28 @@ const CommunityForm = (props: CommunityFormProps) => {
       temporaryStorage: true,
     };
 
-    await handleSubmit(data).then(() => {
-      setSuccess(dayjs(new Date()).format('HH:mm'));
-    });
-  }, [handleSubmit, methods]);
+    uploadMutation.mutate(data);
+  }, [methods, uploadMutation]);
 
   // * 임시저장 데이터 불러오기
   React.useEffect(() => {
-    if (initialData?.tempId && !id)
+    if (initialData.tempId && !id)
       onOpen(
-        <TemporaryStorageModal
-          onClick={onClick}
-          onClose={onClose}
-          onOpen={onOpen}
-          onInit={handleInitialize}
+        <Modal
+          title="임시저장된 글이 있습니다. 불러오시겠습니까?"
+          description="취소를 누르면 임시저장 글이 삭제되고\n새 글을 작성할 수 있습니다."
+          closeText="취소"
+          clickText="불러오기"
+          onCancel={() => {
+            onClose();
+          }}
+          onClick={() => {
+            onClose();
+            handleInitialize();
+          }}
+          onClose={() => {
+            onClose();
+          }}
         />
       );
   }, [handleInitialize, onClick, onClose, onOpen, initialData, id]);
@@ -389,7 +421,12 @@ const CommunityForm = (props: CommunityFormProps) => {
     <FormProvider {...methods}>
       <Form
         encType="multipart/form-data"
-        onSubmit={methods.handleSubmit(handleSubmit)}
+        onSubmit={methods.handleSubmit((data) => {
+          uploadMutation.mutate({
+            ...data,
+            tempId: uploadMutation.data?.tempId,
+          });
+        })}
         css={css`
           display: flex;
           flex-direction: column;
