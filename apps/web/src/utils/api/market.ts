@@ -26,7 +26,7 @@ const marketApi: NextApiHandler = async (req, res) => {
   const category = CATEGORY_MAPPING[queryCategory];
 
   const query =
-    category === 'all'
+    category === '전체'
       ? { filter, orderBy, page, ...rest }
       : { category, filter, orderBy, page, ...rest };
 
