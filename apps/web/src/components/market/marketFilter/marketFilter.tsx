@@ -30,11 +30,11 @@ const MarketFilter = () => {
     const filtered = queries.filter(([key]) => !key.match(pattern));
     const url = filtered.map(([key, value]) => `${key}=${value}`).join('&');
 
-    push(`/market?${url}`, undefined, { scroll: false });
+    push(`/market/${query.category}?${url}`, undefined, { scroll: false });
   };
 
   const resetfilter = () => {
-    push(`/market?category=${query.category}`, undefined, {
+    push(`/market/${query.category}`, undefined, {
       scroll: false,
     });
   };
@@ -60,6 +60,9 @@ const MarketFilter = () => {
                 width: 270px;
                 display: flex;
                 flex-direction: column;
+                box-sizing: border-box;
+                padding: 10px;
+                padding-bottom: 0;
                 gap: 5px;
                 ${applyMediaQuery('mobile')} {
                   width: 311px;
@@ -89,6 +92,8 @@ const MarketFilter = () => {
                 width: 270px;
                 display: flex;
                 flex-direction: column;
+                box-sizing: border-box;
+                padding: 10px;
                 gap: 5px;
                 ${applyMediaQuery('mobile')} {
                   width: 311px;

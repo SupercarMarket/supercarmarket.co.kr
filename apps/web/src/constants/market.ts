@@ -16,11 +16,7 @@ const CATEGORY = [
 
 const CATEGORY_MAPPING: { [key: string]: string } = {};
 CATEGORY.forEach(({ option, value }) => {
-  if (value === 'classic-car') {
-    CATEGORY_MAPPING[value] = '클래식카%26올드카';
-  } else {
-    CATEGORY_MAPPING[value] = option;
-  }
+  CATEGORY_MAPPING[value] = option;
 });
 
 const CATEGORY_VALUES = CATEGORY.map(({ value }) => value);

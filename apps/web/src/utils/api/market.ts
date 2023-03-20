@@ -10,11 +10,22 @@ import {
 import fetcher from 'utils/api/fetcher';
 import { ErrorCode } from 'utils/error';
 import { catchNoExist, getErrorMessage } from 'utils/misc';
+import { CATEGORY_MAPPING } from 'constants/market';
 
 const marketApi: NextApiHandler = async (req, res) => {
-  const { category, filter, orderBy, page, ...rest } = req.query as Params;
+  const {
+    category: queryCategory,
+    filter,
+    orderBy,
+    page,
+    ...rest
+  } = req.query as Params;
 
-  catchNoExist(category, filter, orderBy, page);
+  catchNoExist(queryCategory, filter, orderBy, page);
+
+  const category = CATEGORY_MAPPING[queryCategory];
+
+  console.log(category);
 
   const query =
     category === 'all'
