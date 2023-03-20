@@ -110,7 +110,8 @@ const CommunityForm = (props: CommunityFormProps) => {
   }, [id, initialData.contents]);
 
   const handleEditorHtml = React.useCallback(async () => {
-    const html = editor.current?.getInstance()?.getHTML();
+    const instance = editor.current?.getInstance();
+    const html = instance?.getHTML();
 
     if (!html) {
       throw 'editor contents is require';
@@ -121,6 +122,14 @@ const CommunityForm = (props: CommunityFormProps) => {
     const isImg = img.length > 0;
     const isTempImg = initialData.images && initialData.images.length > 0;
     const thumbnail = img[0]?.src || null;
+    const isContents = Array.from(document.querySelectorAll('p')).some(
+      (element) => element.innerText
+    );
+
+    if (!isContents) {
+      setError('본문에 내용을 작성해주세요.');
+      throw 'contents is require';
+    }
 
     let addImgSrcs = null;
     let deleteImgSrcs = null;
@@ -154,8 +163,6 @@ const CommunityForm = (props: CommunityFormProps) => {
     // * case 2-3 @임시저장 이미지가 존재하고, 내부 에디터에 이미지가 존재하지 않는 경우
 
     if (isTempImg && isInitialize && !isImg) {
-      console.log('check');
-
       deleteImgSrcs = initialData.images;
     }
 
