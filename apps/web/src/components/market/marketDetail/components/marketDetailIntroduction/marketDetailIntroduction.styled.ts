@@ -16,6 +16,7 @@ const Content = styled.div`
   width: 100%;
   height: 100%;
   word-wrap: break-word;
+  white-space: pre-wrap;
   line-height: 150%;
 `;
 
