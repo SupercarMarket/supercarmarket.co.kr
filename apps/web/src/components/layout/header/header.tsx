@@ -31,14 +31,16 @@ const Header = ({ navlinks }: HeaderProps) => {
   const [search, setSearch] = React.useState(false);
   const [hamburger, setHamburger] = React.useState(false);
   const { status, data: session } = useSession();
-  const { push } = useRouter();
+  const { push, refresh } = useRouter();
 
   const handleHamburger = React.useCallback(() => {
     setHamburger((prev) => !prev);
   }, []);
   const handleSignOut = React.useCallback(() => {
-    signOut({ redirect: false });
-  }, []);
+    signOut({ redirect: false }).then(() => {
+      refresh();
+    });
+  }, [refresh]);
 
   return (
     <Container as="header" width="100%" display="flex">
@@ -141,7 +143,7 @@ const Header = ({ navlinks }: HeaderProps) => {
                   style={{
                     cursor: 'pointer',
                   }}
-                  onClick={() => signOut({ redirect: false })}
+                  onClick={handleSignOut}
                 >
                   <Typography
                     color="black"

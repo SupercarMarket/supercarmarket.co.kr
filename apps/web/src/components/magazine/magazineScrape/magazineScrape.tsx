@@ -38,6 +38,7 @@ const MagazineScrape = ({ postId, isScraped }: MagazineScrapeProps) => {
   const handleScrape = React.useCallback(() => {
     mutate();
   }, [mutate]);
+
   return (
     <Button variant="Line" onClick={handleScrape}>
       <Wrapper

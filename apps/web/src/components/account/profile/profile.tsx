@@ -76,7 +76,10 @@ const ProfileBackground = ({
   });
 
   const uploadMutation = useMutation({
-    mutationFn: async (files: FileList) => {
+    mutationFn: async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const files = e.target.files;
+
+      if (!files?.length) return;
       if (!session) return;
 
       const formData = new FormData();
@@ -84,6 +87,8 @@ const ProfileBackground = ({
       Array.from(files).forEach((file) => {
         formData.append('background', file);
       });
+
+      e.target.value = '';
 
       return await clientFetcher('/server/supercar/v1/user/background', {
         method: 'POST',
@@ -200,34 +205,32 @@ const ProfileBackground = ({
                   type="file"
                   accept="image/jpg, image/png, image/jpeg"
                   hidden
-                  onChange={(e) => {
-                    const files = e.target.files;
-                    if (!files?.length) return;
-                    uploadMutation.mutate(files);
-                  }}
+                  onChange={(e) => uploadMutation.mutate(e)}
                 />
                 <label htmlFor="background">배경 이미지 수정</label>
                 <UploadIcon />
               </div>
             </Button>
-            <Button
-              type="button"
-              variant="Line"
-              onClick={() => {
-                if (src === baseSrc) return;
+            {src !== baseSrc && (
+              <Button
+                type="button"
+                variant="Line"
+                onClick={() => {
+                  if (src === baseSrc) return;
 
-                removeMutation.mutate(src);
-              }}
-              style={{
-                height: '100%',
-                padding: 0,
-              }}
-            >
-              <div>
-                <label>삭제</label>
-                <RemoveIcon />
-              </div>
-            </Button>
+                  removeMutation.mutate(src);
+                }}
+                style={{
+                  height: '100%',
+                  padding: 0,
+                }}
+              >
+                <div>
+                  <label>삭제</label>
+                  <RemoveIcon />
+                </div>
+              </Button>
+            )}
           </Wrapper.Item>
         )}
       </Wrapper>
@@ -288,12 +291,19 @@ const ProfileRepresentativeItem = (props: ProfileRepresentativeItemProps) => {
   }, [isMyAccountPage]);
 
   const uploadMutation = useMutation({
-    mutationFn: async (files: FileList) => {
+    mutationFn: async (e: React.ChangeEvent<HTMLInputElement>) => {
       const formData = new FormData();
+
+      const files = e.target.files;
+
+      if (!files?.length) return;
 
       Array.from(files).forEach((file) => {
         formData.append('gallery', file);
       });
+
+      e.target.value = '';
+
       return await clientFetcher('/server/supercar/v1/user/gallery', {
         method: 'POST',
         headers: {
@@ -483,11 +493,7 @@ const ProfileRepresentativeItem = (props: ProfileRepresentativeItemProps) => {
                     type="file"
                     accept="image/jpg, image/png, image/jpeg"
                     hidden
-                    onChange={(e) => {
-                      const files = e.target.files;
-                      if (!files?.length) return;
-                      uploadMutation.mutate(files);
-                    }}
+                    onChange={(e) => uploadMutation.mutate(e)}
                   />
                   <label htmlFor="representative">
                     <UploadIcon />
