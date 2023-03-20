@@ -40,14 +40,14 @@ const FIRST_MARKET_FILTER = [
       defaultLabel: '선택',
       optionSet: [
         {
-          option: '휘발유',
+          option: '가솔린',
           dataName: 'fuel',
-          value: '휘발유',
+          value: '가솔린',
         },
         {
-          option: '경유',
+          option: '디젤',
           dataName: 'fuel',
-          value: '경유',
+          value: '디젤',
         },
         {
           option: '전기',
