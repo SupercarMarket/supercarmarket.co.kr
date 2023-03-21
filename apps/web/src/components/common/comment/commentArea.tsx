@@ -1,4 +1,6 @@
 import { Button, Container, Typography } from '@supercarmarket/ui';
+import { useQueryClient } from '@tanstack/react-query';
+import queries from 'constants/queries';
 import useAddComment from 'hooks/mutations/comment/useAddComment';
 import useUpdateComment from 'hooks/mutations/comment/useUpdateComment';
 import { useSession } from 'next-auth/react';
@@ -17,7 +19,9 @@ interface CommentAreaProps {
   parentId?: string;
   type?: CommentAreaType;
   defaultValue?: string;
-  category?: 'magazine' | 'paparazzi' | 'partnership';
+  kind?: 'magazine' | 'paparazzi' | 'partnership';
+  category: string;
+  onSuccess?: () => void;
 }
 
 const CommentArea = ({
@@ -25,20 +29,54 @@ const CommentArea = ({
   parentId,
   defaultValue,
   type = 'add',
-  category = 'magazine',
+  kind = 'magazine',
+  category,
+  onSuccess,
 }: CommentAreaProps) => {
+  const queryClient = useQueryClient();
   const isAuthenticated = useSession().status === 'authenticated';
-  const { mutate: addMutation, isSuccess: isAddSuccess } = useAddComment({
-    category,
-    postId,
-    parentId,
-  });
-  const { mutate: updateMutation, isSuccess: isUpdateSuccess } =
-    useUpdateComment({
-      category,
+  const { mutate: addMutation, isSuccess: isAddSuccess } = useAddComment(
+    {
+      category: kind,
       postId,
-      commentId: parentId,
-    });
+      parentId,
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(queries.comment.id(postId));
+
+        if (kind === 'partnership') {
+        } else if (kind === 'paparazzi')
+          queryClient.invalidateQueries({
+            queryKey: [
+              ...queries.community.lists(),
+              {
+                category: category,
+                page: 0,
+                filter: undefined,
+                searchType: undefined,
+                keyword: undefined,
+              },
+            ],
+          });
+        if (onSuccess) onSuccess();
+      },
+    }
+  );
+  const { mutate: updateMutation, isSuccess: isUpdateSuccess } =
+    useUpdateComment(
+      {
+        category: kind,
+        postId,
+        commentId: parentId,
+      },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries(queries.comment.id(postId));
+          if (onSuccess) onSuccess();
+        },
+      }
+    );
   const [comment, setComment] = useState(defaultValue ? defaultValue : '');
   const length = useMemo(() => comment.length, [comment.length]);
 

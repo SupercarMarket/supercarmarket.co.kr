@@ -275,7 +275,7 @@ const CommunityPosting = ({
                   </Wrapper.Item>
                 </Button>
               </Wrapper>
-              <Comment id={postId} category={subject} />
+              <Comment id={postId} kind={subject} />
               <Wrapper
                 css={css`
                   width: 100%;
