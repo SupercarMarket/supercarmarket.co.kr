@@ -73,7 +73,7 @@ const CommentArea = ({
             isAuthenticated ? '댓글을 남겨보세요.' : '로그인이 필요합니다.'
           }
           minLength={1}
-          maxLength={2000}
+          maxLength={1999}
           disabled={!isAuthenticated}
         />
       </CommentAreaTop>
