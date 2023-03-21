@@ -16,8 +16,8 @@ import dynamic from 'next/dynamic';
 import type { ParsedUrlQuery } from 'querystring';
 import * as React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import { baseFetch } from 'utils/api/fetcher';
 import { css } from 'styled-components';
+import { serverFetcher } from '@supercarmarket/lib';
 
 const Comment = dynamic(() => import('components/common/comment'), {
   ssr: false,
@@ -76,19 +76,29 @@ export default MagazinePost;
 
 MagazinePost.Layout = layout;
 
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+export const getServerSideProps: GetServerSideProps = async ({
+  req,
+  params,
+}) => {
   const { id } = params as IParams;
 
   const queryClient = new QueryClient();
 
-  await Promise.all([
-    queryClient.prefetchQuery(queries.magazine.id(id), () =>
-      baseFetch(`${process.env.NEXT_PUBLIC_URL}/api/magazine`, {
-        method: 'GET',
-        params: id,
-      })
-    ),
-  ]);
+  let headers = {};
+  const boardView = req.cookies['boardView'];
+
+  if (boardView) headers = { ...headers, Cookie: `boardView=${boardView}` };
+
+  await queryClient.prefetchQuery(queries.magazine.id(id), () =>
+    serverFetcher(`${process.env.NEXT_PUBLIC_URL}/api/magazine`, {
+      method: 'GET',
+      headers,
+      params: id,
+    }).then((res) => {
+      const { ok, status, ...rest } = res;
+      return rest;
+    })
+  );
 
   return {
     props: {

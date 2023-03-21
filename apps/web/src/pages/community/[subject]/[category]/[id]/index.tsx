@@ -78,7 +78,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   if (boardView) headers = { ...headers, Cookie: `boardView=${boardView}` };
   if (session) headers = { ...headers, ACCESS_TOKEN: session.accessToken };
 
-  queryClient.prefetchQuery(
+  await queryClient.prefetchQuery(
     [
       [
         ...queries.community.all,

@@ -57,9 +57,14 @@ const Posting = function Posting(props: PostingProps) {
 };
 
 const MagazinePosting = ({ postId }: Omit<PostingProps, 'type'>) => {
-  const { data: magazinePost } = useMagazinePost(postId, {
-    enabled: !!postId,
-  });
+  const session = useSession();
+  const { data: magazinePost } = useMagazinePost(
+    postId,
+    session.data?.accessToken,
+    {
+      enabled: session.status && session.status !== 'loading',
+    }
+  );
 
   return (
     <>
@@ -70,22 +75,18 @@ const MagazinePosting = ({ postId }: Omit<PostingProps, 'type'>) => {
             description={magazinePost.data.contentHtml}
           />
           <Container>
-            {magazinePost && (
-              <>
-                <PostingHeadMagainze {...magazinePost.data} />
-                <Container
-                  width="100%"
-                  display="flex"
-                  flexDirection="column"
-                  padding="0 40px"
-                  border="1px solid #EAEAEC"
-                  borderRadius="4px"
-                  boxSizing="border-box"
-                >
-                  <PostingBody contentHtml={magazinePost.data.contentHtml} />
-                </Container>
-              </>
-            )}
+            <PostingHeadMagainze {...magazinePost.data} />
+            <Container
+              width="100%"
+              display="flex"
+              flexDirection="column"
+              padding="0 40px"
+              border="1px solid #EAEAEC"
+              borderRadius="4px"
+              boxSizing="border-box"
+            >
+              <PostingBody contentHtml={magazinePost.data.contentHtml} />
+            </Container>
           </Container>
           <MagazineScrape postId={postId} isScraped={magazinePost.isScraped} />
         </>
