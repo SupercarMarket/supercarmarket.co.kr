@@ -6,6 +6,7 @@ import {
   Typography,
   Wrapper,
 } from '@supercarmarket/ui';
+import { useRouter } from 'next/navigation';
 import useCommunityPost from 'hooks/queries/community/useCommunityPost';
 
 import useMagazinePost from 'hooks/queries/useMagazinePost';
@@ -101,6 +102,7 @@ const CommunityPosting = ({
   const session = useSession();
   const { onOpen, onClose, onClick } = React.useContext(ModalContext);
   const queryClient = useQueryClient();
+  const { replace } = useRouter();
   const { data: communityPost } = useCommunityPost(
     session.data?.accessToken || null,
     {
@@ -119,9 +121,29 @@ const CommunityPosting = ({
   });
   const { mutate: removeMutate } = useRemoveCommunityPost({
     onSuccess: () => {
-      queryClient.invalidateQueries(
-        queries.community.detail(subject, category, postId)
-      );
+      Promise.all([
+        queryClient.invalidateQueries([
+          ...queries.community.all,
+          {
+            subject,
+            category,
+            id: postId,
+          },
+        ]),
+        queryClient.invalidateQueries({
+          queryKey: [
+            ...queries.community.lists(),
+            {
+              category: category,
+              page: 0,
+              filter: undefined,
+              searchType: undefined,
+              keyword: undefined,
+            },
+          ],
+        }),
+      ]);
+      replace(`/community/${subject}?category=${category}`);
     },
   });
 
