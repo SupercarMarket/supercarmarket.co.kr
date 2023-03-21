@@ -8,19 +8,19 @@ import CommentHead from './commentHead';
 
 interface CommentProps {
   id: string;
-  category?: 'magazine' | 'paparazzi' | 'partnership';
+  kind?: 'magazine' | 'paparazzi' | 'partnership';
 }
 
-const Comment = ({ id, category = 'magazine' }: CommentProps) => {
+const Comment = ({ id, kind = 'magazine' }: CommentProps) => {
   const { isMobile } = useMedia({ deviceQuery });
-  const { page, orderBy } = useUrlQuery();
+  const { page, orderBy, category } = useUrlQuery();
 
   const { data: comment } = useComment(
     id,
     {
       page,
       orderBy,
-      category,
+      category: kind,
     },
     {
       enabled: !!id,
@@ -46,6 +46,7 @@ const Comment = ({ id, category = 'magazine' }: CommentProps) => {
           <CommentBody
             postId={id}
             comments={comment.data}
+            kind={kind}
             category={category}
           />
           <Pagination
@@ -53,7 +54,7 @@ const Comment = ({ id, category = 'magazine' }: CommentProps) => {
             totalCount={comment.totalCount}
             pageSize={10}
           />
-          <CommentArea postId={id} category={category} />
+          <CommentArea postId={id} kind={kind} category={category} />
         </>
       )}
     </Container>

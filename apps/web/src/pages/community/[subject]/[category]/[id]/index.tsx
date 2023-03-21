@@ -73,11 +73,22 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   const queryClient = new QueryClient();
   let headers = {};
+  const boardView = req.cookies['boardView'];
 
-  if (session) headers = { ACCESS_TOKEN: session.accessToken };
+  if (boardView) headers = { ...headers, Cookie: `boardView=${boardView}` };
+  if (session) headers = { ...headers, ACCESS_TOKEN: session.accessToken };
 
   queryClient.prefetchQuery(
-    queries.community.detail(subject, category, id),
+    [
+      [
+        ...queries.community.all,
+        {
+          subject,
+          category,
+          id,
+        },
+      ],
+    ],
     () =>
       serverFetcher(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/community/${category}/post-id/${id}`,

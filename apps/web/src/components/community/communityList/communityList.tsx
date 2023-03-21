@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import {
   Alert,
@@ -15,6 +16,7 @@ import useCommunity from 'hooks/queries/community/useCommunity';
 import { css } from 'styled-components';
 import CommunityCard from '../communityCard';
 import { CardSkeleton } from 'components/fallback/loading';
+import { searchTypeFormatter } from '@supercarmarket/lib';
 
 interface CommunityListProps {
   category?: string;
@@ -24,15 +26,17 @@ interface CommunityListProps {
 
 const CommunityList = (props: CommunityListProps) => {
   const { category: iCategory, status } = props;
+  const [select, setSelect] = React.useState('');
   const pathname = usePathname();
   const { push } = useRouter();
-  const { variant, category, page, searchType, keyword } = useUrlQuery();
+  const { variant, category, page, keyword, searchType, filter } =
+    useUrlQuery();
 
   const { data, isFetching, isLoading } = useCommunity({
     category: iCategory || category || 'report',
-    filter: null,
-    searchType: searchType ?? null,
-    keyword: keyword ?? null,
+    filter: filter === 'popular' ? filter : undefined,
+    searchType: searchType ? searchType : undefined,
+    keyword,
     page,
   });
 
@@ -111,7 +115,13 @@ const CommunityList = (props: CommunityListProps) => {
           scroll
           create={status === 'authenticated' ? '/community/create' : undefined}
         />
-        <Pagination pageSize={12} totalCount={1} totalPages={1} />
+        {data && (
+          <Pagination
+            pageSize={20}
+            totalCount={data.totalCount}
+            totalPages={data.totalPages}
+          />
+        )}
       </Wrapper>
       <Wrapper
         css={css`
@@ -133,6 +143,11 @@ const CommunityList = (props: CommunityListProps) => {
           `}
         >
           <FormSelect
+            defaultValues={
+              searchType
+                ? searchTypeFormatter(searchType, { reverse: true })
+                : undefined
+            }
             option={{
               name: 'serachType',
               values: ['제목', '제목 + 본문', '닉네임'],
@@ -140,6 +155,13 @@ const CommunityList = (props: CommunityListProps) => {
             style={{
               width: '100%',
               height: '44px',
+            }}
+            callback={(value) => {
+              if (!value) return;
+              if (value === searchTypeFormatter(select, { reverse: true }))
+                return;
+
+              setSelect(searchTypeFormatter(value));
             }}
           />
         </Wrapper.Item>
@@ -149,7 +171,7 @@ const CommunityList = (props: CommunityListProps) => {
           defaultValue={keyword}
           handleClick={(query) =>
             push(
-              `${pathname}?category=${category}&variant=${variant}&searchType=${searchType}&keyword=${query}`
+              `${pathname}?category=${category}&variant=${variant}&searchType=${select}&keyword=${query}`
             )
           }
           style={{
