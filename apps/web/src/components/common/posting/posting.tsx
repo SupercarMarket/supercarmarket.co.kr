@@ -111,7 +111,7 @@ const CommunityPosting = ({
       id: postId,
     },
     {
-      enabled: session.status !== 'loading',
+      enabled: session.status && session.status !== 'loading',
     }
   );
   const { mutate: likeMuate } = useLikeCommunityPost({

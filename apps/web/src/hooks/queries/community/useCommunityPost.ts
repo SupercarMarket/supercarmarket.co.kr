@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import queries from 'constants/queries';
-import { clientFetcher } from 'utils/api/fetcher';
 import type { ServerResponse } from '@supercarmarket/types/base';
 import type { CommunityPostDto } from '@supercarmarket/types/community';
+import { clientFetcher } from '@supercarmarket/lib';
 
 export default function useCommunityPost(
   token: string | null,
