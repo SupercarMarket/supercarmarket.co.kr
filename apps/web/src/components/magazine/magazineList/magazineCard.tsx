@@ -24,6 +24,7 @@ const MagazineCard = memo(function MagazineCard({
   imgSrc,
   contents,
   comments,
+  created,
   type = 'normal',
 }: MagazineCardProps) {
   const imgWidth = type === 'normal' ? 387 : 285;
@@ -108,7 +109,7 @@ const MagazineCard = memo(function MagazineCard({
             lineHeight: '19.36px',
           }}
         >
-          2022.09.01
+          {created}
         </Typography>
       </Container>
     </Link>
