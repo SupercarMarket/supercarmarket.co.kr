@@ -1,24 +1,16 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import queries from 'constants/queries';
-import { baseFetcher } from 'utils/api/fetcher';
+import { clientFetcher } from '@supercarmarket/lib';
+import { useMutation } from '@tanstack/react-query';
 
 export default function useMagazineCounseling(postId: string, options = {}) {
-  const queryClient = useQueryClient();
-
   return useMutation({
-    mutationFn: () =>
-      baseFetcher('/api/magazine/counseling', {
+    mutationFn: (token: string) =>
+      clientFetcher(`/server/supercar/v1/magazine/${postId}/inquiry`, {
         method: 'POST',
         headers: {
+          ACCESS_TOKEN: token,
           'Content-Type': 'application/json',
         },
-        query: {
-          postId,
-        },
       }),
-    onSuccess: () => {
-      queryClient.invalidateQueries(queries.magazine.id(postId));
-    },
     ...options,
   });
 }
