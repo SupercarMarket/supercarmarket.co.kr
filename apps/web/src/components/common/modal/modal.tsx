@@ -1,10 +1,12 @@
 import { Button, Typography, Wrapper } from '@supercarmarket/ui';
 import { ModalProvider } from 'feature/modalContext';
+import * as React from 'react';
 import { css } from 'styled-components';
 
 const Modal = ({
   title = '로그인이 필요합니다',
-  description = '로그인이 필요한 서비스입니다.',
+  description,
+  node,
   closeText,
   clickText,
   background = 'none',
@@ -12,8 +14,9 @@ const Modal = ({
   onClick,
   onCancel,
 }: {
-  title?: string;
-  description?: string;
+  title?: React.ReactNode;
+  description?: React.ReactNode;
+  node?: React.ReactNode;
   closeText?: string;
   clickText?: string;
   background?: string;
@@ -66,18 +69,21 @@ const Modal = ({
           >
             {title}
           </Typography>
-          <Typography
-            as="p"
-            fontSize="body-16"
-            fontWeight="regular"
-            color="greyScale-5"
-            lineHeight="150%"
-            style={{
-              marginBottom: '38px',
-            }}
-          >
-            {description}
-          </Typography>
+          {node}
+          {description && (
+            <Typography
+              as="p"
+              fontSize="body-16"
+              fontWeight="regular"
+              color="greyScale-5"
+              lineHeight="150%"
+              style={{
+                marginBottom: '38px',
+              }}
+            >
+              {description}
+            </Typography>
+          )}
           <Wrapper.Item
             css={css`
               width: 100%;

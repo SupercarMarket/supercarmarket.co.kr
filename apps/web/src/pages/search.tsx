@@ -86,7 +86,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   const queryClient = new QueryClient();
 
-  queryClient.prefetchQuery(
+  await queryClient.prefetchQuery(
     [
       ...queries.search.all,
       ...queries.search.query({

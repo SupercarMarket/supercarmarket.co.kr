@@ -24,6 +24,7 @@ const MagazineCard = memo(function MagazineCard({
   imgSrc,
   contents,
   comments,
+  created,
   type = 'normal',
 }: MagazineCardProps) {
   const imgWidth = type === 'normal' ? 387 : 285;
@@ -60,6 +61,7 @@ const MagazineCard = memo(function MagazineCard({
             blurDataURL={base64 ? base64 : undefined}
             alt="thumbnail"
             style={{
+              objectFit: 'cover',
               borderRadius: '4px',
             }}
           />
@@ -107,7 +109,7 @@ const MagazineCard = memo(function MagazineCard({
             lineHeight: '19.36px',
           }}
         >
-          2022.09.01
+          {created}
         </Typography>
       </Container>
     </Link>

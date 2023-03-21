@@ -52,36 +52,6 @@ const magazineApi: NextApiHandler = async (req, res) => {
   });
 };
 
-const magazinePostApi: NextApiHandler = async (req, res) => {
-  const { id } = req.query as Params;
-  const session = await getSession({ req });
-
-  const headers = session
-    ? {
-        ACCESS_TOKEN: session.accessToken,
-      }
-    : undefined;
-
-  catchNoExist(id);
-
-  const response = await fetcher(
-    `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/magazine/${id}`,
-    {
-      headers,
-      method: 'GET',
-    }
-  );
-
-  if (!response.ok)
-    return res
-      .status(response.status)
-      .json({ message: ErrorCode[response.status] });
-
-  const magazinePost = await response.json();
-
-  return res.status(200).json(magazinePost);
-};
-
 const magazinePostScrapeApi: NextApiHandler = async (req, res) => {
   const { postId } = req.query as Params;
   const session = await getSession({ req });
@@ -107,34 +77,4 @@ const magazinePostScrapeApi: NextApiHandler = async (req, res) => {
   }
 };
 
-const magazinePostCounselingApi: NextApiHandler = async (req, res) => {
-  const { postId } = req.query as Params;
-  const session = await getSession({ req });
-
-  catchNoExist(postId);
-
-  if (!session) return res.status(430).json({ message: ErrorCode[430] });
-
-  try {
-    const counseling = await baseFetcher(
-      `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/magazine/${postId}/inquiry`,
-      {
-        headers: {
-          ACCESS_TOKEN: session.accessToken,
-        },
-        method: 'POST',
-      }
-    );
-
-    return res.status(200).json(counseling);
-  } catch (error) {
-    throw new Error(getErrorMessage(error));
-  }
-};
-
-export {
-  magazineApi,
-  magazinePostApi,
-  magazinePostCounselingApi,
-  magazinePostScrapeApi,
-};
+export { magazineApi, magazinePostScrapeApi };

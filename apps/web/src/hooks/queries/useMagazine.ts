@@ -17,6 +17,6 @@ export default function useMagazine(page = 0, options = {}) {
           page,
         },
       }),
-    { ...options, useErrorBoundary: true }
+    { ...options, useErrorBoundary: true, refetchOnMount: true }
   );
 }
