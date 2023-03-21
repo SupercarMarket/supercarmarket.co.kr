@@ -44,8 +44,8 @@ const MagazineBanner = ({
             align-items: center;
             justify-content: space-between;
             width: 100%;
-            gap: 75px;
             ${reverse && 'flex-direction: row-reverse;'}
+            ${reverse && 'gap: 75px;'}
             ${applyMediaQuery('mobile')} {
               flex-direction: column-reverse;
               gap: 20px;
@@ -142,6 +142,7 @@ const MagazineBanner = ({
               placeholder="blur"
               blurDataURL={magazine.data[0].base64}
               style={{
+                objectFit: 'cover',
                 borderRadius: '4px',
               }}
               priority
