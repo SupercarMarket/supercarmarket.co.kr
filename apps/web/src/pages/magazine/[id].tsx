@@ -90,12 +90,16 @@ export const getServerSideProps: GetServerSideProps = async ({
   if (boardView) headers = { ...headers, Cookie: `boardView=${boardView}` };
 
   await queryClient.prefetchQuery(queries.magazine.id(id), () =>
-    serverFetcher(`${process.env.NEXT_PUBLIC_URL}/api/magazine`, {
-      method: 'GET',
-      headers,
-      params: id,
-    }).then((res) => {
+    serverFetcher(
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/magazine`,
+      {
+        method: 'GET',
+        headers,
+        params: id,
+      }
+    ).then((res) => {
       const { ok, status, ...rest } = res;
+
       return rest;
     })
   );
