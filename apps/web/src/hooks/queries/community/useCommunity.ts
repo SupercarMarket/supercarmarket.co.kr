@@ -7,20 +7,14 @@ import { clientFetcher } from 'utils/api/fetcher';
 export default function useCommunity(
   query: {
     category: string;
-    filter: string | null;
     page: number;
-    searchType: string;
-    keyword: string | null;
+    filter?: string;
+    searchType?: string;
+    keyword?: string;
   },
   options = {}
 ) {
-  const {
-    category = 'report',
-    filter = null,
-    page = 0,
-    searchType,
-    keyword,
-  } = query;
+  const { category = 'report', page = 0, filter, searchType, keyword } = query;
 
   const currentQuery = keyword && {
     searchType,
@@ -28,7 +22,16 @@ export default function useCommunity(
   };
 
   return useQuery<PaginationResponse<CommunityDto[]>>(
-    [...queries.community.lists(), ...queries.community.query(query)],
+    [
+      ...queries.community.lists(),
+      {
+        category,
+        filter,
+        page,
+        searchType,
+        keyword,
+      },
+    ],
     () =>
       clientFetcher('/server/supercar/v1/community', {
         method: 'GET',

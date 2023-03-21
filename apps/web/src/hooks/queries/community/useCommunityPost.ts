@@ -20,7 +20,14 @@ export default function useCommunityPost(
   if (token) headers = { ACCESS_TOKEN: token };
 
   return useQuery<ServerResponse<CommunityPostDto>>(
-    queries.community.detail(subject, category, id),
+    [
+      ...queries.community.all,
+      {
+        subject,
+        category,
+        id,
+      },
+    ],
     () =>
       clientFetcher(`/server/supercar/v1/community/${category}/post-id/${id}`, {
         method: 'GET',

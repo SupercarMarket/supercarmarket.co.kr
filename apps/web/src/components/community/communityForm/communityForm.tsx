@@ -343,23 +343,26 @@ const CommunityForm = (props: CommunityFormProps) => {
 
       if (id)
         queryClient.refetchQueries({
-          queryKey: queries.community.detail(
-            category === 'information' ? 'library' : 'paparazzi',
-            reverseFormatter(category),
-            id
-          ),
+          queryKey: [
+            ...queries.community.all,
+            {
+              subject: category === 'information' ? 'library' : 'paparazzi',
+              category: reverseFormatter(category),
+              id,
+            },
+          ],
         });
 
-      queryClient.invalidateQueries({
+      queryClient.refetchQueries({
         queryKey: [
           ...queries.community.lists(),
-          ...queries.community.query({
-            category,
-            filter: 'null',
-            searchType: 'null',
-            keyword: 'null',
+          {
+            category: reverseFormatter(category),
             page: 0,
-          }),
+            filter: undefined,
+            searchType: undefined,
+            keyword: undefined,
+          },
         ],
       });
 
