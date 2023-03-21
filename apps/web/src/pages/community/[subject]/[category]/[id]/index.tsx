@@ -80,14 +80,12 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   await queryClient.prefetchQuery(
     [
-      [
-        ...queries.community.all,
-        {
-          subject,
-          category,
-          id,
-        },
-      ],
+      ...queries.community.all,
+      {
+        subject,
+        category,
+        id,
+      },
     ],
     () =>
       serverFetcher(
