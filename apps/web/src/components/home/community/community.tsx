@@ -35,7 +35,7 @@ const Community = () => {
             <CommunityCard key={d.id} variant="column" {...d} />
           ))}
       </Wrapper>
-      <RouterButton href="/community">
+      <RouterButton href="/community/paparazzi?category=report">
         <Typography fontSize="header-16" fontWeight="bold" color="black">
           커뮤니티 더보기
         </Typography>
