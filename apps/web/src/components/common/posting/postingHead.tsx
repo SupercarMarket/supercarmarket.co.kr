@@ -216,7 +216,7 @@ const PostingHeadCommunity = ({
             color="greyScale-5"
             lineHeight="120%"
           >
-            {dayjs(created).format('YYYY-MM-DD')}
+            {dayjs(created).format('YYYY.MM.DD HH:MM')}
           </Typography>
         </Wrapper.Left>
         <Wrapper.Right css={style.right}>
