@@ -192,7 +192,7 @@ const CommunityPosting = ({
                     ? '/community/create'
                     : undefined
                 }
-                list={`/community/${subject}`}
+                list={`/community/${subject}?category=${category}`}
               />
               <Wrapper
                 css={css`
