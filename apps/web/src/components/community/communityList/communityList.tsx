@@ -112,7 +112,13 @@ const CommunityList = (props: CommunityListProps) => {
           scroll
           create={status === 'authenticated' ? '/community/create' : undefined}
         />
-        <Pagination pageSize={12} totalCount={1} totalPages={1} />
+        {data && (
+          <Pagination
+            pageSize={20}
+            totalCount={data.totalCount}
+            totalPages={data.totalPages}
+          />
+        )}
       </Wrapper>
       <Wrapper
         css={css`
