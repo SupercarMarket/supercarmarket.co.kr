@@ -9,7 +9,6 @@ import {
 import Avvvatars from 'avvvatars-react';
 import { Modal } from 'components/common/modal';
 import ModalContext from 'feature/modalContext';
-import useMagazineCounseling from 'hooks/mutations/magazine/useMagazineCounseling';
 import * as React from 'react';
 import { css } from 'styled-components';
 import { useSession } from 'next-auth/react';
@@ -26,15 +25,6 @@ interface MagazineDealerProps {
 const MagazineDealer = ({ postId }: MagazineDealerProps) => {
   const queryClient = useQueryClient();
   const session = useSession();
-  const { mutate } = useMagazineCounseling(postId, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(queries.magazine.id(postId));
-    },
-    onError: (error: Error) => {
-      setError(error.message);
-    },
-    useErrorBoundary: true,
-  });
   const { data: userInfo } = useQuery<ServerResponse<{ phone: string }>>({
     queryKey: [...queries.magazine.all, 'phone'],
     queryFn: () =>
@@ -50,11 +40,26 @@ const MagazineDealer = ({ postId }: MagazineDealerProps) => {
   const { onOpen, onClose } = React.useContext(ModalContext);
   const { push } = useRouter();
 
-  const handleCounseling = React.useCallback(() => {
+  const handleInquiry = React.useCallback(async () => {
     setError(null);
     onClose();
-    mutate(session.data?.accessToken || '');
-  }, [mutate, onClose, session.data?.accessToken]);
+
+    if (!session) return;
+
+    await clientFetcher(`/server/supercar/v1/magazine/${postId}/inquiry`, {
+      method: 'POST',
+      headers: {
+        ACCESS_TOKEN: session.data?.accessToken || '',
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(() => {
+        queryClient.invalidateQueries(queries.magazine.id(postId));
+      })
+      .catch((error) => {
+        setError(error.message);
+      });
+  }, [onClose, postId, queryClient, session]);
 
   const onModal = React.useCallback(() => {
     if (session && session.data && userInfo)
@@ -93,7 +98,7 @@ const MagazineDealer = ({ postId }: MagazineDealerProps) => {
           onClose={() => {
             onClose();
           }}
-          onClick={handleCounseling}
+          onClick={handleInquiry}
         />
       );
     else
@@ -117,7 +122,7 @@ const MagazineDealer = ({ postId }: MagazineDealerProps) => {
           clickText="회원가입"
         />
       );
-  }, [handleCounseling, onClose, onOpen, push, session, userInfo]);
+  }, [handleInquiry, onClose, onOpen, push, session, userInfo]);
 
   return (
     <>
