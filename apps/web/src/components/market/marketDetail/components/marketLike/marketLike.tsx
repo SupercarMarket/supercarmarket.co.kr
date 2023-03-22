@@ -1,5 +1,11 @@
 import * as React from 'react';
-import { Button, Container, Typography } from '@supercarmarket/ui';
+import {
+  Button,
+  Container,
+  Typography,
+  Wrapper,
+  applyMediaQuery,
+} from '@supercarmarket/ui';
 import theme from 'constants/theme';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
@@ -8,6 +14,7 @@ import FavoriteIcon from '../../../../../assets/svg/favorite.svg';
 import FavoriteBorderIcon from '../../../../../assets/svg/favorite-border.svg';
 import ModalContext from 'feature/modalContext';
 import AuthModal from 'components/common/modal/authModal';
+import { css } from 'styled-components';
 
 interface MarketLikeProps {
   isLike: boolean;
@@ -48,11 +55,17 @@ const MarketLike = ({ isLike }: MarketLikeProps) => {
   }, [like, setLike, toggleLike, user, onClick, onClose, onOpen]);
 
   return (
-    <Container
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-      height="205px"
+    <Wrapper
+      css={css`
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 205px;
+
+        ${applyMediaQuery('mobile')} {
+          height: 105px;
+        }
+      `}
     >
       <Button
         onClick={likeClick}
@@ -77,7 +90,7 @@ const MarketLike = ({ isLike }: MarketLikeProps) => {
           찜하기
         </Typography>
       </Button>
-    </Container>
+    </Wrapper>
   );
 };
 

@@ -1,8 +1,15 @@
-import { Button, Container, Typography } from '@supercarmarket/ui';
+import {
+  Button,
+  Container,
+  Typography,
+  Wrapper,
+  applyMediaQuery,
+} from '@supercarmarket/ui';
 import useChangeSellStatus from 'hooks/mutations/market/useChangeSellStatus';
 import useRemoveMarketById from 'hooks/mutations/market/useRemoveMarketById';
 import { useSession } from 'next-auth/react';
 import React from 'react';
+import { css } from 'styled-components';
 
 interface MarketMineProps {
   id: string;
@@ -34,12 +41,17 @@ const MarketMine = ({ id, brdSeq }: MarketMineProps) => {
   };
 
   return (
-    <Container
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-      gap="16px"
-      height="205px"
+    <Wrapper
+      css={css`
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 205px;
+
+        ${applyMediaQuery('mobile')} {
+          height: 105px;
+        }
+      `}
     >
       <Button variant="Line" onClick={removeMarket}>
         <Typography color="greyScale-6">삭제</Typography>
@@ -47,7 +59,7 @@ const MarketMine = ({ id, brdSeq }: MarketMineProps) => {
       <Button variant="Line" onClick={changeStatus}>
         <Typography color="greyScale-6">판매 완료</Typography>
       </Button>
-    </Container>
+    </Wrapper>
   );
 };
 
