@@ -106,7 +106,16 @@ const CarouselImageWrapper = styled.div`
   }
 `;
 
-const ImageWrapper = styled.div``;
+const ImageWrapper = styled.div`
+  width: 141px;
+  height: 105px;
+  position: relative;
+
+  ${applyMediaQuery('mobile')} {
+    width: 80px;
+    height: 60px;
+  }
+`;
 
 const CheckBox = styled(CarouselImageWrapper)`
   display: flex;
