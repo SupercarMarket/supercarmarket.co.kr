@@ -86,6 +86,7 @@ interface MarketDetailDto<T> {
   category: string;
   imgSrc: T[];
   isLike: boolean;
+  isMine: boolean;
   createdDate: string;
 }
 
