@@ -18,11 +18,7 @@ const Comment = ({ id, kind = 'magazine' }: CommentProps) => {
   const { isMobile } = useMedia({ deviceQuery });
   const { page, orderBy, category } = useUrlQuery();
 
-  const {
-    data: comment,
-    isFetching,
-    isLoading,
-  } = useComment(
+  const { data: comment, isLoading } = useComment(
     id,
     {
       page,
@@ -35,7 +31,7 @@ const Comment = ({ id, kind = 'magazine' }: CommentProps) => {
     }
   );
 
-  if (isFetching || isLoading) return <CommentSkeleton />;
+  if (isLoading) return <CommentSkeleton />;
 
   return (
     <Container
@@ -58,13 +54,19 @@ const Comment = ({ id, kind = 'magazine' }: CommentProps) => {
             comments={comment.data}
             kind={kind}
             category={category}
+            session={session.data}
           />
           <Pagination
             totalPages={comment.totalPages}
             totalCount={comment.totalCount}
             pageSize={10}
           />
-          <CommentArea postId={id} kind={kind} category={category} />
+          <CommentArea
+            postId={id}
+            kind={kind}
+            category={category}
+            session={session.data}
+          />
         </>
       )}
     </Container>

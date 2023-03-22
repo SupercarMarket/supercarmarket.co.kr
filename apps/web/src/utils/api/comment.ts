@@ -8,47 +8,6 @@ import fetcher, { baseApi } from './fetcher';
 
 type MessageResponse = ServerResponse<{ message: string }>;
 
-const commentCreateApi: NextApiHandler = async (req, res) => {
-  const { contents } = req.body;
-  const { postId, parentId, category } = req.query as Params;
-
-  catchNoExist(contents, postId, category);
-
-  const session = await getSession({ req });
-
-  const headers = session
-    ? {
-        ACCESS_TOKEN: session.accessToken,
-      }
-    : undefined;
-
-  const query =
-    parentId === 'null'
-      ? {
-          category,
-        }
-      : {
-          parentId,
-          category,
-        };
-
-  const response = await baseApi<MessageResponse>(
-    `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/post/${postId}/comment`,
-    {
-      method: 'POST',
-      headers,
-      query,
-      data: { contents },
-    }
-  );
-
-  const { ok, status, data } = response;
-
-  if (!ok) return res.status(status).json({ message: ErrorCode[status] });
-
-  return res.status(200).json(data);
-};
-
 const commentUpdateApi: NextApiHandler = async (req, res) => {
   const { postId, commentId, category } = req.query as Params;
   const { contents } = req.body;
@@ -150,4 +109,4 @@ const commentRemoveApi: NextApiHandler = async (req, res) => {
   return res.status(200).json(remove);
 };
 
-export { commentCreateApi, commentLikeApi, commentRemoveApi, commentUpdateApi };
+export { commentLikeApi, commentRemoveApi, commentUpdateApi };

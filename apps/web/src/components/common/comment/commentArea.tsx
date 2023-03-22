@@ -3,6 +3,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import queries from 'constants/queries';
 import useAddComment from 'hooks/mutations/comment/useAddComment';
 import useUpdateComment from 'hooks/mutations/comment/useUpdateComment';
+import { Session } from 'next-auth';
 import { useSession } from 'next-auth/react';
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
 
@@ -21,6 +22,7 @@ interface CommentAreaProps {
   defaultValue?: string;
   kind?: 'magazine' | 'paparazzi' | 'partnership';
   category: string;
+  session: Session | null;
   onSuccess?: () => void;
 }
 
@@ -31,6 +33,7 @@ const CommentArea = ({
   type = 'add',
   kind = 'magazine',
   category,
+  session,
   onSuccess,
 }: CommentAreaProps) => {
   const queryClient = useQueryClient();
@@ -85,9 +88,13 @@ const CommentArea = ({
   }, []);
 
   const onSubmit = useCallback(() => {
-    if (type === 'add') addMutation({ contents: comment });
+    if (type === 'add')
+      addMutation({
+        data: { contents: comment },
+        token: session?.accessToken || '',
+      });
     else if (type === 'edit') updateMutation(comment);
-  }, [type, addMutation, comment, updateMutation]);
+  }, [type, addMutation, comment, session?.accessToken, updateMutation]);
 
   useEffect(() => {
     if (isAddSuccess || isUpdateSuccess) setComment('');
