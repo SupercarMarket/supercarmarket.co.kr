@@ -54,7 +54,9 @@ const MarketDetailPage: NextPageWithLayout = ({
         flex-direction: column;
         margin: 20px 0 0 0;
         ${applyMediaQuery('mobile')} {
+          width: 100%;
           padding: 0 16px;
+          box-sizing: border-box;
         }
       `}
     >

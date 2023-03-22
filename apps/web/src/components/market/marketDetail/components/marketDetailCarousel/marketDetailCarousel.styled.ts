@@ -1,4 +1,5 @@
-'use client';
+import { applyMediaQuery } from '@supercarmarket/ui';
+('use client');
 
 import styled, { css } from 'styled-components';
 import { fadeIn, popping } from 'styles/keyframes';
@@ -10,6 +11,10 @@ const top = css`
   opacity: 0;
   position: relative;
   animation: ${fadeIn} 0.5s ease-in-out forwards;
+
+  ${applyMediaQuery('mobile')} {
+    width: 100%;
+  }
 `;
 
 const bottom = css`

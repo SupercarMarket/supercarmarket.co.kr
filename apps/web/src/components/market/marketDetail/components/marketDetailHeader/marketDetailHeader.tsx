@@ -1,8 +1,9 @@
-import { Typography, Wrapper } from '@supercarmarket/ui';
+import { Typography, Wrapper, applyMediaQuery } from '@supercarmarket/ui';
 
 import EyeIcon from '../../../../../assets/svg/eye.svg';
 import FavoriteBorderIcon from '../../../../../assets/svg/favorite-border.svg';
 import * as style from './marketDetailHeader.styled';
+import { css } from 'styled-components';
 
 interface MarketDetailHeaderProps {
   year: string;
@@ -31,44 +32,37 @@ const MarketDetailHeader = ({
 
   return (
     <Wrapper css={style.wrapper}>
-      <Wrapper.Left>
-        <Typography
-          fontSize="header-36"
-          fontWeight="bold"
-          lineHeight="150%"
-          style={{ marginBottom: '8px' }}
-        >
-          {carName}
-        </Typography>
-        <br />
-        <Typography fontSize="header-14">
+      <Wrapper.Left css={style.wrapperLeft}>
+        <h1>{carName}</h1>
+        <p className="market_description">
           {`${year}년형 | ${fuel} | ${formatter(mileage)}km`}
-        </Typography>
+        </p>
       </Wrapper.Left>
 
       <Wrapper.Right css={style.right}>
-        <Typography
-          fontSize="header-24"
-          fontWeight="bold"
-          color="system-1"
-          lineHeight="150%"
-          style={{ marginBottom: '15px' }}
-        >
+        <p className="market_price">
           {price ? `${formatter(price * 10000)}원` : '상담'}
-        </Typography>
+        </p>
         <Wrapper.Bottom css={style.rightBottom}>
           <Wrapper css={style.iconWrapper}>
             <Typography>
               {new Date(createdDate).toLocaleDateString('us')}
             </Typography>
           </Wrapper>
-          <Wrapper css={style.iconWrapper}>
-            <EyeIcon width={20} />
-            <Typography>{viewCount}</Typography>
-          </Wrapper>
-          <Wrapper css={style.iconWrapper}>
-            <FavoriteBorderIcon width={20} />
-            <Typography>{likeCount}</Typography>
+          <Wrapper
+            css={css`
+              display: flex;
+              gap: 10px;
+            `}
+          >
+            <Wrapper css={style.iconWrapper}>
+              <EyeIcon width={20} />
+              <Typography>{viewCount}</Typography>
+            </Wrapper>
+            <Wrapper css={style.iconWrapper}>
+              <FavoriteBorderIcon width={20} />
+              <Typography>{likeCount}</Typography>
+            </Wrapper>
           </Wrapper>
         </Wrapper.Bottom>
       </Wrapper.Right>
