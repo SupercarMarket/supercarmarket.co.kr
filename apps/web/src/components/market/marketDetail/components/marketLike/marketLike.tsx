@@ -39,6 +39,8 @@ const MarketLike = ({ isLike }: MarketLikeProps) => {
     } else {
       const result = await toggleLike();
 
+      console.log(result);
+
       if (result.ok) {
         setLike(!like);
       }

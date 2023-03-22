@@ -89,15 +89,15 @@ const MarketDetailCarousel = ({ imgSrc, id }: MarketDetailCarouselProps) => {
     >
       <Wrapper.Top css={Styled.top}>
         {isFetching || isLoading ? (
-          <Skeleton width={1200} height={757} />
+          <Skeleton width={1200} height={900} />
         ) : (
           <Image
-            width={1200}
-            height={757}
             alt="image"
             placeholder="blur"
             blurDataURL={data?.data.base64}
             src={imgSrc[current]}
+            fill
+            style={{ objectFit: 'contain' }}
           />
         )}
       </Wrapper.Top>

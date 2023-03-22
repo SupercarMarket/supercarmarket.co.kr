@@ -5,9 +5,10 @@ import { fadeIn, popping } from 'styles/keyframes';
 
 const top = css`
   width: 100%;
-  height: 757px;
+  height: 900px;
   margin-bottom: 10px;
   opacity: 0;
+  position: relative;
   animation: ${fadeIn} 0.5s ease-in-out forwards;
 `;
 
