@@ -270,7 +270,13 @@ const CommunityPosting = ({
                         >
                           <LikeIcon />
                         </Wrapper.Left>
-                        <Wrapper.Right>추천</Wrapper.Right>
+                        <Wrapper.Right
+                          css={css`
+                            white-space: nowrap;
+                          `}
+                        >
+                          추천
+                        </Wrapper.Right>
                       </Wrapper.Item>
                     </Typography>
                   </Wrapper.Item>
