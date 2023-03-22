@@ -47,17 +47,17 @@ interface InquiryMiscFormState {
 }
 
 interface InquiryPartnershipFormState {
-  prtnName: string;
+  title: string;
   representative: string;
-  wireNumber: string;
-  phoneNumber: string;
-  workingTime: string;
+  tel: string;
+  phone: string;
+  workTime: string;
   introduction: string;
   category: string;
   treatedItem: string;
-  address: string;
-  website: string;
-  partnershipPhotoAttachment: File[];
+  address: string[];
+  siteUrl: string;
+  partnershipPhotoAttachment: Array<{ file: File; thumbnail: string }>;
   partnershipAttachment: File[];
 }
 
@@ -286,23 +286,22 @@ const inquiry = {
       {
         htmlFor: 'regDate',
         label: '형식연도',
-        type: 'select',
-        placeholder: '선택하세요',
-        suffix: 'text',
+        type: 'text',
+        suffix: '년도',
         options: {
-          option: {
-            name: '형식연도',
-            values: ['2006', '2011', '2018'],
-          },
           required: true,
         },
       },
       {
         htmlFor: 'fuel',
         label: '연료',
-        type: 'text',
+        type: 'select',
         placeholder: '선택하세요',
         options: {
+          option: {
+            name: '연료',
+            values: ['가솔린', '디젤', '전기'],
+          },
           required: true,
         },
       },
@@ -435,7 +434,7 @@ const inquiry = {
     ] as InquiryRegister[],
     partnership: [
       {
-        htmlFor: 'prtnName',
+        htmlFor: 'title',
         label: '업체 상호',
         type: 'text',
         placeholder: '상호를 입력해주세요.',
@@ -453,7 +452,7 @@ const inquiry = {
         },
       },
       {
-        htmlFor: 'wireNumber',
+        htmlFor: 'tel',
         label: '업체 전화번호',
         type: 'tel',
         placeholder: '‘-’ 없이 숫자만 입력해주세요.',
@@ -462,7 +461,7 @@ const inquiry = {
         },
       },
       {
-        htmlFor: 'phoneNumber',
+        htmlFor: 'phone',
         label: '휴대폰',
         type: 'tel',
         placeholder: '‘-’ 없이 숫자만 입력해주세요.',
@@ -471,7 +470,7 @@ const inquiry = {
         },
       },
       {
-        htmlFor: 'workingTime',
+        htmlFor: 'workTime',
         label: '업무 시간',
         type: 'text',
         placeholder: '예) 평일 09:00~18:00',
@@ -511,7 +510,7 @@ const inquiry = {
         },
       },
       {
-        htmlFor: 'website',
+        htmlFor: 'siteUrl',
         label: '홈페이지 주소',
         type: 'text',
         placeholder: 'https://...',

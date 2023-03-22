@@ -11,6 +11,7 @@ import { catchNoExist } from 'utils/misc';
 
 import fetcher from './fetcher';
 import { ErrorCode } from '@supercarmarket/lib';
+import fs from 'fs';
 
 const homeApi: NextApiHandler = async (req, res) => {
   const { query } = req;
@@ -38,7 +39,7 @@ const homeApi: NextApiHandler = async (req, res) => {
 
   const homeWithBluredImage = await Promise.all(
     home.data.map(async (m) => {
-      const src = m.imgSrc || `/images/base.png`;
+      const src = m.imgSrc || `${process.env.NEXT_PUBLIC_URL}/images/base.png`;
 
       const { base64 } = await getPlaiceholder(src);
       return {

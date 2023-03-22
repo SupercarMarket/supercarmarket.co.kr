@@ -17,17 +17,18 @@ export async function middleware(req: NextRequest) {
     }
   }
 
-  if (url.pathname.startsWith('/inquiry')) {
+  if (url.pathname.startsWith('/inquiry/')) {
     const session = await getToken({
       req,
       secret: process.env.NEXT_PUBLIC_AUTH_SECRET,
     });
 
     if (!session) {
-      url.pathname = '/auth/signin';
+      url.pathname = '/';
       return NextResponse.redirect(url);
     }
   }
+
   return NextResponse.next();
 }
 

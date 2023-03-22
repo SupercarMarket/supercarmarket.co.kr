@@ -4,6 +4,7 @@ import { InquiryNavbar } from 'components/inquiry';
 import Layout from 'components/layout/layout';
 import inquiry from 'constants/inquiry';
 import { css } from 'styled-components';
+import { ModalProvider } from 'feature/modalContext';
 
 const Inquiry: NextPageWithLayout = () => {
   return (
@@ -19,9 +20,11 @@ const Inquiry: NextPageWithLayout = () => {
         `}
       >
         <Title>어떤 문의를 원하시나요?</Title>
-        {inquiry.links.map((list, index) => (
-          <InquiryNavbar key={list.title} index={index} {...list} />
-        ))}
+        <ModalProvider>
+          {inquiry.links.map((list, index) => (
+            <InquiryNavbar key={list.title} index={index} {...list} />
+          ))}
+        </ModalProvider>
       </Wrapper>
     </Container>
   );

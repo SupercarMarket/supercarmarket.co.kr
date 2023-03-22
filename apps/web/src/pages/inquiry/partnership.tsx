@@ -3,6 +3,7 @@ import type { NextPageWithLayout } from '@supercarmarket/types/base';
 import { PartnershipForm } from 'components/inquiry';
 import Layout from 'components/layout/layout';
 import { css } from 'styled-components';
+import { ModalProvider } from 'feature/modalContext';
 
 const Partnership: NextPageWithLayout = () => {
   return (
@@ -18,7 +19,9 @@ const Partnership: NextPageWithLayout = () => {
         `}
       >
         <Title>제휴업체 등록 문의</Title>
-        <PartnershipForm />
+        <ModalProvider>
+          <PartnershipForm />
+        </ModalProvider>
       </Wrapper>
     </Container>
   );
