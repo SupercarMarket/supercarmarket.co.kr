@@ -18,6 +18,7 @@ interface MarketDetailProps {
 
 const MarketDetail = ({ data, id }: MarketDetailProps) => {
   const {
+    brdSeq,
     carName,
     year,
     fuel,
@@ -79,7 +80,11 @@ const MarketDetail = ({ data, id }: MarketDetailProps) => {
         첨부파일
       </Typography>
       <MarketDetailAttached registration={registration} attrSrc={attSrc} />
-      {!isMine ? <MarketMine /> : <MarketLike isLike={isLike} />}
+      {isMine ? (
+        <MarketMine id={id} brdSeq={brdSeq} />
+      ) : (
+        <MarketLike isLike={isLike} />
+      )}
     </>
   );
 };
