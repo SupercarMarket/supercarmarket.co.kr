@@ -34,15 +34,17 @@ const MarketDetailPage: NextPageWithLayout = ({
       queries.keyword = keywordRef.current.value;
 
       const queryString = makeQuery(queries);
-      const foundCategory = CATEGORY.find(
-        ({ option }) => option === category
-      )?.value;
-
-      console.log(`/market?category=${foundCategory}&${queryString}`);
 
       push(`/market?category=all&${queryString}`);
     }
   };
+
+  const listCategory = React.useMemo(() => {
+    const foundCategory = CATEGORY.find(
+      ({ option }) => option === category
+    )?.value;
+    return foundCategory;
+  }, [category]);
 
   return (
     <Wrapper
@@ -71,7 +73,7 @@ const MarketDetailPage: NextPageWithLayout = ({
                 margin-bottom: 36px;
               `}
             >
-              <Tab list={`/market?${category}`} scroll />
+              <Tab list={`/market?category=${listCategory}`} scroll />
             </Wrapper>
             <Wrapper
               css={css`
