@@ -57,8 +57,8 @@ const NavLink = memo(function NavLink({
         data-active={pathname.includes(href)}
         css={css`
           display: none;
-          ${pathname.includes(href) && 'display: block'}
-          width: 255px;
+          ${pathname.includes(href) && 'display: block;'}
+          width: 240px;
           height: 3px;
           position: absolute;
           left: 50%;
