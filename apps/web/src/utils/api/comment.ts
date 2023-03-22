@@ -1,6 +1,5 @@
 import type { NextApiHandler } from 'next';
 import type { Params, ServerResponse } from '@supercarmarket/types/base';
-import type { CommentResponse } from '@supercarmarket/types/comment';
 import { ErrorCode } from 'utils/error';
 import { catchNoExist } from 'utils/misc';
 
@@ -8,41 +7,6 @@ import { getSession } from './auth/user';
 import fetcher, { baseApi } from './fetcher';
 
 type MessageResponse = ServerResponse<{ message: string }>;
-
-const commentApi: NextApiHandler = async (req, res) => {
-  const { id, page, category, orderby } = req.query as Params;
-  const session = await getSession({ req });
-
-  const headers = session
-    ? {
-        ACCESS_TOKEN: session.accessToken,
-      }
-    : undefined;
-
-  catchNoExist(id, page, category, orderby);
-
-  const response = await fetcher(
-    `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/post/${id}/comment`,
-    {
-      headers,
-      method: 'GET',
-      query: {
-        page: parseInt(page) + 1,
-        orderby,
-        category,
-      },
-    }
-  );
-
-  if (!response.ok)
-    return res
-      .status(response.status)
-      .json({ message: ErrorCode[response.status] });
-
-  const comment: CommentResponse = await response.json();
-
-  return res.status(200).json(comment);
-};
 
 const commentCreateApi: NextApiHandler = async (req, res) => {
   const { contents } = req.body;
@@ -186,10 +150,4 @@ const commentRemoveApi: NextApiHandler = async (req, res) => {
   return res.status(200).json(remove);
 };
 
-export {
-  commentApi,
-  commentCreateApi,
-  commentLikeApi,
-  commentRemoveApi,
-  commentUpdateApi,
-};
+export { commentCreateApi, commentLikeApi, commentRemoveApi, commentUpdateApi };

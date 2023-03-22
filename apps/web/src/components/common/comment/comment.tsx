@@ -5,6 +5,8 @@ import useComment from 'hooks/queries/useComment';
 import CommentArea from './commentArea';
 import CommentBody from './commentBody';
 import CommentHead from './commentHead';
+import { CommentSkeleton } from 'components/fallback/loading';
+import { useSession } from 'next-auth/react';
 
 interface CommentProps {
   id: string;
@@ -12,20 +14,28 @@ interface CommentProps {
 }
 
 const Comment = ({ id, kind = 'magazine' }: CommentProps) => {
+  const session = useSession();
   const { isMobile } = useMedia({ deviceQuery });
   const { page, orderBy, category } = useUrlQuery();
 
-  const { data: comment } = useComment(
+  const {
+    data: comment,
+    isFetching,
+    isLoading,
+  } = useComment(
     id,
     {
       page,
       orderBy,
       category: kind,
     },
+    session.data?.accessToken,
     {
-      enabled: !!id,
+      enabled: session.status !== 'loading',
     }
   );
+
+  if (isFetching || isLoading) return <CommentSkeleton />;
 
   return (
     <Container

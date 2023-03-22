@@ -13,20 +13,30 @@ export default function useComment(
     orderBy: 'DESC',
     category: 'magazine',
   },
+  token?: string,
   options = {}
 ) {
+  const { page, orderBy, category } = query;
+
+  const headers: HeadersInit = token
+    ? {
+        ACCESS_TOKEN: token,
+      }
+    : {};
+
   return useQuery<CommentResponse>({
-    queryKey: [...queries.comment.id(id), ...queries.comment.query(query)],
+    queryKey: [...queries.comment.id(id), query],
     queryFn: () =>
-      clientFetcher('/api/comment', {
+      clientFetcher(`/server/supercar/v1/post/${id}/comment`, {
         method: 'GET',
-        params: id,
+        headers,
         query: {
-          ...query,
-          orderby: query.orderBy === 'DESC' ? 'false' : 'true',
+          page: page + 1,
+          orderby:
+            orderBy === 'DESC' ? false : orderBy === 'ASC' ? true : false,
+          category,
         },
       }),
-    suspense: true,
     ...options,
   });
 }

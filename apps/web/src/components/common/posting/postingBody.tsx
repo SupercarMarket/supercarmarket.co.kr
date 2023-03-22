@@ -2,7 +2,7 @@ import '@toast-ui/editor/dist/toastui-editor-viewer.css';
 
 import { Container } from '@supercarmarket/ui';
 import { Viewer } from '@toast-ui/react-editor';
-import React from 'react';
+import * as React from 'react';
 
 interface PostingBodyProps {
   contentHtml: string;
