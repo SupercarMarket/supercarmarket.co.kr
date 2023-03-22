@@ -17,7 +17,7 @@ const MarketBanner = () => {
         </Typography>
       </Styled.Paragraph>
       <Styled.BannerButtonArea>
-        <Link href="/inquery/market">
+        <Link href="/inquiry/market">
           <Button
             variant="Black"
             border="rounded"

@@ -40,7 +40,7 @@ const PartnershipPage: NextPageWithLayout = ({
       <Banner
         title="제휴업체 등록을 원하시나요?"
         btnTitle="등록 문의하기"
-        url=""
+        url="/inquiry/partnership"
       />
       <Wrapper.Top
         css={css`
