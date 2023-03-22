@@ -38,14 +38,16 @@ const MarketDetailCarouselItem = (props: MarketDetailCarouselItemProps) => {
 
   return (
     <Styled.CarouselImageWrapper onClick={handleClick}>
-      <Image
-        width={141}
-        height={89}
-        alt="image"
-        placeholder="blur"
-        src={imgSrc}
-        blurDataURL={data?.data.base64}
-      />
+      <Styled.ImageWrapper>
+        <Image
+          alt="image"
+          placeholder="blur"
+          src={imgSrc}
+          blurDataURL={data?.data.base64}
+          fill
+          style={{ objectFit: 'contain' }}
+        />
+      </Styled.ImageWrapper>
       {current === idx && (
         <Styled.CheckBox>
           <CheckIcon

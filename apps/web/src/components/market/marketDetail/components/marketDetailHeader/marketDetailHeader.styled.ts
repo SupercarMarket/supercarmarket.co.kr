@@ -13,6 +13,7 @@ const wrapper = css`
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
+    margin-bottom: 35px;
   }
 `;
 
