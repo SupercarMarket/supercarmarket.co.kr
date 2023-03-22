@@ -1,4 +1,4 @@
-import { Typography, Wrapper } from '@supercarmarket/ui';
+import { Typography, Wrapper, applyMediaQuery } from '@supercarmarket/ui';
 import type { DealerDto } from '@supercarmarket/types/market';
 import Avvvatars from 'avvvatars-react';
 import theme from 'constants/theme';
@@ -20,31 +20,29 @@ const MarketDetailDealer = ({ dealer }: MarketDetailDealerProps) => {
       <Wrapper.Left css={style.left}>
         <Wrapper
           css={css`
+            width: 80px;
+            height: 80px;
+
+            ${applyMediaQuery('mobile')} {
+              width: 60px;
+              height: 60px;
+            }
             border-radius: 50%;
             overflow: hidden;
+            position: relative;
           `}
         >
           {profile ? (
-            <Image alt="profile" src={profile} width={80} height={80} />
+            <Image alt="profile" src={profile} fill />
           ) : (
             <Avvvatars value={dealerName} size={80} />
           )}
         </Wrapper>
-        <Wrapper>
-          <Wrapper css={style.profile}>
-            <Typography fontSize="body-20" lineHeight="150%">
-              {company}
-            </Typography>
-            <Typography fontSize="body-20" fontWeight="bold" lineHeight="150%">
-              {dealerName}
-            </Typography>
-            <Typography
-              fontSize="body-20"
-              lineHeight="150%"
-              color="greyScale-5"
-            >
-              {address.split(' ', 2).join(' ')}
-            </Typography>
+        <Wrapper css={style.profile}>
+          <Wrapper css={style.innerProfile}>
+            <p>{company}</p>
+            <p className="bold">{dealerName}</p>
+            <p className="gray">{address.split(' ', 2).join(' ')}</p>
           </Wrapper>
           <Typography fontSize="body-14" color="greyScale-5">
             {dealerNumber}
@@ -52,15 +50,8 @@ const MarketDetailDealer = ({ dealer }: MarketDetailDealerProps) => {
         </Wrapper>
       </Wrapper.Left>
       <Wrapper.Right css={style.right}>
-        <CallIcon
-          width="20px"
-          height="20px"
-          fill={theme.color['system-1']}
-          style={{ marginRight: 13 }}
-        />
-        <Typography fontSize="header-24" fontWeight="bold" color="system-1">
-          {phone}
-        </Typography>
+        <CallIcon />
+        <p>{phone}</p>
       </Wrapper.Right>
     </Wrapper>
   );
