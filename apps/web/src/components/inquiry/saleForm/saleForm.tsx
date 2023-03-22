@@ -22,17 +22,47 @@ const SaleForm = () => {
 
   const handleRequire = async (data: InquiryCarFormState) => {
     Object.entries(data).forEach(([key, value]) => {
+      const target = key as keyof InquiryCarFormState;
+
+      if (
+        (target === 'category' || target === 'fuel' || target === 'sellType') &&
+        !value
+      ) {
+        methods.setError(target, {
+          message: '값을 선택해주세요.',
+        });
+        throw 'selected is require';
+      }
+
+      if (
+        (target === 'personalInfoAgree' || target === 'sellClause') &&
+        !value
+      ) {
+        methods.setError(target, {
+          message: '동의가 필요합니다.',
+        });
+        throw 'fileds is require';
+      }
+
+      if (target === 'productImages' && !value.length) {
+        methods.setError(target, {
+          message: '사진을 첨부해주세요.',
+        });
+        throw 'file is require';
+      }
+
+      if (target === 'attachments' && !value.length) {
+        methods.setError(target, {
+          message: '파일을 첨부해주세요.',
+        });
+        throw 'file is require';
+      }
+
       if (!value) {
-        methods.setError(key as keyof InquiryCarFormState, {
+        methods.setError(target, {
           message: '빈 칸을 입력해주세요.',
         });
         throw 'value is require';
-      }
-      if (!value.length) {
-        methods.setError(key as keyof InquiryCarFormState, {
-          message: '파일을 첨부 해주세요.',
-        });
-        throw 'file is require';
       }
     });
   };
@@ -79,6 +109,7 @@ const SaleForm = () => {
           title="딜러 등록 문의"
           description="딜러 등록 문의가 완료되었습니다."
           clickText="확인"
+          background="rgba(30, 30, 32, 0.5)"
           onCancel={() => {
             onClose();
             replace('/inquiry');

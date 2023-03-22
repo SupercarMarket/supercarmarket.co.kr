@@ -286,23 +286,22 @@ const inquiry = {
       {
         htmlFor: 'regDate',
         label: '형식연도',
-        type: 'select',
-        placeholder: '선택하세요',
-        suffix: 'text',
+        type: 'text',
+        suffix: '년도',
         options: {
-          option: {
-            name: '형식연도',
-            values: ['2006', '2011', '2018'],
-          },
           required: true,
         },
       },
       {
         htmlFor: 'fuel',
         label: '연료',
-        type: 'text',
+        type: 'select',
         placeholder: '선택하세요',
         options: {
+          option: {
+            name: '연료',
+            values: ['가솔린', '디젤', '전기'],
+          },
           required: true,
         },
       },

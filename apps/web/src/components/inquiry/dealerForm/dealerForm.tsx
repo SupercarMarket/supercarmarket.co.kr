@@ -117,6 +117,7 @@ const DealerForm = () => {
           title="딜러 등록 문의"
           description="딜러 등록 문의가 완료되었습니다."
           clickText="확인"
+          background="rgba(30, 30, 32, 0.5)"
           onCancel={() => {
             onClose();
             replace('/inquiry');
