@@ -37,7 +37,7 @@ const NavbarItem = memo(function NavbarItem({
         .navbarItem {
           box-sizing: border-box;
           position: absolute;
-          width: 255px;
+          width: 240px;
           margin-top: 15px;
           border: 1px solid #eaeaec;
           border-radius: 4px;
