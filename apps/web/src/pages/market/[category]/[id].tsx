@@ -15,11 +15,8 @@ import { css } from 'styled-components';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from 'components/fallback';
 import { serverFetcher } from '@supercarmarket/lib';
-
-const makeQuery = (query: Params) =>
-  Object.entries(query)
-    .map(([key, value]) => `${key}=${value}`)
-    .join('&');
+import { CATEGORY } from 'constants/market';
+import { makeQuery } from 'utils/market/marketQuery';
 
 const MarketDetailPage: NextPageWithLayout = ({
   id,
@@ -30,14 +27,20 @@ const MarketDetailPage: NextPageWithLayout = ({
 
   const keydownHandler = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && keywordRef.current !== null) {
-      delete query.id;
+      const queries = query as Params;
 
-      query.keyword = keywordRef.current.value;
-      keywordRef.current.value = '';
+      delete queries.id;
+      delete queries.category;
+      queries.keyword = keywordRef.current.value;
 
-      const queryString = makeQuery(query as Params);
+      const queryString = makeQuery(queries);
+      const foundCategory = CATEGORY.find(
+        ({ option }) => option === category
+      )?.value;
 
-      push(`/market/${query.category}?${queryString}`);
+      console.log(`/market?category=${foundCategory}&${queryString}`);
+
+      push(`/market?category=all&${queryString}`);
     }
   };
 
@@ -68,7 +71,7 @@ const MarketDetailPage: NextPageWithLayout = ({
                 margin-bottom: 36px;
               `}
             >
-              <Tab list={`/market/${category}`} scroll />
+              <Tab list={`/market?${category}`} scroll />
             </Wrapper>
             <Wrapper
               css={css`
