@@ -270,14 +270,7 @@ const FormImage = React.forwardRef(function FormImage(
                     </clipPath>
                   </defs>
                 </svg>
-                <Typography
-                  fontSize="body-14"
-                  fontWeight="regular"
-                  lineHeight="150%"
-                  color="greyScale-5"
-                >
-                  업로드
-                </Typography>
+                업로드
               </Label>
               <Input
                 {...rest}

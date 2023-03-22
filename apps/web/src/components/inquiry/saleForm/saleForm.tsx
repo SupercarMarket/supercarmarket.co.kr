@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, Form } from '@supercarmarket/ui';
+import { Alert, Button, Form, Wrapper } from '@supercarmarket/ui';
 import { fetcher, ErrorCode } from '@supercarmarket/lib';
 import inquiry, { InquiryCarFormState } from 'constants/inquiry';
 import { useRouter } from 'next/navigation';
@@ -10,34 +10,30 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { css } from 'styled-components';
 
 import InquiryFormItem from '../inquiryFormItem';
+import ModalContext from 'feature/modalContext';
+import { Modal } from 'components/common/modal';
 
 const SaleForm = () => {
   const methods = useForm<InquiryCarFormState>();
   const session = useSession();
+  const { onOpen, onClose } = React.useContext(ModalContext);
   const [error, setError] = React.useState<string | null>(null);
-  const { push } = useRouter();
+  const { replace } = useRouter();
 
-  const handleRequire = (data: InquiryCarFormState) => {
-    return new Promise((resolve, reject) => {
-      Object.entries(data).forEach(([key, value]) => {
-        if (value) {
-          return;
-        }
-
-        if (!value) {
-          methods.setError(key as keyof InquiryCarFormState, {
-            message: '빈 칸을 입력해주세요.',
-          });
-          reject();
-        }
-        if (!value.length) {
-          methods.setError(key as keyof InquiryCarFormState, {
-            message: '파일을 첨부 해주세요.',
-          });
-          reject();
-        }
-      });
-      resolve(true);
+  const handleRequire = async (data: InquiryCarFormState) => {
+    Object.entries(data).forEach(([key, value]) => {
+      if (!value) {
+        methods.setError(key as keyof InquiryCarFormState, {
+          message: '빈 칸을 입력해주세요.',
+        });
+        throw 'value is require';
+      }
+      if (!value.length) {
+        methods.setError(key as keyof InquiryCarFormState, {
+          message: '파일을 첨부 해주세요.',
+        });
+        throw 'file is require';
+      }
     });
   };
 
@@ -78,7 +74,21 @@ const SaleForm = () => {
         return;
       }
 
-      push('/inquiry');
+      onOpen(
+        <Modal
+          title="딜러 등록 문의"
+          description="딜러 등록 문의가 완료되었습니다."
+          clickText="확인"
+          onCancel={() => {
+            onClose();
+            replace('/inquiry');
+          }}
+          onClick={() => {
+            onClose();
+            replace('/inquiry');
+          }}
+        />
+      );
     })
   );
   return (
@@ -86,6 +96,7 @@ const SaleForm = () => {
       <Form
         onSubmit={onSubmit}
         css={css`
+          width: 1200px;
           display: flex;
           flex-direction: column;
           gap: 24px;
@@ -98,9 +109,17 @@ const SaleForm = () => {
             {...d}
           />
         ))}
-        <Button type="submit" width="104px">
-          작성 완료
-        </Button>
+        <Wrapper.Item
+          css={css`
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+          `}
+        >
+          <Button type="submit" width="104px">
+            {methods.formState.isSubmitting ? '등록 중..' : '작성 완료'}
+          </Button>
+        </Wrapper.Item>
         {error && <Alert title={error} severity="error" />}
       </Form>
     </FormProvider>

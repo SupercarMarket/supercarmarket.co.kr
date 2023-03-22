@@ -10,33 +10,50 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { css } from 'styled-components';
 
 import InquiryFormItem from '../inquiryFormItem';
+import ModalContext from 'feature/modalContext';
+import { Modal } from 'components/common/modal';
 
 const DealerForm = () => {
   const session = useSession();
   const methods = useForm<InquiryDealerFormState>();
+  const { onOpen, onClose } = React.useContext(ModalContext);
   const [error, setError] = React.useState<string | null>(null);
-  const { push } = useRouter();
+  const { replace } = useRouter();
 
-  const handleRequire = (data: InquiryDealerFormState) => {
+  const handleRequire = async (data: InquiryDealerFormState) => {
     const { addional: _, ...rest } = data;
 
-    return new Promise((resolve, reject) => {
-      Object.entries(rest).forEach(([key, value]) => {
-        if (!value) {
-          methods.setError(key as keyof InquiryDealerFormState, {
-            message: '빈 칸을 입력해주세요.',
-          });
-          reject();
-        }
-        if (!value.length) {
-          methods.setError(key as keyof InquiryDealerFormState, {
-            message: '파일을 첨부 해주세요.',
-          });
-          reject();
-        }
-      });
-      resolve(true);
+    Object.entries(rest).forEach(([key, value]) => {
+      const target = key as keyof InquiryDealerFormState;
+
+      if (target === 'comAddress' && !value) {
+        methods.setError(target, {
+          message: '상사 주소를 입력해주세요.',
+        });
+        throw 'comAddress is require';
+      }
+
+      if (
+        (target === 'regImage' ||
+          target === 'employeeCardBack' ||
+          target === 'employeeCardFront' ||
+          target === 'profileImage') &&
+        !value.length
+      ) {
+        methods.setError(target, {
+          message: '파일을 첨부 해주세요.',
+        });
+        throw 'file is require';
+      }
+
+      if (!value) {
+        methods.setError(target, {
+          message: '빈 칸을 입력해주세요.',
+        });
+        throw 'value is require';
+      }
     });
+    return;
   };
 
   const onSubmit = methods.handleSubmit((d) =>
@@ -95,7 +112,21 @@ const DealerForm = () => {
         return;
       }
 
-      push('/inquiry');
+      onOpen(
+        <Modal
+          title="딜러 등록 문의"
+          description="딜러 등록 문의가 완료되었습니다."
+          clickText="확인"
+          onCancel={() => {
+            onClose();
+            replace('/inquiry');
+          }}
+          onClick={() => {
+            onClose();
+            replace('/inquiry');
+          }}
+        />
+      );
     })
   );
 
@@ -112,14 +143,10 @@ const DealerForm = () => {
         `}
       >
         {inquiry.register.dealer.map((d) => (
-          <InquiryFormItem
-            key={d.htmlFor}
-            callback={(d) => console.log(d)}
-            {...d}
-          />
+          <InquiryFormItem key={d.htmlFor} {...d} />
         ))}
         <Button type="submit" width="104px">
-          작성 완료
+          {methods.formState.isSubmitting ? '등록 중..' : '작성 완료'}
         </Button>
         {error && <Alert title={error} severity="error" />}
       </Form>

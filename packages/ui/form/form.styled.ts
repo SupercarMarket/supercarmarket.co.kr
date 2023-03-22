@@ -6,6 +6,7 @@ import {
   ThemeProps,
 } from 'styled-components';
 import styled from 'styled-components';
+import { theme } from '../styles';
 
 const Form = styled.form<{
   css:
@@ -32,9 +33,15 @@ const Label = styled.label`
   align-items: center;
   gap: 4px;
   font-size: inherit;
-  line-height: normal;
   vertical-align: middle;
+  padding: 10px 22px;
+  border-radius: 4px;
+  line-height: 150%;
+  border: 1px solid ${theme.color['greyScale-4']};
   cursor: pointer;
+  &:hover {
+    background-color: #eaeaec;
+  }
 `;
 
 const wrapper = css`

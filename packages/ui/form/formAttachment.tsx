@@ -170,9 +170,7 @@ const FormAttachment = React.forwardRef(function FormAttachment(
           gap: 24px;
         `}
       >
-        <Button variant="Line" type="button" width="120px" suffix={<div />}>
-          <Label htmlFor={name}>{title}</Label>
-        </Button>
+        <Label htmlFor={name}>{title}</Label>
         {description && (
           <Typography
             fontSize="body-14"
@@ -208,7 +206,7 @@ const FormAttachment = React.forwardRef(function FormAttachment(
               index={index}
               file={file.file}
               thumbnail={file.thumbnail}
-              title={'사진 ' + index}
+              title={index === 0 ? '썸네일' : '사진 ' + index}
               handleRemove={handleRemove}
             />
           ))}
