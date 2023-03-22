@@ -12,8 +12,14 @@ import { css } from 'styled-components';
 import InquiryFormItem from '../inquiryFormItem';
 import ModalContext from 'feature/modalContext';
 import { Modal } from 'components/common/modal';
+import { Profile } from '@supercarmarket/types/account';
 
-const SaleForm = () => {
+interface SaleFormProps {
+  role: Profile['role'];
+}
+
+const SaleForm = (props: SaleFormProps) => {
+  const { role } = props;
   const methods = useForm<InquiryCarFormState>();
   const session = useSession();
   const { onOpen, onClose } = React.useContext(ModalContext);
@@ -107,7 +113,7 @@ const SaleForm = () => {
       onOpen(
         <Modal
           title="딜러 등록 문의"
-          description="딜러 등록 문의가 완료되었습니다."
+          description="로그인 후 이용 가능합니다"
           clickText="확인"
           background="rgba(30, 30, 32, 0.5)"
           onCancel={() => {
@@ -122,6 +128,26 @@ const SaleForm = () => {
       );
     })
   );
+
+  React.useEffect(() => {
+    if (!role || role === 'user')
+      onOpen(
+        <Modal
+          title="판매 등록 문의"
+          description="딜러 등록 후 서비스 이용 가능합니다."
+          clickText="확인"
+          background="rgba(30, 30, 32, 0.5)"
+          onCancel={() => {
+            onClose();
+            replace('/inquiry');
+          }}
+          onClick={() => {
+            onClose();
+            replace('/inquiry');
+          }}
+        />
+      );
+  }, [onClose, onOpen, replace, role]);
   return (
     <FormProvider {...methods}>
       <Form
