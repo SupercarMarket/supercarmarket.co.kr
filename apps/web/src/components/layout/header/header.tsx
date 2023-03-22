@@ -150,6 +150,9 @@ const Header = ({ navlinks }: HeaderProps) => {
                     fontSize="body-16"
                     fontWeight="regular"
                     lineHeight="150%"
+                    style={{
+                      whiteSpace: 'nowrap',
+                    }}
                   >
                     로그아웃
                   </Typography>
@@ -160,6 +163,9 @@ const Header = ({ navlinks }: HeaderProps) => {
                     fontSize="body-16"
                     fontWeight="regular"
                     lineHeight="150%"
+                    style={{
+                      whiteSpace: 'nowrap',
+                    }}
                   >
                     마이페이지
                   </Typography>
@@ -173,6 +179,9 @@ const Header = ({ navlinks }: HeaderProps) => {
                     fontSize="body-16"
                     fontWeight="regular"
                     lineHeight="150%"
+                    style={{
+                      whiteSpace: 'nowrap',
+                    }}
                   >
                     로그인
                   </Typography>
@@ -183,6 +192,9 @@ const Header = ({ navlinks }: HeaderProps) => {
                     fontSize="body-16"
                     fontWeight="regular"
                     lineHeight="150%"
+                    style={{
+                      whiteSpace: 'nowrap',
+                    }}
                   >
                     회원가입
                   </Typography>

@@ -6,6 +6,7 @@ import {
   Typography,
   Wrapper,
 } from '@supercarmarket/ui';
+import { useRouter } from 'next/navigation';
 import useCommunityPost from 'hooks/queries/community/useCommunityPost';
 
 import useMagazinePost from 'hooks/queries/useMagazinePost';
@@ -56,9 +57,14 @@ const Posting = function Posting(props: PostingProps) {
 };
 
 const MagazinePosting = ({ postId }: Omit<PostingProps, 'type'>) => {
-  const { data: magazinePost } = useMagazinePost(postId, {
-    enabled: !!postId,
-  });
+  const session = useSession();
+  const { data: magazinePost } = useMagazinePost(
+    postId,
+    session.data?.accessToken,
+    {
+      enabled: session.status && session.status !== 'loading',
+    }
+  );
 
   return (
     <>
@@ -69,22 +75,18 @@ const MagazinePosting = ({ postId }: Omit<PostingProps, 'type'>) => {
             description={magazinePost.data.contentHtml}
           />
           <Container>
-            {magazinePost && (
-              <>
-                <PostingHeadMagainze {...magazinePost.data} />
-                <Container
-                  width="100%"
-                  display="flex"
-                  flexDirection="column"
-                  padding="0 40px"
-                  border="1px solid #EAEAEC"
-                  borderRadius="4px"
-                  boxSizing="border-box"
-                >
-                  <PostingBody contentHtml={magazinePost.data.contentHtml} />
-                </Container>
-              </>
-            )}
+            <PostingHeadMagainze {...magazinePost.data} />
+            <Container
+              width="100%"
+              display="flex"
+              flexDirection="column"
+              padding="0 40px"
+              border="1px solid #EAEAEC"
+              borderRadius="4px"
+              boxSizing="border-box"
+            >
+              <PostingBody contentHtml={magazinePost.data.contentHtml} />
+            </Container>
           </Container>
           <MagazineScrape postId={postId} isScraped={magazinePost.isScraped} />
         </>
@@ -101,6 +103,7 @@ const CommunityPosting = ({
   const session = useSession();
   const { onOpen, onClose, onClick } = React.useContext(ModalContext);
   const queryClient = useQueryClient();
+  const { replace } = useRouter();
   const { data: communityPost } = useCommunityPost(
     session.data?.accessToken || null,
     {
@@ -109,7 +112,7 @@ const CommunityPosting = ({
       id: postId,
     },
     {
-      enabled: session.status !== 'loading',
+      enabled: session.status && session.status !== 'loading',
     }
   );
   const { mutate: likeMuate } = useLikeCommunityPost({
@@ -119,9 +122,29 @@ const CommunityPosting = ({
   });
   const { mutate: removeMutate } = useRemoveCommunityPost({
     onSuccess: () => {
-      queryClient.invalidateQueries(
-        queries.community.detail(subject, category, postId)
-      );
+      Promise.all([
+        queryClient.invalidateQueries([
+          ...queries.community.all,
+          {
+            subject,
+            category,
+            id: postId,
+          },
+        ]),
+        queryClient.invalidateQueries({
+          queryKey: [
+            ...queries.community.lists(),
+            {
+              category: category,
+              page: 0,
+              filter: undefined,
+              searchType: undefined,
+              keyword: undefined,
+            },
+          ],
+        }),
+      ]);
+      replace(`/community/${subject}?category=${category}`);
     },
   });
 
@@ -170,7 +193,7 @@ const CommunityPosting = ({
                     ? '/community/create'
                     : undefined
                 }
-                list={`/community/${subject}`}
+                list={`/community/${subject}?category=${category}`}
               />
               <Wrapper
                 css={css`
@@ -247,13 +270,19 @@ const CommunityPosting = ({
                         >
                           <LikeIcon />
                         </Wrapper.Left>
-                        <Wrapper.Right>추천</Wrapper.Right>
+                        <Wrapper.Right
+                          css={css`
+                            white-space: nowrap;
+                          `}
+                        >
+                          추천
+                        </Wrapper.Right>
                       </Wrapper.Item>
                     </Typography>
                   </Wrapper.Item>
                 </Button>
               </Wrapper>
-              <Comment id={postId} category={subject} />
+              <Comment id={postId} kind={subject} />
               <Wrapper
                 css={css`
                   width: 100%;

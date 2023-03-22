@@ -67,8 +67,9 @@ const CommentAreaTextArea = styled.textarea`
   outline: none;
   font-weight: 500;
   font-size: 14px;
-  line-height: 21px;
+  line-height: 150%;
   box-sizing: border-box;
+  font-family: inherit;
   background-color: ${({ theme }) => theme.color.white};
   &::placeholder {
     background-color: ${({ theme }) => theme.color.white};

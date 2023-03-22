@@ -33,19 +33,21 @@ const CommentCard = ({
   isRemoved,
   isLiked,
   children,
+  kind,
   category,
 }: Comment & {
   root?: boolean;
   postId: string;
-  category: 'magazine' | 'paparazzi' | 'partnership';
+  category: string;
+  kind: 'magazine' | 'paparazzi' | 'partnership';
 }) => {
   const { mutate: likeMuate } = useLikeComment({
-    category,
+    category: kind,
     postId,
     commentId: id,
   });
   const { mutate: removeMutate } = useRemoveComment({
-    category,
+    category: kind,
     postId,
     commentId: id,
   });
@@ -53,12 +55,14 @@ const CommentCard = ({
   const [open, setOpen] = React.useState(false);
 
   const handleOpen = React.useCallback(() => {
+    if (modify) setModify(false);
     setOpen((prev) => !prev);
-  }, []);
+  }, [modify]);
 
   const handleModify = React.useCallback(() => {
+    if (open) setOpen(false);
     setModify((prev) => !prev);
-  }, []);
+  }, [open]);
 
   const handleRemove = React.useCallback(() => {
     removeMutate();
@@ -317,6 +321,8 @@ const CommentCard = ({
             postId={postId}
             parentId={id}
             defaultValue={content}
+            kind={kind}
+            onSuccess={handleModify}
             category={category}
             type="edit"
           />
@@ -324,7 +330,13 @@ const CommentCard = ({
       )}
       {open && (
         <Wrapper css={style.cardArea}>
-          <CommentArea postId={postId} parentId={id} category={category} />
+          <CommentArea
+            postId={postId}
+            parentId={id}
+            kind={kind}
+            category={category}
+            onSuccess={handleOpen}
+          />
         </Wrapper>
       )}
       {children && (
@@ -333,8 +345,9 @@ const CommentCard = ({
             <CommentCard
               key={comment.id}
               postId={postId}
-              category={category}
+              kind={kind}
               root={false}
+              category={category}
               {...comment}
             />
           ))}
@@ -347,11 +360,13 @@ const CommentCard = ({
 const CommentBody = ({
   postId,
   comments,
-  category = 'magazine',
+  kind = 'magazine',
+  category,
 }: {
   postId: string;
   comments: Comment[];
-  category?: 'magazine' | 'paparazzi' | 'partnership';
+  kind?: 'magazine' | 'paparazzi' | 'partnership';
+  category: string;
 }) => {
   return (
     <Container display="flex" flexDirection="column">
@@ -365,6 +380,7 @@ const CommentBody = ({
         <CommentCard
           key={comment.id}
           postId={postId}
+          kind={kind}
           category={category}
           {...comment}
         />

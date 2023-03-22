@@ -28,7 +28,7 @@ export default function useUrlQuery() {
     filter: filter ?? 'created_date',
     category: category ?? 'all',
     variant: variant ? variant : 'row',
-    searchType: searchType ? searchType : 'title',
+    searchType: searchType ? searchType : undefined,
     keyword: keyword ?? undefined,
     minDate: minDate ?? undefined,
     maxDate: maxDate ?? undefined,

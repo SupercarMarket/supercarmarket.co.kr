@@ -18,7 +18,7 @@ interface User {
   email: string;
   call: string;
   rate: Rating;
-  createAt: string;
+  createdDate: string;
 }
 
 interface Admin extends User {

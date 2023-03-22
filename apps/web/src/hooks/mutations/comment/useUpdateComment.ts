@@ -1,5 +1,4 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import queries from 'constants/queries';
+import { useMutation } from '@tanstack/react-query';
 import { clientApi } from 'utils/api/fetcher';
 
 export default function useUpdateComment(
@@ -11,7 +10,6 @@ export default function useUpdateComment(
   options = {}
 ) {
   const { category, postId, commentId } = query;
-  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (contents: string) =>
@@ -24,9 +22,6 @@ export default function useUpdateComment(
         },
         data: { contents },
       }),
-    onSuccess: () => {
-      queryClient.invalidateQueries(queries.comment.id(postId));
-    },
     ...options,
   });
 }

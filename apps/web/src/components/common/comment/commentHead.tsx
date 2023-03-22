@@ -48,6 +48,7 @@ const CommentHead = ({ totalCount }: CommentHeadProps) => {
               orderBy: 'DESC',
             },
           }}
+          scroll={false}
         >
           <Typography
             fontSize="body-16"
@@ -68,6 +69,7 @@ const CommentHead = ({ totalCount }: CommentHeadProps) => {
               orderBy: 'ASC',
             },
           }}
+          scroll={false}
         >
           <Typography
             fontSize="body-16"

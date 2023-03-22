@@ -26,9 +26,14 @@ export default function useLikeCommunityPost(
         },
       }),
     onSuccess: () => {
-      queryClient.invalidateQueries(
-        queries.community.detail(subject, category, id)
-      );
+      queryClient.invalidateQueries([
+        ...queries.community.all,
+        {
+          subject,
+          category,
+          id,
+        },
+      ]);
     },
     useErrorBoundary: true,
     ...options,

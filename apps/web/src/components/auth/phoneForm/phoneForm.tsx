@@ -1,7 +1,6 @@
 import { Alert, Button, Form, FormLabel } from '@supercarmarket/ui';
 import { ErrorCode } from '@supercarmarket/lib';
 import auth from 'constants/auth';
-import { useAuthDispatch, useAuthState } from 'feature/authProvider';
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 import * as React from 'react';
@@ -9,6 +8,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import AuthFormItem from '../authFormItem/authFormItem';
 import * as style from '../signupForm/signupForm.styled';
+import useAuth from 'hooks/useAuth';
 
 interface PhoneFormProps {
   uuid: string;
@@ -21,8 +21,7 @@ interface FormState {
 
 const PhoneForm = ({ uuid }: PhoneFormProps) => {
   const methods = useForm<FormState>();
-  const state = useAuthState();
-  const dispatch = useAuthDispatch();
+  const { authState } = useAuth();
   const { replace } = useRouter();
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
 
@@ -44,7 +43,7 @@ const PhoneForm = ({ uuid }: PhoneFormProps) => {
       <Form css={style.form} onSubmit={onSubmit}>
         {auth.phoneAuth().map((form) => (
           <FormLabel key={form.htmlFor} name={form.htmlFor} label={form.label}>
-            <AuthFormItem {...form} state={state} dispatch={dispatch} />
+            <AuthFormItem {...form} state={authState} />
           </FormLabel>
         ))}
         <Button type="submit" fullWidth>

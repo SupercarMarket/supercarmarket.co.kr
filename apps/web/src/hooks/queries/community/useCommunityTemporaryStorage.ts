@@ -12,7 +12,12 @@ export default function useCommunityTemporaryStorage(
   options = {}
 ) {
   return useQuery(
-    queries.market.lists([query.category]),
+    [
+      ...queries.community.all,
+      {
+        ...query,
+      },
+    ],
     () =>
       clientFetcher('/supercar/v1/community-temp', {
         method: 'GET',

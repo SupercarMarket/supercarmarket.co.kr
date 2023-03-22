@@ -1,4 +1,4 @@
-import { serverApi } from '@supercarmarket/lib';
+import { serverApi, SupercarMarketApiError } from '@supercarmarket/lib';
 import type { NextApiHandler } from 'next';
 import type {
   Account,
@@ -13,7 +13,6 @@ import GoogleProvider from 'next-auth/providers/google';
 import KakaoProvider from 'next-auth/providers/kakao';
 import { isExpire, refreshToken } from 'utils/api/auth/token';
 import { baseFetcher } from 'utils/api/fetcher';
-import { SupercarMarketApiError } from 'utils/error';
 
 const providers: Provider[] = [
   /*

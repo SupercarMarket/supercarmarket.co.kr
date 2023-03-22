@@ -15,9 +15,12 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from 'components/fallback';
 import { useSession } from 'next-auth/react';
 import HeadSeo from 'components/common/headSeo';
+import { useUrlQuery } from '@supercarmarket/hooks';
+import { formatter } from 'components/community/communityCard/communityCard';
 
 const CommunityCategory: NextPageWithLayout = () => {
   const { status } = useSession();
+  const { category } = useUrlQuery();
 
   return (
     <>
@@ -58,7 +61,7 @@ const CommunityCategory: NextPageWithLayout = () => {
                     align-items: center;
                   `}
                 >
-                  <Title>제보</Title>
+                  <Title>{formatter(category)}</Title>
                   <Tab
                     popular
                     variant
