@@ -1,4 +1,4 @@
-import { Wrapper } from '@supercarmarket/ui';
+import { Wrapper, applyMediaQuery } from '@supercarmarket/ui';
 import theme from 'constants/theme';
 import Image from 'next/image';
 import * as React from 'react';
@@ -87,6 +87,10 @@ const MarketDetailCarousel = ({ imgSrc, id }: MarketDetailCarouselProps) => {
     <Wrapper
       css={css`
         margin-bottom: 60px;
+
+        ${applyMediaQuery('mobile')} {
+          margin-bottom: 32px;
+        }
       `}
     >
       <Wrapper.Top css={Styled.top}>

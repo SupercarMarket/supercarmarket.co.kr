@@ -18,6 +18,7 @@ const wrapper = css`
   ${applyMediaQuery('mobile')} {
     height: 130px;
     padding: 20px 16px;
+    margin-bottom: 32px;
     flex-direction: column;
     align-items: flex-start;
   }

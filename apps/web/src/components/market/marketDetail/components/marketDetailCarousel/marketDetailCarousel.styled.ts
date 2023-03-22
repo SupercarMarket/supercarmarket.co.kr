@@ -27,11 +27,12 @@ const bottom = css`
 
 const CarouselArea = styled.div`
   width: 100%;
-  height: 91px;
+  height: 90px;
   overflow: hidden;
   position: relative;
 
   ${applyMediaQuery('mobile')} {
+    height: 60px;
     overflow-x: scroll;
     -ms-overflow-style: none;
     scrollbar-width: none;
