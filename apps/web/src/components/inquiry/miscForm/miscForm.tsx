@@ -1,5 +1,5 @@
 import { clientApi, ErrorCode } from '@supercarmarket/lib';
-import { Alert, Button, Form } from '@supercarmarket/ui';
+import { Alert, Button, Form, Wrapper } from '@supercarmarket/ui';
 import { Modal } from 'components/common/modal';
 import inquiry, { InquiryMiscFormState } from 'constants/inquiry';
 import ModalContext from 'feature/modalContext';
@@ -92,9 +92,17 @@ const MiscForm = () => {
             {...d}
           />
         ))}
-        <Button type="submit" width="104px">
-          작성 완료
-        </Button>
+        <Wrapper.Item
+          css={css`
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+          `}
+        >
+          <Button type="submit" width="104px">
+            {methods.formState.isSubmitting ? '등록 중..' : '작성 완료'}
+          </Button>
+        </Wrapper.Item>
         {error && <Alert severity="error" title="" />}
       </Form>
     </FormProvider>

@@ -1,5 +1,5 @@
-import { clientApi, ErrorCode, fetcher } from '@supercarmarket/lib';
-import { Alert, Button, Form } from '@supercarmarket/ui';
+import { ErrorCode, fetcher } from '@supercarmarket/lib';
+import { Alert, Button, Form, Wrapper } from '@supercarmarket/ui';
 import { Modal } from 'components/common/modal';
 import inquiry, { InquiryPartnershipFormState } from 'constants/inquiry';
 import ModalContext from 'feature/modalContext';
@@ -12,12 +12,12 @@ import { useRouter } from 'next/navigation';
 import InquiryFormItem from '../inquiryFormItem';
 
 const formatter = (category: string) => {
-  if (category === '전체') return 'all';
-  if (category === '자동차매장') return 'automobile-store';
-  if (category === '공업사') return 'industries';
-  if (category === '도색') return 'painting';
-  if (category === '디테일링') return 'detailing';
-  return 'misc';
+  if (category === '전체') return 'ALL';
+  if (category === '자동차매장') return 'DEALER_SHOP';
+  if (category === '공업사') return 'CAR_CENTER';
+  if (category === '도색') return 'PAINTING';
+  if (category === '디테일링') return 'DEATILING';
+  return 'ETC';
 };
 
 const PartnershipForm = () => {
@@ -38,15 +38,36 @@ const PartnershipForm = () => {
 
   const handleRequire = async (data: InquiryPartnershipFormState) => {
     Object.entries(data).map(([key, value]) => {
-      if (!value) {
-        methods.setError(key as keyof InquiryPartnershipFormState, {
-          message: '빈 칸을 입력해주세요.',
+      const target = key as keyof InquiryPartnershipFormState;
+
+      if (target == 'address' && !value.length) {
+        methods.setError(target, {
+          message: '주소를 입력 해주세요.',
         });
         throw `${key} is require`;
       }
-      if (!value.length) {
-        methods.setError(key as keyof InquiryPartnershipFormState, {
+
+      if (target === 'category' && !value) {
+        methods.setError(target, {
+          message: '업종을 선택 해주세요.',
+        });
+        throw `${key} is require`;
+      }
+
+      if (
+        (target === 'partnershipAttachment' ||
+          target === 'partnershipPhotoAttachment') &&
+        !value.length
+      ) {
+        methods.setError(target, {
           message: '파일을 첨부 해주세요.',
+        });
+        throw `${key} is require`;
+      }
+
+      if (!value) {
+        methods.setError(target, {
+          message: '빈 칸을 입력해주세요.',
         });
         throw `${key} is require`;
       }
@@ -60,35 +81,46 @@ const PartnershipForm = () => {
       const { partnershipAttachment, partnershipPhotoAttachment, ...rest } =
         data;
 
+      rest.address.shift();
+
       const formData = new FormData();
 
       formData.append(
         'partnershipDto',
         new Blob(
-          [JSON.stringify({ ...rest, category: formatter(rest.category) })],
+          [
+            JSON.stringify({
+              ...rest,
+              address: rest.address.join(' '),
+              category: formatter(rest.category),
+            }),
+          ],
           { type: 'application/json' }
         )
       );
 
       partnershipAttachment.forEach((file) =>
-        formData.append('partnershipAttachment', file)
+        formData.append('partnershipAttachmentDto', file)
       );
       partnershipPhotoAttachment.forEach((file) =>
-        formData.append('partnershipPhotoAttachment', file)
+        formData.append('partnershipPhotoAttachmentDto', file.file)
       );
 
-      const response = await fetcher('/server', {
-        method: 'POST',
-        headers: {
-          ACCESS_TOKEN: session.data?.accessToken || '',
-        },
-        data: formData,
-      });
+      const response = await fetcher(
+        '/server/supercar/v1/partnership/inquiry',
+        {
+          method: 'POST',
+          headers: {
+            ACCESS_TOKEN: session.data?.accessToken || '',
+          },
+          body: formData,
+        }
+      );
 
       const result = await response.json();
 
-      if (!result.data) {
-        setError(result.message || ErrorCode[result.status]);
+      if (!response.ok) {
+        setError(result.message || ErrorCode[response.status]);
         return;
       }
 
@@ -98,7 +130,7 @@ const PartnershipForm = () => {
           description="기타 문의가 등록 완료되었습니다."
           clickText="확인"
           background="rgba(30, 30, 32, 0.5)"
-          onClick={() => handleModal('/')}
+          onClick={() => handleModal('/inquiry')}
           onClose={() => handleModal('/inquiry')}
           onCancel={() => handleModal('/inquiry')}
         />
@@ -124,10 +156,18 @@ const PartnershipForm = () => {
             {...d}
           />
         ))}
-        <Button type="submit" width="104px">
-          작성 완료
-        </Button>
-        {error && <Alert severity="error" title="" />}
+        <Wrapper.Item
+          css={css`
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+          `}
+        >
+          <Button type="submit" width="104px">
+            {methods.formState.isSubmitting ? '등록 중..' : '작성 완료'}
+          </Button>
+        </Wrapper.Item>
+        {error && <Alert severity="error" title={error} />}
       </Form>
     </FormProvider>
   );
