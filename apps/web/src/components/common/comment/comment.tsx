@@ -5,6 +5,8 @@ import useComment from 'hooks/queries/useComment';
 import CommentArea from './commentArea';
 import CommentBody from './commentBody';
 import CommentHead from './commentHead';
+import { CommentSkeleton } from 'components/fallback/loading';
+import { useSession } from 'next-auth/react';
 
 interface CommentProps {
   id: string;
@@ -12,20 +14,24 @@ interface CommentProps {
 }
 
 const Comment = ({ id, kind = 'magazine' }: CommentProps) => {
+  const session = useSession();
   const { isMobile } = useMedia({ deviceQuery });
   const { page, orderBy, category } = useUrlQuery();
 
-  const { data: comment } = useComment(
+  const { data: comment, isLoading } = useComment(
     id,
     {
       page,
       orderBy,
       category: kind,
     },
+    session.data?.accessToken,
     {
-      enabled: !!id,
+      enabled: session.status !== 'loading',
     }
   );
+
+  if (isLoading) return <CommentSkeleton />;
 
   return (
     <Container
@@ -48,13 +54,19 @@ const Comment = ({ id, kind = 'magazine' }: CommentProps) => {
             comments={comment.data}
             kind={kind}
             category={category}
+            session={session.data}
           />
           <Pagination
             totalPages={comment.totalPages}
             totalCount={comment.totalCount}
             pageSize={10}
           />
-          <CommentArea postId={id} kind={kind} category={category} />
+          <CommentArea
+            postId={id}
+            kind={kind}
+            category={category}
+            session={session.data}
+          />
         </>
       )}
     </Container>

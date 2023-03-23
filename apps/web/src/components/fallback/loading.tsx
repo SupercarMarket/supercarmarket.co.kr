@@ -1,6 +1,6 @@
 import 'react-loading-skeleton/dist/skeleton.css';
 
-import { applyMediaQuery, Container, Wrapper } from '@supercarmarket/ui';
+import { applyMediaQuery, Container, theme, Wrapper } from '@supercarmarket/ui';
 import Skeleton from 'react-loading-skeleton';
 import { css } from 'styled-components';
 
@@ -223,9 +223,105 @@ const PartnershipDetailSkeleton = () => {
   );
 };
 
+const CommentSkeleton = () => {
+  return (
+    <Container width="100%">
+      <Wrapper
+        css={css`
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+          flex-direction: column;
+          gap: 20px;
+          padding: 40px;
+          border: 1px solid #eaeaec;
+          border-radius: 4px;
+          box-sizing: border-box;
+          ${applyMediaQuery('mobile')} {
+            padding: 16px;
+            border: unset;
+          }
+        `}
+      >
+        {Array.from({ length: 8 }).map((_, index) => (
+          <Wrapper.Item
+            key={index}
+            css={css`
+              width: 100%;
+              display: flex;
+              gap: 12px;
+              padding: 20px 0;
+              border-bottom: 1px solid ${theme.color['greyScale-3']};
+              ${applyMediaQuery('mobile')} {
+                padding: 16px 0;
+                gap: 8px;
+              }
+            `}
+          >
+            <Wrapper.Left
+              css={css`
+                .react-loading-skeleton {
+                  width: 40px;
+                  height: 40px;
+                  ${applyMediaQuery('mobile')} {
+                    width: 24px;
+                    height: 24px;
+                  }
+                }
+              `}
+            >
+              <Skeleton borderRadius="50%" />
+            </Wrapper.Left>
+            <Wrapper.Right
+              css={css`
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                ${applyMediaQuery('mobile')} {
+                  gap: 4.5px;
+                }
+              `}
+            >
+              <Wrapper.Top
+                css={css`
+                  .react-loading-skeleton {
+                    width: 150px;
+                    height: 18px;
+                    ${applyMediaQuery('mobile')} {
+                      width: 100px;
+                    }
+                  }
+                `}
+              >
+                <Skeleton />
+              </Wrapper.Top>
+              <Wrapper.Bottom
+                css={css`
+                  .react-loading-skeleton {
+                    width: 50%;
+                    height: 18px;
+                    ${applyMediaQuery('mobile')} {
+                      width: 100%;
+                    }
+                  }
+                `}
+              >
+                <Skeleton />
+              </Wrapper.Bottom>
+            </Wrapper.Right>
+          </Wrapper.Item>
+        ))}
+      </Wrapper>
+    </Container>
+  );
+};
+
 export {
   CardSkeleton,
   LinkSkeleton,
+  CommentSkeleton,
   MagazineBannerSkeleton,
   MarketDetailSkeleton,
   PartnershipDetailSkeleton,

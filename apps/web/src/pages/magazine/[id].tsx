@@ -54,15 +54,8 @@ const MagazinePost: NextPageWithLayout = ({
                 )}
               >
                 <Posting postId={id} type="magazine" />
-              </ErrorBoundary>
-              <MagazineDealer postId={id} />
-              <ErrorBoundary
-                onReset={reset}
-                fallbackRender={(props) => <ErrorFallback {...props} />}
-              >
-                <React.Suspense fallback={<div>loading..</div>}>
-                  <Comment id={id} />
-                </React.Suspense>
+                <MagazineDealer postId={id} />
+                <Comment id={id} />
               </ErrorBoundary>
             </Wrapper>
           )}

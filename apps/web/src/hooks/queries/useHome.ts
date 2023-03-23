@@ -4,7 +4,7 @@ import type {
   MagazineResponse,
   WithBlurredImage,
 } from '@supercarmarket/types/magazine';
-import { baseFetch } from 'utils/api/fetcher';
+import { clientFetcher } from '@supercarmarket/lib';
 
 export const getServerCategoryQuery = (query: keyof typeof queries.home) => {
   if (query === 'best') return 'interestProduct';
@@ -19,11 +19,17 @@ export default function useHome<T>(
   return useQuery<MagazineResponse<WithBlurredImage<T>>>(
     queries.home[query](),
     () =>
-      baseFetch('/api/home', {
+      clientFetcher('/server/supercar/v1/main', {
+        method: 'GET',
         query: {
           category: getServerCategoryQuery(query),
         },
       }),
-    { ...options, useErrorBoundary: true }
+    {
+      ...options,
+      useErrorBoundary: true,
+      staleTime: 1000 * 60,
+      cacheTime: 1000 * 60,
+    }
   );
 }

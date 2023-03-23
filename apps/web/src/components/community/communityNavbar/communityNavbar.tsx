@@ -9,8 +9,7 @@ import type { Links } from '@supercarmarket/types/base';
 import community from 'constants/community';
 import Link from 'next/link';
 import { css } from 'styled-components';
-import useUrlQuery from 'hooks/useUrlQuery';
-import { useMedia } from '@supercarmarket/hooks';
+import { useMedia, useUrlQuery } from '@supercarmarket/hooks';
 
 const CommunityNavbarItem = (link: Links) => {
   const { category } = useUrlQuery();

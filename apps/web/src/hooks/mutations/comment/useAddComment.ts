@@ -1,5 +1,5 @@
+import { clientApi } from '@supercarmarket/lib';
 import { useMutation } from '@tanstack/react-query';
-import { clientApi } from 'utils/api/fetcher';
 
 export default function useAddComment(
   query: {
@@ -11,15 +11,30 @@ export default function useAddComment(
 ) {
   const { category, postId, parentId } = query;
 
+  const currentQuery = parentId
+    ? {
+        category,
+        parentId,
+      }
+    : {
+        category,
+      };
+
   return useMutation({
-    mutationFn: (data: any) =>
-      clientApi('/api/comment/create', {
+    mutationFn: ({
+      data,
+      token,
+    }: {
+      data: { contents: string };
+      token: string;
+    }) =>
+      clientApi(`/server/supercar/v1/post/${postId}/comment`, {
         method: 'POST',
-        query: {
-          category,
-          postId,
-          parentId: parentId ? parentId : null,
+        headers: {
+          ACCESS_TOKEN: token,
+          'Content-Type': 'application/json',
         },
+        query: currentQuery,
         data,
       }),
     ...options,

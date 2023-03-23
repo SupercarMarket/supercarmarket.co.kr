@@ -9,6 +9,7 @@ import {
   Typography,
   Wrapper,
   applyMediaQuery,
+  deviceQuery,
 } from '@supercarmarket/ui';
 import { LinkSkeleton } from 'components/fallback/loading';
 import Link from 'next/link';
@@ -22,12 +23,14 @@ import Image from 'next/image';
 import searchSrc from '../../../../public/images/search.png';
 import menuSrc from '../../../../public/images/menu.png';
 import { Logo } from 'components/common/logo';
+import { useMedia } from '@supercarmarket/hooks';
 
 interface HeaderProps {
   navlinks: Links[];
 }
 
 const Header = ({ navlinks }: HeaderProps) => {
+  const { isMobile } = useMedia({ deviceQuery: deviceQuery });
   const [search, setSearch] = React.useState(false);
   const [hamburger, setHamburger] = React.useState(false);
   const { status, data: session } = useSession();
@@ -278,13 +281,15 @@ const Header = ({ navlinks }: HeaderProps) => {
           </svg>
         </Button>
       </Wrapper>
-      <Hamburger
-        navlinks={navlinks}
-        session={session}
-        hamburger={hamburger}
-        signOut={handleSignOut}
-        handleClose={handleHamburger}
-      />
+      {isMobile && (
+        <Hamburger
+          navlinks={navlinks}
+          session={session}
+          hamburger={hamburger}
+          signOut={handleSignOut}
+          handleClose={handleHamburger}
+        />
+      )}
     </Container>
   );
 };

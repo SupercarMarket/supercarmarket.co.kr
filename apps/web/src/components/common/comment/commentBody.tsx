@@ -19,6 +19,7 @@ import CommentArea from './commentArea';
 import { css } from 'styled-components';
 import Avatar from '../avatar';
 import Link from 'next/link';
+import { Session } from 'next-auth';
 
 const CommentCard = ({
   isMyComment = true,
@@ -35,22 +36,30 @@ const CommentCard = ({
   children,
   kind,
   category,
+  session,
 }: Comment & {
   root?: boolean;
   postId: string;
   category: string;
+  session: Session | null;
   kind: 'magazine' | 'paparazzi' | 'partnership';
 }) => {
-  const { mutate: likeMuate } = useLikeComment({
-    category: kind,
-    postId,
-    commentId: id,
-  });
-  const { mutate: removeMutate } = useRemoveComment({
-    category: kind,
-    postId,
-    commentId: id,
-  });
+  const { mutate: likeMuate } = useLikeComment(
+    {
+      category: kind,
+      postId,
+      commentId: id,
+    },
+    session?.accessToken
+  );
+  const { mutate: removeMutate } = useRemoveComment(
+    {
+      category: kind,
+      postId,
+      commentId: id,
+    },
+    session?.accessToken
+  );
   const [modify, setModify] = React.useState(false);
   const [open, setOpen] = React.useState(false);
 
@@ -65,12 +74,14 @@ const CommentCard = ({
   }, [open]);
 
   const handleRemove = React.useCallback(() => {
+    if (!session) return;
     removeMutate();
-  }, [removeMutate]);
+  }, [removeMutate, session]);
 
   const handleLike = React.useCallback(() => {
+    if (!session) return;
     likeMuate();
-  }, [likeMuate]);
+  }, [likeMuate, session]);
   return (
     <>
       {isRemoved ? (
@@ -318,6 +329,7 @@ const CommentCard = ({
       {modify && (
         <Wrapper css={style.cardArea}>
           <CommentArea
+            session={session}
             postId={postId}
             parentId={id}
             defaultValue={content}
@@ -331,6 +343,7 @@ const CommentCard = ({
       {open && (
         <Wrapper css={style.cardArea}>
           <CommentArea
+            session={session}
             postId={postId}
             parentId={id}
             kind={kind}
@@ -343,6 +356,7 @@ const CommentCard = ({
         <Wrapper css={style.cardChildren}>
           {children.map((comment) => (
             <CommentCard
+              session={session}
               key={comment.id}
               postId={postId}
               kind={kind}
@@ -362,11 +376,13 @@ const CommentBody = ({
   comments,
   kind = 'magazine',
   category,
+  session,
 }: {
   postId: string;
   comments: Comment[];
   kind?: 'magazine' | 'paparazzi' | 'partnership';
   category: string;
+  session: Session | null;
 }) => {
   return (
     <Container display="flex" flexDirection="column">
@@ -382,6 +398,7 @@ const CommentBody = ({
           postId={postId}
           kind={kind}
           category={category}
+          session={session}
           {...comment}
         />
       ))}
