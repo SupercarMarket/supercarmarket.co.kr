@@ -42,8 +42,6 @@ const MagazineScrape = ({ postId, isScraped }: MagazineScrapeProps) => {
     mutate();
   }, [mutate, session]);
 
-  console.log(isScraped);
-
   return (
     <Button variant="Line" onClick={handleScrape}>
       <Wrapper
