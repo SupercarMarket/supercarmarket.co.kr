@@ -1,6 +1,6 @@
+import { clientFetcher } from '@supercarmarket/lib';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import queries from 'constants/queries';
-import { baseFetch } from 'utils/api/fetcher';
 
 export default function useLikeComment(
   query: {
@@ -8,21 +8,30 @@ export default function useLikeComment(
     postId: string;
     commentId: string;
   },
+  token?: string,
   options = {}
 ) {
   const { category, postId, commentId } = query;
   const queryClient = useQueryClient();
 
+  const headers = token
+    ? {
+        ACCESS_TOKEN: token,
+      }
+    : undefined;
+
   return useMutation({
     mutationFn: () =>
-      baseFetch('/api/comment/like', {
-        method: 'PATCH',
-        query: {
-          category,
-          postId,
-          commentId,
-        },
-      }),
+      clientFetcher(
+        `/server/supercar/v1/post/${postId}/comment/${commentId}/like`,
+        {
+          headers,
+          query: {
+            category,
+          },
+          method: 'POST',
+        }
+      ),
     onSuccess: () => {
       queryClient.invalidateQueries(queries.comment.id(postId));
     },

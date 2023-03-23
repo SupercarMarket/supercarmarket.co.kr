@@ -73,6 +73,7 @@ const CommentArea = ({
         postId,
         commentId: parentId,
       },
+      session?.accessToken,
       {
         onSuccess: () => {
           queryClient.invalidateQueries(queries.comment.id(postId));

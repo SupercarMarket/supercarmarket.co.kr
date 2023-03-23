@@ -44,16 +44,22 @@ const CommentCard = ({
   session: Session | null;
   kind: 'magazine' | 'paparazzi' | 'partnership';
 }) => {
-  const { mutate: likeMuate } = useLikeComment({
-    category: kind,
-    postId,
-    commentId: id,
-  });
-  const { mutate: removeMutate } = useRemoveComment({
-    category: kind,
-    postId,
-    commentId: id,
-  });
+  const { mutate: likeMuate } = useLikeComment(
+    {
+      category: kind,
+      postId,
+      commentId: id,
+    },
+    session?.accessToken
+  );
+  const { mutate: removeMutate } = useRemoveComment(
+    {
+      category: kind,
+      postId,
+      commentId: id,
+    },
+    session?.accessToken
+  );
   const [modify, setModify] = React.useState(false);
   const [open, setOpen] = React.useState(false);
 
@@ -68,12 +74,14 @@ const CommentCard = ({
   }, [open]);
 
   const handleRemove = React.useCallback(() => {
+    if (!session) return;
     removeMutate();
-  }, [removeMutate]);
+  }, [removeMutate, session]);
 
   const handleLike = React.useCallback(() => {
+    if (!session) return;
     likeMuate();
-  }, [likeMuate]);
+  }, [likeMuate, session]);
   return (
     <>
       {isRemoved ? (

@@ -1,6 +1,6 @@
+import { clientFetcher } from '@supercarmarket/lib';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import queries from 'constants/queries';
-import { baseFetch } from 'utils/api/fetcher';
 
 export default function useRemoveComment(
   query: {
@@ -8,19 +8,25 @@ export default function useRemoveComment(
     postId: string;
     commentId: string;
   },
+  token?: string,
   options = {}
 ) {
   const { category, postId, commentId } = query;
   const queryClient = useQueryClient();
 
+  const headers = token
+    ? {
+        ACCESS_TOKEN: token,
+      }
+    : undefined;
+
   return useMutation({
     mutationFn: () =>
-      baseFetch('/api/comment/remove', {
+      clientFetcher(`/server/supercar/v1/post/${postId}/comment/${commentId}`, {
         method: 'DELETE',
+        headers,
         query: {
           category,
-          postId,
-          commentId,
         },
       }),
     onSuccess: () => {
