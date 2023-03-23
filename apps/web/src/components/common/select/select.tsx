@@ -1,9 +1,8 @@
 import { Typography } from '@supercarmarket/ui';
-// import { useRouter } from 'next/router';
 import { useRouter, useSearchParams } from 'next/navigation';
 import * as React from 'react';
 import { SelectType } from '@supercarmarket/types/market';
-import { makeQuery, makeSelectQuery } from 'utils/market/marketQuery';
+import { makeQuery } from 'utils/market/marketQuery';
 
 import ArrowBottom from '../../../assets/svg/arrow-bottom.svg';
 import * as S from './select.styled';
