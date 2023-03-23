@@ -17,12 +17,16 @@ import { useMedia } from '@supercarmarket/hooks';
 import ViewIcon from '../../../assets/svg/eye.svg';
 import LikeIcon from '../../../assets/svg/thumb-up.svg';
 import Avatar from 'components/common/avatar';
+import useBase64 from 'hooks/queries/useBase64';
+import Skeleton from 'react-loading-skeleton';
 
 interface CommunityCardProps extends WithBlurredImage<CommunityDto> {
   variant: string;
 }
 
-type CommunityCardChildrenProps = Omit<CommunityCardProps, 'variant'>;
+type CommunityCardChildrenProps = Omit<CommunityCardProps, 'variant'> & {
+  base64?: string;
+};
 
 const defualtSrc =
   'https://user-images.githubusercontent.com/66871265/210489106-611e72ee-94f8-49e8-9faa-60f9f20ae50f.png';
@@ -47,12 +51,26 @@ export const getCategoryPathname = (category: string) => {
 };
 
 const CommunityCard = ({ variant, ...rest }: CommunityCardProps) => {
+  const { data: base64 } = useBase64(
+    rest.imgSrc || defualtSrc,
+    {
+      src: rest.imgSrc || defualtSrc,
+      category: 'community',
+    },
+    {
+      staleTime: 1000 * 60 * 60,
+      cacheTime: 1000 * 60 * 60,
+    }
+  );
+
   return (
     <>
       {
         {
-          column: <CommunityCardColumn {...rest} />,
-          row: <CommunityCardRow {...rest} />,
+          column: (
+            <CommunityCardColumn {...rest} base64={base64?.data.base64} />
+          ),
+          row: <CommunityCardRow {...rest} base64={base64?.data.base64} />,
         }[variant]
       }
     </>
@@ -72,6 +90,7 @@ const CommunityCardRow = (props: CommunityCardChildrenProps) => {
     view,
     created,
     rate,
+    base64,
   } = props;
   const { isMobile } = useMedia({ deviceQuery });
 
@@ -97,19 +116,33 @@ const CommunityCardRow = (props: CommunityCardChildrenProps) => {
             display: flex;
             align-items: center;
             gap: 30px;
+            .react-loading-skeleton {
+              width: 196px;
+              height: 124px;
+              border-radius: 4px;
+            }
             ${applyMediaQuery('mobile')} {
               width: 64px;
               flex: unset;
+              .react-loading-skeleton {
+                width: 64px;
+                height: 64px;
+                border-radius: 4px;
+              }
             }
           `}
         >
-          <Image
-            src={imgSrc || defualtSrc}
-            alt="thumbnail"
-            width={isMobile ? 64 : 196}
-            height={isMobile ? 64 : 124}
-            style={{ borderRadius: '4px' }}
-          />
+          {base64 ? (
+            <Image
+              src={imgSrc || defualtSrc}
+              alt="thumbnail"
+              width={isMobile ? 64 : 196}
+              height={isMobile ? 64 : 124}
+              style={{ borderRadius: '4px' }}
+            />
+          ) : (
+            <Skeleton />
+          )}
           <Wrapper.Item
             css={css`
               display: flex;
@@ -344,22 +377,35 @@ const CommunityCardColumn = (props: CommunityCardChildrenProps) => {
             position: relative;
             width: 285px;
             height: 180px;
+            .react-loading-skeleton {
+              width: 285px;
+              height: 180px;
+              border-radius: 4px;
+            }
             ${applyMediaQuery('mobile')} {
               width: 167.5px;
               height: 101px;
+              .react-loading-skeleton {
+                width: 167.5px;
+                height: 101px;
+              }
             }
           `}
         >
-          <Image
-            src={imgSrc || defualtSrc}
-            alt="thumbnail"
-            fill
-            placeholder={base64 ? 'blur' : undefined}
-            blurDataURL={base64 ? base64 : undefined}
-            style={{
-              borderRadius: '4px',
-            }}
-          />
+          {base64 ? (
+            <Image
+              src={imgSrc || defualtSrc}
+              alt="thumbnail"
+              fill
+              placeholder="blur"
+              blurDataURL={base64}
+              style={{
+                borderRadius: '4px',
+              }}
+            />
+          ) : (
+            <Skeleton />
+          )}
         </Wrapper.Item>
         <Wrapper.Item
           css={css`

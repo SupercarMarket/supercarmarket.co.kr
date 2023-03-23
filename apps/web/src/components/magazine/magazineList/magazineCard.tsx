@@ -32,10 +32,17 @@ const MagazineCard = memo(function MagazineCard({
     data: base64,
     isFetching,
     isLoading,
-  } = useBase64(imgSrc || `${process.env.NEXT_PUBLIC_URL}/images/base.png`, {
-    src: imgSrc,
-    category: 'magazine',
-  });
+  } = useBase64(
+    imgSrc || `${process.env.NEXT_PUBLIC_URL}/images/base.png`,
+    {
+      src: imgSrc,
+      category: 'magazine',
+    },
+    {
+      staleTime: 1000 * 60 * 60 * 24,
+      cacheTime: Infinity,
+    }
+  );
   const imgWidth = type === 'normal' ? 387 : 285;
   const imgHeight = type === 'normal' ? 240 : 180;
   const headingFontSize = type === 'normal' ? 'header-24' : 'header-16';

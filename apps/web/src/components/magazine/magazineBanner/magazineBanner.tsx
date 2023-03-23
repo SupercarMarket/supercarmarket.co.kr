@@ -49,6 +49,8 @@ const MagazineBanner = ({
       category: 'magazine',
     },
     {
+      staleTime: 1000 * 60 * 60 * 24,
+      cacheTime: Infinity,
       enabled: !!magazine,
     }
   );
