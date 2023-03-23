@@ -7,8 +7,7 @@ import {
   MarketDto,
 } from '@supercarmarket/types/market';
 import { ErrorCode } from 'utils/error';
-
-import fetcher from '../fetcher';
+import { fetcher } from '@supercarmarket/lib';
 
 const marketDetailApi: NextApiHandler = async (req, res) => {
   const { id } = req.query as Params;

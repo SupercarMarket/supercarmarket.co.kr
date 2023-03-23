@@ -270,15 +270,32 @@ const AccountCategory = React.memo(function AccountCategory({
               ))}
             </Wrapper.Item>
           ),
-          magazine: data.data.map((d: MagazineDto) => (
-            <AccountCategoryItemWrapper
-              key={d.id}
-              id={d.id}
-              hidden={isDeleteTarget}
+          magazine: (
+            <Wrapper.Item
+              css={css`
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr;
+                row-gap: 40px;
+                column-gap: 20px;
+                ${applyMediaQuery('mobile')} {
+                  grid-template-columns: 1fr 1fr;
+                  row-gap: 16px;
+                  column-gap: 8px;
+                }
+              `}
             >
-              <MagazineCard key={d.id} {...d} />
-            </AccountCategoryItemWrapper>
-          )),
+              {data.data.map((d: MagazineDto) => (
+                <AccountCategoryItemWrapper
+                  key={d.id}
+                  id={d.id}
+                  hidden={isDeleteTarget}
+                >
+                  <MagazineCard key={d.id} {...d} />
+                </AccountCategoryItemWrapper>
+              ))}
+              <div>asgw</div>
+            </Wrapper.Item>
+          ),
           comment: (
             <Wrapper
               css={css`

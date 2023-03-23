@@ -14,6 +14,7 @@ import { memo } from 'react';
 import { css } from 'styled-components';
 import useBase64 from 'hooks/queries/useBase64';
 import Skeleton from 'react-loading-skeleton';
+import { truncateOnWord } from '@supercarmarket/lib';
 
 interface MagazineCardProps extends WithBlurredImage<MagazineDto> {
   type?: 'small' | 'normal';
@@ -124,7 +125,7 @@ const MagazineCard = memo(function MagazineCard({
               marginBottom: '10px',
             }}
           >
-            {contents}
+            {truncateOnWord(contents, 80)}
           </Typography>
         )}
         <Typography
