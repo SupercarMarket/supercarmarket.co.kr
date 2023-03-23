@@ -16,7 +16,7 @@ const wrapper = css`
   box-sizing: border-box;
 
   ${applyMediaQuery('mobile')} {
-    height: 130px;
+    height: 150px;
     padding: 20px 16px;
     margin-bottom: 32px;
     flex-direction: column;
