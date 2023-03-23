@@ -17,6 +17,7 @@ import { ErrorFallback } from 'components/fallback';
 import { serverFetcher } from '@supercarmarket/lib';
 import { CATEGORY } from 'constants/market';
 import { makeQuery } from 'utils/market/marketQuery';
+import { getSession } from 'utils/api/auth/user';
 
 const MarketDetailPage: NextPageWithLayout = ({
   id,
@@ -114,13 +115,28 @@ const MarketDetailPage: NextPageWithLayout = ({
 
 MarketDetailPage.Layout = layout;
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { id, category = 'sports-car' } = ctx.query as Params;
+export const getServerSideProps: GetServerSideProps = async ({
+  req,
+  res,
+  query,
+}) => {
+  const { id, category = 'sports-car' } = query as Params;
+  const session = await getSession({ req });
+
   const queryClient = new QueryClient();
 
-  queryClient.prefetchQuery(queries.market.detail(id), () =>
+  let headers = {};
+  const boardView = req.cookies['boardView'];
+
+  if (session) headers = { ...headers, ACCESS_token: session.accessToken };
+  if (boardView) headers = { ...headers, Cookie: `boardView=${boardView}` };
+
+  console.log('headers', headers);
+
+  await queryClient.prefetchQuery(queries.market.detail(id), () =>
     serverFetcher(`${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/shop`, {
       method: 'GET',
+      headers,
       params: id,
     }).then((res) => {
       const { ok, status, ...rest } = res;
@@ -128,7 +144,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     })
   );
 
-  ctx.res.setHeader('Cache-Control', 'public, max-age=500, immutable');
+  res.setHeader('Cache-Control', 'public, max-age=500, immutable');
 
   return {
     props: {
