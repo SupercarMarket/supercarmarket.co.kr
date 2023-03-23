@@ -146,6 +146,12 @@ const MarketDetailSkeleton = () => {
           align-items: center;
           justify-content: space-between;
           margin-bottom: 20px;
+
+          ${applyMediaQuery('mobile')} {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 8px;
+          }
         `}
       >
         <Skeleton width={250} height={50} />
@@ -157,6 +163,12 @@ const MarketDetailSkeleton = () => {
           display: flex;
           align-items: center;
           justify-content: space-between;
+
+          ${applyMediaQuery('mobile')} {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 8px;
+          }
         `}
       >
         <Skeleton width={160} height={20} />
@@ -164,11 +176,16 @@ const MarketDetailSkeleton = () => {
       </Wrapper>
       <Wrapper
         css={css`
+          height: 900px;
           margin-top: 24px;
           margin-bottom: 10px;
+
+          ${applyMediaQuery('mobile')} {
+            height: 257px;
+          }
         `}
       >
-        <Skeleton height={757} />
+        <Skeleton height="100%" />
       </Wrapper>
       <Wrapper
         css={css`
@@ -176,8 +193,21 @@ const MarketDetailSkeleton = () => {
           gap: 10.5px;
         `}
       >
-        {Array.from({ length: 8 }).map((_, idx) => (
-          <Skeleton key={idx} width={141} height={89} />
+        {Array.from({ length: 4 }).map((_, idx) => (
+          <Wrapper
+            key={idx}
+            css={css`
+              width: 141px;
+              height: 89px;
+
+              ${applyMediaQuery('mobile')} {
+                width: 80px;
+                height: 60px;
+              }
+            `}
+          >
+            <Skeleton key={idx} width="100%" height="100%" />
+          </Wrapper>
         ))}
       </Wrapper>
       {Array.from({ length: 3 }).map((_, idx) => (

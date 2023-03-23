@@ -15,11 +15,9 @@ import { css } from 'styled-components';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from 'components/fallback';
 import { serverFetcher } from '@supercarmarket/lib';
-
-const makeQuery = (query: Params) =>
-  Object.entries(query)
-    .map(([key, value]) => `${key}=${value}`)
-    .join('&');
+import { CATEGORY } from 'constants/market';
+import { makeQuery } from 'utils/market/marketQuery';
+import { getSession } from 'utils/api/auth/user';
 
 const MarketDetailPage: NextPageWithLayout = ({
   id,
@@ -30,16 +28,24 @@ const MarketDetailPage: NextPageWithLayout = ({
 
   const keydownHandler = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && keywordRef.current !== null) {
-      delete query.id;
+      const queries = query as Params;
 
-      query.keyword = keywordRef.current.value;
-      keywordRef.current.value = '';
+      delete queries.id;
+      delete queries.category;
+      queries.keyword = keywordRef.current.value;
 
-      const queryString = makeQuery(query as Params);
+      const queryString = makeQuery(queries);
 
-      push(`/market/${query.category}?${queryString}`);
+      push(`/market?category=all&${queryString}`);
     }
   };
+
+  const listCategory = React.useMemo(() => {
+    const foundCategory = CATEGORY.find(
+      ({ option }) => option === category
+    )?.value;
+    return foundCategory;
+  }, [category]);
 
   return (
     <Wrapper
@@ -49,7 +55,9 @@ const MarketDetailPage: NextPageWithLayout = ({
         flex-direction: column;
         margin: 20px 0 0 0;
         ${applyMediaQuery('mobile')} {
+          width: 100%;
           padding: 0 16px;
+          box-sizing: border-box;
         }
       `}
     >
@@ -68,23 +76,35 @@ const MarketDetailPage: NextPageWithLayout = ({
                 margin-bottom: 36px;
               `}
             >
-              <Tab list={`/market/${category}`} scroll />
+              <Tab list={`/market?category=${listCategory}`} scroll />
             </Wrapper>
             <Wrapper
               css={css`
+                width: 100%;
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 margin-bottom: 160px;
+                ${applyMediaQuery('mobile')} {
+                  justify-content: flex-start;
+                }
               `}
             >
-              <Searchbar
-                variant="Line"
-                width="540px"
-                placeholder="검색어를 입력하세요"
-                onKeyDown={keydownHandler}
-                ref={keywordRef}
-              />
+              <Wrapper
+                css={css`
+                  width: 504px;
+                  ${applyMediaQuery('mobile')} {
+                    width: 240px;
+                  }
+                `}
+              >
+                <Searchbar
+                  variant="Line"
+                  placeholder="검색어를 입력하세요"
+                  onKeyDown={keydownHandler}
+                  ref={keywordRef}
+                />
+              </Wrapper>
             </Wrapper>
           </>
         )}
@@ -95,13 +115,28 @@ const MarketDetailPage: NextPageWithLayout = ({
 
 MarketDetailPage.Layout = layout;
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { id, category = 'sports-car' } = ctx.query as Params;
+export const getServerSideProps: GetServerSideProps = async ({
+  req,
+  res,
+  query,
+}) => {
+  const { id, category = 'sports-car' } = query as Params;
+  const session = await getSession({ req });
+
   const queryClient = new QueryClient();
 
-  queryClient.prefetchQuery(queries.market.detail(id), () =>
+  let headers = {};
+  const boardView = req.cookies['boardView'];
+
+  if (session) headers = { ...headers, ACCESS_token: session.accessToken };
+  if (boardView) headers = { ...headers, Cookie: `boardView=${boardView}` };
+
+  console.log('headers', headers);
+
+  await queryClient.prefetchQuery(queries.market.detail(id), () =>
     serverFetcher(`${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/shop`, {
       method: 'GET',
+      headers,
       params: id,
     }).then((res) => {
       const { ok, status, ...rest } = res;
@@ -109,7 +144,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     })
   );
 
-  ctx.res.setHeader('Cache-Control', 'public, max-age=500, immutable');
+  res.setHeader('Cache-Control', 'public, max-age=500, immutable');
 
   return {
     props: {

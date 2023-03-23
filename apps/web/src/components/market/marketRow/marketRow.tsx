@@ -95,42 +95,50 @@ const MarketRow = ({
         >
           <Wrapper.Item
             css={css`
-              width: 504px;
-              display: flex;
-              flex-direction: column;
-              box-sizing: border-box;
-              padding-left: 30px;
-              gap: 8px;
+              ${({ theme }) => css`
+                width: 504px;
+                display: flex;
+                flex-direction: column;
+                box-sizing: border-box;
+                padding-left: 30px;
+                gap: 8px;
 
-              ${applyMediaQuery('mobile')} {
-                width: 100%;
-                padding: 0 15px;
-
-                & span {
-                  width: 200px;
-                  display: -webkit-box;
-                  overflow: hidden;
-                  white-space: normal;
+                .car-name {
+                  font-size: ${theme.fontSize['body-24']};
+                  font-weight: ${theme.fontWeight.bold};
+                  line-height: 150%;
                   text-overflow: ellipsis;
-                  -webkit-line-clamp: 2;
-                  -webkit-box-orient: vertical;
-                  word-break: break-all;
+                  overflow: hidden;
+                  white-space: nowrap;
                 }
-              }
+
+                .car-description {
+                  font-size: ${theme.fontSize['body-14']};
+                  color: ${theme.color['greyScale-5']};
+                }
+
+                ${applyMediaQuery('mobile')} {
+                  width: 100%;
+                  padding-left: 12px;
+
+                  .car-name {
+                    font-size: ${theme.fontSize['body-14']};
+                    max-height: 50px;
+                    display: -webkit-box;
+                    white-space: initial;
+                    -webkit-line-clamp: 2;
+                    -webkit-box-orient: vertical;
+                  }
+
+                  .car-description {
+                    font-size: ${theme.fontSize['body-12']};
+                  }
+                }
+              `}
             `}
           >
-            <Typography
-              className="car-name"
-              fontSize="body-24"
-              fontWeight="bold"
-              lineHeight="120%"
-              space
-            >
-              {carName}
-            </Typography>
-            <Typography fontSize="body-14" color="greyScale-5">
-              {description}
-            </Typography>
+            <p className="car-name">{carName}</p>
+            <p className="car-description">{description}</p>
           </Wrapper.Item>
           <Wrapper.Item
             css={css`
@@ -141,8 +149,9 @@ const MarketRow = ({
               }
               ${applyMediaQuery('mobile')} {
                 flex-direction: column;
-                padding: 0 15px;
+                padding-left: 12px;
                 gap: 8px;
+
                 & > span {
                   width: auto;
                 }
@@ -152,25 +161,37 @@ const MarketRow = ({
             <Wrapper.Item
               css={css`
                 display: flex;
-                & > span {
+                .dealer-info {
                   width: 100px;
                   text-align: center;
                 }
+                .vertical-bar {
+                  display: none;
+                }
                 ${applyMediaQuery('mobile')} {
                   gap: 8px;
-                  & > span {
+                  .dealer-info {
                     width: auto;
-                    :not(:first-child):before {
-                    }
+                    text-align: center;
+                  }
+                  .vertical-bar {
+                    display: inline;
                   }
                 }
               `}
             >
-              <Typography fontSize="body-14">{year}</Typography>
-              <Typography fontSize="body-14">{fuel}</Typography>
-              <Typography fontSize="body-14">{`${formatter(
-                mileage
-              )}km`}</Typography>
+              <Typography className="dealer-info" fontSize="body-14">
+                {year}
+              </Typography>
+              <Wrapper className="vertical-bar">|</Wrapper>
+              <Typography className="dealer-info" fontSize="body-14">
+                {fuel}
+              </Typography>
+              <Wrapper className="vertical-bar">|</Wrapper>
+              <Typography
+                className="dealer-info"
+                fontSize="body-14"
+              >{`${formatter(mileage)}km`}</Typography>
             </Wrapper.Item>
             <Wrapper.Item
               css={css`

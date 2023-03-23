@@ -16,11 +16,7 @@ const CATEGORY = [
 
 const CATEGORY_MAPPING: { [key: string]: string } = {};
 CATEGORY.forEach(({ option, value }) => {
-  if (value === 'classic-car') {
-    CATEGORY_MAPPING[value] = '클래식카%26올드카';
-  } else {
-    CATEGORY_MAPPING[value] = option;
-  }
+  CATEGORY_MAPPING[value] = option;
 });
 
 const CATEGORY_VALUES = CATEGORY.map(({ value }) => value);
@@ -44,14 +40,14 @@ const FIRST_MARKET_FILTER = [
       defaultLabel: '선택',
       optionSet: [
         {
-          option: '휘발유',
+          option: '가솔린',
           dataName: 'fuel',
-          value: '휘발유',
+          value: '가솔린',
         },
         {
-          option: '경유',
+          option: '디젤',
           dataName: 'fuel',
-          value: '경유',
+          value: '디젤',
         },
         {
           option: '전기',
@@ -173,7 +169,7 @@ const ORDER_OPTIONSET = {
 const SHOW_COUNT_OPTIONS = {
   label: '리스트 개수',
   defaultLabel: '20개씩',
-  optionSet: makeHowManyResult(5, 70, 'size'),
+  optionSet: makeHowManyResult(20, 70, 'size'),
 };
 
 const MARKET_LIST_TABLE_HEAD = [

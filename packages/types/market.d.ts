@@ -68,7 +68,7 @@ interface MarketAttachment {
 interface MarketDetailDto<T> {
   dealer: DealerDto;
   view: number;
-  dirSeq: number;
+  brdSeq: number;
   likeCount: number;
   registration: string;
   attSrc: MarketAttachment[];
@@ -86,6 +86,7 @@ interface MarketDetailDto<T> {
   category: string;
   imgSrc: T[];
   isLike: boolean;
+  isMine: boolean;
   createdDate: string;
 }
 

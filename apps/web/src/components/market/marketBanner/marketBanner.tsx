@@ -1,12 +1,11 @@
 import { Button, Typography } from '@supercarmarket/ui';
-import { CATEGORY } from 'constants/market';
 import * as React from 'react';
 
 import ArrowRight from '../../../assets/svg/arrow-right.svg';
 import * as Styled from './marketBanner.styled';
+import Link from 'next/link';
 
 const MarketBanner = () => {
-  CATEGORY;
   return (
     <Styled.MarketBannerContainer>
       <Styled.Paragraph>
@@ -18,13 +17,15 @@ const MarketBanner = () => {
         </Typography>
       </Styled.Paragraph>
       <Styled.BannerButtonArea>
-        <Button
-          variant="Black"
-          border="rounded"
-          suffix={<ArrowRight fill="white" />}
-        >
-          등록 문의하기
-        </Button>
+        <Link href="/inquiry/market">
+          <Button
+            variant="Black"
+            border="rounded"
+            suffix={<ArrowRight fill="white" />}
+          >
+            등록 문의하기
+          </Button>
+        </Link>
       </Styled.BannerButtonArea>
     </Styled.MarketBannerContainer>
   );

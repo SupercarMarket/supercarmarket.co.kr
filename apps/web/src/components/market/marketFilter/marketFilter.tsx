@@ -10,7 +10,7 @@ import theme from 'constants/theme';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { css } from 'styled-components';
-import { convertQuery, makeFilterLabel } from 'utils/market/marketFilter';
+import { convertQuery, makeFilterLabel } from 'utils/market/marketQuery';
 
 import Close from '../../../assets/svg/close.svg';
 import Refresh from '../../../assets/svg/refresh.svg';
@@ -34,7 +34,7 @@ const MarketFilter = () => {
   };
 
   const resetfilter = () => {
-    push(`/market?category=${query.category}`, undefined, {
+    push(`/market/${query.category}`, undefined, {
       scroll: false,
     });
   };
@@ -60,6 +60,9 @@ const MarketFilter = () => {
                 width: 270px;
                 display: flex;
                 flex-direction: column;
+                box-sizing: border-box;
+                padding: 10px;
+                padding-bottom: 0;
                 gap: 5px;
                 ${applyMediaQuery('mobile')} {
                   width: 311px;
@@ -89,6 +92,8 @@ const MarketFilter = () => {
                 width: 270px;
                 display: flex;
                 flex-direction: column;
+                box-sizing: border-box;
+                padding: 10px;
                 gap: 5px;
                 ${applyMediaQuery('mobile')} {
                   width: 311px;

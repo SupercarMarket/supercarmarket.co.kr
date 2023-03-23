@@ -9,6 +9,7 @@ import {
   MarketDetailIntroduction,
   MarketLike,
 } from 'components/market/marketDetail/components';
+import MarketMine from './components/marketMine/marketMine';
 
 interface MarketDetailProps {
   data: MarketDetailDto<string>;
@@ -17,6 +18,7 @@ interface MarketDetailProps {
 
 const MarketDetail = ({ data, id }: MarketDetailProps) => {
   const {
+    brdSeq,
     carName,
     year,
     fuel,
@@ -36,6 +38,7 @@ const MarketDetail = ({ data, id }: MarketDetailProps) => {
     attSrc,
     createdDate,
     isLike,
+    isMine,
   } = data;
 
   return (
@@ -77,7 +80,11 @@ const MarketDetail = ({ data, id }: MarketDetailProps) => {
         첨부파일
       </Typography>
       <MarketDetailAttached registration={registration} attrSrc={attSrc} />
-      <MarketLike isLike={isLike} />
+      {isMine ? (
+        <MarketMine id={id} brdSeq={brdSeq} />
+      ) : (
+        <MarketLike isLike={isLike} />
+      )}
     </>
   );
 };

@@ -9,15 +9,24 @@ import {
 } from '@supercarmarket/types/market';
 import { ErrorCode } from 'utils/error';
 import { catchNoExist, getErrorMessage } from 'utils/misc';
+import { CATEGORY_MAPPING } from 'constants/market';
 import { fetcher } from '@supercarmarket/lib';
 
 const marketApi: NextApiHandler = async (req, res) => {
-  const { category, filter, orderBy, page, ...rest } = req.query as Params;
+  const {
+    category: queryCategory,
+    filter,
+    orderBy,
+    page,
+    ...rest
+  } = req.query as Params;
 
-  catchNoExist(category, filter, orderBy, page);
+  catchNoExist(queryCategory, filter, orderBy, page);
+
+  const category = CATEGORY_MAPPING[queryCategory];
 
   const query =
-    category === 'all'
+    category === '전체'
       ? { filter, orderBy, page, ...rest }
       : { category, filter, orderBy, page, ...rest };
 

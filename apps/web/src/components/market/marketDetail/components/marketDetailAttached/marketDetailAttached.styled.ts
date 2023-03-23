@@ -1,5 +1,5 @@
 'use client';
-
+import { applyMediaQuery } from '@supercarmarket/ui';
 import styled from 'styled-components';
 
 const AttachedCard = styled.div`
@@ -13,6 +13,11 @@ const AttachedCard = styled.div`
   border: 1px solid ${({ theme }) => theme.color['greyScale-3']};
   border-radius: 4px;
   box-sizing: border-box;
+
+  ${applyMediaQuery('mobile')} {
+    padding: 16px;
+    min-height: initial;
+  }
 `;
 
 const File = styled.div`

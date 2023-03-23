@@ -1,4 +1,4 @@
-import { Wrapper } from '@supercarmarket/ui';
+import { Wrapper, applyMediaQuery } from '@supercarmarket/ui';
 import theme from 'constants/theme';
 import Image from 'next/image';
 import * as React from 'react';
@@ -34,18 +34,35 @@ const MarketDetailCarouselItem = (props: MarketDetailCarouselItemProps) => {
     idx,
   });
 
-  if (isFetching || isLoading) return <Skeleton width={141} height={89} />;
+  if (isFetching || isLoading)
+    return (
+      <Wrapper
+        css={css`
+          width: 141px;
+          height: 89px;
+
+          ${applyMediaQuery('mobile')} {
+            width: 80px;
+            height: 60px;
+          }
+        `}
+      >
+        <Skeleton width="100%" height="100%" />
+      </Wrapper>
+    );
 
   return (
     <Styled.CarouselImageWrapper onClick={handleClick}>
-      <Image
-        width={141}
-        height={89}
-        alt="image"
-        placeholder="blur"
-        src={imgSrc}
-        blurDataURL={data?.data.base64}
-      />
+      <Styled.ImageWrapper>
+        <Image
+          alt="image"
+          placeholder="blur"
+          src={imgSrc}
+          blurDataURL={data?.data.base64}
+          fill
+          style={{ objectFit: 'contain' }}
+        />
+      </Styled.ImageWrapper>
       {current === idx && (
         <Styled.CheckBox>
           <CheckIcon
@@ -85,19 +102,35 @@ const MarketDetailCarousel = ({ imgSrc, id }: MarketDetailCarouselProps) => {
     <Wrapper
       css={css`
         margin-bottom: 60px;
+
+        ${applyMediaQuery('mobile')} {
+          margin-bottom: 32px;
+        }
       `}
     >
       <Wrapper.Top css={Styled.top}>
         {isFetching || isLoading ? (
-          <Skeleton width={1200} height={757} />
+          <Wrapper
+            css={css`
+              width: 100%;
+              height: 900px;
+
+              ${applyMediaQuery('mobile')} {
+                width: 100%;
+                height: 257px;
+              }
+            `}
+          >
+            <Skeleton width="100%" height="100%" />
+          </Wrapper>
         ) : (
           <Image
-            width={1200}
-            height={757}
             alt="image"
             placeholder="blur"
             blurDataURL={data?.data.base64}
             src={imgSrc[current]}
+            style={{ objectFit: 'contain' }}
+            fill
           />
         )}
       </Wrapper.Top>
