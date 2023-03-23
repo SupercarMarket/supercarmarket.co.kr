@@ -12,6 +12,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { memo } from 'react';
 import { css } from 'styled-components';
+import useBase64 from 'hooks/queries/useBase64';
+import Skeleton from 'react-loading-skeleton';
 
 interface MagazineCardProps extends WithBlurredImage<MagazineDto> {
   type?: 'small' | 'normal';
@@ -20,13 +22,20 @@ interface MagazineCardProps extends WithBlurredImage<MagazineDto> {
 const MagazineCard = memo(function MagazineCard({
   id,
   title,
-  base64,
   imgSrc,
   contents,
   comments,
   created,
   type = 'normal',
 }: MagazineCardProps) {
+  const {
+    data: base64,
+    isFetching,
+    isLoading,
+  } = useBase64(imgSrc || `${process.env.NEXT_PUBLIC_URL}/images/base.png`, {
+    src: imgSrc,
+    category: 'magazine',
+  });
   const imgWidth = type === 'normal' ? 387 : 285;
   const imgHeight = type === 'normal' ? 240 : 180;
   const headingFontSize = type === 'normal' ? 'header-24' : 'header-16';
@@ -47,24 +56,36 @@ const MagazineCard = memo(function MagazineCard({
             position: relative;
             width: ${imgWidth}px;
             height: ${imgHeight}px;
-
+            .react-loading-skeleton {
+              width: ${imgWidth}px;
+              height: ${imgHeight}px;
+              border-radius: 4px;
+            }
             ${applyMediaQuery('mobile')} {
               width: 167.5px;
               height: 106px;
+              .react-loading-skeleton {
+                width: 167.5px;
+                height: 106px;
+              }
             }
           `}
         >
-          <Image
-            src={imgSrc}
-            fill
-            placeholder={base64 ? 'blur' : undefined}
-            blurDataURL={base64 ? base64 : undefined}
-            alt="thumbnail"
-            style={{
-              objectFit: 'cover',
-              borderRadius: '4px',
-            }}
-          />
+          {isFetching || isLoading ? (
+            <Skeleton />
+          ) : (
+            <Image
+              src={imgSrc}
+              fill
+              placeholder="blur"
+              blurDataURL={base64?.data.base64}
+              alt="thumbnail"
+              style={{
+                objectFit: 'cover',
+                borderRadius: '4px',
+              }}
+            />
+          )}
         </Wrapper.Item>
         <Typography
           as="h2"
