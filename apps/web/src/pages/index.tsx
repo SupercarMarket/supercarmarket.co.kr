@@ -3,13 +3,7 @@ import {
   QueryClient,
   QueryErrorResetBoundary,
 } from '@tanstack/react-query';
-import {
-  Container,
-  Wrapper,
-  Title,
-  applyMediaQuery,
-  Alert,
-} from '@supercarmarket/ui';
+import { Container, Wrapper, Title, applyMediaQuery } from '@supercarmarket/ui';
 import type { NextPageWithLayout } from '@supercarmarket/types/base';
 import { ErrorFallback } from 'components/fallback';
 import Community from 'components/home/community';
@@ -20,10 +14,10 @@ import queries from 'constants/queries';
 import { GetStaticProps } from 'next';
 import * as React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import { baseFetch } from 'utils/api/fetcher';
 import HeadSeo from 'components/common/headSeo';
 import { APP_NAME } from 'constants/core';
 import { css } from 'styled-components';
+import { serverFetcher } from '@supercarmarket/lib';
 
 const Home: NextPageWithLayout = () => {
   return (
@@ -88,35 +82,47 @@ const queryClient = new QueryClient();
 export const getStaticProps: GetStaticProps = async () => {
   await Promise.all([
     queryClient.prefetchQuery(queries.home.magazine(), () =>
-      baseFetch(`${process.env.NEXT_PUBLIC_URL}/api/home`, {
+      serverFetcher(`${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/main`, {
         method: 'GET',
         query: {
           category: 'magazine',
         },
+      }).then((res) => {
+        const { ok, status, ...rest } = res;
+        return rest;
       })
     ),
     queryClient.prefetchQuery(queries.home.best(), () =>
-      baseFetch(`${process.env.NEXT_PUBLIC_URL}/api/home`, {
+      serverFetcher(`${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/main`, {
         method: 'GET',
         query: {
-          category: 'best',
+          category: 'interestProduct',
         },
+      }).then((res) => {
+        const { ok, status, ...rest } = res;
+        return rest;
       })
     ),
     queryClient.prefetchQuery(queries.home.new(), () =>
-      baseFetch(`${process.env.NEXT_PUBLIC_URL}/api/home`, {
+      serverFetcher(`${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/main`, {
         method: 'GET',
         query: {
-          category: 'new',
+          category: 'latestProduct',
         },
+      }).then((res) => {
+        const { ok, status, ...rest } = res;
+        return rest;
       })
     ),
     queryClient.prefetchQuery(queries.home.community(), () =>
-      baseFetch(`${process.env.NEXT_PUBLIC_URL}/api/home`, {
+      serverFetcher(`${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/main`, {
         method: 'GET',
         query: {
           category: 'community',
         },
+      }).then((res) => {
+        const { ok, status, ...rest } = res;
+        return rest;
       })
     ),
   ]);
@@ -125,7 +131,7 @@ export const getStaticProps: GetStaticProps = async () => {
     props: {
       dehydratedState: dehydrate(queryClient),
     },
-    revalidate: 30,
+    revalidate: 60,
   };
 };
 

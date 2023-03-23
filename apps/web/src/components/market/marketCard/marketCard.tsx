@@ -14,6 +14,8 @@ import MarketRow from '../marketRow';
 import * as Styled from './marketCard.styled';
 import { useRouter } from 'next/router';
 import { Params } from '@supercarmarket/types/base';
+import useBase64 from 'hooks/queries/useBase64';
+import Skeleton from 'react-loading-skeleton';
 
 interface MarketCardProps extends WithBlurredImage<MarketDto> {
   variant?: string;
@@ -21,13 +23,24 @@ interface MarketCardProps extends WithBlurredImage<MarketDto> {
 
 const MarketCard = (props: MarketCardProps) => {
   const { variant = 'column', ...rest } = props;
+  const { data: base64 } = useBase64(
+    rest.imgSrc,
+    {
+      id: rest.id,
+      category: 'market',
+    },
+    {
+      staleTime: 1000 * 60 * 60 * 24,
+      cacheTime: Infinity,
+    }
+  );
 
   return (
     <>
       {
         {
-          column: <MarketColumn {...rest} />,
-          row: <MarketRow {...rest} />,
+          column: <MarketColumn {...rest} base64={base64?.data.base64} />,
+          row: <MarketRow {...rest} base64={base64?.data.base64} />,
         }[variant]
       }
     </>
@@ -61,21 +74,34 @@ const MarketColumn = (props: WithBlurredImage<MarketDto>) => {
               position: relative;
               width: 285px;
               height: 180px;
+              .react-loading-skeleton {
+                width: 285px;
+                height: 180px;
+                border-radius: 4px;
+              }
               ${applyMediaQuery('mobile')} {
                 width: 167.5px;
                 height: 106px;
+                .react-loading-skeleton {
+                  width: 167.5px;
+                  height: 106px;
+                }
               }
             `}
           >
-            <Image
-              fill
-              placeholder={base64 ? 'blur' : undefined}
-              blurDataURL={base64 ? base64 : undefined}
-              src={imgSrc}
-              alt="thumbnail"
-              style={{ borderRadius: '4px' }}
-              sizes="100%"
-            />
+            {base64 ? (
+              <Image
+                fill
+                placeholder="blur"
+                blurDataURL={base64}
+                src={imgSrc}
+                alt="thumbnail"
+                style={{ borderRadius: '4px' }}
+                sizes="100%"
+              />
+            ) : (
+              <Skeleton />
+            )}
           </Wrapper.Item>
         </Styled.DivideArea>
         <Typography

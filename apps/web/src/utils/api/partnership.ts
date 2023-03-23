@@ -1,12 +1,6 @@
-import {
-  ErrorCode,
-  catchNoExist,
-  fetcher,
-  getErrorMessage,
-} from '@supercarmarket/lib';
+import { ErrorCode, fetcher, getErrorMessage } from '@supercarmarket/lib';
 import { Params } from '@supercarmarket/types/base';
 import {
-  PartnershipDetailResponse,
   PartnershipDto,
   PartnershipResponse,
 } from '@supercarmarket/types/partnership';

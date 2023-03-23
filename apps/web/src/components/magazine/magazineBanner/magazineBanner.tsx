@@ -17,6 +17,8 @@ import { css } from 'styled-components';
 
 import Arrow from '../../../assets/svg/arrow-right.svg';
 import Link from 'next/link';
+import useBase64 from 'hooks/queries/useBase64';
+import Skeleton from 'react-loading-skeleton';
 
 interface MagazineBannerProps {
   reverse?: boolean;
@@ -24,6 +26,8 @@ interface MagazineBannerProps {
   button?: boolean;
   initialData?: MagazineResponse<WithBlurredImage<MagazineDto>>;
 }
+
+const baseSrc = `${process.env.NEXT_PUBLIC_URL}/images/base.png`;
 
 const MagazineBanner = ({
   reverse,
@@ -34,6 +38,22 @@ const MagazineBanner = ({
   const { data: magazine } = useMagazine(0, {
     initialData,
   });
+  const {
+    data: base64,
+    isFetching,
+    isLoading,
+  } = useBase64(
+    magazine?.data[0].imgSrc || baseSrc,
+    {
+      src: magazine?.data[0].imgSrc || baseSrc,
+      category: 'magazine',
+    },
+    {
+      staleTime: 1000 * 60 * 60 * 24,
+      cacheTime: Infinity,
+      enabled: !!magazine,
+    }
+  );
 
   return (
     <Container width="100%" className={className}>
@@ -60,14 +80,29 @@ const MagazineBanner = ({
               flex-direction: column;
               justify-content: center;
               gap: 16px;
-              fill: #fff;
+              fill: ${({ theme }) => theme.color.white};
 
               ${applyMediaQuery('mobile')} {
                 width: 343px;
-                height: 233px;
+                height: auto;
                 display: flex;
                 flex-direction: column;
                 justify-content: flex-start;
+                gap: 12px;
+                h1 {
+                  font-size: ${({ theme }) =>
+                    theme.fontSize['header-24']} !important;
+                }
+                p {
+                  height: 63px !important;
+                  overflow: hidden !important;
+                  white-space: normal !important;
+                  text-overflow: ellipsis !important;
+                  display: -webkit-box !important;
+                  -webkit-line-clamp: 3 !important;
+                  -webkit-box-orient: vertical !important;
+                  word-break: keep-all !important;
+                }
               }
             `}
           >
@@ -129,24 +164,37 @@ const MagazineBanner = ({
               width: 590px;
               height: 394px;
               gap: 16px;
+              .react-loading-skeleton {
+                width: 590px;
+                height: 394px;
+                border-radius: 4px;
+              }
               ${applyMediaQuery('mobile')} {
                 width: 343px;
                 height: 264px;
+                .react-loading-skeleton {
+                  width: 343px;
+                  height: 264px;
+                }
               }
             `}
           >
-            <Image
-              src={magazine.data[0].imgSrc}
-              alt="thumbnail"
-              fill
-              placeholder="blur"
-              blurDataURL={magazine.data[0].base64}
-              style={{
-                objectFit: 'cover',
-                borderRadius: '4px',
-              }}
-              priority
-            />
+            {isFetching || isLoading ? (
+              <Skeleton />
+            ) : (
+              <Image
+                src={magazine.data[0].imgSrc}
+                alt="thumbnail"
+                fill
+                placeholder="blur"
+                blurDataURL={base64?.data.base64}
+                style={{
+                  objectFit: 'cover',
+                  borderRadius: '4px',
+                }}
+                priority
+              />
+            )}
           </Wrapper.Item>
         </Wrapper>
       )}

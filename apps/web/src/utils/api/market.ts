@@ -7,10 +7,10 @@ import {
   MarketDto,
   MarketResponse,
 } from '@supercarmarket/types/market';
-import fetcher from 'utils/api/fetcher';
 import { ErrorCode } from 'utils/error';
 import { catchNoExist, getErrorMessage } from 'utils/misc';
 import { CATEGORY_MAPPING } from 'constants/market';
+import { fetcher } from '@supercarmarket/lib';
 
 const marketApi: NextApiHandler = async (req, res) => {
   const {

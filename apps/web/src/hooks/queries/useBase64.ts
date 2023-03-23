@@ -5,19 +5,12 @@ import { useQuery } from '@tanstack/react-query';
 export default function useBase64(
   src: string,
   query: {
-    category: string;
-    id: string;
-    detail: boolean;
-    idx?: number;
+    [key: string]: string | number | boolean;
   },
   options = {}
 ) {
-  const { category = 'market', id, detail = false, idx } = query;
-
-  const detailImage = detail ? [detail, idx] : [detail];
-
   return useQuery<ServerResponse<{ base64: string }>>(
-    [category, id, ...detailImage],
+    ['base64', query],
     () =>
       clientApi('/api/image/base64', {
         method: 'POST',

@@ -146,7 +146,7 @@ export const getUserPageProps = async (
   ) {
     return {
       redirect: {
-        destination: `/account/${sub}?tab=${account.accountTab[3]}`,
+        destination: `/account/${sub}?tab=${account.accountTab[4]}`,
         permanent: false,
       },
     };

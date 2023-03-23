@@ -1,5 +1,5 @@
 import { ErrorCode, fetcher } from '@supercarmarket/lib';
-import { Alert, Button, Form } from '@supercarmarket/ui';
+import { Alert, Button, Form, Wrapper } from '@supercarmarket/ui';
 import { Modal } from 'components/common/modal';
 import inquiry, { InquiryADFormState } from 'constants/inquiry';
 import ModalContext from 'feature/modalContext';
@@ -29,14 +29,17 @@ const PartnershipForm = () => {
 
   const handleRequire = async (data: InquiryADFormState) => {
     Object.entries(data).map(([key, value]) => {
+      const target = key as keyof InquiryADFormState;
+
       if (!value) {
-        methods.setError(key as keyof InquiryADFormState, {
+        methods.setError(target, {
           message: '빈 칸을 입력해주세요.',
         });
         throw `${key} is require`;
       }
-      if (!value.length) {
-        methods.setError(key as keyof InquiryADFormState, {
+
+      if (target === 'files' && !value.length) {
+        methods.setError(target, {
           message: '파일을 첨부 해주세요.',
         });
         throw `${key} is require`;
@@ -82,6 +85,7 @@ const PartnershipForm = () => {
           title="기타 문의"
           description="기타 문의가 등록 완료되었습니다."
           clickText="확인"
+          background="rgba(30, 30, 32, 0.5)"
           onCancel={() => handleModal('/inquiry')}
           onClick={() => handleModal('/')}
           onClose={() => handleModal('/inquiry')}
@@ -108,9 +112,17 @@ const PartnershipForm = () => {
             {...d}
           />
         ))}
-        <Button type="submit" width="104px">
-          작성 완료
-        </Button>
+        <Wrapper.Item
+          css={css`
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+          `}
+        >
+          <Button type="submit" width="104px">
+            {methods.formState.isSubmitting ? '등록 중..' : '작성 완료'}
+          </Button>
+        </Wrapper.Item>
         {error && <Alert severity="error" title="" />}
       </Form>
     </FormProvider>

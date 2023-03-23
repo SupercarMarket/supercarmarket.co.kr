@@ -142,34 +142,36 @@ const FormFiles = React.forwardRef(function FormFiles(
           gap: 24px;
         `}
       >
-        <Button
-          variant="Line"
-          type="button"
-          width="120px"
-          suffix={
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <g clipPath="url(#clip0_275_10412)">
-                <path
-                  d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z"
-                  fill="#8E8E95"
-                />
-              </g>
-              <defs>
-                <clipPath id="clip0_275_10412">
-                  <rect width="24" height="24" fill="white" />
-                </clipPath>
-              </defs>
-            </svg>
-          }
-        >
-          <Label htmlFor={name}>{title}</Label>
-        </Button>
+        <input
+          ref={ref}
+          id={name}
+          type="file"
+          hidden
+          onChange={handleChange}
+          disabled={size && files.length === size ? true : undefined}
+        />
+        <Label htmlFor={name}>
+          파일 추가
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g clipPath="url(#clip0_275_10412)">
+              <path
+                d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z"
+                fill="#8E8E95"
+              />
+            </g>
+            <defs>
+              <clipPath id="clip0_275_10412">
+                <rect width="24" height="24" fill="white" />
+              </clipPath>
+            </defs>
+          </svg>
+        </Label>
         {description && (
           <Typography
             fontSize="body-14"

@@ -5,8 +5,7 @@ import { getSession as getSessionInner } from 'next-auth/react';
 import type { Signin } from '@supercarmarket/types/auth';
 import type { Params, ServerResponse } from '@supercarmarket/types/base';
 import { catchNoExist, getErrorMessage } from 'utils/misc';
-
-import { baseApi, baseFetcher } from '../fetcher';
+import { serverApi } from '@supercarmarket/lib';
 
 type SignInResponse = ServerResponse<{
   access_token: string;
@@ -18,10 +17,13 @@ const signInApi: NextApiHandler = async (req, res) => {
   const { id, password }: Signin = req.body;
   catchNoExist(id, password);
 
-  const { status, ok, data } = await baseApi<SignInResponse>(
+  const { status, ok, data } = await serverApi(
     `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/user/login`,
     {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
       data: {
         id,
         password,
@@ -41,7 +43,7 @@ const oauthApi: NextApiHandler = async (req, res) => {
   catchNoExist(provider, sub, nickname, email, picture);
 
   try {
-    const oauth = await baseFetcher(
+    const oauth = await serverApi(
       `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/user/login`,
       {
         headers: {

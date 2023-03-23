@@ -24,7 +24,7 @@ const Table = (props: TableProps) => {
   const { tab = 'product', hidden = true, padding, handleCheckbox } = props;
 
   const table = React.useMemo(() => {
-    if (tab === 'product')
+    if (tab === 'product' || tab === 'dealer-product')
       return [
         { title: '사진', width: '196px' },
         { title: '차량정보', width: '504px' },

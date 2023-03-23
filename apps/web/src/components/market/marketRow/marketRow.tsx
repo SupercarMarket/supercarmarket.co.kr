@@ -11,6 +11,7 @@ import type { WithBlurredImage } from '@supercarmarket/types/magazine';
 import type { MarketDto } from '@supercarmarket/types/market';
 import { useRouter } from 'next/router';
 import { Params } from '@supercarmarket/types/base';
+import Skeleton from 'react-loading-skeleton';
 
 const MarketRow = ({
   id,
@@ -48,23 +49,36 @@ const MarketRow = ({
             overflow: hidden;
             width: 196px;
             height: 124px;
+            .react-loading-skeleton {
+              width: 196px;
+              height: 124px;
+              border-radius: 4px;
+            }
             ${applyMediaQuery('mobile')} {
               width: 126px;
               height: 126px;
               & > img {
                 object-fit: cover;
               }
+              .react-loading-skeleton {
+                width: 126px;
+                height: 126px;
+              }
             }
           `}
         >
-          <Image
-            placeholder={base64 ? 'blur' : undefined}
-            blurDataURL={base64 ? base64 : undefined}
-            src={imgSrc}
-            alt="thumbnail"
-            style={{ borderRadius: '4px' }}
-            fill
-          />
+          {base64 ? (
+            <Image
+              placeholder="blur"
+              blurDataURL={base64}
+              src={imgSrc}
+              alt="thumbnail"
+              style={{ borderRadius: '4px' }}
+              fill
+            />
+          ) : (
+            <Skeleton />
+          )}
         </Wrapper.Item>
         <Wrapper.Item
           css={css`

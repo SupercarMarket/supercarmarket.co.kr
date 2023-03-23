@@ -1,14 +1,18 @@
+import * as React from 'react';
 import { Button, Container, Typography, Wrapper } from '@supercarmarket/ui';
 import type { InquiryLink } from '@supercarmarket/types/inquiry';
 import Link from 'next/link';
-
+import { useSession } from 'next-auth/react';
 import { css } from 'styled-components';
+import { useRouter } from 'next/navigation';
 
 import Tr1Icon from '../../../../public/images/icons/tr_1.svg';
 import Tr2Icon from '../../../../public/images/icons/tr_2.svg';
 import Tr3Icon from '../../../../public/images/icons/tr_3.svg';
 import Tr4Icon from '../../../../public/images/icons/tr_4.svg';
 import Tr5Icon from '../../../../public/images/icons/tr_5.svg';
+import ModalContext from 'feature/modalContext';
+import { Modal } from 'components/common/modal';
 
 const getSvgIcon = (index: number) => {
   return {
@@ -28,6 +32,29 @@ const InquiryNavbar = ({
 }: InquiryLink & {
   index: number;
 }) => {
+  const session = useSession();
+  const { onOpen, onClose } = React.useContext(ModalContext);
+  const { replace } = useRouter();
+
+  React.useEffect(() => {
+    if (session.status !== 'authenticated')
+      onOpen(
+        <Modal
+          description="로그인 후 서비스 이용 가능합니다"
+          clickText="로그인"
+          background="rgba(30, 30, 32, 0.5)"
+          onClick={() => {
+            onClose();
+            replace('/auth/signin');
+          }}
+          onCancel={() => {
+            onClose();
+            replace('/auth/signin');
+          }}
+        />
+      );
+  }, [onClose, onOpen, replace, session.status]);
+
   return (
     <Container
       display="flex"
