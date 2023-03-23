@@ -80,14 +80,29 @@ const MagazineBanner = ({
               flex-direction: column;
               justify-content: center;
               gap: 16px;
-              fill: #fff;
+              fill: ${({ theme }) => theme.color.white};
 
               ${applyMediaQuery('mobile')} {
                 width: 343px;
-                height: 233px;
+                height: auto;
                 display: flex;
                 flex-direction: column;
                 justify-content: flex-start;
+                gap: 12px;
+                h1 {
+                  font-size: ${({ theme }) =>
+                    theme.fontSize['header-24']} !important;
+                }
+                p {
+                  height: 63px !important;
+                  overflow: hidden !important;
+                  white-space: normal !important;
+                  text-overflow: ellipsis !important;
+                  display: -webkit-box !important;
+                  -webkit-line-clamp: 3 !important;
+                  -webkit-box-orient: vertical !important;
+                  word-break: keep-all !important;
+                }
               }
             `}
           >
