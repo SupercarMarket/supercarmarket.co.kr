@@ -1,6 +1,5 @@
+'use client';
 import { applyMediaQuery } from '@supercarmarket/ui';
-('use client');
-
 import styled, { css } from 'styled-components';
 
 const wrapper = css`

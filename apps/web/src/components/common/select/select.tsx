@@ -1,8 +1,9 @@
 import { Typography } from '@supercarmarket/ui';
-import { useRouter } from 'next/router';
+// import { useRouter } from 'next/router';
+import { useRouter, useSearchParams } from 'next/navigation';
 import * as React from 'react';
 import { SelectType } from '@supercarmarket/types/market';
-import { makeSelectQuery } from 'utils/market/marketQuery';
+import { makeQuery, makeSelectQuery } from 'utils/market/marketQuery';
 
 import ArrowBottom from '../../../assets/svg/arrow-bottom.svg';
 import * as S from './select.styled';
@@ -13,16 +14,26 @@ interface SelectProps {
   options: SelectType;
 }
 
+function paramsToObject(entries: IterableIterator<[string, string]>) {
+  const result: { [key: string]: string } = {};
+  for (const [key, value] of entries) {
+    result[key] = value;
+  }
+  return result;
+}
+
 const Select = ({ options, width = '100%', align }: SelectProps) => {
   const { optionSet, defaultLabel } = options;
-  const { push, query } = useRouter();
+  const { push } = useRouter();
+  const query = useSearchParams();
   const [toggle, setToggle] = React.useState<boolean>(false);
 
   const optionValue = React.useMemo(() => {
     const check = (val: string, dat: string) => {
       const [v1, v2] = val.split(' ');
       const [d1, d2] = dat.split(' ');
-      return v1 === query[d1] && v2 === query[d2];
+
+      return v1 === query.get(d1) || v2 === query.get(d2);
     };
 
     const options = optionSet.find(({ value, dataName }) =>
@@ -36,17 +47,18 @@ const Select = ({ options, width = '100%', align }: SelectProps) => {
   const closeToggle = () => setToggle(false);
 
   const selectOption = (dataName: string, value: string) => {
-    const queryObj = { ...query };
+    const [key1, key2] = dataName.split(' ');
+    const [value1, value2] = value.split(' ');
 
-    const url = makeSelectQuery(
-      queryObj as { [key: string]: string },
-      dataName,
-      value
-    );
+    const entries = new URLSearchParams(query.toString()).entries();
+    const queries = paramsToObject(entries);
 
-    push(`/market?${url}`, undefined, {
-      scroll: false,
-    });
+    queries[key1] = value1;
+    if (key2 && value2) queries[key2] = value2;
+
+    const url = makeQuery(queries);
+
+    push(`/market?${url}`);
 
     closeToggle();
   };

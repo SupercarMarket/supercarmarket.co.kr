@@ -1,6 +1,5 @@
+'use client';
 import { applyMediaQuery } from '@supercarmarket/ui';
-('use client');
-
 import styled from 'styled-components';
 
 const AttachedCard = styled.div`
