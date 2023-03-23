@@ -1,8 +1,8 @@
+import { clientFetcher } from '@supercarmarket/lib';
 import type { PaginationResponse, Query } from '@supercarmarket/types/base';
 import type { SearchAll } from '@supercarmarket/types/search';
 import { useQuery } from '@tanstack/react-query';
 import queries from 'constants/queries';
-import { clientFetcher } from 'utils/api/fetcher';
 
 export default function useSearch(
   query: Pick<Query, 'category' | 'keyword' | 'page' | 'filter' | 'orderBy'>,

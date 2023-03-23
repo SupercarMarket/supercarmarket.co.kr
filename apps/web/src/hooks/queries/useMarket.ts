@@ -1,3 +1,4 @@
+import { clientFetcher } from '@supercarmarket/lib';
 import type {
   MarketDto,
   MarketResponse,
@@ -5,7 +6,6 @@ import type {
 } from '@supercarmarket/types/market';
 import { useQuery } from '@tanstack/react-query';
 import queries from 'constants/queries';
-import { clientFetcher } from 'utils/api/fetcher';
 
 export default function useMarket(
   query: {

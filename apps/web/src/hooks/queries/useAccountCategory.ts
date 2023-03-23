@@ -1,7 +1,7 @@
+import { clientFetcher } from '@supercarmarket/lib';
 import { useQuery } from '@tanstack/react-query';
 import type { AccountTab } from 'constants/account';
 import queries from 'constants/queries';
-import { clientFetcher } from 'utils/api/fetcher';
 
 export default function useAccountCategory(
   id: string,

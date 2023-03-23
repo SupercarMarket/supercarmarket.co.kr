@@ -1,12 +1,11 @@
+import { clientFetcher } from '@supercarmarket/lib';
 import { catchNoExist, getErrorMessage } from 'utils/misc';
-
-import { baseFetcher } from '../fetcher';
 
 const refreshToken = async (refreshToken: string) => {
   catchNoExist(refreshToken);
 
   try {
-    const token = await baseFetcher(
+    const token = await clientFetcher(
       `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/user/get-token`,
       {
         headers: {

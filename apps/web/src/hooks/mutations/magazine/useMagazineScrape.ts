@@ -1,6 +1,6 @@
+import { clientFetcher } from '@supercarmarket/lib';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import queries from 'constants/queries';
-import { baseFetcher } from 'utils/api/fetcher';
 
 export default function useMagazineScrape(
   postId: string,
@@ -19,7 +19,7 @@ export default function useMagazineScrape(
 
   return useMutation({
     mutationFn: () =>
-      baseFetcher(`/server/supercar/v1/magazine/${postId}/scrap`, {
+      clientFetcher(`/server/supercar/v1/magazine/${postId}/scrap`, {
         method: 'POST',
         headers,
       }),

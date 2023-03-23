@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import queries from 'constants/queries';
-import { clientFetcher } from 'utils/api/fetcher';
 import type { Profile } from '@supercarmarket/types/account';
+import { clientFetcher } from '@supercarmarket/lib';
 
 export default function useAccount(id: string, token?: string, options = {}) {
   const header = token

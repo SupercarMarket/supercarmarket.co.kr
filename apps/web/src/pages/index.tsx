@@ -14,7 +14,6 @@ import queries from 'constants/queries';
 import { GetStaticProps } from 'next';
 import * as React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import { baseFetch } from 'utils/api/fetcher';
 import HeadSeo from 'components/common/headSeo';
 import { APP_NAME } from 'constants/core';
 import { css } from 'styled-components';
@@ -94,7 +93,7 @@ export const getStaticProps: GetStaticProps = async () => {
       })
     ),
     queryClient.prefetchQuery(queries.home.best(), () =>
-      baseFetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/main`, {
+      serverFetcher(`${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/main`, {
         method: 'GET',
         query: {
           category: 'interestProduct',
@@ -105,7 +104,7 @@ export const getStaticProps: GetStaticProps = async () => {
       })
     ),
     queryClient.prefetchQuery(queries.home.new(), () =>
-      baseFetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/main`, {
+      serverFetcher(`${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/main`, {
         method: 'GET',
         query: {
           category: 'latestProduct',
@@ -116,7 +115,7 @@ export const getStaticProps: GetStaticProps = async () => {
       })
     ),
     queryClient.prefetchQuery(queries.home.community(), () =>
-      baseFetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/main`, {
+      serverFetcher(`${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/main`, {
         method: 'GET',
         query: {
           category: 'community',

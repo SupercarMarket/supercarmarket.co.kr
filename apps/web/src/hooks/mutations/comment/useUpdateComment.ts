@@ -1,5 +1,5 @@
+import { clientApi } from '@supercarmarket/lib';
 import { useMutation } from '@tanstack/react-query';
-import { clientApi } from 'utils/api/fetcher';
 
 export default function useUpdateComment(
   query: {
