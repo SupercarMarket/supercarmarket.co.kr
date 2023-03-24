@@ -1,4 +1,3 @@
-import { clientApi, clientFetcher } from '@supercarmarket/lib';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { addComment, deleteComment, likeComment, updateComment } from './apis';
 import { QUERY_KEYS } from './keys';
@@ -32,13 +31,12 @@ export const useLikeComment = (
   options = {}
 ) => {
   const queryClient = useQueryClient();
-  const { category, postId, commentId } = query;
 
   return useMutation({
     mutationFn: (token: string) => likeComment({ query, token }),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: QUERY_KEYS.comment(postId),
+        queryKey: QUERY_KEYS.comment(query.postId),
       });
     },
     ...options,
@@ -53,14 +51,13 @@ export const useDeleteComment = (
   },
   options = {}
 ) => {
-  const { category, postId, commentId } = query;
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (token: string) => deleteComment({ query, token }),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: QUERY_KEYS.comment(postId),
+        queryKey: QUERY_KEYS.comment(query.postId),
       });
     },
     ...options,

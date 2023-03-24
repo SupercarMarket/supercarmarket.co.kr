@@ -45,7 +45,7 @@ const SearchList = () => {
               ),
               product: <SearchMarket data={data.data.product} />,
               paparazzi: <SearchCommunity data={data.data.paparazzi} />,
-              magazine: <SearchMagazine data={data.data} />,
+              magazine: <SearchMagazine data={data.data.magazine} />,
             }[category]
           }
         </>
