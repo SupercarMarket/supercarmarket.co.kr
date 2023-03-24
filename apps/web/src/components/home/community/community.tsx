@@ -1,14 +1,14 @@
 import { Container, Typography, Wrapper } from '@supercarmarket/ui';
 import type { CommunityDto } from '@supercarmarket/types/community';
 import { CommunityCard } from 'components/community';
-import useHome from 'hooks/queries/useHome';
 import { css } from 'styled-components';
 import { applyMediaQuery } from 'styles/mediaQuery';
 
 import RouterButton from '../routerButton';
+import { useHome } from 'utils/api/home';
 
 const Community = () => {
-  const { data: communityBest } = useHome<CommunityDto>('community');
+  const { data: communityBest } = useHome<CommunityDto[]>('community');
 
   return (
     <Container

@@ -10,14 +10,13 @@ import Community from 'components/home/community';
 import Magazine from 'components/home/magazine';
 import { MarketBest, MarketNew } from 'components/home/market';
 import Layout from 'components/layout';
-import queries from 'constants/queries';
 import { GetStaticProps } from 'next';
 import * as React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import HeadSeo from 'components/common/headSeo';
 import { APP_NAME } from 'constants/core';
 import { css } from 'styled-components';
-import { serverFetcher } from '@supercarmarket/lib';
+import { prefetchHome, QUERY_KEYS } from 'utils/api/home';
 
 const Home: NextPageWithLayout = () => {
   return (
@@ -81,49 +80,13 @@ const queryClient = new QueryClient();
 
 export const getStaticProps: GetStaticProps = async () => {
   await Promise.all([
-    queryClient.prefetchQuery(queries.home.magazine(), () =>
-      serverFetcher(`${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/main`, {
-        method: 'GET',
-        query: {
-          category: 'magazine',
-        },
-      }).then((res) => {
-        const { ok, status, ...rest } = res;
-        return rest;
-      })
+    queryClient.prefetchQuery(QUERY_KEYS.magazine(), () =>
+      prefetchHome('magazine')
     ),
-    queryClient.prefetchQuery(queries.home.best(), () =>
-      serverFetcher(`${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/main`, {
-        method: 'GET',
-        query: {
-          category: 'interestProduct',
-        },
-      }).then((res) => {
-        const { ok, status, ...rest } = res;
-        return rest;
-      })
-    ),
-    queryClient.prefetchQuery(queries.home.new(), () =>
-      serverFetcher(`${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/main`, {
-        method: 'GET',
-        query: {
-          category: 'latestProduct',
-        },
-      }).then((res) => {
-        const { ok, status, ...rest } = res;
-        return rest;
-      })
-    ),
-    queryClient.prefetchQuery(queries.home.community(), () =>
-      serverFetcher(`${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/main`, {
-        method: 'GET',
-        query: {
-          category: 'community',
-        },
-      }).then((res) => {
-        const { ok, status, ...rest } = res;
-        return rest;
-      })
+    queryClient.prefetchQuery(QUERY_KEYS.best(), () => prefetchHome('best')),
+    queryClient.prefetchQuery(QUERY_KEYS.new(), () => prefetchHome('new')),
+    queryClient.prefetchQuery(QUERY_KEYS.community(), () =>
+      prefetchHome('community')
     ),
   ]);
 
