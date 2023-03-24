@@ -4,18 +4,6 @@ import type { AccountTab } from './account';
 
 const queries = {
   /**
-   * Home Query Keys
-   */
-  home: {
-    all: ['home'] as const,
-    magazine: () => [...queries.home.all, 'magazine'] as const,
-    market: () => [...queries.home.all, 'market'] as const,
-    community: () => [...queries.home.all, 'community'] as const,
-    partnership: () => [...queries.home.all, 'partnership'] as const,
-    new: () => [...queries.home.all, 'new'] as const,
-    best: () => [...queries.home.all, 'best'] as const,
-  },
-  /**
    * Market Query Keys
    */
   market: {
@@ -56,16 +44,6 @@ const queries = {
         String(query.keyword),
         query.category,
       ] as const,
-  },
-  /**
-   * Comment Query Keys
-   */
-  comment: {
-    all: ['comment'] as const,
-    lists: () => [...queries.comment.all, 'list'] as const,
-    id: (id: string) => [...queries.comment.lists(), id] as const,
-    query: (query: CommentQuery) =>
-      [query.page, query.orderBy, query.category] as const,
   },
   /**
    * Account Query Keys
