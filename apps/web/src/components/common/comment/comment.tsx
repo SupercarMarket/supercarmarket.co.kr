@@ -1,12 +1,12 @@
 import { Container, deviceQuery, Pagination } from '@supercarmarket/ui';
 import { useMedia, useUrlQuery } from '@supercarmarket/hooks';
-import useComment from 'hooks/queries/useComment';
 
 import CommentArea from './commentArea';
 import CommentBody from './commentBody';
 import CommentHead from './commentHead';
 import { CommentSkeleton } from 'components/fallback/loading';
 import { useSession } from 'next-auth/react';
+import { useComment } from 'utils/api/comment';
 
 interface CommentProps {
   id: string;
@@ -19,13 +19,15 @@ const Comment = ({ id, kind = 'magazine' }: CommentProps) => {
   const { page, orderBy, category } = useUrlQuery();
 
   const { data: comment, isLoading } = useComment(
-    id,
     {
-      page,
-      orderBy,
-      category: kind,
+      postId: id,
+      query: {
+        page,
+        orderBy,
+        category: kind,
+      },
+      token: session.data?.accessToken,
     },
-    session.data?.accessToken,
     {
       enabled: session.status !== 'loading',
     }

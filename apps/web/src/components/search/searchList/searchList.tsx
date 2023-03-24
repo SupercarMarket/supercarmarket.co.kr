@@ -1,7 +1,4 @@
 import { useUrlQuery } from '@supercarmarket/hooks';
-import type { CommunityDto } from '@supercarmarket/types/community';
-import type { MagazineDto } from '@supercarmarket/types/magazine';
-import type { MarketDto } from '@supercarmarket/types/market';
 import type { SearchAll as SearchAllType } from '@supercarmarket/types/search';
 import { Container } from '@supercarmarket/ui';
 import useSearch from 'hooks/queries/useSearch';
@@ -30,6 +27,8 @@ const SearchList = () => {
     page,
   });
 
+  console.log(data, category);
+
   return (
     <Container>
       {data && (
@@ -44,9 +43,9 @@ const SearchList = () => {
                   data={data.data as SearchAllType}
                 />
               ),
-              paparazzi: <SearchCommunity data={data.data.paparazzi} />,
               product: <SearchMarket data={data.data.product} />,
-              magazine: <SearchMagazine data={data.data.magazine} />,
+              paparazzi: <SearchCommunity data={data.data.paparazzi} />,
+              magazine: <SearchMagazine data={data.data} />,
             }[category]
           }
         </>

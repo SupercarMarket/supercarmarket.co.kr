@@ -1,4 +1,8 @@
-import { dehydrate, QueryClient } from '@tanstack/react-query';
+import {
+  dehydrate,
+  QueryClient,
+  QueryErrorResetBoundary,
+} from '@tanstack/react-query';
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import type { NextPageWithLayout, Params } from '@supercarmarket/types/base';
 import { Alert, applyMediaQuery, Container, Wrapper } from '@supercarmarket/ui';
@@ -8,6 +12,8 @@ import queries from 'constants/queries';
 import { serverApi } from '@supercarmarket/lib';
 import { SearchList } from 'components/search';
 import HeadSeo from 'components/common/headSeo';
+import { ErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from 'components/fallback';
 
 const Search: NextPageWithLayout = ({
   keyword,
@@ -16,7 +22,7 @@ const Search: NextPageWithLayout = ({
   return (
     <>
       <HeadSeo
-        title="검색결과"
+        title={`${keyword}`}
         description={`${keyword}에 대한 검색결과입니다.`}
       />
       <Container>
@@ -28,17 +34,26 @@ const Search: NextPageWithLayout = ({
             }
           `}
         >
-          {isKeyword ? (
-            <SearchList />
-          ) : (
-            <Wrapper.Item
-              css={css`
-                padding-top: 100px;
-              `}
-            >
-              <Alert severity="info" title="검색어를 입력해주세요" />
-            </Wrapper.Item>
-          )}
+          <QueryErrorResetBoundary>
+            {({ reset }) => (
+              <ErrorBoundary
+                onReset={reset}
+                fallbackRender={(props) => <ErrorFallback {...props} />}
+              >
+                {isKeyword ? (
+                  <SearchList />
+                ) : (
+                  <Wrapper.Item
+                    css={css`
+                      padding-top: 100px;
+                    `}
+                  >
+                    <Alert severity="info" title="검색어를 입력해주세요" />
+                  </Wrapper.Item>
+                )}
+              </ErrorBoundary>
+            )}
+          </QueryErrorResetBoundary>
         </Wrapper>
       </Container>
     </>

@@ -8,8 +8,6 @@ import {
   Wrapper,
 } from '@supercarmarket/ui';
 
-import useLikeComment from 'hooks/mutations/comment/useLikeComment';
-import useRemoveComment from 'hooks/mutations/comment/useRemoveComment';
 import * as React from 'react';
 import type { Comment } from '@supercarmarket/types/comment';
 
@@ -20,6 +18,7 @@ import { css } from 'styled-components';
 import Avatar from '../avatar';
 import Link from 'next/link';
 import { Session } from 'next-auth';
+import { useDeleteComment, useLikeComment } from 'utils/api/comment';
 
 const CommentCard = ({
   isMyComment = true,
@@ -44,22 +43,16 @@ const CommentCard = ({
   session: Session | null;
   kind: 'magazine' | 'paparazzi' | 'partnership';
 }) => {
-  const { mutate: likeMuate } = useLikeComment(
-    {
-      category: kind,
-      postId,
-      commentId: id,
-    },
-    session?.accessToken
-  );
-  const { mutate: removeMutate } = useRemoveComment(
-    {
-      category: kind,
-      postId,
-      commentId: id,
-    },
-    session?.accessToken
-  );
+  const { mutate: likeMuate } = useLikeComment({
+    category: kind,
+    postId,
+    commentId: id,
+  });
+  const { mutate: deleteMutate } = useDeleteComment({
+    category: kind,
+    postId,
+    commentId: id,
+  });
   const [modify, setModify] = React.useState(false);
   const [open, setOpen] = React.useState(false);
 
@@ -75,12 +68,12 @@ const CommentCard = ({
 
   const handleRemove = React.useCallback(() => {
     if (!session) return;
-    removeMutate();
-  }, [removeMutate, session]);
+    deleteMutate(session.accessToken);
+  }, [deleteMutate, session]);
 
   const handleLike = React.useCallback(() => {
     if (!session) return;
-    likeMuate();
+    likeMuate(session.accessToken);
   }, [likeMuate, session]);
   return (
     <>
