@@ -1,8 +1,8 @@
+import { clientFetcher } from '@supercarmarket/lib';
 import type { PaginationResponse } from '@supercarmarket/types/base';
 import type { CommunityDto } from '@supercarmarket/types/community';
 import { useQuery } from '@tanstack/react-query';
 import queries from 'constants/queries';
-import { clientFetcher } from 'utils/api/fetcher';
 
 export default function useCommunity(
   query: {
