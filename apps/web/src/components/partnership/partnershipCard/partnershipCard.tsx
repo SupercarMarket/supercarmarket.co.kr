@@ -15,7 +15,7 @@ import { PartnershipDto } from '@supercarmarket/types/partnership';
 const PartnershipCard = ({
   brdSeq,
   base64,
-  companyName,
+  partnerName,
   category,
   workTime,
   phone,
@@ -107,7 +107,7 @@ const PartnershipCard = ({
               `}
             `}
           >
-            <p className="title">{companyName}</p>
+            <p className="title">{partnerName}</p>
             <p className="address">{address}</p>
           </Wrapper.Item>
           <Wrapper.Item

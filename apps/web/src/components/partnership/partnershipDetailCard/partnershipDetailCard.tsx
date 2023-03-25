@@ -16,6 +16,7 @@ const PartnershipDetailCard = ({ info }: PartnershipDetailCard) => {
     address,
     category,
     representative,
+    partnerName,
     companyName,
     phone,
     treatedItem,
@@ -28,7 +29,7 @@ const PartnershipDetailCard = ({ info }: PartnershipDetailCard) => {
       css={css`
         ${({ theme }) => css`
           box-sizing: border-box;
-          width: 100%;
+          width: 578px;
           padding: 30px 40px;
           border: 1px solid ${({ theme }) => theme.color['greyScale-5']};
           border-radius: 4px;
