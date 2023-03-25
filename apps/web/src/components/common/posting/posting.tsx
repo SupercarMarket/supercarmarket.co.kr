@@ -23,6 +23,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import queries from 'constants/queries';
 import { MagazineScrape } from 'components/magazine';
 import {
+  QUERY_KEYS,
   useCommunityPost,
   useLikeCommunityPost,
   useRemoveCommunityPost,
@@ -126,16 +127,15 @@ const CommunityPosting = ({
     onSuccess: () => {
       Promise.all([
         queryClient.invalidateQueries([
-          ...queries.community.all,
+          ...QUERY_KEYS.id(postId),
           {
             subject,
             category,
-            id: postId,
           },
         ]),
         queryClient.invalidateQueries({
           queryKey: [
-            ...queries.community.lists(),
+            ...QUERY_KEYS.community(),
             {
               category: category,
               page: 0,
