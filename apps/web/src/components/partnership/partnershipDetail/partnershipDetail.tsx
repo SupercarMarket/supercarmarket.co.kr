@@ -81,7 +81,7 @@ const PartnershipDetail = ({ id }: Props) => {
         </>
       )}
       <React.Suspense fallback={<div>loading..</div>}>
-        <Comment id={id} />
+        <Comment id={id} kind="partnership" />
       </React.Suspense>
     </Wrapper>
   );
