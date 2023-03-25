@@ -86,7 +86,7 @@ const MarketDetailPage: NextPageWithLayout = ({
                 justify-content: center;
                 margin-bottom: 160px;
                 ${applyMediaQuery('mobile')} {
-                  justify-content: flex-start;
+                  justify-content: center;
                 }
               `}
             >
