@@ -43,7 +43,9 @@ const MagazineBanner = ({
     isFetching,
     isLoading,
   } = useBase64(
-    magazine?.data[0].imgSrc || baseSrc,
+    magazine && magazine.data && magazine.data.length > 0
+      ? magazine.data[0].imgSrc
+      : baseSrc,
     {
       src: magazine?.data[0].imgSrc || baseSrc,
       category: 'magazine',
@@ -51,7 +53,7 @@ const MagazineBanner = ({
     {
       staleTime: 1000 * 60 * 60 * 24,
       cacheTime: Infinity,
-      enabled: !!magazine,
+      enabled: magazine && magazine.data.length > 0,
     }
   );
 
