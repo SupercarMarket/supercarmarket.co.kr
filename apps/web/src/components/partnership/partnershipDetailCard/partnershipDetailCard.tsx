@@ -41,6 +41,7 @@ const PartnershipDetailCard = ({ info }: PartnershipDetailCard) => {
             margin-bottom: 42px;
           }
           ${applyMediaQuery('mobile')} {
+            width: 100%;
             padding: 24px 16px;
             .company-name {
               font-size: ${theme.fontSize['header-20']};
