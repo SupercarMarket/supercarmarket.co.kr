@@ -15,46 +15,6 @@ const queries = {
     new: () => [...queries.market.lists([]), 'new'] as const,
   },
   /**
-   * Magazine Query Keys
-   */
-  magazine: {
-    all: ['magazine'] as const,
-    lists: () => [...queries.magazine.all, 'list'] as const,
-    id: (id: string) => [...queries.magazine.lists(), id] as const,
-    query: (query: { page: number }) => [query.page] as const,
-  },
-  /**
-   * Community Query Keys
-   */
-  community: {
-    all: ['community'] as const,
-    lists: () => [...queries.community.all, 'list'] as const,
-    best: () => [...queries.community.lists(), 'best'] as const,
-    detail: (...query: string[]) => [...query, 'detail'] as const,
-    query: (
-      query: Pick<
-        Query,
-        'category' | 'page' | 'filter' | 'searchType' | 'keyword'
-      >
-    ) =>
-      [
-        String(query.filter),
-        String(query.searchType),
-        String(query.page),
-        String(query.keyword),
-        query.category,
-      ] as const,
-  },
-  /**
-   * Account Query Keys
-   */
-  account: {
-    all: ['account'] as const,
-    info: () => [...queries.account.all, 'info'] as const,
-    id: (id: string) => [...queries.account.all, id] as const,
-    category: (category: AccountTab) => [category] as const,
-  },
-  /**
    * Search Query Keys
    */
   search: {

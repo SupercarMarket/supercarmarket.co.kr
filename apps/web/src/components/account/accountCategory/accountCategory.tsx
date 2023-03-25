@@ -4,7 +4,6 @@ import InquiryCard from 'components/inquiry/inquiryCard/inquiryCard';
 import MagazineCard from 'components/magazine/magazineList/magazineCard';
 import MarketCard from 'components/market/marketCard';
 import type { AccountTab } from 'constants/account';
-import useAccountCategory from 'hooks/queries/useAccountCategory';
 import { useSession } from 'next-auth/react';
 import * as React from 'react';
 import { css } from 'styled-components';
@@ -24,8 +23,8 @@ import {
   Wrapper,
 } from '@supercarmarket/ui';
 import { useQueryClient } from '@tanstack/react-query';
-import queries from 'constants/queries';
 import { useRemoveCommunityPost } from 'utils/api/community';
+import { QUERY_KEYS, useAccountCategory } from 'utils/api/account';
 
 interface AccountCategoryProps {
   sub: string;
@@ -39,6 +38,7 @@ type AccountCategoryItemWrapperProps = React.PropsWithChildren & {
   id: string;
   allChecked?: boolean;
   category?: string;
+  center?: boolean;
   setDeleteList?: React.Dispatch<
     React.SetStateAction<
       {
@@ -55,6 +55,7 @@ const AccountCategoryItemWrapper = ({
   children,
   allChecked,
   category,
+  center = true,
   setDeleteList,
 }: AccountCategoryItemWrapperProps) => {
   const [checked, setChecked] = React.useState(false);
@@ -89,7 +90,7 @@ const AccountCategoryItemWrapper = ({
     else handleRemoveDeleteList();
   }, [checked, handleAddDeleteList, handleRemoveDeleteList]);
   return (
-    <Container display="flex" alignItems="center">
+    <Container display="flex" alignItems={center ? 'center' : 'flex-start'}>
       {hidden && (
         <Wrapper.Item
           css={css`
@@ -138,19 +139,28 @@ const AccountCategory = React.memo(function AccountCategory({
   const isDeleteTarget = isMyAccountPage && tab === 'community';
   const { data, isLoading, isFetching, refetch } = useAccountCategory(
     sub,
-    session.data?.accessToken,
     {
       category: tab,
-      page: 1,
+      page: 0,
       size: 20,
+    },
+    session.data?.accessToken,
+    {
+      enabled: session.status && session.status !== 'loading',
     }
   );
   const removeCategoryMutation = useRemoveCommunityPost({
     onSuccess: () => {
-      queryClient.invalidateQueries([
-        ...queries.account.id(sub),
-        queries.account.category(tab),
-      ]);
+      queryClient.invalidateQueries({
+        queryKey: [
+          ...QUERY_KEYS.id(sub),
+          {
+            category: tab,
+            page: 0,
+            size: 20,
+          },
+        ],
+      });
     },
   });
 
@@ -289,11 +299,11 @@ const AccountCategory = React.memo(function AccountCategory({
                   key={d.id}
                   id={d.id}
                   hidden={isDeleteTarget}
+                  center={false}
                 >
                   <MagazineCard key={d.id} {...d} />
                 </AccountCategoryItemWrapper>
               ))}
-              <div>asgw</div>
             </Wrapper.Item>
           ),
           comment: (
