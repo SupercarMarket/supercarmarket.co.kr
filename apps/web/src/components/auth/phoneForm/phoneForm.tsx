@@ -21,7 +21,7 @@ interface FormState {
 
 const PhoneForm = ({ uuid }: PhoneFormProps) => {
   const methods = useForm<FormState>();
-  const { authState } = useAuth();
+  const { authState, sendPhone, sendCode } = useAuth();
   const { replace } = useRouter();
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
 
@@ -43,7 +43,12 @@ const PhoneForm = ({ uuid }: PhoneFormProps) => {
       <Form css={style.form} onSubmit={onSubmit}>
         {auth.phoneAuth().map((form) => (
           <FormLabel key={form.htmlFor} name={form.htmlFor} label={form.label}>
-            <AuthFormItem {...form} state={authState} />
+            <AuthFormItem
+              {...form}
+              state={authState}
+              sendPhone={sendPhone}
+              sendCode={sendCode}
+            />
           </FormLabel>
         ))}
         <Button type="submit" fullWidth>
