@@ -1,4 +1,4 @@
-import { Wrapper } from '@supercarmarket/ui';
+import { applyMediaQuery, Wrapper } from '@supercarmarket/ui';
 import theme from 'constants/theme';
 import Image from 'next/image';
 import React from 'react';
@@ -189,12 +189,12 @@ const CarouselItem = ({ idx }: CarouselItemProps) => {
   return (
     <Styled.CarouselImageWrapper key={idx} onClick={() => selectImage(idx)}>
       <Image
-        width={141}
-        height={89}
         alt="image"
         placeholder="blur"
         src={imgSrc[idx]}
         blurDataURL={data?.data.base64}
+        style={{ objectFit: 'contain' }}
+        fill
       />
       {current === idx && (
         <Styled.CheckBox>
