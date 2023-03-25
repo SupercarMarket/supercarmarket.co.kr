@@ -62,7 +62,7 @@ const PartnershipDetail = ({ id }: Props) => {
                       position: relative;
 
                       ${applyMediaQuery('mobile')} {
-                        width: 343px;
+                        width: 100%;
                         height: 257px;
                       }
                     `}
