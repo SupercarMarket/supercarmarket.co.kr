@@ -2,12 +2,7 @@ import { css } from 'styled-components';
 import { ErrorBoundary } from 'react-error-boundary';
 import { InferGetServerSidePropsType, NextPageContext } from 'next/types';
 import { NextPageWithLayout, Params } from '@supercarmarket/types/base';
-import {
-  applyMediaQuery,
-  Category,
-  Searchbar,
-  Wrapper,
-} from '@supercarmarket/ui';
+import { applyMediaQuery, Searchbar, Wrapper } from '@supercarmarket/ui';
 import {
   dehydrate,
   QueryClient,
@@ -21,6 +16,7 @@ import { ErrorFallback } from 'components/fallback';
 import { useSearchKeyword } from 'hooks/useSearchKeyword';
 import { PARTNERSHIP_LINKS } from 'constants/partnership';
 import PartnershipList from 'components/partnership/partnershipList';
+import PartnershipCategory from 'components/partnership/partnershipCategory';
 
 const PartnershipPage: NextPageWithLayout = ({
   category,
@@ -67,7 +63,7 @@ const PartnershipPage: NextPageWithLayout = ({
           />
         </Wrapper.Item>
       </Wrapper.Top>
-      <Category links={PARTNERSHIP_LINKS} category={category} />
+      <PartnershipCategory category={category} />
       <QueryErrorResetBoundary>
         {({ reset }) => (
           <ErrorBoundary

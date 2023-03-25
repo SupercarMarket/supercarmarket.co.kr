@@ -17,19 +17,13 @@ const PartnershipList = (props: PartnershipListProps) => {
     category = 'all',
     keyword,
   } = useUrlQuery();
-  const {
-    data: partnerships,
-    isLoading,
-    isFetching,
-  } = usePartnership({
+  const { data: partnerships } = usePartnership({
     page: String(page),
     pageSize: size,
     region,
     category: _category || category,
     keyword,
   });
-
-  if (isLoading || isFetching) return <div>loading..</div>;
 
   return (
     <Container width="100%">
