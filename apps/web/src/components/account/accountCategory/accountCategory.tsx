@@ -23,9 +23,9 @@ import {
   Table,
   Wrapper,
 } from '@supercarmarket/ui';
-import useRemoveCommunityPost from 'hooks/mutations/community/useRemoveCommunityPost';
 import { useQueryClient } from '@tanstack/react-query';
 import queries from 'constants/queries';
+import { useRemoveCommunityPost } from 'utils/api/community';
 
 interface AccountCategoryProps {
   sub: string;
