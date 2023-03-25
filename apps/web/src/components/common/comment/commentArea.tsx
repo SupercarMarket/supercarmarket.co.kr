@@ -1,10 +1,14 @@
 import { Button, Container, Typography } from '@supercarmarket/ui';
 import { useQueryClient } from '@tanstack/react-query';
-import queries from 'constants/queries';
 import { Session } from 'next-auth';
 import { useSession } from 'next-auth/react';
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
-import { QUERY_KEYS, useAddComment, useUpdateComment } from 'utils/api/comment';
+import {
+  QUERY_KEYS as COMMENT_QUERY_KEYS,
+  useAddComment,
+  useUpdateComment,
+} from 'utils/api/comment';
+import { QUERY_KEYS as COMMUNITY_QUERY_KEYS } from 'utils/api/community';
 
 import {
   CommentAreaBottom,
@@ -45,12 +49,12 @@ const CommentArea = ({
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(QUERY_KEYS.comment(postId));
+        queryClient.invalidateQueries(COMMENT_QUERY_KEYS.comment(postId));
         if (kind === 'partnership') {
         } else if (kind === 'paparazzi')
           queryClient.invalidateQueries({
             queryKey: [
-              ...queries.community.lists(),
+              COMMUNITY_QUERY_KEYS.community(),
               {
                 category: category,
                 page: 0,
@@ -73,7 +77,7 @@ const CommentArea = ({
       },
       {
         onSuccess: () => {
-          queryClient.invalidateQueries(QUERY_KEYS.comment(postId));
+          queryClient.invalidateQueries(COMMENT_QUERY_KEYS.comment(postId));
           if (onSuccess) onSuccess();
         },
       }
