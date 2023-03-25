@@ -40,7 +40,7 @@ export const useCommunityPost = (
 
   return useQuery<ServerResponse<CommunityPostDto>>(
     [
-      ...QUERY_KEYS.detail(id),
+      ...QUERY_KEYS.id(id),
       {
         subject,
         category,

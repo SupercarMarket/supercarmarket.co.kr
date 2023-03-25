@@ -18,7 +18,7 @@ export const useLikeCommunityPost = (
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [
-          ...QUERY_KEYS.detail(id),
+          ...QUERY_KEYS.id(id),
           {
             subject,
             category,

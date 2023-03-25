@@ -9,7 +9,6 @@ import Posting from 'components/common/posting';
 import { ErrorFallback } from 'components/fallback';
 import layout from 'components/layout';
 import { MagazineDealer } from 'components/magazine';
-import queries from 'constants/queries';
 import { ModalProvider } from 'feature/modalContext';
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import dynamic from 'next/dynamic';
@@ -17,7 +16,6 @@ import type { ParsedUrlQuery } from 'querystring';
 import * as React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { css } from 'styled-components';
-import { serverFetcher } from '@supercarmarket/lib';
 import { getSession } from 'utils/api/auth/user';
 import { prefetchMagazinePost, QUERY_KEYS } from 'utils/api/magazine';
 

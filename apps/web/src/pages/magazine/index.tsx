@@ -1,6 +1,5 @@
 import { applyMediaQuery, Container, Title, Wrapper } from '@supercarmarket/ui';
 import type { NextPageWithLayout } from '@supercarmarket/types/base';
-import { clientFetcher } from '@supercarmarket/lib';
 import {
   dehydrate,
   QueryClient,
@@ -9,7 +8,6 @@ import {
 import { ErrorFallback } from 'components/fallback';
 import layout from 'components/layout';
 import { MagazineBanner, MagazineList } from 'components/magazine';
-import queries from 'constants/queries';
 import type { GetStaticProps } from 'next/types';
 import { ErrorBoundary } from 'react-error-boundary';
 import HeadSeo from 'components/common/headSeo';

@@ -1,4 +1,4 @@
-import { clientApi, clientFetcher } from '@supercarmarket/lib';
+import { clientApi, clientFetcher, serverFetcher } from '@supercarmarket/lib';
 
 export const getCommunity = async ({
   query,
@@ -87,5 +87,32 @@ export const deleteCommunityPost = async ({
       ACCESS_TOKEN: token,
     },
     data,
+  });
+};
+
+export const prefetchCommunityPost = async ({
+  id,
+  category,
+  token,
+  boardView,
+}: {
+  id: string;
+  category: string;
+  token?: string;
+  boardView?: string;
+}) => {
+  let headers = {};
+  if (token) headers = { ...headers, ACCESS_TOKEN: token };
+  if (boardView) headers = { ...headers, Cookie: `boardView=${boardView}` };
+
+  return serverFetcher(
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/community/${category}/post-id/${id}`,
+    {
+      method: 'GET',
+      headers,
+    }
+  ).then((res) => {
+    const { ok, status, ...rest } = res;
+    return rest;
   });
 };
