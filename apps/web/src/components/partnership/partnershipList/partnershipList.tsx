@@ -1,5 +1,5 @@
 import { useUrlQuery } from '@supercarmarket/hooks';
-import { Container, Pagination, Table, Wrapper } from '@supercarmarket/ui';
+import { Container, Pagination, Tab, Table, Wrapper } from '@supercarmarket/ui';
 import usePartnership from 'hooks/queries/usePartnership';
 import { css } from 'styled-components';
 import PartnershipCard from '../partnershipCard';
@@ -7,10 +7,11 @@ import PartnershipCard from '../partnershipCard';
 interface PartnershipListProps {
   category: string;
   pagination?: boolean;
+  tab?: boolean;
 }
 
 const PartnershipList = (props: PartnershipListProps) => {
-  const { category: _category, pagination } = props;
+  const { category: _category, pagination, tab } = props;
   const {
     page,
     size = '20',
@@ -44,12 +45,28 @@ const PartnershipList = (props: PartnershipListProps) => {
                 <PartnershipCard key={p.brdSeq} {...p} />
               ))}
           </Wrapper>
+          {tab && (
+            <Wrapper
+              css={css`
+                width: 100%;
+                margin-bottom: 32px;
+              `}
+            >
+              <Tab list={`/partnership?category=${category}`} scroll />
+            </Wrapper>
+          )}
           {pagination && (
-            <Pagination
-              pageSize={partnerships.page}
-              totalCount={partnerships.totalCount}
-              totalPages={partnerships.totalPages}
-            />
+            <Wrapper
+              css={css`
+                margin-bottom: 32px;
+              `}
+            >
+              <Pagination
+                pageSize={partnerships.page}
+                totalCount={partnerships.totalCount}
+                totalPages={partnerships.totalPages}
+              />
+            </Wrapper>
           )}
         </>
       )}

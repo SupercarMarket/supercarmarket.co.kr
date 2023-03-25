@@ -52,18 +52,25 @@ const PartnershipDetailPage: NextPageWithLayout = ({
                 margin-bottom: 160px;
               `}
             >
-              <Searchbar
-                variant="Line"
-                width="540px"
-                placeholder="검색어를 입력하세요"
-                ref={keywordRef}
-                onKeyDown={keydownHandler}
-              />
+              <Wrapper
+                css={css`
+                  width: 504px;
+                  ${applyMediaQuery('mobile')} {
+                    width: 240px;
+                  }
+                `}
+              >
+                <Searchbar
+                  variant="Line"
+                  placeholder="검색어를 입력하세요"
+                  onKeyDown={keydownHandler}
+                  ref={keywordRef}
+                />
+              </Wrapper>
             </Wrapper>
           </>
         )}
       </QueryErrorResetBoundary>
-      <Tab list={`/partnership?category=${category}`} scroll />
     </Wrapper>
   );
 };
