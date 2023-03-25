@@ -32,6 +32,10 @@ const PartnershipDetail = ({ id }: Props) => {
           <Wrapper.Top
             css={css`
               margin-bottom: 80px;
+
+              ${applyMediaQuery('mobile')} {
+                margin-bottom: 32px;
+              }
             `}
           >
             <Carousel
@@ -47,10 +51,24 @@ const PartnershipDetail = ({ id }: Props) => {
 
                     ${applyMediaQuery('mobile')} {
                       flex-direction: column-reverse;
+                      gap: 34px;
                     }
                   `}
                 >
-                  <Carousel.CarouselMainImage width={578} height={386} />
+                  <Wrapper.Item
+                    css={css`
+                      width: 578px;
+                      height: 386px;
+                      position: relative;
+
+                      ${applyMediaQuery('mobile')} {
+                        width: 343px;
+                        height: 257px;
+                      }
+                    `}
+                  >
+                    <Carousel.CarouselMainImage />
+                  </Wrapper.Item>
                   <PartnershipDetailCard info={partnerships.data} />
                 </Wrapper.Top>
               </Carousel.CarouselTop>
