@@ -1,15 +1,15 @@
 import { Container, Typography, Wrapper } from '@supercarmarket/ui';
-import type { MagazineDto } from '@supercarmarket/types/magazine';
+import { type MagazineDto } from '@supercarmarket/types/magazine';
 import { MagazineBanner } from 'components/magazine';
 import MagazineCard from 'components/magazine/magazineList/magazineCard';
-import useHome from 'hooks/queries/useHome';
 import { css } from 'styled-components';
 import { applyMediaQuery } from 'styles/mediaQuery';
 
 import RouterButton from '../routerButton';
+import { useHome } from 'utils/api/home';
 
 const Magazine = () => {
-  const { data: magazine } = useHome<MagazineDto>('magazine');
+  const { data: magazine } = useHome<MagazineDto[]>('magazine');
   return (
     <Container
       display="flex"

@@ -1,3 +1,4 @@
+import { type PaginationResponse } from '@supercarmarket/types/base';
 import type { CommunityDto } from '@supercarmarket/types/community';
 import {
   Alert,
@@ -9,11 +10,13 @@ import {
 import { CommunityCard } from 'components/community';
 import { css } from 'styled-components';
 
-interface SearchAllProps {
-  data: CommunityDto[];
-}
+type SearchCommunityProps = PaginationResponse<CommunityDto[]>;
 
-const SearchCommunity = ({ data }: SearchAllProps) => {
+const SearchCommunity = ({
+  data,
+  totalCount,
+  totalPages,
+}: SearchCommunityProps) => {
   const isPaparazzi = data && data.length > 0;
 
   return (
@@ -34,7 +37,11 @@ const SearchCommunity = ({ data }: SearchAllProps) => {
           <Alert severity="info" title="검색 결과가 존재하지 않습니다." />
         )}
       </Wrapper>
-      <Pagination pageSize={20} totalCount={4} totalPages={1} />
+      <Pagination
+        pageSize={20}
+        totalCount={totalCount}
+        totalPages={totalPages}
+      />
     </Container>
   );
 };

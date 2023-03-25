@@ -17,6 +17,7 @@ import { CommunityPostingList } from 'components/community';
 import { ModalProvider } from 'feature/modalContext';
 import { css } from 'styled-components';
 import Advertisement from 'components/common/advertisement';
+import { prefetchCommunityPost, QUERY_KEYS } from 'utils/api/community';
 
 const CommunityPost: NextPageWithLayout = ({
   subject,
@@ -74,33 +75,24 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { subject, category, id } = query as Params;
 
   const queryClient = new QueryClient();
-  let headers = {};
   const boardView = req.cookies['boardView'];
 
-  if (boardView) headers = { ...headers, Cookie: `boardView=${boardView}` };
-  if (session) headers = { ...headers, ACCESS_TOKEN: session.accessToken };
-
-  await queryClient.prefetchQuery(
-    [
-      ...queries.community.all,
+  await queryClient.prefetchQuery({
+    queryKey: [
+      ...QUERY_KEYS.id(id),
       {
         subject,
         category,
-        id,
       },
     ],
-    () =>
-      serverFetcher(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/community/${category}/post-id/${id}`,
-        {
-          method: 'GET',
-          headers,
-        }
-      ).then((res) => {
-        const { ok, status, ...rest } = res;
-        return rest;
-      })
-  );
+    queryFn: () =>
+      prefetchCommunityPost({
+        id,
+        category,
+        token: session?.accessToken,
+        boardView,
+      }),
+  });
 
   return {
     props: {

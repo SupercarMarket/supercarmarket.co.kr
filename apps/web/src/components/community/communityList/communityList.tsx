@@ -12,11 +12,11 @@ import {
   Wrapper,
 } from '@supercarmarket/ui';
 import { useUrlQuery } from '@supercarmarket/hooks';
-import useCommunity from 'hooks/queries/community/useCommunity';
 import { css } from 'styled-components';
 import CommunityCard from '../communityCard';
 import { CardSkeleton } from 'components/fallback/loading';
 import { searchTypeFormatter } from '@supercarmarket/lib';
+import { useCommunity } from 'utils/api/community';
 
 interface CommunityListProps {
   category?: string;

@@ -7,14 +7,14 @@ import {
   Wrapper,
 } from '@supercarmarket/ui';
 import { useUrlQuery } from '@supercarmarket/hooks';
-import useMagazine from 'hooks/queries/useMagazine';
 
 import MagazineCard from './magazineCard';
 import { css } from 'styled-components';
+import { useMagazine } from 'utils/api/magazine';
 
 const MagazineList = () => {
-  const { page } = useUrlQuery();
-  const { data: magazine } = useMagazine(page);
+  const { page = 0 } = useUrlQuery();
+  const { data: magazine } = useMagazine({ page });
 
   return (
     <Container display="flex" flexDirection="column" alignItems="center">

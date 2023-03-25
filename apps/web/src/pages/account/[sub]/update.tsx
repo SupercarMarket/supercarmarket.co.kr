@@ -1,12 +1,17 @@
 import { Container, Title } from '@supercarmarket/ui';
-import type { NextPageWithLayout, Params } from '@supercarmarket/types/base';
 import { AccountUpdateForm } from 'components/account';
 import layout from 'components/layout';
-import type { GetServerSideProps } from 'next';
+import { type NextPageWithLayout, Params } from '@supercarmarket/types/base';
+import {
+  type GetServerSideProps,
+  type InferGetServerSidePropsType,
+} from 'next';
 import { getSession } from 'utils/api/auth/user';
 import { ModalProvider } from 'feature/modalContext';
 
-const ProfileUpdate: NextPageWithLayout = () => {
+const ProfileUpdate: NextPageWithLayout = ({
+  sub,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   return (
     <Container
       display="flex"
@@ -16,7 +21,7 @@ const ProfileUpdate: NextPageWithLayout = () => {
     >
       <Title textAlign="center">개인정보 수정</Title>
       <ModalProvider>
-        <AccountUpdateForm />
+        <AccountUpdateForm sub={sub} />
       </ModalProvider>
     </Container>
   );

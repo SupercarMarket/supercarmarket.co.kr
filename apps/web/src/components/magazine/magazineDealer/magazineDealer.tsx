@@ -14,9 +14,9 @@ import { css } from 'styled-components';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import queries from 'constants/queries';
 import { clientFetcher } from '@supercarmarket/lib';
 import { ServerResponse } from '@supercarmarket/types/base';
+import { QUERY_KEYS, useMagazineInquiry } from 'utils/api/magazine';
 
 interface MagazineDealerProps {
   postId: string;
@@ -25,8 +25,11 @@ interface MagazineDealerProps {
 const MagazineDealer = ({ postId }: MagazineDealerProps) => {
   const queryClient = useQueryClient();
   const session = useSession();
+  const [error, setError] = React.useState<string | null>(null);
+  const { onOpen, onClose } = React.useContext(ModalContext);
+  const { push } = useRouter();
   const { data: userInfo } = useQuery<ServerResponse<{ phone: string }>>({
-    queryKey: [...queries.magazine.all, 'phone'],
+    queryKey: ['magazine', 'phone'],
     queryFn: () =>
       clientFetcher('/server/supercar/v1/user/phone', {
         method: 'GET',
@@ -36,30 +39,23 @@ const MagazineDealer = ({ postId }: MagazineDealerProps) => {
       }),
     enabled: session.status === 'authenticated',
   });
-  const [error, setError] = React.useState<string | null>(null);
-  const { onOpen, onClose } = React.useContext(ModalContext);
-  const { push } = useRouter();
+  const { mutate: inquiryMutation } = useMagazineInquiry(postId, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(QUERY_KEYS.id(postId));
+    },
+    onError: (error: Error) => {
+      setError(error.message);
+    },
+  });
 
   const handleInquiry = React.useCallback(async () => {
     setError(null);
     onClose();
 
-    if (!session) return;
+    if (session.status !== 'authenticated') return;
 
-    await clientFetcher(`/server/supercar/v1/magazine/${postId}/inquiry`, {
-      method: 'POST',
-      headers: {
-        ACCESS_TOKEN: session.data?.accessToken || '',
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(() => {
-        queryClient.invalidateQueries(queries.magazine.id(postId));
-      })
-      .catch((error) => {
-        setError(error.message);
-      });
-  }, [onClose, postId, queryClient, session]);
+    inquiryMutation(session.data.accessToken || '');
+  }, [inquiryMutation, onClose, session]);
 
   const onModal = React.useCallback(() => {
     if (session && session.data && userInfo)

@@ -12,7 +12,6 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
 import KakaoProvider from 'next-auth/providers/kakao';
 import { isExpire, refreshToken } from 'utils/api/auth/token';
-import { baseFetcher } from 'utils/api/fetcher';
 
 const providers: Provider[] = [
   /*
@@ -203,17 +202,19 @@ const callbacks: Partial<CallbacksOptions<Profile, Account>> | undefined = {
   async signIn({ user, account }) {
     if (account?.type === 'oauth') {
       const { nickname, provider, email, picture, sub } = user;
-      const oauth = await baseFetcher(
+      const { status, ok, ...oauth } = await serverApi(
         `${process.env.NEXT_PUBLIC_URL}/api/auth/user/oauth`,
         {
           headers: { 'Content-Type': 'application/json' },
           method: 'POST',
-          body: JSON.stringify({ nickname, provider, email, picture, sub }),
+          data: { nickname, provider, email, picture, sub },
           query: {
             provider,
           },
         }
       );
+
+      if (!ok) throw new SupercarMarketApiError(status);
 
       const {
         data: { newUser, token, access_token, refresh_token, exp, user: _user },

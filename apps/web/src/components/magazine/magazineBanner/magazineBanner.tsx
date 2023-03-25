@@ -5,13 +5,8 @@ import {
   Wrapper,
   applyMediaQuery,
 } from '@supercarmarket/ui';
-import type {
-  MagazineDto,
-  MagazineResponse,
-  WithBlurredImage,
-} from '@supercarmarket/types/magazine';
+import type { MagazineDto } from '@supercarmarket/types/magazine';
 import clsx from 'clsx';
-import useMagazine from 'hooks/queries/useMagazine';
 import Image from 'next/image';
 import { css } from 'styled-components';
 
@@ -19,12 +14,14 @@ import Arrow from '../../../assets/svg/arrow-right.svg';
 import Link from 'next/link';
 import useBase64 from 'hooks/queries/useBase64';
 import Skeleton from 'react-loading-skeleton';
+import { ServerResponse } from '@supercarmarket/types/base';
+import { useMagazine } from 'utils/api/magazine';
 
 interface MagazineBannerProps {
   reverse?: boolean;
   className?: string;
   button?: boolean;
-  initialData?: MagazineResponse<WithBlurredImage<MagazineDto>>;
+  initialData?: ServerResponse<MagazineDto[]>;
 }
 
 const baseSrc = `${process.env.NEXT_PUBLIC_URL}/images/base.png`;
@@ -35,9 +32,12 @@ const MagazineBanner = ({
   className,
   initialData,
 }: MagazineBannerProps) => {
-  const { data: magazine } = useMagazine(0, {
-    initialData,
-  });
+  const { data: magazine } = useMagazine(
+    { page: 0 },
+    {
+      initialData,
+    }
+  );
   const {
     data: base64,
     isFetching,
