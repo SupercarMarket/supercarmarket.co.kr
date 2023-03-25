@@ -23,7 +23,7 @@ interface CommentAreaProps {
   parentId?: string;
   type?: CommentAreaType;
   defaultValue?: string;
-  kind?: 'magazine' | 'paparazzi' | 'partnership';
+  kind?: 'magazine' | 'paparazzi' | 'partnership' | 'download';
   category: string;
   session: Session | null;
   onSuccess?: () => void;

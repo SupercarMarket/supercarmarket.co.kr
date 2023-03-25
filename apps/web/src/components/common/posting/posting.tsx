@@ -20,7 +20,6 @@ import AuthModal from '../modal/authModal';
 import LikeIcon from '../../../assets/svg/thumb-up.svg';
 import HeadSeo from '../headSeo/headSeo';
 import { useQueryClient } from '@tanstack/react-query';
-import queries from 'constants/queries';
 import { MagazineScrape } from 'components/magazine';
 import {
   QUERY_KEYS,
@@ -43,7 +42,7 @@ export interface PostingProps {
   postId: string;
   type: PostingType;
   category?: string;
-  subject?: 'magazine' | 'paparazzi' | 'partnership';
+  subject?: 'magazine' | 'paparazzi' | 'partnership' | 'library';
 }
 
 const Posting = function Posting(props: PostingProps) {
@@ -284,7 +283,10 @@ const CommunityPosting = ({
                   </Wrapper.Item>
                 </Button>
               </Wrapper>
-              <Comment id={postId} kind={subject} />
+              <Comment
+                id={postId}
+                kind={subject === 'library' ? 'download' : 'paparazzi'}
+              />
               <Wrapper
                 css={css`
                   width: 100%;

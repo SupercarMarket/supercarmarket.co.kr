@@ -10,7 +10,7 @@ import { useComment } from 'utils/api/comment';
 
 interface CommentProps {
   id: string;
-  kind?: 'magazine' | 'paparazzi' | 'partnership';
+  kind?: 'magazine' | 'paparazzi' | 'partnership' | 'download';
 }
 
 const Comment = ({ id, kind = 'magazine' }: CommentProps) => {

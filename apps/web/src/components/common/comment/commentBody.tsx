@@ -41,7 +41,7 @@ const CommentCard = ({
   postId: string;
   category: string;
   session: Session | null;
-  kind: 'magazine' | 'paparazzi' | 'partnership';
+  kind: 'magazine' | 'paparazzi' | 'partnership' | 'download';
 }) => {
   const { mutate: likeMuate } = useLikeComment({
     category: kind,
@@ -373,7 +373,7 @@ const CommentBody = ({
 }: {
   postId: string;
   comments: Comment[];
-  kind?: 'magazine' | 'paparazzi' | 'partnership';
+  kind?: 'magazine' | 'paparazzi' | 'partnership' | 'download';
   category: string;
   session: Session | null;
 }) => {
