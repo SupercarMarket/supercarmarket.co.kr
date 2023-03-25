@@ -70,7 +70,7 @@ const PartnershipPage: NextPageWithLayout = ({
             onReset={reset}
             fallbackRender={(props) => <ErrorFallback {...props} />}
           >
-            <PartnershipList category={category} />
+            <PartnershipList category={category} pagination />
           </ErrorBoundary>
         )}
       </QueryErrorResetBoundary>

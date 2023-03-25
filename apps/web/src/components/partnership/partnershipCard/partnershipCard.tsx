@@ -1,4 +1,9 @@
-import { Container, Typography, Wrapper } from '@supercarmarket/ui';
+import {
+  applyMediaQuery,
+  Container,
+  Typography,
+  Wrapper,
+} from '@supercarmarket/ui';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
@@ -24,6 +29,7 @@ const PartnershipCard = ({
       display="flex"
       alignItems="center"
       borderBottom="1px solid #EAEAEC"
+      padding="0 0 6px 0"
     >
       <Link
         href={`/partnership/${category.toLowerCase()}/${brdSeq}`}
@@ -32,61 +38,126 @@ const PartnershipCard = ({
           alignItems: 'center',
         }}
       >
-        <Image
-          width={196}
-          height={124}
-          placeholder={base64 ? 'blur' : undefined}
-          blurDataURL={base64 ? base64 : undefined}
-          src={imgSrc}
-          alt="thumbnail"
-          style={{ borderRadius: '4px' }}
-          sizes="100%"
-        />
-        <Wrapper.Item
+        <Wrapper
           css={css`
-            flex: 1;
-            width: 403px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            gap: 12px;
-          `}
-        >
-          <Typography
-            fontSize="body-24"
-            fontWeight="bold"
-            style={{ padding: '0 30px' }}
-          >
-            {partnerName}
-          </Typography>
-          <Typography
-            fontSize="body-14"
-            color="greyScale-5"
-            style={{ padding: '0 30px' }}
-          >
-            {address}
-          </Typography>
-        </Wrapper.Item>
-        <Wrapper.Item
-          css={css`
-            display: flex;
-            & > span {
-              text-align: center;
+            width: 196px;
+            height: 124px;
+            position: relative;
+
+            ${applyMediaQuery('mobile')} {
+              width: 64px;
+              height: 64px;
+              object-fit: cover;
             }
           `}
         >
-          <Typography fontSize="body-14" style={{ width: '120px' }}>
-            {category}
-          </Typography>
-          <Typography fontSize="body-14" style={{ width: '119px' }}>
-            {workTime}
-          </Typography>
-          <Typography fontSize="body-14" style={{ width: '142px' }}>
-            {phone}
-          </Typography>
-          <Typography fontSize="body-14" style={{ width: '137px' }}>
-            {address.split(' ').slice(0, 2).join(' ')}
-          </Typography>
+          <Image
+            placeholder={base64 ? 'blur' : undefined}
+            blurDataURL={base64 ? base64 : undefined}
+            src={imgSrc}
+            alt="thumbnail"
+            style={{ borderRadius: '4px', objectFit: 'cover' }}
+            fill
+          />
+        </Wrapper>
+        <Wrapper.Item
+          css={css`
+            display: flex;
+
+            ${applyMediaQuery('mobile')} {
+              flex-direction: column;
+              gap: 4px;
+            }
+          `}
+        >
+          <Wrapper.Item
+            css={css`
+              ${({ theme }) => css`
+                flex: 1;
+                width: 403px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                gap: 12px;
+                padding-left: 30px;
+
+                .title {
+                  font-size: ${theme.fontSize['body-24']};
+                  font-weight: ${theme.fontWeight.bold};
+                }
+
+                .address {
+                  font-size: ${theme.fontSize['body-14']};
+                  color: ${theme.color['greyScale-5']};
+                }
+
+                ${applyMediaQuery('mobile')} {
+                  gap: 4px;
+                  padding-left: 12px;
+
+                  .title {
+                    font-size: ${theme.fontSize['body-14']};
+                  }
+                  .address {
+                    font-size: ${theme.fontSize['body-12']};
+                  }
+                }
+              `}
+            `}
+          >
+            <p className="title">{partnerName}</p>
+            <p className="address">{address}</p>
+          </Wrapper.Item>
+          <Wrapper.Item
+            css={css`
+              ${({ theme }) => css`
+                display: flex;
+                font-size: ${theme.fontSize['body-14']};
+                padding-left: 30px;
+
+                .category {
+                  width: 120px;
+                }
+                .work-time {
+                  width: 119px;
+                }
+                .phone {
+                  width: 142px;
+                }
+                .address {
+                  width: 137px;
+                }
+                .vertical-bar {
+                  display: none;
+                }
+                ${applyMediaQuery('mobile')} {
+                  padding-left: 12px;
+                  gap: 8px;
+
+                  .category,
+                  .work-time,
+                  .phone {
+                    width: auto;
+                  }
+                  .address {
+                    display: none;
+                  }
+                  .vertical-bar {
+                    display: block;
+                  }
+                }
+              `}
+            `}
+          >
+            <p className="category">{category}</p>
+            <p className="vertical-bar">|</p>
+            <p className="work-time">{workTime}</p>
+            <p className="vertical-bar">|</p>
+            <p className="phone">{phone}</p>
+            <p className="address">
+              {address.split(' ').slice(0, 2).join(' ')}
+            </p>
+          </Wrapper.Item>
         </Wrapper.Item>
       </Link>
       <Link
