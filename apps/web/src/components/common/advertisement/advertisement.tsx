@@ -32,6 +32,8 @@ const Advertisement = (props: AdvertisementProps) => {
               margin-top: 0;
               margin-bottom: 32px;
               div {
+                width: 100vw;
+                margin-left: calc(-50vw + 50%);
                 height: 100px;
               }
             }
@@ -60,6 +62,9 @@ const Advertisement = (props: AdvertisementProps) => {
             height: 100%;
             background-color: ${({ theme }) => theme.color['greyScale-3']};
           }
+          ${applyMediaQuery('mobile')} {
+            display: none;
+          }
         `}
       >
         <div />
@@ -75,6 +80,9 @@ const Advertisement = (props: AdvertisementProps) => {
             width: 100%;
             height: 100%;
             background-color: ${({ theme }) => theme.color['greyScale-3']};
+          }
+          ${applyMediaQuery('mobile')} {
+            display: none;
           }
         `}
       >
