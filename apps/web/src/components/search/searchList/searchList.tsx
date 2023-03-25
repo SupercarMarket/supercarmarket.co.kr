@@ -1,7 +1,7 @@
 import { useUrlQuery } from '@supercarmarket/hooks';
 import type { SearchAll as SearchAllType } from '@supercarmarket/types/search';
 import { Container } from '@supercarmarket/ui';
-import useSearch from 'hooks/queries/useSearch';
+import { useSearch } from 'utils/api/search';
 import {
   SearchAll,
   SearchCommunity,
@@ -11,23 +11,24 @@ import {
 } from '..';
 import SearchNotify from '../searchNotify';
 
-const SearchList = () => {
-  const {
-    category = 'null',
-    keyword = '',
-    orderBy,
-    filter,
-    page,
-  } = useUrlQuery();
-  const { data } = useSearch({
-    keyword: keyword ?? 'null',
-    orderBy: orderBy,
-    filter: filter,
-    category: category,
-    page,
-  });
+interface SearchListProps {
+  keyword: string;
+}
 
-  console.log(data, category);
+const SearchList = (props: SearchListProps) => {
+  const { keyword } = props;
+  const { category = 'all', keyword: _keyword, filter, page } = useUrlQuery();
+  const { data } = useSearch(
+    {
+      keyword: keyword ?? _keyword,
+      filter: filter,
+      category: category,
+      page,
+    },
+    {
+      staleTime: 1000 * 60,
+    }
+  );
 
   return (
     <Container>
@@ -43,9 +44,9 @@ const SearchList = () => {
                   data={data.data as SearchAllType}
                 />
               ),
-              product: <SearchMarket data={data.data.product} />,
-              paparazzi: <SearchCommunity data={data.data.paparazzi} />,
-              magazine: <SearchMagazine data={data.data.magazine} />,
+              product: <SearchMarket data={data.data} />,
+              community: <SearchCommunity data={data.data} />,
+              magazine: <SearchMagazine data={data.data} />,
             }[category]
           }
         </>
