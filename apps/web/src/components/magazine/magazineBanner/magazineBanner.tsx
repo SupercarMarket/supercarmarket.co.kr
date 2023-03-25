@@ -7,7 +7,6 @@ import {
 } from '@supercarmarket/ui';
 import type { MagazineDto } from '@supercarmarket/types/magazine';
 import clsx from 'clsx';
-import useMagazine from 'hooks/queries/useMagazine';
 import Image from 'next/image';
 import { css } from 'styled-components';
 
@@ -16,6 +15,7 @@ import Link from 'next/link';
 import useBase64 from 'hooks/queries/useBase64';
 import Skeleton from 'react-loading-skeleton';
 import { ServerResponse } from '@supercarmarket/types/base';
+import { useMagazine } from 'utils/api/magazine';
 
 interface MagazineBannerProps {
   reverse?: boolean;
@@ -32,9 +32,12 @@ const MagazineBanner = ({
   className,
   initialData,
 }: MagazineBannerProps) => {
-  const { data: magazine } = useMagazine(0, {
-    initialData,
-  });
+  const { data: magazine } = useMagazine(
+    { page: 0 },
+    {
+      initialData,
+    }
+  );
   const {
     data: base64,
     isFetching,

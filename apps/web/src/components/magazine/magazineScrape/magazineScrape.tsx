@@ -1,8 +1,8 @@
 import { Button, Typography, Wrapper } from '@supercarmarket/ui';
-import useMagazineScrape from 'hooks/mutations/magazine/useMagazineScrape';
 import { useSession } from 'next-auth/react';
 import * as React from 'react';
 import { css } from 'styled-components';
+import { useMagazineScrap } from 'utils/api/magazine';
 
 interface MagazineScrapeProps {
   isScraped: boolean;
@@ -35,11 +35,11 @@ const Star = ({ isScraped }: MagazineScrapeProps) => {
 
 const MagazineScrape = ({ postId, isScraped }: MagazineScrapeProps) => {
   const session = useSession();
-  const { mutate } = useMagazineScrape(postId, session.data?.accessToken);
+  const { mutate } = useMagazineScrap(postId);
 
   const handleScrape = React.useCallback(() => {
     if (session.status !== 'authenticated') return;
-    mutate();
+    mutate(session.data.accessToken);
   }, [mutate, session]);
 
   return (

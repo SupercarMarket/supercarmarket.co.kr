@@ -19,6 +19,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { css } from 'styled-components';
 import { serverFetcher } from '@supercarmarket/lib';
 import { getSession } from 'utils/api/auth/user';
+import { prefetchMagazinePost, QUERY_KEYS } from 'utils/api/magazine';
 
 const Comment = dynamic(() => import('components/common/comment'), {
   ssr: false,
@@ -79,26 +80,13 @@ export const getServerSideProps: GetServerSideProps = async ({
 
   const queryClient = new QueryClient();
 
-  let headers = {};
   const boardView = req.cookies['boardView'];
 
-  if (session) headers = { ...headers, ACCESS_TOKEN: session.accessToken };
-  if (boardView) headers = { ...headers, Cookie: `boardView=${boardView}` };
-
-  await queryClient.prefetchQuery(queries.magazine.id(id), () =>
-    serverFetcher(
-      `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/magazine`,
-      {
-        method: 'GET',
-        headers,
-        params: id,
-      }
-    ).then((res) => {
-      const { ok, status, ...rest } = res;
-
-      return rest;
-    })
-  );
+  await queryClient.prefetchQuery({
+    queryKey: QUERY_KEYS.id(id),
+    queryFn: () =>
+      prefetchMagazinePost({ id, token: session?.accessToken, boardView }),
+  });
 
   return {
     props: {

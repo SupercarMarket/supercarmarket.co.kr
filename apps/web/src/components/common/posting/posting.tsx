@@ -8,7 +8,6 @@ import {
 } from '@supercarmarket/ui';
 import { useRouter } from 'next/navigation';
 
-import useMagazinePost from 'hooks/queries/useMagazinePost';
 import { useSession } from 'next-auth/react';
 import * as React from 'react';
 import { css } from 'styled-components';
@@ -28,6 +27,7 @@ import {
   useLikeCommunityPost,
   useRemoveCommunityPost,
 } from 'utils/api/community';
+import { useMagazinePost } from 'utils/api/magazine';
 
 const PostingBody = dynamic(() => import('./postingBody'), {
   ssr: false,
