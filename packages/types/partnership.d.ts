@@ -1,6 +1,6 @@
 interface PartnershipDto {
   brdSeq: string;
-  partnerName: string;
+  companyName: string;
   description: string;
   category: string;
   workTime: string;
@@ -19,9 +19,9 @@ interface PartnershipResponse<T> {
 }
 
 type PartnershipDetailDto<T> = Omit<PartnershipDto, 'imgSrc'> & {
-  owner: string;
+  representative: string;
   address: string;
-  production: string;
+  treatedItem: string;
   tel?: string;
   introduction: string;
   imgSrc: T[];

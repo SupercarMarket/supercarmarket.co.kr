@@ -4,7 +4,7 @@ import React from 'react';
 import PartnershipDetailCard from '../partnershipDetailCard/partnershipDetailCard';
 import PartnershipIntroduction from '../partnershipIntroduction/partnershipIntroduction';
 import Comment from 'components/common/comment/comment';
-import { Wrapper } from '@supercarmarket/ui';
+import { applyMediaQuery, Wrapper } from '@supercarmarket/ui';
 import { css } from 'styled-components';
 import { PartnershipDetailSkeleton } from 'components/fallback/loading';
 
@@ -40,8 +40,19 @@ const PartnershipDetail = ({ id }: Props) => {
               imgSrc={partnerships.data.imgSrc}
             >
               <Carousel.CarouselTop>
-                <Carousel.CarouselMainImage width={578} height={386} />
-                <PartnershipDetailCard info={partnerships.data} />
+                <Wrapper.Top
+                  css={css`
+                    display: flex;
+                    width: 100%;
+
+                    ${applyMediaQuery('mobile')} {
+                      flex-direction: column-reverse;
+                    }
+                  `}
+                >
+                  <Carousel.CarouselMainImage width={578} height={386} />
+                  <PartnershipDetailCard info={partnerships.data} />
+                </Wrapper.Top>
               </Carousel.CarouselTop>
               <Carousel.CarouselBottom />
             </Carousel>

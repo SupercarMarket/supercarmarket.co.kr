@@ -15,7 +15,7 @@ import { PartnershipDto } from '@supercarmarket/types/partnership';
 const PartnershipCard = ({
   brdSeq,
   base64,
-  partnerName,
+  companyName,
   category,
   workTime,
   phone,
@@ -29,7 +29,7 @@ const PartnershipCard = ({
       display="flex"
       alignItems="center"
       borderBottom="1px solid #EAEAEC"
-      padding="0 0 6px 0"
+      padding="6px 0"
     >
       <Link
         href={`/partnership/${category.toLowerCase()}/${brdSeq}`}
@@ -79,6 +79,7 @@ const PartnershipCard = ({
                 flex-direction: column;
                 justify-content: center;
                 gap: 12px;
+                box-sizing: border-box;
                 padding-left: 30px;
 
                 .title {
@@ -92,6 +93,7 @@ const PartnershipCard = ({
                 }
 
                 ${applyMediaQuery('mobile')} {
+                  width: 100%;
                   gap: 4px;
                   padding-left: 12px;
 
@@ -105,7 +107,7 @@ const PartnershipCard = ({
               `}
             `}
           >
-            <p className="title">{partnerName}</p>
+            <p className="title">{companyName}</p>
             <p className="address">{address}</p>
           </Wrapper.Item>
           <Wrapper.Item
@@ -113,7 +115,10 @@ const PartnershipCard = ({
               ${({ theme }) => css`
                 display: flex;
                 font-size: ${theme.fontSize['body-14']};
-                padding-left: 30px;
+                padding-left: 0;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
 
                 .category {
                   width: 120px;
@@ -160,24 +165,32 @@ const PartnershipCard = ({
           </Wrapper.Item>
         </Wrapper.Item>
       </Link>
-      <Link
-        href={siteUrl}
-        style={{
-          display: 'inline-block',
-          width: '80px',
-          textAlign: 'center',
-          cursor: 'pointer',
-        }}
+      <Wrapper
+        css={css`
+          ${applyMediaQuery('mobile')} {
+            display: none;
+          }
+        `}
       >
-        <Typography
-          fontSize="body-14"
+        <Link
+          href={siteUrl}
           style={{
-            textDecorationLine: 'underline',
+            display: 'inline-block',
+            width: '80px',
+            textAlign: 'center',
+            cursor: 'pointer',
           }}
         >
-          바로가기
-        </Typography>
-      </Link>
+          <Typography
+            fontSize="body-14"
+            style={{
+              textDecorationLine: 'underline',
+            }}
+          >
+            바로가기
+          </Typography>
+        </Link>
+      </Wrapper>
     </Container>
   );
 };

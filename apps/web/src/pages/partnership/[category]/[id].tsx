@@ -31,7 +31,7 @@ const PartnershipDetailPage: NextPageWithLayout = ({
         flex-direction: column;
         margin: 20px 0 0 0;
         ${applyMediaQuery('mobile')} {
-          padding: 0 16px;
+          width: 100%;
         }
       `}
     >
