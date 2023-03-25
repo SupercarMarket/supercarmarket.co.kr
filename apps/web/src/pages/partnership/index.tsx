@@ -17,6 +17,7 @@ import { useSearchKeyword } from 'hooks/useSearchKeyword';
 import { PARTNERSHIP_LINKS } from 'constants/partnership';
 import PartnershipList from 'components/partnership/partnershipList';
 import PartnershipCategory from 'components/partnership/partnershipCategory';
+import Advertisement from 'components/common/advertisement';
 
 const PartnershipPage: NextPageWithLayout = ({
   category,
@@ -33,6 +34,7 @@ const PartnershipPage: NextPageWithLayout = ({
         }
       `}
     >
+      <Advertisement />
       <Banner
         title="제휴업체 등록을 원하시나요?"
         btnTitle="등록 문의하기"

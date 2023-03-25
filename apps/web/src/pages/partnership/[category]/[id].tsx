@@ -6,7 +6,13 @@ import {
   QueryClient,
   QueryErrorResetBoundary,
 } from '@tanstack/react-query';
-import { applyMediaQuery, Searchbar, Tab, Wrapper } from '@supercarmarket/ui';
+import {
+  applyMediaQuery,
+  Container,
+  Searchbar,
+  Tab,
+  Wrapper,
+} from '@supercarmarket/ui';
 import { ErrorBoundary } from 'react-error-boundary';
 import Layout from 'components/layout';
 import { ErrorFallback } from 'components/fallback';
@@ -14,6 +20,7 @@ import { useSearchKeyword } from 'hooks/useSearchKeyword';
 import { serverFetcher } from '@supercarmarket/lib';
 import queries from 'constants/queries';
 import PartnershipContents from 'components/partnership/partnershipContents';
+import Advertisement from 'components/common/advertisement';
 
 const PartnershipDetailPage: NextPageWithLayout = ({
   id,
@@ -24,54 +31,57 @@ const PartnershipDetailPage: NextPageWithLayout = ({
   });
 
   return (
-    <Wrapper
-      css={css`
-        width: 1200px;
-        display: flex;
-        flex-direction: column;
-        margin: 20px 0 0 0;
-        ${applyMediaQuery('mobile')} {
-          width: 100%;
-        }
-      `}
-    >
-      <QueryErrorResetBoundary>
-        {({ reset }) => (
-          <>
-            <ErrorBoundary
-              onReset={reset}
-              fallbackRender={(props) => <ErrorFallback {...props} />}
-            >
-              <PartnershipContents id={id} category={category} />
-            </ErrorBoundary>
-            <Wrapper
-              css={css`
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                margin-bottom: 160px;
-              `}
-            >
+    <Container>
+      <Advertisement />
+      <Wrapper
+        css={css`
+          width: 1200px;
+          display: flex;
+          flex-direction: column;
+          margin: 20px 0 0 0;
+          ${applyMediaQuery('mobile')} {
+            width: 100%;
+          }
+        `}
+      >
+        <QueryErrorResetBoundary>
+          {({ reset }) => (
+            <>
+              <ErrorBoundary
+                onReset={reset}
+                fallbackRender={(props) => <ErrorFallback {...props} />}
+              >
+                <PartnershipContents id={id} category={category} />
+              </ErrorBoundary>
               <Wrapper
                 css={css`
-                  width: 504px;
-                  ${applyMediaQuery('mobile')} {
-                    width: 240px;
-                  }
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  margin-bottom: 160px;
                 `}
               >
-                <Searchbar
-                  variant="Line"
-                  placeholder="검색어를 입력하세요"
-                  onKeyDown={keydownHandler}
-                  ref={keywordRef}
-                />
+                <Wrapper
+                  css={css`
+                    width: 504px;
+                    ${applyMediaQuery('mobile')} {
+                      width: 240px;
+                    }
+                  `}
+                >
+                  <Searchbar
+                    variant="Line"
+                    placeholder="검색어를 입력하세요"
+                    onKeyDown={keydownHandler}
+                    ref={keywordRef}
+                  />
+                </Wrapper>
               </Wrapper>
-            </Wrapper>
-          </>
-        )}
-      </QueryErrorResetBoundary>
-    </Wrapper>
+            </>
+          )}
+        </QueryErrorResetBoundary>
+      </Wrapper>
+    </Container>
   );
 };
 

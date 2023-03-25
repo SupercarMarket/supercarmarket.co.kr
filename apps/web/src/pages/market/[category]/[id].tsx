@@ -1,4 +1,10 @@
-import { applyMediaQuery, Searchbar, Tab, Wrapper } from '@supercarmarket/ui';
+import {
+  applyMediaQuery,
+  Container,
+  Searchbar,
+  Tab,
+  Wrapper,
+} from '@supercarmarket/ui';
 import type { NextPageWithLayout, Params } from '@supercarmarket/types/base';
 import {
   dehydrate,
@@ -18,6 +24,7 @@ import { serverFetcher } from '@supercarmarket/lib';
 import { CATEGORY } from 'constants/market';
 import { makeQuery } from 'utils/market/marketQuery';
 import { getSession } from 'utils/api/auth/user';
+import Advertisement from 'components/common/advertisement';
 
 const MarketDetailPage: NextPageWithLayout = ({
   id,
@@ -48,68 +55,71 @@ const MarketDetailPage: NextPageWithLayout = ({
   }, [category]);
 
   return (
-    <Wrapper
-      css={css`
-        width: 1200px;
-        display: flex;
-        flex-direction: column;
-        margin: 20px 0 0 0;
-        ${applyMediaQuery('mobile')} {
-          width: 100%;
-          padding: 0 16px;
-          box-sizing: border-box;
-        }
-      `}
-    >
-      <QueryErrorResetBoundary>
-        {({ reset }) => (
-          <>
-            <ErrorBoundary
-              onReset={reset}
-              fallbackRender={(props) => <ErrorFallback {...props} />}
-            >
-              <MarketContents id={id} />
-            </ErrorBoundary>
-            <Wrapper
-              css={css`
-                width: 100%;
-                margin-bottom: 36px;
-              `}
-            >
-              <Tab list={`/market?category=${listCategory}`} scroll />
-            </Wrapper>
-            <Wrapper
-              css={css`
-                width: 100%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                margin-bottom: 160px;
-                ${applyMediaQuery('mobile')} {
-                  justify-content: center;
-                }
-              `}
-            >
+    <Container>
+      <Advertisement />
+      <Wrapper
+        css={css`
+          width: 1200px;
+          display: flex;
+          flex-direction: column;
+          margin: 20px 0 0 0;
+          ${applyMediaQuery('mobile')} {
+            width: 100%;
+            padding: 0 16px;
+            box-sizing: border-box;
+          }
+        `}
+      >
+        <QueryErrorResetBoundary>
+          {({ reset }) => (
+            <>
+              <ErrorBoundary
+                onReset={reset}
+                fallbackRender={(props) => <ErrorFallback {...props} />}
+              >
+                <MarketContents id={id} />
+              </ErrorBoundary>
               <Wrapper
                 css={css`
-                  width: 504px;
+                  width: 100%;
+                  margin-bottom: 36px;
+                `}
+              >
+                <Tab list={`/market?category=${listCategory}`} scroll />
+              </Wrapper>
+              <Wrapper
+                css={css`
+                  width: 100%;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  margin-bottom: 160px;
                   ${applyMediaQuery('mobile')} {
-                    width: 240px;
+                    justify-content: center;
                   }
                 `}
               >
-                <Searchbar
-                  variant="Line"
-                  placeholder="검색어를 입력하세요"
-                  onKeyDown={keydownHandler}
-                  ref={keywordRef}
-                />
+                <Wrapper
+                  css={css`
+                    width: 504px;
+                    ${applyMediaQuery('mobile')} {
+                      width: 240px;
+                    }
+                  `}
+                >
+                  <Searchbar
+                    variant="Line"
+                    placeholder="검색어를 입력하세요"
+                    onKeyDown={keydownHandler}
+                    ref={keywordRef}
+                  />
+                </Wrapper>
               </Wrapper>
-            </Wrapper>
-          </>
-        )}
-      </QueryErrorResetBoundary>
-    </Wrapper>
+            </>
+          )}
+        </QueryErrorResetBoundary>
+      </Wrapper>
+    </Container>
   );
 };
 

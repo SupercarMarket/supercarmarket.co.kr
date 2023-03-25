@@ -17,6 +17,7 @@ import { useSession } from 'next-auth/react';
 import HeadSeo from 'components/common/headSeo';
 import { useUrlQuery } from '@supercarmarket/hooks';
 import { formatter } from 'components/community/communityCard/communityCard';
+import Advertisement from 'components/common/advertisement';
 
 const CommunityCategory: NextPageWithLayout = () => {
   const { status } = useSession();
@@ -38,6 +39,7 @@ const CommunityCategory: NextPageWithLayout = () => {
                 }
               `}
             >
+              <Advertisement />
               <Title>커뮤니티 인기글</Title>
               <ErrorBoundary
                 onReset={reset}

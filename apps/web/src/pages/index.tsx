@@ -18,6 +18,7 @@ import HeadSeo from 'components/common/headSeo';
 import { APP_NAME } from 'constants/core';
 import { css } from 'styled-components';
 import { serverFetcher } from '@supercarmarket/lib';
+import Advertisement from 'components/common/advertisement';
 
 const Home: NextPageWithLayout = () => {
   return (
@@ -33,6 +34,7 @@ const Home: NextPageWithLayout = () => {
                 }
               `}
             >
+              <Advertisement hidden />
               <Title marginBottom="20px">슈마매거진</Title>
               <ErrorBoundary
                 onReset={reset}

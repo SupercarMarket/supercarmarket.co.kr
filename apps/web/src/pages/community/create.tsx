@@ -11,6 +11,7 @@ import { QueryErrorResetBoundary } from '@tanstack/react-query';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from 'components/fallback';
 import { css } from 'styled-components';
+import Advertisement from 'components/common/advertisement';
 
 const Create: NextPageWithLayout = ({
   temporaryStorage,
@@ -27,6 +28,7 @@ const Create: NextPageWithLayout = ({
               padding: 0 16px;
             `}
           >
+            <Advertisement />
             <Title>게시글 작성</Title>
             <ErrorBoundary
               onReset={reset}

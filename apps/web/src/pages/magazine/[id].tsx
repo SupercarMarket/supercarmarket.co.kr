@@ -19,6 +19,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { css } from 'styled-components';
 import { serverFetcher } from '@supercarmarket/lib';
 import { getSession } from 'utils/api/auth/user';
+import Advertisement from 'components/common/advertisement';
 
 const Comment = dynamic(() => import('components/common/comment'), {
   ssr: false,
@@ -34,6 +35,7 @@ const MagazinePost: NextPageWithLayout = ({
   return (
     <ModalProvider>
       <Container>
+        <Advertisement />
         <QueryErrorResetBoundary>
           {({ reset }) => (
             <Wrapper

@@ -14,6 +14,7 @@ import type { GetStaticProps } from 'next/types';
 import { ErrorBoundary } from 'react-error-boundary';
 import HeadSeo from 'components/common/headSeo';
 import { css } from 'styled-components';
+import Advertisement from 'components/common/advertisement';
 
 const MagazinePage: NextPageWithLayout = () => {
   return (
@@ -22,6 +23,7 @@ const MagazinePage: NextPageWithLayout = () => {
         title="슈마매거진"
         description="슈퍼카에 대한 모든 최신소식을 만나보세요!"
       />
+      <Advertisement />
       <Container margin="20px 0 0 0">
         <QueryErrorResetBoundary>
           {({ reset }) => (
