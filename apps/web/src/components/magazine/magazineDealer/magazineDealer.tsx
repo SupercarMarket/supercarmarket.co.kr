@@ -14,7 +14,6 @@ import { css } from 'styled-components';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import queries from 'constants/queries';
 import { clientFetcher } from '@supercarmarket/lib';
 import { ServerResponse } from '@supercarmarket/types/base';
 import { QUERY_KEYS, useMagazineInquiry } from 'utils/api/magazine';
@@ -30,7 +29,7 @@ const MagazineDealer = ({ postId }: MagazineDealerProps) => {
   const { onOpen, onClose } = React.useContext(ModalContext);
   const { push } = useRouter();
   const { data: userInfo } = useQuery<ServerResponse<{ phone: string }>>({
-    queryKey: [...queries.magazine.all, 'phone'],
+    queryKey: ['magazine', 'phone'],
     queryFn: () =>
       clientFetcher('/server/supercar/v1/user/phone', {
         method: 'GET',
