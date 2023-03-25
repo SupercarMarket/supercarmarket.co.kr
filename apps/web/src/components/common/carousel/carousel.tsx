@@ -1,4 +1,4 @@
-import { Wrapper } from '@supercarmarket/ui';
+import { applyMediaQuery, Wrapper } from '@supercarmarket/ui';
 import theme from 'constants/theme';
 import Image from 'next/image';
 import React from 'react';
@@ -98,15 +98,7 @@ const CarouselTop = ({ children }: CarouselTopProps) => {
   return <Wrapper.Top css={Styled.top}>{children}</Wrapper.Top>;
 };
 
-interface CarouselMainImageProps {
-  width?: number;
-  height?: number;
-}
-
-const CarouselMainImage = ({
-  width = 1200,
-  height = 757,
-}: CarouselMainImageProps) => {
+const CarouselMainImage = () => {
   const { carouselId, imgSrc, current } =
     useCarouselContext('CarouselMainImage');
   const { data, isFetching, isLoading } = useBase64(imgSrc[current], {
@@ -121,18 +113,21 @@ const CarouselMainImage = ({
       css={css`
         opacity: 0;
         animation: ${fadeIn} 0.5s ease-in-out forwards;
+        position: relative;
+        width: 100%;
+        height: 100%;
       `}
     >
       {isFetching || isLoading ? (
-        <Skeleton width={width} height={height} />
+        <Skeleton />
       ) : (
         <Image
-          width={width}
-          height={height}
-          alt="image"
           placeholder="blur"
           src={imgSrc[current]}
           blurDataURL={data?.data.base64}
+          alt="image"
+          style={{ objectFit: 'contain' }}
+          fill
         />
       )}
     </Wrapper.Left>
@@ -194,12 +189,12 @@ const CarouselItem = ({ idx }: CarouselItemProps) => {
   return (
     <Styled.CarouselImageWrapper key={idx} onClick={() => selectImage(idx)}>
       <Image
-        width={141}
-        height={89}
         alt="image"
         placeholder="blur"
         src={imgSrc[idx]}
         blurDataURL={data?.data.base64}
+        style={{ objectFit: 'contain' }}
+        fill
       />
       {current === idx && (
         <Styled.CheckBox>

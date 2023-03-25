@@ -1,4 +1,4 @@
-import { Container } from '@supercarmarket/ui';
+import { Container, Wrapper } from '@supercarmarket/ui';
 import PartnershipDetail from '../partnershipDetail';
 import PartnershipList from '../partnershipList';
 
@@ -12,7 +12,7 @@ const PartnershipContents = (props: PartnershipContentsProps) => {
   return (
     <Container width="100%">
       <PartnershipDetail id={id} />
-      <PartnershipList category={category} />
+      <PartnershipList category={category} pagination tab />
     </Container>
   );
 };

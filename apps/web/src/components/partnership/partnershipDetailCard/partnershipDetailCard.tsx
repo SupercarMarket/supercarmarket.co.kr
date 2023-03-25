@@ -1,6 +1,6 @@
 import { WithBlurredImage } from '@supercarmarket/types/base';
 import { PartnershipDetailDto } from '@supercarmarket/types/partnership';
-import { Typography, Wrapper } from '@supercarmarket/ui';
+import { applyMediaQuery, Typography, Wrapper } from '@supercarmarket/ui';
 import React from 'react';
 import { css } from 'styled-components';
 
@@ -15,10 +15,11 @@ const PartnershipDetailCard = ({ info }: PartnershipDetailCard) => {
   const {
     address,
     category,
-    owner,
+    representative,
     partnerName,
+    companyName,
     phone,
-    production,
+    treatedItem,
     workTime,
     tel,
     siteUrl,
@@ -26,35 +27,53 @@ const PartnershipDetailCard = ({ info }: PartnershipDetailCard) => {
   return (
     <Wrapper.Top
       css={css`
-        width: 100%;
-        padding: 30px 40px;
-        border: 1px solid ${({ theme }) => theme.color['greyScale-5']};
-        border-radius: 4px;
-        box-sizing: border-box;
+        ${({ theme }) => css`
+          box-sizing: border-box;
+          width: 578px;
+          padding: 30px 40px;
+          border: 1px solid ${({ theme }) => theme.color['greyScale-5']};
+          border-radius: 4px;
+          box-sizing: border-box;
+
+          .company-name {
+            font-size: ${theme.fontSize['header-36']};
+            font-weight: ${theme.fontWeight.bold};
+            margin-bottom: 42px;
+          }
+          ${applyMediaQuery('mobile')} {
+            width: 100%;
+            padding: 24px 16px;
+            .company-name {
+              font-size: ${theme.fontSize['header-20']};
+              margin-bottom: 26px;
+            }
+          }
+        `}
       `}
     >
-      <Typography
-        as="h1"
-        fontSize="header-36"
-        fontWeight="bold"
-        style={{ marginBottom: '42px' }}
-      >
-        {partnerName}
-      </Typography>
+      <h1 className="company-name">{companyName}</h1>
       <Wrapper.Bottom
         css={css`
           display: flex;
           flex-direction: column;
           gap: 15px;
+
+          ${applyMediaQuery('mobile')} {
+            gap: 8px;
+          }
         `}
       >
         <Information label="업종">{category}</Information>
-        <Information label="취급품목">{production}</Information>
+        <Information label="취급품목">{treatedItem}</Information>
         <Information label="업무시간">{workTime}</Information>
-        <Information label="홈페이지" margin="0 0 34px 0">
+        <Information
+          label="홈페이지"
+          margin="0 0 34px 0"
+          mobileMargin="0 0 16px 0"
+        >
           {siteUrl}
         </Information>
-        <Information label="대표자">{owner}</Information>
+        <Information label="대표자">{representative}</Information>
         <Information label="주소">{address}</Information>
         <Information label="전화번호">
           {tel} <Typography color="greyScale-5">|</Typography> {phone}
@@ -68,13 +87,22 @@ interface InformationProps {
   label: string;
   children?: React.ReactNode;
   margin?: React.CSSProperties['margin'];
+  mobileMargin?: React.CSSProperties['margin'];
 }
 
-const Information = ({ label, children, margin }: InformationProps) => {
+const Information = ({
+  label,
+  children,
+  margin,
+  mobileMargin,
+}: InformationProps) => {
   return (
     <Wrapper
       css={css`
         margin: ${margin};
+        ${applyMediaQuery('mobile')} {
+          margin: ${mobileMargin};
+        }
       `}
     >
       <Wrapper.Left

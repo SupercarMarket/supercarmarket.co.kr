@@ -1,15 +1,17 @@
 import { useUrlQuery } from '@supercarmarket/hooks';
-import { Container, Table, Wrapper } from '@supercarmarket/ui';
+import { Container, Pagination, Tab, Table, Wrapper } from '@supercarmarket/ui';
 import usePartnership from 'hooks/queries/usePartnership';
 import { css } from 'styled-components';
 import PartnershipCard from '../partnershipCard';
 
 interface PartnershipListProps {
   category: string;
+  pagination?: boolean;
+  tab?: boolean;
 }
 
 const PartnershipList = (props: PartnershipListProps) => {
-  const { category: _category } = props;
+  const { category: _category, pagination, tab } = props;
   const {
     page,
     size = '20',
@@ -17,11 +19,7 @@ const PartnershipList = (props: PartnershipListProps) => {
     category = 'all',
     keyword,
   } = useUrlQuery();
-  const {
-    data: partnerships,
-    isLoading,
-    isFetching,
-  } = usePartnership({
+  const { data: partnerships } = usePartnership({
     page: String(page),
     pageSize: size,
     region,
@@ -29,24 +27,49 @@ const PartnershipList = (props: PartnershipListProps) => {
     keyword,
   });
 
-  if (isLoading || isFetching) return <div>loading..</div>;
-
   return (
     <Container width="100%">
       <Table tab="partnership" hidden={false} />
-      <Wrapper
-        css={css`
-          width: 100%;
-          display: flex;
-          flex-direction: column;
-          margin-bottom: 80px;
-        `}
-      >
-        {partnerships &&
-          partnerships.data.map((p) => (
-            <PartnershipCard key={p.brdSeq} {...p} />
-          ))}
-      </Wrapper>
+      {partnerships && (
+        <>
+          <Wrapper
+            css={css`
+              width: 100%;
+              display: flex;
+              flex-direction: column;
+              margin-bottom: 80px;
+            `}
+          >
+            {partnerships &&
+              partnerships.data.map((p) => (
+                <PartnershipCard key={p.brdSeq} {...p} />
+              ))}
+          </Wrapper>
+          {tab && (
+            <Wrapper
+              css={css`
+                width: 100%;
+                margin-bottom: 32px;
+              `}
+            >
+              <Tab list={`/partnership?category=${category}`} scroll />
+            </Wrapper>
+          )}
+          {pagination && (
+            <Wrapper
+              css={css`
+                margin-bottom: 32px;
+              `}
+            >
+              <Pagination
+                pageSize={partnerships.page}
+                totalCount={partnerships.totalCount}
+                totalPages={partnerships.totalPages}
+              />
+            </Wrapper>
+          )}
+        </>
+      )}
     </Container>
   );
 };

@@ -1,4 +1,5 @@
-'use client';
+import { applyMediaQuery } from '@supercarmarket/ui';
+('use client');
 
 import styled, { css } from 'styled-components';
 import { popping } from 'styles/keyframes';
@@ -72,6 +73,11 @@ const CarouselImageWrapper = styled.div`
 
   :hover {
     filter: brightness(70%);
+  }
+
+  ${applyMediaQuery('mobile')} {
+    width: 80px;
+    height: 60px;
   }
 `;
 

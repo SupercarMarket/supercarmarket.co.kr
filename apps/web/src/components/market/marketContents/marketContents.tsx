@@ -18,7 +18,7 @@ const MarketContents = (props: MarketContentsProps) => {
   const { data, isFetching, isLoading } = useMarketDetail(id);
 
   if (isFetching || isLoading) return <MarketDetailSkeleton />;
-  // return <MarketDetailSkeleton />;
+
   return (
     <ModalProvider>
       {data && (

@@ -237,10 +237,39 @@ const PartnershipDetailSkeleton = () => {
           display: flex;
           gap: 20px;
           margin-bottom: 220px;
+
+          ${applyMediaQuery('mobile')} {
+            flex-direction: column;
+          }
         `}
       >
-        <Skeleton width={590} height={386} />
-        <Skeleton width={590} height={386} />
+        <Wrapper
+          css={css`
+            width: 590px;
+            height: 386px;
+
+            ${applyMediaQuery('mobile')} {
+              width: 100%;
+              height: 257px;
+              margin-bottom: 20px;
+            }
+          `}
+        >
+          <Skeleton width="100%" height="100%" />
+        </Wrapper>
+        <Wrapper
+          css={css`
+            width: 590px;
+            height: 386px;
+
+            ${applyMediaQuery('mobile')} {
+              width: 100%;
+              height: 257px;
+            }
+          `}
+        >
+          <Skeleton width="100%" height="100%" />
+        </Wrapper>
       </Wrapper>
       <Wrapper
         css={css`

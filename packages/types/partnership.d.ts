@@ -19,12 +19,13 @@ interface PartnershipResponse<T> {
 }
 
 type PartnershipDetailDto<T> = Omit<PartnershipDto, 'imgSrc'> & {
-  owner: string;
+  representative: string;
   address: string;
-  production: string;
+  treatedItem: string;
   tel?: string;
   introduction: string;
   imgSrc: T[];
+  companyName: string;
 };
 
 interface PartnershipDetailResponse<T> {

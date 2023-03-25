@@ -8,7 +8,11 @@ import type { NextApiHandler } from 'next/types';
 import { getPlaiceholder } from 'plaiceholder';
 
 const partnershipApi: NextApiHandler = async (req, res) => {
-  const query = req.query as Params;
+  const { category, page, ...rest } = req.query as Params;
+  const query =
+    category === 'all'
+      ? { page, ...rest }
+      : { category: category.toUpperCase(), ...rest };
 
   try {
     const response = await fetcher(
@@ -17,8 +21,7 @@ const partnershipApi: NextApiHandler = async (req, res) => {
         method: 'GET',
         query: {
           ...query,
-          page: query.page ? String(+query.page + 1) : '1',
-          category: query.category.toUpperCase(),
+          page: page ? String(+page + 1) : '1',
         },
       }
     );
@@ -33,6 +36,7 @@ const partnershipApi: NextApiHandler = async (req, res) => {
 
     const partnershipsWithBluredImage = await Promise.all(
       partnerships.data.map(async (m) => {
+        console.log('partnership thumbnail image', m.imgSrc);
         const { base64 } = await getPlaiceholder(m.imgSrc);
         return {
           ...m,
@@ -40,6 +44,7 @@ const partnershipApi: NextApiHandler = async (req, res) => {
         };
       })
     ).then((v) => v);
+
     res
       .status(200)
       .json({ ...partnerships, data: partnershipsWithBluredImage });

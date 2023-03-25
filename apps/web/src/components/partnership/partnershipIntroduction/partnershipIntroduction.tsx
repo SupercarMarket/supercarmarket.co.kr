@@ -1,4 +1,4 @@
-import { Typography, Wrapper } from '@supercarmarket/ui';
+import { applyMediaQuery, Typography, Wrapper } from '@supercarmarket/ui';
 import React from 'react';
 import { css } from 'styled-components';
 
@@ -27,6 +27,12 @@ const PartnershipIntroduction = ({
           padding: 30px 40px;
           box-sizing: border-box;
           margin-bottom: 80px;
+
+          ${applyMediaQuery('mobile')} {
+            padding: 16px;
+            height: 305px;
+            margin-bottom: 32px;
+          }
         `}
       >
         {introduction}
