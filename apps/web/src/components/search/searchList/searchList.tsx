@@ -44,9 +44,9 @@ const SearchList = (props: SearchListProps) => {
                   data={data.data as SearchAllType}
                 />
               ),
-              product: <SearchMarket data={data.data} />,
-              community: <SearchCommunity data={data.data} />,
-              magazine: <SearchMagazine data={data.data} />,
+              product: <SearchMarket {...data} />,
+              community: <SearchCommunity {...data} />,
+              magazine: <SearchMagazine {...data} />,
             }[category]
           }
         </>

@@ -118,7 +118,7 @@ const SearchAll = ({ keyword, data }: SearchAllProps) => {
         )}
         {isPaparazzi && (
           <RouterButton
-            href={`/search?category=paparazzi&keyword=${keyword}`}
+            href={`/search?category=community&keyword=${keyword}`}
             style={{
               paddingTop: '34px',
             }}
