@@ -17,6 +17,7 @@ import * as React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { css } from 'styled-components';
 import { getSession } from 'utils/api/auth/user';
+import Advertisement from 'components/common/advertisement';
 import { prefetchMagazinePost, QUERY_KEYS } from 'utils/api/magazine';
 
 const Comment = dynamic(() => import('components/common/comment'), {
@@ -33,6 +34,7 @@ const MagazinePost: NextPageWithLayout = ({
   return (
     <ModalProvider>
       <Container>
+        <Advertisement />
         <QueryErrorResetBoundary>
           {({ reset }) => (
             <Wrapper

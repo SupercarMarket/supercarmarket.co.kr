@@ -16,6 +16,7 @@ import Posting from 'components/common/posting';
 import { CommunityPostingList } from 'components/community';
 import { ModalProvider } from 'feature/modalContext';
 import { css } from 'styled-components';
+import Advertisement from 'components/common/advertisement';
 import { prefetchCommunityPost, QUERY_KEYS } from 'utils/api/community';
 
 const CommunityPost: NextPageWithLayout = ({
@@ -38,6 +39,7 @@ const CommunityPost: NextPageWithLayout = ({
                 <ErrorFallback margin="100px 0" {...props} />
               )}
             >
+              <Advertisement />
               <Title>커뮤니티 게시글</Title>
               <ModalProvider>
                 <Posting

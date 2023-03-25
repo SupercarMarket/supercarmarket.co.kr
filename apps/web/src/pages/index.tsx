@@ -16,6 +16,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import HeadSeo from 'components/common/headSeo';
 import { APP_NAME } from 'constants/core';
 import { css } from 'styled-components';
+import Advertisement from 'components/common/advertisement';
 import { prefetchHome, QUERY_KEYS } from 'utils/api/home';
 
 const Home: NextPageWithLayout = () => {
@@ -32,6 +33,7 @@ const Home: NextPageWithLayout = () => {
                 }
               `}
             >
+              <Advertisement hidden />
               <Title marginBottom="20px">슈마매거진</Title>
               <ErrorBoundary
                 onReset={reset}

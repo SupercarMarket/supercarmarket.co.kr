@@ -5,10 +5,12 @@ import Layout from 'components/layout/layout';
 import inquiry from 'constants/inquiry';
 import { css } from 'styled-components';
 import { ModalProvider } from 'feature/modalContext';
+import Advertisement from 'components/common/advertisement';
 
 const Inquiry: NextPageWithLayout = () => {
   return (
     <Container>
+      <Advertisement />
       <Wrapper
         css={css`
           display: flex;
