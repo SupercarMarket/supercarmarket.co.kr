@@ -1,3 +1,11 @@
+export const homeCategoryFormatter = (
+  category: 'market' | 'magazine' | 'best' | 'new' | 'community' | 'partnership'
+) => {
+  if (category === 'best') return 'interestProduct';
+  if (category === 'new') return 'latestProduct';
+  return category;
+};
+
 export const searchTypeFormatter = (
   searchType: string,
   options?: {

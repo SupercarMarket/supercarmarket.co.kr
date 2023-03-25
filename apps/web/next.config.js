@@ -25,6 +25,7 @@ const nextConfig = {
     imageSizes: [178, 285, 387],
     domains: [
       'doyup.shop',
+      'www.polamfe.com',
       'user-images.githubusercontent.com',
       'supercarmarket-bucket.s3.ap-northeast-2.amazonaws.com',
     ],

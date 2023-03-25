@@ -1,12 +1,12 @@
 import { Container, Wrapper } from '@supercarmarket/ui';
 import type { MarketDto } from '@supercarmarket/types/market';
 import MarketCard from 'components/market/marketCard';
-import useHome from 'hooks/queries/useHome';
 import { css } from 'styled-components';
 import { applyMediaQuery } from 'styles/mediaQuery';
+import { useHome } from 'utils/api/home';
 
 const Market = () => {
-  const { data: marketBest } = useHome<MarketDto>('best');
+  const { data: marketBest } = useHome<MarketDto[]>('best');
 
   return (
     <Container

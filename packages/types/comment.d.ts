@@ -3,7 +3,7 @@ import { ServerResponse, User } from './base';
 interface CommentQuery {
   page: number;
   orderBy: string;
-  category: 'magazine' | 'paparazzi' | 'partnership';
+  category: 'magazine' | 'paparazzi' | 'partnership' | 'download';
 }
 
 interface Comment {

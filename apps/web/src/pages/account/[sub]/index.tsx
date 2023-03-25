@@ -1,5 +1,5 @@
-import { Category, Container, Wrapper } from '@supercarmarket/ui';
-import { BaseApiHandlerResponse, serverFetcher } from '@supercarmarket/lib';
+import { Container, Wrapper } from '@supercarmarket/ui';
+import { BaseApiHandlerResponse } from '@supercarmarket/lib';
 import type { Profile as ProfileType } from '@supercarmarket/types/account';
 import type { Params, NextPageWithLayout } from '@supercarmarket/types/base';
 import { AccountCategory, Profile } from 'components/account';
@@ -22,7 +22,7 @@ import {
 import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from 'components/fallback';
 import HeadSeo from 'components/common/headSeo/headSeo';
-import queries from 'constants/queries';
+import { prefetchAccount, QUERY_KEYS } from 'utils/api/account';
 
 type AccountParams = Params & {
   tab: AccountTab | null;
@@ -89,25 +89,11 @@ export const getUserPageProps = async (
 
   const isMyAccountPage = session && session.sub == sub;
   const isCorrectTab = tab && account.accountTab.includes(tab);
-  const header = session
-    ? {
-        ACCESS_TOKEN: session.accessToken,
-      }
-    : undefined;
 
   const queryClient = new QueryClient();
 
   const user: BaseApiHandlerResponse<{ data: ProfileType }> =
-    await serverFetcher(
-      `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/userpage`,
-      {
-        method: 'GET',
-        headers: header,
-        query: {
-          id: sub,
-        },
-      }
-    );
+    await prefetchAccount({ id: sub, token: session?.accessToken });
 
   if (!user.ok) {
     return {
@@ -121,9 +107,8 @@ export const getUserPageProps = async (
       : account.accountRoutes.dealerAccount(sub)
     : account.accountRoutes.someoneAccount(sub);
 
-  await queryClient.prefetchQuery(queries.account.id(sub), async () => {
+  await queryClient.prefetchQuery(QUERY_KEYS.id(sub), async () => {
     const { ok, status, ...rest } = user;
-
     return rest;
   });
 

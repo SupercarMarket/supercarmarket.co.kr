@@ -1,10 +1,6 @@
-'use client';
-
 import { Alert, Button, Form, FormLabel, theme } from '@supercarmarket/ui';
 import type { FormState } from 'constants/account';
 import account from 'constants/account';
-import useUpdateInfo from 'hooks/queries/useUpdateInfo';
-import { useRouter } from 'next/navigation';
 import { signOut, useSession } from 'next-auth/react';
 import * as React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -15,15 +11,24 @@ import { Modal } from 'components/common/modal';
 import { clientFetcher } from '@supercarmarket/lib';
 import AuthFormItem from 'components/auth/authFormItem/authFormItem';
 import useAuth from 'hooks/useAuth';
+import { useAccountUpdateInfo } from 'utils/api/account';
 
-const AccountUpdateForm = () => {
+interface AccountUpdateFormProps {
+  sub: string;
+}
+
+const AccountUpdateForm = (props: AccountUpdateFormProps) => {
+  const { sub } = props;
   const { onOpen, onClose } = React.useContext(ModalContext);
   const [error, setError] = React.useState<string | null>(null);
-  const { data: session } = useSession();
-  const { data: updateInfo, refetch } = useUpdateInfo(
-    session?.accessToken as string
+  const { data: session, status } = useSession();
+  const { data: updateInfo, refetch } = useAccountUpdateInfo(
+    sub,
+    session?.accessToken || '',
+    {
+      enabled: status && status === 'authenticated',
+    }
   );
-  const { replace } = useRouter();
   const methods = useForm<FormState>();
   const { authState, sendPhone, sendCode, update } = useAuth();
 

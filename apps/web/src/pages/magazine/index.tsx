@@ -1,6 +1,5 @@
 import { applyMediaQuery, Container, Title, Wrapper } from '@supercarmarket/ui';
 import type { NextPageWithLayout } from '@supercarmarket/types/base';
-import { clientFetcher } from '@supercarmarket/lib';
 import {
   dehydrate,
   QueryClient,
@@ -9,11 +8,11 @@ import {
 import { ErrorFallback } from 'components/fallback';
 import layout from 'components/layout';
 import { MagazineBanner, MagazineList } from 'components/magazine';
-import queries from 'constants/queries';
 import type { GetStaticProps } from 'next/types';
 import { ErrorBoundary } from 'react-error-boundary';
 import HeadSeo from 'components/common/headSeo';
 import { css } from 'styled-components';
+import { prefetchMagazine, QUERY_KEYS } from 'utils/api/magazine';
 
 const MagazinePage: NextPageWithLayout = () => {
   return (
@@ -60,16 +59,10 @@ MagazinePage.Layout = layout;
 export const getStaticProps: GetStaticProps = async () => {
   const queryClient = new QueryClient();
 
-  await queryClient.prefetchQuery(
-    [...queries.magazine.lists(), ...queries.magazine.query({ page: 0 })],
-    () =>
-      clientFetcher(`${process.env.NEXT_PUBLIC_URL}/api/magazine`, {
-        method: 'GET',
-        query: {
-          page: 0,
-        },
-      })
-  );
+  await queryClient.prefetchQuery({
+    queryKey: [...QUERY_KEYS.magazine(), { page: 0 }],
+    queryFn: () => prefetchMagazine({ page: 0 }),
+  });
 
   return {
     props: {

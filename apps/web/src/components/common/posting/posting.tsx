@@ -7,25 +7,27 @@ import {
   Wrapper,
 } from '@supercarmarket/ui';
 import { useRouter } from 'next/navigation';
-import useCommunityPost from 'hooks/queries/community/useCommunityPost';
 
-import useMagazinePost from 'hooks/queries/useMagazinePost';
-import useRemoveCommunityPost from 'hooks/mutations/community/useRemoveCommunityPost';
 import { useSession } from 'next-auth/react';
 import * as React from 'react';
 import { css } from 'styled-components';
 import { PostingHeadCommunity, PostingHeadMagainze } from './postingHead';
 
 import dynamic from 'next/dynamic';
-import useLikeCommunityPost from 'hooks/mutations/community/useLikeCommunityPost';
 import ModalContext from 'feature/modalContext';
 import AuthModal from '../modal/authModal';
 
 import LikeIcon from '../../../assets/svg/thumb-up.svg';
 import HeadSeo from '../headSeo/headSeo';
 import { useQueryClient } from '@tanstack/react-query';
-import queries from 'constants/queries';
 import { MagazineScrape } from 'components/magazine';
+import {
+  QUERY_KEYS,
+  useCommunityPost,
+  useLikeCommunityPost,
+  useRemoveCommunityPost,
+} from 'utils/api/community';
+import { useMagazinePost } from 'utils/api/magazine';
 
 const PostingBody = dynamic(() => import('./postingBody'), {
   ssr: false,
@@ -40,7 +42,7 @@ export interface PostingProps {
   postId: string;
   type: PostingType;
   category?: string;
-  subject?: 'magazine' | 'paparazzi' | 'partnership';
+  subject?: 'magazine' | 'paparazzi' | 'partnership' | 'library';
 }
 
 const Posting = function Posting(props: PostingProps) {
@@ -105,12 +107,12 @@ const CommunityPosting = ({
   const queryClient = useQueryClient();
   const { replace } = useRouter();
   const { data: communityPost } = useCommunityPost(
-    session.data?.accessToken || null,
     {
       subject,
       category,
       id: postId,
     },
+    session.data?.accessToken,
     {
       enabled: session.status && session.status !== 'loading',
     }
@@ -124,16 +126,15 @@ const CommunityPosting = ({
     onSuccess: () => {
       Promise.all([
         queryClient.invalidateQueries([
-          ...queries.community.all,
+          ...QUERY_KEYS.id(postId),
           {
             subject,
             category,
-            id: postId,
           },
         ]),
         queryClient.invalidateQueries({
           queryKey: [
-            ...queries.community.lists(),
+            ...QUERY_KEYS.community(),
             {
               category: category,
               page: 0,
@@ -282,7 +283,10 @@ const CommunityPosting = ({
                   </Wrapper.Item>
                 </Button>
               </Wrapper>
-              <Comment id={postId} kind={subject} />
+              <Comment
+                id={postId}
+                kind={subject === 'library' ? 'download' : 'paparazzi'}
+              />
               <Wrapper
                 css={css`
                   width: 100%;

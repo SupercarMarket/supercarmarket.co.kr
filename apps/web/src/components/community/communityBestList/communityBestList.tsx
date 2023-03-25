@@ -1,13 +1,13 @@
 import { CommunityDto } from '@supercarmarket/types/community';
 import { Alert, applyMediaQuery, Container, Wrapper } from '@supercarmarket/ui';
 import { CardSkeleton } from 'components/fallback/loading';
-import useHome from 'hooks/queries/useHome';
 import * as React from 'react';
 import { css } from 'styled-components';
+import { useHome } from 'utils/api/home';
 import CommunityCard from '../communityCard';
 
 const CommunityBestList = () => {
-  const { data, isFetching, isLoading } = useHome<CommunityDto>('community');
+  const { data, isFetching, isLoading } = useHome<CommunityDto[]>('community');
 
   if (isFetching || isLoading)
     return <CardSkeleton size={4} variant="column" />;

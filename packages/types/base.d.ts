@@ -55,13 +55,11 @@ type NextPageWithLayout = NextPage & {
 interface Query {
   page: number;
   category: string;
-  orderby: string;
-  popular: string;
   variant: 'row' | 'column';
   orderBy: string;
-  filter: string | null;
-  searchType: string;
-  keyword: string | null;
+  filter: string;
+  searchType?: string;
+  keyword?: string;
 }
 
 interface PaginationResponse<T> {

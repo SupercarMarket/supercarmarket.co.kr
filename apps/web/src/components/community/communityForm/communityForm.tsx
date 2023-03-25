@@ -29,6 +29,7 @@ import dayjs from 'dayjs';
 import { Modal } from 'components/common/modal';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import queries from 'constants/queries';
+import { QUERY_KEYS } from 'utils/api/community';
 
 interface CommunityFormProps {
   id?: string;
@@ -344,18 +345,17 @@ const CommunityForm = (props: CommunityFormProps) => {
       if (id)
         queryClient.refetchQueries({
           queryKey: [
-            ...queries.community.all,
+            ...QUERY_KEYS.id(id),
             {
               subject: category === 'information' ? 'library' : 'paparazzi',
               category: reverseFormatter(category),
-              id,
             },
           ],
         });
 
       queryClient.refetchQueries({
         queryKey: [
-          ...queries.community.lists(),
+          ...QUERY_KEYS.community(),
           {
             category: reverseFormatter(category),
             page: 0,

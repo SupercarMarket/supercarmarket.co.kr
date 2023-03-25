@@ -17,13 +17,12 @@ import Skeleton from 'react-loading-skeleton';
 import { useSession } from 'next-auth/react';
 import type { Session } from 'next-auth';
 import { clientApi, clientFetcher } from '@supercarmarket/lib';
-import useAccount from 'hooks/queries/useAccount';
 import {
   QueryClient,
   useMutation,
   useQueryClient,
 } from '@tanstack/react-query';
-import queries from 'constants/queries';
+import { QUERY_KEYS, useAccount } from 'utils/api/account';
 
 import UploadIcon from '../../../../public/svg/create.svg';
 import RemoveIcon from '../../../../public/svg/delete.svg';
@@ -99,7 +98,7 @@ const ProfileBackground = ({
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(queries.account.id(sub));
+      queryClient.invalidateQueries(QUERY_KEYS.id(sub));
     },
   });
 
@@ -117,7 +116,7 @@ const ProfileBackground = ({
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(queries.account.id(sub));
+      queryClient.invalidateQueries(QUERY_KEYS.id(sub));
     },
   });
 
@@ -314,7 +313,7 @@ const ProfileRepresentativeItem = (props: ProfileRepresentativeItemProps) => {
     },
     onSuccess: () => {
       setHidden(true);
-      queryClient.invalidateQueries(queries.account.id(sub));
+      queryClient.invalidateQueries(QUERY_KEYS.id(sub));
     },
   });
 
@@ -333,7 +332,7 @@ const ProfileRepresentativeItem = (props: ProfileRepresentativeItemProps) => {
     },
     onSuccess: () => {
       setHidden(true);
-      queryClient.invalidateQueries(queries.account.id(sub));
+      queryClient.invalidateQueries(QUERY_KEYS.id(sub));
     },
   });
 
@@ -526,9 +525,9 @@ const ProfileRepresentativeItem = (props: ProfileRepresentativeItemProps) => {
 
 const Profile = (props: ProfileProps) => {
   const { profile, sub, isMyAccountPage, ...rest } = props;
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const { data: account } = useAccount(sub, session?.accessToken, {
-    enabled: !!session,
+    enabled: status && status !== 'loading',
   });
 
   return (
