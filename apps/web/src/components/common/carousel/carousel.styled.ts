@@ -22,6 +22,9 @@ const CarouselArea = styled.div`
   height: 90px;
   overflow: hidden;
   position: relative;
+  ${applyMediaQuery('mobile')} {
+    height: 60px;
+  }
 `;
 
 const CarouselBox = styled.div<{ page: number }>`

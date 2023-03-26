@@ -229,6 +229,148 @@ const MarketDetailSkeleton = () => {
   );
 };
 
+const PartnershipSkeleton = () => {
+  return (
+    <Wrapper>
+      <Wrapper.Item
+        css={css`
+          display: flex;
+          padding: 6px 0;
+        `}
+      >
+        <Wrapper.Item
+          css={css`
+            width: 196px;
+            height: 124px;
+
+            ${applyMediaQuery('mobile')} {
+              width: 64px;
+              height: 64px;
+            }
+          `}
+        >
+          <Skeleton width="100%" height="100%" />
+        </Wrapper.Item>
+        <Wrapper.Item
+          css={css`
+            display: flex;
+            flex: 1;
+
+            ${applyMediaQuery('mobile')} {
+              flex-direction: column;
+              gap: 4px;
+            }
+          `}
+        >
+          <Wrapper.Item
+            css={css`
+              ${({ theme }) => css`
+                flex: 1;
+                width: 403px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                gap: 12px;
+                box-sizing: border-box;
+                padding-left: 30px;
+
+                .title {
+                  height: 24px;
+                }
+
+                .address {
+                }
+
+                ${applyMediaQuery('mobile')} {
+                  width: 100%;
+                  gap: 4px;
+                  padding-left: 12px;
+
+                  .title {
+                    font-size: ${theme.fontSize['body-14']};
+                  }
+                  .address {
+                    font-size: ${theme.fontSize['body-12']};
+                  }
+                }
+              `}
+            `}
+          >
+            <Wrapper.Item className="title">
+              <Skeleton width="100%" height="100%" />
+            </Wrapper.Item>
+            <Wrapper.Item className="address">
+              <Skeleton width="100%" height="100%" />
+            </Wrapper.Item>
+          </Wrapper.Item>
+          <Wrapper.Item
+            css={css`
+              ${({ theme }) => css`
+                display: flex;
+                font-size: ${theme.fontSize['body-14']};
+                padding-left: 0;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+
+                .category {
+                  width: 120px;
+                }
+                .work-time {
+                  width: 119px;
+                }
+                .phone {
+                  width: 142px;
+                }
+                .address {
+                  width: 137px;
+                }
+                .vertical-bar {
+                  display: none;
+                }
+                ${applyMediaQuery('mobile')} {
+                  padding-left: 12px;
+                  justify-content: flex-start;
+                  gap: 8px;
+
+                  .category,
+                  .work-time,
+                  .phone {
+                    width: auto;
+                  }
+                  .address,
+                  .site {
+                    display: none;
+                  }
+                  .vertical-bar {
+                    display: block;
+                  }
+                }
+              `}
+            `}
+          >
+            <Wrapper.Item className="category">
+              <Skeleton width="70px" />
+            </Wrapper.Item>
+            <Wrapper.Item className="work-time">
+              <Skeleton width="70px" />
+            </Wrapper.Item>
+            <Wrapper.Item className="phone">
+              <Skeleton width="70px" />
+            </Wrapper.Item>
+            <Wrapper.Item className="address">
+              <Skeleton width="70px" />
+            </Wrapper.Item>
+            <Wrapper.Item className="site">
+              <Skeleton width="70px" />
+            </Wrapper.Item>
+          </Wrapper.Item>
+        </Wrapper.Item>
+      </Wrapper.Item>
+    </Wrapper>
+  );
+};
+
 const PartnershipDetailSkeleton = () => {
   return (
     <Container>
@@ -383,5 +525,6 @@ export {
   CommentSkeleton,
   MagazineBannerSkeleton,
   MarketDetailSkeleton,
+  PartnershipSkeleton,
   PartnershipDetailSkeleton,
 };
