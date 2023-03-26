@@ -99,14 +99,7 @@ const CarouselTop = ({ children }: CarouselTopProps) => {
 };
 
 const CarouselMainImage = () => {
-  const { carouselId, imgSrc, current } =
-    useCarouselContext('CarouselMainImage');
-  const { data, isFetching, isLoading } = useBase64(imgSrc[current], {
-    category: 'market',
-    detail: true,
-    id: carouselId,
-    idx: current,
-  });
+  const { imgSrc, current } = useCarouselContext('CarouselMainImage');
 
   return (
     <Wrapper.Left
@@ -118,18 +111,12 @@ const CarouselMainImage = () => {
         height: 100%;
       `}
     >
-      {isFetching || isLoading ? (
-        <Skeleton />
-      ) : (
-        <Image
-          placeholder="blur"
-          src={imgSrc[current]}
-          blurDataURL={data?.data.base64}
-          alt="image"
-          style={{ objectFit: 'contain' }}
-          fill
-        />
-      )}
+      <Image
+        src={imgSrc[current]}
+        alt="image"
+        style={{ objectFit: 'contain' }}
+        fill
+      />
     </Wrapper.Left>
   );
 };
@@ -172,27 +159,15 @@ interface CarouselItemProps {
 }
 
 const CarouselItem = ({ idx }: CarouselItemProps) => {
-  const { imgSrc, current, changeCurrent, carouselId, carouselCategory } =
-    useCarouselContext('CarouselItem');
-
-  const { data, isFetching, isLoading } = useBase64(imgSrc[idx], {
-    category: carouselCategory,
-    detail: true,
-    id: carouselId,
-    idx,
-  });
+  const { imgSrc, current, changeCurrent } = useCarouselContext('CarouselItem');
 
   const selectImage = (idx: number) => changeCurrent(idx);
-
-  if (isFetching || isLoading) return <Skeleton width={141} height={89} />;
 
   return (
     <Styled.CarouselImageWrapper key={idx} onClick={() => selectImage(idx)}>
       <Image
         alt="image"
-        placeholder="blur"
         src={imgSrc[idx]}
-        blurDataURL={data?.data.base64}
         style={{ objectFit: 'contain' }}
         fill
       />

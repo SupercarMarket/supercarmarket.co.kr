@@ -10,7 +10,6 @@ import {
   applyMediaQuery,
   Container,
   Searchbar,
-  Tab,
   Wrapper,
 } from '@supercarmarket/ui';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -38,8 +37,10 @@ const PartnershipDetailPage: NextPageWithLayout = ({
           display: flex;
           flex-direction: column;
           margin: 20px 0 0 0;
+          box-sizing: border-box;
           ${applyMediaQuery('mobile')} {
             width: 100%;
+            padding: 0 16px;
           }
         `}
       >

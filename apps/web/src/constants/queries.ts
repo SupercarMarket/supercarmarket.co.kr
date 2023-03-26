@@ -27,15 +27,6 @@ const queries = {
       query.category,
     ],
   },
-  /**
-   * Partnership Query Keys
-   */
-  partnership: {
-    all: ['partnership'] as const,
-    lists: (query: string[]) =>
-      [...queries.partnership.all, 'list', ...query] as const,
-    id: (id: string) => [...queries.partnership.lists([]), id] as const,
-  },
 };
 
 export default queries;

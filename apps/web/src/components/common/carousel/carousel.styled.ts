@@ -22,6 +22,14 @@ const CarouselArea = styled.div`
   height: 90px;
   overflow: hidden;
   position: relative;
+  ${applyMediaQuery('mobile')} {
+    height: 60px;
+    overflow-x: scroll;
+
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  }
 `;
 
 const CarouselBox = styled.div<{ page: number }>`
@@ -61,6 +69,10 @@ const ArrowButton = styled.button<ArrowButtonProps>`
     svg {
       fill: ${({ theme }) => theme.color['greyScale-4']};
     }
+  }
+
+  ${applyMediaQuery('mobile')} {
+    display: none;
   }
 `;
 

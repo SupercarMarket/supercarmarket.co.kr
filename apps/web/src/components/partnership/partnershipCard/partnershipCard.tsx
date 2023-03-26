@@ -10,6 +10,7 @@ import React from 'react';
 
 import { css } from 'styled-components';
 import { PartnershipDto } from '@supercarmarket/types/partnership';
+import { partnershipFormatter } from '@supercarmarket/lib';
 
 const PartnershipCard = ({
   brdSeq,
@@ -21,6 +22,8 @@ const PartnershipCard = ({
   siteUrl,
   imgSrc,
 }: PartnershipDto) => {
+  const engCategory = partnershipFormatter(category.replaceAll(' ', ''));
+
   return (
     <Container
       width="100%"
@@ -30,7 +33,7 @@ const PartnershipCard = ({
       padding="6px 0"
     >
       <Link
-        href={`/partnership/${category.toLowerCase()}/${brdSeq}`}
+        href={`/partnership/${engCategory.toLowerCase()}/${brdSeq}`}
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -134,6 +137,8 @@ const PartnershipCard = ({
                 ${applyMediaQuery('mobile')} {
                   padding-left: 12px;
                   gap: 8px;
+                  justify-content: flex-start;
+                  text-align: center;
 
                   .category,
                   .work-time,

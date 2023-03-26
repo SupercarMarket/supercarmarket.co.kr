@@ -9,7 +9,6 @@ import {
   QueryErrorResetBoundary,
 } from '@tanstack/react-query';
 
-import queries from 'constants/queries';
 import layout from 'components/layout';
 import Banner from 'components/partnership/banner';
 import { ErrorFallback } from 'components/fallback';

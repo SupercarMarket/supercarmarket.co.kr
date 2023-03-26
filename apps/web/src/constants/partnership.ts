@@ -119,18 +119,8 @@ const PARTNERSHIP_FILTER_OPTIONS = {
   ],
 };
 
-const PARTNERSHIP_API_CATEGORY_MAPPER: Params = {
-  all: 'ALL',
-  'automobile-store': 'DEALER_SHOP',
-  industries: 'CAR_CENTER',
-  detailing: 'DETAILING',
-  painting: 'PAINTING',
-  misc: 'ETC',
-};
-
 export {
   PARTNERSHIP_LINKS,
   PARTNERSHIP_FILTER_OPTIONS,
   PARTNERSHIP_TABLE_HEAD,
-  PARTNERSHIP_API_CATEGORY_MAPPER,
 };

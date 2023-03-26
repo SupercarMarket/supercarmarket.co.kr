@@ -1,7 +1,7 @@
 import Carousel from 'components/common/carousel';
 import React from 'react';
-import PartnershipDetailCard from '../partnershipDetailCard/partnershipDetailCard';
-import PartnershipIntroduction from '../partnershipIntroduction/partnershipIntroduction';
+import PartnershipDetailCard from '../partnershipDetailCard';
+import PartnershipIntroduction from '../partnershipIntroduction';
 import Comment from 'components/common/comment/comment';
 import { applyMediaQuery, Wrapper } from '@supercarmarket/ui';
 import { css } from 'styled-components';
@@ -44,6 +44,7 @@ const PartnershipDetail = ({ id }: Props) => {
                   css={css`
                     display: flex;
                     width: 100%;
+                    gap: 50px;
 
                     ${applyMediaQuery('mobile')} {
                       flex-direction: column-reverse;
