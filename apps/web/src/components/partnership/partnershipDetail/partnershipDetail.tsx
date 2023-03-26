@@ -1,5 +1,4 @@
 import Carousel from 'components/common/carousel';
-import usePartnershipDetail from 'hooks/queries/usePartnershipDetail';
 import React from 'react';
 import PartnershipDetailCard from '../partnershipDetailCard/partnershipDetailCard';
 import PartnershipIntroduction from '../partnershipIntroduction/partnershipIntroduction';
@@ -7,17 +6,14 @@ import Comment from 'components/common/comment/comment';
 import { applyMediaQuery, Wrapper } from '@supercarmarket/ui';
 import { css } from 'styled-components';
 import { PartnershipDetailSkeleton } from 'components/fallback/loading';
+import { usePartnershipPost } from 'utils/api/partnership';
 
 interface Props {
   id: string;
 }
 
 const PartnershipDetail = ({ id }: Props) => {
-  const {
-    data: partnerships,
-    isLoading,
-    isFetching,
-  } = usePartnershipDetail(id);
+  const { data: partnerships, isLoading, isFetching } = usePartnershipPost(id);
 
   if (isLoading || isFetching) return <PartnershipDetailSkeleton />;
 

@@ -1,6 +1,4 @@
-import type { CommentQuery } from '@supercarmarket/types/comment';
 import type { Query } from '@supercarmarket/types/base';
-import type { AccountTab } from './account';
 
 const queries = {
   /**

@@ -1,7 +1,6 @@
 import * as React from 'react';
 import {
   Button,
-  Container,
   Typography,
   Wrapper,
   applyMediaQuery,
@@ -13,8 +12,10 @@ import { useSession } from 'next-auth/react';
 import FavoriteIcon from '../../../../../assets/svg/favorite.svg';
 import FavoriteBorderIcon from '../../../../../assets/svg/favorite-border.svg';
 import ModalContext from 'feature/modalContext';
-import AuthModal from 'components/common/modal/authModal';
 import { css } from 'styled-components';
+import { Modal } from 'components/common/modal';
+import { useLikeMarketPost } from 'utils/api/market';
+import { type Params } from '@supercarmarket/types/base';
 
 interface MarketLikeProps {
   isLike: boolean;
@@ -22,37 +23,39 @@ interface MarketLikeProps {
 
 const MarketLike = ({ isLike }: MarketLikeProps) => {
   const [like, setLike] = React.useState<boolean>(isLike);
-  const { onOpen, onClose, onClick } = React.useContext(ModalContext);
-  const { data: user } = useSession();
-
-  const {
-    query: { id },
-  } = useRouter();
-
-  const toggleLike = React.useCallback(
-    async () =>
-      await fetch(`/server/supercar/v1/shop/${id}/scrap`, {
-        method: 'POST',
-        headers: {
-          ACCESS_TOKEN: user?.accessToken || '',
-        },
-      }),
-    [id, user]
-  );
+  const { onOpen, onClose } = React.useContext(ModalContext);
+  const { push, query } = useRouter();
+  const { id } = query as Params;
+  const { data: session } = useSession();
+  const likeMutation = useLikeMarketPost(id, {
+    enabled: !!id,
+    onSuccess: () => {
+      setLike((prev) => !prev);
+    },
+  });
 
   const likeClick = React.useCallback(async () => {
-    if (!user) {
-      onOpen(<AuthModal onClose={onClose} onClick={onClick} onOpen={onOpen} />);
+    if (!session) {
+      onOpen(
+        <Modal
+          description="로그인 후 상담 신청이 가능합니다"
+          onCancel={() => {
+            onClose();
+          }}
+          clickText="로그인"
+          closeText="회원가입"
+          onClick={() => {
+            push('/auth/signin');
+          }}
+          onClose={() => {
+            push('/auth/signup');
+          }}
+        />
+      );
     } else {
-      const result = await toggleLike();
-
-      console.log(result);
-
-      if (result.ok) {
-        setLike(!like);
-      }
+      likeMutation.mutate({ token: session.accessToken });
     }
-  }, [like, setLike, toggleLike, user, onClick, onClose, onOpen]);
+  }, [session, onOpen, onClose, push, likeMutation]);
 
   return (
     <Wrapper
