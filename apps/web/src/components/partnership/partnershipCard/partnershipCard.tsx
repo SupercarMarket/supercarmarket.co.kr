@@ -9,12 +9,10 @@ import Link from 'next/link';
 import React from 'react';
 
 import { css } from 'styled-components';
-import { WithBlurredImage } from '@supercarmarket/types/base';
 import { PartnershipDto } from '@supercarmarket/types/partnership';
 
 const PartnershipCard = ({
   brdSeq,
-  base64,
   partnerName,
   category,
   workTime,
@@ -22,7 +20,7 @@ const PartnershipCard = ({
   address,
   siteUrl,
   imgSrc,
-}: WithBlurredImage<PartnershipDto>) => {
+}: PartnershipDto) => {
   return (
     <Container
       width="100%"
@@ -52,8 +50,6 @@ const PartnershipCard = ({
           `}
         >
           <Image
-            placeholder={base64 ? 'blur' : undefined}
-            blurDataURL={base64 ? base64 : undefined}
             src={imgSrc}
             alt="thumbnail"
             style={{ borderRadius: '4px', objectFit: 'cover' }}

@@ -6,6 +6,15 @@ export const homeCategoryFormatter = (
   return category;
 };
 
+export const partnershipFormatter = (category: string) => {
+  if (category === '전체') return 'ALL';
+  if (category === '자동차매장') return 'DEALER_SHOP';
+  if (category === '공업사') return 'CAR_CENTER';
+  if (category === '도색') return 'PAINTING';
+  if (category === '디테일링') return 'DEATILING';
+  return 'ETC';
+};
+
 export const searchTypeFormatter = (
   searchType: string,
   options?: {
