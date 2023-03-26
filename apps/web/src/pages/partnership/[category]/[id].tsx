@@ -10,7 +10,6 @@ import {
   applyMediaQuery,
   Container,
   Searchbar,
-  Tab,
   Wrapper,
 } from '@supercarmarket/ui';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -18,9 +17,9 @@ import Layout from 'components/layout';
 import { ErrorFallback } from 'components/fallback';
 import { useSearchKeyword } from 'hooks/useSearchKeyword';
 import { serverFetcher } from '@supercarmarket/lib';
-import queries from 'constants/queries';
 import PartnershipContents from 'components/partnership/partnershipContents';
 import Advertisement from 'components/common/advertisement';
+import { PARTNERSHIP_QUERY_KEY } from 'utils/api/partnership/index';
 
 const PartnershipDetailPage: NextPageWithLayout = ({
   id,
@@ -93,7 +92,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   const queryClient = new QueryClient();
 
-  queryClient.prefetchQuery(queries.partnership.id(id), () =>
+  queryClient.prefetchQuery(PARTNERSHIP_QUERY_KEY.partnership.id(id), () =>
     serverFetcher(
       `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/partnership`,
       {

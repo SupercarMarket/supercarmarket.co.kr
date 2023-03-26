@@ -120,12 +120,12 @@ const PARTNERSHIP_FILTER_OPTIONS = {
 };
 
 const PARTNERSHIP_API_CATEGORY_MAPPER: Params = {
-  all: 'ALL',
-  'automobile-store': 'DEALER_SHOP',
-  industries: 'CAR_CENTER',
-  detailing: 'DETAILING',
-  painting: 'PAINTING',
-  misc: 'ETC',
+  전체: 'ALL',
+  자동차매장: 'DEALER_SHOP',
+  공업사: 'CAR_CENTER',
+  디테일링: 'DETAILING',
+  도색: 'PAINTING',
+  기타: 'ETC',
 };
 
 export {

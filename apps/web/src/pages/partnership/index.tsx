@@ -9,7 +9,6 @@ import {
   QueryErrorResetBoundary,
 } from '@tanstack/react-query';
 
-import queries from 'constants/queries';
 import layout from 'components/layout';
 import Banner from 'components/partnership/banner';
 import { ErrorFallback } from 'components/fallback';
@@ -18,6 +17,7 @@ import { PARTNERSHIP_LINKS } from 'constants/partnership';
 import PartnershipList from 'components/partnership/partnershipList';
 import PartnershipCategory from 'components/partnership/partnershipCategory';
 import Advertisement from 'components/common/advertisement';
+import { PARTNERSHIP_QUERY_KEY } from 'utils/api/partnership/keys';
 
 const PartnershipPage: NextPageWithLayout = ({
   category,
@@ -99,7 +99,7 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
       },
     };
 
-  queryClient.prefetchQuery(queries.partnership.lists([]), () =>
+  queryClient.prefetchQuery(PARTNERSHIP_QUERY_KEY.partnership.lists([]), () =>
     fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/partnership`, {
       method: 'GET',
     }).then((res) => res.json())

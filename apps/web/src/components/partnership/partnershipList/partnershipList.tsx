@@ -1,7 +1,11 @@
 import { useUrlQuery } from '@supercarmarket/hooks';
+import {
+  PartnershipDto,
+  PartnershipResponse,
+} from '@supercarmarket/types/partnership';
 import { Container, Pagination, Tab, Table, Wrapper } from '@supercarmarket/ui';
-import usePartnership from 'hooks/queries/usePartnership';
 import { css } from 'styled-components';
+import { usePartnership } from 'utils/api/partnership/index';
 import PartnershipCard from '../partnershipCard';
 
 interface PartnershipListProps {
@@ -19,7 +23,9 @@ const PartnershipList = (props: PartnershipListProps) => {
     category = 'all',
     keyword,
   } = useUrlQuery();
-  const { data: partnerships } = usePartnership({
+  const { data: partnerships } = usePartnership<
+    PartnershipResponse<PartnershipDto>
+  >({
     page: String(page),
     pageSize: size,
     region,
