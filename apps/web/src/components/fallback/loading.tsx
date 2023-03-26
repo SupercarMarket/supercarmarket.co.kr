@@ -372,13 +372,29 @@ const PartnershipSkeleton = () => {
 };
 
 const PartnershipDetailSkeleton = () => {
+  const Dummy = Array.from({ length: 8 }, (_, i) => (
+    <Wrapper
+      key={i}
+      css={css`
+        width: 141px;
+        height: 89px;
+
+        ${applyMediaQuery('mobile')} {
+          width: 80px;
+          height: 60px;
+        }
+      `}
+    >
+      <Skeleton width="100%" height="100%" />
+    </Wrapper>
+  ));
+
   return (
     <Container>
       <Wrapper
         css={css`
           display: flex;
-          gap: 20px;
-          margin-bottom: 220px;
+          gap: 34px;
 
           ${applyMediaQuery('mobile')} {
             flex-direction: column;
@@ -389,11 +405,11 @@ const PartnershipDetailSkeleton = () => {
           css={css`
             width: 590px;
             height: 386px;
+            margin-bottom: 10px;
 
             ${applyMediaQuery('mobile')} {
               width: 100%;
-              height: 257px;
-              margin-bottom: 20px;
+              height: 247px;
             }
           `}
         >
@@ -406,7 +422,8 @@ const PartnershipDetailSkeleton = () => {
 
             ${applyMediaQuery('mobile')} {
               width: 100%;
-              height: 257px;
+              height: 247px;
+              margin-bottom: 10px;
             }
           `}
         >
@@ -416,8 +433,40 @@ const PartnershipDetailSkeleton = () => {
       <Wrapper
         css={css`
           width: 100%;
+          height: 90px;
+          overflow: hidden;
+          position: relative;
+          margin-bottom: 80px;
+
+          ${applyMediaQuery('mobile')} {
+            height: 60px;
+            margin-bottom: 30px;
+          }
         `}
       >
+        <Wrapper
+          css={css`
+            position: absolute;
+            display: flex;
+            gap: 10.5px;
+
+            ${applyMediaQuery('mobile')} {
+              overflow: hidden;
+            }
+          `}
+        >
+          {Dummy}
+        </Wrapper>
+      </Wrapper>
+      <Wrapper
+        css={css`
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        `}
+      >
+        <Skeleton height="24px" />
         <Skeleton height={500} />
       </Wrapper>
     </Container>
