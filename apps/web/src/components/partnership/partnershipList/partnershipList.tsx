@@ -1,12 +1,8 @@
 import { useUrlQuery } from '@supercarmarket/hooks';
-import {
-  PartnershipDto,
-  PartnershipResponse,
-} from '@supercarmarket/types/partnership';
 import { Container, Pagination, Tab, Table, Wrapper } from '@supercarmarket/ui';
 import { PartnershipSkeleton } from 'components/fallback/loading';
 import { css } from 'styled-components';
-import { usePartnership } from 'utils/api/partnership/index';
+import { usePartnership } from 'http/server/partnership';
 import PartnershipCard from '../partnershipCard';
 
 interface PartnershipListProps {

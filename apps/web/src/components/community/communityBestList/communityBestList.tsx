@@ -3,7 +3,7 @@ import { Alert, applyMediaQuery, Container, Wrapper } from '@supercarmarket/ui';
 import { CardSkeleton } from 'components/fallback/loading';
 import * as React from 'react';
 import { css } from 'styled-components';
-import { useHome } from 'utils/api/home';
+import { useHome } from 'http/server/home';
 import CommunityCard from '../communityCard';
 
 const CommunityBestList = () => {

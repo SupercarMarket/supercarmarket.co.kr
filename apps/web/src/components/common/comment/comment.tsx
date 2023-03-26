@@ -6,7 +6,7 @@ import CommentBody from './commentBody';
 import CommentHead from './commentHead';
 import { CommentSkeleton } from 'components/fallback/loading';
 import { useSession } from 'next-auth/react';
-import { useComment } from 'utils/api/comment';
+import { useComment } from 'http/server/comment';
 
 interface CommentProps {
   id: string;

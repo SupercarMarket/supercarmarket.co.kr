@@ -7,7 +7,7 @@ import { MarketDetail } from '../marketDetail';
 import { ModalProvider } from 'feature/modalContext';
 import { MarketDetailSkeleton } from 'components/fallback/loading';
 import HeadSeo from 'components/common/headSeo';
-import { useMarketPost } from 'utils/api/market';
+import { useMarketPost } from 'http/server/market';
 
 interface MarketContentsProps {
   id: string;

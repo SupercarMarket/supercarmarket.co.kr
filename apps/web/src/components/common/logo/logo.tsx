@@ -1,4 +1,4 @@
-import { applyMediaQuery, deviceQuery } from '@supercarmarket/ui';
+import { deviceQuery } from '@supercarmarket/ui';
 import clsx from 'clsx';
 import Image from 'next/image';
 import Link from 'next/link';

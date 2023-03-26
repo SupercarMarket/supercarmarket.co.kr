@@ -6,7 +6,7 @@ import { css } from 'styled-components';
 import { applyMediaQuery } from 'styles/mediaQuery';
 
 import RouterButton from '../routerButton';
-import { useHome } from 'utils/api/home';
+import { useHome } from 'http/server/home';
 
 const Magazine = () => {
   const { data: magazine } = useHome<MagazineDto[]>('magazine');

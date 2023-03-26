@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import React, { memo } from 'react';
+import * as React from 'react';
 
 import { Button, Typography } from '@supercarmarket/ui';
 import ArrowRight from '../../../assets/svg/arrow-right.svg';
@@ -45,4 +45,4 @@ const Banner = ({ title, subtitle, btnTitle, url }: BannerProps) => {
   );
 };
 
-export default memo(Banner);
+export default React.memo(Banner);

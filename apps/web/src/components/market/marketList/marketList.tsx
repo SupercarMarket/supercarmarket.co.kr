@@ -8,7 +8,7 @@ import {
 } from '@supercarmarket/ui';
 import { css } from 'styled-components';
 import MarketCard from '../marketCard';
-import { useMarket } from 'utils/api/market';
+import { useMarket } from 'http/server/market';
 
 interface MarketListProps {
   pagination?: boolean;

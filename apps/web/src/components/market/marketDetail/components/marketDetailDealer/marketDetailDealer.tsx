@@ -1,7 +1,6 @@
 import { Typography, Wrapper, applyMediaQuery } from '@supercarmarket/ui';
 import type { DealerDto } from '@supercarmarket/types/market';
 import Avvvatars from 'avvvatars-react';
-import theme from 'constants/theme';
 import Image from 'next/image';
 import { css } from 'styled-components';
 

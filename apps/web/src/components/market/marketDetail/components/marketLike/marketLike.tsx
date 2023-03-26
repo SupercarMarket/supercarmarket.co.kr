@@ -14,7 +14,7 @@ import FavoriteBorderIcon from '../../../../../assets/svg/favorite-border.svg';
 import ModalContext from 'feature/modalContext';
 import { css } from 'styled-components';
 import { Modal } from 'components/common/modal';
-import { useLikeMarketPost } from 'utils/api/market';
+import { useLikeMarketPost } from 'http/server/market';
 import { type Params } from '@supercarmarket/types/base';
 
 interface MarketLikeProps {

@@ -11,7 +11,7 @@ import { Modal } from 'components/common/modal';
 import { clientFetcher } from '@supercarmarket/lib';
 import AuthFormItem from 'components/auth/authFormItem/authFormItem';
 import useAuth from 'hooks/useAuth';
-import { useAccountUpdateInfo } from 'utils/api/account';
+import { useAccountUpdateInfo } from 'http/server/account';
 
 interface AccountUpdateFormProps {
   sub: string;

@@ -22,7 +22,7 @@ import {
 import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from 'components/fallback';
 import HeadSeo from 'components/common/headSeo/headSeo';
-import { prefetchAccount, QUERY_KEYS } from 'utils/api/account';
+import { prefetchAccount, QUERY_KEYS } from 'http/server/account';
 
 type AccountParams = Params & {
   tab: AccountTab | null;

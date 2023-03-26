@@ -1,12 +1,12 @@
 import Carousel from 'components/common/carousel';
-import React from 'react';
+import * as React from 'react';
 import PartnershipDetailCard from '../partnershipDetailCard';
 import PartnershipIntroduction from '../partnershipIntroduction';
 import Comment from 'components/common/comment/comment';
 import { applyMediaQuery, Wrapper } from '@supercarmarket/ui';
 import { css } from 'styled-components';
 import { PartnershipDetailSkeleton } from 'components/fallback/loading';
-import { usePartnershipPost } from 'utils/api/partnership';
+import { usePartnershipPost } from 'http/server/partnership';
 
 interface Props {
   id: string;

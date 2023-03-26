@@ -1,7 +1,7 @@
 import { useUrlQuery } from '@supercarmarket/hooks';
 import type { SearchAll as SearchAllType } from '@supercarmarket/types/search';
 import { Container } from '@supercarmarket/ui';
-import { useSearch } from 'utils/api/search';
+import { useSearch } from 'http/server/search';
 import {
   SearchAll,
   SearchCommunity,

@@ -1,4 +1,4 @@
-import { Container, Wrapper } from '@supercarmarket/ui';
+import { Container } from '@supercarmarket/ui';
 import PartnershipDetail from '../partnershipDetail';
 import PartnershipList from '../partnershipList';
 

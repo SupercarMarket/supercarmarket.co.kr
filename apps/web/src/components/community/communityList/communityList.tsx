@@ -16,7 +16,7 @@ import { css } from 'styled-components';
 import CommunityCard from '../communityCard';
 import { CardSkeleton } from 'components/fallback/loading';
 import { searchTypeFormatter } from '@supercarmarket/lib';
-import { useCommunity } from 'utils/api/community';
+import { useCommunity } from 'http/server/community';
 
 interface CommunityListProps {
   category?: string;

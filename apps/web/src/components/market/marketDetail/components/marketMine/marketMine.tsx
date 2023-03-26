@@ -7,7 +7,7 @@ import {
 import useChangeSellStatus from 'hooks/mutations/market/useChangeSellStatus';
 import useRemoveMarketById from 'hooks/mutations/market/useRemoveMarketById';
 import { useSession } from 'next-auth/react';
-import React from 'react';
+import * as React from 'react';
 import { css } from 'styled-components';
 
 interface MarketMineProps {

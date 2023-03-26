@@ -1,7 +1,7 @@
 import { WithBlurredImage } from '@supercarmarket/types/base';
 import { PartnershipDetailDto } from '@supercarmarket/types/partnership';
 import { applyMediaQuery, Typography, Wrapper } from '@supercarmarket/ui';
-import React from 'react';
+import * as React from 'react';
 import { css } from 'styled-components';
 
 interface PartnershipDetailCard {

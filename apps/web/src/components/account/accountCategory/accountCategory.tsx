@@ -23,8 +23,8 @@ import {
   Wrapper,
 } from '@supercarmarket/ui';
 import { useQueryClient } from '@tanstack/react-query';
-import { useRemoveCommunityPost } from 'utils/api/community';
-import { QUERY_KEYS, useAccountCategory } from 'utils/api/account';
+import { useRemoveCommunityPost } from 'http/server/community';
+import { QUERY_KEYS, useAccountCategory } from 'http/server/account';
 
 interface AccountCategoryProps {
   sub: string;

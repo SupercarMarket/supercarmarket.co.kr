@@ -16,7 +16,7 @@ import { useRouter } from 'next/navigation';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { clientFetcher } from '@supercarmarket/lib';
 import { ServerResponse } from '@supercarmarket/types/base';
-import { QUERY_KEYS, useMagazineInquiry } from 'utils/api/magazine';
+import { QUERY_KEYS, useMagazineInquiry } from 'http/server/magazine';
 
 interface MagazineDealerProps {
   postId: string;
