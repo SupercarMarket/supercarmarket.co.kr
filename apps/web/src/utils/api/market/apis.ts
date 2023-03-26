@@ -1,7 +1,7 @@
 import { clientApi, clientFetcher, serverFetcher } from '@supercarmarket/lib';
 import { CATEGORY_MAPPING } from 'constants/market';
 
-export const getMarket = ({
+export const getMarket = async ({
   query,
 }: {
   query: {
@@ -29,21 +29,21 @@ export const getMarket = ({
   });
 };
 
-export const getMarketPost = ({ id }: { id: string }) => {
+export const getMarketPost = async ({ id }: { id: string }) => {
   return clientFetcher(`/server/supercar/v1/shop`, {
     method: 'GET',
     params: id,
   });
 };
 
-export const likeMarketPost = ({
+export const likeMarketPost = async ({
   id,
   token,
 }: {
   id: string;
   token: string;
 }) => {
-  return clientFetcher(`/server/supercar/v1/shop/${id}/scrap`, {
+  return fetch(`/server/supercar/v1/shop/${id}/scrap`, {
     method: 'POST',
     headers: {
       ACCESS_TOKEN: token,
@@ -51,7 +51,7 @@ export const likeMarketPost = ({
   });
 };
 
-export const updateMarketSellStatus = ({
+export const updateMarketSellStatus = async ({
   data,
   token,
 }: {
@@ -68,7 +68,7 @@ export const updateMarketSellStatus = ({
   });
 };
 
-export const deleteMarketPost = ({
+export const deleteMarketPost = async ({
   data,
   token,
 }: {
@@ -85,13 +85,38 @@ export const deleteMarketPost = ({
   });
 };
 
-export const prefetchMarket = (query: { [key: string]: string | number }) => {
+export const prefetchMarket = async (query: {
+  [key: string]: string | number;
+}) => {
   return serverFetcher(
     `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/shop`,
     { method: 'GET', query }
   );
 };
 
-export const prefetchMarketPost = () => {
-  return serverFetcher('/', { method: 'GET' });
+export const prefetchMarketPost = async ({
+  boardView,
+  token,
+  id,
+}: {
+  id: string;
+  boardView?: string;
+  token?: string;
+}) => {
+  let headers = {};
+
+  if (token) headers = { ...headers, ACCESS_token: token };
+  if (boardView) headers = { ...headers, Cookie: `boardView=${boardView}` };
+
+  return serverFetcher(
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/shop`,
+    {
+      method: 'GET',
+      headers,
+      params: id,
+    }
+  ).then((res) => {
+    const { ok, status, ...rest } = res;
+    return rest;
+  });
 };

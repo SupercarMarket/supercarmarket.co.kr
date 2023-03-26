@@ -5,10 +5,9 @@ import {
   updateMarketSellStatus,
 } from './apis';
 
-export const useLikeMarketPost = (options = []) => {
+export const useLikeMarketPost = (id: string, options = {}) => {
   return useMutation({
-    mutationFn: ({ id, token }: { id: string; token: string }) =>
-      likeMarketPost({ id, token }),
+    mutationFn: ({ token }: { token: string }) => likeMarketPost({ id, token }),
     useErrorBoundary: true,
     ...options,
   });
