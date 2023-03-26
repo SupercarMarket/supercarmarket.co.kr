@@ -13,7 +13,7 @@ export const useLikeMarketPost = (id: string, options = {}) => {
   });
 };
 
-export default function useChangeMarketSellStatus(options = {}) {
+export const useUpdateMarketSellStatus = (options = {}) => {
   return useMutation({
     mutationFn: ({
       data,
@@ -25,7 +25,7 @@ export default function useChangeMarketSellStatus(options = {}) {
     useErrorBoundary: true,
     ...options,
   });
-}
+};
 
 export const useDeleteMarketPost = (options = {}) => {
   return useMutation({
