@@ -16,10 +16,9 @@ import { ErrorBoundary } from 'react-error-boundary';
 import Layout from 'components/layout';
 import { ErrorFallback } from 'components/fallback';
 import { useSearchKeyword } from 'hooks/useSearchKeyword';
-import { serverFetcher } from '@supercarmarket/lib';
 import PartnershipContents from 'components/partnership/partnershipContents';
 import Advertisement from 'components/common/advertisement';
-import { PARTNERSHIP_QUERY_KEY } from 'utils/api/partnership/index';
+import { prefetchPartnershipPost, QUERY_KEYS } from 'utils/api/partnership';
 
 const PartnershipDetailPage: NextPageWithLayout = ({
   id,
@@ -94,18 +93,10 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   const queryClient = new QueryClient();
 
-  queryClient.prefetchQuery(PARTNERSHIP_QUERY_KEY.partnership.id(id), () =>
-    serverFetcher(
-      `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/partnership`,
-      {
-        method: 'GET',
-        params: id,
-      }
-    ).then((res) => {
-      const { ok, status, ...rest } = res;
-      return rest;
-    })
-  );
+  await queryClient.prefetchQuery({
+    queryKey: QUERY_KEYS.id(id),
+    queryFn: () => prefetchPartnershipPost(id),
+  });
 
   ctx.res.setHeader('Cache-Control', 'public, max-age=500, immutable');
 

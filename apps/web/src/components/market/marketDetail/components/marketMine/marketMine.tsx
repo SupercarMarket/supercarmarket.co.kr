@@ -1,6 +1,5 @@
 import {
   Button,
-  Container,
   Typography,
   Wrapper,
   applyMediaQuery,
@@ -24,20 +23,18 @@ const MarketMine = ({ id, brdSeq }: MarketMineProps) => {
 
   const removeMarket = () => {
     if (!session.data) return;
-    const result = removeMarketById({
+    removeMarketById({
       data: [{ id }],
       token: session.data?.accessToken,
     });
-    console.log(result);
   };
 
   const changeStatus = () => {
     if (!session.data) return;
-    const result = changeSellStatus({
+    changeSellStatus({
       data: { brdSeq },
       token: session.data?.accessToken,
     });
-    console.log(result);
   };
 
   return (

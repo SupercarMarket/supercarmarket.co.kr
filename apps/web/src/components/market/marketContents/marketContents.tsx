@@ -1,5 +1,4 @@
 import { Container, Divider, Table, Wrapper } from '@supercarmarket/ui';
-import useMarketDetail from 'hooks/queries/useMarketDetail';
 import * as React from 'react';
 import { css } from 'styled-components';
 
@@ -8,6 +7,7 @@ import { MarketDetail } from '../marketDetail';
 import { ModalProvider } from 'feature/modalContext';
 import { MarketDetailSkeleton } from 'components/fallback/loading';
 import HeadSeo from 'components/common/headSeo';
+import { useMarketPost } from 'utils/api/market';
 
 interface MarketContentsProps {
   id: string;
@@ -15,7 +15,7 @@ interface MarketContentsProps {
 
 const MarketContents = (props: MarketContentsProps) => {
   const { id } = props;
-  const { data, isFetching, isLoading } = useMarketDetail(id);
+  const { data, isFetching, isLoading } = useMarketPost(id);
 
   if (isFetching || isLoading) return <MarketDetailSkeleton />;
 

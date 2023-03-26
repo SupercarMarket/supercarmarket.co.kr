@@ -19,22 +19,21 @@ const PartnershipList = (props: PartnershipListProps) => {
   const { category: _category, pagination, tab } = props;
   const {
     page,
+    keyword,
     size = '20',
     region = '전국',
     category = 'all',
-    keyword,
   } = useUrlQuery();
-
   const {
     data: partnerships,
     isLoading,
     isFetching,
-  } = usePartnership<PartnershipResponse<PartnershipDto>>({
-    page: String(page),
+  } = usePartnership({
     pageSize: size,
     region,
     category: _category || category,
     keyword,
+    page,
   });
 
   const DummySkeleton = Array.from({ length: 20 }, (_, i) => (

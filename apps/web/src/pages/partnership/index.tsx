@@ -17,7 +17,7 @@ import { PARTNERSHIP_LINKS } from 'constants/partnership';
 import PartnershipList from 'components/partnership/partnershipList';
 import PartnershipCategory from 'components/partnership/partnershipCategory';
 import Advertisement from 'components/common/advertisement';
-import { PARTNERSHIP_QUERY_KEY } from 'utils/api/partnership/keys';
+import { prefetchPartnership, QUERY_KEYS } from 'utils/api/partnership';
 
 const PartnershipPage: NextPageWithLayout = ({
   category,
@@ -99,11 +99,19 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
       },
     };
 
-  queryClient.prefetchQuery(PARTNERSHIP_QUERY_KEY.partnership.lists([]), () =>
-    fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/partnership`, {
-      method: 'GET',
-    }).then((res) => res.json())
-  );
+  queryClient.prefetchQuery({
+    queryKey: [
+      QUERY_KEYS.partnership(),
+      {
+        page: 0,
+        size: '20',
+        region: '전국',
+        category: 'all',
+        keyword: '',
+      },
+    ],
+    queryFn: () => prefetchPartnership(),
+  });
 
   return {
     props: {

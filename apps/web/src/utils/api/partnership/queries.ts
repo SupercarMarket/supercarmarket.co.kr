@@ -1,11 +1,15 @@
-import { PARTNERSHIP_QUERY_KEY } from './keys';
-import { PartnershipDetailResponse } from '@supercarmarket/types/partnership';
+import {
+  PartnershipDetailResponse,
+  type PartnershipDto,
+  type PartnershipResponse,
+} from '@supercarmarket/types/partnership';
 import { useQuery } from '@tanstack/react-query';
-import { getPartnership, getPartnershipList } from './apis';
+import { getPartnership, getPartnershipPost } from './apis';
+import { QUERY_KEYS } from './keys';
 
-const usePartnership = <T>(
+export const usePartnership = (
   query: {
-    page?: string;
+    page: number;
     pageSize?: string;
     region?: string;
     category: string;
@@ -13,21 +17,17 @@ const usePartnership = <T>(
   },
   options = {}
 ) => {
-  const queryString = Object.values(query);
-
-  return useQuery<T>(
-    PARTNERSHIP_QUERY_KEY.partnership.lists(queryString),
-    () => getPartnershipList(query),
-    { useErrorBoundary: true, ...options }
+  return useQuery<PartnershipResponse<PartnershipDto>>(
+    [...QUERY_KEYS.partnership(), query],
+    () => getPartnership(query),
+    options
   );
 };
 
-const usePartnershipDetail = (id: string, options = {}) => {
+export const usePartnershipPost = (id: string, options = {}) => {
   return useQuery<PartnershipDetailResponse<string>>(
-    PARTNERSHIP_QUERY_KEY.partnership.id(id),
-    () => getPartnership(id),
-    { useErrorBoundary: true, ...options }
+    QUERY_KEYS.id(id),
+    () => getPartnershipPost({ id }),
+    options
   );
 };
-
-export { usePartnership, usePartnershipDetail };

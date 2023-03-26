@@ -1,37 +1,60 @@
-import { clientFetcher, serverFetcher } from '@supercarmarket/lib';
+import {
+  clientFetcher,
+  partnershipFormatter,
+  serverFetcher,
+} from '@supercarmarket/lib';
 
-interface GetPartnershipListProps {
-  page?: string;
+export const getPartnership = async (query: {
+  category: string;
+  page: number;
   pageSize?: string;
   region?: string;
-  category: string;
   keyword?: string;
-}
-
-const getPartnershipList = async (query: GetPartnershipListProps) => {
+}) => {
   const { category, page, ...rest } = query;
 
-  const queries =
-    query.category === 'all'
-      ? { page: Number(query.page) + 1 || '1', ...rest }
-      : {
-          category: category.toUpperCase(),
-          ...rest,
-        };
+  let currentQuery =
+    category === 'all'
+      ? { page: Number(page) + 1 || '1', ...rest }
+      : { category: partnershipFormatter(category), ...rest };
 
-  return clientFetcher(`/server/supercar/v1/partnership`, {
+  return clientFetcher('/server/supercar/v1/partnership', {
     method: 'GET',
-    query: queries,
-  });
-};
-
-const getPartnership = async (id: string) => {
-  return serverFetcher(`/server/supercar/v1/partnership/${id}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
+    query: {
+      ...currentQuery,
+      page: page + 1,
     },
   });
 };
 
-export { getPartnershipList, getPartnership };
+export const getPartnershipPost = async ({ id }: { id: string }) => {
+  return clientFetcher(`/server/supercar/v1/partnership`, {
+    method: 'GET',
+    params: id,
+  });
+};
+
+export const prefetchPartnership = async () => {
+  return serverFetcher(
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/partnership`,
+    {
+      method: 'GET',
+    }
+  ).then((res) => {
+    const { ok, status, ...rest } = res;
+    return rest;
+  });
+};
+
+export const prefetchPartnershipPost = async (id: string) => {
+  return serverFetcher(
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/partnership`,
+    {
+      method: 'GET',
+      params: id,
+    }
+  ).then((res) => {
+    const { ok, status, ...rest } = res;
+    return rest;
+  });
+};

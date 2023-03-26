@@ -6,18 +6,14 @@ import Comment from 'components/common/comment/comment';
 import { applyMediaQuery, Wrapper } from '@supercarmarket/ui';
 import { css } from 'styled-components';
 import { PartnershipDetailSkeleton } from 'components/fallback/loading';
-import { usePartnershipDetail } from 'utils/api/partnership/index';
+import { usePartnershipPost } from 'utils/api/partnership';
 
 interface Props {
   id: string;
 }
 
 const PartnershipDetail = ({ id }: Props) => {
-  const {
-    data: partnerships,
-    isLoading,
-    isFetching,
-  } = usePartnershipDetail(id);
+  const { data: partnerships, isLoading, isFetching } = usePartnershipPost(id);
 
   if (isLoading || isFetching) return <PartnershipDetailSkeleton />;
 

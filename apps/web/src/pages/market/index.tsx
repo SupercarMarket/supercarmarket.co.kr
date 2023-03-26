@@ -25,6 +25,7 @@ import { useSearchKeyword } from 'hooks/useSearchKeyword';
 import { css } from 'styled-components';
 import HeadSeo from 'components/common/headSeo';
 import Advertisement from 'components/common/advertisement';
+import { prefetchMarket, QUERY_KEYS } from 'utils/api/market';
 
 const MarketFilterPage: NextPageWithLayout = ({
   category,
@@ -120,11 +121,10 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
       },
     };
 
-  queryClient.prefetchQuery(queries.market.lists([]), () =>
-    fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/shop`, {
-      method: 'GET',
-    }).then((res) => res.json())
-  );
+  await queryClient.prefetchQuery({
+    queryKey: [...QUERY_KEYS.market(), {}],
+    queryFn: () => prefetchMarket({}),
+  });
 
   return {
     props: {

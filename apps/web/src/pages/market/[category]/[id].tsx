@@ -13,18 +13,17 @@ import {
 } from '@tanstack/react-query';
 import layout from 'components/layout';
 import MarketContents from 'components/market/marketContents';
-import queries from 'constants/queries';
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { css } from 'styled-components';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from 'components/fallback';
-import { serverFetcher } from '@supercarmarket/lib';
 import { CATEGORY } from 'constants/market';
 import { makeQuery } from 'utils/market/marketQuery';
 import { getSession } from 'utils/api/auth/user';
 import Advertisement from 'components/common/advertisement';
+import { prefetchMarketPost, QUERY_KEYS } from 'utils/api/market';
 
 const MarketDetailPage: NextPageWithLayout = ({
   id,
@@ -135,24 +134,13 @@ export const getServerSideProps: GetServerSideProps = async ({
 
   const queryClient = new QueryClient();
 
-  let headers = {};
   const boardView = req.cookies['boardView'];
 
-  if (session) headers = { ...headers, ACCESS_token: session.accessToken };
-  if (boardView) headers = { ...headers, Cookie: `boardView=${boardView}` };
-
-  console.log('headers', headers);
-
-  await queryClient.prefetchQuery(queries.market.detail(id), () =>
-    serverFetcher(`${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/shop`, {
-      method: 'GET',
-      headers,
-      params: id,
-    }).then((res) => {
-      const { ok, status, ...rest } = res;
-      return rest;
-    })
-  );
+  await queryClient.prefetchQuery({
+    queryKey: QUERY_KEYS.id(id),
+    queryFn: () =>
+      prefetchMarketPost({ boardView, token: session?.accessToken, id }),
+  });
 
   res.setHeader('Cache-Control', 'public, max-age=500, immutable');
 
