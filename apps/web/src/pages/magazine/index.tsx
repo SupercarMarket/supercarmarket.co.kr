@@ -13,7 +13,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import HeadSeo from 'components/common/headSeo';
 import { css } from 'styled-components';
 import Advertisement from 'components/common/advertisement';
-import { prefetchMagazine, QUERY_KEYS } from 'utils/api/magazine';
+import { prefetchMagazine, QUERY_KEYS } from 'http/server/magazine';
 
 const MagazinePage: NextPageWithLayout = () => {
   return (

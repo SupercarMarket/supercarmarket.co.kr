@@ -13,7 +13,7 @@ import type {
   InferGetServerSidePropsType,
 } from 'next';
 import type { Session } from 'next-auth';
-import { getSession } from 'utils/api/auth/user';
+import { getSession } from 'http/server/auth/user';
 import {
   dehydrate,
   QueryClient,

@@ -17,7 +17,7 @@ import HeadSeo from 'components/common/headSeo';
 import { APP_NAME } from 'constants/core';
 import { css } from 'styled-components';
 import Advertisement from 'components/common/advertisement';
-import { prefetchHome, QUERY_KEYS } from 'utils/api/home';
+import { prefetchHome, QUERY_KEYS } from 'http/server/home';
 
 const Home: NextPageWithLayout = () => {
   return (

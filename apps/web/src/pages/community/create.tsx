@@ -3,7 +3,7 @@ import type { NextPageWithLayout } from '@supercarmarket/types/base';
 import { CommunityForm } from 'components/community';
 import layout from 'components/layout';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-import { getSession } from 'utils/api/auth/user';
+import { getSession } from 'http/server/auth/user';
 import { serverFetcher } from '@supercarmarket/lib';
 import { ModalProvider } from 'feature/modalContext';
 import { CommunityTemporaryStorageDto } from '@supercarmarket/types/community';

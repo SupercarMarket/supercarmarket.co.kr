@@ -1,3 +1,3 @@
-import { signInApi } from 'utils/api/auth/user';
+import { signInApi } from 'http/server/auth/user';
 
 export default signInApi;

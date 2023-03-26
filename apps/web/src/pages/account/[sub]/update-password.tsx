@@ -2,7 +2,7 @@ import { Container, Title } from '@supercarmarket/ui';
 import type { NextPageWithLayout, Params } from '@supercarmarket/types/base';
 import layout from 'components/layout';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-import { getSession } from 'utils/api/auth/user';
+import { getSession } from 'http/server/auth/user';
 import { AccountPasswordForm } from 'components/account';
 
 const ProfilePasswordUpdate: NextPageWithLayout = ({

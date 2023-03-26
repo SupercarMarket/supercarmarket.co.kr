@@ -11,7 +11,7 @@ import type { Provider } from 'next-auth/providers';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
 import KakaoProvider from 'next-auth/providers/kakao';
-import { isExpire, refreshToken } from 'utils/api/auth/token';
+import { isExpire, refreshToken } from 'http/server/auth/token';
 
 const providers: Provider[] = [
   /*

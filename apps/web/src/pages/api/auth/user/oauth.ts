@@ -1,3 +1,3 @@
-import { oauthApi } from 'utils/api/auth/user';
+import { oauthApi } from 'http/server/auth/user';
 
 export default oauthApi;

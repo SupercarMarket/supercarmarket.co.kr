@@ -17,7 +17,7 @@ import { PARTNERSHIP_LINKS } from 'constants/partnership';
 import PartnershipList from 'components/partnership/partnershipList';
 import PartnershipCategory from 'components/partnership/partnershipCategory';
 import Advertisement from 'components/common/advertisement';
-import { prefetchPartnership, QUERY_KEYS } from 'utils/api/partnership';
+import { prefetchPartnership, QUERY_KEYS } from 'http/server/partnership';
 
 const PartnershipPage: NextPageWithLayout = ({
   category,

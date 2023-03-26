@@ -12,7 +12,7 @@ import { SearchList } from 'components/search';
 import HeadSeo from 'components/common/headSeo';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from 'components/fallback';
-import { prefetchSearch, QUERY_KEYS } from 'utils/api/search';
+import { prefetchSearch, QUERY_KEYS } from 'http/server/search';
 
 const Search: NextPageWithLayout = ({
   keyword,

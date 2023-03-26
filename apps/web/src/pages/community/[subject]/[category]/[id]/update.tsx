@@ -13,8 +13,6 @@ import { css } from 'styled-components';
 const CommunityUpdate: NextPageWithLayout = ({
   initialData,
   id,
-  subject,
-  category,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   return (
     <Container>
