@@ -22,9 +22,9 @@ const PartnershipCard = ({
   siteUrl,
   imgSrc,
 }: PartnershipDto) => {
-  console.log(category);
   const engCategory =
     PARTNERSHIP_API_CATEGORY_MAPPER[category.replaceAll(' ', '')];
+
   return (
     <Container
       width="100%"

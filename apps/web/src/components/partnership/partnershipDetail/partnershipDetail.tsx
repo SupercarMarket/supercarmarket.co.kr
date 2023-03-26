@@ -48,6 +48,7 @@ const PartnershipDetail = ({ id }: Props) => {
                   css={css`
                     display: flex;
                     width: 100%;
+                    gap: 50px;
 
                     ${applyMediaQuery('mobile')} {
                       flex-direction: column-reverse;
