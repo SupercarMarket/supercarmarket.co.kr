@@ -1,6 +1,4 @@
-import { CATEGORY_MAPPING } from 'constants/market';
 import { clientFetcher, serverFetcher } from '@supercarmarket/lib';
-import { PARTNERSHIP_API_CATEGORY_MAPPER } from 'constants/partnership';
 
 interface GetPartnershipListProps {
   page?: string;
@@ -13,11 +11,13 @@ interface GetPartnershipListProps {
 const getPartnershipList = async (query: GetPartnershipListProps) => {
   const { category, page, ...rest } = query;
 
+  console.log(category);
+
   const queries =
     query.category === 'all'
       ? { page: Number(query.page) + 1 || '1', ...rest }
       : {
-          category: PARTNERSHIP_API_CATEGORY_MAPPER[category].toUpperCase(),
+          category: category.toUpperCase(),
           ...rest,
         };
 

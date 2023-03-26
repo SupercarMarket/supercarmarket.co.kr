@@ -10,6 +10,7 @@ import React from 'react';
 
 import { css } from 'styled-components';
 import { PartnershipDto } from '@supercarmarket/types/partnership';
+import { PARTNERSHIP_API_CATEGORY_MAPPER } from 'constants/partnership';
 
 const PartnershipCard = ({
   brdSeq,
@@ -21,6 +22,9 @@ const PartnershipCard = ({
   siteUrl,
   imgSrc,
 }: PartnershipDto) => {
+  console.log(category);
+  const engCategory =
+    PARTNERSHIP_API_CATEGORY_MAPPER[category.replaceAll(' ', '')];
   return (
     <Container
       width="100%"
@@ -30,7 +34,7 @@ const PartnershipCard = ({
       padding="6px 0"
     >
       <Link
-        href={`/partnership/${category.toLowerCase()}/${brdSeq}`}
+        href={`/partnership/${engCategory.toLowerCase()}/${brdSeq}`}
         style={{
           display: 'flex',
           alignItems: 'center',
