@@ -6,9 +6,9 @@ import {
   Table,
   Wrapper,
 } from '@supercarmarket/ui';
-import useMarket from 'hooks/queries/useMarket';
 import { css } from 'styled-components';
 import MarketCard from '../marketCard';
+import { useMarket } from 'utils/api/market';
 
 interface MarketListProps {
   pagination?: boolean;

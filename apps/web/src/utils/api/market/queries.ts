@@ -1,4 +1,3 @@
-import { clientFetcher } from '@supercarmarket/lib';
 import {
   type MarketDetailDto,
   type MarketDetailResponse,
@@ -6,8 +5,8 @@ import {
   type MarketResponse,
 } from '@supercarmarket/types/market';
 import { useQuery } from '@tanstack/react-query';
-import queries from 'constants/queries';
 import { QUERY_KEYS } from './keys';
+import { getMarket, getMarketPost } from './';
 
 export const useMarket = (
   query: {
@@ -29,29 +28,18 @@ export const useMarket = (
   },
   options = {}
 ) => {
-  const entries = Object.entries(query).filter(([, val]) => val !== undefined);
-  const queryKeys = entries.map(([, val]) => val + '');
-  const serverQuery = Object.fromEntries(entries);
-
-  return useQuery<MarketResponse<MarketDto>>(
-    [QUERY_KEYS.market(), query],
-    () =>
-      clientFetcher('/api/market', {
-        method: 'GET',
-        query: serverQuery,
-      }),
-    options
-  );
+  return useQuery<MarketResponse<MarketDto>>({
+    queryKey: [...QUERY_KEYS.market(), query],
+    queryFn: () => getMarket({ query }),
+    ...options,
+  });
 };
 
-export const useMarketDetail = (id: string, options = {}) => {
-  return useQuery<MarketDetailResponse<MarketDetailDto<string>>>(
-    queries.market.detail(id),
-    () =>
-      clientFetcher(`/server/supercar/v1/shop`, { method: 'GET', params: id }),
-    {
-      ...options,
-      useErrorBoundary: true,
-    }
-  );
+export const useMarketPost = (id: string, options = {}) => {
+  return useQuery<MarketDetailResponse<MarketDetailDto<string>>>({
+    queryKey: QUERY_KEYS.id(id),
+    queryFn: () => getMarketPost({ id }),
+    useErrorBoundary: true,
+    ...options,
+  });
 };
