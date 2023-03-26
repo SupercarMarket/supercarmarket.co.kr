@@ -138,6 +138,8 @@ const PartnershipCard = ({
                 ${applyMediaQuery('mobile')} {
                   padding-left: 12px;
                   gap: 8px;
+                  justify-content: flex-start;
+                  text-align: center;
 
                   .category,
                   .work-time,
