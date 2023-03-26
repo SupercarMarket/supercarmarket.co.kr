@@ -4,10 +4,12 @@ import {
   Wrapper,
   applyMediaQuery,
 } from '@supercarmarket/ui';
-import useChangeSellStatus from 'hooks/mutations/market/useChangeSellStatus';
-import useRemoveMarketById from 'hooks/mutations/market/useRemoveMarketById';
+import {
+  useDeleteMarketPost,
+  useUpdateMarketSellStatus,
+} from 'http/server/market';
 import { useSession } from 'next-auth/react';
-import React from 'react';
+import * as React from 'react';
 import { css } from 'styled-components';
 
 interface MarketMineProps {
@@ -18,8 +20,8 @@ interface MarketMineProps {
 const MarketMine = ({ id, brdSeq }: MarketMineProps) => {
   const session = useSession();
 
-  const { mutate: removeMarketById } = useRemoveMarketById();
-  const { mutate: changeSellStatus } = useChangeSellStatus();
+  const { mutate: removeMarketById } = useDeleteMarketPost();
+  const { mutate: changeSellStatus } = useUpdateMarketSellStatus();
 
   const removeMarket = () => {
     if (!session.data) return;

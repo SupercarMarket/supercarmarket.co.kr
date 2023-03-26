@@ -2,7 +2,7 @@ import { Button, Typography, Wrapper } from '@supercarmarket/ui';
 import { useSession } from 'next-auth/react';
 import * as React from 'react';
 import { css } from 'styled-components';
-import { useMagazineScrap } from 'utils/api/magazine';
+import { useMagazineScrap } from 'http/server/magazine';
 
 interface MagazineScrapeProps {
   isScraped: boolean;

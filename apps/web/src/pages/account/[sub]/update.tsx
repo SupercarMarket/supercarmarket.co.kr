@@ -6,7 +6,7 @@ import {
   type GetServerSideProps,
   type InferGetServerSidePropsType,
 } from 'next';
-import { getSession } from 'utils/api/auth/user';
+import { getSession } from 'http/server/auth/user';
 import { ModalProvider } from 'feature/modalContext';
 
 const ProfileUpdate: NextPageWithLayout = ({

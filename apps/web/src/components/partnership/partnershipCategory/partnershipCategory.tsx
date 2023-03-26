@@ -7,7 +7,7 @@ import {
   PARTNERSHIP_LINKS,
 } from 'constants/partnership';
 import { useRouter } from 'next/router';
-import React from 'react';
+import * as React from 'react';
 import { css } from 'styled-components';
 import { makeQuery } from 'utils/market/marketQuery';
 

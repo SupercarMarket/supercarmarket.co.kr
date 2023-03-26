@@ -3,33 +3,16 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "components/*": [
-        "src/components/*"
-      ],
-      "utils/*": [
-        "src/utils/*"
-      ],
-      "assets/*": [
-        "src/assets/*"
-      ],
-      "constants/*": [
-        "src/constants/*"
-      ],
-      "feature/*": [
-        "src/feature/*"
-      ],
-      "hooks/*": [
-        "src/hooks/*"
-      ],
-      "pages/*": [
-        "src/pages/*"
-      ],
-      "styles/*": [
-        "src/styles/*"
-      ],
-      "types/*": [
-        "src/types/*"
-      ],
+      "components/*": ["src/components/*"],
+      "utils/*": ["src/utils/*"],
+      "assets/*": ["src/assets/*"],
+      "constants/*": ["src/constants/*"],
+      "feature/*": ["src/feature/*"],
+      "hooks/*": ["src/hooks/*"],
+      "pages/*": ["src/pages/*"],
+      "http/*": ["src/http/*"],
+      "styles/*": ["src/styles/*"],
+      "types/*": ["src/types/*"]
     },
     "target": "ES6"
   },
@@ -40,7 +23,5 @@
     "**/*.ts",
     "**/*.tsx"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }

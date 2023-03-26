@@ -17,7 +17,6 @@ import MarketBanner from 'components/market/marketBanner';
 import MarketCar from 'components/market/marketCar';
 import MarketFilter from 'components/market/marketFilter';
 import { CATEGORY, CATEGORY_VALUES, MARKET_LINKS } from 'constants/market';
-import queries from 'constants/queries';
 import type { InferGetServerSidePropsType, NextPageContext } from 'next/types';
 import * as React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -25,7 +24,7 @@ import { useSearchKeyword } from 'hooks/useSearchKeyword';
 import { css } from 'styled-components';
 import HeadSeo from 'components/common/headSeo';
 import Advertisement from 'components/common/advertisement';
-import { prefetchMarket, QUERY_KEYS } from 'utils/api/market';
+import { prefetchMarket, QUERY_KEYS } from 'http/server/market';
 
 const MarketFilterPage: NextPageWithLayout = ({
   category,

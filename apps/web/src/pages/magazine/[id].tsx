@@ -16,9 +16,9 @@ import type { ParsedUrlQuery } from 'querystring';
 import * as React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { css } from 'styled-components';
-import { getSession } from 'utils/api/auth/user';
+import { getSession } from 'http/server/auth/user';
 import Advertisement from 'components/common/advertisement';
-import { prefetchMagazinePost, QUERY_KEYS } from 'utils/api/magazine';
+import { prefetchMagazinePost, QUERY_KEYS } from 'http/server/magazine';
 
 const Comment = dynamic(() => import('components/common/comment'), {
   ssr: false,

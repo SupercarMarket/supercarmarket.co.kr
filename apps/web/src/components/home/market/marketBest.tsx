@@ -3,7 +3,7 @@ import type { MarketDto } from '@supercarmarket/types/market';
 import MarketCard from 'components/market/marketCard';
 import { css } from 'styled-components';
 import { applyMediaQuery } from 'styles/mediaQuery';
-import { useHome } from 'utils/api/home';
+import { useHome } from 'http/server/home';
 
 const Market = () => {
   const { data: marketBest } = useHome<MarketDto[]>('best');

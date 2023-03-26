@@ -1,4 +1,4 @@
-import { Typography, Wrapper, applyMediaQuery } from '@supercarmarket/ui';
+import { Typography, Wrapper } from '@supercarmarket/ui';
 
 import EyeIcon from '../../../../../assets/svg/eye.svg';
 import FavoriteBorderIcon from '../../../../../assets/svg/favorite-border.svg';

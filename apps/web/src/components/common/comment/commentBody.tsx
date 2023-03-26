@@ -18,7 +18,7 @@ import { css } from 'styled-components';
 import Avatar from '../avatar';
 import Link from 'next/link';
 import { Session } from 'next-auth';
-import { useDeleteComment, useLikeComment } from 'utils/api/comment';
+import { useDeleteComment, useLikeComment } from 'http/server/comment';
 
 const CommentCard = ({
   isMyComment = true,

@@ -15,7 +15,7 @@ import Link from 'next/link';
 import useBase64 from 'hooks/queries/useBase64';
 import Skeleton from 'react-loading-skeleton';
 import { ServerResponse } from '@supercarmarket/types/base';
-import { useMagazine } from 'utils/api/magazine';
+import { useMagazine } from 'http/server/magazine';
 
 interface MagazineBannerProps {
   reverse?: boolean;

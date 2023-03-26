@@ -21,9 +21,9 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from 'components/fallback';
 import { CATEGORY } from 'constants/market';
 import { makeQuery } from 'utils/market/marketQuery';
-import { getSession } from 'utils/api/auth/user';
+import { getSession } from 'http/server/auth/user';
 import Advertisement from 'components/common/advertisement';
-import { prefetchMarketPost, QUERY_KEYS } from 'utils/api/market';
+import { prefetchMarketPost, QUERY_KEYS } from 'http/server/market';
 
 const MarketDetailPage: NextPageWithLayout = ({
   id,

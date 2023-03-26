@@ -26,8 +26,8 @@ import {
   useCommunityPost,
   useLikeCommunityPost,
   useRemoveCommunityPost,
-} from 'utils/api/community';
-import { useMagazinePost } from 'utils/api/magazine';
+} from 'http/server/community';
+import { useMagazinePost } from 'http/server/magazine';
 
 const PostingBody = dynamic(() => import('./postingBody'), {
   ssr: false,

@@ -10,7 +10,7 @@ import { useUrlQuery } from '@supercarmarket/hooks';
 
 import MagazineCard from './magazineCard';
 import { css } from 'styled-components';
-import { useMagazine } from 'utils/api/magazine';
+import { useMagazine } from 'http/server/magazine';
 
 const MagazineList = () => {
   const { page = 0 } = useUrlQuery();

@@ -18,7 +18,7 @@ import { ErrorFallback } from 'components/fallback';
 import { useSearchKeyword } from 'hooks/useSearchKeyword';
 import PartnershipContents from 'components/partnership/partnershipContents';
 import Advertisement from 'components/common/advertisement';
-import { prefetchPartnershipPost, QUERY_KEYS } from 'utils/api/partnership';
+import { prefetchPartnershipPost, QUERY_KEYS } from 'http/server/partnership';
 
 const PartnershipDetailPage: NextPageWithLayout = ({
   id,

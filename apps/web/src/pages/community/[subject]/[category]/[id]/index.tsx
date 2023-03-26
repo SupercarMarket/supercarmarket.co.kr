@@ -7,9 +7,7 @@ import {
   QueryClient,
   QueryErrorResetBoundary,
 } from '@tanstack/react-query';
-import queries from 'constants/queries';
-import { serverFetcher } from '@supercarmarket/lib';
-import { getSession } from 'utils/api/auth/user';
+import { getSession } from 'http/server/auth/user';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from 'components/fallback';
 import Posting from 'components/common/posting';
@@ -17,7 +15,7 @@ import { CommunityPostingList } from 'components/community';
 import { ModalProvider } from 'feature/modalContext';
 import { css } from 'styled-components';
 import Advertisement from 'components/common/advertisement';
-import { prefetchCommunityPost, QUERY_KEYS } from 'utils/api/community';
+import { prefetchCommunityPost, QUERY_KEYS } from 'http/server/community';
 
 const CommunityPost: NextPageWithLayout = ({
   subject,

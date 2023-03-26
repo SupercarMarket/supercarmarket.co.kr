@@ -1,9 +1,4 @@
-import {
-  Container,
-  Typography,
-  Wrapper,
-  applyMediaQuery,
-} from '@supercarmarket/ui';
+import { Typography, Wrapper, applyMediaQuery } from '@supercarmarket/ui';
 import Image from 'next/image';
 import Link from 'next/link';
 import { css } from 'styled-components';

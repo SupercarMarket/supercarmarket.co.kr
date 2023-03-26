@@ -22,7 +22,7 @@ import {
   useMutation,
   useQueryClient,
 } from '@tanstack/react-query';
-import { QUERY_KEYS, useAccount } from 'utils/api/account';
+import { QUERY_KEYS, useAccount } from 'http/server/account';
 
 import UploadIcon from '../../../../public/svg/create.svg';
 import RemoveIcon from '../../../../public/svg/delete.svg';

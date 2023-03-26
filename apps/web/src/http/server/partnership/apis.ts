@@ -15,7 +15,7 @@ export const getPartnership = async (query: {
 
   let currentQuery =
     category === 'all'
-      ? { page: Number(page) + 1 || '1', ...rest }
+      ? { page, ...rest }
       : { category: partnershipFormatter(category), ...rest };
 
   return clientFetcher('/server/supercar/v1/partnership', {

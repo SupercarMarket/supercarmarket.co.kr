@@ -7,8 +7,8 @@ import {
   QUERY_KEYS as COMMENT_QUERY_KEYS,
   useAddComment,
   useUpdateComment,
-} from 'utils/api/comment';
-import { QUERY_KEYS as COMMUNITY_QUERY_KEYS } from 'utils/api/community';
+} from 'http/server/comment';
+import { QUERY_KEYS as COMMUNITY_QUERY_KEYS } from 'http/server/community';
 
 import {
   CommentAreaBottom,
