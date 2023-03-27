@@ -159,6 +159,9 @@ const ProfileBackground = ({
               objectFit: 'cover',
               zIndex: -1,
             }}
+            sizes={`${applyMediaQuery('desktop')} 100vw, ${applyMediaQuery(
+              'mobile'
+            )} 425px`}
           />
         )}
         {isMyAccountPage && (

@@ -97,7 +97,9 @@ const MarketColumn = (props: WithBlurredImage<MarketDto>) => {
                 src={imgSrc}
                 alt="thumbnail"
                 style={{ borderRadius: '4px' }}
-                sizes="100%"
+                sizes={`${applyMediaQuery('desktop')} 285px, ${applyMediaQuery(
+                  'mobile'
+                )} 167.5px`}
               />
             ) : (
               <Skeleton />
