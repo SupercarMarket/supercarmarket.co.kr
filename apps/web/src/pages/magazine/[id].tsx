@@ -85,7 +85,11 @@ export const getServerSideProps: GetServerSideProps = async ({
   await queryClient.prefetchQuery({
     queryKey: QUERY_KEYS.id(id),
     queryFn: () =>
-      prefetchMagazinePost({ id, token: session?.accessToken, boardView }),
+      prefetchMagazinePost({
+        id,
+        token: session?.accessToken,
+        boardView: `${boardView}[${id}]`,
+      }),
   });
 
   return {

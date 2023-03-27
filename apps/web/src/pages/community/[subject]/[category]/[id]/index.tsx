@@ -88,7 +88,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         id,
         category,
         token: session?.accessToken,
-        boardView,
+        boardView: `${boardView}[${id}]`,
       }),
   });
 
