@@ -459,6 +459,7 @@ const CommunityForm = (props: CommunityFormProps) => {
               setCategory(value);
               methods.setValue('category', value);
             }}
+            disabled={!!id}
           />
         </FormLabel>
         <FormLabel name="title" label="제목" bold>
