@@ -252,6 +252,7 @@ const CommunityForm = (props: CommunityFormProps) => {
 
   const handleRequire = React.useCallback(async (data: FormState) => {
     setSuccess(null);
+    setError(null);
 
     const { title, category } = data;
 
@@ -364,6 +365,10 @@ const CommunityForm = (props: CommunityFormProps) => {
     },
   });
 
+  const debouncedUploadMutation = useDebounce((data: FormState) => {
+    uploadMutation.mutate(data);
+  }, 500);
+
   const handleTemporaryStorage = React.useCallback(async () => {
     const data = {
       title: methods.getValues('title'),
@@ -372,12 +377,8 @@ const CommunityForm = (props: CommunityFormProps) => {
       temporaryStorage: true,
     };
 
-    uploadMutation.mutate(data);
-  }, [methods, uploadMutation]);
-
-  const debouncedUploadMutation = useDebounce((data: FormState) => {
-    uploadMutation.mutate(data);
-  }, 500);
+    debouncedUploadMutation(data);
+  }, [debouncedUploadMutation, methods]);
 
   // * 임시저장 데이터 불러오기
   React.useEffect(() => {
@@ -511,7 +512,18 @@ const CommunityForm = (props: CommunityFormProps) => {
               <Button
                 variant="Line"
                 type="button"
-                onClick={handleTemporaryStorage}
+                onClick={() => {
+                  const data = {
+                    title: methods.getValues('title'),
+                    category: methods.getValues('category'),
+                    files: methods.getValues('files'),
+                    temporaryStorage: true,
+                  };
+                  handleRequire(data).then(() => {
+                    handleTemporaryStorage();
+                  });
+                }}
+                disabled={uploadMutation.isLoading}
               >
                 임시저장
               </Button>
