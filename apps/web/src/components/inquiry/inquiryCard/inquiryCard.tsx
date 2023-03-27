@@ -1,6 +1,7 @@
 import { Container, Typography, Wrapper } from '@supercarmarket/ui';
 import type { InquiryDto } from '@supercarmarket/types/inquiry';
 import { css } from 'styled-components';
+import dayjs from 'dayjs';
 
 const InquiryCard = (props: InquiryDto) => {
   const { title, category, created, progress } = props;
@@ -49,7 +50,7 @@ const InquiryCard = (props: InquiryDto) => {
           lineHeight="150%"
           color="greyScale-6"
         >
-          {created}
+          {dayjs(created).format('HH:mm')}
         </Typography>
       </Wrapper.Item>
       <Wrapper.Item
