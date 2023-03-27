@@ -248,7 +248,7 @@ const CommunityCardRow = (props: CommunityCardChildrenProps) => {
               color="greyScale-6"
               lineHeight="150%"
             >
-              {dayjs(created).format('hh:mm')}
+              {dayjs(created).format('HH:mm')}
             </Typography>
             <Typography
               fontSize="body-14"

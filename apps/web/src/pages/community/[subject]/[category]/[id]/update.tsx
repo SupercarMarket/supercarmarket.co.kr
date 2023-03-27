@@ -6,6 +6,7 @@ import Advertisement from 'components/common/advertisement';
 import { CommunityForm } from 'components/community';
 import { ErrorFallback } from 'components/fallback';
 import Layout from 'components/layout';
+import { getSession } from 'http/server/auth/user';
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { ErrorBoundary } from 'react-error-boundary';
 import { css } from 'styled-components';
@@ -48,10 +49,11 @@ CommunityUpdate.Layout = Layout;
 export default CommunityUpdate;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { query } = ctx;
+  const { query, req } = ctx;
   const { subject, category, id } = query as Params;
+  const session = await getSession({ req });
 
-  if (!(subject && category && id)) {
+  if (!(subject && category && id && session)) {
     return {
       notFound: true,
     };
@@ -61,6 +63,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/community/${category}/update-id`,
     {
       method: 'GET',
+      headers: {
+        ACCESS_TOKEN: session.accessToken,
+      },
       params: id,
     }
   ).then((res) => {

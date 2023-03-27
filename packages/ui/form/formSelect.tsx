@@ -82,6 +82,7 @@ const FormSelect = React.forwardRef(function FormSelect(
   const [open, setOpen] = React.useState(false);
 
   const onClick = () => {
+    if (rest.disabled) return;
     setOpen((prev) => !prev);
   };
 
