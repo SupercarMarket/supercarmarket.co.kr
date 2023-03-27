@@ -1,5 +1,6 @@
 import {
   Alert,
+  applyMediaQuery,
   Button,
   Form,
   FormFiles,
@@ -433,6 +434,11 @@ const CommunityForm = (props: CommunityFormProps) => {
           flex-direction: column;
           gap: 24px;
           z-index: 0;
+          ${applyMediaQuery('mobile')} {
+            .toastui-editor-popup {
+              margin-left: 0 !important;
+            }
+          }
         `}
       >
         <FormLabel name="category" label="카테고리" bold>
