@@ -196,10 +196,10 @@ const CommunityForm = (props: CommunityFormProps) => {
       const { files } = data;
 
       const isLibrary = initialData?.category === 'information' || null;
-      const isSelecteLibrary = category === '자료실';
+      const isSelecteLibrary = category === '차량 정보';
 
       let addFiles = null;
-      let deleteFilesSrcs = null;
+      let deleteFileSrcs = null;
 
       // * 애초에 카테고리가 자료실이 아닌경우와 자료실인 경우
       // * - 선택한 카테고리가 자료실인 경우와 아닌경우
@@ -227,13 +227,13 @@ const CommunityForm = (props: CommunityFormProps) => {
         const currentTempFiles = initialData?.files || [];
 
         if (isLibrary && !isSelecteLibrary) {
-          deleteFilesSrcs = initialData.files.map((file) => file.url);
+          deleteFileSrcs = initialData.files.map((file) => file.url);
         }
 
         // * case 2-2
         // * 임시저장 카테고리가 자료실이고 선택한 카테고리가 자료실인 경우
         if (isLibrary && isSelecteLibrary) {
-          deleteFilesSrcs = currentTempFiles
+          deleteFileSrcs = currentTempFiles
             .filter((file) => !files.some((f) => f.name === file.name))
             .map((file) => file.url);
           addFiles = files.filter(
@@ -244,7 +244,7 @@ const CommunityForm = (props: CommunityFormProps) => {
 
       return {
         addFiles,
-        deleteFilesSrcs,
+        deleteFileSrcs,
       };
     },
     [category, initialData?.category, initialData.files, isInitialize]
@@ -278,7 +278,7 @@ const CommunityForm = (props: CommunityFormProps) => {
         tempId: _tempId,
         html,
       } = await handleEditorHtml();
-      const { addFiles, deleteFilesSrcs } = await handleFiles(data);
+      const { addFiles, deleteFileSrcs } = await handleFiles(data);
 
       const formData = new FormData();
 
@@ -291,9 +291,9 @@ const CommunityForm = (props: CommunityFormProps) => {
               category: reverseFormatter(category),
               addImgSrcs,
               thumbnail,
-              tempId: tempId || _tempId,
+              tempId: isInitialize ? tempId || _tempId : null,
               deleteImgSrcs,
-              deleteFilesSrcs,
+              deleteFileSrcs,
               contents: html,
             }),
           ],
@@ -323,11 +323,14 @@ const CommunityForm = (props: CommunityFormProps) => {
 
       const result = await response.json();
 
-      if (!response.ok) setError(result.message || ErrorCode[response.status]);
+      if (!response.ok) {
+        setError(result.message || ErrorCode[response.status]);
+        throw 'failed upload';
+      }
 
       return {
-        id: result.data.id,
-        tempId: result.data.tempId,
+        id: result.data?.id,
+        tempId: result.data?.tempId,
         temporaryStorage,
       };
     },
@@ -369,16 +372,12 @@ const CommunityForm = (props: CommunityFormProps) => {
     uploadMutation.mutate(data);
   }, 500);
 
-  const handleTemporaryStorage = React.useCallback(async () => {
-    const data = {
-      title: methods.getValues('title'),
-      category: methods.getValues('category'),
-      files: methods.getValues('files'),
-      temporaryStorage: true,
-    };
-
-    debouncedUploadMutation(data);
-  }, [debouncedUploadMutation, methods]);
+  const handleTemporaryStorage = React.useCallback(
+    async (data: FormState) => {
+      debouncedUploadMutation(data);
+    },
+    [debouncedUploadMutation]
+  );
 
   // * 임시저장 데이터 불러오기
   React.useEffect(() => {
@@ -441,7 +440,7 @@ const CommunityForm = (props: CommunityFormProps) => {
             name="category"
             option={{
               name: 'community',
-              values: ['제보', '포토갤러리', '내 차 자랑', '자료실'],
+              values: ['제보', '포토갤러리', '내 차 자랑', '차량 정보'],
             }}
             defaultValues={
               isInitialize && initialData?.category
@@ -463,12 +462,12 @@ const CommunityForm = (props: CommunityFormProps) => {
             {...methods.register('title')}
           />
         </FormLabel>
-        {category === '자료실' && (
+        {category === '차량 정보' && (
           <FormLabel name="files" label="첨부파일" bold>
             <FormFiles
               name="files"
               defaultValues={
-                initialData.tempId &&
+                isInitialize &&
                 initialData.category === 'information' &&
                 initialData.files.length > 0
                   ? initialData.files.map(
@@ -518,9 +517,10 @@ const CommunityForm = (props: CommunityFormProps) => {
                     category: methods.getValues('category'),
                     files: methods.getValues('files'),
                     temporaryStorage: true,
+                    tempId: uploadMutation.data?.tempId,
                   };
                   handleRequire(data).then(() => {
-                    handleTemporaryStorage();
+                    handleTemporaryStorage(data);
                   });
                 }}
                 disabled={uploadMutation.isLoading}
