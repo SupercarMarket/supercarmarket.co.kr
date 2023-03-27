@@ -245,37 +245,40 @@ const ProfileRepresentative = ({
 }: ProfileRepresentativeProps) => {
   const queryClient = useQueryClient();
   return (
-    <Container
-      display="grid"
-      flex="1"
-      gap="20px"
-      alignItems="center"
-      gridTemplateColumns="1fr 1fr 1fr"
-      style={{
-        overflowX: 'scroll',
-      }}
-    >
-      {images &&
-        images.map((image) => (
-          <ProfileRepresentativeItem
-            key={image}
-            src={image}
-            session={session}
-            sub={sub}
-            queryClient={queryClient}
-            isMyAccountPage={isMyAccountPage}
-          />
-        ))}
-      {images &&
-        Array.from({ length: 3 - images.length }).map((_, index) => (
-          <ProfileRepresentativeItem
-            key={index}
-            session={session}
-            queryClient={queryClient}
-            sub={sub}
-            isMyAccountPage={isMyAccountPage}
-          />
-        ))}
+    <Container display="flex" flex={1}>
+      <Wrapper
+        css={css`
+          display: grid;
+          gap: 20px;
+          grid-template-columns: 1fr 1fr 1fr;
+          align-items: center;
+          ${applyMediaQuery('mobile')} {
+            overflow-x: scroll;
+          }
+        `}
+      >
+        {images &&
+          images.map((image) => (
+            <ProfileRepresentativeItem
+              key={image}
+              src={image}
+              session={session}
+              sub={sub}
+              queryClient={queryClient}
+              isMyAccountPage={isMyAccountPage}
+            />
+          ))}
+        {images &&
+          Array.from({ length: 3 - images.length }).map((_, index) => (
+            <ProfileRepresentativeItem
+              key={index}
+              session={session}
+              queryClient={queryClient}
+              sub={sub}
+              isMyAccountPage={isMyAccountPage}
+            />
+          ))}
+      </Wrapper>
     </Container>
   );
 };
@@ -362,12 +365,11 @@ const ProfileRepresentativeItem = (props: ProfileRepresentativeItemProps) => {
               justify-content: center;
               background: ${({ theme }) => theme.color['greyScale-2']};
               border: 1px solid ${({ theme }) => theme.color['greyScale-4']};
-              border-radius: 20px;
+              border-radius: 12px;
               overflow: hidden;
               ${applyMediaQuery('mobile')} {
                 width: 160px;
                 height: 160px;
-                border-radius: 12px;
               }
             `
       }
@@ -378,7 +380,7 @@ const ProfileRepresentativeItem = (props: ProfileRepresentativeItemProps) => {
           alt="대표이미지"
           fill
           style={{
-            cursor: 'pointer',
+            cursor: isMyAccountPage ? 'pointer' : 'unset',
             objectFit: 'cover',
             borderRadius: '12px',
           }}
@@ -395,7 +397,7 @@ const ProfileRepresentativeItem = (props: ProfileRepresentativeItemProps) => {
               display: flex;
               align-items: center;
               justify-content: center;
-              cursor: pointer;
+              cursor: ${isMyAccountPage ? 'pointer' : 'unset'};
               &.hidden {
                 display: none;
               }
@@ -435,6 +437,7 @@ const ProfileRepresentativeItem = (props: ProfileRepresentativeItemProps) => {
             width: 100%;
             height: 100%;
             transition: all 0.3s;
+            border-radius: 12px;
             & > div {
               display: flex;
               align-items: flex-end;
