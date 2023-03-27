@@ -77,7 +77,9 @@ const Modal = ({
               fontWeight="regular"
               color="greyScale-5"
               lineHeight="150%"
+              space
               style={{
+                textAlign: 'center',
                 marginBottom: '38px',
               }}
             >

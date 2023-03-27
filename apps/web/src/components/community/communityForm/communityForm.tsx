@@ -386,7 +386,7 @@ const CommunityForm = (props: CommunityFormProps) => {
       onOpen(
         <Modal
           title="임시저장된 글이 있습니다. 불러오시겠습니까?"
-          description="취소를 누르면 임시저장 글이 삭제되고\n새 글을 작성할 수 있습니다."
+          description={`취소를 누르면 임시저장 글이 삭제되고\n새 글을 작성할 수 있습니다.`}
           closeText="취소"
           clickText="불러오기"
           onCancel={() => {
