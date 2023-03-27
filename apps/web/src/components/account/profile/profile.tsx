@@ -179,11 +179,6 @@ const ProfileBackground = ({
                 cursor: pointer;
                 line-height: 24px;
               }
-              svg {
-                width: 18px !important;
-                height: 18px !important;
-                fill: ${theme.color['greyScale-6']} !important;
-              }
               button {
                 height: 100% !important;
                 padding: 0 !important;
@@ -207,7 +202,11 @@ const ProfileBackground = ({
                   onChange={(e) => uploadMutation.mutate(e)}
                 />
                 <label htmlFor="background">배경 이미지 수정</label>
-                <UploadIcon />
+                <UploadIcon
+                  width="18px"
+                  height="18px"
+                  fill={theme.color['greyScale-6']}
+                />
               </div>
             </Button>
             {src !== baseSrc && (
@@ -226,7 +225,11 @@ const ProfileBackground = ({
               >
                 <div>
                   <label>삭제</label>
-                  <RemoveIcon />
+                  <RemoveIcon
+                    width="18px"
+                    height="18px"
+                    fill={theme.color['greyScale-6']}
+                  />
                 </div>
               </Button>
             )}
@@ -460,11 +463,6 @@ const ProfileRepresentativeItem = (props: ProfileRepresentativeItemProps) => {
               width: 24px;
               height: 24px;
             }
-            svg {
-              width: 24px !important;
-              height: 24px !important;
-              fill: ${theme.color['greyScale-6']} !important;
-            }
             &.hidden {
               visibility: hidden;
               opacity: 0;
@@ -498,7 +496,11 @@ const ProfileRepresentativeItem = (props: ProfileRepresentativeItemProps) => {
                     onChange={(e) => uploadMutation.mutate(e)}
                   />
                   <label htmlFor="representative">
-                    <UploadIcon />
+                    <UploadIcon
+                      width="24px"
+                      height="24px"
+                      fill={theme.color['greyScale-6']}
+                    />
                   </label>
                 </Button>
               )}
@@ -515,7 +517,11 @@ const ProfileRepresentativeItem = (props: ProfileRepresentativeItemProps) => {
                     removeMutation.mutate(src);
                   }}
                 >
-                  <RemoveIcon />
+                  <RemoveIcon
+                    width="24px"
+                    height="24px"
+                    fill={theme.color['greyScale-6']}
+                  />
                 </Button>
               )}
             </div>
