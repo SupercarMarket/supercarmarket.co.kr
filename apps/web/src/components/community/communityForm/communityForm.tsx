@@ -199,7 +199,7 @@ const CommunityForm = (props: CommunityFormProps) => {
       const isSelecteLibrary = category === '차량 정보';
 
       let addFiles = null;
-      let deleteFileSrcs = null;
+      let deleteFileSrcs: string[] = [];
 
       // * 애초에 카테고리가 자료실이 아닌경우와 자료실인 경우
       // * - 선택한 카테고리가 자료실인 경우와 아닌경우
