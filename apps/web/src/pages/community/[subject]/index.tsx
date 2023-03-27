@@ -61,6 +61,10 @@ const CommunityCategory: NextPageWithLayout = () => {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
+                    ${applyMediaQuery('mobile')} {
+                      flex-direction: column;
+                      gap: 16px;
+                    }
                   `}
                 >
                   <Title>{formatter(category)}</Title>

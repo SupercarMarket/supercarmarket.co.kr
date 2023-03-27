@@ -4,6 +4,7 @@ import { useUrlQuery } from '@supercarmarket/hooks';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { css } from 'styled-components';
+import { applyMediaQuery } from 'styles/mediaQuery';
 import { theme } from '../../styles';
 
 import { Button } from '../button';
@@ -86,6 +87,8 @@ const Tab = ({
             align-items: center;
             justify-content: flex-end;
             gap: 9px;
+            ${applyMediaQuery('mobile')} {
+            }
           `}
         >
           {popular && (
@@ -124,10 +127,13 @@ const Tab = ({
                     display: flex;
                     align-items: center;
                     box-sizing: border-box;
-                    padding: 10px;
+                    padding: 9px;
                     background: ${theme.color.white};
                     border: 1px solid ${theme.color['greyScale-4']};
                     border-radius: 4px;
+                    ${applyMediaQuery('mobile')} {
+                      padding: 7px;
+                    }
                   `}
                 >
                   <svg
@@ -170,10 +176,13 @@ const Tab = ({
                     display: flex;
                     align-items: center;
                     box-sizing: border-box;
-                    padding: 10px;
+                    padding: 9px;
                     background: ${theme.color.white};
                     border: 1px solid ${theme.color['greyScale-4']};
                     border-radius: 4px;
+                    ${applyMediaQuery('mobile')} {
+                      padding: 7px;
+                    }
                   `}
                 >
                   <svg
