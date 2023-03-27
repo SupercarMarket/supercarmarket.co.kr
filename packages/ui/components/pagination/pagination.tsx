@@ -27,6 +27,7 @@ interface PaginationProps {
   totalCount: number;
   totalPages: number;
   className?: string;
+  scrollTarget?: React.RefObject<HTMLDivElement>;
 }
 
 const PaginationLink = ({
@@ -42,7 +43,7 @@ const PaginationLink = ({
     );
   }
   return (
-    <Link href={href}>
+    <Link href={href} scroll={false}>
       <PaginationButton type="button" variant="Line">
         {children}
       </PaginationButton>
@@ -60,7 +61,7 @@ const PaginationItem = React.memo(function PaginationItem({
       data-active={active}
       className={clsx('pagination-item')}
     >
-      <Link href={href} shallow>
+      <Link href={href} scroll={false} shallow>
         <span>{children}</span>
       </Link>
     </PaginationItemContainer>
@@ -70,6 +71,7 @@ const PaginationItem = React.memo(function PaginationItem({
 const Pagination = memo(function Pagination({
   pageSize = 10,
   totalPages,
+  scrollTarget,
   className = 'pagination',
 }: PaginationProps) {
   const {
@@ -95,6 +97,7 @@ const Pagination = memo(function Pagination({
       .filter((v) => v.has(page + 1))
       .shift();
   }, [page, pageSize, totalPages]);
+  const [prevPage, setPrevPage] = React.useState(0);
 
   const categoryQuery = category !== 'all' && {
     category,
@@ -107,6 +110,13 @@ const Pagination = memo(function Pagination({
     searchType,
   };
 
+  React.useEffect(() => {
+    if (scrollTarget && prevPage !== page) {
+      scrollTarget.current?.scrollIntoView({ behavior: 'smooth' });
+      setPrevPage(page);
+    }
+  }, [page, prevPage, scrollTarget]);
+
   return (
     <Container
       display="flex"
@@ -118,7 +128,7 @@ const Pagination = memo(function Pagination({
         href={{
           pathname,
           query: {
-            page: page - pageSize,
+            page: 0,
             variant,
             ...categoryQuery,
             ...keywordQuery,
@@ -126,7 +136,7 @@ const Pagination = memo(function Pagination({
             ...restQuery,
           },
         }}
-        disabled={page <= pageSize}
+        disabled={page <= 0}
       >
         <svg
           width="12"
