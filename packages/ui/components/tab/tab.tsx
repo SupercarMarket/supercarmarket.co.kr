@@ -36,6 +36,7 @@ const Tab = ({
     useUrlQuery();
   const isPopular = filter === 'popular';
   const isVariantRow = variant === 'row';
+  const isScroll = scroll && !create;
   const pathname = usePathname();
   const keywordQuery = keyword && {
     keyword,
@@ -232,7 +233,7 @@ const Tab = ({
               </Button>
             </Link>
           )}
-          {scroll && (
+          {isScroll && (
             <Button type="button" variant="Line" onClick={scrollToTop}>
               맨 위로 ↑
             </Button>

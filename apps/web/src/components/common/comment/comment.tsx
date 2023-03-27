@@ -47,7 +47,7 @@ const Comment = ({ id, kind = 'magazine' }: CommentProps) => {
         justifyContent="flex-start"
         flexDirection="column"
         gap="20px"
-        padding={isMobile ? '16px' : '40px'}
+        padding={isMobile ? '16px 0' : '40px'}
         border={isMobile ? undefined : '1px solid #EAEAEC'}
         borderRadius="4px"
         boxSizing="border-box"
