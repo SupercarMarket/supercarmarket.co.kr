@@ -17,10 +17,10 @@ export const useHome = <T>(
     QUERY_KEYS[category](),
     () => getHome(category),
     {
-      ...options,
       useErrorBoundary: true,
       staleTime: 1000 * 60,
       cacheTime: 1000 * 60,
+      ...options,
     }
   );
 };
