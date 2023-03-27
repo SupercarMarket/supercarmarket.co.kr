@@ -26,7 +26,7 @@ interface CommunityListProps {
 
 const CommunityList = (props: CommunityListProps) => {
   const { category: iCategory, status } = props;
-  const [select, setSelect] = React.useState('');
+  const [select, setSelect] = React.useState(searchTypeFormatter('제목'));
   const pathname = usePathname();
   const { push } = useRouter();
   const { variant, category, page, keyword, searchType, filter } =
@@ -144,8 +144,8 @@ const CommunityList = (props: CommunityListProps) => {
         >
           <FormSelect
             defaultValues={
-              searchType
-                ? searchTypeFormatter(searchType, { reverse: true })
+              select
+                ? searchTypeFormatter(select, { reverse: true })
                 : undefined
             }
             option={{
@@ -169,11 +169,12 @@ const CommunityList = (props: CommunityListProps) => {
           variant="Line"
           border="normal"
           defaultValue={keyword}
-          handleClick={(query) =>
+          handleClick={(query) => {
+            if (!(select && query)) return;
             push(
               `${pathname}?category=${category}&variant=${variant}&searchType=${select}&keyword=${query}`
-            )
-          }
+            );
+          }}
           style={{
             height: '44px',
           }}
