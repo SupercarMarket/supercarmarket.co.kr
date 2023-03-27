@@ -29,6 +29,7 @@ import dayjs from 'dayjs';
 import { Modal } from 'components/common/modal';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEYS } from 'http/server/community';
+import { useDebounce } from '@supercarmarket/hooks';
 
 interface CommunityFormProps {
   id?: string;
@@ -249,92 +250,86 @@ const CommunityForm = (props: CommunityFormProps) => {
     [category, initialData?.category, initialData.files, isInitialize]
   );
 
-  const handleRequire = React.useCallback(
-    async (data: FormState) => {
-      const { title, category } = data;
+  const handleRequire = React.useCallback(async (data: FormState) => {
+    setSuccess(null);
 
-      if (!title) {
-        methods.setError('title', { message: '제목을 입력해주세요.' });
-        throw 'title is require';
-      }
+    const { title, category } = data;
 
-      if (!category) {
-        methods.setError('title', { message: '카테고리를 입력해주세요.' });
-        throw 'category is require';
-      }
-    },
-    [methods]
-  );
+    if (!title) {
+      setError('제목을 입력해주세요.');
+      throw 'title is require';
+    }
+
+    if (!category) {
+      setError('카테고리를 선택해주세요.');
+      throw 'category is require';
+    }
+  }, []);
 
   const uploadMutation = useMutation({
-    mutationFn: async (data: FormState) =>
-      handleRequire(data).then(async () => {
-        setError(null);
-        const { title, category, temporaryStorage, tempId } = data;
-        const {
-          addImgFiles,
-          addImgSrcs,
-          deleteImgSrcs,
-          thumbnail,
-          tempId: _tempId,
-          html,
-        } = await handleEditorHtml();
-        const { addFiles, deleteFilesSrcs } = await handleFiles(data);
+    mutationFn: async (data: FormState) => {
+      const { title, category, temporaryStorage, tempId } = data;
+      const {
+        addImgFiles,
+        addImgSrcs,
+        deleteImgSrcs,
+        thumbnail,
+        tempId: _tempId,
+        html,
+      } = await handleEditorHtml();
+      const { addFiles, deleteFilesSrcs } = await handleFiles(data);
 
-        const formData = new FormData();
+      const formData = new FormData();
 
-        formData.append(
-          'requestDto',
-          new Blob(
-            [
-              JSON.stringify({
-                title,
-                category: reverseFormatter(category),
-                addImgSrcs,
-                thumbnail,
-                tempId: tempId || _tempId,
-                deleteImgSrcs,
-                deleteFilesSrcs,
-                contents: html,
-              }),
-            ],
-            { type: 'application/json' }
-          )
-        );
+      formData.append(
+        'requestDto',
+        new Blob(
+          [
+            JSON.stringify({
+              title,
+              category: reverseFormatter(category),
+              addImgSrcs,
+              thumbnail,
+              tempId: tempId || _tempId,
+              deleteImgSrcs,
+              deleteFilesSrcs,
+              contents: html,
+            }),
+          ],
+          { type: 'application/json' }
+        )
+      );
 
-        if (addImgFiles?.length)
-          addImgFiles.forEach((file) => formData.append('images', file));
-        if (addFiles?.length)
-          addFiles.forEach((file) => formData.append('files', file));
+      if (addImgFiles?.length)
+        addImgFiles.forEach((file) => formData.append('images', file));
+      if (addFiles?.length)
+        addFiles.forEach((file) => formData.append('files', file));
 
-        const options = id
-          ? { method: 'PATCH', params: id }
-          : { method: 'POST' };
+      const options = id ? { method: 'PATCH', params: id } : { method: 'POST' };
 
-        const url = temporaryStorage
-          ? '/server/supercar/v1/community-temp'
-          : '/server/supercar/v1/community';
+      const url = temporaryStorage
+        ? '/server/supercar/v1/community-temp'
+        : '/server/supercar/v1/community';
 
-        const response = await fetcher(url, {
-          ...options,
-          headers: {
-            ACCESS_TOKEN: session.data?.accessToken || '',
-          },
-          params: id,
-          body: formData,
-        });
+      const response = await fetcher(url, {
+        ...options,
+        headers: {
+          ACCESS_TOKEN: session.data?.accessToken || '',
+        },
+        params: id,
+        body: formData,
+      });
 
-        const result = await response.json();
+      const result = await response.json();
 
-        if (!response.ok)
-          setError(result.message || ErrorCode[response.status]);
+      if (!response.ok) setError(result.message || ErrorCode[response.status]);
 
-        return {
-          id: result.data.id,
-          tempId: result.data.tempId,
-          temporaryStorage,
-        };
-      }),
+      return {
+        id: result.data.id,
+        tempId: result.data.tempId,
+        temporaryStorage,
+      };
+    },
     onSuccess: async ({ id: _id, temporaryStorage }) => {
       if (temporaryStorage) {
         setSuccess(dayjs(new Date()).format('HH:mm'));
@@ -370,8 +365,6 @@ const CommunityForm = (props: CommunityFormProps) => {
   });
 
   const handleTemporaryStorage = React.useCallback(async () => {
-    setSuccess(null);
-
     const data = {
       title: methods.getValues('title'),
       category: methods.getValues('category'),
@@ -381,6 +374,10 @@ const CommunityForm = (props: CommunityFormProps) => {
 
     uploadMutation.mutate(data);
   }, [methods, uploadMutation]);
+
+  const debouncedUploadMutation = useDebounce((data: FormState) => {
+    uploadMutation.mutate(data);
+  }, 500);
 
   // * 임시저장 데이터 불러오기
   React.useEffect(() => {
@@ -423,12 +420,14 @@ const CommunityForm = (props: CommunityFormProps) => {
     <FormProvider {...methods}>
       <Form
         encType="multipart/form-data"
-        onSubmit={methods.handleSubmit((data) => {
-          uploadMutation.mutate({
-            ...data,
-            tempId: uploadMutation.data?.tempId,
-          });
-        })}
+        onSubmit={methods.handleSubmit((data) =>
+          handleRequire(data).then(() => {
+            debouncedUploadMutation({
+              ...data,
+              tempId: uploadMutation.data?.tempId,
+            });
+          })
+        )}
         css={css`
           display: flex;
           flex-direction: column;
@@ -517,7 +516,11 @@ const CommunityForm = (props: CommunityFormProps) => {
                 임시저장
               </Button>
             )}
-            <Button variant="Primary" type="submit">
+            <Button
+              variant="Primary"
+              type="submit"
+              disabled={uploadMutation.isLoading}
+            >
               {id
                 ? formState.isSubmitting
                   ? '수정 중..'
