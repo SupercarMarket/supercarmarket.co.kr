@@ -15,8 +15,6 @@ import { PostingHeadCommunity, PostingHeadMagainze } from './postingHead';
 
 import dynamic from 'next/dynamic';
 import ModalContext from 'feature/modalContext';
-import AuthModal from '../modal/authModal';
-
 import LikeIcon from '../../../assets/svg/thumb-up.svg';
 import HeadSeo from '../headSeo/headSeo';
 import { useQueryClient } from '@tanstack/react-query';
@@ -28,6 +26,7 @@ import {
   useRemoveCommunityPost,
 } from 'http/server/community';
 import { useMagazinePost } from 'http/server/magazine';
+import { Modal } from '../modal';
 
 const PostingBody = dynamic(() => import('./postingBody'), {
   ssr: false,
@@ -105,7 +104,7 @@ const CommunityPosting = ({
   const session = useSession();
   const { onOpen, onClose, onClick } = React.useContext(ModalContext);
   const queryClient = useQueryClient();
-  const { replace } = useRouter();
+  const { replace, push } = useRouter();
   const { data: communityPost } = useCommunityPost(
     {
       subject,
@@ -165,18 +164,28 @@ const CommunityPosting = ({
   const handleLike = React.useCallback(() => {
     if (session.status === 'unauthenticated') {
       onOpen(
-        <AuthModal
-          onClose={onClose}
-          onClick={onClick}
-          onOpen={onOpen}
-          description="로그인 후 상담 추천이 가능합니다"
+        <Modal
+          description="로그인 후 추천이 가능합니다."
+          clickText="로그인"
+          closeText="회원가입"
+          onCancel={() => {
+            onClose();
+          }}
+          onClick={() => {
+            onClose();
+            push('/auth/signin');
+          }}
+          onClose={() => {
+            onClose();
+            push('/auth/signup');
+          }}
         />
       );
       return;
     }
     likeMuate(session.data?.accessToken || '');
     return;
-  }, [likeMuate, onClick, onClose, onOpen, session]);
+  }, [likeMuate, onClose, onOpen, push, session]);
 
   return (
     <>
