@@ -29,7 +29,7 @@ import {
 import dayjs from 'dayjs';
 import { Modal } from 'components/common/modal';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { QUERY_KEYS } from 'http/server/community';
+import { getTemporaryStorage, QUERY_KEYS } from 'http/server/community';
 import { useDebounce } from '@supercarmarket/hooks';
 
 interface CommunityFormProps {
@@ -47,17 +47,19 @@ const CommunityEditor = dynamic(() => import('./communityEditor'), {
 });
 
 const CommunityForm = (props: CommunityFormProps) => {
-  const { id, initialData } = props;
+  const { id, initialData: _initialData } = props;
 
   const { back, push } = useRouter();
   const session = useSession();
+  const [initialData, setInitialData] =
+    React.useState<CommunityTemporaryStorageDto>(_initialData);
   const [category, setCategory] = React.useState('');
   const [isInitialize, setIsInitialize] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
   const [success, setSuccess] = React.useState<string | null>(null);
   const editor = React.useRef<InstanceType<typeof Editor>>(null);
   const [images, setImages] = React.useState<CommunityFormEditorImages[]>([]);
-  const { onClick, onClose, onOpen } = React.useContext(ModalContext);
+  const { onClose, onOpen } = React.useContext(ModalContext);
   const methods = useForm<FormState>();
   const queryClient = useQueryClient();
   const { formState } = methods;
@@ -71,31 +73,28 @@ const CommunityForm = (props: CommunityFormProps) => {
     e.returnValue = '';
   }, []);
 
-  const handleInitialize = React.useCallback(() => {
-    setIsInitialize(true);
-    const instance = editor.current?.getInstance();
+  const handleInitialize = React.useCallback(
+    (data: CommunityTemporaryStorageDto) => {
+      setIsInitialize(true);
+      const instance = editor.current?.getInstance();
 
-    if (instance && initialData.contents)
-      instance.setHTML(initialData.contents);
+      if (instance && data.contents) instance.setHTML(data.contents);
 
-    if (initialData.images?.length > 0)
-      setImages(() =>
-        initialData.images.map((i) => ({
-          file: new File([i], i),
-          local: i,
-        }))
-      );
+      if (data.images?.length > 0)
+        setImages(() =>
+          data.images.map((i) => ({
+            file: new File([i], i),
+            local: i,
+          }))
+        );
 
-    methods.setValue('title', initialData.title);
+      methods.setValue('title', data.title);
 
-    onClose();
-  }, [
-    initialData.contents,
-    initialData.images,
-    initialData.title,
-    methods,
-    onClose,
-  ]);
+      setInitialData(data);
+      onClose();
+    },
+    [methods, onClose]
+  );
 
   const handleInitEditor = React.useCallback(() => {
     const instance = editor.current?.getInstance();
@@ -131,7 +130,7 @@ const CommunityForm = (props: CommunityFormProps) => {
       (element) => element.innerText
     );
 
-    if (!isContents) {
+    if (!isContents && !isImg) {
       setError('본문에 내용을 작성해주세요.');
       throw 'contents is require';
     }
@@ -338,6 +337,9 @@ const CommunityForm = (props: CommunityFormProps) => {
     onSuccess: async ({ id: _id, temporaryStorage }) => {
       if (temporaryStorage) {
         setSuccess(dayjs(new Date()).format('HH:mm'));
+        await getTemporaryStorage(session.data?.accessToken || '').then((res) =>
+          handleInitialize(res.data)
+        );
         return;
       }
 
@@ -382,7 +384,7 @@ const CommunityForm = (props: CommunityFormProps) => {
 
   // * 임시저장 데이터 불러오기
   React.useEffect(() => {
-    if (initialData.tempId && !id)
+    if (_initialData.tempId && !id)
       onOpen(
         <Modal
           title="임시저장된 글이 있습니다. 불러오시겠습니까?"
@@ -394,18 +396,18 @@ const CommunityForm = (props: CommunityFormProps) => {
           }}
           onClick={() => {
             onClose();
-            handleInitialize();
+            handleInitialize(_initialData);
           }}
           onClose={() => {
             onClose();
           }}
         />
       );
-  }, [handleInitialize, onClick, onClose, onOpen, initialData, id]);
+  }, []);
 
   React.useEffect(() => {
-    if (id) handleInitialize();
-  }, [handleInitialize, id]);
+    if (id) handleInitialize(_initialData);
+  }, []);
 
   React.useEffect(() => {
     (() => {

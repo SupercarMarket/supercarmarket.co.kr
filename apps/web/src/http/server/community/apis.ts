@@ -45,6 +45,7 @@ export const getCommunityPost = async ({
     {
       method: 'GET',
       headers,
+      credentials: 'include',
     }
   );
 };
@@ -90,6 +91,16 @@ export const deleteCommunityPost = async ({
   });
 };
 
+export const getTemporaryStorage = async (token: string) => {
+  return clientFetcher(`/server/supercar/v1/community-temp`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      ACCESS_TOKEN: token,
+    },
+  });
+};
+
 export const prefetchCommunityPost = async ({
   id,
   category,
@@ -114,5 +125,20 @@ export const prefetchCommunityPost = async ({
   ).then((res) => {
     const { ok, status, ...rest } = res;
     return rest;
+  });
+};
+
+export const prefetchTemporaryStorage = async (token: string) => {
+  return serverFetcher(
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/community-temp`,
+    {
+      method: 'GET',
+      headers: {
+        ACCESS_TOKEN: token,
+      },
+    }
+  ).then((res) => {
+    const { ok, status, ...rest } = res;
+    return rest.data;
   });
 };
