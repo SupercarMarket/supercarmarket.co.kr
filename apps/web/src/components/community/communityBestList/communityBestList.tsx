@@ -17,24 +17,42 @@ const CommunityBestList = () => {
       <Wrapper
         css={css`
           width: 100%;
-          padding-bottom: 52.5px;
-          display: grid;
-          grid-template-columns: 1fr 1fr 1fr 1fr;
-          gap: 20px;
+          height: 311px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
           ${applyMediaQuery('mobile')} {
-            column-gap: 8px;
-            row-gap: 16px;
-            overflow-x: scroll;
-            padding-bottom: 32px;
+            height: 217px;
           }
         `}
       >
         {data && data.data.length > 0 ? (
-          data.data.map((value) => (
-            <CommunityCard key={value.id} variant="column" {...value} />
-          ))
+          <Wrapper.Item
+            css={css`
+              display: grid;
+              grid-template-columns: 1fr 1fr 1fr 1fr;
+              gap: 20px;
+              ${applyMediaQuery('mobile')} {
+                column-gap: 8px;
+                row-gap: 16px;
+                overflow-x: scroll;
+              }
+            `}
+          >
+            {data.data.map((value) => (
+              <CommunityCard key={value.id} variant="column" {...value} />
+            ))}
+          </Wrapper.Item>
         ) : (
-          <Alert severity="info" title="인기글이 존재하지 않습니다." />
+          <Wrapper.Item
+            css={css`
+              width: 100%;
+              display: flex;
+              align-items: center;
+            `}
+          >
+            <Alert severity="info" title="인기글이 존재하지 않습니다." />
+          </Wrapper.Item>
         )}
       </Wrapper>
     </Container>
