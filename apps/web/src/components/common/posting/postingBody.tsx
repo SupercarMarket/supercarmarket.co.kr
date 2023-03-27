@@ -14,7 +14,9 @@ const PostingBody = React.memo(function PostingBody({
   const viewer = React.useRef<InstanceType<typeof Viewer>>(null);
 
   React.useEffect(() => {
-    viewer.current?.getInstance().setMarkdown(contentHtml);
+    const instance = viewer.current?.getInstance();
+    instance?.setMarkdown('');
+    instance?.setMarkdown(contentHtml);
   }, [contentHtml]);
 
   return (
