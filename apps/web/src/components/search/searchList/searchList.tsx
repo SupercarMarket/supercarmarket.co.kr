@@ -2,7 +2,13 @@ import { useUrlQuery } from '@supercarmarket/hooks';
 import { type SearchAll as SearchAllType } from '@supercarmarket/types/search';
 import { Category, Container } from '@supercarmarket/ui';
 import { useSearch } from 'http/server/search';
-import { SearchAll, SearchCommunity, SearchMagazine, SearchMarket } from '..';
+import {
+  SearchAll,
+  SearchCommunity,
+  SearchMagazine,
+  SearchMarket,
+  SearchPartnership,
+} from '..';
 import SearchNotify from '../searchNotify';
 
 const searchLinks = (keyword: string) => [
@@ -52,6 +58,17 @@ const searchLinks = (keyword: string) => [
     },
     category: 'community',
   },
+  {
+    title: '제휴업체',
+    href: {
+      pathname: '/search',
+      query: {
+        category: 'partnership',
+        keyword,
+      },
+    },
+    category: 'partnership',
+  },
 ];
 
 interface SearchListProps {
@@ -90,6 +107,7 @@ const SearchList = (props: SearchListProps) => {
               product: <SearchMarket {...data} />,
               community: <SearchCommunity {...data} />,
               magazine: <SearchMagazine {...data} />,
+              partnership: <SearchPartnership {...data} />,
             }[category]
           }
         </>
