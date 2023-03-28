@@ -19,6 +19,7 @@ import LikeIcon from '../../../assets/svg/thumb-up.svg';
 import Avatar from 'components/common/avatar';
 import useBase64 from 'hooks/queries/useBase64';
 import Skeleton from 'react-loading-skeleton';
+import { truncateOnWord } from '@supercarmarket/lib';
 
 interface CommunityCardProps extends WithBlurredImage<CommunityDto> {
   variant: string;
@@ -184,7 +185,7 @@ const CommunityCardRow = (props: CommunityCardChildrenProps) => {
                 flex: '1',
               }}
             >
-              {title}{' '}
+              {truncateOnWord(title, 50)}{' '}
               <Typography
                 as="b"
                 fontSize="body-16"
@@ -439,7 +440,7 @@ const CommunityCardColumn = (props: CommunityCardChildrenProps) => {
             fontWeight="bold"
             color="greyScale-6"
           >
-            {title}{' '}
+            {truncateOnWord(title, 50)}{' '}
             <Typography
               as="span"
               fontSize="header-16"
