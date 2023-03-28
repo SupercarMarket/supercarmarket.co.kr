@@ -10,6 +10,7 @@ import { css } from 'styled-components';
 import { useRouter } from 'next/navigation';
 
 import InquiryFormItem from '../inquiryFormItem';
+import { useDebounce } from '@supercarmarket/hooks';
 
 const MiscForm = () => {
   const session = useSession();
@@ -41,44 +42,48 @@ const MiscForm = () => {
     }
   };
 
-  const onSubmit = methods.handleSubmit((data) =>
-    handleRequire(data).then(async () => {
-      setError(null);
+  const debouncedSubmit = useDebounce(
+    (data: InquiryMiscFormState) =>
+      handleRequire(data).then(async () => {
+        setError(null);
 
-      const { title, contents } = data;
+        const { title, contents } = data;
 
-      const result = await clientApi('/server/supercar/v1/inquiry-etc', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ACCESS_TOKEN: session.data?.accessToken || '',
-        },
-        data: { title, contents },
-      });
+        const result = await clientApi('/server/supercar/v1/inquiry-etc', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ACCESS_TOKEN: session.data?.accessToken || '',
+          },
+          data: { title, contents },
+        });
 
-      if (!result.data) {
-        setError(result.message || ErrorCode[result.status]);
-        return;
-      }
+        if (!result.data) {
+          setError(result.message || ErrorCode[result.status]);
+          return;
+        }
 
-      onOpen(
-        <Modal
-          title="기타 문의"
-          description="기타 문의가 등록 완료되었습니다."
-          clickText="확인"
-          background="rgba(30, 30, 32, 0.5)"
-          onCancel={() => handleModal('/inquiry')}
-          onClick={() => handleModal('/')}
-          onClose={() => handleModal('/inquiry')}
-        />
-      );
-    })
+        onOpen(
+          <Modal
+            title="기타 문의"
+            description="기타 문의가 등록 완료되었습니다."
+            clickText="확인"
+            background="rgba(30, 30, 32, 0.5)"
+            onCancel={() => handleModal('/inquiry')}
+            onClick={() => handleModal('/')}
+            onClose={() => handleModal('/inquiry')}
+          />
+        );
+      }),
+    300
   );
 
   return (
     <FormProvider {...methods}>
       <Form
-        onSubmit={onSubmit}
+        onSubmit={methods.handleSubmit((data) => {
+          debouncedSubmit(data);
+        })}
         css={css`
           display: flex;
           flex-direction: column;

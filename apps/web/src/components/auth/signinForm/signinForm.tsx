@@ -21,6 +21,7 @@ import KakaoIcon from '../../../assets/svg/kakao.svg';
 import AuthFormItem from '../authFormItem/authFormItem';
 import * as style from './signinForm.styled';
 import useAuth from 'hooks/useAuth';
+import { useDebounce } from '@supercarmarket/hooks';
 
 const oauth = [
   { provider: 'kakao', title: '카카오', icon: <KakaoIcon /> },
@@ -73,7 +74,7 @@ const LocalFormItem = () => {
 
   const { formState } = methods;
 
-  const onSubmit = methods.handleSubmit(async (data) => {
+  const debouncedSubmit = useDebounce(async (data: FormState) => {
     setErrorMessage(null);
 
     const { id, password } = data;
@@ -88,10 +89,11 @@ const LocalFormItem = () => {
     if (!response) setErrorMessage(ErrorCode[450]);
     else if (response.ok) replace('/');
     else setErrorMessage(response?.error || ErrorCode[450]);
-  });
+  }, 300);
+
   return (
     <FormProvider {...methods}>
-      <Form css={style.form} onSubmit={onSubmit}>
+      <Form css={style.form} onSubmit={methods.handleSubmit(debouncedSubmit)}>
         <Wrapper css={style.wrapper}>
           {auth.signin().map((form) => (
             <FormLabel
