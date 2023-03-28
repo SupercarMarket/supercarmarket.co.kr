@@ -16,7 +16,7 @@ const formatter = (category: string) => {
   if (category === '자동차매장') return 'DEALER_SHOP';
   if (category === '공업사') return 'CAR_CENTER';
   if (category === '도색') return 'PAINTING';
-  if (category === '디테일링') return 'DEATILING';
+  if (category === '디테일링') return 'DETAILING';
   return 'ETC';
 };
 
