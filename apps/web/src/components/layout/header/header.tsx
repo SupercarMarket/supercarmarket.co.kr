@@ -66,7 +66,7 @@ const Header = ({ navlinks }: HeaderProps) => {
           }
           ${applyMediaQuery('mobile')} {
             height: 56px;
-            padding: 0 16px;
+            padding: 14px 16px;
           }
         `}
       >
