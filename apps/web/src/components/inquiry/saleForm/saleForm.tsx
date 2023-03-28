@@ -112,8 +112,8 @@ const SaleForm = (props: SaleFormProps) => {
 
       onOpen(
         <Modal
-          title="딜러 등록 문의"
-          description="로그인 후 이용 가능합니다"
+          title="판매차량 등록 문의"
+          description="판매차량 등록 문의가 완료되었습니다."
           clickText="확인"
           background="rgba(30, 30, 32, 0.5)"
           onCancel={() => {

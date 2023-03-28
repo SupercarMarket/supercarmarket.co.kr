@@ -82,8 +82,8 @@ const PartnershipForm = () => {
 
       onOpen(
         <Modal
-          title="기타 문의"
-          description="기타 문의가 등록 완료되었습니다."
+          title="광고 문의"
+          description="광고 문의가 등록 완료되었습니다."
           clickText="확인"
           background="rgba(30, 30, 32, 0.5)"
           onCancel={() => handleModal('/inquiry')}
