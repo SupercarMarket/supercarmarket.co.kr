@@ -90,10 +90,7 @@ const Header = ({ navlinks }: HeaderProps) => {
             }
           `}
         >
-          <Logo
-            width={isMobile ? '115.5' : undefined}
-            height={isMobile ? '28' : undefined}
-          />
+          <Logo />
         </Wrapper.Item>
         <Wrapper
           css={css`
