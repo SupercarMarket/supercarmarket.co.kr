@@ -29,9 +29,9 @@ const NavLink = memo(function NavLink({
         {title}
       </label>
       <button id={title} className={clsx('navlink-button')}>
-        {subMenu ? (
+        <Link href={'/' + href}>
           <Typography
-            as="a"
+            as="span"
             fontSize="header-16"
             fontWeight="bold"
             lineHeight="120%"
@@ -39,19 +39,7 @@ const NavLink = memo(function NavLink({
           >
             {title}
           </Typography>
-        ) : (
-          <Link href={'/' + href}>
-            <Typography
-              as="span"
-              fontSize="header-16"
-              fontWeight="bold"
-              lineHeight="120%"
-              color="black"
-            >
-              {title}
-            </Typography>
-          </Link>
-        )}
+        </Link>
       </button>
       <Wrapper.Item
         data-active={pathname.includes(href)}
