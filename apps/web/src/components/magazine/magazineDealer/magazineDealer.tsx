@@ -6,7 +6,6 @@ import {
   Typography,
   Wrapper,
 } from '@supercarmarket/ui';
-import Avvvatars from 'avvvatars-react';
 import { Modal } from 'components/common/modal';
 import ModalContext from 'feature/modalContext';
 import * as React from 'react';
@@ -17,6 +16,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { clientFetcher } from '@supercarmarket/lib';
 import { ServerResponse } from '@supercarmarket/types/base';
 import { QUERY_KEYS, useMagazineInquiry } from 'http/server/magazine';
+import Avatar from 'components/common/avatar';
 
 interface MagazineDealerProps {
   postId: string;
@@ -146,20 +146,14 @@ const MagazineDealer = ({ postId }: MagazineDealerProps) => {
               }
             `}
           >
-            <Wrapper.Item
-              css={css`
-                ${applyMediaQuery('mobile')} {
-                  & > div {
-                    width: 40px !important;
-                    height: 40px !important;
-                  }
-                  & > div > p {
-                    font-size: 15px !important;
-                  }
-                }
-              `}
-            >
-              <Avvvatars value="금종선" size={80} />
+            <Wrapper.Item>
+              <Avatar
+                rating="6"
+                size={80}
+                option={{
+                  mobile: '40',
+                }}
+              />
             </Wrapper.Item>
             <Wrapper.Item
               css={css`
