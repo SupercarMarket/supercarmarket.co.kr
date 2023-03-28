@@ -8,10 +8,13 @@ import {
 import { QUERY_KEYS } from './keys';
 import { getMagazine, getMagazinePost } from './apis';
 
-export const useMagazine = ({ page }: { page: number }, options = {}) => {
+export const useMagazine = (
+  { page, keyword }: { page: number; keyword?: string },
+  options = {}
+) => {
   return useQuery<PaginationResponse<MagazineDto[]>>({
-    queryKey: [...QUERY_KEYS.magazine(), { page }],
-    queryFn: () => getMagazine({ page }),
+    queryKey: [...QUERY_KEYS.magazine(), { page, keyword }],
+    queryFn: () => getMagazine({ page, keyword }),
     useErrorBoundary: true,
     refetchOnMount: true,
     ...options,

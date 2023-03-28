@@ -1,11 +1,18 @@
 import { clientFetcher, serverFetcher } from '@supercarmarket/lib';
 
-export const getMagazine = async ({ page }: { page: number }) => {
+export const getMagazine = async ({
+  page,
+  keyword,
+}: {
+  page: number;
+  keyword?: string;
+}) => {
+  const currentQuery = keyword
+    ? { keyword, page: page + 1 }
+    : { page: page + 1 };
   return clientFetcher('/server/supercar/v1/magazine', {
     method: 'GET',
-    query: {
-      page: page + 1,
-    },
+    query: currentQuery,
   });
 };
 
