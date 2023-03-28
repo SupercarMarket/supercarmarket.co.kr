@@ -65,8 +65,8 @@ const Logo = (props: LogoProps) => {
         }
         @media (${deviceQuery.mobile}) {
           .logo {
-            width: 115.5px;
-            height: 28px;
+            width: 115.5px !important;
+            height: 28px !important;
           }
         }
       `}</style>
