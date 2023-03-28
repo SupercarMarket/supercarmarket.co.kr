@@ -1,4 +1,4 @@
-import { deviceQuery } from '@supercarmarket/ui';
+import { applyMediaQuery, deviceQuery } from '@supercarmarket/ui';
 import clsx from 'clsx';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -24,7 +24,15 @@ const Logo = (props: LogoProps) => {
             className
           )}
         >
-          <Image src={logoSrc} placeholder="blur" alt="로고" fill />
+          <Image
+            src={logoSrc}
+            sizes={`${applyMediaQuery('desktop')} 231px, ${applyMediaQuery(
+              'mobile'
+            )} 115.5px`}
+            placeholder="blur"
+            alt="로고"
+            fill
+          />
         </div>
       </Link>
       <style jsx>{`

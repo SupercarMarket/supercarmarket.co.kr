@@ -402,6 +402,9 @@ const CommunityCardColumn = (props: CommunityCardChildrenProps) => {
               style={{
                 borderRadius: '4px',
               }}
+              sizes={`${applyMediaQuery('desktop')} 285px, ${applyMediaQuery(
+                'mobile'
+              )} 167.5px`}
             />
           ) : (
             <Skeleton />

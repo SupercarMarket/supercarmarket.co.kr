@@ -92,6 +92,9 @@ const MagazineCard = memo(function MagazineCard({
                 objectFit: 'cover',
                 borderRadius: '4px',
               }}
+              sizes={`${applyMediaQuery('desktop')} 387px, ${applyMediaQuery(
+                'mobile'
+              )} 167.5px`}
             />
           )}
         </Wrapper.Item>

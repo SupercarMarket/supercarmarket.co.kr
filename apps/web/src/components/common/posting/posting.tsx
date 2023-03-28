@@ -1,4 +1,5 @@
 import {
+  applyMediaQuery,
   Button,
   Container,
   Tab,
@@ -77,17 +78,23 @@ const MagazinePosting = ({ postId }: Omit<PostingProps, 'type'>) => {
           />
           <Container>
             <PostingHeadMagainze {...magazinePost.data} />
-            <Container
-              width="100%"
-              display="flex"
-              flexDirection="column"
-              padding="0 40px"
-              border="1px solid #EAEAEC"
-              borderRadius="4px"
-              boxSizing="border-box"
+            <Wrapper
+              css={css`
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                padding: 0 40px;
+                border: 1px solid #eaeaec;
+                border-radius: 4px;
+                box-sizing: border-box;
+                ${applyMediaQuery('mobile')} {
+                  border: unset;
+                  padding: 0;
+                }
+              `}
             >
               <PostingBody contentHtml={magazinePost.data.contentHtml} />
-            </Container>
+            </Wrapper>
           </Container>
           <MagazineScrape postId={postId} isScraped={magazinePost.isScraped} />
         </>
@@ -215,6 +222,10 @@ const CommunityPosting = ({
                   border-radius: 4px;
                   box-sizing: border-box;
                   margin-top: 20px;
+                  ${applyMediaQuery('mobile')} {
+                    padding: 0;
+                    border: unset;
+                  }
                 `}
               >
                 <PostingHeadCommunity

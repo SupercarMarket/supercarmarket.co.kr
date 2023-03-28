@@ -70,6 +70,9 @@ const MarketRow = ({
               alt="thumbnail"
               style={{ borderRadius: '4px' }}
               fill
+              sizes={`${applyMediaQuery('desktop')} 196px, ${applyMediaQuery(
+                'mobile'
+              )} 126px`}
             />
           ) : (
             <Skeleton />

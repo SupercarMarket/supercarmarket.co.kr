@@ -80,7 +80,7 @@ const Header = ({ navlinks }: HeaderProps) => {
           `}
         >
           <Button variant="Init" type="button" onClick={handleHamburger}>
-            <Image src={menuSrc} alt="menu" placeholder="blur" />
+            <Image src={menuSrc} alt="menu" />
           </Button>
         </Wrapper.Item>
         <Wrapper.Item
@@ -228,7 +228,7 @@ const Header = ({ navlinks }: HeaderProps) => {
               zIndex: '999',
             }}
           >
-            <Image src={searchSrc} alt="search" placeholder="blur" />
+            <Image src={searchSrc} alt="search" />
           </Button>
         </Wrapper.Item>
       </Wrapper>

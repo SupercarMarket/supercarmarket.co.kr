@@ -195,6 +195,9 @@ const MagazineBanner = ({
                   borderRadius: '4px',
                 }}
                 priority
+                sizes={`${applyMediaQuery('desktop')} 590px, ${applyMediaQuery(
+                  'mobile'
+                )} 343px`}
               />
             )}
           </Wrapper.Item>

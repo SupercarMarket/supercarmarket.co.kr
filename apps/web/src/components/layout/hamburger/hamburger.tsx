@@ -85,7 +85,7 @@ const HamburgerLinkItem = React.memo(function HamburgerLinkItem({
         </SupercarmarketLink>
         {children && children.length > 0 && (
           <Button type="button" variant="Init" onClick={handleShow}>
-            <Image src={arrowRightSrc} placeholder="blur" alt="arrow" />
+            <Image src={arrowRightSrc} alt="arrow" />
           </Button>
         )}
       </Wrapper.Top>
@@ -193,7 +193,7 @@ const Hamburger = React.memo(function Hamburger({
       >
         <Wrapper.Left>
           <Button variant="Init" type="button" onClick={handleClose}>
-            <Image src={closeSrc} placeholder="blur" alt="arrow" />
+            <Image src={closeSrc} alt="arrow" />
           </Button>
         </Wrapper.Left>
         <Wrapper.Right
