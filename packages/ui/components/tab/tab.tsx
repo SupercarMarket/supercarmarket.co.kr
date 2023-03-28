@@ -147,7 +147,7 @@ const Tab = ({
                     <g clipPath="url(#clip0_268_8692)">
                       <path
                         d="M3 18H21V16H3V18ZM3 13H21V11H3V13ZM3 6V8H21V6H3Z"
-                        fill={isVariantRow ? '#C3C3C7' : '#1E1E20'}
+                        fill={isVariantRow ? '#1E1E20' : '#C3C3C7'}
                       />
                     </g>
                     <defs>
@@ -198,28 +198,28 @@ const Tab = ({
                       y="3"
                       width="8"
                       height="8"
-                      fill={isVariantRow ? '#1E1E20' : '#C3C3C7'}
+                      fill={isVariantRow ? '#C3C3C7' : '#1E1E20'}
                     />
                     <rect
                       x="13"
                       y="3"
                       width="8"
                       height="8"
-                      fill={isVariantRow ? '#1E1E20' : '#C3C3C7'}
+                      fill={isVariantRow ? '#C3C3C7' : '#1E1E20'}
                     />
                     <rect
                       x="13"
                       y="13"
                       width="8"
                       height="8"
-                      fill={isVariantRow ? '#1E1E20' : '#C3C3C7'}
+                      fill={isVariantRow ? '#C3C3C7' : '#1E1E20'}
                     />
                     <rect
                       x="3"
                       y="13"
                       width="8"
                       height="8"
-                      fill={isVariantRow ? '#1E1E20' : '#C3C3C7'}
+                      fill={isVariantRow ? '#C3C3C7' : '#1E1E20'}
                     />
                   </svg>
                 </Wrapper>

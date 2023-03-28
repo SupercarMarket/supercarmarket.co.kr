@@ -111,9 +111,11 @@ const MagazineBanner = ({
             <Typography
               as="span"
               color="system-1"
+              fontWeight="medium"
               style={{
                 width: '100%',
                 textAlign: 'start',
+                fontFamily: 'var(--font-inter)',
               }}
             >
               NEW

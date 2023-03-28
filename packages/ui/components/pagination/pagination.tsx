@@ -61,7 +61,18 @@ const PaginationItem = React.memo(function PaginationItem({
       data-active={active}
       className={clsx('pagination-item')}
     >
-      <Link href={href} scroll={false} shallow>
+      <Link
+        href={href}
+        scroll={false}
+        shallow
+        style={{
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
         <span>{children}</span>
       </Link>
     </PaginationItemContainer>

@@ -7,6 +7,7 @@ import Document, {
 } from 'next/document';
 import Script from 'next/script';
 import { ServerStyleSheet } from 'styled-components';
+import { inter, pretendard } from './_app';
 
 const APP_NAME = '슈퍼카마켓';
 const APP_DESCRIPTION = '안녕하세요 슈퍼카 마켓입니다.';
@@ -25,12 +26,7 @@ export default class MyDocument extends Document {
       const initialProps = await Document.getInitialProps(ctx);
       return {
         ...initialProps,
-        styles: (
-          <>
-            {initialProps.styles}
-            {sheet.getStyleElement()}
-          </>
-        ),
+        styles: [initialProps.styles, sheet.getStyleElement()],
       };
     } finally {
       sheet.seal();
@@ -38,7 +34,7 @@ export default class MyDocument extends Document {
   }
   render(): JSX.Element {
     return (
-      <Html lang="ko">
+      <Html lang="ko" className={pretendard.className}>
         <Head>
           {/* meta */}
           <meta name="application-name" content={APP_NAME} />
@@ -107,7 +103,7 @@ export default class MyDocument extends Document {
             }}
           />
         </Head>
-        <body>
+        <body className={pretendard.className}>
           <Main />
           <div id="__portal" />
           <NextScript />

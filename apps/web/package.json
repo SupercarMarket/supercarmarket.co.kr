@@ -18,7 +18,6 @@
     "@supercarmarket/ui": "workspace:*",
     "@tanstack/react-query": "^4.24.4",
     "@toast-ui/react-editor": "^3.2.2",
-    "avvvatars-react": "^0.4.2",
     "browser-image-compression": "^2.0.0",
     "clsx": "^1.2.1",
     "cookies-next": "^2.1.1",
