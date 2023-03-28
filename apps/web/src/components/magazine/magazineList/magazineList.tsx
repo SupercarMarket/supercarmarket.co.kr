@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation';
 import MagazineCard from './magazineCard';
 import { css } from 'styled-components';
 import { useMagazine } from 'http/server/magazine';
+import MagazineBanner from '../magazineBanner';
 
 const MagazineList = () => {
   const { page = 0, keyword } = useUrlQuery();
@@ -19,6 +20,7 @@ const MagazineList = () => {
 
   return (
     <Container display="flex" flexDirection="column" alignItems="center">
+      <MagazineBanner initialData={magazine} />
       <Wrapper
         css={css`
           width: 880px;

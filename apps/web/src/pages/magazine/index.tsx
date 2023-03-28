@@ -7,7 +7,7 @@ import {
 } from '@tanstack/react-query';
 import { ErrorFallback } from 'components/fallback';
 import layout from 'components/layout';
-import { MagazineBanner, MagazineList } from 'components/magazine';
+import { MagazineList } from 'components/magazine';
 import type { GetStaticProps } from 'next/types';
 import { ErrorBoundary } from 'react-error-boundary';
 import HeadSeo from 'components/common/headSeo';
@@ -43,7 +43,6 @@ const MagazinePage: NextPageWithLayout = () => {
                   <ErrorFallback margin="100px 0" {...props} />
                 )}
               >
-                <MagazineBanner />
                 <MagazineList />
               </ErrorBoundary>
             </Wrapper>
