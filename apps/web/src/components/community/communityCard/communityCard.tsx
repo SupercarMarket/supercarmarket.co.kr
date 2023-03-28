@@ -184,16 +184,16 @@ const CommunityCardRow = (props: CommunityCardChildrenProps) => {
                 flex: '1',
               }}
             >
-              {title}
-            </Typography>
-            <Typography
-              as="span"
-              fontSize="body-16"
-              fontWeight="regular"
-              color="system-1"
-              lineHeight="150%"
-            >
-              ({comments})
+              {title}{' '}
+              <Typography
+                as="b"
+                fontSize="body-16"
+                fontWeight="regular"
+                color="system-1"
+                lineHeight="150%"
+              >
+                ({comments})
+              </Typography>
             </Typography>
           </Wrapper.Item>
         </Wrapper.Left>
