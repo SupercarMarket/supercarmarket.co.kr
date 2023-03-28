@@ -1,11 +1,11 @@
 import { Typography, Wrapper, applyMediaQuery } from '@supercarmarket/ui';
 import type { DealerDto } from '@supercarmarket/types/market';
-import Avvvatars from 'avvvatars-react';
 import Image from 'next/image';
 import { css } from 'styled-components';
 
 import CallIcon from '../../../../../assets/svg/call.svg';
 import * as style from './marketDetailDealer.styled';
+import Avatar from 'components/common/avatar';
 
 interface MarketDetailDealerProps {
   dealer: DealerDto;
@@ -34,7 +34,7 @@ const MarketDetailDealer = ({ dealer }: MarketDetailDealerProps) => {
           {profile ? (
             <Image alt="profile" src={profile} fill />
           ) : (
-            <Avvvatars value={dealerName} size={80} />
+            <Avatar rating="6" size={80} />
           )}
         </Wrapper>
         <Wrapper css={style.profile}>
