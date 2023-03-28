@@ -12,8 +12,8 @@ import { ThemeProvider } from 'styled-components';
 import GlobalStyle from 'styles/globalStyles';
 import { DefaultSeo } from 'next-seo';
 import { seoConfig } from 'utils/next-seo.config';
-import { Inter } from 'next/font/google';
-import localFont from 'next/font/local';
+import { Inter } from '@next/font/google';
+import localFont from '@next/font/local';
 
 const Nope: FC<{ children?: ReactNode }> = ({ children }) => <>{children}</>;
 
