@@ -5,14 +5,10 @@ import { applyMediaQuery } from './mediaQuery';
 
 const GlobalStyle = createGlobalStyle`
   ${reset}
-
   html, body ,#__next  {
     width: 100%;
-    font-family: var("--pretendard");
-    
-    * {
-      box-sizing: "border-box";
-    }
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
 
     ${applyMediaQuery('tablet')} {}
 
@@ -25,6 +21,10 @@ const GlobalStyle = createGlobalStyle`
     ${applyMediaQuery('mobile')} {
       font-size: 87.5%;
     }
+  }
+
+  * {
+    box-sizing: "border-box";
   }
 
   a {

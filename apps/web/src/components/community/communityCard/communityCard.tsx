@@ -362,7 +362,7 @@ const CommunityCardRow = (props: CommunityCardChildrenProps) => {
 };
 
 const CommunityCardColumn = (props: CommunityCardChildrenProps) => {
-  const { id, imgSrc, base64, category, profileSrc, nickname, title, rate } =
+  const { id, imgSrc, base64, category, nickname, title, rate, comments } =
     props;
 
   return (
@@ -439,14 +439,19 @@ const CommunityCardColumn = (props: CommunityCardChildrenProps) => {
             fontWeight="bold"
             color="greyScale-6"
           >
-            {title}
+            {title}{' '}
+            <Typography
+              as="span"
+              fontSize="header-16"
+              fontWeight="medium"
+              color="system-1"
+              style={{
+                fontFamily: 'var(--font-inter)',
+              }}
+            >
+              ({comments})
+            </Typography>
           </Typography>
-          <Typography
-            as="h2"
-            fontSize="header-16"
-            fontWeight="bold"
-            color="system-1"
-          />
         </Wrapper>
       </Container>
     </Link>

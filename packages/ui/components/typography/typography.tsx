@@ -37,7 +37,7 @@ const Typography = forwardRef(function Typography<
   const {
     as: Component = 'span',
     fontSize,
-    fontWeight,
+    fontWeight = 'regular',
     lineHeight,
     display = 'inline-block',
     textAlign,
@@ -60,6 +60,7 @@ const Typography = forwardRef(function Typography<
         display,
         textAlign,
         whiteSpace: space ? 'pre-wrap' : 'normal',
+        fontFamily: 'inherit',
         ...style,
       }}
       className={className}

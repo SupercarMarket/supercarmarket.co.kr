@@ -3,7 +3,7 @@ import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query';
-import theme, { pretendard } from 'constants/theme';
+import theme from 'constants/theme';
 import type { AppProps } from 'next/app';
 import { SessionProvider } from 'next-auth/react';
 import type { FC, ReactNode } from 'react';
@@ -12,8 +12,36 @@ import { ThemeProvider } from 'styled-components';
 import GlobalStyle from 'styles/globalStyles';
 import { DefaultSeo } from 'next-seo';
 import { seoConfig } from 'utils/next-seo.config';
+import { Inter } from 'next/font/google';
+import localFont from 'next/font/local';
 
 const Nope: FC<{ children?: ReactNode }> = ({ children }) => <>{children}</>;
+
+export const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  preload: true,
+  display: 'swap',
+});
+
+export const pretendard = localFont({
+  src: [
+    {
+      path: '../../public/fonts/Pretendard-Bold.woff2',
+      weight: '700',
+      style: 'bold',
+    },
+    {
+      path: '../../public/fonts/Pretendard-Regular.woff2',
+      weight: '400',
+      style: 'normal',
+    },
+  ],
+  preload: true,
+  display: 'swap',
+  variable: '--font-pretendard',
+  fallback: ['--font-pretendard', '-apple-system', 'system-ui'],
+});
 
 function MyApp({
   Component,
@@ -54,7 +82,8 @@ function MyApp({
             </Layout>
             <style jsx global>{`
               :root {
-                --pretendard: ${pretendard.style.fontFamily};
+                --font-inter: ${inter.style.fontFamily};
+                --font-pretendard: ${pretendard.style.fontFamily};
               }
             `}</style>
           </SessionProvider>
