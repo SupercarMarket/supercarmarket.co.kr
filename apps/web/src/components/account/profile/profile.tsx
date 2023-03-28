@@ -23,6 +23,8 @@ import {
 } from '@tanstack/react-query';
 import { QUERY_KEYS, useAccount } from 'http/server/account';
 import clsx from 'clsx';
+import uploadIconSrc from '../../../../public/images/create.png';
+import deleteIconSrc from '../../../../public/images/delete.png';
 
 const baseSrc =
   'https://user-images.githubusercontent.com/66871265/210207112-a0d7b276-e24b-4ae9-80a1-8e48d5cc45f2.png';
@@ -201,25 +203,7 @@ const ProfileBackground = ({
                   onChange={(e) => uploadMutation.mutate(e)}
                 />
                 <label htmlFor="background">배경 이미지 수정</label>
-                <svg
-                  width="18px"
-                  height="18px"
-                  viewBox="0 0 24 24"
-                  fill="current"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <g clipPath="url(#clip0_309_5878)">
-                    <path
-                      d="M3 17.25V21H6.75L17.81 9.94L14.06 6.19L3 17.25ZM5.92 19H5V18.08L14.06 9.02L14.98 9.94L5.92 19ZM20.71 5.63L18.37 3.29C18.17 3.09 17.92 3 17.66 3C17.4 3 17.15 3.1 16.96 3.29L15.13 5.12L18.88 8.87L20.71 7.04C21.1 6.65 21.1 6.02 20.71 5.63Z"
-                      fill="#1E1E20"
-                    />
-                  </g>
-                  <defs>
-                    <clipPath id="clip0_309_5878">
-                      <rect width="24" height="24" fill="white" />
-                    </clipPath>
-                  </defs>
-                </svg>
+                <Image src={uploadIconSrc} alt="upload" />
               </div>
             </Button>
             {src !== baseSrc && (
@@ -238,25 +222,7 @@ const ProfileBackground = ({
               >
                 <div>
                   <label>삭제</label>
-                  <svg
-                    width="18px"
-                    height="18px"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <g clipPath="url(#clip0_3617_34016)">
-                      <path
-                        d="M16 9V19H8V9H16ZM14.5 3H9.5L8.5 4H5V6H19V4H15.5L14.5 3ZM18 7H6V19C6 20.1 6.9 21 8 21H16C17.1 21 18 20.1 18 19V7Z"
-                        fill="#1E1E20"
-                      />
-                    </g>
-                    <defs>
-                      <clipPath id="clip0_3617_34016">
-                        <rect width="24" height="24" fill="white" />
-                      </clipPath>
-                    </defs>
-                  </svg>
+                  <Image src={deleteIconSrc} alt="delete" />
                 </div>
               </Button>
             )}
@@ -523,25 +489,7 @@ const ProfileRepresentativeItem = (props: ProfileRepresentativeItemProps) => {
                     onChange={(e) => uploadMutation.mutate(e)}
                   />
                   <label htmlFor="representative">
-                    <svg
-                      width="24px"
-                      height="24px"
-                      viewBox="0 0 24 24"
-                      fill="current"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <g clipPath="url(#clip0_309_5878)">
-                        <path
-                          d="M3 17.25V21H6.75L17.81 9.94L14.06 6.19L3 17.25ZM5.92 19H5V18.08L14.06 9.02L14.98 9.94L5.92 19ZM20.71 5.63L18.37 3.29C18.17 3.09 17.92 3 17.66 3C17.4 3 17.15 3.1 16.96 3.29L15.13 5.12L18.88 8.87L20.71 7.04C21.1 6.65 21.1 6.02 20.71 5.63Z"
-                          fill="#1E1E20"
-                        />
-                      </g>
-                      <defs>
-                        <clipPath id="clip0_309_5878">
-                          <rect width="24" height="24" fill="white" />
-                        </clipPath>
-                      </defs>
-                    </svg>
+                    <Image src={uploadIconSrc} alt="upload" />
                   </label>
                 </Button>
               )}
@@ -558,25 +506,7 @@ const ProfileRepresentativeItem = (props: ProfileRepresentativeItemProps) => {
                     removeMutation.mutate(src);
                   }}
                 >
-                  <svg
-                    width="24px"
-                    height="24px"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <g clipPath="url(#clip0_3617_34016)">
-                      <path
-                        d="M16 9V19H8V9H16ZM14.5 3H9.5L8.5 4H5V6H19V4H15.5L14.5 3ZM18 7H6V19C6 20.1 6.9 21 8 21H16C17.1 21 18 20.1 18 19V7Z"
-                        fill="#1E1E20"
-                      />
-                    </g>
-                    <defs>
-                      <clipPath id="clip0_3617_34016">
-                        <rect width="24" height="24" fill="white" />
-                      </clipPath>
-                    </defs>
-                  </svg>
+                  <Image src={deleteIconSrc} alt="delete" />
                 </Button>
               )}
             </div>
