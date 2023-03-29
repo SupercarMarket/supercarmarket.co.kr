@@ -134,7 +134,6 @@ export const getServerSideProps: GetServerSideProps = async ({
 
   const queryClient = new QueryClient();
 
-  console.log('cookies', req.cookies);
   const boardView = req.cookies['boardView'];
 
   await queryClient.prefetchQuery({
