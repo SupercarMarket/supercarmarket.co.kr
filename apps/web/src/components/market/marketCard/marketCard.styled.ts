@@ -2,15 +2,6 @@
 
 import styled from 'styled-components';
 
-const MarketCard = styled.div`
-  width: 285px;
-  height: 302px;
-`;
-
-const DivideArea = styled.div`
-  cursor: pointer;
-`;
-
 const Divider = styled.div`
   display: inline-block;
   width: 1px;
@@ -18,4 +9,4 @@ const Divider = styled.div`
   background: ${({ theme }) => theme.color['greyScale-4']};
 `;
 
-export { DivideArea, Divider, MarketCard };
+export { Divider };
