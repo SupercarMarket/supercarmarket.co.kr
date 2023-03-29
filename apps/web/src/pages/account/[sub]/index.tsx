@@ -1,4 +1,4 @@
-import { Container, Wrapper } from '@supercarmarket/ui';
+import { applyMediaQuery, Container, Wrapper } from '@supercarmarket/ui';
 import { BaseApiHandlerResponse } from '@supercarmarket/lib';
 import type { Profile as ProfileType } from '@supercarmarket/types/account';
 import type { Params, NextPageWithLayout } from '@supercarmarket/types/base';
@@ -23,6 +23,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from 'components/fallback';
 import HeadSeo from 'components/common/headSeo/headSeo';
 import { prefetchAccount, QUERY_KEYS } from 'http/server/account';
+import { css } from 'styled-components';
 
 type AccountParams = Params & {
   tab: AccountTab | null;
@@ -62,12 +63,20 @@ const Account: NextPageWithLayout = ({
                     <ErrorFallback {...props} margin="100px 0" />
                   )}
                 >
-                  <AccountCategory
-                    sub={sub}
-                    tab={tab}
-                    isMyAccountPage={isMyAccountPage}
-                    accountRoutes={accountRoutes}
-                  />
+                  <Wrapper
+                    css={css`
+                      ${applyMediaQuery('mobile')} {
+                        padding: 0 16px;
+                      }
+                    `}
+                  >
+                    <AccountCategory
+                      sub={sub}
+                      tab={tab}
+                      isMyAccountPage={isMyAccountPage}
+                      accountRoutes={accountRoutes}
+                    />
+                  </Wrapper>
                 </ErrorBoundary>
               </Wrapper>
             </>

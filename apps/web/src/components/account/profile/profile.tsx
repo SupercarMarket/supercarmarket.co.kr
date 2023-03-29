@@ -249,6 +249,7 @@ const ProfileRepresentative = ({
           grid-template-columns: 1fr 1fr 1fr;
           align-items: center;
           ${applyMediaQuery('mobile')} {
+            margin: 0 16px;
             overflow-x: scroll;
           }
         `}
