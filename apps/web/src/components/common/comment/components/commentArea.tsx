@@ -14,7 +14,7 @@ import {
   CommentAreaBottom,
   CommentAreaTextArea,
   CommentAreaTop,
-} from './comment.styled';
+} from '../comment.styled';
 
 type CommentAreaType = 'add' | 'edit';
 

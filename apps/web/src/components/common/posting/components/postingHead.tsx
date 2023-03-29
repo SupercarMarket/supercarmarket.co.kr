@@ -8,14 +8,15 @@ import {
 import dayjs from 'dayjs';
 import Image from 'next/image';
 import { Posting } from '@supercarmarket/types/base';
-import ChatIcon from '../../../assets/svg/chat.svg';
-import EyeIcon from '../../../assets/svg/eye.svg';
-import * as style from './posting.styled';
-import { PostingProps } from './posting';
+import ChatIcon from '../../../../assets/svg/chat.svg';
+import EyeIcon from '../../../../assets/svg/eye.svg';
+import * as style from '../posting.styled';
+import { PostingProps } from '../posting';
 import { formatter } from 'components/community/communityCard/communityCard';
 import { css } from 'styled-components';
-import Avatar from '../avatar';
+import Avatar from '../../avatar';
 import { truncateOnWord } from '@supercarmarket/lib';
+import Link from 'next/link';
 
 const PostingHeadMagainze = ({
   title,
@@ -210,7 +211,9 @@ const PostingHeadCommunity = ({
       </Wrapper.Top>
       <Wrapper.Bottom css={style.bottom}>
         <Wrapper.Left css={style.left}>
-          <Avatar rating={user.rate} size={40} nickname={user.nickname} />
+          <Link href={`/account/${user.id}`}>
+            <Avatar rating={user.rate} size={40} nickname={user.nickname} />
+          </Link>
           <Typography
             as="span"
             fontSize="body-14"

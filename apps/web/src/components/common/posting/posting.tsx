@@ -12,9 +12,8 @@ import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import * as React from 'react';
 import { css } from 'styled-components';
-import { PostingHeadCommunity, PostingHeadMagainze } from './postingHead';
-
 import dynamic from 'next/dynamic';
+import { PostingHeadCommunity, PostingHeadMagainze } from './components';
 import ModalContext from 'feature/modalContext';
 import LikeIcon from '../../../assets/svg/thumb-up.svg';
 import HeadSeo from '../headSeo/headSeo';
@@ -29,9 +28,10 @@ import {
 import { useMagazinePost } from 'http/server/magazine';
 import { Modal } from '../modal';
 
-const PostingBody = dynamic(() => import('./postingBody'), {
+const PostingBody = dynamic(() => import('./components/postingBody'), {
   ssr: false,
 });
+
 const Comment = dynamic(() => import('components/common/comment'), {
   ssr: false,
 });

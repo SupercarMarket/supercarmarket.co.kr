@@ -11,11 +11,11 @@ import {
 import * as React from 'react';
 import type { Comment } from '@supercarmarket/types/comment';
 
-import LikeIcon from '../../../assets/svg/thumb-up.svg';
-import * as style from './comment.styled';
-import CommentArea from './commentArea';
+import LikeIcon from '../../../../assets/svg/thumb-up.svg';
+import * as style from '../comment.styled';
+import { CommentArea } from '.';
 import { css } from 'styled-components';
-import Avatar from '../avatar';
+import Avatar from '../../avatar';
 import Link from 'next/link';
 import { Session } from 'next-auth';
 import { useDeleteComment, useLikeComment } from 'http/server/comment';

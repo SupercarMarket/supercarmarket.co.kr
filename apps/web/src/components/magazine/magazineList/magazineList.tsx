@@ -8,7 +8,7 @@ import {
 } from '@supercarmarket/ui';
 import { useUrlQuery } from '@supercarmarket/hooks';
 import { useRouter } from 'next/navigation';
-import MagazineCard from './magazineCard';
+import MagazineCard from '../magazineCard';
 import { css } from 'styled-components';
 import { useMagazine } from 'http/server/magazine';
 import MagazineBanner from '../magazineBanner';

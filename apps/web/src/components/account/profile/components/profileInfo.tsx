@@ -10,8 +10,8 @@ import { ratingFormatter } from 'components/common/avatar/avatar';
 import dayjs from 'dayjs';
 import Link from 'next/link';
 import { css } from 'styled-components';
-import { ProfileProps } from './profile';
-import * as style from './profile.styled';
+import { ProfileProps } from '../profile';
+import * as style from '../profile.styled';
 
 type ProfileInfoProps = ProfileProps & { sub: string };
 

@@ -1,7 +1,7 @@
 import { CommunityCard } from 'components/community';
 import { CardSkeleton } from 'components/fallback/loading';
-import InquiryCard from 'components/inquiry/inquiryCard/inquiryCard';
-import MagazineCard from 'components/magazine/magazineList/magazineCard';
+import InquiryCard from 'components/inquiry/inquiryCard';
+import MagazineCard from 'components/magazine/magazineCard';
 import MarketCard from 'components/market/marketCard';
 import type { AccountTab } from 'constants/account';
 import { useSession } from 'next-auth/react';
