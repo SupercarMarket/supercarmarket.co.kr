@@ -81,6 +81,10 @@ const SelectOptionList = styled.ul<SelectOptionListProps>`
   cursor: pointer;
   z-index: 20;
 
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
   ${({ toggle }) =>
     toggle &&
     css`
