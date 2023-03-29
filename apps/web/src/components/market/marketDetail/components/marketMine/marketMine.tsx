@@ -46,6 +46,7 @@ const MarketMine = ({ id, brdSeq }: MarketMineProps) => {
         align-items: center;
         justify-content: center;
         height: 205px;
+        gap: 16px;
 
         ${applyMediaQuery('mobile')} {
           height: 105px;
