@@ -14,6 +14,7 @@ import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { css } from 'styled-components';
 import { useRouter } from 'next/navigation';
+import { useDebounce } from '@supercarmarket/hooks';
 
 interface AccountPasswordFormProps {
   sub: string;
@@ -39,30 +40,32 @@ const AccountPasswordForm = (props: AccountPasswordFormProps) => {
     return true;
   };
 
-  const handleSubmit = methods.handleSubmit((data) =>
-    handleRequire(data).then(async () => {
-      setError(null);
+  const debouncedSubmit = useDebounce(
+    (data: AccountPasswordUpdateFormState) =>
+      handleRequire(data).then(async () => {
+        setError(null);
 
-      const response = await clientApi(`/server/supercar/v1/user/change-pw`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ACCESS_TOKEN: session.data?.accessToken || '',
-        },
-        data,
-      }).catch((error) => {
-        setError(error.message);
-      });
+        const response = await clientApi(`/server/supercar/v1/user/change-pw`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ACCESS_TOKEN: session.data?.accessToken || '',
+          },
+          data,
+        }).catch((error) => {
+          setError(error.message);
+        });
 
-      if (!response?.data) return;
+        if (!response?.data) return;
 
-      replace(`/account/${sub}`);
-    })
+        replace(`/account/${sub}`);
+      }),
+    300
   );
   return (
     <FormProvider {...methods}>
       <Form
-        onSubmit={handleSubmit}
+        onSubmit={methods.handleSubmit((data) => debouncedSubmit(data))}
         css={css`
           width: 800px;
           display: flex;

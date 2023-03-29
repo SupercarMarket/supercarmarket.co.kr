@@ -13,6 +13,7 @@ import InquiryFormItem from '../inquiryFormItem';
 import ModalContext from 'feature/modalContext';
 import { Modal } from 'components/common/modal';
 import { Profile } from '@supercarmarket/types/account';
+import { useDebounce } from '@supercarmarket/hooks';
 
 interface SaleFormProps {
   role: Profile['role'];
@@ -73,60 +74,63 @@ const SaleForm = (props: SaleFormProps) => {
     });
   };
 
-  const onSubmit = methods.handleSubmit((data) =>
-    handleRequire(data).then(async () => {
-      const { productImages, attachments, ...rest } = data;
-      const formData = new FormData();
-      formData.append(
-        'productRegDto',
-        new Blob(
-          [
-            JSON.stringify({
-              ...rest,
-              accidentHistory: rest.accidentHistory === '무사고' ? false : true,
-              price: rest.price === '상담' ? '0' : rest.price,
-            }),
-          ],
-          { type: 'application/json' }
-        )
-      );
-      productImages.forEach((file) =>
-        formData.append('productImages', file.file)
-      );
-      attachments.forEach((file) => formData.append('attachments', file));
+  const debouncedSubmit = useDebounce(
+    async (data: InquiryCarFormState) =>
+      handleRequire(data).then(async () => {
+        const { productImages, attachments, ...rest } = data;
+        const formData = new FormData();
+        formData.append(
+          'productRegDto',
+          new Blob(
+            [
+              JSON.stringify({
+                ...rest,
+                accidentHistory:
+                  rest.accidentHistory === '무사고' ? false : true,
+                price: rest.price === '상담' ? '0' : rest.price,
+              }),
+            ],
+            { type: 'application/json' }
+          )
+        );
+        productImages.forEach((file) =>
+          formData.append('productImages', file.file)
+        );
+        attachments.forEach((file) => formData.append('attachments', file));
 
-      const response = await fetcher('/server/supercar/v1/inquiry-product', {
-        method: 'POST',
-        headers: {
-          ACCESS_TOKEN: session.data?.accessToken || '',
-        },
-        body: formData,
-      });
+        const response = await fetcher('/server/supercar/v1/inquiry-product', {
+          method: 'POST',
+          headers: {
+            ACCESS_TOKEN: session.data?.accessToken || '',
+          },
+          body: formData,
+        });
 
-      const result = await response.json();
+        const result = await response.json();
 
-      if (!response.ok) {
-        setError(result.message || ErrorCode[response.status]);
-        return;
-      }
+        if (!response.ok) {
+          setError(result.message || ErrorCode[response.status]);
+          return;
+        }
 
-      onOpen(
-        <Modal
-          title="판매차량 등록 문의"
-          description="판매차량 등록 문의가 완료되었습니다."
-          clickText="확인"
-          background="rgba(30, 30, 32, 0.5)"
-          onCancel={() => {
-            onClose();
-            replace('/inquiry');
-          }}
-          onClick={() => {
-            onClose();
-            replace('/inquiry');
-          }}
-        />
-      );
-    })
+        onOpen(
+          <Modal
+            title="판매차량 등록 문의"
+            description="판매차량 등록 문의가 완료되었습니다."
+            clickText="확인"
+            background="rgba(30, 30, 32, 0.5)"
+            onCancel={() => {
+              onClose();
+              replace('/inquiry');
+            }}
+            onClick={() => {
+              onClose();
+              replace('/inquiry');
+            }}
+          />
+        );
+      }),
+    300
   );
 
   React.useEffect(() => {
@@ -151,7 +155,7 @@ const SaleForm = (props: SaleFormProps) => {
   return (
     <FormProvider {...methods}>
       <Form
-        onSubmit={onSubmit}
+        onSubmit={methods.handleSubmit((data) => debouncedSubmit(data))}
         css={css`
           width: 1200px;
           display: flex;
