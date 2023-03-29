@@ -10,13 +10,14 @@ import { css } from 'styled-components';
 import { useRouter } from 'next/navigation';
 
 import InquiryFormItem from '../inquiryFormItem';
+import { useDebounce } from '@supercarmarket/hooks';
 
 const formatter = (category: string) => {
   if (category === '전체') return 'ALL';
   if (category === '자동차매장') return 'DEALER_SHOP';
   if (category === '공업사') return 'CAR_CENTER';
   if (category === '도색') return 'PAINTING';
-  if (category === '디테일링') return 'DEATILING';
+  if (category === '디테일링') return 'DETAILING';
   return 'ETC';
 };
 
@@ -74,75 +75,77 @@ const PartnershipForm = () => {
     });
   };
 
-  const onSubmit = methods.handleSubmit((data) =>
-    handleRequire(data).then(async () => {
-      setError(null);
+  const debouncedSubmit = useDebounce(
+    async (data: InquiryPartnershipFormState) =>
+      handleRequire(data).then(async () => {
+        setError(null);
 
-      const { partnershipAttachment, partnershipPhotoAttachment, ...rest } =
-        data;
+        const { partnershipAttachment, partnershipPhotoAttachment, ...rest } =
+          data;
 
-      rest.address.shift();
+        rest.address.shift();
 
-      const formData = new FormData();
+        const formData = new FormData();
 
-      formData.append(
-        'partnershipDto',
-        new Blob(
-          [
-            JSON.stringify({
-              ...rest,
-              address: rest.address.join(' '),
-              category: formatter(rest.category),
-            }),
-          ],
-          { type: 'application/json' }
-        )
-      );
+        formData.append(
+          'partnershipDto',
+          new Blob(
+            [
+              JSON.stringify({
+                ...rest,
+                address: rest.address.join(' '),
+                category: formatter(rest.category),
+              }),
+            ],
+            { type: 'application/json' }
+          )
+        );
 
-      partnershipAttachment.forEach((file) =>
-        formData.append('partnershipAttachmentDto', file)
-      );
-      partnershipPhotoAttachment.forEach((file) =>
-        formData.append('partnershipPhotoAttachmentDto', file.file)
-      );
+        partnershipAttachment.forEach((file) =>
+          formData.append('partnershipAttachmentDto', file)
+        );
+        partnershipPhotoAttachment.forEach((file) =>
+          formData.append('partnershipPhotoAttachmentDto', file.file)
+        );
 
-      const response = await fetcher(
-        '/server/supercar/v1/partnership/inquiry',
-        {
-          method: 'POST',
-          headers: {
-            ACCESS_TOKEN: session.data?.accessToken || '',
-          },
-          body: formData,
+        const response = await fetcher(
+          '/server/supercar/v1/partnership/inquiry',
+          {
+            method: 'POST',
+            headers: {
+              ACCESS_TOKEN: session.data?.accessToken || '',
+            },
+            body: formData,
+          }
+        );
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          setError(result.message || ErrorCode[response.status]);
+          return;
         }
-      );
 
-      const result = await response.json();
-
-      if (!response.ok) {
-        setError(result.message || ErrorCode[response.status]);
-        return;
-      }
-
-      onOpen(
-        <Modal
-          title="기타 문의"
-          description="기타 문의가 등록 완료되었습니다."
-          clickText="확인"
-          background="rgba(30, 30, 32, 0.5)"
-          onClick={() => handleModal('/inquiry')}
-          onClose={() => handleModal('/inquiry')}
-          onCancel={() => handleModal('/inquiry')}
-        />
-      );
-    })
+        onOpen(
+          <Modal
+            title="제휴업체 문의"
+            description="제휴업체 문의가 등록 완료되었습니다."
+            clickText="확인"
+            background="rgba(30, 30, 32, 0.5)"
+            onClick={() => handleModal('/inquiry')}
+            onClose={() => handleModal('/inquiry')}
+            onCancel={() => handleModal('/inquiry')}
+          />
+        );
+      }),
+    300
   );
 
   return (
     <FormProvider {...methods}>
       <Form
         encType="multipart/form-data"
-        onSubmit={onSubmit}
+        onSubmit={methods.handleSubmit((data) => debouncedSubmit(data))}
         css={css`
           display: flex;
           flex-direction: column;

@@ -1,4 +1,11 @@
-import { Alert, Button, Form, FormLabel, theme } from '@supercarmarket/ui';
+import {
+  Alert,
+  applyMediaQuery,
+  Button,
+  Form,
+  FormLabel,
+  theme,
+} from '@supercarmarket/ui';
 import type { FormState } from 'constants/account';
 import account from 'constants/account';
 import { signOut, useSession } from 'next-auth/react';
@@ -12,6 +19,7 @@ import { clientFetcher } from '@supercarmarket/lib';
 import AuthFormItem from 'components/auth/authFormItem/authFormItem';
 import useAuth from 'hooks/useAuth';
 import { useAccountUpdateInfo } from 'http/server/account';
+import { useDebounce } from '@supercarmarket/hooks';
 
 interface AccountUpdateFormProps {
   sub: string;
@@ -110,25 +118,27 @@ const AccountUpdateForm = (props: AccountUpdateFormProps) => {
     }
   };
 
-  const onSubmit = methods.handleSubmit((data) =>
-    handleRequire(data).then(() => {
-      if (!session?.accessToken) return;
+  const debouncedSubmit = useDebounce(
+    (data: FormState) =>
+      handleRequire(data).then(() => {
+        if (!session?.accessToken) return;
 
-      const formData = {
-        ...data,
-        code: data.authentication,
-      };
+        const formData = {
+          ...data,
+          code: data.authentication,
+        };
 
-      update(formData, session.accessToken).then(() => {
-        refetch();
-      });
-    })
+        update(formData, session.accessToken).then(() => {
+          refetch();
+        });
+      }),
+    300
   );
 
   return (
     <FormProvider {...methods}>
       <Form
-        onSubmit={onSubmit}
+        onSubmit={methods.handleSubmit((data) => debouncedSubmit(data))}
         encType="multipart/form-data"
         css={css`
           width: 800px;
@@ -137,6 +147,10 @@ const AccountUpdateForm = (props: AccountUpdateFormProps) => {
           align-items: center;
           padding-top: 60px;
           gap: 26px;
+          ${applyMediaQuery('mobile')} {
+            width: 343px;
+            gap: 16px;
+          }
         `}
       >
         {updateInfo && (

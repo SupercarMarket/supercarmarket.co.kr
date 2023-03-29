@@ -25,6 +25,7 @@ import {
 import { useQueryClient } from '@tanstack/react-query';
 import { useRemoveCommunityPost } from 'http/server/community';
 import { QUERY_KEYS, useAccountCategory } from 'http/server/account';
+import { useDebounce } from '@supercarmarket/hooks';
 
 interface AccountCategoryProps {
   sub: string;
@@ -168,7 +169,7 @@ const AccountCategory = React.memo(function AccountCategory({
     setAllChecked((prev) => !prev);
   }, []);
 
-  const handleDelete = React.useCallback(async () => {
+  const debouncedDelete = useDebounce(async () => {
     if (!isDeleteTarget) return;
     if (!session) return;
 
@@ -182,14 +183,7 @@ const AccountCategory = React.memo(function AccountCategory({
     }
 
     refetch();
-  }, [
-    deleteList,
-    isDeleteTarget,
-    session,
-    tab,
-    removeCategoryMutation,
-    refetch,
-  ]);
+  }, 300);
 
   if (isFetching || isLoading) return <CardSkeleton variant="row" />;
 
@@ -215,7 +209,7 @@ const AccountCategory = React.memo(function AccountCategory({
               type="button"
               variant="Primary-Line"
               width="92px"
-              onClick={handleDelete}
+              onClick={debouncedDelete}
               style={{
                 padding: 0,
                 height: '44px',

@@ -5,11 +5,9 @@ import {
   Typography,
   Wrapper,
 } from '@supercarmarket/ui';
-
 import dayjs from 'dayjs';
 import Image from 'next/image';
 import { Posting } from '@supercarmarket/types/base';
-
 import ChatIcon from '../../../assets/svg/chat.svg';
 import EyeIcon from '../../../assets/svg/eye.svg';
 import * as style from './posting.styled';
@@ -17,6 +15,7 @@ import { PostingProps } from './posting';
 import { formatter } from 'components/community/communityCard/communityCard';
 import { css } from 'styled-components';
 import Avatar from '../avatar';
+import { truncateOnWord } from '@supercarmarket/lib';
 
 const PostingHeadMagainze = ({
   title,
@@ -45,6 +44,9 @@ const PostingHeadMagainze = ({
           objectFit: 'cover',
           zIndex: -1,
         }}
+        sizes={`${applyMediaQuery('desktop')} 1200px, ${applyMediaQuery(
+          'mobile'
+        )} 425px`}
       />
       <Wrapper
         css={css`
@@ -76,7 +78,7 @@ const PostingHeadMagainze = ({
             color="white"
             lineHeight="150%"
           >
-            {title}
+            {truncateOnWord(title, 100)}
           </Typography>
         </Wrapper.Item>
         <Wrapper.Item

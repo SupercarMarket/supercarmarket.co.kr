@@ -85,7 +85,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     category !== 'all' &&
     category !== 'community' &&
     category !== 'product' &&
-    category !== 'magazine'
+    category !== 'magazine' &&
+    category !== 'partnership'
   ) {
     return {
       notFound: true,

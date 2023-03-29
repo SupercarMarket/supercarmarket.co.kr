@@ -77,7 +77,19 @@ const MagazinePosting = ({ postId }: Omit<PostingProps, 'type'>) => {
             description={magazinePost.data.contentHtml}
           />
           <Container>
-            <PostingHeadMagainze {...magazinePost.data} />
+            <Tab list="/magazine" />
+            <Wrapper
+              css={css`
+                width: 100%;
+                padding-top: 20px;
+                ${applyMediaQuery('mobile')} {
+                  width: 100vw;
+                  margin-left: calc(-50vw + 50%);
+                }
+              `}
+            >
+              <PostingHeadMagainze {...magazinePost.data} />
+            </Wrapper>
             <Wrapper
               css={css`
                 width: 100%;

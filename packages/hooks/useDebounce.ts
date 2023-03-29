@@ -1,6 +1,6 @@
-import debounce from 'lodash.debounce';
 import { useEffect, useMemo } from 'react';
 import { usePreservedCallback, usePreservedReference } from './';
+import { debounce } from '@supercarmarket/lib';
 
 /**
  * @description

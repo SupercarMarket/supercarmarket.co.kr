@@ -4,6 +4,7 @@ import { CommunityCard } from 'components/community';
 import RouterButton from 'components/home/routerButton';
 import MagazineCard from 'components/magazine/magazineList/magazineCard';
 import MarketCard from 'components/market/marketCard';
+import PartnershipCard from 'components/partnership/partnershipCard';
 import { css } from 'styled-components';
 import { SearchNotify } from '..';
 
@@ -13,10 +14,12 @@ interface SearchAllProps {
 }
 
 const SearchAll = ({ keyword, data }: SearchAllProps) => {
-  const { product, magazine, paparazzi } = data;
+  const { product, magazine, paparazzi, partnership } = data;
   const isProduct = product.length > 0;
   const isMagazine = magazine.length > 0;
   const isPaparazzi = paparazzi.length > 0;
+  const isPartnership = partnership.length > 0;
+
   return (
     <Container
       width="100%"
@@ -119,6 +122,44 @@ const SearchAll = ({ keyword, data }: SearchAllProps) => {
         {isPaparazzi && (
           <RouterButton
             href={`/search?category=community&keyword=${keyword}`}
+            style={{
+              paddingTop: '34px',
+            }}
+          >
+            더보기
+          </RouterButton>
+        )}
+      </Wrapper>
+      <Title marginTop="80px" marginBottom="20px">
+        제휴업체
+      </Title>
+      <Table tab="partnership" hidden={false} />
+      <Wrapper
+        css={css`
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+          align-items: center;
+          padding-top: 6px;
+        `}
+      >
+        {isPartnership ? (
+          <Wrapper.Item
+            css={css`
+              width: 100%;
+            `}
+          >
+            {partnership.map((p) => (
+              <PartnershipCard key={p.brdSeq} {...p} />
+            ))}
+          </Wrapper.Item>
+        ) : (
+          <SearchNotify keyword={keyword} totalCount={partnership.length} />
+        )}
+        {isPartnership && (
+          <RouterButton
+            href={`/search?category=partnership&keyword=${keyword}`}
             style={{
               paddingTop: '34px',
             }}

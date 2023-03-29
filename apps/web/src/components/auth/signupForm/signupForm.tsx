@@ -12,6 +12,7 @@ import ModalContext from 'feature/modalContext';
 import TermModal from 'components/common/modal/termModal';
 import useAuth from 'hooks/useAuth';
 import { Modal } from 'components/common/modal';
+import { useDebounce } from '@supercarmarket/hooks';
 
 const SignupForm = () => {
   const { replace } = useRouter();
@@ -89,31 +90,28 @@ const SignupForm = () => {
     }
   };
 
-  const onSubmit = React.useCallback(
-    (data: FormState) => {
-      signUp(data)
-        .then(() => {
-          onOpen(
-            <Modal
-              title="회원가입 성공 🎉🎊"
-              description="Welcome to 슈퍼카마켓"
-              background="rgba(30, 30, 32, 0.5)"
-              onCancel={() => {
-                onClose();
-                replace('/auth/signin');
-              }}
-              clickText="로그인"
-              onClick={() => {
-                onClose();
-                replace('/auth/signin');
-              }}
-            />
-          );
-        })
-        .catch((error) => setError(error.message));
-    },
-    [onClose, onOpen, replace, signUp]
-  );
+  const debouncedSubmit = useDebounce(async (data: FormState) => {
+    await signUp(data)
+      .then(() => {
+        onOpen(
+          <Modal
+            title="회원가입 성공 🎉🎊"
+            description="Welcome to 슈퍼카마켓"
+            background="rgba(30, 30, 32, 0.5)"
+            onCancel={() => {
+              onClose();
+              replace('/auth/signin');
+            }}
+            clickText="로그인"
+            onClick={() => {
+              onClose();
+              replace('/auth/signin');
+            }}
+          />
+        );
+      })
+      .catch((error) => setError(error.message));
+  }, 300);
 
   React.useEffect(() => {
     return () => resetField();
@@ -125,7 +123,7 @@ const SignupForm = () => {
         css={style.form}
         onSubmit={methods.handleSubmit((data) =>
           handleRequire(data).then(() => {
-            onSubmit(data);
+            debouncedSubmit(data);
           })
         )}
       >

@@ -7,26 +7,36 @@ import {
   Wrapper,
 } from '@supercarmarket/ui';
 import { useUrlQuery } from '@supercarmarket/hooks';
-
+import { useRouter } from 'next/navigation';
 import MagazineCard from './magazineCard';
 import { css } from 'styled-components';
 import { useMagazine } from 'http/server/magazine';
+import MagazineBanner from '../magazineBanner';
 
 const MagazineList = () => {
-  const { page = 0 } = useUrlQuery();
-  const { data: magazine } = useMagazine({ page });
+  const { page = 0, keyword } = useUrlQuery();
+  const { data: magazine } = useMagazine({ page, keyword });
+  const { push } = useRouter();
 
   return (
     <Container display="flex" flexDirection="column" alignItems="center">
+      <MagazineBanner initialData={magazine} />
       <Wrapper
         css={css`
+          width: 880px;
           margin-top: 80px;
           ${applyMediaQuery('mobile')} {
+            width: 100%;
             margin-top: 32px;
           }
         `}
       >
-        <Searchbar width="343px" variant="Line" border="normal" />
+        <Searchbar
+          variant="Line"
+          border="normal"
+          placeholder="검색어를 입력해주세요."
+          handleClick={(query) => push(`/magazine?keyword=${query}`)}
+        />
       </Wrapper>
       {magazine ? (
         <>

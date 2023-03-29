@@ -10,6 +10,7 @@ import { css } from 'styled-components';
 import { useRouter } from 'next/navigation';
 
 import InquiryFormItem from '../inquiryFormItem';
+import { useDebounce } from '@supercarmarket/hooks';
 
 const PartnershipForm = () => {
   const session = useSession();
@@ -47,58 +48,60 @@ const PartnershipForm = () => {
     });
   };
 
-  const onSubmit = methods.handleSubmit((data) =>
-    handleRequire(data).then(async () => {
-      setError(null);
+  const debouncedSubmit = useDebounce(
+    (data: InquiryADFormState) =>
+      handleRequire(data).then(async () => {
+        setError(null);
 
-      const { files, ...rest } = data;
+        const { files, ...rest } = data;
 
-      const formData = new FormData();
+        const formData = new FormData();
 
-      formData.append(
-        'adRegDto',
-        new Blob([JSON.stringify({ ...rest })], { type: 'application/json' })
-      );
+        formData.append(
+          'adRegDto',
+          new Blob([JSON.stringify({ ...rest })], { type: 'application/json' })
+        );
 
-      files.forEach((file) => formData.append('file', file));
+        files.forEach((file) => formData.append('file', file));
 
-      const response = await fetcher(
-        '/server/supercar/v1/inquiry-advertisement',
-        {
-          method: 'POST',
-          headers: {
-            ACCESS_TOKEN: session.data?.accessToken || '',
-          },
-          data: formData,
+        const response = await fetcher(
+          '/server/supercar/v1/inquiry-advertisement',
+          {
+            method: 'POST',
+            headers: {
+              ACCESS_TOKEN: session.data?.accessToken || '',
+            },
+            data: formData,
+          }
+        );
+
+        const result = await response.json();
+
+        if (!result.data) {
+          setError(result.message || ErrorCode[result.status]);
+          return;
         }
-      );
 
-      const result = await response.json();
-
-      if (!result.data) {
-        setError(result.message || ErrorCode[result.status]);
-        return;
-      }
-
-      onOpen(
-        <Modal
-          title="기타 문의"
-          description="기타 문의가 등록 완료되었습니다."
-          clickText="확인"
-          background="rgba(30, 30, 32, 0.5)"
-          onCancel={() => handleModal('/inquiry')}
-          onClick={() => handleModal('/')}
-          onClose={() => handleModal('/inquiry')}
-        />
-      );
-    })
+        onOpen(
+          <Modal
+            title="광고 문의"
+            description="광고 문의가 등록 완료되었습니다."
+            clickText="확인"
+            background="rgba(30, 30, 32, 0.5)"
+            onCancel={() => handleModal('/inquiry')}
+            onClick={() => handleModal('/')}
+            onClose={() => handleModal('/inquiry')}
+          />
+        );
+      }),
+    300
   );
 
   return (
     <FormProvider {...methods}>
       <Form
         encType="multipart/form-data"
-        onSubmit={onSubmit}
+        onSubmit={methods.handleSubmit((data) => debouncedSubmit(data))}
         css={css`
           display: flex;
           flex-direction: column;
