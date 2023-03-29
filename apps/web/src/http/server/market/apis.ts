@@ -18,7 +18,7 @@ export const getMarket = async ({
   const currentQuery =
     targetCategory === '전체'
       ? { filter, orderBy, page, ...rest }
-      : { targetCategory, filter, orderBy, page, ...rest };
+      : { category: targetCategory, filter, orderBy, page, ...rest };
 
   return clientFetcher('/server/supercar/v1/shop', {
     method: 'GET',
