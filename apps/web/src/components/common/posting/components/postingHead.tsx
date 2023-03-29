@@ -8,13 +8,13 @@ import {
 import dayjs from 'dayjs';
 import Image from 'next/image';
 import { Posting } from '@supercarmarket/types/base';
-import ChatIcon from '../../../assets/svg/chat.svg';
-import EyeIcon from '../../../assets/svg/eye.svg';
-import * as style from './posting.styled';
-import { PostingProps } from './posting';
+import ChatIcon from '../../../../assets/svg/chat.svg';
+import EyeIcon from '../../../../assets/svg/eye.svg';
+import * as style from '../posting.styled';
+import { PostingProps } from '../posting';
 import { formatter } from 'components/community/communityCard/communityCard';
 import { css } from 'styled-components';
-import Avatar from '../avatar';
+import Avatar from '../../avatar';
 import { truncateOnWord } from '@supercarmarket/lib';
 import Link from 'next/link';
 

@@ -7,7 +7,7 @@ import {
   Pagination,
   Wrapper,
 } from '@supercarmarket/ui';
-import MagazineCard from 'components/magazine/magazineList/magazineCard';
+import MagazineCard from 'components/magazine/magazineCard/magazineCard';
 import { css } from 'styled-components';
 
 type SearchMagazineProps = PaginationResponse<MagazineDto[]>;

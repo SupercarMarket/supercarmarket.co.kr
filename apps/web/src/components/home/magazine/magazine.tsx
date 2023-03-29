@@ -1,7 +1,7 @@
 import { Container, Typography, Wrapper } from '@supercarmarket/ui';
 import { type MagazineDto } from '@supercarmarket/types/magazine';
 import { MagazineBanner } from 'components/magazine';
-import MagazineCard from 'components/magazine/magazineList/magazineCard';
+import MagazineCard from 'components/magazine/magazineCard';
 import { css } from 'styled-components';
 import { applyMediaQuery } from 'styles/mediaQuery';
 

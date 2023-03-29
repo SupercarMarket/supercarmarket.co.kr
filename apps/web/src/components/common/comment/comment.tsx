@@ -1,9 +1,7 @@
 import { Container, deviceQuery, Pagination } from '@supercarmarket/ui';
 import { useMedia, useUrlQuery } from '@supercarmarket/hooks';
 
-import CommentArea from './commentArea';
-import CommentBody from './commentBody';
-import CommentHead from './commentHead';
+import { CommentArea, CommentBody, CommentHead } from './components';
 import { CommentSkeleton } from 'components/fallback/loading';
 import { useSession } from 'next-auth/react';
 import { useComment } from 'http/server/comment';

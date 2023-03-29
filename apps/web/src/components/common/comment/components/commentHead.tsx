@@ -4,8 +4,8 @@ import { Container, Typography } from '@supercarmarket/ui';
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 
-import ChatIcon from '../../../assets/svg/chat.svg';
-import { CommentHeadLeft, CommentHeadRight } from './comment.styled';
+import ChatIcon from '../../../../assets/svg/chat.svg';
+import { CommentHeadLeft, CommentHeadRight } from '../comment.styled';
 
 interface CommentHeadProps {
   totalCount?: number;

@@ -12,7 +12,7 @@ import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import * as React from 'react';
 import { css } from 'styled-components';
-import { PostingHeadCommunity, PostingHeadMagainze } from './postingHead';
+import { PostingHeadCommunity, PostingHeadMagainze } from './components';
 
 import dynamic from 'next/dynamic';
 import ModalContext from 'feature/modalContext';
@@ -29,7 +29,7 @@ import {
 import { useMagazinePost } from 'http/server/magazine';
 import { Modal } from '../modal';
 
-const PostingBody = dynamic(() => import('./postingBody'), {
+const PostingBody = dynamic(() => import('./components/postingBody'), {
   ssr: false,
 });
 const Comment = dynamic(() => import('components/common/comment'), {

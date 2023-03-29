@@ -2,7 +2,7 @@ import type { SearchAll as SearchAllType } from '@supercarmarket/types/search';
 import { Container, Table, Title, Wrapper } from '@supercarmarket/ui';
 import { CommunityCard } from 'components/community';
 import RouterButton from 'components/home/routerButton';
-import MagazineCard from 'components/magazine/magazineList/magazineCard';
+import MagazineCard from 'components/magazine/magazineCard/magazineCard';
 import MarketCard from 'components/market/marketCard';
 import PartnershipCard from 'components/partnership/partnershipCard';
 import { css } from 'styled-components';
