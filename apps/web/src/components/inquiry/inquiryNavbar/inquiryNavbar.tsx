@@ -1,5 +1,12 @@
 import * as React from 'react';
-import { Button, Container, Typography, Wrapper } from '@supercarmarket/ui';
+import {
+  applyMediaQuery,
+  Button,
+  Container,
+  deviceQuery,
+  Typography,
+  Wrapper,
+} from '@supercarmarket/ui';
 import type { InquiryLink } from '@supercarmarket/types/inquiry';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
@@ -13,6 +20,7 @@ import Tr4Icon from '../../../../public/images/icons/tr_4.svg';
 import Tr5Icon from '../../../../public/images/icons/tr_5.svg';
 import ModalContext from 'feature/modalContext';
 import { Modal } from 'components/common/modal';
+import { useMedia } from '@supercarmarket/hooks';
 
 const getSvgIcon = (index: number) => {
   return {
@@ -33,8 +41,9 @@ const InquiryNavbar = ({
   index: number;
 }) => {
   const session = useSession();
+  const { isMobile } = useMedia({ deviceQuery });
   const { onOpen, onClose } = React.useContext(ModalContext);
-  const { replace } = useRouter();
+  const { replace, push } = useRouter();
 
   React.useEffect(() => {
     if (session.status !== 'authenticated')
@@ -58,33 +67,45 @@ const InquiryNavbar = ({
   return (
     <Container
       display="flex"
-      padding="34px 40px"
+      padding={isMobile ? '24px' : '34px 40px'}
       background="#F7F7F8"
       borderRadius="4px"
+      handleClick={isMobile ? () => push(link) : undefined}
     >
       <Wrapper.Left
         css={css`
           display: flex;
           align-items: center;
           gap: 40px;
+          ${applyMediaQuery('mobile')} {
+            gap: 16px;
+          }
         `}
       >
         <Wrapper.Item
           css={css`
             width: 100px;
             height: 100px;
+            ${applyMediaQuery('mobile')} {
+              width: 48px;
+              height: 48px;
+            }
           `}
         >
           {getSvgIcon(index)}
         </Wrapper.Item>
         <Wrapper.Item
           css={css`
-            position: relative;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+            gap: 4px;
           `}
         >
           <Typography
             as="b"
-            fontSize="header-24"
+            fontSize={isMobile ? 'header-20' : 'header-24'}
             fontWeight="bold"
             lineHeight="120%"
             color="greyScale-6"
@@ -97,13 +118,6 @@ const InquiryNavbar = ({
               fontWeight="regular"
               lineHeight="150%"
               color="greyScale-5"
-              style={{
-                position: 'absolute',
-                width: '100%',
-                whiteSpace: 'nowrap',
-                left: 0,
-                bottom: '-24px',
-              }}
             >
               {description}
             </Typography>
@@ -116,6 +130,9 @@ const InquiryNavbar = ({
           display: flex;
           align-items: center;
           justify-content: flex-end;
+          ${applyMediaQuery('mobile')} {
+            display: none;
+          }
         `}
       >
         <Link href={link} shallow>
