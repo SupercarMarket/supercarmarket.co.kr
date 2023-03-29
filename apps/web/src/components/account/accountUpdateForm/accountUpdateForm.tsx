@@ -1,4 +1,11 @@
-import { Alert, Button, Form, FormLabel, theme } from '@supercarmarket/ui';
+import {
+  Alert,
+  applyMediaQuery,
+  Button,
+  Form,
+  FormLabel,
+  theme,
+} from '@supercarmarket/ui';
 import type { FormState } from 'constants/account';
 import account from 'constants/account';
 import { signOut, useSession } from 'next-auth/react';
@@ -140,6 +147,10 @@ const AccountUpdateForm = (props: AccountUpdateFormProps) => {
           align-items: center;
           padding-top: 60px;
           gap: 26px;
+          ${applyMediaQuery('mobile')} {
+            width: 343px;
+            gap: 16px;
+          }
         `}
       >
         {updateInfo && (

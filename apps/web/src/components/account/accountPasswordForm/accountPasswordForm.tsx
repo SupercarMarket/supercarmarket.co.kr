@@ -1,6 +1,7 @@
 import { clientApi } from '@supercarmarket/lib';
 import {
   Alert,
+  applyMediaQuery,
   Button,
   Form,
   FormInput,
@@ -75,6 +76,10 @@ const AccountPasswordForm = (props: AccountPasswordFormProps) => {
           align-items: center;
           button[type='submit'] {
             width: 340px;
+          }
+          ${applyMediaQuery('mobile')} {
+            width: 343px;
+            gap: 16px;
           }
         `}
       >
