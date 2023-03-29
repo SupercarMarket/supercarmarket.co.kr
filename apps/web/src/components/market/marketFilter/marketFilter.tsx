@@ -4,138 +4,84 @@ import {
   Typography,
   Wrapper,
 } from '@supercarmarket/ui';
-import MarketSelect from 'components/market/marketSelect';
-import { FIRST_MARKET_FILTER, SECOND_MARKET_FILTER } from 'constants/market';
 import theme from 'constants/theme';
-import { useRouter } from 'next/router';
-import * as React from 'react';
+import Link from 'next/link';
 import { css } from 'styled-components';
+import * as React from 'react';
+import { useSearchParams } from 'next/navigation';
 import { convertQuery, makeFilterLabel } from 'utils/market/marketQuery';
+import MarketFilterArea from './marketFilterArea';
+import { useNextQuery } from 'hooks/useNextQuery';
 
+import * as Styled from './marketFilter.styled';
 import Close from '../../../assets/svg/close.svg';
 import Refresh from '../../../assets/svg/refresh.svg';
-import * as Styled from './marketFilter.styled';
 
 const MarketFilter = () => {
-  const { push, query, asPath } = useRouter();
-
-  const convertedQuery = React.useMemo(
-    () => convertQuery(query, asPath),
-    [query, asPath]
-  );
+  const searchParams = useSearchParams();
+  const { query } = useNextQuery(searchParams);
 
   const removeFilter = (key: string) => {
     const pattern = new RegExp(key);
-    const queries = Object.entries(query as { [key: string]: string });
+    const queries = Object.entries(query);
     const filtered = queries.filter(([key]) => !key.match(pattern));
     const url = filtered.map(([key, value]) => `${key}=${value}`).join('&');
 
-    push(`/market?${url}`, undefined, { scroll: false });
+    return `/market?${url}`;
   };
 
-  const resetfilter = () => {
-    push(`/market/${query.category}`, undefined, {
-      scroll: false,
-    });
-  };
+  const convertedQuery = React.useMemo(
+    () => convertQuery(query, searchParams.toString()),
+    [query, searchParams]
+  );
 
   return (
     <Container>
-      <Styled.MarketFilterArea>
-        <Wrapper
-          css={css`
-            display: flex;
-            gap: 24px;
-            ${applyMediaQuery('mobile')} {
-              flex-direction: column;
-              align-items: center;
-              justify-content: center;
-            }
-          `}
-        >
-          {FIRST_MARKET_FILTER.map(([options1, options2], idx) => (
-            <Wrapper.Item
-              key={idx}
-              css={css`
-                width: 270px;
-                display: flex;
-                flex-direction: column;
-                box-sizing: border-box;
-                padding: 10px;
-                padding-bottom: 0;
-                gap: 5px;
-                ${applyMediaQuery('mobile')} {
-                  width: 311px;
-                }
-              `}
-            >
-              <Typography>{options1.label}</Typography>
-              <MarketSelect options1={options1} options2={options2} />
-            </Wrapper.Item>
-          ))}
-        </Wrapper>
-        <Wrapper
-          css={css`
-            display: flex;
-            gap: 24px;
-            ${applyMediaQuery('mobile')} {
-              flex-direction: column;
-              align-items: center;
-              justify-content: center;
-            }
-          `}
-        >
-          {SECOND_MARKET_FILTER.map(([options1, options2], idx) => (
-            <Wrapper.Item
-              key={idx}
-              css={css`
-                width: 270px;
-                display: flex;
-                flex-direction: column;
-                box-sizing: border-box;
-                padding: 10px;
-                gap: 5px;
-                ${applyMediaQuery('mobile')} {
-                  width: 311px;
-                }
-              `}
-            >
-              <Typography>{options1.label}</Typography>
-              <MarketSelect options1={options1} options2={options2} />
-            </Wrapper.Item>
-          ))}
-        </Wrapper>
-      </Styled.MarketFilterArea>
-      <Styled.FilterListArea>
+      <MarketFilterArea />
+      <Wrapper.Bottom
+        css={css`
+          display: flex;
+          align-items: flex-start;
+          justify-content: space-between;
+          flex-wrap: wrap;
+          margin-bottom: 80px;
+          ${applyMediaQuery('mobile')} {
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 32px;
+          }
+        `}
+      >
         <Styled.MarketFilterList>
           {convertedQuery.map(([key, [val1, val2]], idx) => {
             const [k, value1, value2] = makeFilterLabel(key, val1, val2);
             return (
-              <Styled.MarketFilterItem
-                key={idx}
-                onClick={() => removeFilter(key)}
-              >
-                <Typography fontSize="body-16" lineHeight="150%">
-                  {value2 ? `${k} ${value1}~${value2}` : `${k} ${value1}`}
-                </Typography>
-                <Close
-                  width="16px"
-                  height="16px"
-                  fill={theme.color['greyScale-5']}
-                />
-              </Styled.MarketFilterItem>
+              <Link key={idx} href={removeFilter(key)} scroll={false}>
+                <Styled.MarketFilterItem>
+                  <Typography fontSize="body-16" lineHeight="150%">
+                    {value2 ? `${k} ${value1}~${value2}` : `${k} ${value1}`}
+                  </Typography>
+                  <Close
+                    width="16px"
+                    height="16px"
+                    fill={theme.color['greyScale-5']}
+                  />
+                </Styled.MarketFilterItem>
+              </Link>
             );
           })}
         </Styled.MarketFilterList>
-        <Styled.ResetButton onClick={resetfilter}>
-          <Refresh
-            width="16px"
-            height="16px"
-            fill={theme.color['greyScale-5']}
-          />
-          <Typography fontSize="body-16">초기화</Typography>
+        <Styled.ResetButton>
+          <Link href={`/market?category=${query.category}`} scroll={false}>
+            <Refresh
+              width="16px"
+              height="16px"
+              fill={theme.color['greyScale-5']}
+            />
+            <Typography fontSize="body-16">초기화</Typography>
+          </Link>
         </Styled.ResetButton>
-      </Styled.FilterListArea>
+      </Wrapper.Bottom>
     </Container>
   );
 };

@@ -1,11 +1,13 @@
-import { Typography } from '@supercarmarket/ui';
-import { useRouter, useSearchParams } from 'next/navigation';
 import * as React from 'react';
+import { Typography, Wrapper } from '@supercarmarket/ui';
+import { useSearchParams } from 'next/navigation';
 import { SelectType } from '@supercarmarket/types/market';
 import { makeQuery } from 'utils/market/marketQuery';
 
 import ArrowBottom from '../../../assets/svg/arrow-bottom.svg';
 import * as S from './select.styled';
+import Link from 'next/link';
+import { css } from 'styled-components';
 
 interface SelectProps {
   width?: string;
@@ -23,9 +25,11 @@ function paramsToObject(entries: IterableIterator<[string, string]>) {
 
 const Select = ({ options, width = '100%', align }: SelectProps) => {
   const { optionSet, defaultLabel } = options;
-  const { push } = useRouter();
   const query = useSearchParams();
   const [toggle, setToggle] = React.useState<boolean>(false);
+
+  const onToggle = () => setToggle(!toggle);
+  const closeToggle = () => setToggle(false);
 
   const optionValue = React.useMemo(() => {
     const check = (val: string, dat: string) => {
@@ -42,9 +46,6 @@ const Select = ({ options, width = '100%', align }: SelectProps) => {
     return { option: options?.option, value: options?.value };
   }, [optionSet, query]);
 
-  const onToggle = () => setToggle(!toggle);
-  const closeToggle = () => setToggle(false);
-
   const selectOption = (dataName: string, value: string) => {
     const [key1, key2] = dataName.split(' ');
     const [value1, value2] = value.split(' ');
@@ -57,13 +58,19 @@ const Select = ({ options, width = '100%', align }: SelectProps) => {
 
     const url = makeQuery(queries);
 
-    push(`/market?${url}`);
-
-    closeToggle();
+    return `/market?${url}`;
   };
 
+  React.useEffect(() => closeToggle(), [query]);
+
   return (
-    <S.SelectContainer width={width}>
+    <Wrapper
+      css={css`
+        box-sizing: border-box;
+        position: relative;
+        width: ${width};
+      `}
+    >
       <S.Backdrop toggle={toggle} onClick={closeToggle} />
       <S.SelectCurrentButton type="button" onClick={onToggle} align={align}>
         <Typography fontSize="body-16">
@@ -73,21 +80,20 @@ const Select = ({ options, width = '100%', align }: SelectProps) => {
       </S.SelectCurrentButton>
       <S.SelectOptionList width={width} toggle={toggle}>
         {optionSet.map(({ option, dataName, value }) => (
-          <S.SelectOptionItem
-            key={option}
-            onClick={() => selectOption(dataName, value)}
-          >
-            <S.SelectOptionButton
-              type="button"
-              active={optionValue.option === option}
-              align={align}
-            >
-              <Typography fontSize="body-16">{option}</Typography>
-            </S.SelectOptionButton>
+          <S.SelectOptionItem key={option}>
+            <Link href={selectOption(dataName, value)} scroll={false}>
+              <S.SelectOptionButton
+                type="button"
+                active={optionValue.option === option}
+                align={align}
+              >
+                <Typography fontSize="body-16">{option}</Typography>
+              </S.SelectOptionButton>
+            </Link>
           </S.SelectOptionItem>
         ))}
       </S.SelectOptionList>
-    </S.SelectContainer>
+    </Wrapper>
   );
 };
 
