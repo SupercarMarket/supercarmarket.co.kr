@@ -73,18 +73,16 @@ const MarketColumn = (props: WithBlurredImage<MarketDto>) => {
             css={css`
               position: relative;
               width: 285px;
-              height: 180px;
+              aspect-ratio: 4/3;
               .react-loading-skeleton {
                 width: 285px;
-                height: 180px;
+                aspect-ratio: 4/3;
                 border-radius: 4px;
               }
               ${applyMediaQuery('mobile')} {
                 width: 167.5px;
-                height: 106px;
                 .react-loading-skeleton {
                   width: 167.5px;
-                  height: 106px;
                 }
               }
             `}
