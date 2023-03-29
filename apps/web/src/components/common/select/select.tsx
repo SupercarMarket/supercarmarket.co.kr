@@ -1,13 +1,14 @@
 import * as React from 'react';
-import { Typography, Wrapper } from '@supercarmarket/ui';
-import { useSearchParams } from 'next/navigation';
-import { SelectType } from '@supercarmarket/types/market';
-import { makeQuery } from 'utils/market/marketQuery';
-
-import ArrowBottom from '../../../assets/svg/arrow-bottom.svg';
-import * as S from './select.styled';
 import Link from 'next/link';
 import { css } from 'styled-components';
+import { makeQuery } from 'utils/market/marketQuery';
+import { SelectType } from '@supercarmarket/types/market';
+import { useNextQuery } from 'hooks/useNextQuery';
+import { useSearchParams } from 'next/navigation';
+import { Typography, Wrapper } from '@supercarmarket/ui';
+
+import * as S from './select.styled';
+import ArrowBottom from '../../../assets/svg/arrow-bottom.svg';
 
 interface SelectProps {
   width?: string;
@@ -15,17 +16,10 @@ interface SelectProps {
   options: SelectType;
 }
 
-function paramsToObject(entries: IterableIterator<[string, string]>) {
-  const result: { [key: string]: string } = {};
-  for (const [key, value] of entries) {
-    result[key] = value;
-  }
-  return result;
-}
-
 const Select = ({ options, width = '100%', align }: SelectProps) => {
   const { optionSet, defaultLabel } = options;
-  const query = useSearchParams();
+  const searchParams = useSearchParams();
+  const { query } = useNextQuery(searchParams);
   const [toggle, setToggle] = React.useState<boolean>(false);
 
   const onToggle = () => setToggle(!toggle);
@@ -35,8 +29,7 @@ const Select = ({ options, width = '100%', align }: SelectProps) => {
     const check = (val: string, dat: string) => {
       const [v1, v2] = val.split(' ');
       const [d1, d2] = dat.split(' ');
-
-      return v1 === query.get(d1) || v2 === query.get(d2);
+      return v1 === query[d1] && v2 === query[d2];
     };
 
     const options = optionSet.find(({ value, dataName }) =>
@@ -50,13 +43,10 @@ const Select = ({ options, width = '100%', align }: SelectProps) => {
     const [key1, key2] = dataName.split(' ');
     const [value1, value2] = value.split(' ');
 
-    const entries = new URLSearchParams(query.toString()).entries();
-    const queries = paramsToObject(entries);
+    query[key1] = value1;
+    if (key2 && value2) query[key2] = value2;
 
-    queries[key1] = value1;
-    if (key2 && value2) queries[key2] = value2;
-
-    const url = makeQuery(queries);
+    const url = makeQuery(query);
 
     return `/market?${url}`;
   };
