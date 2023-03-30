@@ -88,13 +88,13 @@ export async function patch<T, U>(
 
 export async function remove<T, U>(
   path: string,
-  body: T,
+  body?: T,
   config?: FetcherRequestInit
 ): Promise<U> {
   const init = {
     method: 'DELETE',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
+    body: body ? JSON.stringify(body) : undefined,
     ...config,
   };
   return await http<U>(path, init);

@@ -13,12 +13,13 @@ import { css } from 'styled-components';
 
 import ModalContext from 'feature/modalContext';
 import { Modal } from 'components/common/modal';
-import { clientFetcher } from '@supercarmarket/lib';
 import AuthFormItem from 'components/auth/authFormItem/authFormItem';
 import useAuth from 'hooks/useAuth';
 import { useAccountUpdateInfo } from 'http/server/account';
 import { useDebounce } from '@supercarmarket/hooks';
 import { form, FormState } from 'constants/form/updateInfo';
+import { remove } from '@supercarmarket/lib';
+import { type ServerResponse } from '@supercarmarket/types/base';
 
 interface AccountUpdateFormProps {
   sub: string;
@@ -38,13 +39,17 @@ const AccountUpdateForm = (props: AccountUpdateFormProps) => {
 
     if (!session) return;
 
-    const response = await clientFetcher('/server', {
-      method: 'DELETE',
-      headers: {
-        ACCESS_TOKEN: session.accessToken,
-        REFRESH_TOKEN: session.refreshToken,
-      },
-    }).catch((error) => {
+    const response = await remove<undefined, ServerResponse<boolean>>(
+      '/server',
+      undefined,
+      {
+        method: 'DELETE',
+        headers: {
+          ACCESS_TOKEN: session.accessToken,
+          REFRESH_TOKEN: session.refreshToken,
+        },
+      }
+    ).catch((error) => {
       setError(error.message);
     });
 
@@ -121,7 +126,7 @@ const AccountUpdateForm = (props: AccountUpdateFormProps) => {
           code: data.authentication,
         };
 
-        update(formData, session.accessToken).then(() => {
+        update(formData).then(() => {
           refetch();
         });
       }),

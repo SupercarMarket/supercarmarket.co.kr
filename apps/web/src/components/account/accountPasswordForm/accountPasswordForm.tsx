@@ -1,4 +1,3 @@
-import { clientApi } from '@supercarmarket/lib';
 import {
   Alert,
   applyMediaQuery,
@@ -16,6 +15,7 @@ import { css } from 'styled-components';
 import { useRouter } from 'next/navigation';
 import { useDebounce } from '@supercarmarket/hooks';
 import { form, FormState } from 'constants/form/updatePassword';
+import { authRequest } from 'http/core';
 
 interface AccountPasswordFormProps {
   sub: string;
@@ -23,7 +23,6 @@ interface AccountPasswordFormProps {
 
 const AccountPasswordForm = (props: AccountPasswordFormProps) => {
   const { sub } = props;
-  const session = useSession();
   const { replace } = useRouter();
   const methods = useForm<FormState>();
   const [error, setError] = useState<string | null>(null);
@@ -46,14 +45,13 @@ const AccountPasswordForm = (props: AccountPasswordFormProps) => {
       handleRequire(data).then(async () => {
         setError(null);
 
-        const response = await clientApi(`/server/supercar/v1/user/change-pw`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            ACCESS_TOKEN: session.data?.accessToken || '',
-          },
-          data,
-        }).catch((error) => {
+        const response = await authRequest(
+          `/server/supercar/v1/user/change-pw`,
+          {
+            method: 'POST',
+            data,
+          }
+        ).catch((error) => {
           setError(error.message);
         });
 
