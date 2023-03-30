@@ -1,10 +1,8 @@
 import { Container, Wrapper } from '@supercarmarket/ui';
-import type { AccountRoute } from 'constants/account';
 import { PropsWithChildren } from 'react';
 import Footer from './footer';
 
 import Header from './header';
-import { navlinks } from './layout';
 import * as style from './layout.styled';
 import Navbar from './navbar';
 
@@ -13,7 +11,6 @@ interface AccountLayoutProps extends PropsWithChildren {
   profileSrc: string;
   backgroundSrc: string;
   isMyAccountPage: boolean;
-  accountRoutes: AccountRoute[];
 }
 
 const AccountLayout = (props: AccountLayoutProps) => {
@@ -28,8 +25,8 @@ const AccountLayout = (props: AccountLayoutProps) => {
         }}
       >
         <Wrapper css={style.account}>
-          <Header navlinks={navlinks} />
-          <Navbar navlinks={navlinks} />
+          <Header />
+          <Navbar />
         </Wrapper>
         <Wrapper role="main">{children}</Wrapper>
       </Container>
