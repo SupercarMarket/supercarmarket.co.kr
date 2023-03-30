@@ -9,13 +9,13 @@ import {
   FormMessage,
   Wrapper,
 } from '@supercarmarket/ui';
-import account, { AccountPasswordUpdateFormState } from 'constants/account';
 import { useSession } from 'next-auth/react';
 import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { css } from 'styled-components';
 import { useRouter } from 'next/navigation';
 import { useDebounce } from '@supercarmarket/hooks';
+import { form, FormState } from 'constants/form/updatePassword';
 
 interface AccountPasswordFormProps {
   sub: string;
@@ -25,10 +25,10 @@ const AccountPasswordForm = (props: AccountPasswordFormProps) => {
   const { sub } = props;
   const session = useSession();
   const { replace } = useRouter();
-  const methods = useForm<AccountPasswordUpdateFormState>();
+  const methods = useForm<FormState>();
   const [error, setError] = useState<string | null>(null);
 
-  const handleRequire = async (data: AccountPasswordUpdateFormState) => {
+  const handleRequire = async (data: FormState) => {
     const { newPassword, newPasswordCheck } = data;
 
     if (newPassword !== newPasswordCheck) {
@@ -42,7 +42,7 @@ const AccountPasswordForm = (props: AccountPasswordFormProps) => {
   };
 
   const debouncedSubmit = useDebounce(
-    (data: AccountPasswordUpdateFormState) =>
+    (data: FormState) =>
       handleRequire(data).then(async () => {
         setError(null);
 
@@ -83,8 +83,8 @@ const AccountPasswordForm = (props: AccountPasswordFormProps) => {
           }
         `}
       >
-        {account.updatePassword.map((form) => (
-          <FormLabel key={form.htmlFor} name={form.htmlFor} label={form.label}>
+        {form.map((f) => (
+          <FormLabel key={f.htmlFor} name={f.htmlFor} label={f.label}>
             <Wrapper
               css={css`
                 width: 100%;
@@ -94,13 +94,13 @@ const AccountPasswordForm = (props: AccountPasswordFormProps) => {
               `}
             >
               <FormInput
-                type={form.type}
-                placeholder={form.placeholder}
-                {...methods.register(form.htmlFor, form.options)}
+                type={f.type}
+                placeholder={f.placeholder}
+                {...methods.register(f.htmlFor, f.options)}
               />
               <FormMessage
-                tooltip={form.tooltip}
-                error={methods.formState.errors[form.htmlFor]?.message}
+                tooltip={f.tooltip}
+                error={methods.formState.errors[f.htmlFor]?.message}
                 padding="0 0 0 14px"
               />
             </Wrapper>

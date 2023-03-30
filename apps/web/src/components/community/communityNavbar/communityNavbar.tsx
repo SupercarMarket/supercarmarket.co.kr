@@ -5,11 +5,11 @@ import {
   Typography,
   Wrapper,
 } from '@supercarmarket/ui';
-import type { Links } from '@supercarmarket/types/base';
-import community from 'constants/community';
 import Link from 'next/link';
 import { css } from 'styled-components';
 import { useMedia, useUrlQuery } from '@supercarmarket/hooks';
+import { links } from 'constants/link/community';
+import { Links } from 'constants/link';
 
 const CommunityNavbarItem = (link: Links) => {
   const { category } = useUrlQuery();
@@ -43,9 +43,9 @@ const CommunityNavbarItem = (link: Links) => {
           <Link
             key={children.title}
             href={{
-              pathname: link.href,
+              pathname: link.href.toString(),
               query: {
-                category: children.href,
+                category: children.href.toString(),
               },
             }}
           >
@@ -104,7 +104,7 @@ const CommunityNavbar = () => {
           }
         `}
       >
-        {community.links.map((link) => (
+        {links.map((link) => (
           <CommunityNavbarItem key={link.title} {...link} />
         ))}
       </Wrapper>

@@ -1,5 +1,5 @@
 import { clientFetcher, serverFetcher } from '@supercarmarket/lib';
-import { type AccountTab } from 'constants/account';
+import { type AccountCategory } from 'constants/link/account';
 
 export const getAccount = async ({
   id,
@@ -30,7 +30,7 @@ export const getAccountCategory = async ({
 }: {
   id: string;
   query: {
-    category: AccountTab;
+    category: AccountCategory;
     page: number;
     size: number;
   };

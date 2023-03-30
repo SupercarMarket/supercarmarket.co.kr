@@ -1,6 +1,6 @@
-import { type AccountTab } from 'constants/account';
 import { type UpdateInfo, type Profile } from '@supercarmarket/types/account';
 import { type ServerResponse } from '@supercarmarket/types/base';
+import { type AccountCategory } from 'constants/link/account';
 import { useQuery } from '@tanstack/react-query';
 import { getAccount, getAccountCategory, getAccountUpdateInfo } from './apis';
 import { QUERY_KEYS } from './keys';
@@ -17,7 +17,7 @@ export const useAccount = (id: string, token?: string, options = {}) => {
 export const useAccountCategory = (
   id: string,
   query: {
-    category: AccountTab;
+    category: AccountCategory;
     page: number;
     size: number;
   },

@@ -2,7 +2,6 @@
 
 import { Alert, Button, Form, Wrapper } from '@supercarmarket/ui';
 import { fetcher, ErrorCode } from '@supercarmarket/lib';
-import inquiry, { InquiryCarFormState } from 'constants/inquiry';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import * as React from 'react';
@@ -14,6 +13,7 @@ import ModalContext from 'feature/modalContext';
 import { Modal } from 'components/common/modal';
 import { Profile } from '@supercarmarket/types/account';
 import { useDebounce } from '@supercarmarket/hooks';
+import { form, type FormState } from 'constants/form/sale';
 
 interface SaleFormProps {
   role: Profile['role'];
@@ -21,15 +21,15 @@ interface SaleFormProps {
 
 const SaleForm = (props: SaleFormProps) => {
   const { role } = props;
-  const methods = useForm<InquiryCarFormState>();
+  const methods = useForm<FormState>();
   const session = useSession();
   const { onOpen, onClose } = React.useContext(ModalContext);
   const [error, setError] = React.useState<string | null>(null);
   const { replace } = useRouter();
 
-  const handleRequire = async (data: InquiryCarFormState) => {
+  const handleRequire = async (data: FormState) => {
     Object.entries(data).forEach(([key, value]) => {
-      const target = key as keyof InquiryCarFormState;
+      const target = key as keyof FormState;
 
       if (
         (target === 'category' || target === 'fuel' || target === 'sellType') &&
@@ -75,7 +75,7 @@ const SaleForm = (props: SaleFormProps) => {
   };
 
   const debouncedSubmit = useDebounce(
-    async (data: InquiryCarFormState) =>
+    async (data: FormState) =>
       handleRequire(data).then(async () => {
         const { productImages, attachments, ...rest } = data;
         const formData = new FormData();
@@ -163,12 +163,8 @@ const SaleForm = (props: SaleFormProps) => {
           gap: 24px;
         `}
       >
-        {inquiry.register.car.map((d) => (
-          <InquiryFormItem
-            key={d.htmlFor}
-            callback={(d) => console.log(d)}
-            {...d}
-          />
+        {form.map((d) => (
+          <InquiryFormItem key={d.htmlFor} {...d} />
         ))}
         <Wrapper.Item
           css={css`

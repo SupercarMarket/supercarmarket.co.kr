@@ -1,7 +1,6 @@
 import { ErrorCode, fetcher } from '@supercarmarket/lib';
 import { Alert, Button, Form, Wrapper } from '@supercarmarket/ui';
 import { Modal } from 'components/common/modal';
-import inquiry, { InquiryADFormState } from 'constants/inquiry';
 import ModalContext from 'feature/modalContext';
 import { useSession } from 'next-auth/react';
 import * as React from 'react';
@@ -11,13 +10,14 @@ import { useRouter } from 'next/navigation';
 
 import InquiryFormItem from '../inquiryFormItem';
 import { useDebounce } from '@supercarmarket/hooks';
+import { form, type FormState } from 'constants/form/advertisement';
 
 const PartnershipForm = () => {
   const session = useSession();
   const [error, setError] = React.useState<string | null>(null);
   const { onClose, onOpen } = React.useContext(ModalContext);
   const { replace } = useRouter();
-  const methods = useForm<InquiryADFormState>();
+  const methods = useForm<FormState>();
 
   const handleModal = React.useCallback(
     (href: string) => {
@@ -28,9 +28,9 @@ const PartnershipForm = () => {
     [onClose, replace]
   );
 
-  const handleRequire = async (data: InquiryADFormState) => {
+  const handleRequire = async (data: FormState) => {
     Object.entries(data).map(([key, value]) => {
-      const target = key as keyof InquiryADFormState;
+      const target = key as keyof FormState;
 
       if (!value) {
         methods.setError(target, {
@@ -49,7 +49,7 @@ const PartnershipForm = () => {
   };
 
   const debouncedSubmit = useDebounce(
-    (data: InquiryADFormState) =>
+    (data: FormState) =>
       handleRequire(data).then(async () => {
         setError(null);
 
@@ -108,12 +108,8 @@ const PartnershipForm = () => {
           gap: 24px;
         `}
       >
-        {inquiry.register.advertisement.map((d) => (
-          <InquiryFormItem
-            key={d.htmlFor}
-            callback={(d) => console.log(d)}
-            {...d}
-          />
+        {form.map((d) => (
+          <InquiryFormItem key={d.htmlFor} {...d} />
         ))}
         <Wrapper.Item
           css={css`
