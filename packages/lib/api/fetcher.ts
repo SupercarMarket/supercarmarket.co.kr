@@ -1,13 +1,6 @@
 import { SupercarMarketApiError } from '../embeds/error';
 import getErrorMessage from '../getErrorMessage';
-
-export interface FetcherRequestInit extends RequestInit {
-  params?: number | string;
-  query?: {
-    [key: string]: any;
-  };
-  data?: unknown;
-}
+import { FetcherRequestInit } from './fetcherWrapper';
 
 export type BaseApiHandlerResponse<T> = {
   status: number;
