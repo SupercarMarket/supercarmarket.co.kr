@@ -16,7 +16,6 @@ import Link from 'next/link';
 import { signOut, useSession } from 'next-auth/react';
 import { css } from 'styled-components';
 import clsx from 'clsx';
-import type { Links } from '@supercarmarket/types/base';
 import Hamburger from '../hamburger';
 import Image from 'next/image';
 
@@ -25,11 +24,7 @@ import menuSrc from '../../../../public/images/menu.png';
 import { Logo } from 'components/common/logo';
 import { useMedia } from '@supercarmarket/hooks';
 
-interface HeaderProps {
-  navlinks: Links[];
-}
-
-const Header = ({ navlinks }: HeaderProps) => {
+const Header = () => {
   const { isMobile } = useMedia({ deviceQuery: deviceQuery });
   const [search, setSearch] = React.useState(false);
   const [hamburger, setHamburger] = React.useState(false);
@@ -283,7 +278,6 @@ const Header = ({ navlinks }: HeaderProps) => {
       </Wrapper>
       {isMobile && (
         <Hamburger
-          navlinks={navlinks}
           session={session}
           hamburger={hamburger}
           signOut={handleSignOut}

@@ -1,7 +1,6 @@
 import { ErrorCode } from '@supercarmarket/lib';
 import { Alert, Button, Form, Wrapper } from '@supercarmarket/ui';
 import { Modal } from 'components/common/modal';
-import inquiry, { InquiryPartnershipFormState } from 'constants/inquiry';
 import ModalContext from 'feature/modalContext';
 import { useSession } from 'next-auth/react';
 import * as React from 'react';
@@ -12,6 +11,7 @@ import { useRouter } from 'next/navigation';
 import InquiryFormItem from '../inquiryFormItem';
 import { useDebounce } from '@supercarmarket/hooks';
 import { authRequest } from 'http/core';
+import { form, type FormState } from 'constants/form/partnership';
 
 const formatter = (category: string) => {
   if (category === '전체') return 'ALL';
@@ -27,7 +27,7 @@ const PartnershipForm = () => {
   const [error, setError] = React.useState<string | null>(null);
   const { onClose, onOpen } = React.useContext(ModalContext);
   const { replace } = useRouter();
-  const methods = useForm<InquiryPartnershipFormState>();
+  const methods = useForm<FormState>();
 
   const handleModal = React.useCallback(
     (href: string) => {
@@ -38,9 +38,9 @@ const PartnershipForm = () => {
     [onClose, replace]
   );
 
-  const handleRequire = async (data: InquiryPartnershipFormState) => {
+  const handleRequire = async (data: FormState) => {
     Object.entries(data).map(([key, value]) => {
-      const target = key as keyof InquiryPartnershipFormState;
+      const target = key as keyof FormState;
 
       if (target == 'address' && !value.length) {
         methods.setError(target, {
@@ -77,7 +77,7 @@ const PartnershipForm = () => {
   };
 
   const debouncedSubmit = useDebounce(
-    async (data: InquiryPartnershipFormState) =>
+    async (data: FormState) =>
       handleRequire(data).then(async () => {
         setError(null);
 
@@ -147,12 +147,8 @@ const PartnershipForm = () => {
           gap: 24px;
         `}
       >
-        {inquiry.register.partnership.map((d) => (
-          <InquiryFormItem
-            key={d.htmlFor}
-            callback={(d) => console.log(d)}
-            {...d}
-          />
+        {form.map((d) => (
+          <InquiryFormItem key={d.htmlFor} {...d} />
         ))}
         <Wrapper.Item
           css={css`

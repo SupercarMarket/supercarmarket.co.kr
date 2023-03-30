@@ -209,69 +209,6 @@ const FUEL_KIND: { [key: string]: string } = {
   electric: '전기',
 };
 
-const MARKET_LINKS = [
-  {
-    title: '전체',
-    href: {
-      pathname: '/market',
-      query: {
-        category: 'all',
-      },
-    },
-    category: 'all',
-  },
-  {
-    title: '스포츠카',
-    href: {
-      pathname: '/market',
-      query: {
-        category: 'sports-car',
-      },
-    },
-    category: 'sports-car',
-  },
-  {
-    title: '세단',
-    href: {
-      pathname: '/market',
-      query: {
-        category: 'saloon',
-      },
-    },
-    category: 'saloon',
-  },
-  {
-    title: 'SUV',
-    href: {
-      pathname: '/market',
-      query: {
-        category: 'suv',
-      },
-    },
-    category: 'suv',
-  },
-  {
-    title: '픽업트럭',
-    href: {
-      pathname: '/market',
-      query: {
-        category: 'pickup-truck',
-      },
-    },
-    category: 'pickup-truck',
-  },
-  {
-    title: '클래식카&올드카',
-    href: {
-      pathname: '/market',
-      query: {
-        category: 'classic-car',
-      },
-    },
-    category: 'classic-car',
-  },
-];
-
 export {
   CATEGORY,
   CATEGORY_MAPPING,
@@ -283,5 +220,4 @@ export {
   ORDER_OPTIONSET,
   SECOND_MARKET_FILTER,
   SHOW_COUNT_OPTIONS,
-  MARKET_LINKS,
 };

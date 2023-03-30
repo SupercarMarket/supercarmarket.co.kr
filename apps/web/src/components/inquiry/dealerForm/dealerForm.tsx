@@ -2,7 +2,6 @@
 
 import { Alert, Button, Form } from '@supercarmarket/ui';
 import { ErrorCode } from '@supercarmarket/lib';
-import inquiry, { InquiryDealerFormState } from 'constants/inquiry';
 import { useRouter } from 'next/navigation';
 import * as React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -13,18 +12,19 @@ import ModalContext from 'feature/modalContext';
 import { Modal } from 'components/common/modal';
 import { useDebounce } from '@supercarmarket/hooks';
 import { authRequest } from 'http/core';
+import { form, FormState } from 'constants/form/dealer';
 
 const DealerForm = () => {
-  const methods = useForm<InquiryDealerFormState>();
+  const methods = useForm<FormState>();
   const { onOpen, onClose } = React.useContext(ModalContext);
   const [error, setError] = React.useState<string | null>(null);
   const { replace } = useRouter();
 
-  const handleRequire = async (data: InquiryDealerFormState) => {
+  const handleRequire = async (data: FormState) => {
     const { addional: _, ...rest } = data;
 
     Object.entries(rest).forEach(([key, value]) => {
-      const target = key as keyof InquiryDealerFormState;
+      const target = key as keyof FormState;
 
       if (target === 'comAddress' && !value) {
         methods.setError(target, {
@@ -57,7 +57,7 @@ const DealerForm = () => {
   };
 
   const debouncedSubmit = useDebounce(
-    async (data: InquiryDealerFormState) =>
+    async (data: FormState) =>
       handleRequire(data).then(async () => {
         setError(null);
 
@@ -142,7 +142,7 @@ const DealerForm = () => {
           gap: 24px;
         `}
       >
-        {inquiry.register.dealer.map((data) => (
+        {form.map((data) => (
           <InquiryFormItem key={data.htmlFor} {...data} />
         ))}
         <Button type="submit" width="104px">

@@ -2,10 +2,10 @@ import { applyMediaQuery, Container, Title, Wrapper } from '@supercarmarket/ui';
 import type { NextPageWithLayout } from '@supercarmarket/types/base';
 import { InquiryNavbar } from 'components/inquiry';
 import Layout from 'components/layout/layout';
-import inquiry from 'constants/inquiry';
 import { css } from 'styled-components';
 import { ModalProvider } from 'feature/modalContext';
 import Advertisement from 'components/common/advertisement';
+import { links } from 'constants/link/inquiry';
 
 const Inquiry: NextPageWithLayout = () => {
   return (
@@ -23,7 +23,7 @@ const Inquiry: NextPageWithLayout = () => {
       >
         <Title>어떤 문의를 원하시나요?</Title>
         <ModalProvider>
-          {inquiry.links.map((list, index) => (
+          {links.map((list, index) => (
             <InquiryNavbar key={list.title} index={index} {...list} />
           ))}
         </ModalProvider>

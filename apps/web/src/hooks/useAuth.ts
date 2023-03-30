@@ -1,8 +1,9 @@
 import { get, patch, post } from '@supercarmarket/lib';
-import { Signup } from '@supercarmarket/types/auth';
-import { ServerResponse, User } from '@supercarmarket/types/base';
-import { FormState } from 'constants/account';
+import { ServerResponse } from '@supercarmarket/types/base';
 import { authRequest } from 'http/core';
+import { type Signup } from '@supercarmarket/types/auth';
+import { type User } from '@supercarmarket/types/base';
+import { FormState } from 'constants/form/updateInfo';
 import * as React from 'react';
 
 interface AuthStateField<T extends any = any> {
@@ -217,7 +218,7 @@ export default function useAuth() {
 
   const update = React.useCallback(
     async (
-      data: Omit<FormState, 'gallery' | 'background' | 'newPassword'> & {
+      data: FormState & {
         code: string;
       }
     ) => {

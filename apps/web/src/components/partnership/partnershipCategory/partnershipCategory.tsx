@@ -2,10 +2,8 @@ import { Params } from '@supercarmarket/types/base';
 import { MarketOptionType } from '@supercarmarket/types/market';
 import { applyMediaQuery, Category, Wrapper } from '@supercarmarket/ui';
 import SecondSelect from 'components/common/secondSelect';
-import {
-  PARTNERSHIP_FILTER_OPTIONS,
-  PARTNERSHIP_LINKS,
-} from 'constants/partnership';
+import { links } from 'constants/link/partnership';
+import { PARTNERSHIP_FILTER_OPTIONS } from 'constants/partnership';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { css } from 'styled-components';
@@ -40,7 +38,7 @@ const PartnershipCategory = ({ category }: PartnershipCategoryProps) => {
       `}
     >
       <Wrapper.Left>
-        <Category links={PARTNERSHIP_LINKS} category={category} />
+        <Category links={links} category={category} />
       </Wrapper.Left>
       <Wrapper.Right
         css={css`

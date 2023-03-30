@@ -1,6 +1,5 @@
 import { Alert, Button, Form, FormLabel } from '@supercarmarket/ui';
 import { ErrorCode } from '@supercarmarket/lib';
-import auth from 'constants/auth';
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 import * as React from 'react';
@@ -9,6 +8,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import AuthFormItem from '../authFormItem/authFormItem';
 import * as style from '../signupForm/signupForm.styled';
 import useAuth from 'hooks/useAuth';
+import { form } from 'constants/form/findPassword';
 
 interface PhoneFormProps {
   uuid: string;
@@ -41,16 +41,22 @@ const PhoneForm = ({ uuid }: PhoneFormProps) => {
   return (
     <FormProvider {...methods}>
       <Form css={style.form} onSubmit={onSubmit}>
-        {auth.phoneAuth().map((form) => (
-          <FormLabel key={form.htmlFor} name={form.htmlFor} label={form.label}>
-            <AuthFormItem
-              {...form}
-              state={authState}
-              sendPhone={sendPhone}
-              sendCode={sendCode}
-            />
-          </FormLabel>
-        ))}
+        {form
+          .filter((_, index) => index !== 0)
+          .map((form) => (
+            <FormLabel
+              key={form.htmlFor}
+              name={form.htmlFor}
+              label={form.label}
+            >
+              <AuthFormItem
+                {...form}
+                state={authState}
+                sendPhone={sendPhone}
+                sendCode={sendCode}
+              />
+            </FormLabel>
+          ))}
         <Button type="submit" fullWidth>
           인증
         </Button>

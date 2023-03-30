@@ -18,7 +18,6 @@ import type { Editor } from '@toast-ui/react-editor';
 import type { CommunityTemporaryStorageDto } from '@supercarmarket/types/community';
 import ModalContext from 'feature/modalContext';
 import { FormProvider, useForm } from 'react-hook-form';
-import { FormState } from 'constants/community';
 import { ErrorCode, fetcher } from '@supercarmarket/lib';
 import { useSession } from 'next-auth/react';
 import {
@@ -31,6 +30,14 @@ import { Modal } from 'components/common/modal';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { getTemporaryStorage, QUERY_KEYS } from 'http/server/community';
 import { useDebounce } from '@supercarmarket/hooks';
+
+interface FormState {
+  files: File[];
+  category: string;
+  title: string;
+  temporaryStorage?: boolean;
+  tempId?: string;
+}
 
 interface CommunityFormProps {
   id?: string;

@@ -3,7 +3,6 @@ import { CardSkeleton } from 'components/fallback/loading';
 import InquiryCard from 'components/inquiry/inquiryCard';
 import MagazineCard from 'components/magazine/magazineCard';
 import MarketCard from 'components/market/marketCard';
-import type { AccountTab } from 'constants/account';
 import { useSession } from 'next-auth/react';
 import * as React from 'react';
 import { css } from 'styled-components';
@@ -26,10 +25,11 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useRemoveCommunityPost } from 'http/server/community';
 import { QUERY_KEYS, useAccountCategory } from 'http/server/account';
 import { useDebounce } from '@supercarmarket/hooks';
+import { type AccountCategory } from 'constants/link/account';
 
 interface AccountCategoryProps {
   sub: string;
-  tab: AccountTab;
+  tab: AccountCategory;
   isMyAccountPage: boolean;
   accountRoutes: CategoryProps['links'];
 }
@@ -122,7 +122,7 @@ const AccountCategoryItemWrapper = ({
   );
 };
 
-const AccountCategory = React.memo(function AccountCategory({
+const AccountCategoryList = React.memo(function AccountCategory({
   sub,
   tab,
   isMyAccountPage,
@@ -343,4 +343,4 @@ const AccountCategory = React.memo(function AccountCategory({
   );
 });
 
-export default AccountCategory;
+export default AccountCategoryList;

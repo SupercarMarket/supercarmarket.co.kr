@@ -9,7 +9,6 @@ import {
   Wrapper,
 } from '@supercarmarket/ui';
 import { catchNoExist, ErrorCode } from '@supercarmarket/lib';
-import auth from 'constants/auth';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
@@ -22,16 +21,12 @@ import AuthFormItem from '../authFormItem/authFormItem';
 import * as style from './signinForm.styled';
 import useAuth from 'hooks/useAuth';
 import { useDebounce } from '@supercarmarket/hooks';
+import { form, FormState } from 'constants/form/signin';
 
 const oauth = [
   { provider: 'kakao', title: '카카오', icon: <KakaoIcon /> },
   { provider: 'google', title: '구글', icon: <GoogleIcon /> },
 ];
-
-interface FormState {
-  id: string;
-  password: string;
-}
 
 const Links = () => {
   return (
@@ -95,7 +90,7 @@ const LocalFormItem = () => {
     <FormProvider {...methods}>
       <Form css={style.form} onSubmit={methods.handleSubmit(debouncedSubmit)}>
         <Wrapper css={style.wrapper}>
-          {auth.signin().map((form) => (
+          {form.map((form) => (
             <FormLabel
               key={form.htmlFor}
               name={form.htmlFor}

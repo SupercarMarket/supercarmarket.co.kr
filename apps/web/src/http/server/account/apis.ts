@@ -1,8 +1,8 @@
 import { type Profile } from '@supercarmarket/types/account';
 import { type ServerResponse } from '@supercarmarket/types/base';
-import { type AccountTab } from 'constants/account';
 import { get } from '@supercarmarket/lib';
 import { authRequest } from 'http/core';
+import { type AccountCategory } from 'constants/link/account';
 
 export const getAccount = async ({
   id,
@@ -33,7 +33,7 @@ export const getAccountCategory = async ({
 }: {
   id: string;
   query: {
-    category: AccountTab;
+    category: AccountCategory;
     page: number;
     size: number;
   };

@@ -1,7 +1,6 @@
 import { ErrorCode } from '@supercarmarket/lib';
 import { Alert, Button, Form, Wrapper } from '@supercarmarket/ui';
 import { Modal } from 'components/common/modal';
-import inquiry, { InquiryMiscFormState } from 'constants/inquiry';
 import ModalContext from 'feature/modalContext';
 import { useSession } from 'next-auth/react';
 import * as React from 'react';
@@ -12,12 +11,13 @@ import { useRouter } from 'next/navigation';
 import InquiryFormItem from '../inquiryFormItem';
 import { useDebounce } from '@supercarmarket/hooks';
 import { authRequest } from 'http/core';
+import { form, type FormState } from 'constants/form/misc';
 
 const MiscForm = () => {
   const session = useSession();
   const { onClose, onOpen } = React.useContext(ModalContext);
   const { replace } = useRouter();
-  const methods = useForm<InquiryMiscFormState>();
+  const methods = useForm<FormState>();
   const [error, setError] = React.useState<string | null>(null);
 
   const handleModal = React.useCallback(
@@ -29,7 +29,7 @@ const MiscForm = () => {
     [onClose, replace]
   );
 
-  const handleRequire = async (data: InquiryMiscFormState) => {
+  const handleRequire = async (data: FormState) => {
     const { title, contents } = data;
 
     if (!title) {
@@ -44,7 +44,7 @@ const MiscForm = () => {
   };
 
   const debouncedSubmit = useDebounce(
-    (data: InquiryMiscFormState) =>
+    (data: FormState) =>
       handleRequire(data).then(async () => {
         setError(null);
 
@@ -90,12 +90,8 @@ const MiscForm = () => {
           gap: 24px;
         `}
       >
-        {inquiry.register.misc.map((d) => (
-          <InquiryFormItem
-            key={d.htmlFor}
-            callback={(d) => console.log(d)}
-            {...d}
-          />
+        {form.map((d) => (
+          <InquiryFormItem key={d.htmlFor} {...d} />
         ))}
         <Wrapper.Item
           css={css`
