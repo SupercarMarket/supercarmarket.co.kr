@@ -1,4 +1,4 @@
-import { clientFetcher, get, serverFetcher } from '@supercarmarket/lib';
+import { get } from '@supercarmarket/lib';
 import { type Query } from '@supercarmarket/types/base';
 
 export const getSearch = async ({
