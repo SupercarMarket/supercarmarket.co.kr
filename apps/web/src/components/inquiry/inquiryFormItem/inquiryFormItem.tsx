@@ -16,7 +16,6 @@ import {
   Wrapper,
 } from '@supercarmarket/ui';
 import { Form, FormType } from 'constants/form';
-import type { InquiryRegister } from 'constants/inquiry';
 import * as React from 'react';
 import type {
   FieldError,
@@ -99,7 +98,9 @@ const InquiryFormMixed = (
   );
 };
 
-const InquiryFormItem = (props: InquiryRegister) => {
+const InquiryFormItem = (
+  props: Form<string, Exclude<FormType, 'tel' | 'email' | 'password'>>
+) => {
   const { htmlFor, options } = props;
   const {
     register,
