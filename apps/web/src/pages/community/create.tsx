@@ -64,8 +64,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     };
   }
 
-  const temporaryStorage: CommunityTemporaryStorageDto | null =
-    await prefetchTemporaryStorage(session.accessToken);
+  const temporaryStorage = await prefetchTemporaryStorage(session.accessToken);
 
   return {
     props: {

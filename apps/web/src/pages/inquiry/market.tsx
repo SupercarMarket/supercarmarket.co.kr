@@ -5,7 +5,7 @@ import Layout from 'components/layout/layout';
 import { css } from 'styled-components';
 import { ModalProvider } from 'feature/modalContext';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-import { serverFetcher } from '@supercarmarket/lib';
+import { get } from '@supercarmarket/lib';
 import { getSession } from 'http/server/auth/user';
 
 const Market: NextPageWithLayout = ({
@@ -45,7 +45,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     };
   }
 
-  const { ok, status, ...result } = await serverFetcher(
+  const result = await get(
     `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/user/info`,
     {
       method: 'GET',
@@ -55,7 +55,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     }
   );
 
-  if (!ok) {
+  if (!result) {
     return {
       notFound: true,
     };

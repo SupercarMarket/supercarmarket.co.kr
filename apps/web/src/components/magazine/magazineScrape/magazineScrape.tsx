@@ -39,7 +39,7 @@ const MagazineScrape = ({ postId, isScraped }: MagazineScrapeProps) => {
 
   const handleScrape = React.useCallback(() => {
     if (session.status !== 'authenticated') return;
-    mutate(session.data.accessToken);
+    mutate();
   }, [mutate, session]);
 
   return (

@@ -1,8 +1,7 @@
 'use client';
 
 import { Alert, Button, Form, Wrapper } from '@supercarmarket/ui';
-import { fetcher, ErrorCode } from '@supercarmarket/lib';
-import inquiry, { InquiryCarFormState } from 'constants/inquiry';
+import { ErrorCode } from '@supercarmarket/lib';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import * as React from 'react';
@@ -14,6 +13,8 @@ import ModalContext from 'feature/modalContext';
 import { Modal } from 'components/common/modal';
 import { Profile } from '@supercarmarket/types/account';
 import { useDebounce } from '@supercarmarket/hooks';
+import { authRequest } from 'http/core';
+import { form, type FormState } from 'constants/form/sale';
 
 interface SaleFormProps {
   role: Profile['role'];
@@ -21,15 +22,15 @@ interface SaleFormProps {
 
 const SaleForm = (props: SaleFormProps) => {
   const { role } = props;
-  const methods = useForm<InquiryCarFormState>();
+  const methods = useForm<FormState>();
   const session = useSession();
   const { onOpen, onClose } = React.useContext(ModalContext);
   const [error, setError] = React.useState<string | null>(null);
   const { replace } = useRouter();
 
-  const handleRequire = async (data: InquiryCarFormState) => {
+  const handleRequire = async (data: FormState) => {
     Object.entries(data).forEach(([key, value]) => {
-      const target = key as keyof InquiryCarFormState;
+      const target = key as keyof FormState;
 
       if (
         (target === 'category' || target === 'fuel' || target === 'sellType') &&
@@ -75,7 +76,7 @@ const SaleForm = (props: SaleFormProps) => {
   };
 
   const debouncedSubmit = useDebounce(
-    async (data: InquiryCarFormState) =>
+    async (data: FormState) =>
       handleRequire(data).then(async () => {
         const { productImages, attachments, ...rest } = data;
         const formData = new FormData();
@@ -98,37 +99,34 @@ const SaleForm = (props: SaleFormProps) => {
         );
         attachments.forEach((file) => formData.append('attachments', file));
 
-        const response = await fetcher('/server/supercar/v1/inquiry-product', {
+        await authRequest('/inquiry-product', {
           method: 'POST',
           headers: {
-            ACCESS_TOKEN: session.data?.accessToken || '',
+            'Content-Type': 'multipart/form-data',
           },
-          body: formData,
-        });
-
-        const result = await response.json();
-
-        if (!response.ok) {
-          setError(result.message || ErrorCode[response.status]);
-          return;
-        }
-
-        onOpen(
-          <Modal
-            title="판매차량 등록 문의"
-            description="판매차량 등록 문의가 완료되었습니다."
-            clickText="확인"
-            background="rgba(30, 30, 32, 0.5)"
-            onCancel={() => {
-              onClose();
-              replace('/inquiry');
-            }}
-            onClick={() => {
-              onClose();
-              replace('/inquiry');
-            }}
-          />
-        );
+          data: formData,
+        })
+          .then(() => {
+            onOpen(
+              <Modal
+                title="판매차량 등록 문의"
+                description="판매차량 등록 문의가 완료되었습니다."
+                clickText="확인"
+                background="rgba(30, 30, 32, 0.5)"
+                onCancel={() => {
+                  onClose();
+                  replace('/inquiry');
+                }}
+                onClick={() => {
+                  onClose();
+                  replace('/inquiry');
+                }}
+              />
+            );
+          })
+          .catch((error) => {
+            setError(error.message || ErrorCode[error.status]);
+          });
       }),
     300
   );
@@ -163,12 +161,8 @@ const SaleForm = (props: SaleFormProps) => {
           gap: 24px;
         `}
       >
-        {inquiry.register.car.map((d) => (
-          <InquiryFormItem
-            key={d.htmlFor}
-            callback={(d) => console.log(d)}
-            {...d}
-          />
+        {form.map((d) => (
+          <InquiryFormItem key={d.htmlFor} {...d} />
         ))}
         <Wrapper.Item
           css={css`

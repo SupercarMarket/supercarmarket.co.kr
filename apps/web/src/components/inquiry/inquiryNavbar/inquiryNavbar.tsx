@@ -7,7 +7,6 @@ import {
   Typography,
   Wrapper,
 } from '@supercarmarket/ui';
-import type { InquiryLink } from '@supercarmarket/types/inquiry';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import { css } from 'styled-components';
@@ -21,6 +20,7 @@ import Tr5Icon from '../../../../public/images/icons/tr_5.svg';
 import ModalContext from 'feature/modalContext';
 import { Modal } from 'components/common/modal';
 import { useMedia } from '@supercarmarket/hooks';
+import { type Links } from 'constants/link';
 
 const getSvgIcon = (index: number) => {
   return {
@@ -34,10 +34,10 @@ const getSvgIcon = (index: number) => {
 
 const InquiryNavbar = ({
   title,
+  href,
   description,
-  link,
   index,
-}: InquiryLink & {
+}: (Links & { description?: string }) & {
   index: number;
 }) => {
   const session = useSession();
@@ -70,7 +70,7 @@ const InquiryNavbar = ({
       padding={isMobile ? '24px' : '34px 40px'}
       background="#F7F7F8"
       borderRadius="4px"
-      handleClick={isMobile ? () => push(link) : undefined}
+      handleClick={isMobile ? () => push(href as string) : undefined}
     >
       <Wrapper.Left
         css={css`
@@ -135,7 +135,7 @@ const InquiryNavbar = ({
           }
         `}
       >
-        <Link href={link} shallow>
+        <Link href={href} shallow>
           <Button variant="Black">문의하기</Button>
         </Link>
       </Wrapper.Right>

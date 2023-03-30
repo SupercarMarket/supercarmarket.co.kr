@@ -13,11 +13,11 @@ import layout from 'components/layout';
 import Banner from 'components/partnership/banner';
 import { ErrorFallback } from 'components/fallback';
 import { useSearchKeyword } from 'hooks/useSearchKeyword';
-import { PARTNERSHIP_LINKS } from 'constants/partnership';
 import PartnershipList from 'components/partnership/partnershipList';
 import PartnershipCategory from 'components/partnership/partnershipCategory';
 import Advertisement from 'components/common/advertisement';
 import { prefetchPartnership, QUERY_KEYS } from 'http/server/partnership';
+import { links } from 'constants/link/partnership';
 
 const PartnershipPage: NextPageWithLayout = ({
   category,
@@ -88,10 +88,7 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
 
   const queryClient = new QueryClient();
 
-  if (
-    !category ||
-    !PARTNERSHIP_LINKS.map((link) => link.category).includes(category)
-  )
+  if (!category || !links.map((link) => link.category).includes(category))
     return {
       redirect: {
         destination: '/partnership?category=all',

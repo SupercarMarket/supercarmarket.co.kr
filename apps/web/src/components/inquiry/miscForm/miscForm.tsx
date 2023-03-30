@@ -1,7 +1,6 @@
-import { clientApi, ErrorCode } from '@supercarmarket/lib';
+import { ErrorCode } from '@supercarmarket/lib';
 import { Alert, Button, Form, Wrapper } from '@supercarmarket/ui';
 import { Modal } from 'components/common/modal';
-import inquiry, { InquiryMiscFormState } from 'constants/inquiry';
 import ModalContext from 'feature/modalContext';
 import { useSession } from 'next-auth/react';
 import * as React from 'react';
@@ -11,12 +10,14 @@ import { useRouter } from 'next/navigation';
 
 import InquiryFormItem from '../inquiryFormItem';
 import { useDebounce } from '@supercarmarket/hooks';
+import { authRequest } from 'http/core';
+import { form, type FormState } from 'constants/form/misc';
 
 const MiscForm = () => {
   const session = useSession();
   const { onClose, onOpen } = React.useContext(ModalContext);
   const { replace } = useRouter();
-  const methods = useForm<InquiryMiscFormState>();
+  const methods = useForm<FormState>();
   const [error, setError] = React.useState<string | null>(null);
 
   const handleModal = React.useCallback(
@@ -28,7 +29,7 @@ const MiscForm = () => {
     [onClose, replace]
   );
 
-  const handleRequire = async (data: InquiryMiscFormState) => {
+  const handleRequire = async (data: FormState) => {
     const { title, contents } = data;
 
     if (!title) {
@@ -43,37 +44,36 @@ const MiscForm = () => {
   };
 
   const debouncedSubmit = useDebounce(
-    (data: InquiryMiscFormState) =>
+    (data: FormState) =>
       handleRequire(data).then(async () => {
         setError(null);
 
         const { title, contents } = data;
 
-        const result = await clientApi('/server/supercar/v1/inquiry-etc', {
+        await authRequest('/inquiry-etc', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             ACCESS_TOKEN: session.data?.accessToken || '',
           },
           data: { title, contents },
-        });
-
-        if (!result.data) {
-          setError(result.message || ErrorCode[result.status]);
-          return;
-        }
-
-        onOpen(
-          <Modal
-            title="기타 문의"
-            description="기타 문의가 등록 완료되었습니다."
-            clickText="확인"
-            background="rgba(30, 30, 32, 0.5)"
-            onCancel={() => handleModal('/inquiry')}
-            onClick={() => handleModal('/')}
-            onClose={() => handleModal('/inquiry')}
-          />
-        );
+        })
+          .then(() => {
+            onOpen(
+              <Modal
+                title="기타 문의"
+                description="기타 문의가 등록 완료되었습니다."
+                clickText="확인"
+                background="rgba(30, 30, 32, 0.5)"
+                onCancel={() => handleModal('/inquiry')}
+                onClick={() => handleModal('/')}
+                onClose={() => handleModal('/inquiry')}
+              />
+            );
+          })
+          .catch((error) => {
+            setError(error.message || ErrorCode[error.status]);
+          });
       }),
     300
   );
@@ -90,12 +90,8 @@ const MiscForm = () => {
           gap: 24px;
         `}
       >
-        {inquiry.register.misc.map((d) => (
-          <InquiryFormItem
-            key={d.htmlFor}
-            callback={(d) => console.log(d)}
-            {...d}
-          />
+        {form.map((d) => (
+          <InquiryFormItem key={d.htmlFor} {...d} />
         ))}
         <Wrapper.Item
           css={css`

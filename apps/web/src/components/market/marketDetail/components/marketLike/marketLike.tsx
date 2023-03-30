@@ -53,7 +53,7 @@ const MarketLike = ({ isLike }: MarketLikeProps) => {
         />
       );
     } else {
-      likeMutation.mutate({ token: session.accessToken });
+      likeMutation.mutate();
     }
   }, [session, onOpen, onClose, push, likeMutation]);
 

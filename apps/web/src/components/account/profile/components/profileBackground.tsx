@@ -1,4 +1,3 @@
-import { clientApi, clientFetcher } from '@supercarmarket/lib';
 import {
   applyMediaQuery,
   Button,
@@ -14,6 +13,7 @@ import { css } from 'styled-components';
 import Image from 'next/image';
 import uploadIconSrc from '../../../../../public/images/create.png';
 import deleteIconSrc from '../../../../../public/images/delete.png';
+import { authRequest } from 'http/core';
 
 const baseSrc =
   'https://user-images.githubusercontent.com/66871265/210207112-a0d7b276-e24b-4ae9-80a1-8e48d5cc45f2.png';
@@ -55,12 +55,11 @@ const ProfileBackground = ({
 
       e.target.value = '';
 
-      return await clientFetcher('/server/supercar/v1/user/background', {
-        method: 'POST',
+      return await authRequest('/server/supercar/v1/user/background', {
         headers: {
-          ACCESS_TOKEN: session.accessToken,
+          'Content-Type': 'multipart/form-data',
         },
-        body: formData,
+        data: formData,
       });
     },
     onSuccess: () => {
@@ -72,12 +71,8 @@ const ProfileBackground = ({
     mutationFn: async (url: string) => {
       if (!session) return;
 
-      return await clientApi('/server/supercar/v1/user/background', {
+      return await authRequest('/server/supercar/v1/user/background', {
         method: 'DELETE',
-        headers: {
-          ACCESS_TOKEN: session.accessToken,
-          'Content-Type': 'application/json',
-        },
         data: { url },
       });
     },

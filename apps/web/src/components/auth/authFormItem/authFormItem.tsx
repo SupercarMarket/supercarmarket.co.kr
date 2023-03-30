@@ -5,8 +5,13 @@ import {
   FormMessage,
   Wrapper,
 } from '@supercarmarket/ui';
-import { Forms, FormState } from 'constants/auth';
-import type { AuthState, AuthStateField, UseAuth } from 'hooks/useAuth';
+import { type Form, type FormType } from 'constants/form';
+import { type FormState } from 'constants/form/signup';
+import {
+  type AuthState,
+  type AuthStateField,
+  type UseAuth,
+} from 'hooks/useAuth';
 import * as React from 'react';
 import type {
   FieldError,
@@ -32,7 +37,11 @@ type InputBtnAttr = {
   buttonCallback?: () => void;
 };
 
-interface AuthFormItemProps extends Forms {
+interface AuthFormItemProps
+  extends Form<
+    keyof FormState,
+    Extract<FormType, 'text' | 'password' | 'tel' | 'email' | 'agreement'>
+  > {
   state: AuthState;
   defaultValue?: string | string[];
   duplicate?: UseAuth['duplicate'];

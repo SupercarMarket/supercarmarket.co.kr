@@ -2,11 +2,9 @@ import { applyMediaQuery, Container, Wrapper } from '@supercarmarket/ui';
 import { BaseApiHandlerResponse } from '@supercarmarket/lib';
 import type { Profile as ProfileType } from '@supercarmarket/types/account';
 import type { Params, NextPageWithLayout } from '@supercarmarket/types/base';
-import { AccountCategory, Profile } from 'components/account';
+import { AccountCategoryList, Profile } from 'components/account';
 import AccountLayout from 'components/layout/accountLayout';
 import * as style from 'components/layout/layout.styled';
-import type { AccountTab } from 'constants/account';
-import account from 'constants/account';
 import type {
   GetServerSideProps,
   GetServerSidePropsContext,
@@ -24,9 +22,14 @@ import { ErrorFallback } from 'components/fallback';
 import HeadSeo from 'components/common/headSeo/headSeo';
 import { prefetchAccount, QUERY_KEYS } from 'http/server/account';
 import { css } from 'styled-components';
+import {
+  accountCategory,
+  links,
+  type AccountCategory,
+} from 'constants/link/account';
 
 type AccountParams = Params & {
-  tab: AccountTab | null;
+  tab: AccountCategory | null;
 };
 
 const Account: NextPageWithLayout = ({
@@ -70,7 +73,7 @@ const Account: NextPageWithLayout = ({
                       }
                     `}
                   >
-                    <AccountCategory
+                    <AccountCategoryList
                       sub={sub}
                       tab={tab}
                       isMyAccountPage={isMyAccountPage}
@@ -97,14 +100,13 @@ export const getUserPageProps = async (
   const { sub, tab } = query as AccountParams;
 
   const isMyAccountPage = session && session.sub == sub;
-  const isCorrectTab = tab && account.accountTab.includes(tab);
+  const isCorrectTab = tab && accountCategory.includes(tab);
 
   const queryClient = new QueryClient();
 
-  const user: BaseApiHandlerResponse<{ data: ProfileType }> =
-    await prefetchAccount({ id: sub, token: session?.accessToken });
+  const user = await prefetchAccount({ id: sub, token: session?.accessToken });
 
-  if (!user.ok) {
+  if (!user) {
     return {
       notFound: true,
     };
@@ -112,13 +114,12 @@ export const getUserPageProps = async (
 
   const accountRoutes = isMyAccountPage
     ? user.data.role == 'user'
-      ? account.accountRoutes.myAccount(sub)
-      : account.accountRoutes.dealerAccount(sub)
-    : account.accountRoutes.someoneAccount(sub);
+      ? links.myAccount(sub)
+      : links.dealerAccount(sub)
+    : links.someoneAccount(sub);
 
   await queryClient.prefetchQuery(QUERY_KEYS.id(sub), async () => {
-    const { ok, status, ...rest } = user;
-    return rest;
+    return user;
   });
 
   /**
@@ -129,7 +130,7 @@ export const getUserPageProps = async (
   if (isMyAccountPage && !isCorrectTab) {
     return {
       redirect: {
-        destination: `/account/${sub}?tab=${account.accountTab[1]}`,
+        destination: `/account/${sub}?tab=${accountCategory[1]}`,
         permanent: false,
       },
     };
@@ -140,7 +141,7 @@ export const getUserPageProps = async (
   ) {
     return {
       redirect: {
-        destination: `/account/${sub}?tab=${account.accountTab[4]}`,
+        destination: `/account/${sub}?tab=${accountCategory[4]}`,
         permanent: false,
       },
     };
@@ -149,7 +150,7 @@ export const getUserPageProps = async (
   if (user.data.role !== 'dealer' && tab === 'dealer-product') {
     return {
       redirect: {
-        destination: `/account/${sub}?tab=${account.accountTab[1]}`,
+        destination: `/account/${sub}?tab=${accountCategory[1]}`,
         permanent: false,
       },
     };

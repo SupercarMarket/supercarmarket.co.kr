@@ -176,7 +176,6 @@ const CommunityPosting = ({
           category,
         },
       ],
-      token: session.data.accessToken,
     });
   }, [category, postId, removeMutate, session.data]);
 
@@ -202,7 +201,7 @@ const CommunityPosting = ({
       );
       return;
     }
-    likeMuate(session.data?.accessToken || '');
+    likeMuate();
     return;
   }, [likeMuate, onClose, onOpen, push, session]);
 

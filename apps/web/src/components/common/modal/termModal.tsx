@@ -1,5 +1,5 @@
 import { Button, theme, Typography, Wrapper } from '@supercarmarket/ui';
-import { FormState } from 'constants/auth';
+import { FormState } from 'constants/form/signup';
 import * as terms from 'constants/terms';
 import { ModalProvider } from 'feature/modalContext';
 import { css } from 'styled-components';

@@ -1,9 +1,10 @@
-import { clientApi, clientFetcher } from '@supercarmarket/lib';
+import { get } from '@supercarmarket/lib';
 import { Params } from '@supercarmarket/types/base';
 import {
   type CommentQuery,
   type CommentResponse,
 } from '@supercarmarket/types/comment';
+import { authRequest } from 'http/core';
 
 export const getComments = async ({
   postId,
@@ -21,7 +22,7 @@ export const getComments = async ({
         ACCESS_TOKEN: token,
       }
     : undefined;
-  return clientFetcher(`/server/supercar/v1/post/${postId}/comment`, {
+  return get(`/server/supercar/v1/post/${postId}/comment`, {
     method: 'GET',
     headers,
     query: {
@@ -35,11 +36,9 @@ export const getComments = async ({
 export const addComment = async ({
   data,
   query,
-  token,
 }: {
   data: { contents: string };
   query: Params;
-  token: string;
 }) => {
   const { category, postId, parentId } = query;
 
@@ -52,81 +51,47 @@ export const addComment = async ({
         category,
       };
 
-  return clientApi(`/server/supercar/v1/post/${postId}/comment`, {
+  return authRequest(`/post/${postId}/comment`, {
     method: 'POST',
-    headers: {
-      ACCESS_TOKEN: token,
-      'Content-Type': 'application/json',
-    },
-    query: currentQuery,
+    params: currentQuery,
     data,
   });
 };
 
-export const likeComment = async ({
-  query,
-  token,
-}: {
-  query: Params;
-  token: string;
-}) => {
+export const likeComment = async ({ query }: { query: Params }) => {
   const { category, postId, commentId } = query;
 
-  return clientFetcher(
-    `/server/supercar/v1/post/${postId}/comment/${commentId}/like`,
-    {
-      method: 'POST',
-      headers: {
-        ACCESS_TOKEN: token,
-      },
-      query: {
-        category,
-      },
-    }
-  );
+  return authRequest(`/post/${postId}/comment/${commentId}/like`, {
+    method: 'POST',
+    params: {
+      category,
+    },
+  });
 };
 
-export const deleteComment = async ({
-  query,
-  token,
-}: {
-  query: Params;
-  token: string;
-}) => {
+export const deleteComment = async ({ query }: { query: Params }) => {
   const { category, postId, commentId } = query;
 
-  return clientFetcher(
-    `/server/supercar/v1/post/${postId}/comment/${commentId}`,
-    {
-      method: 'DELETE',
-      headers: {
-        ACCESS_TOKEN: token,
-      },
-      query: {
-        category,
-      },
-    }
-  );
+  return authRequest(`/post/${postId}/comment/${commentId}`, {
+    method: 'DELETE',
+    params: {
+      category,
+    },
+  });
 };
 
 export const updateComment = async ({
   query,
   data,
-  token,
 }: {
   query: Params;
   data: { contents: string };
-  token: string;
 }) => {
   const { category, postId, commentId } = query;
 
-  return clientApi(`/server/supercar/v1/post/${postId}/comment/${commentId}`, {
+  return authRequest(`/post/${postId}/comment/${commentId}`, {
     method: 'PATCH',
-    headers: {
-      ACCESS_TOKEN: token,
-      'Content-Type': 'application/json',
-    },
-    query: {
+    params: {
       category,
     },
     data,

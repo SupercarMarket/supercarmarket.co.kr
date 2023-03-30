@@ -1,5 +1,6 @@
-import { clientApi, clientFetcher, serverFetcher } from '@supercarmarket/lib';
+import { get } from '@supercarmarket/lib';
 import { CATEGORY_MAPPING } from 'constants/market';
+import { authRequest } from 'http/core';
 
 export const getMarket = async ({
   query,
@@ -20,7 +21,7 @@ export const getMarket = async ({
       ? { filter, orderBy, page, ...rest }
       : { category: targetCategory, filter, orderBy, page, ...rest };
 
-  return clientFetcher('/server/supercar/v1/shop', {
+  return get('/server/supercar/v1/shop', {
     method: 'GET',
     query: {
       ...currentQuery,
@@ -30,57 +31,36 @@ export const getMarket = async ({
 };
 
 export const getMarketPost = async ({ id }: { id: string }) => {
-  return clientFetcher(`/server/supercar/v1/shop`, {
+  return get(`/server/supercar/v1/shop`, {
     method: 'GET',
     params: id,
   });
 };
 
-export const likeMarketPost = async ({
-  id,
-  token,
-}: {
-  id: string;
-  token: string;
-}) => {
-  return fetch(`/server/supercar/v1/shop/${id}/scrap`, {
+export const likeMarketPost = async ({ id }: { id: string }) => {
+  return authRequest(`/shop/${id}/scrap`, {
     method: 'POST',
-    headers: {
-      ACCESS_TOKEN: token,
-    },
   });
 };
 
 export const updateMarketSellStatus = async ({
   data,
-  token,
 }: {
   data: { brdSeq: number };
-  token: string;
 }) => {
-  return clientApi(`/server/supercar/v1/shop`, {
+  return authRequest(`/shop`, {
     method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      ACCESS_TOKEN: token,
-    },
     data,
   });
 };
 
 export const deleteMarketPost = async ({
   data,
-  token,
 }: {
   data: { id: string }[];
-  token: string;
 }) => {
-  return clientApi(`/server/supercar/v1/shop`, {
+  return authRequest(`/shop`, {
     method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-      ACCESS_TOKEN: token,
-    },
     data,
   });
 };
@@ -88,10 +68,10 @@ export const deleteMarketPost = async ({
 export const prefetchMarket = async (query: {
   [key: string]: string | number;
 }) => {
-  return serverFetcher(
-    `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/shop`,
-    { method: 'GET', query }
-  );
+  return get(`${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/shop`, {
+    method: 'GET',
+    query,
+  });
 };
 
 export const prefetchMarketPost = async ({
@@ -108,15 +88,9 @@ export const prefetchMarketPost = async ({
   if (token) headers = { ...headers, ACCESS_token: token };
   if (boardView) headers = { ...headers, Cookie: `boardView=${boardView}` };
 
-  return serverFetcher(
-    `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/shop`,
-    {
-      method: 'GET',
-      headers,
-      params: id,
-    }
-  ).then((res) => {
-    const { ok, status, ...rest } = res;
-    return rest;
+  return get(`${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/shop`, {
+    method: 'GET',
+    headers,
+    params: id,
   });
 };

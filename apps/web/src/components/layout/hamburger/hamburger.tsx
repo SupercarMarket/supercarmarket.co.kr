@@ -8,12 +8,13 @@ import { Wrapper } from '@supercarmarket/ui/components/wrapper';
 import { Link as SupercarmarketLink } from '@supercarmarket/ui/components/link';
 import type { Session } from 'next-auth';
 import { Container } from '@supercarmarket/ui/components/container';
-import type { Links } from '@supercarmarket/types/base';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
 import arrowRightSrc from '../../../../public/images/arrow-right.png';
 import closeSrc from '../../../../public/images/close.png';
+import { links } from 'constants/link/navbar';
+import { Links } from 'constants/link';
 
 interface ISession extends Session {
   sub: string;
@@ -21,7 +22,6 @@ interface ISession extends Session {
 
 interface HamburgerProps {
   session: ISession | null;
-  navlinks: Links[];
   hamburger?: boolean;
   className?: string;
   handleClose: () => void;
@@ -126,7 +126,6 @@ const HamburgerLinkItem = React.memo(function HamburgerLinkItem({
 });
 
 const Hamburger = React.memo(function Hamburger({
-  navlinks,
   session,
   hamburger,
   className = 'hambuger',
@@ -276,11 +275,11 @@ const Hamburger = React.memo(function Hamburger({
           width: 100%;
         `}
       >
-        {navlinks.map((navLink) => (
+        {links.map((link) => (
           <HamburgerLinkItem
-            key={navLink.title}
+            key={link.title}
             handleClick={handleClick}
-            {...navLink}
+            {...link}
           />
         ))}
       </Wrapper.Item>

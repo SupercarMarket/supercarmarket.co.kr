@@ -10,7 +10,7 @@ export const useLikeMarketPost = (id: string, options = {}) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ token }: { token: string }) => likeMarketPost({ id, token }),
+    mutationFn: () => likeMarketPost({ id }),
     useErrorBoundary: true,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.id(id) });
@@ -21,13 +21,8 @@ export const useLikeMarketPost = (id: string, options = {}) => {
 
 export const useUpdateMarketSellStatus = (options = {}) => {
   return useMutation({
-    mutationFn: ({
-      data,
-      token,
-    }: {
-      data: { brdSeq: number };
-      token: string;
-    }) => updateMarketSellStatus({ data, token }),
+    mutationFn: ({ data }: { data: { brdSeq: number } }) =>
+      updateMarketSellStatus({ data }),
     useErrorBoundary: true,
     ...options,
   });
@@ -35,8 +30,8 @@ export const useUpdateMarketSellStatus = (options = {}) => {
 
 export const useDeleteMarketPost = (options = {}) => {
   return useMutation({
-    mutationFn: ({ data, token }: { data: { id: string }[]; token: string }) =>
-      deleteMarketPost({ data, token }),
+    mutationFn: ({ data }: { data: { id: string }[] }) =>
+      deleteMarketPost({ data }),
     useErrorBoundary: true,
     ...options,
   });

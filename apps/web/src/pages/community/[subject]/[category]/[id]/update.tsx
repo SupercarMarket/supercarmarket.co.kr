@@ -1,4 +1,4 @@
-import { serverFetcher } from '@supercarmarket/lib';
+import { get, serverFetcher } from '@supercarmarket/lib';
 import { NextPageWithLayout, Params } from '@supercarmarket/types/base';
 import { Container, Title, Wrapper } from '@supercarmarket/ui';
 import { QueryErrorResetBoundary } from '@tanstack/react-query';
@@ -59,7 +59,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     };
   }
 
-  const initialData = await serverFetcher(
+  const initialData = await get(
     `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/community/${category}/update-id`,
     {
       method: 'GET',
@@ -69,8 +69,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       params: id,
     }
   ).then((res) => {
-    const { ok, status, ...rest } = res;
-    return rest.data;
+    return res.data;
   });
 
   return {
