@@ -1,6 +1,4 @@
 import { applyMediaQuery, Container, Wrapper } from '@supercarmarket/ui';
-import { BaseApiHandlerResponse } from '@supercarmarket/lib';
-import type { Profile as ProfileType } from '@supercarmarket/types/account';
 import type { Params, NextPageWithLayout } from '@supercarmarket/types/base';
 import { AccountCategoryList, Profile } from 'components/account';
 import AccountLayout from 'components/layout/accountLayout';
@@ -104,10 +102,9 @@ export const getUserPageProps = async (
 
   const queryClient = new QueryClient();
 
-  const user: BaseApiHandlerResponse<{ data: ProfileType }> =
-    await prefetchAccount({ id: sub, token: session?.accessToken });
+  const user = await prefetchAccount({ id: sub, token: session?.accessToken });
 
-  if (!user.ok) {
+  if (!user) {
     return {
       notFound: true,
     };
@@ -120,8 +117,7 @@ export const getUserPageProps = async (
     : links.someoneAccount(sub);
 
   await queryClient.prefetchQuery(QUERY_KEYS.id(sub), async () => {
-    const { ok, status, ...rest } = user;
-    return rest;
+    return user;
   });
 
   /**

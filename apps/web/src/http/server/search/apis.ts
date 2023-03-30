@@ -1,4 +1,4 @@
-import { clientFetcher, serverFetcher } from '@supercarmarket/lib';
+import { get } from '@supercarmarket/lib';
 import { type Query } from '@supercarmarket/types/base';
 
 export const getSearch = async ({
@@ -18,7 +18,7 @@ export const getSearch = async ({
 
   if (filter !== 'created_date') currentQuery = { ...currentQuery, filter };
 
-  return clientFetcher('/server/supercar/v1/search', {
+  return get('/server/supercar/v1/search', {
     method: 'GET',
     query: currentQuery,
   });
@@ -40,14 +40,8 @@ export const prefetchSearch = async (
 
   if (filter !== 'created_date') currentQuery = { ...currentQuery, filter };
 
-  return serverFetcher(
-    `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/search`,
-    {
-      method: 'GET',
-      query: currentQuery,
-    }
-  ).then((res) => {
-    const { ok, status, ...rest } = res;
-    return rest;
+  return get(`${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/search`, {
+    method: 'GET',
+    query: currentQuery,
   });
 };

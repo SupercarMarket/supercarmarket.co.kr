@@ -1,4 +1,7 @@
-import { clientFetcher, serverFetcher } from '@supercarmarket/lib';
+import { type Profile } from '@supercarmarket/types/account';
+import { type ServerResponse } from '@supercarmarket/types/base';
+import { get } from '@supercarmarket/lib';
+import { authRequest } from 'http/core';
 import { type AccountCategory } from 'constants/link/account';
 
 export const getAccount = async ({
@@ -8,14 +11,14 @@ export const getAccount = async ({
   id: string;
   token?: string;
 }) => {
-  const header = token
+  const headers = token
     ? {
         ACCESS_TOKEN: token,
       }
     : undefined;
 
-  return clientFetcher('/server/supercar/v1/userpage', {
-    headers: header,
+  return get('/server/supercar/v1/userpage', {
+    headers,
     method: 'GET',
     query: {
       id,
@@ -42,26 +45,20 @@ export const getAccountCategory = async ({
       }
     : undefined;
 
-  return clientFetcher(
-    `/server/supercar/v1/userpage/category/${query.category}/id`,
-    {
-      method: 'GET',
-      headers,
-      params: id,
-      query: {
-        ...query,
-        page: query.page + 1,
-      },
-    }
-  );
+  return get(`/server/supercar/v1/userpage/category/${query.category}/id`, {
+    method: 'GET',
+    headers,
+    params: id,
+    query: {
+      ...query,
+      page: query.page + 1,
+    },
+  });
 };
 
-export const getAccountUpdateInfo = async (token: string) => {
-  return clientFetcher(`/server/supercar/v1/user/info`, {
+export const getAccountUpdateInfo = async () => {
+  return authRequest(`/user/info`, {
     method: 'GET',
-    headers: {
-      ACCESS_TOKEN: token,
-    },
   });
 };
 
@@ -72,15 +69,16 @@ export const prefetchAccount = async ({
   id: string;
   token?: string;
 }) => {
-  const header = token
+  const headers = token
     ? {
         ACCESS_TOKEN: token,
       }
     : undefined;
-  return serverFetcher(
+
+  return get<ServerResponse<Profile>>(
     `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/userpage`,
     {
-      headers: header,
+      headers,
       method: 'GET',
       query: {
         id,

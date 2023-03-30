@@ -1,4 +1,4 @@
-import { type UpdateInfo, type Profile } from '@supercarmarket/types/account';
+import { type UpdateInfo } from '@supercarmarket/types/account';
 import { type ServerResponse } from '@supercarmarket/types/base';
 import { type AccountCategory } from 'constants/link/account';
 import { useQuery } from '@tanstack/react-query';
@@ -6,7 +6,7 @@ import { getAccount, getAccountCategory, getAccountUpdateInfo } from './apis';
 import { QUERY_KEYS } from './keys';
 
 export const useAccount = (id: string, token?: string, options = {}) => {
-  return useQuery<{ data: Profile }>({
+  return useQuery({
     queryKey: QUERY_KEYS.id(id),
     queryFn: () => getAccount({ id, token }),
     useErrorBoundary: true,
@@ -32,14 +32,10 @@ export const useAccountCategory = (
   });
 };
 
-export const useAccountUpdateInfo = (
-  id: string,
-  token: string,
-  options = {}
-) => {
+export const useAccountUpdateInfo = (id: string, options = {}) => {
   return useQuery<ServerResponse<UpdateInfo>>({
     queryKey: QUERY_KEYS.info(id),
-    queryFn: () => getAccountUpdateInfo(token),
+    queryFn: () => getAccountUpdateInfo(),
     useErrorBoundary: true,
     ...options,
   });

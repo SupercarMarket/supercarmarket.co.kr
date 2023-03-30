@@ -13,7 +13,7 @@ import { css } from 'styled-components';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { clientFetcher } from '@supercarmarket/lib';
+import { get } from '@supercarmarket/lib';
 import { ServerResponse } from '@supercarmarket/types/base';
 import { QUERY_KEYS, useMagazineInquiry } from 'http/server/magazine';
 import Avatar from 'components/common/avatar';
@@ -31,7 +31,7 @@ const MagazineDealer = ({ postId }: MagazineDealerProps) => {
   const { data: userInfo } = useQuery<ServerResponse<{ phone: string }>>({
     queryKey: ['magazine', 'phone'],
     queryFn: () =>
-      clientFetcher('/server/supercar/v1/user/phone', {
+      get('/server/supercar/v1/user/phone', {
         method: 'GET',
         headers: {
           ACCESS_TOKEN: session.data?.accessToken || '',
@@ -54,7 +54,7 @@ const MagazineDealer = ({ postId }: MagazineDealerProps) => {
 
     if (session.status !== 'authenticated') return;
 
-    inquiryMutation(session.data.accessToken || '');
+    inquiryMutation();
   }, [inquiryMutation, onClose, session]);
 
   const onModal = React.useCallback(() => {

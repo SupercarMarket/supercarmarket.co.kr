@@ -178,7 +178,6 @@ const AccountCategoryList = React.memo(function AccountCategory({
     if (tab === 'community') {
       removeCategoryMutation.mutate({
         data: deleteList,
-        token: session.data?.accessToken || '',
       });
     }
 

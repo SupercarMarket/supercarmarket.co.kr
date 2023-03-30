@@ -1,4 +1,10 @@
-import { clientApi, clientFetcher, serverFetcher } from '@supercarmarket/lib';
+import { get } from '@supercarmarket/lib';
+import { PaginationResponse, ServerResponse } from '@supercarmarket/types/base';
+import {
+  CommunityDto,
+  CommunityPostDto,
+} from '@supercarmarket/types/community';
+import { authRequest } from 'http/core';
 
 export const getCommunity = async ({
   query,
@@ -18,15 +24,18 @@ export const getCommunity = async ({
     keyword,
   };
 
-  return clientFetcher('/server/supercar/v1/community', {
-    method: 'GET',
-    query: {
-      filter,
-      page: page + 1,
-      category: category === 'all' ? 'report' : category,
-      ...currentQuery,
-    },
-  });
+  return get<PaginationResponse<CommunityDto[]>>(
+    '/server/supercar/v1/community',
+    {
+      method: 'GET',
+      query: {
+        filter,
+        page: page + 1,
+        category: category === 'all' ? 'report' : category,
+        ...currentQuery,
+      },
+    }
+  );
 };
 
 export const getCommunityPost = async ({
@@ -40,7 +49,7 @@ export const getCommunityPost = async ({
 }) => {
   const headers = token ? { ACCESS_TOKEN: token } : undefined;
 
-  return clientFetcher(
+  return get<ServerResponse<CommunityPostDto>>(
     `/server/supercar/v1/community/${category}/post-id/${id}`,
     {
       method: 'GET',
@@ -53,51 +62,36 @@ export const getCommunityPost = async ({
 export const likeCommunityPost = async ({
   id,
   category,
-  token,
 }: {
   id: string;
   category: string;
-  token: string;
 }) => {
-  return clientApi(`/server/supercar/v1/community/${id}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      ACCESS_TOKEN: token,
-    },
-    data: {
-      category,
-    },
-  });
+  return authRequest<{ category: string }, ServerResponse<boolean>>(
+    `/community/${id}`,
+    {
+      method: 'POST',
+      data: { category },
+    }
+  );
 };
 
 export const deleteCommunityPost = async ({
   data,
-  token,
 }: {
   data: {
     id: string;
     category?: string;
   }[];
-  token: string;
 }) => {
-  return clientApi(`/server/supercar/v1/community`, {
+  return authRequest(`/community`, {
     method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-      ACCESS_TOKEN: token,
-    },
     data,
   });
 };
 
-export const getTemporaryStorage = async (token: string) => {
-  return clientFetcher(`/server/supercar/v1/community-temp`, {
+export const getTemporaryStorage = async () => {
+  return authRequest(`/server/supercar/v1/community-temp`, {
     method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      ACCESS_TOKEN: token,
-    },
   });
 };
 
@@ -116,20 +110,17 @@ export const prefetchCommunityPost = async ({
   if (token) headers = { ...headers, ACCESS_TOKEN: token };
   if (boardView) headers = { ...headers, Cookie: `boardView=${boardView}` };
 
-  return serverFetcher(
+  return get(
     `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/community/${category}/post-id/${id}`,
     {
       method: 'GET',
       headers,
     }
-  ).then((res) => {
-    const { ok, status, ...rest } = res;
-    return rest;
-  });
+  );
 };
 
 export const prefetchTemporaryStorage = async (token: string) => {
-  return serverFetcher(
+  return get(
     `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/community-temp`,
     {
       method: 'GET',
@@ -137,8 +128,5 @@ export const prefetchTemporaryStorage = async (token: string) => {
         ACCESS_TOKEN: token,
       },
     }
-  ).then((res) => {
-    const { ok, status, ...rest } = res;
-    return rest.data;
-  });
+  );
 };

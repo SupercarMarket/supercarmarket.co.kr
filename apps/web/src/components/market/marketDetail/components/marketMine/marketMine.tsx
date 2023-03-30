@@ -27,7 +27,6 @@ const MarketMine = ({ id, brdSeq }: MarketMineProps) => {
     if (!session.data) return;
     removeMarketById({
       data: [{ id }],
-      token: session.data?.accessToken,
     });
   };
 
@@ -35,7 +34,6 @@ const MarketMine = ({ id, brdSeq }: MarketMineProps) => {
     if (!session.data) return;
     changeSellStatus({
       data: { brdSeq },
-      token: session.data?.accessToken,
     });
   };
 

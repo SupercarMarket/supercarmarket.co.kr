@@ -6,7 +6,7 @@ export const useMagazineScrap = (id: string, options = {}) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (token: string) => scrapMagazinePost({ id, token }),
+    mutationFn: () => scrapMagazinePost({ id }),
     onSuccess: () => {
       queryClient.invalidateQueries(QUERY_KEYS.id(id));
     },
@@ -16,7 +16,7 @@ export const useMagazineScrap = (id: string, options = {}) => {
 
 export const useMagazineInquiry = (id: string, options = {}) => {
   return useMutation({
-    mutationFn: (token: string) => inquiryMagazine({ id, token }),
+    mutationFn: () => inquiryMagazine({ id }),
     ...options,
   });
 };

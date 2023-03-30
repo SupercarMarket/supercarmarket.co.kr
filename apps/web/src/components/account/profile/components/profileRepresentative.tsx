@@ -15,10 +15,10 @@ import { css } from 'styled-components';
 import * as React from 'react';
 import { QUERY_KEYS } from 'http/server/account';
 import Image from 'next/image';
-import { clientApi, clientFetcher } from '@supercarmarket/lib';
 import clsx from 'clsx';
 import uploadIconSrc from '../../../../../public/images/create.png';
 import deleteIconSrc from '../../../../../public/images/delete.png';
+import { authRequest } from 'http/core';
 
 interface ProfileRepresentativeProps {
   session: Session | null;
@@ -105,12 +105,12 @@ const ProfileRepresentativeItem = (props: ProfileRepresentativeItemProps) => {
 
       e.target.value = '';
 
-      return await clientFetcher('/server/supercar/v1/user/gallery', {
+      return await authRequest('/server/supercar/v1/user/gallery', {
         method: 'POST',
         headers: {
-          ACCESS_TOKEN: session?.accessToken || '',
+          'Content-Type': 'multipart/form-data',
         },
-        body: formData,
+        data: formData,
       });
     },
     onSuccess: () => {
@@ -123,12 +123,8 @@ const ProfileRepresentativeItem = (props: ProfileRepresentativeItemProps) => {
     mutationFn: async (url: string) => {
       if (!session) return;
 
-      return await clientApi('/server/supercar/v1/user/gallery', {
+      return await authRequest('/server/supercar/v1/user/gallery', {
         method: 'DELETE',
-        headers: {
-          ACCESS_TOKEN: session.accessToken,
-          'Content-Type': 'application/json',
-        },
         data: { url },
       });
     },

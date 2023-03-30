@@ -18,7 +18,7 @@ import type { Editor } from '@toast-ui/react-editor';
 import type { CommunityTemporaryStorageDto } from '@supercarmarket/types/community';
 import ModalContext from 'feature/modalContext';
 import { FormProvider, useForm } from 'react-hook-form';
-import { ErrorCode, fetcher } from '@supercarmarket/lib';
+import { ErrorCode, HttpError } from '@supercarmarket/lib';
 import { useSession } from 'next-auth/react';
 import {
   formatter,
@@ -30,6 +30,8 @@ import { Modal } from 'components/common/modal';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { getTemporaryStorage, QUERY_KEYS } from 'http/server/community';
 import { useDebounce } from '@supercarmarket/hooks';
+import { authRequest } from 'http/core';
+import { ServerResponse } from '@supercarmarket/types/base';
 
 interface FormState {
   files: File[];
@@ -57,7 +59,6 @@ const CommunityForm = (props: CommunityFormProps) => {
   const { id, initialData: _initialData } = props;
 
   const { back, push } = useRouter();
-  const session = useSession();
   const [initialData, setInitialData] =
     React.useState<CommunityTemporaryStorageDto>(_initialData);
   const [category, setCategory] = React.useState('');
@@ -313,27 +314,24 @@ const CommunityForm = (props: CommunityFormProps) => {
       if (addFiles?.length)
         addFiles.forEach((file) => formData.append('files', file));
 
-      const options = id ? { method: 'PATCH', params: id } : { method: 'POST' };
+      const options = id ? { method: 'PATCH' } : { method: 'POST' };
 
-      const url = temporaryStorage
-        ? '/server/supercar/v1/community-temp'
-        : '/server/supercar/v1/community';
+      const url = temporaryStorage ? `/community-temp` : '/community';
 
-      const response = await fetcher(url, {
+      const result = await authRequest<
+        ServerResponse<{ id: string; tempId: string }>,
+        ServerResponse<{ id: string; tempId: string }>
+      >(id ? `${url}/${id}` : url, {
         ...options,
         headers: {
-          ACCESS_TOKEN: session.data?.accessToken || '',
+          'Content-Type': 'multipart/form-data',
         },
-        params: id,
-        body: formData,
+        data: formData,
+      }).catch((error) => {
+        setError(error.message || ErrorCode[error.status]);
       });
 
-      const result = await response.json();
-
-      if (!response.ok) {
-        setError(result.message || ErrorCode[response.status]);
-        throw 'failed upload';
-      }
+      if (!result) throw new HttpError({ statusCode: 500 });
 
       return {
         id: result.data?.id,
@@ -344,9 +342,7 @@ const CommunityForm = (props: CommunityFormProps) => {
     onSuccess: async ({ id: _id, temporaryStorage }) => {
       if (temporaryStorage) {
         setSuccess(dayjs(new Date()).format('HH:mm'));
-        await getTemporaryStorage(session.data?.accessToken || '').then((res) =>
-          handleInitialize(res.data)
-        );
+        await getTemporaryStorage().then((res) => handleInitialize(res.data));
         return;
       }
 
