@@ -1,7 +1,7 @@
 import { clientApi } from '@supercarmarket/lib';
 import { type Signup } from '@supercarmarket/types/auth';
 import { type User } from '@supercarmarket/types/base';
-import { type FormState } from 'constants/form/signup';
+import { FormState } from 'constants/form/updateInfo';
 import * as React from 'react';
 
 interface AuthStateField<T extends any = any> {
@@ -217,7 +217,7 @@ export default function useAuth() {
 
   const update = React.useCallback(
     async (
-      data: Omit<FormState, 'gallery' | 'background' | 'newPassword'> & {
+      data: FormState & {
         code: string;
       },
       token: string
