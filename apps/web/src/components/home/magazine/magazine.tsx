@@ -10,6 +10,7 @@ import { useHome } from 'http/server/home';
 
 const Magazine = () => {
   const { data: magazine } = useHome<MagazineDto[]>('magazine');
+
   return (
     <Container
       display="flex"

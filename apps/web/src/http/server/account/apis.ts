@@ -1,5 +1,6 @@
-import { clientFetcher, serverFetcher } from '@supercarmarket/lib';
+import { get, serverFetcher } from '@supercarmarket/lib';
 import { type AccountTab } from 'constants/account';
+import { authRequest } from 'http/core';
 
 export const getAccount = async ({
   id,
@@ -14,7 +15,7 @@ export const getAccount = async ({
       }
     : undefined;
 
-  return clientFetcher('/server/supercar/v1/userpage', {
+  return get('/server/supercar/v1/userpage', {
     headers: header,
     method: 'GET',
     query: {
@@ -42,26 +43,20 @@ export const getAccountCategory = async ({
       }
     : undefined;
 
-  return clientFetcher(
-    `/server/supercar/v1/userpage/category/${query.category}/id`,
-    {
-      method: 'GET',
-      headers,
-      params: id,
-      query: {
-        ...query,
-        page: query.page + 1,
-      },
-    }
-  );
+  return get(`/server/supercar/v1/userpage/category/${query.category}/id`, {
+    method: 'GET',
+    headers,
+    params: id,
+    query: {
+      ...query,
+      page: query.page + 1,
+    },
+  });
 };
 
-export const getAccountUpdateInfo = async (token: string) => {
-  return clientFetcher(`/server/supercar/v1/user/info`, {
+export const getAccountUpdateInfo = async () => {
+  return authRequest(`/user/info`, {
     method: 'GET',
-    headers: {
-      ACCESS_TOKEN: token,
-    },
   });
 };
 

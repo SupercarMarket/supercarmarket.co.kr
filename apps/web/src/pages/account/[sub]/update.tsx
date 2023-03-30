@@ -8,6 +8,9 @@ import {
 } from 'next';
 import { getSession } from 'http/server/auth/user';
 import { ModalProvider } from 'feature/modalContext';
+import { QueryErrorResetBoundary } from '@tanstack/react-query';
+import { ErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from 'components/fallback';
 
 const ProfileUpdate: NextPageWithLayout = ({
   sub,
@@ -21,7 +24,16 @@ const ProfileUpdate: NextPageWithLayout = ({
     >
       <Title textAlign="center">개인정보 수정</Title>
       <ModalProvider>
-        <AccountUpdateForm sub={sub} />
+        <QueryErrorResetBoundary>
+          {({ reset }) => (
+            <ErrorBoundary
+              onReset={reset}
+              fallbackRender={(props) => <ErrorFallback {...props} />}
+            >
+              <AccountUpdateForm sub={sub} />
+            </ErrorBoundary>
+          )}
+        </QueryErrorResetBoundary>
       </ModalProvider>
     </Container>
   );
