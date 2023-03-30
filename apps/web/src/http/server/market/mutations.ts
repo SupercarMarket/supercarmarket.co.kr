@@ -1,4 +1,5 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { QUERY_KEYS } from './keys';
 import {
   deleteMarketPost,
   likeMarketPost,
@@ -6,9 +7,14 @@ import {
 } from './apis';
 
 export const useLikeMarketPost = (id: string, options = {}) => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: ({ token }: { token: string }) => likeMarketPost({ id, token }),
     useErrorBoundary: true,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.id(id) });
+    },
     ...options,
   });
 };
