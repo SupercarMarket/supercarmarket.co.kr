@@ -1,5 +1,4 @@
 import { Alert, Button, Form, FormLabel } from '@supercarmarket/ui';
-import auth, { Forms } from 'constants/auth';
 import { useRouter } from 'next/navigation';
 import * as React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -10,17 +9,20 @@ import useAuth from 'hooks/useAuth';
 import ResultId from '../resultId';
 import ModalContext from 'feature/modalContext';
 import { Modal } from 'components/common/modal';
+import { form as findIdForm } from 'constants/form/findId';
+import { form as findPasswordForm } from 'constants/form/findPassword';
+import { form as resultPasswordForm } from 'constants/form/resultPassword';
 
 interface FindForms {
-  id: () => Forms[];
-  password: () => Forms[];
-  'result-password': () => Forms[];
+  id: typeof findIdForm;
+  password: typeof findPasswordForm;
+  'result-password': typeof resultPasswordForm;
 }
 
 const forms: FindForms = {
-  id: auth.findId,
-  password: auth.findPassword,
-  'result-password': auth.resultPassword,
+  id: findIdForm,
+  password: findPasswordForm,
+  'result-password': resultPasswordForm,
 };
 
 interface FormsState {
@@ -166,7 +168,7 @@ const FindForm = ({ type }: FindFormProps) => {
             })
           )}
         >
-          {forms[type]().map((form) => (
+          {forms[type].map((form) => (
             <FormLabel
               key={form.htmlFor}
               name={form.htmlFor}

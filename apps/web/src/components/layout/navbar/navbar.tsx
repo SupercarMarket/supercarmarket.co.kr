@@ -1,6 +1,7 @@
-import type { Links } from '@supercarmarket/types/base';
 import { Container, Typography, Wrapper } from '@supercarmarket/ui';
 import clsx from 'clsx';
+import { type Links } from 'constants/link';
+import { links } from 'constants/link/navbar';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { memo, useState } from 'react';
@@ -8,17 +9,14 @@ import { css } from 'styled-components';
 
 import NavbarItem from './navbarItem';
 
-interface NavbarProps {
-  navlinks: Links[];
-}
-
 const NavLink = memo(function NavLink({
   title,
   children: subMenu,
-  href,
+  href: _href,
 }: Links) {
   const [active, setActive] = useState<boolean>(false);
   const { pathname } = useRouter();
+  const href = _href.toString();
   return (
     <div
       className={clsx('navlink')}
@@ -71,7 +69,7 @@ const NavLink = memo(function NavLink({
   );
 });
 
-const Navbar = ({ navlinks }: NavbarProps) => {
+const Navbar = () => {
   return (
     <Container
       as="nav"
@@ -83,7 +81,7 @@ const Navbar = ({ navlinks }: NavbarProps) => {
       alignItems="center"
       justifyContent="space-around"
     >
-      {navlinks.map((navlink) => (
+      {links.map((navlink) => (
         <NavLink key={navlink.title} {...navlink} />
       ))}
     </Container>

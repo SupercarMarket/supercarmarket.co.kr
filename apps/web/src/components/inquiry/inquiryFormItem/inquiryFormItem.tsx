@@ -15,6 +15,7 @@ import {
   FormTextArea,
   Wrapper,
 } from '@supercarmarket/ui';
+import { Form, FormType } from 'constants/form';
 import type { InquiryRegister } from 'constants/inquiry';
 import * as React from 'react';
 import type {
@@ -29,7 +30,7 @@ import { useFormContext, useWatch } from 'react-hook-form';
 import { css } from 'styled-components';
 
 type InquiryFormItemContainerProps = React.PropsWithChildren &
-  InquiryRegister & {
+  Form<string, Exclude<FormType, 'tel' | 'email' | 'password'>> & {
     register: UseFormRegister<FieldValues>;
     setValue: UseFormSetValue<FieldValues>;
     isRequire: boolean;

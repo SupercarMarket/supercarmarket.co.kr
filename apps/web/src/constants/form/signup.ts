@@ -1,17 +1,17 @@
-import type { RegisterOptions } from 'react-hook-form';
 import {
-  authentication,
-  email,
   id,
-  name,
   nickname,
   password,
+  name,
   phone,
-  privacy,
+  authentication,
   service,
+  email,
+  privacy,
 } from 'utils/validator';
+import { type Form, type FormType } from '.';
 
-interface FormState {
+export interface FormState {
   id: string;
   password: string;
   passwordConfirm: string;
@@ -25,21 +25,8 @@ interface FormState {
   description: string;
 }
 
-interface Forms {
-  htmlFor: keyof FormState;
-  label?: string;
-  type?: 'text' | 'email' | 'password' | 'tel' | 'agreement';
-  placeholder?: string;
-  tooltip?: string;
-  options?: RegisterOptions;
-  button?: string;
-  buttonWidth?: string;
-  successMessage?: string;
-  errorMessage?: string;
-}
-
-const auth = {
-  id: {
+export const form = [
+  {
     htmlFor: 'id',
     label: '아이디',
     type: 'text',
@@ -48,10 +35,12 @@ const auth = {
     options: {
       validate: id,
     },
+    button: '중복 확인',
+    buttonWidth: '120px',
     errorMessage: '사용 불가능한 아이디입니다',
     successMessage: '사용 가능한 아이디입니다',
-  } as Forms,
-  password: {
+  },
+  {
     htmlFor: 'password',
     label: '비밀번호',
     type: 'password',
@@ -60,8 +49,8 @@ const auth = {
     options: {
       validate: password,
     },
-  } as Forms,
-  passwordConfirm: {
+  },
+  {
     htmlFor: 'passwordConfirm',
     label: '비밀번호 확인',
     type: 'password',
@@ -69,8 +58,8 @@ const auth = {
     options: {
       validate: password,
     },
-  } as Forms,
-  newPassword: {
+  },
+  {
     htmlFor: 'password',
     label: '새 비밀번호',
     type: 'password',
@@ -79,8 +68,8 @@ const auth = {
     options: {
       validate: password,
     },
-  } as Forms,
-  name: {
+  },
+  {
     htmlFor: 'name',
     label: '이름',
     type: 'text',
@@ -88,8 +77,8 @@ const auth = {
     options: {
       validate: name,
     },
-  } as Forms,
-  nickname: {
+  },
+  {
     htmlFor: 'nickname',
     label: '닉네임',
     type: 'text',
@@ -102,8 +91,8 @@ const auth = {
     },
     errorMessage: '사용 불가능한 닉네임입니다',
     successMessage: '사용 가능한 닉네임입니다',
-  } as Forms,
-  phone: {
+  },
+  {
     htmlFor: 'phone',
     label: '휴대폰',
     type: 'tel',
@@ -115,8 +104,8 @@ const auth = {
     },
     successMessage: '인증번호를 확인해주세요.',
     errorMessage: '인증번호 요청에 실패했습니다. 재시도해주세요.',
-  } as Forms,
-  authentication: {
+  },
+  {
     htmlFor: 'authentication',
     label: '인증번호',
     type: 'tel',
@@ -128,8 +117,8 @@ const auth = {
     },
     successMessage: '인증이 완료되었습니다.',
     errorMessage: '인증에 실패했습니다. 재시도해주세요.',
-  } as Forms,
-  email: {
+  },
+  {
     htmlFor: 'email',
     label: '이메일',
     type: 'email',
@@ -141,8 +130,8 @@ const auth = {
     },
     errorMessage: '사용 불가능한 이메일입니다',
     successMessage: '사용 가능한 이메일입니다',
-  } as Forms,
-  service: {
+  },
+  {
     htmlFor: 'service',
     label: '서비스',
     type: 'agreement',
@@ -150,8 +139,8 @@ const auth = {
     options: {
       validate: service,
     },
-  } as Forms,
-  privacy: {
+  },
+  {
     htmlFor: 'privacy',
     label: '개인정보',
     type: 'agreement',
@@ -159,32 +148,8 @@ const auth = {
     options: {
       validate: privacy,
     },
-  } as Forms,
-  phoneAuth: () => [auth.phone, auth.authentication],
-  findId: () => [auth.name, ...auth.phoneAuth()],
-  findPassword: () => [auth.id, ...auth.phoneAuth()],
-  signin: () => [
-    auth.id,
-    {
-      ...auth.password,
-      options: {
-        required: '비밀번호를 입력해주세요.',
-      },
-    },
-  ],
-  signup: () => [
-    { ...auth.id, button: '중복 확인', buttonWidth: '120px' },
-    auth.password,
-    auth.passwordConfirm,
-    auth.name,
-    auth.nickname,
-    ...auth.phoneAuth(),
-    auth.email,
-    auth.service,
-    auth.privacy,
-  ],
-  resultPassword: () => [auth.newPassword, auth.passwordConfirm],
-};
-
-export type { Forms, FormState };
-export default auth;
+  },
+] as Form<
+  keyof FormState,
+  Extract<FormType, 'text' | 'password' | 'tel' | 'email' | 'agreement'>
+>[];

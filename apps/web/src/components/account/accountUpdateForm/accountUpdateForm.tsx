@@ -6,8 +6,6 @@ import {
   FormLabel,
   theme,
 } from '@supercarmarket/ui';
-import type { FormState } from 'constants/account';
-import account from 'constants/account';
 import { signOut, useSession } from 'next-auth/react';
 import * as React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -20,6 +18,7 @@ import AuthFormItem from 'components/auth/authFormItem/authFormItem';
 import useAuth from 'hooks/useAuth';
 import { useAccountUpdateInfo } from 'http/server/account';
 import { useDebounce } from '@supercarmarket/hooks';
+import { form, FormState } from 'constants/form/updateInfo';
 
 interface AccountUpdateFormProps {
   sub: string;
@@ -155,22 +154,18 @@ const AccountUpdateForm = (props: AccountUpdateFormProps) => {
       >
         {updateInfo && (
           <>
-            {account.update.map((form) => (
-              <FormLabel
-                key={form.htmlFor}
-                name={form.htmlFor}
-                label={form.label}
-              >
+            {form.map((f) => (
+              <FormLabel key={f.htmlFor} name={f.htmlFor} label={f.label}>
                 <AuthFormItem
                   defaultValue={
-                    form.htmlFor !== 'authentication'
-                      ? updateInfo?.data[form.htmlFor]
+                    f.htmlFor !== 'authentication'
+                      ? updateInfo?.data[f.htmlFor]
                       : undefined
                   }
                   state={authState}
                   sendPhone={sendPhone}
                   sendCode={sendCode}
-                  {...form}
+                  {...f}
                 />
               </FormLabel>
             ))}

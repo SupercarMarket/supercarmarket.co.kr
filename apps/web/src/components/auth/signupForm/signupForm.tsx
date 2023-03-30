@@ -1,7 +1,6 @@
 'use client';
 
 import { Alert, Button, Divider, Form, FormLabel } from '@supercarmarket/ui';
-import auth, { FormState } from 'constants/auth';
 import { useRouter } from 'next/navigation';
 import * as React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -13,6 +12,7 @@ import TermModal from 'components/common/modal/termModal';
 import useAuth from 'hooks/useAuth';
 import { Modal } from 'components/common/modal';
 import { useDebounce } from '@supercarmarket/hooks';
+import { form, type FormState } from 'constants/form/signup';
 
 const SignupForm = () => {
   const { replace } = useRouter();
@@ -127,7 +127,7 @@ const SignupForm = () => {
           })
         )}
       >
-        {auth.signup().map((props) => (
+        {form.map((props) => (
           <React.Fragment key={props.htmlFor}>
             <FormLabel
               name={props.htmlFor}
