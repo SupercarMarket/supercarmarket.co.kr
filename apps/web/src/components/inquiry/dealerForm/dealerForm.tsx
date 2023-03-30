@@ -1,10 +1,9 @@
 'use client';
 
 import { Alert, Button, Form } from '@supercarmarket/ui';
-import { fetcher, ErrorCode } from '@supercarmarket/lib';
+import { ErrorCode } from '@supercarmarket/lib';
 import inquiry, { InquiryDealerFormState } from 'constants/inquiry';
 import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
 import * as React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { css } from 'styled-components';
@@ -13,9 +12,9 @@ import InquiryFormItem from '../inquiryFormItem';
 import ModalContext from 'feature/modalContext';
 import { Modal } from 'components/common/modal';
 import { useDebounce } from '@supercarmarket/hooks';
+import { authRequest } from 'http/core';
 
 const DealerForm = () => {
-  const session = useSession();
   const methods = useForm<InquiryDealerFormState>();
   const { onOpen, onClose } = React.useContext(ModalContext);
   const [error, setError] = React.useState<string | null>(null);
@@ -99,37 +98,34 @@ const DealerForm = () => {
         profileImage.forEach((file) => formData.append('profileImage', file));
         regImage.forEach((file) => formData.append('regImage', file));
 
-        const response = await fetcher('/server/supercar/v1/inquiry-dealer', {
+        await authRequest('/inquiry-dealer', {
           method: 'POST',
           headers: {
-            ACCESS_TOKEN: session.data?.accessToken || '',
+            'Content-Type': 'multipart/form-data',
           },
-          body: formData,
-        });
-
-        const result = await response.json();
-
-        if (!response.ok) {
-          setError(result.message || ErrorCode[response.status]);
-          return;
-        }
-
-        onOpen(
-          <Modal
-            title="딜러 등록 문의"
-            description="딜러 등록 문의가 완료되었습니다."
-            clickText="확인"
-            background="rgba(30, 30, 32, 0.5)"
-            onCancel={() => {
-              onClose();
-              replace('/inquiry');
-            }}
-            onClick={() => {
-              onClose();
-              replace('/inquiry');
-            }}
-          />
-        );
+          data: formData,
+        })
+          .then(() => {
+            onOpen(
+              <Modal
+                title="딜러 등록 문의"
+                description="딜러 등록 문의가 완료되었습니다."
+                clickText="확인"
+                background="rgba(30, 30, 32, 0.5)"
+                onCancel={() => {
+                  onClose();
+                  replace('/inquiry');
+                }}
+                onClick={() => {
+                  onClose();
+                  replace('/inquiry');
+                }}
+              />
+            );
+          })
+          .catch((error) => {
+            setError(error.message || ErrorCode[error.status]);
+          });
       }),
     300
   );

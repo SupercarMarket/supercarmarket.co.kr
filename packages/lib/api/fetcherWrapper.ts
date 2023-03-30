@@ -7,7 +7,10 @@ export interface FetcherRequestInit extends RequestInit {
   };
 }
 
-async function http<T>(path: string, config: FetcherRequestInit): Promise<T> {
+async function http<T extends any>(
+  path: string,
+  config: FetcherRequestInit
+): Promise<T> {
   const { params, query, ...rest } = config;
 
   if (params) path += `/${params}`;
@@ -33,7 +36,7 @@ async function http<T>(path: string, config: FetcherRequestInit): Promise<T> {
   return await response.json();
 }
 
-export async function get<T>(
+export async function get<T extends unknown = any>(
   path: string,
   config?: FetcherRequestInit
 ): Promise<T> {

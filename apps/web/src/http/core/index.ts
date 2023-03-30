@@ -6,6 +6,11 @@ import axios, {
 } from 'axios';
 import { getSession } from 'next-auth/react';
 
+/**
+ * @description
+ * client-side 전용
+ * server-side인 경우엔 직접 토큰 넣어줘야합니다.
+ */
 const authRequest: AxiosInstance = axios.create({
   baseURL: `/server/supercar/v1`,
 });

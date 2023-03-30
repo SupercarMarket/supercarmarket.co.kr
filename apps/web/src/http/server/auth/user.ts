@@ -2,39 +2,15 @@ import type { NextApiHandler } from 'next';
 import type { Session } from 'next-auth';
 import type { GetSessionParams } from 'next-auth/react';
 import { getSession as getSessionInner } from 'next-auth/react';
-import type { Signin } from '@supercarmarket/types/auth';
 import type { Params, ServerResponse } from '@supercarmarket/types/base';
 import { catchNoExist, getErrorMessage } from 'utils/misc';
-import { serverApi } from '@supercarmarket/lib';
+import { post } from '@supercarmarket/lib';
 
 type SignInResponse = ServerResponse<{
   access_token: string;
   refresh_token: string;
   exp: number;
 }>;
-
-const signInApi: NextApiHandler = async (req, res) => {
-  const { id, password }: Signin = req.body;
-  catchNoExist(id, password);
-
-  const { status, ok, data } = await serverApi(
-    `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/user/login`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      data: {
-        id,
-        password,
-      },
-    }
-  );
-
-  if (!ok) return res.status(status).end();
-
-  return res.status(200).json(data);
-};
 
 const oauthApi: NextApiHandler = async (req, res) => {
   const { provider } = req.query as Params;
@@ -43,15 +19,12 @@ const oauthApi: NextApiHandler = async (req, res) => {
   catchNoExist(provider, sub, nickname, email, picture);
 
   try {
-    const oauth = await serverApi(
+    const oauth = await post(
       `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/user/login`,
       {
-        headers: {
-          'Content-Type': 'application/json',
-        },
         method: 'POST',
         params: provider,
-        body: JSON.stringify({ sub, name: nickname, email, picture }),
+        body: { sub, name: nickname, email, picture },
       }
     );
 
@@ -73,5 +46,5 @@ const getSession = async (
   return session as Session | null;
 };
 
-export { getSession, oauthApi, signInApi };
+export { getSession, oauthApi };
 export type { SignInResponse };

@@ -11,13 +11,8 @@ export const useAddComment = (
   options = {}
 ) => {
   return useMutation({
-    mutationFn: ({
-      data,
-      token,
-    }: {
-      data: { contents: string };
-      token: string;
-    }) => addComment({ data, query, token }),
+    mutationFn: ({ data }: { data: { contents: string }; token: string }) =>
+      addComment({ data, query }),
     ...options,
   });
 };
@@ -33,7 +28,7 @@ export const useLikeComment = (
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (token: string) => likeComment({ query, token }),
+    mutationFn: () => likeComment({ query }),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: QUERY_KEYS.comment(query.postId),
@@ -54,7 +49,7 @@ export const useDeleteComment = (
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (token: string) => deleteComment({ query, token }),
+    mutationFn: () => deleteComment({ query }),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: QUERY_KEYS.comment(query.postId),
@@ -73,13 +68,8 @@ export const useUpdateComment = (
   options = {}
 ) => {
   return useMutation({
-    mutationFn: ({
-      data,
-      token,
-    }: {
-      data: { contents: string };
-      token: string;
-    }) => updateComment({ data, token, query }),
+    mutationFn: ({ data }: { data: { contents: string } }) =>
+      updateComment({ data, query }),
     ...options,
   });
 };

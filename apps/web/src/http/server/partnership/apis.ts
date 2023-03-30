@@ -1,8 +1,4 @@
-import {
-  clientFetcher,
-  partnershipFormatter,
-  serverFetcher,
-} from '@supercarmarket/lib';
+import { clientFetcher, get, serverFetcher } from '@supercarmarket/lib';
 
 export const getPartnership = async (query: {
   category: string;
@@ -18,7 +14,7 @@ export const getPartnership = async (query: {
       ? { page, ...rest }
       : { category: category.toUpperCase(), ...rest };
 
-  return clientFetcher('/server/supercar/v1/partnership', {
+  return get('/server/supercar/v1/partnership', {
     method: 'GET',
     query: {
       ...currentQuery,
@@ -28,33 +24,21 @@ export const getPartnership = async (query: {
 };
 
 export const getPartnershipPost = async ({ id }: { id: string }) => {
-  return clientFetcher(`/server/supercar/v1/partnership`, {
+  return get(`/server/supercar/v1/partnership`, {
     method: 'GET',
     params: id,
   });
 };
 
 export const prefetchPartnership = async () => {
-  return serverFetcher(
-    `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/partnership`,
-    {
-      method: 'GET',
-    }
-  ).then((res) => {
-    const { ok, status, ...rest } = res;
-    return rest;
+  return get(`${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/partnership`, {
+    method: 'GET',
   });
 };
 
 export const prefetchPartnershipPost = async (id: string) => {
-  return serverFetcher(
-    `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/partnership`,
-    {
-      method: 'GET',
-      params: id,
-    }
-  ).then((res) => {
-    const { ok, status, ...rest } = res;
-    return rest;
+  return get(`${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/partnership`, {
+    method: 'GET',
+    params: id,
   });
 };

@@ -1,4 +1,4 @@
-import { clientApi, ErrorCode } from '@supercarmarket/lib';
+import { ErrorCode } from '@supercarmarket/lib';
 import { Alert, Button, Form, Wrapper } from '@supercarmarket/ui';
 import { Modal } from 'components/common/modal';
 import inquiry, { InquiryMiscFormState } from 'constants/inquiry';
@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation';
 
 import InquiryFormItem from '../inquiryFormItem';
 import { useDebounce } from '@supercarmarket/hooks';
+import { authRequest } from 'http/core';
 
 const MiscForm = () => {
   const session = useSession();
@@ -49,31 +50,30 @@ const MiscForm = () => {
 
         const { title, contents } = data;
 
-        const result = await clientApi('/server/supercar/v1/inquiry-etc', {
+        await authRequest('/inquiry-etc', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             ACCESS_TOKEN: session.data?.accessToken || '',
           },
           data: { title, contents },
-        });
-
-        if (!result.data) {
-          setError(result.message || ErrorCode[result.status]);
-          return;
-        }
-
-        onOpen(
-          <Modal
-            title="기타 문의"
-            description="기타 문의가 등록 완료되었습니다."
-            clickText="확인"
-            background="rgba(30, 30, 32, 0.5)"
-            onCancel={() => handleModal('/inquiry')}
-            onClick={() => handleModal('/')}
-            onClose={() => handleModal('/inquiry')}
-          />
-        );
+        })
+          .then(() => {
+            onOpen(
+              <Modal
+                title="기타 문의"
+                description="기타 문의가 등록 완료되었습니다."
+                clickText="확인"
+                background="rgba(30, 30, 32, 0.5)"
+                onCancel={() => handleModal('/inquiry')}
+                onClick={() => handleModal('/')}
+                onClose={() => handleModal('/inquiry')}
+              />
+            );
+          })
+          .catch((error) => {
+            setError(error.message || ErrorCode[error.status]);
+          });
       }),
     300
   );

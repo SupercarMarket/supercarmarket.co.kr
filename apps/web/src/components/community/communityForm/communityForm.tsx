@@ -337,9 +337,7 @@ const CommunityForm = (props: CommunityFormProps) => {
     onSuccess: async ({ id: _id, temporaryStorage }) => {
       if (temporaryStorage) {
         setSuccess(dayjs(new Date()).format('HH:mm'));
-        await getTemporaryStorage(session.data?.accessToken || '').then((res) =>
-          handleInitialize(res.data)
-        );
+        await getTemporaryStorage().then((res) => handleInitialize(res.data));
         return;
       }
 

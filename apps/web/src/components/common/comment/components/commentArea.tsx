@@ -99,7 +99,6 @@ const CommentArea = ({
     else if (type === 'edit')
       updateMutation({
         data: { contents: comment },
-        token: session.accessToken,
       });
   }, [session, type, addMutation, comment, updateMutation]);
 

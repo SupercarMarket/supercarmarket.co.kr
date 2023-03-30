@@ -1,7 +1,8 @@
-import { clientApi } from '@supercarmarket/lib';
+import { get, patch, post } from '@supercarmarket/lib';
 import { Signup } from '@supercarmarket/types/auth';
-import { User } from '@supercarmarket/types/base';
+import { ServerResponse, User } from '@supercarmarket/types/base';
 import { FormState } from 'constants/account';
+import { authRequest } from 'http/core';
 import * as React from 'react';
 
 interface AuthStateField<T extends any = any> {
@@ -78,14 +79,8 @@ export default function useAuth() {
       field: Omit<keyof AuthState, 'phone' | 'authentication'>,
       value: string
     ) => {
-      return await clientApi(`/server/supercar/v1/user/${field}chk`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          [`${field}`]: value,
-        }),
+      return await post(`/server/supercar/v1/user/${field}chk`, {
+        [`${field}`]: value,
       })
         .then(() => {
           setAuthState((prev) => ({
@@ -104,7 +99,7 @@ export default function useAuth() {
   );
 
   const sendPhone = React.useCallback(async (phone: string) => {
-    return await clientApi(`/server/supercar/v1/message/auth/send/${phone}`, {
+    return await get(`/server/supercar/v1/message/auth/send/${phone}`, {
       method: 'GET',
     })
       .then(() => {
@@ -122,7 +117,7 @@ export default function useAuth() {
   }, []);
 
   const sendCode = React.useCallback(async (phone: string, code: string) => {
-    return await clientApi(`/server/supercar/v1/message/auth/code/${phone}`, {
+    return await get(`/server/supercar/v1/message/auth/code/${phone}`, {
       method: 'GET',
       query: {
         code,
@@ -151,22 +146,26 @@ export default function useAuth() {
     }) => {
       const { phone, id, authentication, password } = data;
 
-      return await clientApi(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/user/change-pw`,
+      return await patch<
         {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          data: { id, password, phone, code: authentication },
-        }
-      )
+          phone: string;
+          code: string;
+          id: string;
+          password: string;
+        },
+        ServerResponse<boolean>
+      >(`/server/supercar/v1/user/change-pw`, {
+        id,
+        password,
+        phone,
+        code: authentication,
+      })
         .then((res) => {
           const { data } = res;
 
           setAuthState((prev) => ({
             ...prev,
-            resetPasswordResult: successField(data),
+            resetPasswordResult: successField(data as unknown as string),
           }));
         })
         .catch((error) => {
@@ -183,19 +182,20 @@ export default function useAuth() {
     async (data: { phone: string; authentication: string; name: string }) => {
       const { phone, name, authentication } = data;
 
-      return await clientApi(`/server/supercar/v1/user/find-id`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        data: { phone, name, code: authentication },
+      return await post<
+        { phone: string; code: string; name: string },
+        ServerResponse<boolean>
+      >(`/server/supercar/v1/user/find-id`, {
+        phone,
+        name,
+        code: authentication,
       })
         .then((res) => {
           const { data } = res;
 
           setAuthState((prev) => ({
             ...prev,
-            findIdResult: successField(data),
+            findIdResult: successField(data as unknown as string),
           }));
         })
         .catch((error) => {
@@ -219,15 +219,9 @@ export default function useAuth() {
     async (
       data: Omit<FormState, 'gallery' | 'background' | 'newPassword'> & {
         code: string;
-      },
-      token: string
+      }
     ) => {
-      return await clientApi(`/server/supercar/v1/mypage`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          ACCESS_TOKEN: token,
-        },
+      return await authRequest(`/mypage`, {
         data,
       });
     },
@@ -246,21 +240,15 @@ export default function useAuth() {
       authentication,
     } = data;
 
-    return await clientApi('/server/supercar/v1/user/signup', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      data: {
-        id,
-        password,
-        passwordCheck: passwordConfirm,
-        name,
-        nickname,
-        email,
-        phone,
-        code: authentication,
-      },
+    return await post('/server/supercar/v1/user/signup', {
+      id,
+      password,
+      passwordCheck: passwordConfirm,
+      name,
+      nickname,
+      email,
+      phone,
+      code: authentication,
     });
   }, []);
 

@@ -29,14 +29,8 @@ const AccountUpdateForm = (props: AccountUpdateFormProps) => {
   const { sub } = props;
   const { onOpen, onClose } = React.useContext(ModalContext);
   const [error, setError] = React.useState<string | null>(null);
-  const { data: session, status } = useSession();
-  const { data: updateInfo, refetch } = useAccountUpdateInfo(
-    sub,
-    session?.accessToken || '',
-    {
-      enabled: status && status === 'authenticated',
-    }
-  );
+  const { data: session } = useSession();
+  const { data: updateInfo, refetch } = useAccountUpdateInfo(sub);
   const methods = useForm<FormState>();
   const { authState, sendPhone, sendCode, update } = useAuth();
 

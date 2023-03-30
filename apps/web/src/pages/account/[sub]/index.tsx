@@ -101,10 +101,9 @@ export const getUserPageProps = async (
 
   const queryClient = new QueryClient();
 
-  const user: BaseApiHandlerResponse<{ data: ProfileType }> =
-    await prefetchAccount({ id: sub, token: session?.accessToken });
+  const user = await prefetchAccount({ id: sub, token: session?.accessToken });
 
-  if (!user.ok) {
+  if (!user) {
     return {
       notFound: true,
     };
@@ -117,8 +116,7 @@ export const getUserPageProps = async (
     : account.accountRoutes.someoneAccount(sub);
 
   await queryClient.prefetchQuery(QUERY_KEYS.id(sub), async () => {
-    const { ok, status, ...rest } = user;
-    return rest;
+    return user;
   });
 
   /**

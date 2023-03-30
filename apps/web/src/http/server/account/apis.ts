@@ -1,5 +1,7 @@
-import { get, serverFetcher } from '@supercarmarket/lib';
+import { type Profile } from '@supercarmarket/types/account';
+import { type ServerResponse } from '@supercarmarket/types/base';
 import { type AccountTab } from 'constants/account';
+import { get } from '@supercarmarket/lib';
 import { authRequest } from 'http/core';
 
 export const getAccount = async ({
@@ -9,14 +11,14 @@ export const getAccount = async ({
   id: string;
   token?: string;
 }) => {
-  const header = token
+  const headers = token
     ? {
         ACCESS_TOKEN: token,
       }
     : undefined;
 
   return get('/server/supercar/v1/userpage', {
-    headers: header,
+    headers,
     method: 'GET',
     query: {
       id,
@@ -67,15 +69,16 @@ export const prefetchAccount = async ({
   id: string;
   token?: string;
 }) => {
-  const header = token
+  const headers = token
     ? {
         ACCESS_TOKEN: token,
       }
     : undefined;
-  return serverFetcher(
+
+  return get<ServerResponse<Profile>>(
     `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/userpage`,
     {
-      headers: header,
+      headers,
       method: 'GET',
       query: {
         id,

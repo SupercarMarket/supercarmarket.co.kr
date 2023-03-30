@@ -14,7 +14,7 @@ export const useLikeCommunityPost = (
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (token: string) => likeCommunityPost({ id, category, token }),
+    mutationFn: () => likeCommunityPost({ id, category }),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [
@@ -35,14 +35,12 @@ export const useRemoveCommunityPost = (options = {}) => {
   return useMutation({
     mutationFn: ({
       data,
-      token,
     }: {
       data: {
         id: string;
         category?: string;
       }[];
-      token: string;
-    }) => deleteCommunityPost({ data, token }),
+    }) => deleteCommunityPost({ data }),
     useErrorBoundary: true,
     ...options,
   });

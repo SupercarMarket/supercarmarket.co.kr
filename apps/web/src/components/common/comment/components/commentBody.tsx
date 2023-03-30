@@ -68,12 +68,12 @@ const CommentCard = ({
 
   const handleRemove = React.useCallback(() => {
     if (!session) return;
-    deleteMutate(session.accessToken);
+    deleteMutate();
   }, [deleteMutate, session]);
 
   const handleLike = React.useCallback(() => {
     if (!session) return;
-    likeMuate(session.accessToken);
+    likeMuate();
   }, [likeMuate, session]);
   return (
     <>
