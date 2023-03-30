@@ -240,7 +240,4 @@ export const form = [
       required: true,
     },
   },
-] as Form<
-  keyof FormState,
-  Extract<FormType, 'text' | 'password' | 'tel' | 'email' | 'agreement'>
->[];
+] as Form<keyof FormState, Exclude<FormType, 'tel' | 'email' | 'password'>>[];
