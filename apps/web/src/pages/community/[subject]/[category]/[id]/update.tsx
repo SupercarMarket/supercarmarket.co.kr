@@ -1,4 +1,4 @@
-import { get, serverFetcher } from '@supercarmarket/lib';
+import { get } from '@supercarmarket/lib';
 import { NextPageWithLayout, Params } from '@supercarmarket/types/base';
 import { Container, Title, Wrapper } from '@supercarmarket/ui';
 import { QueryErrorResetBoundary } from '@tanstack/react-query';
