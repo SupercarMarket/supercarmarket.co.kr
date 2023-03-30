@@ -1,7 +1,7 @@
 import { clientApi } from '@supercarmarket/lib';
-import { Signup } from '@supercarmarket/types/auth';
-import { User } from '@supercarmarket/types/base';
-import { FormState } from 'constants/account';
+import { type Signup } from '@supercarmarket/types/auth';
+import { type User } from '@supercarmarket/types/base';
+import { type FormState } from 'constants/form/signup';
 import * as React from 'react';
 
 interface AuthStateField<T extends any = any> {
