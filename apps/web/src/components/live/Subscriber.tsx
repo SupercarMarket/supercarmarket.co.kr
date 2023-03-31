@@ -28,7 +28,7 @@ function Subscriber(props: Props) {
         var video = document.getElementById('Streaming') as HTMLVideoElement;
 
         newSession.on('streamCreated', (event) => {
-          const newSubscriber = newSession.subscribe(event.stream, video, {
+          newSession.subscribe(event.stream, video, {
             insertMode: 'APPEND',
           });
         });
@@ -61,9 +61,7 @@ function Subscriber(props: Props) {
   }
   return (
     <div style={{ width: '880px' }}>
-      <div style={{ height: '485px' }}>
-        <video id="Streaming" style={{ height: '100%', width: '100%' }} />
-      </div>
+      <div id="Streaming" style={{ height: '485px' }}></div>
       <div>
         <p>딜러 닉네임</p>
         <p>오늘의 라이브 진행합니다! 들어와서 구경하고 가세요!</p>

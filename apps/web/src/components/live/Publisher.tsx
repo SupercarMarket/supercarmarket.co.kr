@@ -24,6 +24,10 @@ function Publisher(props: Props) {
         newSession
           .connect(token, { clientData: initUserData.userName })
           .then(async () => {
+            var devices = await newOV.getDevices();
+            var videoDevices = devices.filter(
+              (device) => device.kind === 'videoinput'
+            );
             var video = document.getElementById(
               'Streaming'
             ) as HTMLVideoElement;
@@ -31,9 +35,16 @@ function Publisher(props: Props) {
               insertMode: 'APPEND',
               resolution: '880x495',
               frameRate: 10000000,
-              videoSource: undefined,
+              videoSource: videoDevices[0].deviceId,
+              publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
+              publishVideo: true, // Whether you want to start publishing with your video enabled or not
             });
             newSession.publish(publich);
+
+            newSession.on('streamCreated', (event) => {
+              const subscriber = newSession.subscribe(event.stream, undefined);
+              console.log(subscriber);
+            });
           });
       });
     };

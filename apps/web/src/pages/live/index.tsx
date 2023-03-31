@@ -23,7 +23,7 @@ const Index = (props: Props) => {
   const router = useRouter();
 
   useEffect(() => {
-    getBroadcastList().then((res) => {
+    getBroadcastList().then((res: any) => {
       console.log(res);
       setLiveItemList(res.list);
     });
@@ -92,13 +92,16 @@ const LiveItem = ({ data }: { data: any }) => {
           margin: 'auto',
         }}
       >
-        <img />
+        <img
+          src={data.thumbnailUrl}
+          style={{ width: '100%', height: '100%' }}
+        />
       </div>
       <div style={{ margin: 'auto', width: '95%', marginTop: '20px' }}>
         <div
           style={{ fontWeight: '500', fontSize: '16px', lineHeight: '24px' }}
         >
-          딜러 닉네임
+          {data.name}
         </div>
         <div
           style={{
@@ -108,7 +111,7 @@ const LiveItem = ({ data }: { data: any }) => {
             marginTop: '10px',
           }}
         >
-          오늘의 라이브 진행합니다
+          {data.title}
         </div>
         <div
           style={{
@@ -119,7 +122,9 @@ const LiveItem = ({ data }: { data: any }) => {
             marginTop: '10px',
           }}
         >
-          #해시태그
+          {data.tags.map((data) => {
+            return `#${data}`;
+          })}
         </div>
       </div>
     </div>
