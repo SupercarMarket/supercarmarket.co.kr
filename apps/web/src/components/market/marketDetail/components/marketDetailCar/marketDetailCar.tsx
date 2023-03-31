@@ -1,7 +1,6 @@
-import { Typography, Wrapper } from '@supercarmarket/ui';
 import * as React from 'react';
-
-import * as Styled from './marketDetailCar.styled';
+import { css } from 'styled-components';
+import { applyMediaQuery, Typography, Wrapper } from '@supercarmarket/ui';
 
 interface MarketDetailCarProps {
   year: string;
@@ -27,7 +26,25 @@ const MarketDetailCar = ({
   const formatter = Intl.NumberFormat('ko').format;
 
   return (
-    <Wrapper css={Styled.wrapper}>
+    <Wrapper
+      css={css`
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        margin-top: 20px;
+        margin-bottom: 80px;
+        padding: 30px 40px 20px 40px;
+        border: 1px solid ${({ theme }) => theme.color['greyScale-3']};
+        border-radius: 4px;
+        box-sizing: border-box;
+
+        ${applyMediaQuery('mobile')} {
+          margin-bottom: 32px;
+          padding: 16px;
+          gap: 16px;
+        }
+      `}
+    >
       <CarInfo subject="연식">{`${year}년형`}</CarInfo>
       <CarInfo subject="주행거리">{`${formatter(mileage)}km`}</CarInfo>
       <CarInfo subject="연료">{fuel}</CarInfo>
@@ -46,18 +63,39 @@ interface CarInfoProps {
 
 const CarInfo = ({ subject, children }: CarInfoProps) => {
   return (
-    <Styled.Info>
-      <Styled.Subject>
+    <Wrapper
+      css={css`
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+
+        ${applyMediaQuery('mobile')} {
+          margin-bottom: 0;
+        }
+      `}
+    >
+      <Wrapper.Left
+        css={css`
+          width: 90px;
+        `}
+      >
         <Typography fontSize="body-16" fontWeight="bold" color="greyScale-5">
           {subject}
         </Typography>
-      </Styled.Subject>
-      <Styled.Content>
+      </Wrapper.Left>
+      <Wrapper.Right
+        css={css`
+          ${({ theme }) => css`
+            width: 270px;
+            font-weight: ${theme.fontWeight['bold']};
+          `}
+        `}
+      >
         <Typography fontSize="body-16" color="greyScale-6">
           {children}
         </Typography>
-      </Styled.Content>
-    </Styled.Info>
+      </Wrapper.Right>
+    </Wrapper>
   );
 };
 

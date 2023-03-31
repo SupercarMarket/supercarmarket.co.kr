@@ -4,17 +4,15 @@ import {
   Wrapper,
   applyMediaQuery,
 } from '@supercarmarket/ui';
-import { useSearchParams } from 'next/navigation';
-import { MarketDto } from '@supercarmarket/types/market';
-import { WithBlurredImage } from '@supercarmarket/types/magazine';
-import Image from 'next/image';
 import Link from 'next/link';
-import { css } from 'styled-components';
+import Image from 'next/image';
 import Skeleton from 'react-loading-skeleton';
+import styled, { css } from 'styled-components';
+import { useSearchParams } from 'next/navigation';
 import useBase64 from 'hooks/queries/useBase64';
 import MarketRow from '../marketRow';
-
-import * as Styled from './marketCard.styled';
+import { MarketDto } from '@supercarmarket/types/market';
+import { WithBlurredImage } from '@supercarmarket/types/magazine';
 
 interface MarketCardProps extends WithBlurredImage<MarketDto> {
   variant?: string;
@@ -173,9 +171,9 @@ const MarketColumn = (
           `}
         >
           <Typography fontSize="body-14">{`${year}`}</Typography>
-          <Styled.Divider />
+          <Divider />
           <Typography fontSize="body-14">{fuel}</Typography>
-          <Styled.Divider />
+          <Divider />
           <Typography fontSize="body-14">{`${formatter(
             mileage
           )}km`}</Typography>
@@ -191,5 +189,12 @@ const MarketColumn = (
     </Link>
   );
 };
+
+const Divider = styled.div`
+  display: inline-block;
+  width: 1px;
+  height: 16px;
+  background: ${({ theme }) => theme.color['greyScale-4']};
+`;
 
 export default MarketCard;

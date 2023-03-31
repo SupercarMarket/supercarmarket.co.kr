@@ -13,7 +13,6 @@ import { convertQuery, makeFilterLabel } from 'utils/market/marketQuery';
 import MarketFilterArea from './marketFilterArea';
 import { useNextQuery } from 'hooks/useNextQuery';
 
-import * as Styled from './marketFilter.styled';
 import Close from '../../../assets/svg/close.svg';
 import Refresh from '../../../assets/svg/refresh.svg';
 
@@ -52,12 +51,34 @@ const MarketFilter = () => {
           }
         `}
       >
-        <Styled.MarketFilterList>
+        <Wrapper
+          css={css`
+            display: flex;
+            flex-wrap: wrap;
+            gap: 9px;
+          `}
+        >
           {convertedQuery.map(([key, [val1, val2]], idx) => {
             const [k, value1, value2] = makeFilterLabel(key, val1, val2);
             return (
               <Link key={idx} href={removeFilter(key)} scroll={false}>
-                <Styled.MarketFilterItem>
+                <Wrapper.Item
+                  css={css`
+                    ${({ theme }) => css`
+                      box-sizing: border-box;
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      gap: 7px;
+                      height: 44px;
+                      padding: 10px 22px;
+                      background: ${theme.color.white};
+                      border: 1px solid ${theme.color['greyScale-4']};
+                      border-radius: 20px;
+                      cursor: pointer;
+                    `}
+                  `}
+                >
                   <Typography fontSize="body-16" lineHeight="150%">
                     {value2 ? `${k} ${value1}~${value2}` : `${k} ${value1}`}
                   </Typography>
@@ -66,12 +87,27 @@ const MarketFilter = () => {
                     height="16px"
                     fill={theme.color['greyScale-5']}
                   />
-                </Styled.MarketFilterItem>
+                </Wrapper.Item>
               </Link>
             );
           })}
-        </Styled.MarketFilterList>
-        <Styled.ResetButton>
+        </Wrapper>
+        <Wrapper.Item
+          css={css`
+            width: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            background: none;
+            border: none;
+            color: ${({ theme }) => theme.color['greyScale-5']};
+            cursor: pointer;
+
+            ${applyMediaQuery('mobile')} {
+              width: 100%;
+            }
+          `}
+        >
           <Link href={`/market?category=${query.category}`} scroll={false}>
             <Refresh
               width="16px"
@@ -80,7 +116,7 @@ const MarketFilter = () => {
             />
             <Typography fontSize="body-16">초기화</Typography>
           </Link>
-        </Styled.ResetButton>
+        </Wrapper.Item>
       </Wrapper.Bottom>
     </Container>
   );
