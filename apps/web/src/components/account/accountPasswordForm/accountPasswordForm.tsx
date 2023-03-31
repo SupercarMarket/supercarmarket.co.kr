@@ -8,7 +8,6 @@ import {
   FormMessage,
   Wrapper,
 } from '@supercarmarket/ui';
-import { useSession } from 'next-auth/react';
 import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { css } from 'styled-components';

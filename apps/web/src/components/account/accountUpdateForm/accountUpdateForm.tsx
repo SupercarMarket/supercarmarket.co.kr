@@ -32,7 +32,7 @@ const AccountUpdateForm = (props: AccountUpdateFormProps) => {
   const { data: session } = useSession();
   const { data: updateInfo, refetch } = useAccountUpdateInfo(sub);
   const methods = useForm<FormState>();
-  const { authState, sendPhone, sendCode, update } = useAuth();
+  const { authState, update } = useAuth();
 
   const handleWithdrawal = React.useCallback(async () => {
     setError(null);
@@ -161,9 +161,6 @@ const AccountUpdateForm = (props: AccountUpdateFormProps) => {
                       ? updateInfo?.data[f.htmlFor]
                       : undefined
                   }
-                  state={authState}
-                  sendPhone={sendPhone}
-                  sendCode={sendCode}
                   {...f}
                 />
               </FormLabel>

@@ -19,7 +19,6 @@ import GoogleIcon from '../../../assets/svg/google.svg';
 import KakaoIcon from '../../../assets/svg/kakao.svg';
 import AuthFormItem from '../authFormItem/authFormItem';
 import * as style from './signinForm.styled';
-import useAuth from 'hooks/useAuth';
 import { useDebounce } from '@supercarmarket/hooks';
 import { form, FormState } from 'constants/form/signin';
 
@@ -63,7 +62,6 @@ const Links = () => {
 
 const LocalFormItem = () => {
   const methods = useForm<FormState>();
-  const { authState } = useAuth();
   const { replace } = useRouter();
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
 
@@ -97,7 +95,7 @@ const LocalFormItem = () => {
               label={form.label}
               hidden
             >
-              <AuthFormItem {...form} state={authState} tooltip="" />
+              <AuthFormItem {...form} tooltip="" />
             </FormLabel>
           ))}
         </Wrapper>

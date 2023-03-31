@@ -1,6 +1,6 @@
+import * as React from 'react';
 import { Alert, Button, Form, FormLabel } from '@supercarmarket/ui';
 import { useRouter } from 'next/navigation';
-import * as React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import AuthFormItem from '../authFormItem/authFormItem';
@@ -42,15 +42,8 @@ const FindForm = ({ type }: FindFormProps) => {
   const methods = useForm<FormsState>();
   const [error, setError] = React.useState<string | null>(null);
   const { onOpen, onClose } = React.useContext(ModalContext);
-  const {
-    authState,
-    sendPhone,
-    sendCode,
-    findId,
-    findPassword,
-    resetPassword,
-    resetField,
-  } = useAuth();
+  const { authState, findId, findPassword, resetPassword, resetField } =
+    useAuth();
   const { replace } = useRouter();
 
   const handleRequire = async (data: FormsState) => {
@@ -174,12 +167,7 @@ const FindForm = ({ type }: FindFormProps) => {
               name={form.htmlFor}
               label={form.label}
             >
-              <AuthFormItem
-                state={authState}
-                sendPhone={sendPhone}
-                sendCode={sendCode}
-                {...form}
-              />
+              <AuthFormItem {...form} />
             </FormLabel>
           ))}
           {error && <Alert title={error} severity="error" />}

@@ -7,7 +7,6 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import AuthFormItem from '../authFormItem/authFormItem';
 import * as style from '../signupForm/signupForm.styled';
-import useAuth from 'hooks/useAuth';
 import { form } from 'constants/form/findPassword';
 
 interface PhoneFormProps {
@@ -21,7 +20,6 @@ interface FormState {
 
 const PhoneForm = ({ uuid }: PhoneFormProps) => {
   const methods = useForm<FormState>();
-  const { authState, sendPhone, sendCode } = useAuth();
   const { replace } = useRouter();
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
 
@@ -49,12 +47,7 @@ const PhoneForm = ({ uuid }: PhoneFormProps) => {
               name={form.htmlFor}
               label={form.label}
             >
-              <AuthFormItem
-                {...form}
-                state={authState}
-                sendPhone={sendPhone}
-                sendCode={sendCode}
-              />
+              <AuthFormItem {...form} />
             </FormLabel>
           ))}
         <Button type="submit" fullWidth>
