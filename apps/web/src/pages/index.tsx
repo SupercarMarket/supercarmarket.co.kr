@@ -18,6 +18,7 @@ import { APP_NAME } from 'constants/core';
 import { css } from 'styled-components';
 import Advertisement from 'components/common/advertisement';
 import { prefetchHome, QUERY_KEYS } from 'http/server/home';
+import Banner from 'components/home/banner';
 
 const Home: NextPageWithLayout = () => {
   return (
@@ -33,6 +34,12 @@ const Home: NextPageWithLayout = () => {
                 }
               `}
             >
+              <ErrorBoundary
+                onReset={reset}
+                fallbackRender={(props) => <ErrorFallback {...props} />}
+              >
+                <Banner />
+              </ErrorBoundary>
               <Advertisement hidden />
               <Title marginBottom="20px">슈마매거진</Title>
               <ErrorBoundary
