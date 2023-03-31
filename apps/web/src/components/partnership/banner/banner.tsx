@@ -1,9 +1,14 @@
-import { useRouter } from 'next/router';
 import * as React from 'react';
+import { css } from 'styled-components';
+import { useRouter } from 'next/navigation';
 
-import { Button, Typography } from '@supercarmarket/ui';
+import {
+  applyMediaQuery,
+  Button,
+  Typography,
+  Wrapper,
+} from '@supercarmarket/ui';
 import ArrowRight from '../../../assets/svg/arrow-right.svg';
-import * as Styled from './banner.styled';
 
 interface BannerProps {
   title: string;
@@ -20,8 +25,30 @@ const Banner = ({ title, subtitle, btnTitle, url }: BannerProps) => {
   };
 
   return (
-    <Styled.BannerContainer>
-      <Styled.Paragraph>
+    <Wrapper
+      css={css`
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        padding: 34px 40px;
+        background: ${({ theme }) => theme.color['greyScale-2']};
+        border-radius: 4px;
+        ${applyMediaQuery('mobile')} {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 16px;
+        }
+      `}
+    >
+      <Wrapper.Top
+        css={css`
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+        `}
+      >
         <Typography fontSize="header-24" fontWeight="bold" display="block">
           {title}
         </Typography>
@@ -30,8 +57,13 @@ const Banner = ({ title, subtitle, btnTitle, url }: BannerProps) => {
             {subtitle}
           </Typography>
         )}
-      </Styled.Paragraph>
-      <Styled.BannerButtonArea>
+      </Wrapper.Top>
+      <Wrapper.Bottom
+        css={css`
+          display: flex;
+          align-items: center;
+        `}
+      >
         <Button
           variant="Black"
           border="rounded"
@@ -40,8 +72,8 @@ const Banner = ({ title, subtitle, btnTitle, url }: BannerProps) => {
         >
           {btnTitle}
         </Button>
-      </Styled.BannerButtonArea>
-    </Styled.BannerContainer>
+      </Wrapper.Bottom>
+    </Wrapper>
   );
 };
 

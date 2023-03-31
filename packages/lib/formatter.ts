@@ -6,6 +6,15 @@ export const homeCategoryFormatter = (
   return category;
 };
 
+export const marketFormatter = (category: string) => {
+  if (category === '스포츠카') return 'sports-car';
+  if (category === '세단') return 'saloon';
+  if (category === 'SUV') return 'suv';
+  if (category === '픽업트럭') return 'pickup-truck';
+  if (category === '클래식카&올드카') return 'classic-car';
+  return 'all';
+};
+
 export const partnershipFormatter = (category: string) => {
   if (category === '전체') return 'ALL';
   if (category === '자동차매장') return 'DEALER_SHOP';

@@ -4,18 +4,15 @@ import {
   Wrapper,
   applyMediaQuery,
 } from '@supercarmarket/ui';
-import { useRouter } from 'next/router';
-import { MarketDto } from '@supercarmarket/types/market';
-import { WithBlurredImage } from '@supercarmarket/types/magazine';
-import Image from 'next/image';
 import Link from 'next/link';
-import { css } from 'styled-components';
+import Image from 'next/image';
 import Skeleton from 'react-loading-skeleton';
+import styled, { css } from 'styled-components';
+import { useSearchParams } from 'next/navigation';
 import useBase64 from 'hooks/queries/useBase64';
 import MarketRow from '../marketRow';
-import { Params } from '@supercarmarket/types/base';
-
-import * as Styled from './marketCard.styled';
+import { MarketDto } from '@supercarmarket/types/market';
+import { WithBlurredImage } from '@supercarmarket/types/magazine';
 
 interface MarketCardProps extends WithBlurredImage<MarketDto> {
   variant?: string;
@@ -64,13 +61,11 @@ const MarketColumn = (
     category,
     ranking,
   } = props;
-  const { query } = useRouter();
-  const queryString = new URLSearchParams(query as Params).toString();
-
+  const searchParams = useSearchParams().toString();
   const formatter = Intl.NumberFormat('ko-KR', { notation: 'compact' }).format;
 
   return (
-    <Link href={`/market/${category}/${id}?${queryString}`}>
+    <Link href={`/market/${category}/${id}?${searchParams}`}>
       <Container width="100%" display="flex" flexDirection="column" key={id}>
         <Wrapper
           css={css`
@@ -176,19 +171,30 @@ const MarketColumn = (
           `}
         >
           <Typography fontSize="body-14">{`${year}`}</Typography>
-          <Styled.Divider />
+          <Divider />
           <Typography fontSize="body-14">{fuel}</Typography>
-          <Styled.Divider />
+          <Divider />
           <Typography fontSize="body-14">{`${formatter(
             mileage
           )}km`}</Typography>
         </Wrapper>
         <Typography fontSize="body-14" fontWeight="bold" color="system-1">
-          {price ? `${formatter(price * 10000)}원` : '상담'}
+          {price && price === 1
+            ? '판매 완료'
+            : price !== 1
+            ? `${formatter(price * 10000)}원`
+            : '상담'}
         </Typography>
       </Container>
     </Link>
   );
 };
+
+const Divider = styled.div`
+  display: inline-block;
+  width: 1px;
+  height: 16px;
+  background: ${({ theme }) => theme.color['greyScale-4']};
+`;
 
 export default MarketCard;

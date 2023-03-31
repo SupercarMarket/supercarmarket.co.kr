@@ -14,7 +14,7 @@ import {
 import layout from 'components/layout';
 import MarketContents from 'components/market/marketContents';
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-import { useRouter } from 'next/router';
+import { useRouter, useSearchParams } from 'next/navigation';
 import * as React from 'react';
 import { css } from 'styled-components';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -24,12 +24,15 @@ import { makeQuery } from 'utils/market/marketQuery';
 import { getSession } from 'http/server/auth/user';
 import Advertisement from 'components/common/advertisement';
 import { prefetchMarketPost, QUERY_KEYS } from 'http/server/market';
+import { useNextQuery } from 'hooks/useNextQuery';
 
 const MarketDetailPage: NextPageWithLayout = ({
   id,
   category,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const { push, query } = useRouter();
+  const { push } = useRouter();
+  const searchParams = useSearchParams();
+  const { query } = useNextQuery(searchParams);
   const keywordRef = React.useRef<HTMLInputElement>(null);
 
   const keydownHandler = (e: React.KeyboardEvent) => {

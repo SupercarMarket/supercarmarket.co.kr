@@ -46,7 +46,7 @@ export const likeMarketPost = async ({ id }: { id: string }) => {
 export const updateMarketSellStatus = async ({
   data,
 }: {
-  data: { brdSeq: number };
+  data: { seq: number };
 }) => {
   return authRequest(`/shop`, {
     method: 'PUT',

@@ -5,40 +5,34 @@ import {
   Wrapper,
   applyMediaQuery,
 } from '@supercarmarket/ui';
-import theme from 'constants/theme';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 
-import FavoriteIcon from '../../../../../assets/svg/favorite.svg';
-import FavoriteBorderIcon from '../../../../../assets/svg/favorite-border.svg';
+import theme from 'constants/theme';
 import ModalContext from 'feature/modalContext';
 import { css } from 'styled-components';
 import { Modal } from 'components/common/modal';
 import { useLikeMarketPost } from 'http/server/market';
-import { type Params } from '@supercarmarket/types/base';
+import FavoriteIcon from '../../../../../assets/svg/favorite.svg';
+import FavoriteBorderIcon from '../../../../../assets/svg/favorite-border.svg';
 
 interface MarketLikeProps {
+  id: string;
   isLike: boolean;
 }
 
-const MarketLike = ({ isLike }: MarketLikeProps) => {
+const MarketLike = ({ id, isLike }: MarketLikeProps) => {
   const [like, setLike] = React.useState<boolean>(isLike);
   const { onOpen, onClose } = React.useContext(ModalContext);
-  const { push, query } = useRouter();
-  const { id } = query as Params;
   const { data: session } = useSession();
-  const likeMutation = useLikeMarketPost(id, {
-    enabled: !!id,
-    onSuccess: () => {
-      setLike((prev) => !prev);
-    },
-  });
+  const { push } = useRouter();
+  const { mutate: toggleLike } = useLikeMarketPost(id);
 
   const likeClick = React.useCallback(async () => {
     if (!session) {
       onOpen(
         <Modal
-          description="로그인 후 상담 신청이 가능합니다"
+          description="로그인 후 찜하기가 가능합니다"
           onCancel={() => {
             onClose();
           }}
@@ -53,9 +47,9 @@ const MarketLike = ({ isLike }: MarketLikeProps) => {
         />
       );
     } else {
-      likeMutation.mutate();
+      toggleLike();
     }
-  }, [session, onOpen, onClose, push, likeMutation]);
+  }, [session, onOpen, onClose, push, toggleLike]);
 
   return (
     <Wrapper

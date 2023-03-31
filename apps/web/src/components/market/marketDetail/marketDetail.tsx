@@ -83,7 +83,7 @@ const MarketDetail = ({ data, id }: MarketDetailProps) => {
       {isMine ? (
         <MarketMine id={id} brdSeq={brdSeq} />
       ) : (
-        <MarketLike isLike={isLike} />
+        <MarketLike id={id} isLike={isLike} />
       )}
     </>
   );
