@@ -1,6 +1,6 @@
 'use client';
 
-import type { PropsWithChildren } from 'react';
+import type { AriaRole, PropsWithChildren } from 'react';
 import type {
   DefaultTheme,
   FlattenInterpolation,
@@ -14,12 +14,13 @@ interface WrapperProps {
     | FlattenSimpleInterpolation
     | FlattenInterpolation<ThemeProps<DefaultTheme>>;
   className?: string;
+  role?: AriaRole;
 }
 
 const Wrapper = (props: PropsWithChildren<WrapperProps>) => {
-  const { css = style``, children, className = 'wrapper' } = props;
+  const { css = style``, children, className = 'wrapper', role } = props;
   return (
-    <Container css={css} className={className}>
+    <Container role={role} css={css} className={className}>
       {children}
     </Container>
   );

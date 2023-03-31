@@ -1,5 +1,4 @@
 {
   "extends": "@supercarmarket/tsconfig/nextjs.json",
-  "include": ["."],
   "exclude": ["dist", "build", "node_modules"]
 }

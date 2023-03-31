@@ -1,5 +1,5 @@
-import type { Links } from '@supercarmarket/types/base';
 import clsx from 'clsx';
+import { type Links } from 'constants/link';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { memo } from 'react';
@@ -24,7 +24,7 @@ const NavbarItem = memo(function NavbarItem({
               href={'/' + href + '/' + s.href}
             >
               <li
-                data-active={pathname.includes(s.href)}
+                data-active={pathname.includes(s.href.toString())}
                 className={clsx('navbarItem-li')}
               >
                 {s.title}
@@ -37,7 +37,7 @@ const NavbarItem = memo(function NavbarItem({
         .navbarItem {
           box-sizing: border-box;
           position: absolute;
-          width: 255px;
+          width: 240px;
           margin-top: 15px;
           border: 1px solid #eaeaec;
           border-radius: 4px;

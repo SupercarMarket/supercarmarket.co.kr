@@ -1,4 +1,10 @@
-import { applyMediaQuery, Searchbar, Tab, Wrapper } from '@supercarmarket/ui';
+import {
+  applyMediaQuery,
+  Container,
+  Searchbar,
+  Tab,
+  Wrapper,
+} from '@supercarmarket/ui';
 import type { NextPageWithLayout, Params } from '@supercarmarket/types/base';
 import {
   dehydrate,
@@ -7,109 +13,139 @@ import {
 } from '@tanstack/react-query';
 import layout from 'components/layout';
 import MarketContents from 'components/market/marketContents';
-import queries from 'constants/queries';
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-import { useRouter } from 'next/router';
+import { useRouter, useSearchParams } from 'next/navigation';
 import * as React from 'react';
 import { css } from 'styled-components';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from 'components/fallback';
-import { serverFetcher } from '@supercarmarket/lib';
-
-const makeQuery = (query: Params) =>
-  Object.entries(query)
-    .map(([key, value]) => `${key}=${value}`)
-    .join('&');
+import { CATEGORY } from 'constants/market';
+import { makeQuery } from 'utils/market/marketQuery';
+import { getSession } from 'http/server/auth/user';
+import Advertisement from 'components/common/advertisement';
+import { prefetchMarketPost, QUERY_KEYS } from 'http/server/market';
+import { useNextQuery } from 'hooks/useNextQuery';
 
 const MarketDetailPage: NextPageWithLayout = ({
   id,
   category,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const { push, query } = useRouter();
+  const { push } = useRouter();
+  const searchParams = useSearchParams();
+  const { query } = useNextQuery(searchParams);
   const keywordRef = React.useRef<HTMLInputElement>(null);
 
   const keydownHandler = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && keywordRef.current !== null) {
-      delete query.id;
+      const queries = query as Params;
 
-      query.keyword = keywordRef.current.value;
-      keywordRef.current.value = '';
+      delete queries.id;
+      delete queries.category;
+      queries.keyword = keywordRef.current.value;
 
-      const queryString = makeQuery(query as Params);
+      const queryString = makeQuery(queries);
 
-      push(`/market/${query.category}?${queryString}`);
+      push(`/market?category=all&${queryString}`);
     }
   };
 
+  const listCategory = React.useMemo(() => {
+    const foundCategory = CATEGORY.find(
+      ({ option }) => option === category
+    )?.value;
+    return foundCategory;
+  }, [category]);
+
   return (
-    <Wrapper
-      css={css`
-        width: 1200px;
-        display: flex;
-        flex-direction: column;
-        margin: 20px 0 0 0;
-        ${applyMediaQuery('mobile')} {
-          padding: 0 16px;
-        }
-      `}
-    >
-      <QueryErrorResetBoundary>
-        {({ reset }) => (
-          <>
-            <ErrorBoundary
-              onReset={reset}
-              fallbackRender={(props) => <ErrorFallback {...props} />}
-            >
-              <MarketContents id={id} />
-            </ErrorBoundary>
-            <Wrapper
-              css={css`
-                width: 100%;
-                margin-bottom: 36px;
-              `}
-            >
-              <Tab list={`/market/${category}`} scroll />
-            </Wrapper>
-            <Wrapper
-              css={css`
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                margin-bottom: 160px;
-              `}
-            >
-              <Searchbar
-                variant="Line"
-                width="540px"
-                placeholder="검색어를 입력하세요"
-                onKeyDown={keydownHandler}
-                ref={keywordRef}
-              />
-            </Wrapper>
-          </>
-        )}
-      </QueryErrorResetBoundary>
-    </Wrapper>
+    <Container>
+      <Advertisement />
+      <Wrapper
+        css={css`
+          width: 1200px;
+          display: flex;
+          flex-direction: column;
+          margin: 20px 0 0 0;
+          ${applyMediaQuery('mobile')} {
+            width: 100%;
+            padding: 0 16px;
+            box-sizing: border-box;
+          }
+        `}
+      >
+        <QueryErrorResetBoundary>
+          {({ reset }) => (
+            <>
+              <ErrorBoundary
+                onReset={reset}
+                fallbackRender={(props) => <ErrorFallback {...props} />}
+              >
+                <MarketContents id={id} />
+              </ErrorBoundary>
+              <Wrapper
+                css={css`
+                  width: 100%;
+                  margin-bottom: 36px;
+                `}
+              >
+                <Tab list={`/market?category=${listCategory}`} scroll />
+              </Wrapper>
+              <Wrapper
+                css={css`
+                  width: 100%;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  margin-bottom: 160px;
+                  ${applyMediaQuery('mobile')} {
+                    justify-content: center;
+                  }
+                `}
+              >
+                <Wrapper
+                  css={css`
+                    width: 504px;
+                    ${applyMediaQuery('mobile')} {
+                      width: 240px;
+                    }
+                  `}
+                >
+                  <Searchbar
+                    variant="Line"
+                    placeholder="검색어를 입력하세요"
+                    onKeyDown={keydownHandler}
+                    ref={keywordRef}
+                  />
+                </Wrapper>
+              </Wrapper>
+            </>
+          )}
+        </QueryErrorResetBoundary>
+      </Wrapper>
+    </Container>
   );
 };
 
 MarketDetailPage.Layout = layout;
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { id, category = 'sports-car' } = ctx.query as Params;
+export const getServerSideProps: GetServerSideProps = async ({
+  req,
+  res,
+  query,
+}) => {
+  const { id, category = 'sports-car' } = query as Params;
+  const session = await getSession({ req });
+
   const queryClient = new QueryClient();
 
-  queryClient.prefetchQuery(queries.market.detail(id), () =>
-    serverFetcher(`${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/shop`, {
-      method: 'GET',
-      params: id,
-    }).then((res) => {
-      const { ok, status, ...rest } = res;
-      return rest;
-    })
-  );
+  const boardView = req.cookies['boardView'];
 
-  ctx.res.setHeader('Cache-Control', 'public, max-age=500, immutable');
+  await queryClient.prefetchQuery({
+    queryKey: QUERY_KEYS.id(id),
+    queryFn: () =>
+      prefetchMarketPost({ boardView, token: session?.accessToken, id }),
+  });
+
+  // res.setHeader('Cache-Control', 'public, max-age=500, immutable');
 
   return {
     props: {

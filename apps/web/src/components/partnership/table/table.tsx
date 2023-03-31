@@ -1,6 +1,6 @@
 import { Typography } from '@supercarmarket/ui';
 import PartnershipCard from 'components/partnership/partnershipCard';
-import React from 'react';
+import * as React from 'react';
 import { WithBlurredImage } from '@supercarmarket/types/base';
 import { PartnershipDto } from '@supercarmarket/types/partnership';
 

@@ -1,4 +1,4 @@
-import { serverApi } from '@supercarmarket/lib';
+import { post } from '@supercarmarket/lib';
 import type { NextApiHandler } from 'next';
 import type {
   Account,
@@ -11,9 +11,8 @@ import type { Provider } from 'next-auth/providers';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
 import KakaoProvider from 'next-auth/providers/kakao';
-import { isExpire, refreshToken } from 'utils/api/auth/token';
-import { baseFetcher } from 'utils/api/fetcher';
-import { SupercarMarketApiError } from 'utils/error';
+import { isExpire, refreshToken } from 'http/server/auth/token';
+import { ServerResponse } from '@supercarmarket/types/base';
 
 const providers: Provider[] = [
   /*
@@ -33,15 +32,26 @@ const providers: Provider[] = [
 
       const { id, password } = credentials;
 
-      const { status, ok, ...data } = await serverApi(
-        `${process.env.NEXT_PUBLIC_URL}/api/auth/user/signin`,
+      const { data } = await post<
         {
-          method: 'POST',
-          data: { id, password },
-        }
-      );
-
-      if (!ok) throw new SupercarMarketApiError(status);
+          id: string;
+          password: string;
+        },
+        ServerResponse<{
+          access_token: string;
+          refresh_token: string;
+          exp: number;
+          newUser: boolean;
+          user: {
+            id: string;
+            name: string;
+            email: string;
+          };
+        }>
+      >(`${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/user/login`, {
+        id,
+        password,
+      });
 
       if (data)
         return {
@@ -76,18 +86,28 @@ const providers: Provider[] = [
 
       const { phone, authentication, uuid } = credentials;
 
-      const { status, ok, data } = await serverApi(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/user/register-phone`,
+      const { data } = await post<
         {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          data: { phone, code: authentication, token: uuid },
-        }
+          phone: string;
+          code: string;
+          token: string;
+        },
+        ServerResponse<{
+          access_token: string;
+          refresh_token: string;
+          exp: number;
+          newUser: boolean;
+          user: {
+            id: string;
+            name: string;
+            email: string;
+            provider: 'local' | 'google' | 'kakao';
+          };
+        }>
+      >(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/user/register-phone`,
+        { phone, code: authentication, token: uuid }
       );
-
-      if (!ok) throw new SupercarMarketApiError(status);
 
       const { access_token, refresh_token, exp, newUser, user } = data;
 
@@ -204,21 +224,43 @@ const callbacks: Partial<CallbacksOptions<Profile, Account>> | undefined = {
   async signIn({ user, account }) {
     if (account?.type === 'oauth') {
       const { nickname, provider, email, picture, sub } = user;
-      const oauth = await baseFetcher(
-        `${process.env.NEXT_PUBLIC_URL}/api/auth/user/oauth`,
+      const { data } = await post<
         {
-          headers: { 'Content-Type': 'application/json' },
-          method: 'POST',
-          body: JSON.stringify({ nickname, provider, email, picture, sub }),
-          query: {
-            provider,
-          },
-        }
-      );
+          nickname: string;
+          provider: string;
+          sub: string;
+          email?: string;
+          picture?: string;
+        },
+        ServerResponse<{
+          access_token: string;
+          refresh_token: string;
+          exp: number;
+          user: {
+            id: string;
+            name: string;
+            email: string;
+            provider: string;
+          };
+          token: string;
+          newUser?: boolean;
+        }>
+      >(`${process.env.NEXT_PUBLIC_URL}/api/auth/user/oauth`, {
+        nickname,
+        provider,
+        email,
+        picture,
+        sub,
+      });
 
       const {
-        data: { newUser, token, access_token, refresh_token, exp, user: _user },
-      } = oauth;
+        newUser,
+        token,
+        access_token,
+        refresh_token,
+        exp,
+        user: _user,
+      } = data;
 
       user.newUser = newUser;
 
@@ -237,17 +279,6 @@ const callbacks: Partial<CallbacksOptions<Profile, Account>> | undefined = {
 
     return true;
   },
-  /*
-    |--------------------------------------------------------------------------
-    | Callback : Redirect
-    |--------------------------------------------------------------------------
-    */
-  // async redirect({ url, baseUrl }) {
-  //   if (url === `${baseUrl}/auth/signin`) {
-  //     return Promise.resolve(`${baseUrl}/auth/signin`);
-  //   }
-  //   return Promise.resolve(url);
-  // },
 };
 
 const nextAuthOptions: NextAuthOptions = {

@@ -69,6 +69,7 @@ const Searchbar = forwardRef(function Searchbar(
         </label>
         <input
           ref={ref ?? input}
+          role="search"
           id={id}
           placeholder={placeholder}
           className={clsx(

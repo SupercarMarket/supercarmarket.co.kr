@@ -1,5 +1,6 @@
 import {
   Alert,
+  applyMediaQuery,
   Button,
   Form,
   FormFiles,
@@ -16,17 +17,28 @@ import { css } from 'styled-components';
 import type { Editor } from '@toast-ui/react-editor';
 import type { CommunityTemporaryStorageDto } from '@supercarmarket/types/community';
 import ModalContext from 'feature/modalContext';
-import TemporaryStorageModal from 'components/common/modal/temporaryStorageModal';
 import { FormProvider, useForm } from 'react-hook-form';
-import { FormState } from 'constants/community';
-import { ErrorCode, fetcher } from '@supercarmarket/lib';
-import { useSession } from 'next-auth/react';
+import { ErrorCode, HttpError } from '@supercarmarket/lib';
 import {
   formatter,
   getCategoryPathname,
   reverseFormatter,
 } from '../communityCard/communityCard';
 import dayjs from 'dayjs';
+import { Modal } from 'components/common/modal';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { getTemporaryStorage, QUERY_KEYS } from 'http/server/community';
+import { useDebounce } from '@supercarmarket/hooks';
+import { authRequest } from 'http/core';
+import { ServerResponse } from '@supercarmarket/types/base';
+
+interface FormState {
+  files: File[];
+  category: string;
+  title: string;
+  temporaryStorage?: boolean;
+  tempId?: string;
+}
 
 interface CommunityFormProps {
   id?: string;
@@ -43,18 +55,20 @@ const CommunityEditor = dynamic(() => import('./communityEditor'), {
 });
 
 const CommunityForm = (props: CommunityFormProps) => {
-  const { id, initialData } = props;
+  const { id, initialData: _initialData } = props;
 
-  const { back, replace } = useRouter();
-  const session = useSession();
+  const { back, push } = useRouter();
+  const [initialData, setInitialData] =
+    React.useState<CommunityTemporaryStorageDto>(_initialData);
   const [category, setCategory] = React.useState('');
   const [isInitialize, setIsInitialize] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
   const [success, setSuccess] = React.useState<string | null>(null);
   const editor = React.useRef<InstanceType<typeof Editor>>(null);
   const [images, setImages] = React.useState<CommunityFormEditorImages[]>([]);
-  const { onClick, onClose, onOpen } = React.useContext(ModalContext);
+  const { onClose, onOpen } = React.useContext(ModalContext);
   const methods = useForm<FormState>();
+  const queryClient = useQueryClient();
   const { formState } = methods;
 
   const handleCancel = React.useCallback(() => {
@@ -66,31 +80,28 @@ const CommunityForm = (props: CommunityFormProps) => {
     e.returnValue = '';
   }, []);
 
-  const handleInitialize = React.useCallback(() => {
-    setIsInitialize(true);
-    const instance = editor.current?.getInstance();
+  const handleInitialize = React.useCallback(
+    (data: CommunityTemporaryStorageDto) => {
+      setIsInitialize(true);
+      const instance = editor.current?.getInstance();
 
-    if (instance && initialData.contents)
-      instance.setHTML(initialData.contents);
+      if (instance && data.contents) instance.setHTML(data.contents);
 
-    if (initialData.images?.length > 0)
-      setImages(() =>
-        initialData.images.map((i) => ({
-          file: new File([i], i),
-          local: i,
-        }))
-      );
+      if (data.images?.length > 0)
+        setImages(() =>
+          data.images.map((i) => ({
+            file: new File([i], i),
+            local: i,
+          }))
+        );
 
-    methods.setValue('title', initialData.title);
+      methods.setValue('title', data.title);
 
-    onClose();
-  }, [
-    initialData.contents,
-    initialData.images,
-    initialData.title,
-    methods,
-    onClose,
-  ]);
+      setInitialData(data);
+      onClose();
+    },
+    [methods, onClose]
+  );
 
   const handleInitEditor = React.useCallback(() => {
     const instance = editor.current?.getInstance();
@@ -110,7 +121,8 @@ const CommunityForm = (props: CommunityFormProps) => {
   }, [id, initialData.contents]);
 
   const handleEditorHtml = React.useCallback(async () => {
-    const html = editor.current?.getInstance()?.getHTML();
+    const instance = editor.current?.getInstance();
+    const html = instance?.getHTML();
 
     if (!html) {
       throw 'editor contents is require';
@@ -121,6 +133,14 @@ const CommunityForm = (props: CommunityFormProps) => {
     const isImg = img.length > 0;
     const isTempImg = initialData.images && initialData.images.length > 0;
     const thumbnail = img[0]?.src || null;
+    const isContents = Array.from(document.querySelectorAll('p')).some(
+      (element) => element.innerText
+    );
+
+    if (!isContents && !isImg) {
+      setError('본문에 내용을 작성해주세요.');
+      throw 'contents is require';
+    }
 
     let addImgSrcs = null;
     let deleteImgSrcs = null;
@@ -154,8 +174,6 @@ const CommunityForm = (props: CommunityFormProps) => {
     // * case 2-3 @임시저장 이미지가 존재하고, 내부 에디터에 이미지가 존재하지 않는 경우
 
     if (isTempImg && isInitialize && !isImg) {
-      console.log('check');
-
       deleteImgSrcs = initialData.images;
     }
 
@@ -185,10 +203,10 @@ const CommunityForm = (props: CommunityFormProps) => {
       const { files } = data;
 
       const isLibrary = initialData?.category === 'information' || null;
-      const isSelecteLibrary = category === '자료실';
+      const isSelecteLibrary = category === '차량 정보';
 
       let addFiles = null;
-      let deleteFilesSrcs = null;
+      let deleteFileSrcs: string[] = [];
 
       // * 애초에 카테고리가 자료실이 아닌경우와 자료실인 경우
       // * - 선택한 카테고리가 자료실인 경우와 아닌경우
@@ -216,13 +234,13 @@ const CommunityForm = (props: CommunityFormProps) => {
         const currentTempFiles = initialData?.files || [];
 
         if (isLibrary && !isSelecteLibrary) {
-          deleteFilesSrcs = initialData.files.map((file) => file.url);
+          deleteFileSrcs = initialData.files.map((file) => file.url);
         }
 
         // * case 2-2
         // * 임시저장 카테고리가 자료실이고 선택한 카테고리가 자료실인 경우
         if (isLibrary && isSelecteLibrary) {
-          deleteFilesSrcs = currentTempFiles
+          deleteFileSrcs = currentTempFiles
             .filter((file) => !files.some((f) => f.name === file.name))
             .map((file) => file.url);
           addFiles = files.filter(
@@ -233,140 +251,165 @@ const CommunityForm = (props: CommunityFormProps) => {
 
       return {
         addFiles,
-        deleteFilesSrcs,
+        deleteFileSrcs,
       };
     },
     [category, initialData?.category, initialData.files, isInitialize]
   );
 
-  const handleRequire = React.useCallback(
-    async (data: FormState) => {
-      const { title, category } = data;
+  const handleRequire = React.useCallback(async (data: FormState) => {
+    setSuccess(null);
+    setError(null);
 
-      if (!title) {
-        methods.setError('title', { message: '제목을 입력해주세요.' });
-        throw 'title is require';
-      }
+    const { title, category } = data;
 
-      if (!category) {
-        methods.setError('title', { message: '카테고리를 입력해주세요.' });
-        throw 'category is require';
-      }
+    if (!title) {
+      setError('제목을 입력해주세요.');
+      throw 'title is require';
+    }
+
+    if (!category) {
+      setError('카테고리를 선택해주세요.');
+      throw 'category is require';
+    }
+  }, []);
+
+  const uploadMutation = useMutation({
+    mutationFn: async (data: FormState) => {
+      const { title, category, temporaryStorage, tempId } = data;
+      const {
+        addImgFiles,
+        addImgSrcs,
+        deleteImgSrcs,
+        thumbnail,
+        tempId: _tempId,
+        html,
+      } = await handleEditorHtml();
+      const { addFiles, deleteFileSrcs } = await handleFiles(data);
+
+      const formData = new FormData();
+
+      formData.append(
+        'requestDto',
+        new Blob(
+          [
+            JSON.stringify({
+              title,
+              category: reverseFormatter(category),
+              addImgSrcs,
+              thumbnail,
+              tempId: isInitialize ? tempId || _tempId : null,
+              deleteImgSrcs,
+              deleteFileSrcs,
+              contents: html,
+            }),
+          ],
+          { type: 'application/json' }
+        )
+      );
+
+      if (addImgFiles?.length)
+        addImgFiles.forEach((file) => formData.append('images', file));
+      if (addFiles?.length)
+        addFiles.forEach((file) => formData.append('files', file));
+
+      const options = id ? { method: 'PATCH' } : { method: 'POST' };
+
+      const url = temporaryStorage ? `/community-temp` : '/community';
+
+      const result = await authRequest<
+        ServerResponse<{ id: string; tempId: string }>,
+        ServerResponse<{ id: string; tempId: string }>
+      >(id ? `${url}/${id}` : url, {
+        ...options,
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        data: formData,
+      }).catch((error) => {
+        setError(error.message || ErrorCode[error.status]);
+      });
+
+      if (!result) throw new HttpError({ statusCode: 500 });
+
+      return {
+        id: result.data?.id,
+        tempId: result.data?.tempId,
+        temporaryStorage,
+      };
     },
-    [methods]
-  );
+    onSuccess: async ({ id: _id, temporaryStorage }) => {
+      if (temporaryStorage) {
+        setSuccess(dayjs(new Date()).format('HH:mm'));
+        await getTemporaryStorage().then((res) => handleInitialize(res.data));
+        return;
+      }
 
-  const handleSubmit = React.useCallback(
-    async (data: FormState) =>
-      handleRequire(data).then(async () => {
-        setError(null);
-        const { title, category, temporaryStorage } = data;
-        const {
-          addImgFiles,
-          addImgSrcs,
-          deleteImgSrcs,
-          thumbnail,
-          tempId,
-          html,
-        } = await handleEditorHtml();
-        const { addFiles, deleteFilesSrcs } = await handleFiles(data);
-
-        const formData = new FormData();
-
-        formData.append(
-          'requestDto',
-          new Blob(
-            [
-              JSON.stringify({
-                title,
-                category: reverseFormatter(category),
-                addImgSrcs,
-                thumbnail,
-                tempId,
-                deleteImgSrcs,
-                deleteFilesSrcs,
-                contents: html,
-              }),
-            ],
-            { type: 'application/json' }
-          )
-        );
-
-        if (addImgFiles?.length)
-          addImgFiles.forEach((file) => formData.append('images', file));
-        if (addFiles?.length)
-          addFiles.forEach((file) => formData.append('files', file));
-
-        const options = id
-          ? { method: 'PATCH', params: id }
-          : { method: 'POST' };
-
-        const url = temporaryStorage
-          ? '/server/supercar/v1/community-temp'
-          : '/server/supercar/v1/community';
-
-        const response = await fetcher(url, {
-          ...options,
-          headers: {
-            ACCESS_TOKEN: session.data?.accessToken || '',
-          },
-          body: formData,
+      if (id)
+        queryClient.refetchQueries({
+          queryKey: [
+            ...QUERY_KEYS.id(id),
+            {
+              subject: category === 'information' ? 'library' : 'paparazzi',
+              category: reverseFormatter(category),
+            },
+          ],
         });
 
-        const result = await response.json();
+      queryClient.refetchQueries({
+        queryKey: [
+          ...QUERY_KEYS.community(),
+          {
+            category: reverseFormatter(category),
+            page: 0,
+            filter: undefined,
+            searchType: undefined,
+            keyword: undefined,
+          },
+        ],
+      });
 
-        if (!response.ok) {
-          setError(result.message || ErrorCode[response.status]);
-          return;
-        }
+      push(`${getCategoryPathname(reverseFormatter(category))}/${_id}`);
+    },
+  });
 
-        if (temporaryStorage) return;
+  const debouncedUploadMutation = useDebounce((data: FormState) => {
+    uploadMutation.mutate(data);
+  }, 500);
 
-        replace(
-          `${getCategoryPathname(reverseFormatter(category))}/${result.data.id}`
-        );
-      }),
-    [
-      id,
-      session.data?.accessToken,
-      handleEditorHtml,
-      handleFiles,
-      handleRequire,
-      replace,
-    ]
+  const handleTemporaryStorage = React.useCallback(
+    async (data: FormState) => {
+      debouncedUploadMutation(data);
+    },
+    [debouncedUploadMutation]
   );
-
-  const handleTemporaryStorage = React.useCallback(async () => {
-    setSuccess(null);
-
-    const data = {
-      title: methods.getValues('title'),
-      category: methods.getValues('category'),
-      files: methods.getValues('files'),
-      temporaryStorage: true,
-    };
-
-    await handleSubmit(data).then(() => {
-      setSuccess(dayjs(new Date()).format('HH:mm'));
-    });
-  }, [handleSubmit, methods]);
 
   // * 임시저장 데이터 불러오기
   React.useEffect(() => {
-    if (initialData?.tempId && !id)
+    if (_initialData.tempId && !id)
       onOpen(
-        <TemporaryStorageModal
-          onClick={onClick}
-          onClose={onClose}
-          onOpen={onOpen}
-          onInit={handleInitialize}
+        <Modal
+          title="임시저장된 글이 있습니다. 불러오시겠습니까?"
+          description={`취소를 누르면 임시저장 글이 삭제되고\n새 글을 작성할 수 있습니다.`}
+          closeText="취소"
+          clickText="불러오기"
+          onCancel={() => {
+            onClose();
+          }}
+          onClick={() => {
+            onClose();
+            handleInitialize(_initialData);
+          }}
+          onClose={() => {
+            onClose();
+          }}
         />
       );
-  }, [handleInitialize, onClick, onClose, onOpen, initialData, id]);
+  }, []);
 
   React.useEffect(() => {
-    if (id) handleInitialize();
-  }, [handleInitialize, id]);
+    if (id) handleInitialize(_initialData);
+  }, []);
 
   React.useEffect(() => {
     (() => {
@@ -382,12 +425,24 @@ const CommunityForm = (props: CommunityFormProps) => {
     <FormProvider {...methods}>
       <Form
         encType="multipart/form-data"
-        onSubmit={methods.handleSubmit(handleSubmit)}
+        onSubmit={methods.handleSubmit((data) =>
+          handleRequire(data).then(() => {
+            debouncedUploadMutation({
+              ...data,
+              tempId: uploadMutation.data?.tempId,
+            });
+          })
+        )}
         css={css`
           display: flex;
           flex-direction: column;
           gap: 24px;
           z-index: 0;
+          ${applyMediaQuery('mobile')} {
+            .toastui-editor-popup {
+              margin-left: 0 !important;
+            }
+          }
         `}
       >
         <FormLabel name="category" label="카테고리" bold>
@@ -395,7 +450,7 @@ const CommunityForm = (props: CommunityFormProps) => {
             name="category"
             option={{
               name: 'community',
-              values: ['제보', '포토갤러리', '내 차 자랑', '자료실'],
+              values: ['제보', '포토갤러리', '내 차 자랑', '차량 정보'],
             }}
             defaultValues={
               isInitialize && initialData?.category
@@ -406,6 +461,7 @@ const CommunityForm = (props: CommunityFormProps) => {
               setCategory(value);
               methods.setValue('category', value);
             }}
+            disabled={!!id}
           />
         </FormLabel>
         <FormLabel name="title" label="제목" bold>
@@ -417,12 +473,12 @@ const CommunityForm = (props: CommunityFormProps) => {
             {...methods.register('title')}
           />
         </FormLabel>
-        {category === '자료실' && (
+        {category === '차량 정보' && (
           <FormLabel name="files" label="첨부파일" bold>
             <FormFiles
               name="files"
               defaultValues={
-                initialData.tempId &&
+                isInitialize &&
                 initialData.category === 'information' &&
                 initialData.files.length > 0
                   ? initialData.files.map(
@@ -466,17 +522,33 @@ const CommunityForm = (props: CommunityFormProps) => {
               <Button
                 variant="Line"
                 type="button"
-                onClick={handleTemporaryStorage}
+                onClick={() => {
+                  const data = {
+                    title: methods.getValues('title'),
+                    category: methods.getValues('category'),
+                    files: methods.getValues('files'),
+                    temporaryStorage: true,
+                    tempId: uploadMutation.data?.tempId,
+                  };
+                  handleRequire(data).then(() => {
+                    handleTemporaryStorage(data);
+                  });
+                }}
+                disabled={uploadMutation.isLoading}
               >
                 임시저장
               </Button>
             )}
-            <Button variant="Primary" type="submit">
+            <Button
+              variant="Primary"
+              type="submit"
+              disabled={uploadMutation.isLoading}
+            >
               {id
-                ? formState.isSubmitting
+                ? uploadMutation.isLoading
                   ? '수정 중..'
                   : '수정 완료'
-                : formState.isSubmitting
+                : uploadMutation.isLoading
                 ? '작성 중..'
                 : '작성 완료'}
             </Button>

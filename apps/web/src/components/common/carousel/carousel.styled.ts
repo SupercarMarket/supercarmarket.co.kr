@@ -1,4 +1,5 @@
-'use client';
+import { applyMediaQuery } from '@supercarmarket/ui';
+('use client');
 
 import styled, { css } from 'styled-components';
 import { popping } from 'styles/keyframes';
@@ -21,6 +22,14 @@ const CarouselArea = styled.div`
   height: 90px;
   overflow: hidden;
   position: relative;
+  ${applyMediaQuery('mobile')} {
+    height: 60px;
+    overflow-x: scroll;
+
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  }
 `;
 
 const CarouselBox = styled.div<{ page: number }>`
@@ -61,6 +70,10 @@ const ArrowButton = styled.button<ArrowButtonProps>`
       fill: ${({ theme }) => theme.color['greyScale-4']};
     }
   }
+
+  ${applyMediaQuery('mobile')} {
+    display: none;
+  }
 `;
 
 const CarouselImageWrapper = styled.div`
@@ -72,6 +85,11 @@ const CarouselImageWrapper = styled.div`
 
   :hover {
     filter: brightness(70%);
+  }
+
+  ${applyMediaQuery('mobile')} {
+    width: 80px;
+    height: 60px;
   }
 `;
 

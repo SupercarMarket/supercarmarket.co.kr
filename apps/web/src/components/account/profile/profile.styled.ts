@@ -1,3 +1,4 @@
+import { applyMediaQuery } from '@supercarmarket/ui';
 import { account } from 'components/layout/layout.styled';
 import { css } from 'styled-components';
 
@@ -14,6 +15,12 @@ const wrapper = css`
   display: flex;
   align-items: flex-end;
   gap: 50px;
+  ${applyMediaQuery('mobile')} {
+    flex-direction: column;
+    padding-top: 168px;
+    align-items: unset;
+    gap: 0;
+  }
 `;
 
 const nickname = css`

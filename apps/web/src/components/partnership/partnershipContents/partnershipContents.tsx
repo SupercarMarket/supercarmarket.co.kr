@@ -12,7 +12,7 @@ const PartnershipContents = (props: PartnershipContentsProps) => {
   return (
     <Container width="100%">
       <PartnershipDetail id={id} />
-      <PartnershipList category={category} />
+      <PartnershipList category={category} pagination tab />
     </Container>
   );
 };

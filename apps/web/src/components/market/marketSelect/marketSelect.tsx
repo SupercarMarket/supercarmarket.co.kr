@@ -1,9 +1,10 @@
 import Select from 'components/common/select';
 import { useRouter } from 'next/router';
 import { SelectType } from '@supercarmarket/types/market';
-import { makeSelectQuery } from 'utils/market/marketFilter';
+import { makeSelectQuery } from 'utils/market/marketQuery';
 
-import * as Styled from './marketSelect.styled';
+import { Wrapper } from '@supercarmarket/ui';
+import { css } from 'styled-components';
 
 interface SelectWrapperProps {
   options1: SelectType;
@@ -19,20 +20,33 @@ const MarketSelect = ({ options1, options2 }: SelectWrapperProps) => {
 
     if (+op1 > +op2) {
       const url = makeSelectQuery(query, options1.optionSet[0].dataName, op2);
-      push(`/market/${query.category}?${url}`, undefined, { scroll: false });
+      push(`/market?${url}`, undefined, { scroll: false });
     }
   }
 
   return (
-    <Styled.SelectBox>
+    <Wrapper
+      css={css`
+        display: flex;
+        align-items: center;
+        width: 100%;
+      `}
+    >
       <Select options={options1} />
       {options2 && (
         <>
-          <Styled.Hyphen />
+          <Wrapper.Item
+            css={css`
+              width: 16px;
+              height: 1px;
+              margin: 0 8px;
+              background: ${({ theme }) => theme.color.black};
+            `}
+          />
           <Select options={options2} />
         </>
       )}
-    </Styled.SelectBox>
+    </Wrapper>
   );
 };
 

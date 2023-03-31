@@ -1,26 +1,33 @@
-import { Category, Container, Wrapper } from '@supercarmarket/ui';
-import { BaseApiHandlerResponse, serverFetcher } from '@supercarmarket/lib';
-import type { Profile as ProfileType } from '@supercarmarket/types/account';
+import { applyMediaQuery, Container, Wrapper } from '@supercarmarket/ui';
 import type { Params, NextPageWithLayout } from '@supercarmarket/types/base';
-import { AccountCategory, Profile } from 'components/account';
+import { AccountCategoryList, Profile } from 'components/account';
 import AccountLayout from 'components/layout/accountLayout';
 import * as style from 'components/layout/layout.styled';
-import type { AccountTab } from 'constants/account';
-import account from 'constants/account';
 import type {
   GetServerSideProps,
   GetServerSidePropsContext,
   InferGetServerSidePropsType,
 } from 'next';
 import type { Session } from 'next-auth';
-import { getSession } from 'utils/api/auth/user';
-import { QueryErrorResetBoundary } from '@tanstack/react-query';
+import { getSession } from 'http/server/auth/user';
+import {
+  dehydrate,
+  QueryClient,
+  QueryErrorResetBoundary,
+} from '@tanstack/react-query';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from 'components/fallback';
 import HeadSeo from 'components/common/headSeo/headSeo';
+import { prefetchAccount, QUERY_KEYS } from 'http/server/account';
+import { css } from 'styled-components';
+import {
+  accountCategory,
+  links,
+  type AccountCategory,
+} from 'constants/link/account';
 
 type AccountParams = Params & {
-  tab: AccountTab | null;
+  tab: AccountCategory | null;
 };
 
 const Account: NextPageWithLayout = ({
@@ -44,21 +51,33 @@ const Account: NextPageWithLayout = ({
                 onReset={reset}
                 fallbackRender={(props) => <ErrorFallback {...props} />}
               >
-                <Profile isMyAccountPage={isMyAccountPage} profile={profile} />
+                <Profile
+                  isMyAccountPage={isMyAccountPage}
+                  sub={sub}
+                  profile={profile}
+                />
               </ErrorBoundary>
               <Wrapper css={style.account}>
-                <Category links={accountRoutes} category={tab} />
                 <ErrorBoundary
                   onReset={reset}
                   fallbackRender={(props) => (
                     <ErrorFallback {...props} margin="100px 0" />
                   )}
                 >
-                  <AccountCategory
-                    sub={sub}
-                    tab={tab}
-                    isMyAccountPage={isMyAccountPage}
-                  />
+                  <Wrapper
+                    css={css`
+                      ${applyMediaQuery('mobile')} {
+                        padding: 0 16px;
+                      }
+                    `}
+                  >
+                    <AccountCategoryList
+                      sub={sub}
+                      tab={tab}
+                      isMyAccountPage={isMyAccountPage}
+                      accountRoutes={accountRoutes}
+                    />
+                  </Wrapper>
                 </ErrorBoundary>
               </Wrapper>
             </>
@@ -79,42 +98,37 @@ export const getUserPageProps = async (
   const { sub, tab } = query as AccountParams;
 
   const isMyAccountPage = session && session.sub == sub;
-  const isCorrectTab = tab && account.accountTab.includes(tab);
-  const accountRoutes = isMyAccountPage
-    ? account.accountRoutes.myAccount(sub)
-    : account.accountRoutes.someoneAccount(sub);
-  const header = session
-    ? {
-        ACCESS_TOKEN: session.accessToken,
-      }
-    : undefined;
+  const isCorrectTab = tab && accountCategory.includes(tab);
 
-  const user: BaseApiHandlerResponse<{ data: ProfileType }> =
-    await serverFetcher(
-      `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/userpage`,
-      {
-        method: 'GET',
-        headers: header,
-        query: {
-          id: sub,
-        },
-      }
-    );
+  const queryClient = new QueryClient();
 
-  if (!user.ok) {
+  const user = await prefetchAccount({ id: sub, token: session?.accessToken });
+
+  if (!user) {
     return {
       notFound: true,
     };
   }
 
+  const accountRoutes = isMyAccountPage
+    ? user.data.role == 'user'
+      ? links.myAccount(sub)
+      : links.dealerAccount(sub)
+    : links.someoneAccount(sub);
+
+  await queryClient.prefetchQuery(QUERY_KEYS.id(sub), async () => {
+    return user;
+  });
+
   /**
    * 타유저인 경우 작성글과 댓글단 글만 볼 수 있다.
+   * 딜러가 아닌 경우 제한 처리
    * 이에 따라 쿼리 접근 제한 처리
    */
   if (isMyAccountPage && !isCorrectTab) {
     return {
       redirect: {
-        destination: `/account/${sub}?tab=${account.accountTab[0]}`,
+        destination: `/account/${sub}?tab=${accountCategory[1]}`,
         permanent: false,
       },
     };
@@ -125,11 +139,21 @@ export const getUserPageProps = async (
   ) {
     return {
       redirect: {
-        destination: `/account/${sub}?tab=${account.accountTab[3]}`,
+        destination: `/account/${sub}?tab=${accountCategory[4]}`,
         permanent: false,
       },
     };
   }
+
+  if (user.data.role !== 'dealer' && tab === 'dealer-product') {
+    return {
+      redirect: {
+        destination: `/account/${sub}?tab=${accountCategory[1]}`,
+        permanent: false,
+      },
+    };
+  }
+
   if ((isMyAccountPage && isCorrectTab) || (!isMyAccountPage && isCorrectTab))
     return {
       props: {
@@ -138,6 +162,7 @@ export const getUserPageProps = async (
         tab,
         sub,
         profile: user.data,
+        dehydratedState: dehydrate(queryClient),
       },
     };
 

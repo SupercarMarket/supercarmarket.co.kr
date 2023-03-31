@@ -1,4 +1,5 @@
 import {
+  Alert,
   applyMediaQuery,
   Container,
   Pagination,
@@ -6,28 +7,41 @@ import {
   Wrapper,
 } from '@supercarmarket/ui';
 import { useUrlQuery } from '@supercarmarket/hooks';
-import useMagazine from 'hooks/queries/useMagazine';
-
-import MagazineCard from './magazineCard';
+import { useRouter } from 'next/navigation';
+import MagazineCard from '../magazineCard';
 import { css } from 'styled-components';
+import { useMagazine } from 'http/server/magazine';
+import MagazineBanner from '../magazineBanner';
 
 const MagazineList = () => {
-  const { page } = useUrlQuery();
-  const { data: magazine } = useMagazine(page);
+  const { page = 0, keyword } = useUrlQuery();
+  const { data: magazine } = useMagazine({ page, keyword });
+  const { push } = useRouter();
 
   return (
     <Container display="flex" flexDirection="column" alignItems="center">
+      <MagazineBanner initialData={magazine} />
       <Wrapper
         css={css`
+          width: 880px;
           margin-top: 80px;
           ${applyMediaQuery('mobile')} {
+            width: 100%;
             margin-top: 32px;
           }
         `}
       >
-        <Searchbar width="343px" variant="Line" border="normal" />
+        <Searchbar
+          variant="Line"
+          border="normal"
+          placeholder="검색어를 입력해주세요."
+          handleClick={(query) => {
+            if (query.length <= 1) return;
+            push(`/magazine?keyword=${query}`);
+          }}
+        />
       </Wrapper>
-      {magazine && (
+      {magazine && magazine.data.length > 0 ? (
         <>
           <Wrapper
             css={css`
@@ -56,6 +70,18 @@ const MagazineList = () => {
             totalPages={magazine.totalPages}
           />
         </>
+      ) : (
+        <Wrapper
+          css={css`
+            width: 100%;
+            margin-top: 80px;
+            ${applyMediaQuery('mobile')} {
+              margin-top: 32px;
+            }
+          `}
+        >
+          <Alert severity="info" title="매거진이 존재하지 않습니다." />
+        </Wrapper>
       )}
     </Container>
   );

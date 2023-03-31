@@ -1,6 +1,7 @@
-import type { Links } from '@supercarmarket/types/base';
 import { Container, Typography, Wrapper } from '@supercarmarket/ui';
 import clsx from 'clsx';
+import { type Links } from 'constants/link';
+import { links } from 'constants/link/navbar';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { memo, useState } from 'react';
@@ -8,17 +9,14 @@ import { css } from 'styled-components';
 
 import NavbarItem from './navbarItem';
 
-interface NavbarProps {
-  navlinks: Links[];
-}
-
 const NavLink = memo(function NavLink({
   title,
   children: subMenu,
-  href,
+  href: _href,
 }: Links) {
   const [active, setActive] = useState<boolean>(false);
   const { pathname } = useRouter();
+  const href = _href.toString();
   return (
     <div
       className={clsx('navlink')}
@@ -29,9 +27,9 @@ const NavLink = memo(function NavLink({
         {title}
       </label>
       <button id={title} className={clsx('navlink-button')}>
-        {subMenu ? (
+        <Link href={'/' + href}>
           <Typography
-            as="a"
+            as="span"
             fontSize="header-16"
             fontWeight="bold"
             lineHeight="120%"
@@ -39,26 +37,14 @@ const NavLink = memo(function NavLink({
           >
             {title}
           </Typography>
-        ) : (
-          <Link href={'/' + href}>
-            <Typography
-              as="span"
-              fontSize="header-16"
-              fontWeight="bold"
-              lineHeight="120%"
-              color="black"
-            >
-              {title}
-            </Typography>
-          </Link>
-        )}
+        </Link>
       </button>
       <Wrapper.Item
         data-active={pathname.includes(href)}
         css={css`
           display: none;
-          ${pathname.includes(href) && 'display: block'}
-          width: 255px;
+          ${pathname.includes(href) && 'display: block;'}
+          width: 240px;
           height: 3px;
           position: absolute;
           left: 50%;
@@ -83,9 +69,11 @@ const NavLink = memo(function NavLink({
   );
 });
 
-const Navbar = ({ navlinks }: NavbarProps) => {
+const Navbar = () => {
   return (
     <Container
+      as="nav"
+      role="navigation"
       className="navbar"
       width="100%"
       position="relative"
@@ -93,7 +81,7 @@ const Navbar = ({ navlinks }: NavbarProps) => {
       alignItems="center"
       justifyContent="space-around"
     >
-      {navlinks.map((navlink) => (
+      {links.map((navlink) => (
         <NavLink key={navlink.title} {...navlink} />
       ))}
     </Container>

@@ -34,6 +34,7 @@ const FormLabel = (props: FormLabelProps) => {
     <Wrapper
       className={className}
       css={css`
+        width: 100%;
         display: flex;
         flex-direction: ${flexDirection};
         gap: ${gap};
@@ -47,10 +48,8 @@ const FormLabel = (props: FormLabelProps) => {
     >
       <Wrapper.Item
         css={css`
-          padding-top: ${paddingTop};
-          ${applyMediaQuery('mobile')} {
-            padding-top: 0;
-          }
+          display: flex;
+          align-items: center;
         `}
       >
         <Typography

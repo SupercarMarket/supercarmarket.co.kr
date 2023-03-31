@@ -17,12 +17,17 @@ import { useMedia } from '@supercarmarket/hooks';
 import ViewIcon from '../../../assets/svg/eye.svg';
 import LikeIcon from '../../../assets/svg/thumb-up.svg';
 import Avatar from 'components/common/avatar';
+import useBase64 from 'hooks/queries/useBase64';
+import Skeleton from 'react-loading-skeleton';
+import { truncateOnWord } from '@supercarmarket/lib';
 
 interface CommunityCardProps extends WithBlurredImage<CommunityDto> {
   variant: string;
 }
 
-type CommunityCardChildrenProps = Omit<CommunityCardProps, 'variant'>;
+type CommunityCardChildrenProps = Omit<CommunityCardProps, 'variant'> & {
+  base64?: string;
+};
 
 const defualtSrc =
   'https://user-images.githubusercontent.com/66871265/210489106-611e72ee-94f8-49e8-9faa-60f9f20ae50f.png';
@@ -47,12 +52,26 @@ export const getCategoryPathname = (category: string) => {
 };
 
 const CommunityCard = ({ variant, ...rest }: CommunityCardProps) => {
+  const { data: base64 } = useBase64(
+    rest.imgSrc || defualtSrc,
+    {
+      src: rest.imgSrc || defualtSrc,
+      category: 'community',
+    },
+    {
+      staleTime: 1000 * 60 * 60,
+      cacheTime: 1000 * 60 * 60,
+    }
+  );
+
   return (
     <>
       {
         {
-          column: <CommunityCardColumn {...rest} />,
-          row: <CommunityCardRow {...rest} />,
+          column: (
+            <CommunityCardColumn {...rest} base64={base64?.data.base64} />
+          ),
+          row: <CommunityCardRow {...rest} base64={base64?.data.base64} />,
         }[variant]
       }
     </>
@@ -72,8 +91,13 @@ const CommunityCardRow = (props: CommunityCardChildrenProps) => {
     view,
     created,
     rate,
+    base64,
   } = props;
   const { isMobile } = useMedia({ deviceQuery });
+
+  const isToday =
+    dayjs(new Date()).format('YYYY-MM-DD') ===
+    dayjs(created).format('YYYY-MM-DD');
 
   return (
     <Link
@@ -97,19 +121,33 @@ const CommunityCardRow = (props: CommunityCardChildrenProps) => {
             display: flex;
             align-items: center;
             gap: 30px;
+            .react-loading-skeleton {
+              width: 196px;
+              height: 124px;
+              border-radius: 4px;
+            }
             ${applyMediaQuery('mobile')} {
               width: 64px;
               flex: unset;
+              .react-loading-skeleton {
+                width: 64px;
+                height: 64px;
+                border-radius: 4px;
+              }
             }
           `}
         >
-          <Image
-            src={imgSrc || defualtSrc}
-            alt="thumbnail"
-            width={isMobile ? 64 : 196}
-            height={isMobile ? 64 : 124}
-            style={{ borderRadius: '4px' }}
-          />
+          {base64 ? (
+            <Image
+              src={imgSrc || defualtSrc}
+              alt="thumbnail"
+              width={isMobile ? 64 : 196}
+              height={isMobile ? 64 : 124}
+              style={{ borderRadius: '4px' }}
+            />
+          ) : (
+            <Skeleton />
+          )}
           <Wrapper.Item
             css={css`
               display: flex;
@@ -151,16 +189,16 @@ const CommunityCardRow = (props: CommunityCardChildrenProps) => {
                 flex: '1',
               }}
             >
-              {title}
-            </Typography>
-            <Typography
-              as="span"
-              fontSize="body-16"
-              fontWeight="regular"
-              color="system-1"
-              lineHeight="150%"
-            >
-              ({comments})
+              {truncateOnWord(title, 50)}{' '}
+              <Typography
+                as="b"
+                fontSize="body-16"
+                fontWeight="regular"
+                color="system-1"
+                lineHeight="150%"
+              >
+                ({comments})
+              </Typography>
             </Typography>
           </Wrapper.Item>
         </Wrapper.Left>
@@ -215,7 +253,9 @@ const CommunityCardRow = (props: CommunityCardChildrenProps) => {
               color="greyScale-6"
               lineHeight="150%"
             >
-              {dayjs(created).format('hh:ss')}
+              {isToday
+                ? dayjs(created).format('HH:mm')
+                : dayjs(created).format('YYYY-MM-DD')}
             </Typography>
             <Typography
               fontSize="body-14"
@@ -329,7 +369,7 @@ const CommunityCardRow = (props: CommunityCardChildrenProps) => {
 };
 
 const CommunityCardColumn = (props: CommunityCardChildrenProps) => {
-  const { id, imgSrc, base64, category, profileSrc, nickname, title, rate } =
+  const { id, imgSrc, base64, category, nickname, title, rate, comments } =
     props;
 
   return (
@@ -344,22 +384,38 @@ const CommunityCardColumn = (props: CommunityCardChildrenProps) => {
             position: relative;
             width: 285px;
             height: 180px;
+            .react-loading-skeleton {
+              width: 285px;
+              height: 180px;
+              border-radius: 4px;
+            }
             ${applyMediaQuery('mobile')} {
               width: 167.5px;
               height: 101px;
+              .react-loading-skeleton {
+                width: 167.5px;
+                height: 101px;
+              }
             }
           `}
         >
-          <Image
-            src={imgSrc || defualtSrc}
-            alt="thumbnail"
-            fill
-            placeholder={base64 ? 'blur' : undefined}
-            blurDataURL={base64 ? base64 : undefined}
-            style={{
-              borderRadius: '4px',
-            }}
-          />
+          {base64 ? (
+            <Image
+              src={imgSrc || defualtSrc}
+              alt="thumbnail"
+              fill
+              placeholder="blur"
+              blurDataURL={base64}
+              style={{
+                borderRadius: '4px',
+              }}
+              sizes={`${applyMediaQuery('desktop')} 285px, ${applyMediaQuery(
+                'mobile'
+              )} 167.5px`}
+            />
+          ) : (
+            <Skeleton />
+          )}
         </Wrapper.Item>
         <Wrapper.Item
           css={css`
@@ -390,14 +446,19 @@ const CommunityCardColumn = (props: CommunityCardChildrenProps) => {
             fontWeight="bold"
             color="greyScale-6"
           >
-            {title}
+            {truncateOnWord(title, 50)}{' '}
+            <Typography
+              as="span"
+              fontSize="header-16"
+              fontWeight="medium"
+              color="system-1"
+              style={{
+                fontFamily: 'var(--font-inter)',
+              }}
+            >
+              ({comments})
+            </Typography>
           </Typography>
-          <Typography
-            as="h2"
-            fontSize="header-16"
-            fontWeight="bold"
-            color="system-1"
-          />
         </Wrapper>
       </Container>
     </Link>

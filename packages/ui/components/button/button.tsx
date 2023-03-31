@@ -42,6 +42,7 @@ const Button = forwardRef(function Button(
     <>
       <button
         ref={ref}
+        role="button"
         type={type}
         id={buttonId}
         aria-pressed={active}
@@ -153,7 +154,7 @@ const Button = forwardRef(function Button(
         }
         @media (${deviceQuery.mobile}) {
           .button {
-            padding: 9.5px 16px;
+            padding: 8.5px 16px;
             font-size: 14px;
           }
         }

@@ -5,7 +5,9 @@ import Document, {
   Main,
   NextScript,
 } from 'next/document';
+import Script from 'next/script';
 import { ServerStyleSheet } from 'styled-components';
+import { inter, pretendard } from './_app';
 
 const APP_NAME = '슈퍼카마켓';
 const APP_DESCRIPTION = '안녕하세요 슈퍼카 마켓입니다.';
@@ -24,12 +26,7 @@ export default class MyDocument extends Document {
       const initialProps = await Document.getInitialProps(ctx);
       return {
         ...initialProps,
-        styles: (
-          <>
-            {initialProps.styles}
-            {sheet.getStyleElement()}
-          </>
-        ),
+        styles: [initialProps.styles, sheet.getStyleElement()],
       };
     } finally {
       sheet.seal();
@@ -37,7 +34,7 @@ export default class MyDocument extends Document {
   }
   render(): JSX.Element {
     return (
-      <Html lang="ko">
+      <Html lang="ko" className={pretendard.className}>
         <Head>
           {/* meta */}
           <meta name="application-name" content={APP_NAME} />
@@ -51,6 +48,15 @@ export default class MyDocument extends Document {
           <meta name="mobile-web-app-capable" content="yes" />
           <meta name="theme-color" content="#FFFFFF" />
           <meta name="msapplication-TileColor" content="#ffffff" />
+          {/* 서치 콘솔 */}
+          <meta
+            name="naver-site-verification"
+            content="64a0a231db514bb40ad2899c67e3595109ef6b93"
+          />
+          <meta
+            name="google-site-verification"
+            content="Py_afcHdJUFmCzWGXB-EmHItssuvcAhBGPpHjCoa05c"
+          />
           {/* favicon */}
           <link
             rel="apple-touch-icon"
@@ -77,8 +83,27 @@ export default class MyDocument extends Document {
           />
           <meta name="msapplication-TileColor" content="#da532c" />
           <meta name="theme-color" content="#ffffff" />
+          {/* 구글 애널리틱스 */}
+          <Script
+            strategy="afterInteractive"
+            src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}`}
+          />
+          <Script
+            id="gtag-init"
+            strategy="afterInteractive"
+            dangerouslySetInnerHTML={{
+              __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}', {
+              page_path: window.location.pathname,
+            });
+          `,
+            }}
+          />
         </Head>
-        <body>
+        <body className={pretendard.className}>
           <Main />
           <div id="__portal" />
           <NextScript />

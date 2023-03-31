@@ -3,14 +3,14 @@ import type { NextPageWithLayout } from '@supercarmarket/types/base';
 import { CommunityForm } from 'components/community';
 import layout from 'components/layout';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-import { getSession } from 'utils/api/auth/user';
-import { serverFetcher } from '@supercarmarket/lib';
+import { getSession } from 'http/server/auth/user';
 import { ModalProvider } from 'feature/modalContext';
-import { CommunityTemporaryStorageDto } from '@supercarmarket/types/community';
 import { QueryErrorResetBoundary } from '@tanstack/react-query';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from 'components/fallback';
 import { css } from 'styled-components';
+import Advertisement from 'components/common/advertisement';
+import { prefetchTemporaryStorage } from 'http/server/community';
 
 const Create: NextPageWithLayout = ({
   temporaryStorage,
@@ -27,6 +27,7 @@ const Create: NextPageWithLayout = ({
               padding: 0 16px;
             `}
           >
+            <Advertisement />
             <Title>게시글 작성</Title>
             <ErrorBoundary
               onReset={reset}
@@ -62,19 +63,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     };
   }
 
-  const temporaryStorage: CommunityTemporaryStorageDto | null =
-    await serverFetcher(
-      `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/community-temp`,
-      {
-        method: 'GET',
-        headers: {
-          ACCESS_TOKEN: `${session.accessToken}`,
-        },
-      }
-    ).then((res) => {
-      const { ok, status, ...rest } = res;
-      return rest.data;
-    });
+  const temporaryStorage = await prefetchTemporaryStorage(session.accessToken);
 
   return {
     props: {

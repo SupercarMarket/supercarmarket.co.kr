@@ -2,25 +2,22 @@ import { css } from 'styled-components';
 import { ErrorBoundary } from 'react-error-boundary';
 import { InferGetServerSidePropsType, NextPageContext } from 'next/types';
 import { NextPageWithLayout, Params } from '@supercarmarket/types/base';
-import {
-  applyMediaQuery,
-  Category,
-  Searchbar,
-  Wrapper,
-} from '@supercarmarket/ui';
+import { applyMediaQuery, Searchbar, Wrapper } from '@supercarmarket/ui';
 import {
   dehydrate,
   QueryClient,
   QueryErrorResetBoundary,
 } from '@tanstack/react-query';
 
-import queries from 'constants/queries';
 import layout from 'components/layout';
 import Banner from 'components/partnership/banner';
 import { ErrorFallback } from 'components/fallback';
 import { useSearchKeyword } from 'hooks/useSearchKeyword';
-import { PARTNERSHIP_LINKS } from 'constants/partnership';
 import PartnershipList from 'components/partnership/partnershipList';
+import PartnershipCategory from 'components/partnership/partnershipCategory';
+import Advertisement from 'components/common/advertisement';
+import { prefetchPartnership, QUERY_KEYS } from 'http/server/partnership';
+import { links } from 'constants/link/partnership';
 
 const PartnershipPage: NextPageWithLayout = ({
   category,
@@ -37,10 +34,11 @@ const PartnershipPage: NextPageWithLayout = ({
         }
       `}
     >
+      <Advertisement />
       <Banner
         title="제휴업체 등록을 원하시나요?"
         btnTitle="등록 문의하기"
-        url=""
+        url="/inquiry/partnership"
       />
       <Wrapper.Top
         css={css`
@@ -67,14 +65,14 @@ const PartnershipPage: NextPageWithLayout = ({
           />
         </Wrapper.Item>
       </Wrapper.Top>
-      <Category links={PARTNERSHIP_LINKS} category={category} />
+      <PartnershipCategory category={category} />
       <QueryErrorResetBoundary>
         {({ reset }) => (
           <ErrorBoundary
             onReset={reset}
             fallbackRender={(props) => <ErrorFallback {...props} />}
           >
-            <PartnershipList category={category} />
+            <PartnershipList category={category} pagination />
           </ErrorBoundary>
         )}
       </QueryErrorResetBoundary>
@@ -90,10 +88,7 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
 
   const queryClient = new QueryClient();
 
-  if (
-    !category ||
-    !PARTNERSHIP_LINKS.map((link) => link.category).includes(category)
-  )
+  if (!category || !links.map((link) => link.category).includes(category))
     return {
       redirect: {
         destination: '/partnership?category=all',
@@ -101,11 +96,19 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
       },
     };
 
-  queryClient.prefetchQuery(queries.partnership.lists([]), () =>
-    fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/partnership`, {
-      method: 'GET',
-    }).then((res) => res.json())
-  );
+  queryClient.prefetchQuery({
+    queryKey: [
+      QUERY_KEYS.partnership(),
+      {
+        page: 0,
+        size: '20',
+        region: '전국',
+        category: 'all',
+        keyword: '',
+      },
+    ],
+    queryFn: () => prefetchPartnership(),
+  });
 
   return {
     props: {

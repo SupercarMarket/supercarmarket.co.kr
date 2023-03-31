@@ -1,68 +1,3 @@
-import { Params } from '@supercarmarket/types/base';
-
-const PARTNERSHIP_LINKS = [
-  {
-    title: '전체',
-    href: {
-      pathname: '/partnership',
-      query: {
-        category: 'all',
-      },
-    },
-    category: 'all',
-  },
-  {
-    title: '자동차매장',
-    href: {
-      pathname: '/partnership',
-      query: {
-        category: 'dealer_shop',
-      },
-    },
-    category: 'dealer_shop',
-  },
-  {
-    title: '공업사',
-    href: {
-      pathname: '/partnership',
-      query: {
-        category: 'car_center',
-      },
-    },
-    category: 'car_center',
-  },
-  {
-    title: '디테일링',
-    href: {
-      pathname: '/partnership',
-      query: {
-        category: 'detailing',
-      },
-    },
-    category: 'detailing',
-  },
-  {
-    title: '도색',
-    href: {
-      pathname: '/partnership',
-      query: {
-        category: 'painting',
-      },
-    },
-    category: 'painting',
-  },
-  {
-    title: '기타',
-    href: {
-      pathname: '/partnership',
-      query: {
-        category: 'etc',
-      },
-    },
-    category: 'etc',
-  },
-];
-
 const PARTNERSHIP_TABLE_HEAD = [
   {
     title: '사진',
@@ -119,18 +54,4 @@ const PARTNERSHIP_FILTER_OPTIONS = {
   ],
 };
 
-const PARTNERSHIP_API_CATEGORY_MAPPER: Params = {
-  all: 'ALL',
-  'automobile-store': 'DEALER_SHOP',
-  industries: 'CAR_CENTER',
-  detailing: 'DETAILING',
-  painting: 'PAINTING',
-  misc: 'ETC',
-};
-
-export {
-  PARTNERSHIP_LINKS,
-  PARTNERSHIP_FILTER_OPTIONS,
-  PARTNERSHIP_TABLE_HEAD,
-  PARTNERSHIP_API_CATEGORY_MAPPER,
-};
+export { PARTNERSHIP_FILTER_OPTIONS, PARTNERSHIP_TABLE_HEAD };

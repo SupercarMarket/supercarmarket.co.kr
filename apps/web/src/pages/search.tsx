@@ -1,13 +1,18 @@
-import { dehydrate, QueryClient } from '@tanstack/react-query';
+import {
+  dehydrate,
+  QueryClient,
+  QueryErrorResetBoundary,
+} from '@tanstack/react-query';
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import type { NextPageWithLayout, Params } from '@supercarmarket/types/base';
 import { Alert, applyMediaQuery, Container, Wrapper } from '@supercarmarket/ui';
 import Layout from 'components/layout';
 import { css } from 'styled-components';
-import queries from 'constants/queries';
-import { serverApi } from '@supercarmarket/lib';
 import { SearchList } from 'components/search';
 import HeadSeo from 'components/common/headSeo';
+import { ErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from 'components/fallback';
+import { prefetchSearch, QUERY_KEYS } from 'http/server/search';
 
 const Search: NextPageWithLayout = ({
   keyword,
@@ -16,7 +21,7 @@ const Search: NextPageWithLayout = ({
   return (
     <>
       <HeadSeo
-        title="검색결과"
+        title={`${keyword}`}
         description={`${keyword}에 대한 검색결과입니다.`}
       />
       <Container>
@@ -28,17 +33,26 @@ const Search: NextPageWithLayout = ({
             }
           `}
         >
-          {isKeyword ? (
-            <SearchList />
-          ) : (
-            <Wrapper.Item
-              css={css`
-                padding-top: 100px;
-              `}
-            >
-              <Alert severity="info" title="검색어를 입력해주세요" />
-            </Wrapper.Item>
-          )}
+          <QueryErrorResetBoundary>
+            {({ reset }) => (
+              <ErrorBoundary
+                onReset={reset}
+                fallbackRender={(props) => <ErrorFallback {...props} />}
+              >
+                {isKeyword ? (
+                  <SearchList keyword={keyword} />
+                ) : (
+                  <Wrapper.Item
+                    css={css`
+                      padding-top: 100px;
+                    `}
+                  >
+                    <Alert severity="info" title="검색어를 입력해주세요" />
+                  </Wrapper.Item>
+                )}
+              </ErrorBoundary>
+            )}
+          </QueryErrorResetBoundary>
         </Wrapper>
       </Container>
     </>
@@ -52,10 +66,9 @@ export default Search;
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { query } = ctx;
   const {
-    category = null,
-    filter = null,
-    orderBy = null,
-    keyword = null,
+    category = 'all',
+    filter = 'created_date',
+    keyword,
   } = query as Params;
   const isKeyword = !!keyword;
 
@@ -68,48 +81,37 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     };
   }
 
-  let currentQuery = {};
-
-  currentQuery = {
-    ...currentQuery,
-    category,
-    keyword,
-    page: 0,
-  };
-
-  if (filter)
-    currentQuery = {
-      ...currentQuery,
-      filter,
-      orderBy,
+  if (
+    category !== 'all' &&
+    category !== 'community' &&
+    category !== 'product' &&
+    category !== 'magazine' &&
+    category !== 'partnership'
+  ) {
+    return {
+      notFound: true,
     };
+  }
 
   const queryClient = new QueryClient();
 
-  queryClient.prefetchQuery(
-    [
-      ...queries.search.all,
-      ...queries.search.query({
-        category: String(category),
-        orderBy: String(orderBy),
-        filter,
+  await queryClient.prefetchQuery({
+    queryKey: [
+      ...QUERY_KEYS.all,
+      {
         keyword,
+        filter,
+        category,
         page: 0,
-      }),
+      },
     ],
-    () =>
-      serverApi(`${process.env.NEXT_PUBLIC_SERVER_URL}//supercar/v1/search`, {
-        method: 'GET',
-        query: currentQuery,
-      }).then((res) => {
-        const { ok, status, ...rest } = res;
-        return rest;
-      })
-  );
+    queryFn: () => prefetchSearch({ keyword, filter, category, page: 0 }),
+  });
 
   return {
     props: {
       isKeyword,
+      keyword,
       dehydratedState: dehydrate(queryClient),
     },
   };

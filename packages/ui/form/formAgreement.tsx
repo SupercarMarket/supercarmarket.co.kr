@@ -1,5 +1,5 @@
 'use client';
-import Link from 'next/link';
+
 import * as React from 'react';
 import { css } from 'styled-components';
 import { Wrapper } from '../components/wrapper';
@@ -12,10 +12,11 @@ interface FormAgreementProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
   content?: string;
   href?: string;
+  handleCick?: () => void;
 }
 
 const FormAgreement = (props: FormAgreementProps) => {
-  const { name, content, href = '/', ...rest } = props;
+  const { name, content, href = '/', handleCick, ...rest } = props;
   return (
     <Container
       width="100%"
@@ -60,11 +61,11 @@ const FormAgreement = (props: FormAgreementProps) => {
         </label>
         <Typography>{content}</Typography>
       </Wrapper>
-      <Link href={href}>
-        <Button type="button" variant="Line" width="120px">
+      {handleCick && (
+        <Button type="button" variant="Line" width="120px" onClick={handleCick}>
           보기
         </Button>
-      </Link>
+      )}
     </Container>
   );
 };

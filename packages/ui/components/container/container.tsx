@@ -27,6 +27,7 @@ interface BaseProps {
   bottom?: React.CSSProperties['bottom'];
   left?: React.CSSProperties['left'];
   right?: React.CSSProperties['right'];
+  handleClick?: () => void;
 }
 
 type ContainerProps<Element extends keyof JSX.IntrinsicElements = 'div'> =
@@ -63,7 +64,9 @@ const Container = React.forwardRef(function Container<
     bottom,
     left,
     right,
+    style,
     children,
+    handleClick,
   } = props as ContainerProps;
 
   const borderAttr = border
@@ -99,7 +102,9 @@ const Container = React.forwardRef(function Container<
         left,
         right,
         ...borderAttr,
+        ...style,
       }}
+      onClick={handleClick}
     >
       {children}
     </Component>

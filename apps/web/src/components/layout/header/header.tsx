@@ -9,39 +9,39 @@ import {
   Typography,
   Wrapper,
   applyMediaQuery,
+  deviceQuery,
 } from '@supercarmarket/ui';
 import { LinkSkeleton } from 'components/fallback/loading';
 import Link from 'next/link';
 import { signOut, useSession } from 'next-auth/react';
 import { css } from 'styled-components';
 import clsx from 'clsx';
-import type { Links } from '@supercarmarket/types/base';
 import Hamburger from '../hamburger';
 import Image from 'next/image';
 
 import searchSrc from '../../../../public/images/search.png';
 import menuSrc from '../../../../public/images/menu.png';
 import { Logo } from 'components/common/logo';
+import { useMedia } from '@supercarmarket/hooks';
 
-interface HeaderProps {
-  navlinks: Links[];
-}
-
-const Header = ({ navlinks }: HeaderProps) => {
+const Header = () => {
+  const { isMobile } = useMedia({ deviceQuery: deviceQuery });
   const [search, setSearch] = React.useState(false);
   const [hamburger, setHamburger] = React.useState(false);
   const { status, data: session } = useSession();
-  const { push } = useRouter();
+  const { push, refresh } = useRouter();
 
   const handleHamburger = React.useCallback(() => {
     setHamburger((prev) => !prev);
   }, []);
   const handleSignOut = React.useCallback(() => {
-    signOut({ redirect: false });
-  }, []);
+    signOut({ redirect: false }).then(() => {
+      refresh();
+    });
+  }, [refresh]);
 
   return (
-    <Container width="100%" display="flex">
+    <Container as="header" width="100%" display="flex">
       <Wrapper
         className={clsx({
           hidden: search,
@@ -61,7 +61,7 @@ const Header = ({ navlinks }: HeaderProps) => {
           }
           ${applyMediaQuery('mobile')} {
             height: 56px;
-            padding: 0 16px;
+            padding: 14px 16px;
           }
         `}
       >
@@ -75,7 +75,7 @@ const Header = ({ navlinks }: HeaderProps) => {
           `}
         >
           <Button variant="Init" type="button" onClick={handleHamburger}>
-            <Image src={menuSrc} alt="menu" placeholder="blur" />
+            <Image src={menuSrc} alt="menu" />
           </Button>
         </Wrapper.Item>
         <Wrapper.Item
@@ -141,13 +141,16 @@ const Header = ({ navlinks }: HeaderProps) => {
                   style={{
                     cursor: 'pointer',
                   }}
-                  onClick={() => signOut({ redirect: false })}
+                  onClick={handleSignOut}
                 >
                   <Typography
                     color="black"
                     fontSize="body-16"
                     fontWeight="regular"
                     lineHeight="150%"
+                    style={{
+                      whiteSpace: 'nowrap',
+                    }}
                   >
                     로그아웃
                   </Typography>
@@ -158,6 +161,9 @@ const Header = ({ navlinks }: HeaderProps) => {
                     fontSize="body-16"
                     fontWeight="regular"
                     lineHeight="150%"
+                    style={{
+                      whiteSpace: 'nowrap',
+                    }}
                   >
                     마이페이지
                   </Typography>
@@ -171,6 +177,9 @@ const Header = ({ navlinks }: HeaderProps) => {
                     fontSize="body-16"
                     fontWeight="regular"
                     lineHeight="150%"
+                    style={{
+                      whiteSpace: 'nowrap',
+                    }}
                   >
                     로그인
                   </Typography>
@@ -181,6 +190,9 @@ const Header = ({ navlinks }: HeaderProps) => {
                     fontSize="body-16"
                     fontWeight="regular"
                     lineHeight="150%"
+                    style={{
+                      whiteSpace: 'nowrap',
+                    }}
                   >
                     회원가입
                   </Typography>
@@ -211,7 +223,7 @@ const Header = ({ navlinks }: HeaderProps) => {
               zIndex: '999',
             }}
           >
-            <Image src={searchSrc} alt="search" placeholder="blur" />
+            <Image src={searchSrc} alt="search" />
           </Button>
         </Wrapper.Item>
       </Wrapper>
@@ -264,13 +276,14 @@ const Header = ({ navlinks }: HeaderProps) => {
           </svg>
         </Button>
       </Wrapper>
-      <Hamburger
-        navlinks={navlinks}
-        session={session}
-        hamburger={hamburger}
-        signOut={handleSignOut}
-        handleClose={handleHamburger}
-      />
+      {isMobile && (
+        <Hamburger
+          session={session}
+          hamburger={hamburger}
+          signOut={handleSignOut}
+          handleClose={handleHamburger}
+        />
+      )}
     </Container>
   );
 };

@@ -1,7 +1,6 @@
-import { clientApi, ErrorCode } from '@supercarmarket/lib';
-import { Alert, Button, Form } from '@supercarmarket/ui';
+import { ErrorCode } from '@supercarmarket/lib';
+import { Alert, Button, Form, Wrapper } from '@supercarmarket/ui';
 import { Modal } from 'components/common/modal';
-import inquiry, { InquiryMiscFormState } from 'constants/inquiry';
 import ModalContext from 'feature/modalContext';
 import { useSession } from 'next-auth/react';
 import * as React from 'react';
@@ -10,12 +9,15 @@ import { css } from 'styled-components';
 import { useRouter } from 'next/navigation';
 
 import InquiryFormItem from '../inquiryFormItem';
+import { useDebounce } from '@supercarmarket/hooks';
+import { authRequest } from 'http/core';
+import { form, type FormState } from 'constants/form/misc';
 
 const MiscForm = () => {
   const session = useSession();
   const { onClose, onOpen } = React.useContext(ModalContext);
   const { replace } = useRouter();
-  const methods = useForm<InquiryMiscFormState>();
+  const methods = useForm<FormState>();
   const [error, setError] = React.useState<string | null>(null);
 
   const handleModal = React.useCallback(
@@ -27,7 +29,7 @@ const MiscForm = () => {
     [onClose, replace]
   );
 
-  const handleRequire = async (data: InquiryMiscFormState) => {
+  const handleRequire = async (data: FormState) => {
     const { title, contents } = data;
 
     if (!title) {
@@ -41,58 +43,67 @@ const MiscForm = () => {
     }
   };
 
-  const onSubmit = methods.handleSubmit((data) =>
-    handleRequire(data).then(async () => {
-      setError(null);
+  const debouncedSubmit = useDebounce(
+    (data: FormState) =>
+      handleRequire(data).then(async () => {
+        setError(null);
 
-      const { title, contents } = data;
+        const { title, contents } = data;
 
-      const result = await clientApi('/server/supercar/v1/inquiry-etc', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ACCESS_TOKEN: session.data?.accessToken || '',
-        },
-        data: { title, contents },
-      });
-
-      if (!result.data) {
-        setError(result.message || ErrorCode[result.status]);
-        return;
-      }
-
-      onOpen(
-        <Modal
-          title="기타 문의"
-          description="기타 문의가 등록 완료되었습니다."
-          clickText="확인"
-          onClick={() => handleModal('/')}
-          onClose={() => handleModal('/inquiry')}
-        />
-      );
-    })
+        await authRequest('/inquiry-etc', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ACCESS_TOKEN: session.data?.accessToken || '',
+          },
+          data: { title, contents },
+        })
+          .then(() => {
+            onOpen(
+              <Modal
+                title="기타 문의"
+                description="기타 문의가 등록 완료되었습니다."
+                clickText="확인"
+                background="rgba(30, 30, 32, 0.5)"
+                onCancel={() => handleModal('/inquiry')}
+                onClick={() => handleModal('/')}
+                onClose={() => handleModal('/inquiry')}
+              />
+            );
+          })
+          .catch((error) => {
+            setError(error.message || ErrorCode[error.status]);
+          });
+      }),
+    300
   );
 
   return (
     <FormProvider {...methods}>
       <Form
-        onSubmit={onSubmit}
+        onSubmit={methods.handleSubmit((data) => {
+          debouncedSubmit(data);
+        })}
         css={css`
           display: flex;
           flex-direction: column;
           gap: 24px;
         `}
       >
-        {inquiry.register.misc.map((d) => (
-          <InquiryFormItem
-            key={d.htmlFor}
-            callback={(d) => console.log(d)}
-            {...d}
-          />
+        {form.map((d) => (
+          <InquiryFormItem key={d.htmlFor} {...d} />
         ))}
-        <Button type="submit" width="104px">
-          작성 완료
-        </Button>
+        <Wrapper.Item
+          css={css`
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+          `}
+        >
+          <Button type="submit" width="104px">
+            {methods.formState.isSubmitting ? '등록 중..' : '작성 완료'}
+          </Button>
+        </Wrapper.Item>
         {error && <Alert severity="error" title="" />}
       </Form>
     </FormProvider>

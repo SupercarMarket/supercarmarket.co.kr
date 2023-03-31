@@ -57,6 +57,7 @@ const FormRadio = React.forwardRef(function FormRadio(
         id={value as string}
         value={value}
         name={name}
+        readOnly
       />
       <label htmlFor={value as string}>
         <div />

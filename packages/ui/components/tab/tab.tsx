@@ -4,6 +4,7 @@ import { useUrlQuery } from '@supercarmarket/hooks';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { css } from 'styled-components';
+import { applyMediaQuery } from 'styles/mediaQuery';
 import { theme } from '../../styles';
 
 import { Button } from '../button';
@@ -35,6 +36,7 @@ const Tab = ({
     useUrlQuery();
   const isPopular = filter === 'popular';
   const isVariantRow = variant === 'row';
+  const isScroll = scroll && !create;
   const pathname = usePathname();
   const keywordQuery = keyword && {
     keyword,
@@ -48,7 +50,7 @@ const Tab = ({
     });
 
   return (
-    <Container width={full ? '100%' : 'fit-content'}>
+    <Container role="group" width={full ? '100%' : 'fit-content'}>
       <Wrapper
         css={css`
           width: 100%;
@@ -86,6 +88,8 @@ const Tab = ({
             align-items: center;
             justify-content: flex-end;
             gap: 9px;
+            ${applyMediaQuery('mobile')} {
+            }
           `}
         >
           {popular && (
@@ -124,10 +128,13 @@ const Tab = ({
                     display: flex;
                     align-items: center;
                     box-sizing: border-box;
-                    padding: 10px;
+                    padding: 9px;
                     background: ${theme.color.white};
                     border: 1px solid ${theme.color['greyScale-4']};
                     border-radius: 4px;
+                    ${applyMediaQuery('mobile')} {
+                      padding: 7px;
+                    }
                   `}
                 >
                   <svg
@@ -170,10 +177,13 @@ const Tab = ({
                     display: flex;
                     align-items: center;
                     box-sizing: border-box;
-                    padding: 10px;
+                    padding: 9px;
                     background: ${theme.color.white};
                     border: 1px solid ${theme.color['greyScale-4']};
                     border-radius: 4px;
+                    ${applyMediaQuery('mobile')} {
+                      padding: 7px;
+                    }
                   `}
                 >
                   <svg
@@ -223,7 +233,7 @@ const Tab = ({
               </Button>
             </Link>
           )}
-          {scroll && (
+          {isScroll && (
             <Button type="button" variant="Line" onClick={scrollToTop}>
               맨 위로 ↑
             </Button>

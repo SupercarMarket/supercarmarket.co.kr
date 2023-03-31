@@ -10,9 +10,11 @@
       "feature/*": ["src/feature/*"],
       "hooks/*": ["src/hooks/*"],
       "pages/*": ["src/pages/*"],
+      "http/*": ["src/http/*"],
       "styles/*": ["src/styles/*"],
       "types/*": ["src/types/*"]
-    }
+    },
+    "target": "ES6"
   },
   "include": [
     "next-env.d.ts",

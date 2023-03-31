@@ -1,28 +1,82 @@
-'use client';
-
-import { Alert, Button, Form } from '@supercarmarket/ui';
-import type { FormState } from 'constants/account';
-import account from 'constants/account';
-import { update } from 'feature/actions/authActions';
-import { useAuthDispatch, useAuthState } from 'feature/authProvider';
-import useUpdateInfo from 'hooks/queries/useUpdateInfo';
-import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
+import {
+  Alert,
+  applyMediaQuery,
+  Button,
+  Form,
+  FormLabel,
+  theme,
+} from '@supercarmarket/ui';
+import { signOut, useSession } from 'next-auth/react';
 import * as React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { css } from 'styled-components';
 
-import AccountFormItem from '../accountFormItem';
+import ModalContext from 'feature/modalContext';
+import { Modal } from 'components/common/modal';
+import AuthFormItem from 'components/auth/authFormItem/authFormItem';
+import useAuth from 'hooks/useAuth';
+import { useAccountUpdateInfo } from 'http/server/account';
+import { useDebounce } from '@supercarmarket/hooks';
+import { form, FormState } from 'constants/form/updateInfo';
+import { remove } from '@supercarmarket/lib';
+import { type ServerResponse } from '@supercarmarket/types/base';
 
-const AccountUpdateForm = () => {
+interface AccountUpdateFormProps {
+  sub: string;
+}
+
+const AccountUpdateForm = (props: AccountUpdateFormProps) => {
+  const { sub } = props;
+  const { onOpen, onClose } = React.useContext(ModalContext);
+  const [error, setError] = React.useState<string | null>(null);
   const { data: session } = useSession();
-  const { data: updateInfo, refetch } = useUpdateInfo(
-    session?.accessToken as string
-  );
-  const { replace } = useRouter();
+  const { data: updateInfo, refetch } = useAccountUpdateInfo(sub);
   const methods = useForm<FormState>();
-  const state = useAuthState();
-  const dispatch = useAuthDispatch();
+  const { authState, sendPhone, sendCode, update } = useAuth();
+
+  const handleWithdrawal = React.useCallback(async () => {
+    setError(null);
+
+    if (!session) return;
+
+    const response = await remove<undefined, ServerResponse<boolean>>(
+      '/server',
+      undefined,
+      {
+        method: 'DELETE',
+        headers: {
+          ACCESS_TOKEN: session.accessToken,
+          REFRESH_TOKEN: session.refreshToken,
+        },
+      }
+    ).catch((error) => {
+      setError(error.message);
+    });
+
+    if (!response?.data) return;
+
+    onClose();
+    signOut({ redirect: true });
+  }, [onClose, session]);
+
+  const handleModal = React.useCallback(() => {
+    onOpen(
+      <Modal
+        title="회원 탈퇴"
+        description="회원 탈퇴 시, 정보를 복구할 수 없습니다."
+        background={theme.color['greyScale-6']}
+        closeText="취소"
+        clickText="탈퇴하기"
+        onClose={() => {
+          onClose();
+        }}
+        onCancel={() => {
+          onClose();
+        }}
+        onClick={handleWithdrawal}
+      />
+    );
+  }, [handleWithdrawal, onClose, onOpen]);
 
   /**
    * @function handleRequire
@@ -30,88 +84,59 @@ const AccountUpdateForm = () => {
    * 내 정보 수정하기의 필드는 모두 require 필드가 아님
    * 각 필드마다 입력을 받았을 때, 다른 필드의 입력이 필수인지 아닌지 핸들링하는 함수
    */
-  const handleRequire = (data: FormState) => {
-    const { authentication, password, newPassword, newPasswordConfirm } = data;
+  const handleRequire = async (data: FormState) => {
+    const { authentication } = data;
+    const { phone, email, nickname } = authState;
 
-    return new Promise((resolve, reject) => {
-      if (!password) {
-        methods.setError('password', { message: '비밀번호를 입력해주세요.' });
-        reject();
-      }
+    const isPhoneAuthRequire = phone.success && !authentication;
+    const isNicknameRequire =
+      updateInfo?.data.nickname !== data.nickname && !nickname.success;
+    const isEmailRequire =
+      updateInfo?.data.email !== data.email && !email.success;
 
-      const isNewPasswordRequire = newPasswordConfirm && !newPassword;
-      const isNewPasswordConfirmRequire = newPassword && !newPasswordConfirm;
-      const isPhoneAuthRequire = state.phone.data && !authentication;
-      const isNicknameRequire =
-        updateInfo?.data.nickname !== data.nickname && !state.nickname.data;
-      const isEmailRequire =
-        updateInfo?.data.email !== data.email && !state.email.data;
+    if (isNicknameRequire) {
+      methods.setError('nickname', {
+        message: '중복검사가 필요합니다.',
+      });
+      throw '';
+    }
 
-      if (isNicknameRequire) {
-        methods.setError('nickname', {
-          message: '중복검사가 필요합니다.',
-        });
-        reject();
-      }
+    if (isEmailRequire) {
+      methods.setError('email', {
+        message: '중복검사가 필요합니다.',
+      });
+      throw '';
+    }
 
-      if (isEmailRequire) {
-        methods.setError('email', {
-          message: '중복검사가 필요합니다.',
-        });
-        reject();
-      }
-
-      if (isNewPasswordRequire) {
-        methods.setError('newPassword', {
-          message: '새 비밀번호를 입력해주세요.',
-        });
-        reject();
-      }
-
-      if (isNewPasswordConfirmRequire) {
-        methods.setError('newPasswordConfirm', {
-          message: '새 비밀번호 확인을 입력해주세요.',
-        });
-        reject();
-      }
-
-      if (isPhoneAuthRequire) {
-        methods.setError('authentication', {
-          message: '인증번호를 입력해주세요.',
-        });
-        reject();
-      }
-
-      resolve(true);
-    });
+    if (isPhoneAuthRequire) {
+      methods.setError('authentication', {
+        message: '인증번호를 입력해주세요.',
+      });
+      throw '';
+    }
   };
 
-  const onSubmit = methods.handleSubmit((data) =>
-    handleRequire(data).then(() => {
-      if (!session?.accessToken) return;
+  const debouncedSubmit = useDebounce(
+    (data: FormState) =>
+      handleRequire(data).then(() => {
+        if (!session?.accessToken) return;
 
-      const { gallery, background, ...rest } = data;
-      const formData = {
-        ...rest,
-        newPasswordCheck: rest.newPasswordConfirm || null,
-        newPassword: rest.newPassword || null,
-        code: rest.authentication,
-      };
+        const formData = {
+          ...data,
+          code: data.authentication,
+        };
 
-      update(dispatch, formData, session.accessToken).then(() => {
-        refetch();
-      });
-    })
+        update(formData).then(() => {
+          refetch();
+        });
+      }),
+    300
   );
-
-  React.useEffect(() => {
-    if (state.update.data) return replace('/');
-  }, [replace, state.update.data]);
 
   return (
     <FormProvider {...methods}>
       <Form
-        onSubmit={onSubmit}
+        onSubmit={methods.handleSubmit((data) => debouncedSubmit(data))}
         encType="multipart/form-data"
         css={css`
           width: 800px;
@@ -120,35 +145,41 @@ const AccountUpdateForm = () => {
           align-items: center;
           padding-top: 60px;
           gap: 26px;
+          ${applyMediaQuery('mobile')} {
+            width: 343px;
+            gap: 16px;
+          }
         `}
       >
         {updateInfo && (
           <>
-            {account.forms.map((form) => (
-              <AccountFormItem
-                key={form.htmlFor}
-                defaultValue={
-                  form.htmlFor !== 'authentication' &&
-                  form.htmlFor !== 'password' &&
-                  form.htmlFor !== 'newPassword' &&
-                  form.htmlFor !== 'newPasswordConfirm'
-                    ? updateInfo?.data[form.htmlFor]
-                    : undefined
-                }
-                state={state}
-                session={session}
-                dispatch={dispatch}
-                {...form}
-              />
+            {form.map((f) => (
+              <FormLabel key={f.htmlFor} name={f.htmlFor} label={f.label}>
+                <AuthFormItem
+                  defaultValue={
+                    f.htmlFor !== 'authentication'
+                      ? updateInfo?.data[f.htmlFor]
+                      : undefined
+                  }
+                  state={authState}
+                  sendPhone={sendPhone}
+                  sendCode={sendCode}
+                  {...f}
+                />
+              </FormLabel>
             ))}
+            <FormLabel label="회원탈퇴">
+              <Button type="button" variant="Line" onClick={handleModal}>
+                탈퇴하기
+              </Button>
+            </FormLabel>
             <Button type="submit" variant="Primary" width="340px">
               수정하기
             </Button>
           </>
         )}
-        {state.update.error && (
-          <Alert title={state.update.error.message} severity="error" />
-        )}
+        {error && <Alert title={error} severity="error" />}
+        {error && <Alert title={error} severity="error" />}
       </Form>
     </FormProvider>
   );

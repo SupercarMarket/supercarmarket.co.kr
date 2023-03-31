@@ -10,14 +10,15 @@ import Community from 'components/home/community';
 import Magazine from 'components/home/magazine';
 import { MarketBest, MarketNew } from 'components/home/market';
 import Layout from 'components/layout';
-import queries from 'constants/queries';
 import { GetStaticProps } from 'next';
 import * as React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import { baseFetch } from 'utils/api/fetcher';
 import HeadSeo from 'components/common/headSeo';
 import { APP_NAME } from 'constants/core';
 import { css } from 'styled-components';
+import Advertisement from 'components/common/advertisement';
+import { prefetchBanner, prefetchHome, QUERY_KEYS } from 'http/server/home';
+import Banner from 'components/home/banner';
 
 const Home: NextPageWithLayout = () => {
   return (
@@ -33,6 +34,22 @@ const Home: NextPageWithLayout = () => {
                 }
               `}
             >
+              <ErrorBoundary
+                onReset={reset}
+                fallbackRender={(props) => <ErrorFallback {...props} />}
+              >
+                <Wrapper.Item
+                  css={css`
+                    ${applyMediaQuery('mobile')} {
+                      width: 100vw;
+                      margin-left: calc(-50vw + 50%);
+                    }
+                  `}
+                >
+                  <Banner />
+                </Wrapper.Item>
+              </ErrorBoundary>
+              <Advertisement hidden />
               <Title marginBottom="20px">슈마매거진</Title>
               <ErrorBoundary
                 onReset={reset}
@@ -81,37 +98,14 @@ const queryClient = new QueryClient();
 
 export const getStaticProps: GetStaticProps = async () => {
   await Promise.all([
-    queryClient.prefetchQuery(queries.home.magazine(), () =>
-      baseFetch(`${process.env.NEXT_PUBLIC_URL}/api/home`, {
-        method: 'GET',
-        query: {
-          category: 'magazine',
-        },
-      })
+    queryClient.prefetchQuery(QUERY_KEYS.banner(), () => prefetchBanner('D')),
+    queryClient.prefetchQuery(QUERY_KEYS.magazine(), () =>
+      prefetchHome('magazine')
     ),
-    queryClient.prefetchQuery(queries.home.best(), () =>
-      baseFetch(`${process.env.NEXT_PUBLIC_URL}/api/home`, {
-        method: 'GET',
-        query: {
-          category: 'best',
-        },
-      })
-    ),
-    queryClient.prefetchQuery(queries.home.new(), () =>
-      baseFetch(`${process.env.NEXT_PUBLIC_URL}/api/home`, {
-        method: 'GET',
-        query: {
-          category: 'new',
-        },
-      })
-    ),
-    queryClient.prefetchQuery(queries.home.community(), () =>
-      baseFetch(`${process.env.NEXT_PUBLIC_URL}/api/home`, {
-        method: 'GET',
-        query: {
-          category: 'community',
-        },
-      })
+    queryClient.prefetchQuery(QUERY_KEYS.best(), () => prefetchHome('best')),
+    queryClient.prefetchQuery(QUERY_KEYS.new(), () => prefetchHome('new')),
+    queryClient.prefetchQuery(QUERY_KEYS.community(), () =>
+      prefetchHome('community')
     ),
   ]);
 
@@ -119,7 +113,7 @@ export const getStaticProps: GetStaticProps = async () => {
     props: {
       dehydratedState: dehydrate(queryClient),
     },
-    revalidate: 30,
+    revalidate: 60,
   };
 };
 

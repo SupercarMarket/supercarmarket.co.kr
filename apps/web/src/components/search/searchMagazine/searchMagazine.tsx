@@ -1,13 +1,22 @@
+import { PaginationResponse } from '@supercarmarket/types/base';
 import type { MagazineDto } from '@supercarmarket/types/magazine';
-import { Alert, applyMediaQuery, Container, Wrapper } from '@supercarmarket/ui';
-import MagazineCard from 'components/magazine/magazineList/magazineCard';
+import {
+  Alert,
+  applyMediaQuery,
+  Container,
+  Pagination,
+  Wrapper,
+} from '@supercarmarket/ui';
+import MagazineCard from 'components/magazine/magazineCard/magazineCard';
 import { css } from 'styled-components';
 
-interface SearchAllProps {
-  data: MagazineDto[];
-}
+type SearchMagazineProps = PaginationResponse<MagazineDto[]>;
 
-const SearchMagazine = ({ data }: SearchAllProps) => {
+const SearchMagazine = ({
+  data,
+  totalCount,
+  totalPages,
+}: SearchMagazineProps) => {
   const isMagazine = data && data.length > 0;
 
   return (
@@ -44,6 +53,11 @@ const SearchMagazine = ({ data }: SearchAllProps) => {
           <Alert severity="info" title="검색 결과가 존재하지 않습니다." />
         </Wrapper>
       )}
+      <Pagination
+        pageSize={20}
+        totalCount={totalCount}
+        totalPages={totalPages}
+      />
     </Container>
   );
 };

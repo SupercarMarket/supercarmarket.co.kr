@@ -13,6 +13,7 @@ import {
 import Layout from 'components/layout';
 import { css } from 'styled-components';
 import { useRouter } from 'next/router';
+import { authRequest } from 'http/core';
 
 interface Props {}
 
@@ -23,8 +24,8 @@ const Index = (props: Props) => {
 
   useEffect(() => {
     getBroadcastList().then((res) => {
-      console.log(res.data);
-      setLiveItemList(res.data.list);
+      console.log(res);
+      setLiveItemList(res.list);
     });
   }, []);
 
@@ -63,7 +64,7 @@ const Index = (props: Props) => {
               }}
             >
               {liveItemList?.map((data, idx) => {
-                return <LiveItem key={`LiveItem_${idx}`} />;
+                return <LiveItem key={`LiveItem_${idx}`} data={data} />;
               })}
             </div>
           </div>
@@ -76,9 +77,13 @@ const Index = (props: Props) => {
 
 export default Index;
 
-const LiveItem = () => {
+const LiveItem = ({ data }: { data: any }) => {
+  const router = useRouter();
+  const clickItem = () => {
+    router.push(`live/${data.id}`);
+  };
   return (
-    <div style={{ cursor: 'pointer', width: '25%' }}>
+    <div style={{ cursor: 'pointer', width: '25%' }} onClick={clickItem}>
       <div
         style={{
           width: '97%',
@@ -122,23 +127,6 @@ const LiveItem = () => {
 };
 
 const getBroadcastList = async () => {
-  const login = await axios.post(
-    `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/user/login`,
-    {
-      id: 'gltlvl12',
-      password: 'Rlaehduq12#',
-    }
-  );
-  const accessTocken = login.data.data.access_token;
-  const refreshTocken = login.data.data.refresh_token;
-  const data = await axios.get(
-    `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/live?page=1&pageSize=16`,
-    {
-      headers: {
-        ACCESS_TOKEN: accessTocken,
-        REFRESH_TOKEN: refreshTocken,
-      },
-    }
-  );
+  const data = await authRequest.get(`/live?page=1&pageSize=16`);
   return data;
 };

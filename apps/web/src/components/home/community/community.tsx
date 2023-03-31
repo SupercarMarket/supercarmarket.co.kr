@@ -1,14 +1,14 @@
 import { Container, Typography, Wrapper } from '@supercarmarket/ui';
 import type { CommunityDto } from '@supercarmarket/types/community';
 import { CommunityCard } from 'components/community';
-import useHome from 'hooks/queries/useHome';
 import { css } from 'styled-components';
 import { applyMediaQuery } from 'styles/mediaQuery';
 
 import RouterButton from '../routerButton';
+import { useHome } from 'http/server/home';
 
 const Community = () => {
-  const { data: communityBest } = useHome<CommunityDto>('community');
+  const { data: communityBest } = useHome<CommunityDto[]>('community');
 
   return (
     <Container
@@ -35,7 +35,7 @@ const Community = () => {
             <CommunityCard key={d.id} variant="column" {...d} />
           ))}
       </Wrapper>
-      <RouterButton href="/community">
+      <RouterButton href="/community/paparazzi?category=report">
         <Typography fontSize="header-16" fontWeight="bold" color="black">
           커뮤니티 더보기
         </Typography>

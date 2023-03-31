@@ -10,6 +10,10 @@
   },
   "dependencies": {
     "@supercarmarket/tsconfig": "workspace:*",
-    "@supercarmarket/types": "workspace:*"
+    "@supercarmarket/types": "workspace:*",
+    "lodash.debounce": "^4.0.8"
+  },
+  "devDependencies": {
+    "@types/lodash.debounce": "^4.0.7"
   }
 }

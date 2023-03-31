@@ -16,20 +16,22 @@ import layout from 'components/layout';
 import MarketBanner from 'components/market/marketBanner';
 import MarketCar from 'components/market/marketCar';
 import MarketFilter from 'components/market/marketFilter';
-import { CATEGORY, CATEGORY_VALUES, MARKET_LINKS } from 'constants/market';
-import queries from 'constants/queries';
+import { CATEGORY, CATEGORY_VALUES } from 'constants/market';
 import type { InferGetServerSidePropsType, NextPageContext } from 'next/types';
 import * as React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useSearchKeyword } from 'hooks/useSearchKeyword';
 import { css } from 'styled-components';
 import HeadSeo from 'components/common/headSeo';
+import Advertisement from 'components/common/advertisement';
+import { prefetchMarket, QUERY_KEYS } from 'http/server/market';
+import { linsk } from 'constants/link/market';
 
 const MarketFilterPage: NextPageWithLayout = ({
   category,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const { keydownHandler, keywordRef } = useSearchKeyword({
-    domain: 'partnership',
+    domain: 'market',
   });
 
   return (
@@ -40,6 +42,7 @@ const MarketFilterPage: NextPageWithLayout = ({
           CATEGORY.find((value) => value.value === category)?.option ?? ''
         }에 대한 매물`}
       />
+      <Advertisement />
       <Container display="flex" flexDirection="column" margin="20px 0 0 0">
         <Wrapper
           css={css`
@@ -91,7 +94,7 @@ const MarketFilterPage: NextPageWithLayout = ({
                 onReset={reset}
                 fallbackRender={(props) => <ErrorFallback {...props} />}
               >
-                <Category links={MARKET_LINKS} category={category} />
+                <Category links={linsk} category={category} />
                 <MarketFilter />
                 <MarketCar />
               </ErrorBoundary>
@@ -118,11 +121,10 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
       },
     };
 
-  queryClient.prefetchQuery(queries.market.lists([]), () =>
-    fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/shop`, {
-      method: 'GET',
-    }).then((res) => res.json())
-  );
+  await queryClient.prefetchQuery({
+    queryKey: [...QUERY_KEYS.market(), {}],
+    queryFn: () => prefetchMarket({}),
+  });
 
   return {
     props: {

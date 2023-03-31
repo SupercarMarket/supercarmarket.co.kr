@@ -3,6 +3,7 @@ import type { NextPageWithLayout } from '@supercarmarket/types/base';
 import { AdvertisementForm } from 'components/inquiry';
 import Layout from 'components/layout/layout';
 import { css } from 'styled-components';
+import { ModalProvider } from 'feature/modalContext';
 
 const Advertisement: NextPageWithLayout = () => {
   return (
@@ -18,7 +19,9 @@ const Advertisement: NextPageWithLayout = () => {
         `}
       >
         <Title>광고 문의</Title>
-        <AdvertisementForm />
+        <ModalProvider>
+          <AdvertisementForm />
+        </ModalProvider>
       </Wrapper>
     </Container>
   );

@@ -7,15 +7,15 @@ import {
   QueryClient,
   QueryErrorResetBoundary,
 } from '@tanstack/react-query';
-import queries from 'constants/queries';
-import { serverFetcher } from '@supercarmarket/lib';
-import { getSession } from 'utils/api/auth/user';
+import { getSession } from 'http/server/auth/user';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from 'components/fallback';
 import Posting from 'components/common/posting';
 import { CommunityPostingList } from 'components/community';
 import { ModalProvider } from 'feature/modalContext';
 import { css } from 'styled-components';
+import Advertisement from 'components/common/advertisement';
+import { prefetchCommunityPost, QUERY_KEYS } from 'http/server/community';
 
 const CommunityPost: NextPageWithLayout = ({
   subject,
@@ -37,6 +37,7 @@ const CommunityPost: NextPageWithLayout = ({
                 <ErrorFallback margin="100px 0" {...props} />
               )}
             >
+              <Advertisement />
               <Title>커뮤니티 게시글</Title>
               <ModalProvider>
                 <Posting
@@ -72,24 +73,24 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { subject, category, id } = query as Params;
 
   const queryClient = new QueryClient();
-  let headers = {};
+  const boardView = req.cookies['boardView'];
 
-  if (session) headers = { ACCESS_TOKEN: session.accessToken };
-
-  queryClient.prefetchQuery(
-    queries.community.detail(subject, category, id),
-    () =>
-      serverFetcher(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/community/${category}/post-id/${id}`,
-        {
-          method: 'GET',
-          headers,
-        }
-      ).then((res) => {
-        const { ok, status, ...rest } = res;
-        return rest;
-      })
-  );
+  await queryClient.prefetchQuery({
+    queryKey: [
+      ...QUERY_KEYS.id(id),
+      {
+        subject,
+        category,
+      },
+    ],
+    queryFn: () =>
+      prefetchCommunityPost({
+        id,
+        category,
+        token: session?.accessToken,
+        boardView: `${boardView}[${id}]`,
+      }),
+  });
 
   return {
     props: {

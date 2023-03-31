@@ -3,15 +3,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-import {
-  Button,
-  Container,
-  Title,
-  Wrapper,
-  Pagination,
-} from '@supercarmarket/ui';
+import { Button, Container, Title, Wrapper } from '@supercarmarket/ui';
 import Layout from 'components/layout';
 import { css } from 'styled-components';
+import { authRequest } from 'http/core';
+import { useRouter } from 'next/router';
 
 interface Props {}
 
@@ -28,6 +24,8 @@ const Create = (props: Props) => {
     tags: [''],
     isPrivate: true,
   });
+
+  const router = useRouter();
 
   const broadcastStateChangeHandler = (
     target: string,
@@ -53,18 +51,18 @@ const Create = (props: Props) => {
       sessionId: sessionId,
     };
 
-    const login = await axios.post(
-      `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/user/login`,
-      {
-        id: 'gltlvl12',
-        password: 'Rlaehduq12#',
-      }
-    );
-    const accessTocken = login.data.data.access_token;
-    const refreshTocken = login.data.data.refresh_token;
-
     const formData = new FormData();
-    formData.append('addBroadCastDto', JSON.stringify(params));
+
+    console.log(
+      (
+        (document.getElementById('thumbnail') as HTMLInputElement)
+          .files as FileList
+      )[0]
+    );
+    formData.append(
+      'addBroadCastDto',
+      new Blob([JSON.stringify(params)], { type: 'application/json' })
+    );
     formData.append(
       'file',
       (
@@ -73,19 +71,10 @@ const Create = (props: Props) => {
       )[0]
     );
 
-    const data = await axios.post(
-      'http://3.37.88.125:8080/supercar/v1/live',
-      // `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/live`,
-      formData,
-      {
-        headers: {
-          ACCESS_TOKEN: accessTocken,
-          REFRESH_TOKEN: refreshTocken,
-        },
-      }
-    );
+    const data = await authRequest.post(`/live`, formData);
 
     console.log(data);
+    router.push(`${data.data.bcSeq}`);
   };
 
   useEffect(() => {}, []);

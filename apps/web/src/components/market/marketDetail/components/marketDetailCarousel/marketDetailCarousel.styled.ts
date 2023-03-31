@@ -1,14 +1,22 @@
-'use client';
+import { applyMediaQuery } from '@supercarmarket/ui';
+('use client');
 
 import styled, { css } from 'styled-components';
 import { fadeIn, popping } from 'styles/keyframes';
 
 const top = css`
   width: 100%;
-  height: 757px;
+  height: 900px;
   margin-bottom: 10px;
   opacity: 0;
+  position: relative;
   animation: ${fadeIn} 0.5s ease-in-out forwards;
+
+  ${applyMediaQuery('mobile')} {
+    width: 100%;
+    height: 257px;
+    margin-bottom: 8px;
+  }
 `;
 
 const bottom = css`
@@ -19,9 +27,19 @@ const bottom = css`
 
 const CarouselArea = styled.div`
   width: 100%;
-  height: 89px;
+  height: 90px;
   overflow: hidden;
   position: relative;
+
+  ${applyMediaQuery('mobile')} {
+    height: 60px;
+    overflow-x: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
 `;
 
 const CarouselBox = styled.div<{ page: number }>`
@@ -32,6 +50,10 @@ const CarouselBox = styled.div<{ page: number }>`
     transform: translateX(${(page - 1) * -1212}px);
   `}
   transition: transform 0.75s ease-in-out;
+
+  ${applyMediaQuery('mobile')} {
+    gap: 8px;
+  }
 `;
 
 interface ArrowButtonProps {
@@ -62,6 +84,10 @@ const ArrowButton = styled.button<ArrowButtonProps>`
       fill: ${({ theme }) => theme.color['greyScale-4']};
     }
   }
+
+  ${applyMediaQuery('mobile')} {
+    display: none;
+  }
 `;
 
 const CarouselImageWrapper = styled.div`
@@ -72,6 +98,22 @@ const CarouselImageWrapper = styled.div`
   :hover {
     filter: brightness(70%);
     transition: filter 0.2s ease-in-out;
+  }
+
+  ${applyMediaQuery('mobile')} {
+    width: 80px;
+    height: 60px;
+  }
+`;
+
+const ImageWrapper = styled.div`
+  width: 141px;
+  height: 105px;
+  position: relative;
+
+  ${applyMediaQuery('mobile')} {
+    width: 80px;
+    height: 60px;
   }
 `;
 
@@ -91,6 +133,7 @@ export {
   CarouselArea,
   CarouselBox,
   CarouselImageWrapper,
+  ImageWrapper,
   CheckBox,
   top,
 };

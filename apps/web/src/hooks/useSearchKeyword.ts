@@ -1,12 +1,15 @@
-import { useRouter } from 'next/router';
+import { useRouter, useSearchParams } from 'next/navigation';
 import React from 'react';
+import { useNextQuery } from 'hooks/useNextQuery';
 
 interface SearchParams {
   domain: string;
 }
 
 const useSearchKeyword = ({ domain }: SearchParams) => {
-  const { push, query } = useRouter();
+  const { push } = useRouter();
+  const searchParams = useSearchParams();
+  const { query } = useNextQuery(searchParams);
   const keywordRef = React.useRef<HTMLInputElement>(null);
 
   const keydownHandler = (e: React.KeyboardEvent) => {
@@ -20,7 +23,8 @@ const useSearchKeyword = ({ domain }: SearchParams) => {
       const queryString = Object.entries(queries)
         .map(([key, value]) => `${key}=${value}`)
         .join('&');
-      push(`/${domain}/${query.category}?${queryString}`);
+
+      push(`/${domain}?${queryString}`);
     }
   };
 

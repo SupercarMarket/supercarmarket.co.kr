@@ -1,12 +1,20 @@
 import { Container, Title } from '@supercarmarket/ui';
-import type { NextPageWithLayout, Params } from '@supercarmarket/types/base';
 import { AccountUpdateForm } from 'components/account';
 import layout from 'components/layout';
-import { AuthProvider } from 'feature/authProvider';
-import type { GetServerSideProps } from 'next';
-import { getSession } from 'utils/api/auth/user';
+import { type NextPageWithLayout, Params } from '@supercarmarket/types/base';
+import {
+  type GetServerSideProps,
+  type InferGetServerSidePropsType,
+} from 'next';
+import { getSession } from 'http/server/auth/user';
+import { ModalProvider } from 'feature/modalContext';
+import { QueryErrorResetBoundary } from '@tanstack/react-query';
+import { ErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from 'components/fallback';
 
-const ProfileUpdate: NextPageWithLayout = () => {
+const ProfileUpdate: NextPageWithLayout = ({
+  sub,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   return (
     <Container
       display="flex"
@@ -15,9 +23,18 @@ const ProfileUpdate: NextPageWithLayout = () => {
       margin="80px 0"
     >
       <Title textAlign="center">개인정보 수정</Title>
-      <AuthProvider>
-        <AccountUpdateForm />
-      </AuthProvider>
+      <ModalProvider>
+        <QueryErrorResetBoundary>
+          {({ reset }) => (
+            <ErrorBoundary
+              onReset={reset}
+              fallbackRender={(props) => <ErrorFallback {...props} />}
+            >
+              <AccountUpdateForm sub={sub} />
+            </ErrorBoundary>
+          )}
+        </QueryErrorResetBoundary>
+      </ModalProvider>
     </Container>
   );
 };
@@ -29,7 +46,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { sub } = params as Params;
   const session = await getSession({ req });
 
-  if (sub !== session?.sub) {
+  if (sub != session?.sub) {
     return {
       notFound: true,
     };
@@ -37,7 +54,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   return {
     props: {
-      title: '',
+      sub,
     },
   };
 };

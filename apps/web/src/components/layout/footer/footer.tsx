@@ -1,10 +1,11 @@
 import { Container, Typography, Wrapper } from '@supercarmarket/ui';
+import Link from 'next/link';
 
 import * as style from './footer.styled';
 
 const Footer = () => {
   return (
-    <Container background="#F7F7F8">
+    <Container as="footer" role="contentinfo" background="#F7F7F8">
       <Wrapper css={style.footer}>
         <Wrapper.Left css={style.footerLeft}>
           <Wrapper.Item css={style.footerLeftItem}>
@@ -50,46 +51,56 @@ const Footer = () => {
             </Typography>
           </Wrapper.Item>
           <Wrapper.Item css={style.footerLeftItem}>
-            <Typography
-              fontSize="body-14"
-              fontWeight="regular"
-              lineHeight="150%"
-              color="greyScale-6"
-            >
-              매장
-            </Typography>
-            <Typography
-              fontSize="body-14"
-              fontWeight="regular"
-              lineHeight="150%"
-              color="greyScale-6"
-            >
-              슈마매거진
-            </Typography>
-            <Typography
-              fontSize="body-14"
-              fontWeight="regular"
-              lineHeight="150%"
-              color="greyScale-6"
-            >
-              커뮤니티
-            </Typography>
-            <Typography
-              fontSize="body-14"
-              fontWeight="regular"
-              lineHeight="150%"
-              color="greyScale-6"
-            >
-              제휴업체
-            </Typography>
-            <Typography
-              fontSize="body-14"
-              fontWeight="regular"
-              lineHeight="150%"
-              color="greyScale-6"
-            >
-              문의하기
-            </Typography>
+            <Link href="/market">
+              <Typography
+                fontSize="body-14"
+                fontWeight="regular"
+                lineHeight="150%"
+                color="greyScale-6"
+              >
+                매장
+              </Typography>
+            </Link>
+            <Link href="/magazine">
+              <Typography
+                fontSize="body-14"
+                fontWeight="regular"
+                lineHeight="150%"
+                color="greyScale-6"
+              >
+                슈마매거진
+              </Typography>
+            </Link>
+            <Link href="/community/paparazzi">
+              <Typography
+                fontSize="body-14"
+                fontWeight="regular"
+                lineHeight="150%"
+                color="greyScale-6"
+              >
+                커뮤니티
+              </Typography>
+            </Link>
+            <Link href="/partnership">
+              <Typography
+                fontSize="body-14"
+                fontWeight="regular"
+                lineHeight="150%"
+                color="greyScale-6"
+              >
+                제휴업체
+              </Typography>
+            </Link>
+            <Link href="/inquiry">
+              <Typography
+                fontSize="body-14"
+                fontWeight="regular"
+                lineHeight="150%"
+                color="greyScale-6"
+              >
+                문의하기
+              </Typography>
+            </Link>
           </Wrapper.Item>
         </Wrapper.Left>
         <Wrapper.Right css={style.footerRight}>

@@ -20,7 +20,7 @@ const Category = (props: CategoryProps) => {
   const { links, category } = props;
 
   return (
-    <Container width="100%">
+    <Container role="navigation" width="100%">
       <Wrapper
         css={css`
           display: flex;
@@ -33,7 +33,7 @@ const Category = (props: CategoryProps) => {
         `}
       >
         {links.map((link) => (
-          <Link key={link.title} href={link.href}>
+          <Link key={link.title} href={link.href} scroll={false}>
             <Button
               variant={link.category === category ? 'Primary' : 'Line'}
               border="rounded"

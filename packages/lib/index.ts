@@ -5,3 +5,7 @@ export * from './embeds';
 export * from './random';
 export * from './browser/browser.utils';
 export * from './text';
+export * from './formatter';
+export * from './checkDeeplyEquall';
+export * from './debounce';
+export * from './isServer';

@@ -24,6 +24,7 @@ const footer = css`
 const footerLeft = css`
   display: grid;
   grid-template-columns: 1fr 1fr;
+  padding-left: 16px;
 `;
 
 const footerLeftItem = css`
@@ -37,6 +38,7 @@ const footerRight = css`
   display: flex;
   justify-content: flex-end;
   gap: 17px;
+  padding-right: 16px;
 `;
 
 export { footer, footerLeft, footerLeftItem, footerRight };

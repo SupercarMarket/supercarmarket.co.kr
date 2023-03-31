@@ -4,28 +4,22 @@ import Layout from 'components/layout/layout';
 import { OpenVidu, Session, StreamManager } from 'openvidu-browser';
 import React, { useEffect, useState } from 'react';
 
-interface Props {}
+interface Props {
+  sessionId: string;
+}
 
 function Subscriber(props: Props) {
-  const {} = props;
-
-  const [ov, setOv] = useState<OpenVidu>();
-  const [session, setSession] = useState<Session>();
+  const { sessionId } = props;
 
   const [initUserData, setInitUserData] = useState({
     sessionId: 'channelId',
-    userName: 'userInfo.nickname',
+    userName: 'userInfo.nickname1',
   });
-
-  const [subscribers, setSubscribers] = useState<StreamManager>();
 
   const joinSession = () => {
     const newOV = new OpenVidu();
     newOV.enableProdMode();
     const newSession = newOV.initSession();
-
-    setOv(newOV);
-    setSession(newSession);
 
     const connection = () => {
       getToken().then((token: any) => {
@@ -37,48 +31,45 @@ function Subscriber(props: Props) {
           const newSubscriber = newSession.subscribe(event.stream, video, {
             insertMode: 'APPEND',
           });
-          setSubscribers(newSubscriber);
         });
       });
     };
     connection();
   };
 
+  const getToken = async () => {
+    const resData = await axios.get(
+      `${process.env.NEXT_PUBLIC_OPENVIDU_API_URL}/openvidu/api/sessions/${sessionId}`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Basic ${btoa(
+            process.env.NEXT_PUBLIC_OPENVIDU_SECRET
+          )}`,
+        },
+      }
+    );
+    return resData.data.connections.content[0].token;
+  };
+
   useEffect(() => {
-    joinSession();
+    if (sessionId) joinSession();
   }, []);
 
+  if (!sessionId) {
+    return <></>;
+  }
   return (
-    <Container>
-      <Layout>
-        <div style={{ display: 'flex', marginTop: '10px' }}>
-          <div style={{ width: '880px' }}>
-            <div style={{ height: '485px' }}>
-              <video id="Streaming" style={{ height: '100%', width: '100%' }} />
-            </div>
-            <div>
-              <p>딜러 닉네임</p>
-              <p>오늘의 라이브 진행합니다! 들어와서 구경하고 가세요!</p>
-            </div>
-          </div>
-        </div>
-      </Layout>
-    </Container>
+    <div style={{ width: '880px' }}>
+      <div style={{ height: '485px' }}>
+        <video id="Streaming" style={{ height: '100%', width: '100%' }} />
+      </div>
+      <div>
+        <p>딜러 닉네임</p>
+        <p>오늘의 라이브 진행합니다! 들어와서 구경하고 가세요!</p>
+      </div>
+    </div>
   );
 }
 
 export default Subscriber;
-
-const getToken = async () => {
-  const resData = await axios.post(
-    `${process.env.NEXT_PUBLIC_OPENVIDU_API_URL}/openvidu/api/sessions/${data.data.id}/connection`,
-    {},
-    {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Basic ${btoa(process.env.NEXT_PUBLIC_OPENVIDU_SECRET)}`,
-      },
-    }
-  );
-  return resData.data.token;
-};

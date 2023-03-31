@@ -1,12 +1,12 @@
 import { Container, Wrapper } from '@supercarmarket/ui';
 import type { MarketDto } from '@supercarmarket/types/market';
 import MarketCard from 'components/market/marketCard';
-import useHome from 'hooks/queries/useHome';
 import { css } from 'styled-components';
 import { applyMediaQuery } from 'styles/mediaQuery';
+import { useHome } from 'http/server/home';
 
 const Market = () => {
-  const { data: marketBest } = useHome<MarketDto>('best');
+  const { data: marketBest } = useHome<MarketDto[]>('best');
 
   return (
     <Container
@@ -32,7 +32,9 @@ const Market = () => {
         {marketBest &&
           marketBest.data
             .slice(0, 8)
-            .map((post) => <MarketCard key={post.id} {...post} />)}
+            .map((post, index) => (
+              <MarketCard key={post.id} ranking={index + 1} {...post} />
+            ))}
       </Wrapper>
     </Container>
   );

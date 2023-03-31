@@ -3,6 +3,7 @@ import type { NextPageWithLayout } from '@supercarmarket/types/base';
 import { DealerForm } from 'components/inquiry';
 import Layout from 'components/layout/layout';
 import { css } from 'styled-components';
+import { ModalProvider } from 'feature/modalContext';
 
 const Dealer: NextPageWithLayout = () => {
   return (
@@ -18,7 +19,9 @@ const Dealer: NextPageWithLayout = () => {
         `}
       >
         <Title>딜러 등록 문의</Title>
-        <DealerForm />
+        <ModalProvider>
+          <DealerForm />
+        </ModalProvider>
       </Wrapper>
     </Container>
   );

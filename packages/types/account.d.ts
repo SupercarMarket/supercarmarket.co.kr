@@ -11,6 +11,7 @@ interface Profile {
   representativeImgSrc?: string[];
   gallery: string[];
   createdDate: string;
+  role: 'user' | 'dealer';
 }
 
 interface UpdateInfo {

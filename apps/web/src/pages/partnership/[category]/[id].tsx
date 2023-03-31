@@ -6,14 +6,19 @@ import {
   QueryClient,
   QueryErrorResetBoundary,
 } from '@tanstack/react-query';
-import { applyMediaQuery, Searchbar, Tab, Wrapper } from '@supercarmarket/ui';
+import {
+  applyMediaQuery,
+  Container,
+  Searchbar,
+  Wrapper,
+} from '@supercarmarket/ui';
 import { ErrorBoundary } from 'react-error-boundary';
 import Layout from 'components/layout';
 import { ErrorFallback } from 'components/fallback';
 import { useSearchKeyword } from 'hooks/useSearchKeyword';
-import { serverFetcher } from '@supercarmarket/lib';
-import queries from 'constants/queries';
 import PartnershipContents from 'components/partnership/partnershipContents';
+import Advertisement from 'components/common/advertisement';
+import { prefetchPartnershipPost, QUERY_KEYS } from 'http/server/partnership';
 
 const PartnershipDetailPage: NextPageWithLayout = ({
   id,
@@ -24,47 +29,59 @@ const PartnershipDetailPage: NextPageWithLayout = ({
   });
 
   return (
-    <Wrapper
-      css={css`
-        width: 1200px;
-        display: flex;
-        flex-direction: column;
-        margin: 20px 0 0 0;
-        ${applyMediaQuery('mobile')} {
-          padding: 0 16px;
-        }
-      `}
-    >
-      <QueryErrorResetBoundary>
-        {({ reset }) => (
-          <>
-            <ErrorBoundary
-              onReset={reset}
-              fallbackRender={(props) => <ErrorFallback {...props} />}
-            >
-              <PartnershipContents id={id} category={category} />
-            </ErrorBoundary>
-            <Wrapper
-              css={css`
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                margin-bottom: 160px;
-              `}
-            >
-              <Searchbar
-                variant="Line"
-                width="540px"
-                placeholder="검색어를 입력하세요"
-                ref={keywordRef}
-                onKeyDown={keydownHandler}
-              />
-            </Wrapper>
-          </>
-        )}
-      </QueryErrorResetBoundary>
-      <Tab list={`/partnership?category=${category}`} scroll />
-    </Wrapper>
+    <Container>
+      <Advertisement />
+      <Wrapper
+        css={css`
+          width: 1200px;
+          display: flex;
+          flex-direction: column;
+          margin: 20px 0 0 0;
+          box-sizing: border-box;
+          ${applyMediaQuery('mobile')} {
+            width: 100%;
+            padding: 0 16px;
+          }
+        `}
+      >
+        <QueryErrorResetBoundary>
+          {({ reset }) => (
+            <>
+              <ErrorBoundary
+                onReset={reset}
+                fallbackRender={(props) => <ErrorFallback {...props} />}
+              >
+                <PartnershipContents id={id} category={category} />
+              </ErrorBoundary>
+              <Wrapper
+                css={css`
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  margin-bottom: 160px;
+                `}
+              >
+                <Wrapper
+                  css={css`
+                    width: 504px;
+                    ${applyMediaQuery('mobile')} {
+                      width: 240px;
+                    }
+                  `}
+                >
+                  <Searchbar
+                    variant="Line"
+                    placeholder="검색어를 입력하세요"
+                    onKeyDown={keydownHandler}
+                    ref={keywordRef}
+                  />
+                </Wrapper>
+              </Wrapper>
+            </>
+          )}
+        </QueryErrorResetBoundary>
+      </Wrapper>
+    </Container>
   );
 };
 
@@ -76,18 +93,10 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   const queryClient = new QueryClient();
 
-  queryClient.prefetchQuery(queries.partnership.id(id), () =>
-    serverFetcher(
-      `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/partnership`,
-      {
-        method: 'GET',
-        params: id,
-      }
-    ).then((res) => {
-      const { ok, status, ...rest } = res;
-      return rest;
-    })
-  );
+  await queryClient.prefetchQuery({
+    queryKey: QUERY_KEYS.id(id),
+    queryFn: () => prefetchPartnershipPost(id),
+  });
 
   ctx.res.setHeader('Cache-Control', 'public, max-age=500, immutable');
 

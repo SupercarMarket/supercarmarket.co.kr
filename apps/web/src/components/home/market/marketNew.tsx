@@ -1,14 +1,14 @@
 import { Container, Typography, Wrapper } from '@supercarmarket/ui';
 import type { MarketDto } from '@supercarmarket/types/market';
 import MarketCard from 'components/market/marketCard';
-import useHome from 'hooks/queries/useHome';
 import { css } from 'styled-components';
 import { applyMediaQuery } from 'styles/mediaQuery';
 
 import RouterButton from '../routerButton';
+import { useHome } from 'http/server/home';
 
 const MarketNew = () => {
-  const { data: marketNew } = useHome<MarketDto>('new');
+  const { data: marketNew } = useHome<MarketDto[]>('new');
 
   return (
     <Container

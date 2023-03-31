@@ -9,8 +9,6 @@ import {
   Wrapper,
 } from '@supercarmarket/ui';
 import { catchNoExist, ErrorCode } from '@supercarmarket/lib';
-import auth from 'constants/auth';
-import { useAuthDispatch, useAuthState } from 'feature/authProvider';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
@@ -21,16 +19,14 @@ import GoogleIcon from '../../../assets/svg/google.svg';
 import KakaoIcon from '../../../assets/svg/kakao.svg';
 import AuthFormItem from '../authFormItem/authFormItem';
 import * as style from './signinForm.styled';
+import useAuth from 'hooks/useAuth';
+import { useDebounce } from '@supercarmarket/hooks';
+import { form, FormState } from 'constants/form/signin';
 
 const oauth = [
   { provider: 'kakao', title: '카카오', icon: <KakaoIcon /> },
   { provider: 'google', title: '구글', icon: <GoogleIcon /> },
 ];
-
-interface FormState {
-  id: string;
-  password: string;
-}
 
 const Links = () => {
   return (
@@ -67,14 +63,13 @@ const Links = () => {
 
 const LocalFormItem = () => {
   const methods = useForm<FormState>();
-  const dispatch = useAuthDispatch();
-  const state = useAuthState();
+  const { authState } = useAuth();
   const { replace } = useRouter();
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
 
   const { formState } = methods;
 
-  const onSubmit = methods.handleSubmit(async (data) => {
+  const debouncedSubmit = useDebounce(async (data: FormState) => {
     setErrorMessage(null);
 
     const { id, password } = data;
@@ -86,22 +81,23 @@ const LocalFormItem = () => {
       redirect: false,
     });
 
-    if (!response) setErrorMessage(ErrorCode[420]);
+    if (!response) setErrorMessage(ErrorCode[450]);
     else if (response.ok) replace('/');
-    else setErrorMessage(ErrorCode[450]);
-  });
+    else setErrorMessage(response?.error || ErrorCode[450]);
+  }, 300);
+
   return (
     <FormProvider {...methods}>
-      <Form css={style.form} onSubmit={onSubmit}>
+      <Form css={style.form} onSubmit={methods.handleSubmit(debouncedSubmit)}>
         <Wrapper css={style.wrapper}>
-          {auth.signin().map((form) => (
+          {form.map((form) => (
             <FormLabel
               key={form.htmlFor}
               name={form.htmlFor}
               label={form.label}
               hidden
             >
-              <AuthFormItem state={state} dispatch={dispatch} {...form} />
+              <AuthFormItem {...form} state={authState} tooltip="" />
             </FormLabel>
           ))}
         </Wrapper>
