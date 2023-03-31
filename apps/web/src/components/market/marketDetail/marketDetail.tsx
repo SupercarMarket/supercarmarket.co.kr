@@ -54,7 +54,7 @@ const MarketDetail = ({ data, id }: MarketDetailProps) => {
         viewCount={view}
         createdDate={createdDate}
       />
-      <MarketDetailCarousel imgSrc={imgSrc} id={id} />
+      {imgSrc.length > 0 && <MarketDetailCarousel imgSrc={imgSrc} id={id} />}
       <Typography fontSize="header-24" fontWeight="bold">
         딜러정보
       </Typography>

@@ -1,27 +1,46 @@
 import * as React from 'react';
-import Select from 'components/common/select';
-import { ORDER_OPTIONSET, SHOW_COUNT_OPTIONS } from 'constants/market';
+import { css } from 'styled-components';
 
-import * as Styled from './marketCar.styled';
+import Select from 'components/common/select';
 import MarketList from '../marketList';
-import { Tab } from '@supercarmarket/ui';
+import { Container, Tab, Wrapper } from '@supercarmarket/ui';
+import { ORDER_OPTIONSET, SHOW_COUNT_OPTIONS } from 'constants/market';
 
 const MarketCar = () => {
   return (
-    <Styled.MarketCarListContainer>
-      <Styled.ListFilter>
-        <Styled.ButtonBox>
-          <Styled.SelectBox width="140px">
+    <Container margin="0 0 80px 0">
+      <Wrapper
+        css={css`
+          display: flex;
+          justify-content: flex-end;
+          margin-bottom: 20px;
+        `}
+      >
+        <Wrapper.Top
+          css={css`
+            display: flex;
+            gap: 9px;
+          `}
+        >
+          <Wrapper.Left
+            css={css`
+              width: 140px;
+            `}
+          >
             <Select options={ORDER_OPTIONSET} />
-          </Styled.SelectBox>
-          <Styled.SelectBox width="100px">
+          </Wrapper.Left>
+          <Wrapper.Right
+            css={css`
+              width: 100px;
+            `}
+          >
             <Select options={SHOW_COUNT_OPTIONS} />
-          </Styled.SelectBox>
+          </Wrapper.Right>
           <Tab variant full={false} />
-        </Styled.ButtonBox>
-      </Styled.ListFilter>
+        </Wrapper.Top>
+      </Wrapper>
       <MarketList pagination />
-    </Styled.MarketCarListContainer>
+    </Container>
   );
 };
 

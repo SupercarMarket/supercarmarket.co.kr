@@ -73,7 +73,7 @@ const convertQuery = (query: object, asPath: string) => {
   const objectQuery = { ...query } as { [key: string]: string };
   const converted: string[][] = Object.entries(objectQuery);
 
-  const path = asPath.split('?')[1]?.replaceAll(/min|max/g, '');
+  const path = asPath.replaceAll(/min|max/g, '');
   const con: { [key: string]: string[] } = {};
 
   converted.forEach(([key, val]) => {
