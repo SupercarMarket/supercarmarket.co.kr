@@ -49,6 +49,7 @@ const BannerItem = (props: BannerItemProps) => {
           'mobile'
         )} 343px`}
         fill
+        priority
       />
       <Wrapper.Item
         css={css`
