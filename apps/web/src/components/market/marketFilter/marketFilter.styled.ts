@@ -3,46 +3,9 @@
 import { applyMediaQuery } from '@supercarmarket/ui';
 import styled from 'styled-components';
 
-const MarketFilterContainer = styled.div`
-  width: 1200px;
-  height: 350px;
-`;
-
-const MarketFilterArea = styled.div`
-  box-sizing: border-box;
-  display: flex;
-  width: 100%;
-  flex-direction: column;
-  gap: 32px;
-  margin-bottom: 20px;
-  padding: 16px 12px;
-  background: ${({ theme }) => theme.color['greyScale-2']};
-  border-radius: 4px;
-`;
-
 const MarketFilterBox = styled.div`
   display: flex;
   gap: 24px;
-`;
-
-const MarketFilterWrapper = styled.div`
-  width: 270px;
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-`;
-
-const FilterListArea = styled.div`
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  margin-bottom: 80px;
-  ${applyMediaQuery('mobile')} {
-    flex-direction: column;
-    gap: 8px;
-    margin-bottom: 32px;
-  }
 `;
 
 const MarketFilterList = styled.ul`
@@ -79,13 +42,4 @@ const ResetButton = styled.button`
   }
 `;
 
-export {
-  FilterListArea,
-  MarketFilterArea,
-  MarketFilterBox,
-  MarketFilterContainer,
-  MarketFilterItem,
-  MarketFilterList,
-  MarketFilterWrapper,
-  ResetButton,
-};
+export { MarketFilterBox, MarketFilterItem, MarketFilterList, ResetButton };

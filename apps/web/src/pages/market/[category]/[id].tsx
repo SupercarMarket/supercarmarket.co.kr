@@ -142,7 +142,7 @@ export const getServerSideProps: GetServerSideProps = async ({
       prefetchMarketPost({ boardView, token: session?.accessToken, id }),
   });
 
-  res.setHeader('Cache-Control', 'public, max-age=500, immutable');
+  // res.setHeader('Cache-Control', 'public, max-age=500, immutable');
 
   return {
     props: {

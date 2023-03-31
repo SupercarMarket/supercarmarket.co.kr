@@ -4,21 +4,22 @@ import {
   Wrapper,
   applyMediaQuery,
 } from '@supercarmarket/ui';
+import { useRouter } from 'next/router';
 import { MarketDto } from '@supercarmarket/types/market';
 import { WithBlurredImage } from '@supercarmarket/types/magazine';
 import Image from 'next/image';
 import Link from 'next/link';
 import { css } from 'styled-components';
-
-import MarketRow from '../marketRow';
-import * as Styled from './marketCard.styled';
-import { useRouter } from 'next/router';
-import { Params } from '@supercarmarket/types/base';
-import useBase64 from 'hooks/queries/useBase64';
 import Skeleton from 'react-loading-skeleton';
+import useBase64 from 'hooks/queries/useBase64';
+import MarketRow from '../marketRow';
+import { Params } from '@supercarmarket/types/base';
+
+import * as Styled from './marketCard.styled';
 
 interface MarketCardProps extends WithBlurredImage<MarketDto> {
   variant?: string;
+  ranking?: number;
 }
 
 const MarketCard = (props: MarketCardProps) => {
@@ -47,7 +48,9 @@ const MarketCard = (props: MarketCardProps) => {
   );
 };
 
-const MarketColumn = (props: WithBlurredImage<MarketDto>) => {
+const MarketColumn = (
+  props: WithBlurredImage<MarketDto> & { ranking?: number }
+) => {
   const {
     id,
     carName,
@@ -59,6 +62,7 @@ const MarketColumn = (props: WithBlurredImage<MarketDto>) => {
     price,
     year,
     category,
+    ranking,
   } = props;
   const { query } = useRouter();
   const queryString = new URLSearchParams(query as Params).toString();
@@ -68,27 +72,69 @@ const MarketColumn = (props: WithBlurredImage<MarketDto>) => {
   return (
     <Link href={`/market/${category}/${id}?${queryString}`}>
       <Container width="100%" display="flex" flexDirection="column" key={id}>
-        <Styled.DivideArea style={{ marginBottom: '20px' }}>
+        <Wrapper
+          css={css`
+            margin-bottom: 20px;
+            cursor: pointer;
+          `}
+        >
           <Wrapper.Item
             css={css`
-              position: relative;
               width: 285px;
-              height: 180px;
+              position: relative;
+              aspect-ratio: 4/3;
+              overflow: hidden;
+
               .react-loading-skeleton {
                 width: 285px;
-                height: 180px;
+                aspect-ratio: 4/3;
                 border-radius: 4px;
               }
               ${applyMediaQuery('mobile')} {
                 width: 167.5px;
-                height: 106px;
                 .react-loading-skeleton {
                   width: 167.5px;
-                  height: 106px;
                 }
               }
             `}
           >
+            {ranking && (
+              <Wrapper.Item
+                css={css`
+                  ${({ theme }) => css`
+                    position: absolute;
+                    left: 0;
+                    z-index: 1;
+                    border-top-left-radius: 4px;
+                    overflow: hidden;
+
+                    .ranking {
+                      position: absolute;
+                      left: 12px;
+                      top: 7px;
+                      color: ${theme.color.white};
+                      font-size: ${theme.fontSize['body-16']};
+                      font-weight: ${theme.fontWeight.regular};
+                    }
+
+                    ${applyMediaQuery('mobile')} {
+                      display: none;
+                    }
+                  `}
+                `}
+              >
+                <p className="ranking">{ranking}</p>
+                <svg
+                  width="32"
+                  height="44"
+                  viewBox="0 0 32 44"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M0 44V0H32V44L16 30.0759L0 44Z" fill="#1E1E20" />
+                </svg>
+              </Wrapper.Item>
+            )}
             {base64 ? (
               <Image
                 fill
@@ -105,7 +151,7 @@ const MarketColumn = (props: WithBlurredImage<MarketDto>) => {
               <Skeleton />
             )}
           </Wrapper.Item>
-        </Styled.DivideArea>
+        </Wrapper>
         <Typography
           fontSize="header-16"
           fontWeight="bold"
@@ -121,13 +167,13 @@ const MarketColumn = (props: WithBlurredImage<MarketDto>) => {
         >
           {description}
         </Typography>
-        <Styled.DivideArea
-          style={{
-            display: 'flex',
-            alignContent: 'center',
-            gap: '8px',
-            marginBottom: '12.5px',
-          }}
+        <Wrapper
+          css={css`
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12.5px;
+          `}
         >
           <Typography fontSize="body-14">{`${year}`}</Typography>
           <Styled.Divider />
@@ -136,7 +182,7 @@ const MarketColumn = (props: WithBlurredImage<MarketDto>) => {
           <Typography fontSize="body-14">{`${formatter(
             mileage
           )}km`}</Typography>
-        </Styled.DivideArea>
+        </Wrapper>
         <Typography fontSize="body-14" fontWeight="bold" color="system-1">
           {price ? `${formatter(price * 10000)}원` : '상담'}
         </Typography>
