@@ -14,6 +14,9 @@ function Publisher(props: Props) {
     userName: 'userInfo.nickname',
   });
 
+  const [session, setSession] = useState<any>();
+  const [publicher, setPublicher] = useState<any>();
+
   const joinSession = () => {
     const newOV = new OpenVidu();
     newOV.enableProdMode();
@@ -21,6 +24,7 @@ function Publisher(props: Props) {
 
     const connection = () => {
       getToken().then((token: any) => {
+        console.log(token);
         newSession
           .connect(token, { clientData: initUserData.userName })
           .then(async () => {
@@ -39,6 +43,9 @@ function Publisher(props: Props) {
               publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
               publishVideo: true, // Whether you want to start publishing with your video enabled or not
             });
+            // setSession(newSession);
+            // setPublicher(publich);
+
             newSession.publish(publich);
 
             newSession.on('streamCreated', (event) => {
@@ -49,6 +56,10 @@ function Publisher(props: Props) {
       });
     };
     connection();
+  };
+
+  const test = () => {
+    session.publish(publicher);
   };
 
   const getToken = async () => {

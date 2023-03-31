@@ -13,7 +13,7 @@ function Subscriber(props: Props) {
 
   const [initUserData, setInitUserData] = useState({
     sessionId: 'channelId',
-    userName: 'userInfo.nickname1',
+    userName: 'userInfo.nickname12',
   });
 
   const joinSession = () => {
@@ -23,7 +23,8 @@ function Subscriber(props: Props) {
 
     const connection = () => {
       getToken().then((token: any) => {
-        newSession.connect(token, { clientData: initUserData.userName });
+        console.log(token);
+        newSession.connect(token);
 
         var video = document.getElementById('Streaming') as HTMLVideoElement;
 
@@ -38,8 +39,9 @@ function Subscriber(props: Props) {
   };
 
   const getToken = async () => {
-    const resData = await axios.get(
-      `${process.env.NEXT_PUBLIC_OPENVIDU_API_URL}/openvidu/api/sessions/${sessionId}`,
+    const resData = await axios.post(
+      `${process.env.NEXT_PUBLIC_OPENVIDU_API_URL}/openvidu/api/sessions/${sessionId}/connection`,
+      {},
       {
         headers: {
           'Content-Type': 'application/json',
@@ -49,7 +51,7 @@ function Subscriber(props: Props) {
         },
       }
     );
-    return resData.data.connections.content[0].token;
+    return resData.data.token;
   };
 
   useEffect(() => {
@@ -61,7 +63,7 @@ function Subscriber(props: Props) {
   }
   return (
     <div style={{ width: '880px' }}>
-      <div id="Streaming" style={{ height: '485px' }}></div>
+      <div id="Streaming" style={{ height: '495px' }}></div>
       <div>
         <p>딜러 닉네임</p>
         <p>오늘의 라이브 진행합니다! 들어와서 구경하고 가세요!</p>
