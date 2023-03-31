@@ -1,4 +1,4 @@
-import { clientFetcher, get, serverFetcher } from '@supercarmarket/lib';
+import { get } from '@supercarmarket/lib';
 
 export const getPartnership = async (query: {
   category: string;

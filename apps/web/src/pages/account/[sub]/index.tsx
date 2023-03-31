@@ -1,6 +1,4 @@
 import { applyMediaQuery, Container, Wrapper } from '@supercarmarket/ui';
-import { BaseApiHandlerResponse } from '@supercarmarket/lib';
-import type { Profile as ProfileType } from '@supercarmarket/types/account';
 import type { Params, NextPageWithLayout } from '@supercarmarket/types/base';
 import { AccountCategoryList, Profile } from 'components/account';
 import AccountLayout from 'components/layout/accountLayout';

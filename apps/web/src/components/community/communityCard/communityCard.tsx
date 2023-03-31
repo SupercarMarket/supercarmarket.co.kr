@@ -95,6 +95,10 @@ const CommunityCardRow = (props: CommunityCardChildrenProps) => {
   } = props;
   const { isMobile } = useMedia({ deviceQuery });
 
+  const isToday =
+    dayjs(new Date()).format('YYYY-MM-DD') ===
+    dayjs(created).format('YYYY-MM-DD');
+
   return (
     <Link
       href={{
@@ -249,7 +253,9 @@ const CommunityCardRow = (props: CommunityCardChildrenProps) => {
               color="greyScale-6"
               lineHeight="150%"
             >
-              {dayjs(created).format('HH:mm')}
+              {isToday
+                ? dayjs(created).format('HH:mm')
+                : dayjs(created).format('YYYY-MM-DD')}
             </Typography>
             <Typography
               fontSize="body-14"

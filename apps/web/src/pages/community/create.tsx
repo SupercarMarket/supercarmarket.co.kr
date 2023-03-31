@@ -5,7 +5,6 @@ import layout from 'components/layout';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { getSession } from 'http/server/auth/user';
 import { ModalProvider } from 'feature/modalContext';
-import { CommunityTemporaryStorageDto } from '@supercarmarket/types/community';
 import { QueryErrorResetBoundary } from '@tanstack/react-query';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from 'components/fallback';

@@ -128,14 +128,6 @@ const FormSelect = React.forwardRef(function FormSelect(
         css={css`
           width: 100%;
           position: relative;
-          & > input {
-            font-size: ${theme.fontSize['body-12']} !important;
-          }
-          ${applyMediaQuery('mobile')} {
-            & > input {
-              font-size: 8px !important;
-            }
-          }
         `}
       >
         <Input
