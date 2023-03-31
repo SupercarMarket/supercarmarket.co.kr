@@ -1,5 +1,6 @@
 import { CSSProperties, InputHTMLAttributes, Ref } from 'react';
 import { forwardRef } from 'react';
+import { deviceQuery } from '../../styles';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   width?: CSSProperties['width'];
@@ -58,6 +59,11 @@ const Input = forwardRef(function Input(
         }
         .input:invalid {
           border: 1px solid #ed7474;
+        }
+        @media (${deviceQuery.mobile}) {
+          .input {
+            font-size: 12px;
+          }
         }
       `}</style>
     </>

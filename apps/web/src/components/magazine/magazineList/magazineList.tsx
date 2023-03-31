@@ -35,10 +35,13 @@ const MagazineList = () => {
           variant="Line"
           border="normal"
           placeholder="검색어를 입력해주세요."
-          handleClick={(query) => push(`/magazine?keyword=${query}`)}
+          handleClick={(query) => {
+            if (query.length <= 1) return;
+            push(`/magazine?keyword=${query}`);
+          }}
         />
       </Wrapper>
-      {magazine ? (
+      {magazine && magazine.data.length > 0 ? (
         <>
           <Wrapper
             css={css`
@@ -68,7 +71,17 @@ const MagazineList = () => {
           />
         </>
       ) : (
-        <Alert severity="info" title="매거진이 존재하지 않습니다." />
+        <Wrapper
+          css={css`
+            width: 100%;
+            margin-top: 80px;
+            ${applyMediaQuery('mobile')} {
+              margin-top: 32px;
+            }
+          `}
+        >
+          <Alert severity="info" title="매거진이 존재하지 않습니다." />
+        </Wrapper>
       )}
     </Container>
   );

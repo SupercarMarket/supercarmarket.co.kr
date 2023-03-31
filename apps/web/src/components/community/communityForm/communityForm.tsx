@@ -19,7 +19,6 @@ import type { CommunityTemporaryStorageDto } from '@supercarmarket/types/communi
 import ModalContext from 'feature/modalContext';
 import { FormProvider, useForm } from 'react-hook-form';
 import { ErrorCode, HttpError } from '@supercarmarket/lib';
-import { useSession } from 'next-auth/react';
 import {
   formatter,
   getCategoryPathname,
@@ -546,10 +545,10 @@ const CommunityForm = (props: CommunityFormProps) => {
               disabled={uploadMutation.isLoading}
             >
               {id
-                ? formState.isSubmitting
+                ? uploadMutation.isLoading
                   ? '수정 중..'
                   : '수정 완료'
-                : formState.isSubmitting
+                : uploadMutation.isLoading
                 ? '작성 중..'
                 : '작성 완료'}
             </Button>
