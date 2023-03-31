@@ -6,7 +6,7 @@ import { css } from 'styled-components';
 import { ModalProvider } from 'feature/modalContext';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { get } from '@supercarmarket/lib';
-import { getSession } from 'http/server/auth/user';
+import { getSession } from 'http/server/next';
 
 const Market: NextPageWithLayout = ({
   role,
