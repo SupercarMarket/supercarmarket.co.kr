@@ -201,7 +201,11 @@ const MarketRow = ({
               `}
             >
               <Typography fontSize="body-14" fontWeight="bold" color="system-1">
-                {price ? `${formatter(price * 10000)}원` : '상담'}
+                {price && price === 1
+                  ? '판매 완료'
+                  : price !== 1
+                  ? `${formatter(price * 10000)}원`
+                  : '상담'}
               </Typography>
             </Wrapper.Item>
             <Wrapper.Item

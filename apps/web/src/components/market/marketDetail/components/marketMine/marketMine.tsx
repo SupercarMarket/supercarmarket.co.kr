@@ -20,8 +20,8 @@ interface MarketMineProps {
 }
 
 const MarketMine = ({ id, brdSeq }: MarketMineProps) => {
-  const { mutate: removeMarketById } = useDeleteMarketPost();
-  const { mutate: changeSellStatus } = useUpdateMarketSellStatus();
+  const { mutate: removeMarketById } = useDeleteMarketPost(id);
+  const { mutate: changeSellStatus } = useUpdateMarketSellStatus(id);
   const { onOpen, onClose } = React.useContext(ModalContext);
 
   const changeStatus = React.useCallback(() => {

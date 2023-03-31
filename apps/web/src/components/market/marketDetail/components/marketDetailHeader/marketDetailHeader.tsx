@@ -41,7 +41,11 @@ const MarketDetailHeader = ({
 
       <Wrapper.Right css={style.right}>
         <p className="market_price">
-          {price ? `${formatter(price * 10000)}원` : '상담'}
+          {price && price === 1
+            ? '판매 완료'
+            : price !== 1
+            ? `${formatter(price * 10000)}원`
+            : '상담'}
         </p>
         <Wrapper.Bottom css={style.rightBottom}>
           <Wrapper css={style.iconWrapper}>
