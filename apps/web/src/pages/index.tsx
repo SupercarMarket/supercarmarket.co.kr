@@ -38,7 +38,16 @@ const Home: NextPageWithLayout = () => {
                 onReset={reset}
                 fallbackRender={(props) => <ErrorFallback {...props} />}
               >
-                <Banner />
+                <Wrapper.Item
+                  css={css`
+                    ${applyMediaQuery('mobile')} {
+                      width: 100vw;
+                      margin-left: calc(-50vw + 50%);
+                    }
+                  `}
+                >
+                  <Banner />
+                </Wrapper.Item>
               </ErrorBoundary>
               <Advertisement hidden />
               <Title marginBottom="20px">슈마매거진</Title>

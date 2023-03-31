@@ -34,7 +34,7 @@ const BannerItem = (props: BannerItemProps) => {
         height: 260px;
         flex: none;
         ${applyMediaQuery('mobile')} {
-          width: 343px;
+          width: 100%;
           height: 160px;
         }
       `}
@@ -47,7 +47,7 @@ const BannerItem = (props: BannerItemProps) => {
         }}
         sizes={`${applyMediaQuery('desktop')} 1200px, ${applyMediaQuery(
           'mobile'
-        )} 343px`}
+        )} 400px`}
         fill
         priority
       />
@@ -129,7 +129,7 @@ const Banner = () => {
           margin-top: 8px;
           margin-bottom: 40px;
           ${applyMediaQuery('mobile')} {
-            width: 343px;
+            width: 100%;
             height: 160px;
           }
         `}
@@ -140,7 +140,7 @@ const Banner = () => {
               css={css`
                 display: flex;
                 transition: all 0.3s ease-out;
-                ${`margin-left: -${index}00%;`}
+                ${`transform: translateX(-${index}00%);`}
               `}
             >
               {data.data.map((banner, _index) => (
