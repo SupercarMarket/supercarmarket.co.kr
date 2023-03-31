@@ -5,6 +5,7 @@ import {
   applyMediaQuery,
   theme,
 } from '@supercarmarket/ui';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Modal } from 'components/common/modal';
 import ModalContext from 'feature/modalContext';
 import {
@@ -13,6 +14,8 @@ import {
 } from 'http/server/market';
 import * as React from 'react';
 import { css } from 'styled-components';
+import { useNextQuery } from 'hooks/useNextQuery';
+import { marketFormatter } from '@supercarmarket/lib';
 
 interface MarketMineProps {
   id: string;
@@ -20,9 +23,16 @@ interface MarketMineProps {
 }
 
 const MarketMine = ({ id, brdSeq }: MarketMineProps) => {
-  const { mutate: removeMarketById } = useDeleteMarketPost(id);
-  const { mutate: changeSellStatus } = useUpdateMarketSellStatus(id);
+  const { push } = useRouter();
+  const searchParams = useSearchParams();
+  const { query } = useNextQuery(searchParams);
   const { onOpen, onClose } = React.useContext(ModalContext);
+  const { mutate: changeSellStatus } = useUpdateMarketSellStatus(id);
+  const { mutate: deleteMarketById } = useDeleteMarketPost(id, {
+    onSuccess: () => {
+      push(`/market?category=${marketFormatter(query.category)}`);
+    },
+  });
 
   const changeStatus = React.useCallback(() => {
     changeSellStatus({
@@ -30,11 +40,11 @@ const MarketMine = ({ id, brdSeq }: MarketMineProps) => {
     });
   }, [brdSeq, changeSellStatus]);
 
-  const removeMarket = React.useCallback(() => {
-    removeMarketById({
+  const deleteMarket = React.useCallback(() => {
+    deleteMarketById({
       data: [{ id }],
     });
-  }, [id, removeMarketById]);
+  }, [id, deleteMarketById]);
 
   const handleStatusModal = React.useCallback(() => {
     onOpen(
@@ -69,10 +79,10 @@ const MarketMine = ({ id, brdSeq }: MarketMineProps) => {
         onCancel={() => {
           onClose();
         }}
-        onClick={removeMarket}
+        onClick={deleteMarket}
       />
     );
-  }, [removeMarket, onOpen, onClose]);
+  }, [deleteMarket, onOpen, onClose]);
 
   return (
     <Wrapper
