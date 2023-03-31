@@ -1,12 +1,14 @@
-import { Params } from '@supercarmarket/types/base';
+import Link from 'next/link';
+import { css } from 'styled-components';
+import * as React from 'react';
+import { useSearchParams } from 'next/navigation';
+
+import { links } from 'constants/link/partnership';
+import SecondSelect from 'components/common/secondSelect';
 import { MarketOptionType } from '@supercarmarket/types/market';
 import { applyMediaQuery, Category, Wrapper } from '@supercarmarket/ui';
-import SecondSelect from 'components/common/secondSelect';
-import { links } from 'constants/link/partnership';
 import { PARTNERSHIP_FILTER_OPTIONS } from 'constants/partnership';
-import { useRouter } from 'next/router';
-import * as React from 'react';
-import { css } from 'styled-components';
+import { useNextQuery } from 'hooks/useNextQuery';
 import { makeQuery } from 'utils/market/marketQuery';
 
 interface PartnershipCategoryProps {
@@ -14,16 +16,15 @@ interface PartnershipCategoryProps {
 }
 
 const PartnershipCategory = ({ category }: PartnershipCategoryProps) => {
-  const { push, query } = useRouter();
+  const searchParams = useSearchParams();
+  const { query } = useNextQuery(searchParams);
   const selectRegion = (option: MarketOptionType) => {
-    const queries = query as Params;
+    const queries = query;
     queries[option.dataName] = option.value;
 
     const url = makeQuery(queries);
 
-    push(`/partnership?&${url}`, undefined, {
-      scroll: false,
-    });
+    return `/partnership?&${url}`;
   };
 
   return (
@@ -49,17 +50,18 @@ const PartnershipCategory = ({ category }: PartnershipCategoryProps) => {
         `}
       >
         <SecondSelect width="100px">
-          <SecondSelect.Button align="left" selected={(query as Params).region}>
+          <SecondSelect.Button align="left" selected={query.region}>
             {PARTNERSHIP_FILTER_OPTIONS.defaultLabel}
           </SecondSelect.Button>
           <SecondSelect.List>
             {PARTNERSHIP_FILTER_OPTIONS.optionSet.map((options) => (
-              <SecondSelect.Item
+              <Link
                 key={options.value}
-                onClick={() => selectRegion(options)}
+                href={selectRegion(options)}
+                scroll={false}
               >
-                {options.option}
-              </SecondSelect.Item>
+                <SecondSelect.Item>{options.option}</SecondSelect.Item>
+              </Link>
             ))}
           </SecondSelect.List>
         </SecondSelect>

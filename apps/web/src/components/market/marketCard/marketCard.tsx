@@ -4,7 +4,7 @@ import {
   Wrapper,
   applyMediaQuery,
 } from '@supercarmarket/ui';
-import { useRouter } from 'next/router';
+import { useSearchParams } from 'next/navigation';
 import { MarketDto } from '@supercarmarket/types/market';
 import { WithBlurredImage } from '@supercarmarket/types/magazine';
 import Image from 'next/image';
@@ -13,7 +13,6 @@ import { css } from 'styled-components';
 import Skeleton from 'react-loading-skeleton';
 import useBase64 from 'hooks/queries/useBase64';
 import MarketRow from '../marketRow';
-import { Params } from '@supercarmarket/types/base';
 
 import * as Styled from './marketCard.styled';
 
@@ -64,13 +63,11 @@ const MarketColumn = (
     category,
     ranking,
   } = props;
-  const { query } = useRouter();
-  const queryString = new URLSearchParams(query as Params).toString();
-
+  const searchParams = useSearchParams().toString();
   const formatter = Intl.NumberFormat('ko-KR', { notation: 'compact' }).format;
 
   return (
-    <Link href={`/market/${category}/${id}?${queryString}`}>
+    <Link href={`/market/${category}/${id}?${searchParams}`}>
       <Container width="100%" display="flex" flexDirection="column" key={id}>
         <Wrapper
           css={css`

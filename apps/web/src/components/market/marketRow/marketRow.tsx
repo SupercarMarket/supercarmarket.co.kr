@@ -4,8 +4,7 @@ import Link from 'next/link';
 import { css } from 'styled-components';
 import type { WithBlurredImage } from '@supercarmarket/types/magazine';
 import type { MarketDto } from '@supercarmarket/types/market';
-import { useRouter } from 'next/router';
-import { Params } from '@supercarmarket/types/base';
+import { useSearchParams } from 'next/navigation';
 import Skeleton from 'react-loading-skeleton';
 
 const MarketRow = ({
@@ -21,13 +20,11 @@ const MarketRow = ({
   year,
   category,
 }: WithBlurredImage<MarketDto>) => {
-  const { query } = useRouter();
-  const queryString = new URLSearchParams(query as Params).toString();
-
+  const searchParams = useSearchParams();
   const formatter = Intl.NumberFormat('ko-KR', { notation: 'compact' }).format;
 
   return (
-    <Link href={`/market/${category}/${id}?${queryString}`}>
+    <Link href={`/market/${category}/${id}?${searchParams}`}>
       <Wrapper
         css={css`
           width: 100%;
