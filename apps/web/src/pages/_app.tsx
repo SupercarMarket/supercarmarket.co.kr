@@ -76,8 +76,6 @@ function MyApp({
   );
   const Layout = (Component as any).Layout || Nope;
 
-  console.log(pageProps);
-
   return (
     <ThemeProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
