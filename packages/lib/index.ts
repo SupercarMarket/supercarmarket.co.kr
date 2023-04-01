@@ -9,3 +9,4 @@ export * from './formatter';
 export * from './checkDeeplyEquall';
 export * from './debounce';
 export * from './isServer';
+export * from './link';

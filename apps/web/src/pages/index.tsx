@@ -17,7 +17,7 @@ import HeadSeo from 'components/common/headSeo';
 import { APP_NAME } from 'constants/core';
 import { css } from 'styled-components';
 import Advertisement from 'components/common/advertisement';
-import { prefetchBanner, prefetchHome, QUERY_KEYS } from 'http/server/home';
+import { prefetchHome, QUERY_KEYS } from 'http/server/home';
 import Banner from 'components/home/banner';
 
 const Home: NextPageWithLayout = () => {
@@ -40,10 +40,8 @@ const Home: NextPageWithLayout = () => {
               >
                 <Wrapper.Item
                   css={css`
-                    ${applyMediaQuery('mobile')} {
-                      width: 100vw;
-                      margin-left: calc(-50vw + 50%);
-                    }
+                    width: 100vw;
+                    margin-left: calc(-50vw + 50%);
                   `}
                 >
                   <Banner />
@@ -98,7 +96,6 @@ const queryClient = new QueryClient();
 
 export const getStaticProps: GetStaticProps = async () => {
   await Promise.all([
-    queryClient.prefetchQuery(QUERY_KEYS.banner(), () => prefetchBanner('D')),
     queryClient.prefetchQuery(QUERY_KEYS.magazine(), () =>
       prefetchHome('magazine')
     ),

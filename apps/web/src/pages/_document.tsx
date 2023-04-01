@@ -7,7 +7,7 @@ import Document, {
 } from 'next/document';
 import Script from 'next/script';
 import { ServerStyleSheet } from 'styled-components';
-import { inter, pretendard } from './_app';
+import { pretendard } from './_app';
 
 const APP_NAME = '슈퍼카마켓';
 const APP_DESCRIPTION = '안녕하세요 슈퍼카 마켓입니다.';
