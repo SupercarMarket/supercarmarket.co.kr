@@ -11,6 +11,7 @@ import { useBanner } from 'http/server/home';
 import { css } from 'styled-components';
 import Image from 'next/image';
 import Skeleton from 'react-loading-skeleton';
+import { createExternalLink } from '@supercarmarket/lib';
 
 interface BannerItemProps {
   imageUrl: string;
@@ -25,7 +26,7 @@ interface BannerDotProps {
 }
 
 const BannerItem = (props: BannerItemProps) => {
-  const { imageUrl } = props;
+  const { imageUrl, url } = props;
   return (
     <Wrapper
       css={css`
@@ -39,25 +40,24 @@ const BannerItem = (props: BannerItemProps) => {
         }
       `}
     >
-      <Image
-        src={imageUrl}
-        alt="배너 이미지"
-        style={{
-          objectFit: 'cover',
-        }}
-        sizes={`${applyMediaQuery('desktop')} 100vw, ${applyMediaQuery(
-          'mobile'
-        )} 400px`}
-        fill
-        priority
-      />
-      <Wrapper.Item
-        css={css`
-          width: 100%;
-          height: 100%;
-          box-sizing: border-box;
-        `}
-      />
+      <a
+        href={createExternalLink(url)}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <Image
+          src={imageUrl}
+          alt="배너 이미지"
+          style={{
+            objectFit: 'cover',
+          }}
+          sizes={`${applyMediaQuery('desktop')} 100vw, ${applyMediaQuery(
+            'mobile'
+          )} 400px`}
+          fill
+          priority
+        />
+      </a>
     </Wrapper>
   );
 };
@@ -101,7 +101,6 @@ const Banner = () => {
   const [index, setIndex] = React.useState(0);
   const { isMobile } = useMedia({ deviceQuery });
   const { data, isLoading } = useBanner(isMobile ? 'M' : 'D');
-
   const handleIndex = React.useCallback(() => {
     const maxLength = data?.data.length;
     const nextIndex = maxLength === index + 1 ? 0 : index + 1;
