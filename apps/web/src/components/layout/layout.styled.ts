@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components';
 import { applyMediaQuery } from 'styles/mediaQuery';
 
 const availableWidth = {
+  wideDesktop: '1200px',
   desktop: '1200px',
   tablet: '768px',
   mobile: '375px',
