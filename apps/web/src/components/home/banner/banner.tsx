@@ -17,7 +17,6 @@ interface BannerItemProps {
   currentIndex: number;
   index: number;
   url: string;
-  clientWidth: number;
 }
 
 interface BannerDotProps {
@@ -26,7 +25,7 @@ interface BannerDotProps {
 }
 
 const BannerItem = (props: BannerItemProps) => {
-  const { imageUrl, clientWidth } = props;
+  const { imageUrl } = props;
   return (
     <Wrapper
       css={css`
@@ -35,9 +34,8 @@ const BannerItem = (props: BannerItemProps) => {
         height: 600px;
         flex: none;
         ${applyMediaQuery('wideDesktop')} {
-          width: 100%;
-          min-height: 600px;
-          height: ${clientWidth - 1300}px;
+          width: 1920px;
+          height: 600px;
         }
         ${applyMediaQuery('mobile')} {
           width: 100%;
@@ -106,7 +104,6 @@ const BannerDot = (props: BannerDotProps) => {
 const Banner = () => {
   const [index, setIndex] = React.useState(0);
   const { isMobile } = useMedia({ deviceQuery });
-  const [clientWidth, setClientWidth] = React.useState(0);
   const { data, isLoading } = useBanner(isMobile ? 'M' : 'D');
 
   const handleIndex = React.useCallback(() => {
@@ -117,15 +114,6 @@ const Banner = () => {
   }, [data, index]);
 
   useInterval(handleIndex, 4000);
-
-  React.useEffect(() => {
-    window.addEventListener('resize', () => {
-      const width = window.innerWidth;
-      if (!width) return;
-      if (width <= 1899) return;
-      setClientWidth(width);
-    });
-  }, []);
 
   if (isLoading)
     return (
@@ -148,9 +136,12 @@ const Banner = () => {
           margin-top: 8px;
           margin-bottom: 40px;
           ${applyMediaQuery('wideDesktop')} {
-            width: 100%;
+            width: 1920px;
             min-height: 600px;
-            height: auto;
+            height: 600px;
+            margin: 0 auto;
+            padding-bottom: 40px;
+            padding-top: 8px;
           }
           ${applyMediaQuery('mobile')} {
             width: 100%;
@@ -172,7 +163,6 @@ const Banner = () => {
                   key={banner.imageUrl}
                   currentIndex={index}
                   index={_index}
-                  clientWidth={clientWidth}
                   {...banner}
                 />
               ))}

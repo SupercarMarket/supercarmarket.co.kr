@@ -4,7 +4,7 @@ type DeviceQuery = {
 };
 
 export const deviceQuery: DeviceQuery = {
-  wideDesktop: '(min-width: 1900px)',
+  wideDesktop: '(min-width: 1920px)',
   desktop: '(min-width: 1200px)',
   tablet: '(min-width: 768px) and (max-width: 1199px)',
   mobile: '(min-width: 300px) and (max-width: 767px)',
