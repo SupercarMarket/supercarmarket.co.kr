@@ -34,7 +34,7 @@ const BannerItem = (props: BannerItemProps) => {
         height: 600px;
         flex: none;
         ${applyMediaQuery('wideDesktop')} {
-          width: 1920px;
+          width: 100%;
           height: 600px;
         }
         ${applyMediaQuery('mobile')} {
@@ -136,12 +136,9 @@ const Banner = () => {
           margin-top: 8px;
           margin-bottom: 40px;
           ${applyMediaQuery('wideDesktop')} {
-            width: 1920px;
+            width: 100%;
             min-height: 600px;
             height: 600px;
-            margin: 0 auto;
-            padding-bottom: 40px;
-            padding-top: 8px;
           }
           ${applyMediaQuery('mobile')} {
             width: 100%;
