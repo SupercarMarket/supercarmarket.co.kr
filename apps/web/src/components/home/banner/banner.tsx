@@ -17,6 +17,7 @@ interface BannerItemProps {
   currentIndex: number;
   index: number;
   url: string;
+  clientWidth: number;
 }
 
 interface BannerDotProps {
@@ -25,14 +26,19 @@ interface BannerDotProps {
 }
 
 const BannerItem = (props: BannerItemProps) => {
-  const { imageUrl } = props;
+  const { imageUrl, clientWidth } = props;
   return (
     <Wrapper
       css={css`
         position: relative;
-        width: 1200px;
-        height: 260px;
+        width: 100%;
+        height: 600px;
         flex: none;
+        ${applyMediaQuery('wideDesktop')} {
+          width: 100%;
+          min-height: 600px;
+          height: ${clientWidth - 1300}px;
+        }
         ${applyMediaQuery('mobile')} {
           width: 100%;
           height: 160px;
@@ -45,7 +51,7 @@ const BannerItem = (props: BannerItemProps) => {
         style={{
           objectFit: 'cover',
         }}
-        sizes={`${applyMediaQuery('desktop')} 1200px, ${applyMediaQuery(
+        sizes={`${applyMediaQuery('desktop')} 100vw, ${applyMediaQuery(
           'mobile'
         )} 400px`}
         fill
@@ -100,6 +106,7 @@ const BannerDot = (props: BannerDotProps) => {
 const Banner = () => {
   const [index, setIndex] = React.useState(0);
   const { isMobile } = useMedia({ deviceQuery });
+  const [clientWidth, setClientWidth] = React.useState(0);
   const { data, isLoading } = useBanner(isMobile ? 'M' : 'D');
 
   const handleIndex = React.useCallback(() => {
@@ -111,10 +118,22 @@ const Banner = () => {
 
   useInterval(handleIndex, 4000);
 
+  React.useEffect(() => {
+    window.addEventListener('resize', () => {
+      const width = window.innerWidth;
+      if (!width) return;
+      if (width <= 1899) return;
+      setClientWidth(width);
+    });
+  }, []);
+
   if (isLoading)
     return (
       <Container margin="8px 0 40px 0">
-        <Skeleton width={isMobile ? 343 : 1200} height={isMobile ? 160 : 260} />
+        <Skeleton
+          width={isMobile ? 343 : '100%'}
+          height={isMobile ? 160 : 600}
+        />
       </Container>
     );
 
@@ -123,11 +142,16 @@ const Banner = () => {
       <Wrapper
         css={css`
           position: relative;
-          width: 1200px;
-          height: 260px;
+          width: 100%;
+          height: 600px;
           overflow: hidden;
           margin-top: 8px;
           margin-bottom: 40px;
+          ${applyMediaQuery('wideDesktop')} {
+            width: 100%;
+            min-height: 600px;
+            height: auto;
+          }
           ${applyMediaQuery('mobile')} {
             width: 100%;
             height: 160px;
@@ -148,6 +172,7 @@ const Banner = () => {
                   key={banner.imageUrl}
                   currentIndex={index}
                   index={_index}
+                  clientWidth={clientWidth}
                   {...banner}
                 />
               ))}

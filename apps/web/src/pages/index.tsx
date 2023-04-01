@@ -40,10 +40,8 @@ const Home: NextPageWithLayout = () => {
               >
                 <Wrapper.Item
                   css={css`
-                    ${applyMediaQuery('mobile')} {
-                      width: 100vw;
-                      margin-left: calc(-50vw + 50%);
-                    }
+                    width: 100vw;
+                    margin-left: calc(-50vw + 50%);
                   `}
                 >
                   <Banner />
