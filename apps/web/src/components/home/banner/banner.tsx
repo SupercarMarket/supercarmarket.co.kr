@@ -33,10 +33,6 @@ const BannerItem = (props: BannerItemProps) => {
         width: 100%;
         height: 600px;
         flex: none;
-        ${applyMediaQuery('wideDesktop')} {
-          width: 100%;
-          height: 600px;
-        }
         ${applyMediaQuery('mobile')} {
           width: 100%;
           height: 160px;
@@ -118,10 +114,7 @@ const Banner = () => {
   if (isLoading)
     return (
       <Container margin="8px 0 40px 0">
-        <Skeleton
-          width={isMobile ? 343 : '100%'}
-          height={isMobile ? 160 : 600}
-        />
+        <Skeleton width="100%" height={isMobile ? 160 : 600} />
       </Container>
     );
 
@@ -135,11 +128,6 @@ const Banner = () => {
           overflow: hidden;
           margin-top: 8px;
           margin-bottom: 40px;
-          ${applyMediaQuery('wideDesktop')} {
-            width: 100%;
-            min-height: 600px;
-            height: 600px;
-          }
           ${applyMediaQuery('mobile')} {
             width: 100%;
             height: 160px;
