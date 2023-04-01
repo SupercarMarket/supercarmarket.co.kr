@@ -140,7 +140,7 @@ const FindPasswordForm = () => {
         ))}
         {error && <Alert title={error} severity="error" />}
         <Button width="340px" type="submit" variant="Primary">
-          확인
+          {resetPasswordMutation.isLoading ? '확인중..' : '확인'}
         </Button>
       </Form>
     </FormProvider>

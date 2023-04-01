@@ -1,20 +1,15 @@
-'use client';
-
-import { Alert, Button, Form, Wrapper } from '@supercarmarket/ui';
-import { ErrorCode } from '@supercarmarket/lib';
-import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
 import * as React from 'react';
+import { Alert, Button, Form, Wrapper } from '@supercarmarket/ui';
+import { useRouter } from 'next/navigation';
 import { FormProvider, useForm } from 'react-hook-form';
 import { css } from 'styled-components';
-
 import InquiryFormItem from '../inquiryFormItem';
 import ModalContext from 'feature/modalContext';
 import { Modal } from 'components/common/modal';
 import { Profile } from '@supercarmarket/types/account';
 import { useDebounce } from '@supercarmarket/hooks';
-import { authRequest } from 'http/core';
 import { form, type FormState } from 'constants/form/sale';
+import { useRegisterSale } from 'http/server/inquiry';
 
 interface SaleFormProps {
   role: Profile['role'];
@@ -23,10 +18,14 @@ interface SaleFormProps {
 const SaleForm = (props: SaleFormProps) => {
   const { role } = props;
   const methods = useForm<FormState>();
-  const session = useSession();
   const { onOpen, onClose } = React.useContext(ModalContext);
   const [error, setError] = React.useState<string | null>(null);
   const { replace } = useRouter();
+  const saleMutation = useRegisterSale({
+    onError: (error: Error) => {
+      setError(error.message);
+    },
+  });
 
   const handleRequire = async (data: FormState) => {
     Object.entries(data).forEach(([key, value]) => {
@@ -99,14 +98,8 @@ const SaleForm = (props: SaleFormProps) => {
         );
         attachments.forEach((file) => formData.append('attachments', file));
 
-        await authRequest('/inquiry-product', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-          data: formData,
-        })
-          .then(() => {
+        saleMutation.mutate(formData, {
+          onSuccess: () => {
             onOpen(
               <Modal
                 title="판매차량 등록 문의"
@@ -123,10 +116,8 @@ const SaleForm = (props: SaleFormProps) => {
                 }}
               />
             );
-          })
-          .catch((error) => {
-            setError(error.message || ErrorCode[error.status]);
-          });
+          },
+        });
       }),
     300
   );
@@ -172,7 +163,7 @@ const SaleForm = (props: SaleFormProps) => {
           `}
         >
           <Button type="submit" width="104px">
-            {methods.formState.isSubmitting ? '등록 중..' : '작성 완료'}
+            {saleMutation.isLoading ? '등록 중..' : '작성 완료'}
           </Button>
         </Wrapper.Item>
         {error && <Alert title={error} severity="error" />}

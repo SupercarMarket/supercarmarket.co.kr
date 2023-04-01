@@ -156,6 +156,12 @@ const AccountUpdateForm = (props: AccountUpdateFormProps) => {
     300
   );
 
+  React.useEffect(() => {
+    return () => {
+      queryClient.resetQueries(QUERY_KEYS.all);
+    };
+  }, []);
+
   return (
     <FormProvider {...methods}>
       <Form

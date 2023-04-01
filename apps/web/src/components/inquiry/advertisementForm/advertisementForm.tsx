@@ -1,22 +1,25 @@
-import { ErrorCode } from '@supercarmarket/lib';
+import * as React from 'react';
 import { Alert, Button, Form, Wrapper } from '@supercarmarket/ui';
 import { Modal } from 'components/common/modal';
 import ModalContext from 'feature/modalContext';
-import * as React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { css } from 'styled-components';
 import { useRouter } from 'next/navigation';
-
 import InquiryFormItem from '../inquiryFormItem';
 import { useDebounce } from '@supercarmarket/hooks';
-import { authRequest } from 'http/core';
 import { form, type FormState } from 'constants/form/advertisement';
+import { useRegisterAdvertisement } from 'http/server/inquiry';
 
 const PartnershipForm = () => {
   const [error, setError] = React.useState<string | null>(null);
   const { onClose, onOpen } = React.useContext(ModalContext);
   const { replace } = useRouter();
   const methods = useForm<FormState>();
+  const adMutation = useRegisterAdvertisement({
+    onError: (error: Error) => {
+      setError(error.message);
+    },
+  });
 
   const handleModal = React.useCallback(
     (href: string) => {
@@ -63,13 +66,8 @@ const PartnershipForm = () => {
 
         files.forEach((file) => formData.append('file', file));
 
-        await authRequest('/inquiry-advertisement', {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-          data: formData,
-        })
-          .then(() => {
+        adMutation.mutate(formData, {
+          onSuccess: () => {
             onOpen(
               <Modal
                 title="광고 문의"
@@ -81,10 +79,8 @@ const PartnershipForm = () => {
                 onClose={() => handleModal('/inquiry')}
               />
             );
-          })
-          .catch((error) => {
-            setError(error.message || ErrorCode[error.status]);
-          });
+          },
+        });
       }),
     300
   );
@@ -111,7 +107,7 @@ const PartnershipForm = () => {
           `}
         >
           <Button type="submit" width="104px">
-            {methods.formState.isSubmitting ? '등록 중..' : '작성 완료'}
+            {adMutation.isLoading ? '등록 중..' : '작성 완료'}
           </Button>
         </Wrapper.Item>
         {error && <Alert severity="error" title="" />}
