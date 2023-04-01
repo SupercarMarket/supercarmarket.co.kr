@@ -70,7 +70,6 @@ const HamburgerLinkItem = React.memo(function HamburgerLinkItem({
       >
         <SupercarmarketLink
           href={href}
-          disabled={!!children}
           callback={() => handleClick(`/${href}`)}
         >
           <Typography
