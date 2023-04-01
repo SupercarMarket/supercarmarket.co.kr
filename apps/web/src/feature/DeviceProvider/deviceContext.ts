@@ -1,13 +1,13 @@
 import * as React from 'react';
 
-export interface DeviceInfoContextType {
+export interface DeviceContextType {
   userAgent: string;
   isMobile: boolean;
   isIos: boolean;
   isAndroid: boolean;
 }
 
-export const DeviceInfoContext = React.createContext<DeviceInfoContextType>({
+export const DeviceContext = React.createContext<DeviceContextType>({
   userAgent: '',
   isMobile: false,
   isIos: false,

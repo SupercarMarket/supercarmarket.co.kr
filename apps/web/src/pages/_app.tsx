@@ -15,6 +15,7 @@ import { DefaultSeo } from 'next-seo';
 import { seoConfig } from 'utils/next-seo.config';
 import { Inter } from '@next/font/google';
 import localFont from '@next/font/local';
+import { DeviceProvider } from 'feature/DeviceProvider';
 
 interface PageProps {
   $ua: {
@@ -81,24 +82,29 @@ function MyApp({
     <ThemeProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
         <Hydrate state={dehydratedState}>
-          <SessionProvider session={session}>
-            <DefaultSeo
-              openGraph={{
-                ...seoConfig.headSeo,
-              }}
-              {...seoConfig.defaultNextSeo}
-            />
-            <GlobalStyle />
-            <Layout {...pageProps}>
-              <Component {...pageProps} />
-            </Layout>
-            <style jsx global>{`
-              :root {
-                --font-inter: ${inter.style.fontFamily};
-                --font-pretendard: ${pretendard.style.fontFamily};
-              }
-            `}</style>
-          </SessionProvider>
+          <DeviceProvider
+            hints={pageProps.$ua.hints}
+            userAgent={pageProps.$ua.userAgent}
+          >
+            <SessionProvider session={session}>
+              <DefaultSeo
+                openGraph={{
+                  ...seoConfig.headSeo,
+                }}
+                {...seoConfig.defaultNextSeo}
+              />
+              <GlobalStyle />
+              <Layout {...pageProps}>
+                <Component {...pageProps} />
+              </Layout>
+              <style jsx global>{`
+                :root {
+                  --font-inter: ${inter.style.fontFamily};
+                  --font-pretendard: ${pretendard.style.fontFamily};
+                }
+              `}</style>
+            </SessionProvider>
+          </DeviceProvider>
         </Hydrate>
       </QueryClientProvider>
     </ThemeProvider>

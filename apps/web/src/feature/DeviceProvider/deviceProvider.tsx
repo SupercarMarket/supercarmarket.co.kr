@@ -1,6 +1,6 @@
 import * as React from 'react';
 import type { PropsWithChildren } from 'react';
-import { DeviceInfoContext } from './deviceContext';
+import { DeviceContext } from './deviceContext';
 
 export interface DeviceInfoProviderProps {
   userAgent?: string;
@@ -13,7 +13,7 @@ const validateMobile = (userAgent: string) => /mobi/gi.test(userAgent);
 const validateIos = (userAgent: string) => /iPhone|iPod|iPad/gi.test(userAgent);
 const validateAndroid = (userAgent: string) => /Android/gi.test(userAgent);
 
-export const DeviceInfoProvider = ({
+export const DeviceProvider = ({
   userAgent,
   hints,
   children,
@@ -32,8 +32,6 @@ export const DeviceInfoProvider = ({
   );
 
   return (
-    <DeviceInfoContext.Provider value={value}>
-      {children}
-    </DeviceInfoContext.Provider>
+    <DeviceContext.Provider value={value}>{children}</DeviceContext.Provider>
   );
 };
