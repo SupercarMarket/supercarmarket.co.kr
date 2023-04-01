@@ -5,12 +5,68 @@ import {
   duplicateField,
   sendPhone,
   sendCode,
+  resetPassword,
+  findId,
+  updateAccount,
+  deleteAccount,
 } from '.';
 import { type Signup } from '@supercarmarket/types/auth';
+import { type FormState } from 'constants/form/updateInfo';
 
 export const useCreateAccount = (options = {}) => {
   return useMutation({
     mutationFn: (data: Signup) => createAccount(data),
+    useErrorBoundary: false,
+    ...options,
+  });
+};
+
+export const useUpdateAccount = (options = {}) => {
+  return useMutation({
+    mutationFn: (
+      data: FormState & {
+        code: string;
+      }
+    ) => updateAccount(data),
+    useErrorBoundary: false,
+    ...options,
+  });
+};
+
+export const useDeleteAccount = (options = {}) => {
+  return useMutation({
+    mutationFn: (data: { accessToken: string; refreshToken: string }) =>
+      deleteAccount(data),
+    useErrorBoundary: false,
+    ...options,
+  });
+};
+
+export const useResetPassword = (options = {}) => {
+  return useMutation({
+    mutationFn: (data: {
+      phone: string;
+      authentication: string;
+      id: string;
+      password: string;
+    }) => resetPassword(data),
+    useErrorBoundary: false,
+    ...options,
+  });
+};
+
+export const useFindId = (options = {}) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: {
+      phone: string;
+      authentication: string;
+      name: string;
+    }) => findId(data),
+    onSuccess: (result) => {
+      queryClient.setQueryData(QUERY_KEYS.findId(), result);
+    },
+    useErrorBoundary: false,
     ...options,
   });
 };

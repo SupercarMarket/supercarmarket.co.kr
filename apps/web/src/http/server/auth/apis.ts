@@ -1,4 +1,4 @@
-import { get, patch, post } from '@supercarmarket/lib';
+import { get, patch, post, remove } from '@supercarmarket/lib';
 import { authRequest } from 'http/core';
 import { type Signup } from '@supercarmarket/types/auth';
 import { type ServerResponse } from '@supercarmarket/types/base';
@@ -57,8 +57,24 @@ export const updateAccount = async (
     code: string;
   }
 ) => {
-  return await authRequest(`/mypage`, {
+  return authRequest(`/mypage`, {
+    method: 'PATCH',
     data,
+  });
+};
+
+export const deleteAccount = async ({
+  accessToken,
+  refreshToken,
+}: {
+  accessToken: string;
+  refreshToken: string;
+}) => {
+  return remove('/supercar/v1/user/delete', undefined, {
+    headers: {
+      ACCESS_TOKEN: accessToken,
+      REFRESH_TOKEN: refreshToken,
+    },
   });
 };
 

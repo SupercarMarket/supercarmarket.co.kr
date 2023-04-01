@@ -14,12 +14,15 @@ import { css } from 'styled-components';
 import ModalContext from 'feature/modalContext';
 import { Modal } from 'components/common/modal';
 import AuthFormItem from 'components/auth/authFormItem/authFormItem';
-import useAuth from 'hooks/useAuth';
 import { useAccountUpdateInfo } from 'http/server/account';
 import { useDebounce } from '@supercarmarket/hooks';
 import { form, FormState } from 'constants/form/updateInfo';
-import { remove } from '@supercarmarket/lib';
-import { type ServerResponse } from '@supercarmarket/types/base';
+import { useQueryClient } from '@tanstack/react-query';
+import {
+  QUERY_KEYS,
+  useDeleteAccount,
+  useUpdateAccount,
+} from 'http/server/auth';
 
 interface AccountUpdateFormProps {
   sub: string;
@@ -27,37 +30,46 @@ interface AccountUpdateFormProps {
 
 const AccountUpdateForm = (props: AccountUpdateFormProps) => {
   const { sub } = props;
+  const queryClient = useQueryClient();
   const { onOpen, onClose } = React.useContext(ModalContext);
   const [error, setError] = React.useState<string | null>(null);
+  const [success, setSuccess] = React.useState<string | null>(null);
   const { data: session } = useSession();
-  const { data: updateInfo, refetch } = useAccountUpdateInfo(sub);
+  const { data: updateInfo } = useAccountUpdateInfo(sub, {
+    onError: (error: Error) => {
+      setError(error.message);
+    },
+  });
+  const updateAccountMutation = useUpdateAccount({
+    onError: (error: Error) => {
+      setError(error.message);
+    },
+  });
+  const deleteAccountMuttation = useDeleteAccount({
+    onError: (error: Error) => {
+      setError(error.message);
+    },
+  });
   const methods = useForm<FormState>();
-  const { authState, update } = useAuth();
 
   const handleWithdrawal = React.useCallback(async () => {
     setError(null);
 
     if (!session) return;
 
-    const response = await remove<undefined, ServerResponse<boolean>>(
-      '/server',
-      undefined,
+    deleteAccountMuttation.mutate(
       {
-        method: 'DELETE',
-        headers: {
-          ACCESS_TOKEN: session.accessToken,
-          REFRESH_TOKEN: session.refreshToken,
+        accessToken: session.accessToken,
+        refreshToken: session.refreshToken,
+      },
+      {
+        onSuccess: () => {
+          onClose();
+          signOut({ redirect: true });
         },
       }
-    ).catch((error) => {
-      setError(error.message);
-    });
-
-    if (!response?.data) return;
-
-    onClose();
-    signOut({ redirect: true });
-  }, [onClose, session]);
+    );
+  }, [deleteAccountMuttation, onClose, session]);
 
   const handleModal = React.useCallback(() => {
     onOpen(
@@ -85,14 +97,22 @@ const AccountUpdateForm = (props: AccountUpdateFormProps) => {
    * 각 필드마다 입력을 받았을 때, 다른 필드의 입력이 필수인지 아닌지 핸들링하는 함수
    */
   const handleRequire = async (data: FormState) => {
-    const { authentication } = data;
-    const { phone, email, nickname } = authState;
+    setError(null);
+    setSuccess(null);
 
-    const isPhoneAuthRequire = phone.success && !authentication;
+    const { authentication } = data;
+    const email = queryClient.getQueryData<string>(
+      QUERY_KEYS.duplicate('email')
+    );
+    const nickname = queryClient.getQueryData<string>(
+      QUERY_KEYS.duplicate('nickname')
+    );
+    const phone = queryClient.getQueryData<string>(QUERY_KEYS.phone());
+
+    const isPhoneAuthRequire = phone && !authentication;
     const isNicknameRequire =
-      updateInfo?.data.nickname !== data.nickname && !nickname.success;
-    const isEmailRequire =
-      updateInfo?.data.email !== data.email && !email.success;
+      updateInfo?.data.nickname !== data.nickname && !nickname;
+    const isEmailRequire = updateInfo?.data.email !== data.email && !email;
 
     if (isNicknameRequire) {
       methods.setError('nickname', {
@@ -126,8 +146,11 @@ const AccountUpdateForm = (props: AccountUpdateFormProps) => {
           code: data.authentication,
         };
 
-        update(formData).then(() => {
-          refetch();
+        updateAccountMutation.mutate(formData, {
+          onSuccess: () => {
+            queryClient.resetQueries(QUERY_KEYS.all);
+            setSuccess('개인정보를 수정했습니다.');
+          },
         });
       }),
     300
@@ -175,7 +198,7 @@ const AccountUpdateForm = (props: AccountUpdateFormProps) => {
             </Button>
           </>
         )}
-        {error && <Alert title={error} severity="error" />}
+        {success && <Alert title={success} severity="waring" />}
         {error && <Alert title={error} severity="error" />}
       </Form>
     </FormProvider>

@@ -14,7 +14,6 @@ import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 import * as React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-
 import GoogleIcon from '../../../assets/svg/google.svg';
 import KakaoIcon from '../../../assets/svg/kakao.svg';
 import AuthFormItem from '../authFormItem/authFormItem';
@@ -31,7 +30,7 @@ const Links = () => {
   return (
     <Container display="flex" alignItems="center" justifyContent="center">
       <Link
-        href="/auth/find?type=id"
+        href="/auth/find-id"
         style={{
           cursor: 'pointer',
         }}
@@ -40,7 +39,7 @@ const Links = () => {
       </Link>
       <Divider width="1px" height="10px" color="#C3C3C7" margin="0 10px" />
       <Link
-        href="/auth/find?type=password"
+        href="/auth/find-password"
         style={{
           cursor: 'pointer',
         }}
