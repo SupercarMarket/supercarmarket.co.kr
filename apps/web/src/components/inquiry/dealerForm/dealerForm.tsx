@@ -4,11 +4,11 @@ import { useRouter } from 'next/navigation';
 import { FormProvider, useForm } from 'react-hook-form';
 import { css } from 'styled-components';
 import InquiryFormItem from '../inquiryFormItem';
-import ModalContext from 'feature/modalContext';
 import { Modal } from 'components/common/modal';
 import { useDebounce } from '@supercarmarket/hooks';
 import { form, FormState } from 'constants/form/dealer';
 import { useRegisterDealer } from 'http/server/inquiry';
+import { ModalContext } from 'feature/ModalProvider';
 
 const DealerForm = () => {
   const methods = useForm<FormState>();

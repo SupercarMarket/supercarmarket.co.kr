@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Alert, Button, Form, Wrapper } from '@supercarmarket/ui';
 import { Modal } from 'components/common/modal';
-import ModalContext from 'feature/modalContext';
 import { FormProvider, useForm } from 'react-hook-form';
 import { css } from 'styled-components';
 import { useRouter } from 'next/navigation';
@@ -10,6 +9,7 @@ import InquiryFormItem from '../inquiryFormItem';
 import { useDebounce } from '@supercarmarket/hooks';
 import { form, type FormState } from 'constants/form/misc';
 import { useRegisterMisc } from 'http/server/inquiry';
+import { ModalContext } from 'feature/ModalProvider';
 
 const MiscForm = () => {
   const { onClose, onOpen } = React.useContext(ModalContext);

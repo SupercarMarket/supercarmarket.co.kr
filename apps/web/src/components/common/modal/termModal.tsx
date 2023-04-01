@@ -1,7 +1,7 @@
 import { Button, theme, Typography, Wrapper } from '@supercarmarket/ui';
 import { FormState } from 'constants/form/signup';
 import * as terms from 'constants/terms';
-import { ModalProvider } from 'feature/modalContext';
+import { ModalProvider } from 'feature/ModalProvider';
 import { css } from 'styled-components';
 
 const TermModal = ({

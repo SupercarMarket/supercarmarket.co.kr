@@ -3,10 +3,10 @@ import type { NextPageWithLayout } from '@supercarmarket/types/base';
 import { SaleForm } from 'components/inquiry';
 import Layout from 'components/layout/layout';
 import { css } from 'styled-components';
-import { ModalProvider } from 'feature/modalContext';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { get } from '@supercarmarket/lib';
 import { getSession } from 'http/server/next';
+import { ModalProvider } from 'feature/ModalProvider';
 
 const Market: NextPageWithLayout = ({
   role,

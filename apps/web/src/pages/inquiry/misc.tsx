@@ -2,8 +2,8 @@ import { applyMediaQuery, Container, Title, Wrapper } from '@supercarmarket/ui';
 import type { NextPageWithLayout } from '@supercarmarket/types/base';
 import { MiscForm } from 'components/inquiry';
 import Layout from 'components/layout/layout';
-import { ModalProvider } from 'feature/modalContext';
 import { css } from 'styled-components';
+import { ModalProvider } from 'feature/ModalProvider';
 
 const Misc: NextPageWithLayout = () => {
   return (

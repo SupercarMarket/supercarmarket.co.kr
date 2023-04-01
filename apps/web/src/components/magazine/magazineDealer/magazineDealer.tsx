@@ -7,7 +7,6 @@ import {
   Wrapper,
 } from '@supercarmarket/ui';
 import { Modal } from 'components/common/modal';
-import ModalContext from 'feature/modalContext';
 import * as React from 'react';
 import { css } from 'styled-components';
 import { useSession } from 'next-auth/react';
@@ -17,6 +16,7 @@ import { get } from '@supercarmarket/lib';
 import { ServerResponse } from '@supercarmarket/types/base';
 import { QUERY_KEYS, useMagazineInquiry } from 'http/server/magazine';
 import Avatar from 'components/common/avatar';
+import { ModalContext } from 'feature/ModalProvider';
 
 interface MagazineDealerProps {
   postId: string;

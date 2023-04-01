@@ -1,6 +1,6 @@
-import { Button, Typography, Wrapper } from '@supercarmarket/ui';
-import { ModalProvider } from 'feature/modalContext';
 import * as React from 'react';
+import { Button, Typography, Wrapper } from '@supercarmarket/ui';
+import { ModalProvider } from 'feature/ModalProvider';
 import { css } from 'styled-components';
 
 const Modal = ({

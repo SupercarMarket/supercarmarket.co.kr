@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Alert, Button, Form, Wrapper } from '@supercarmarket/ui';
 import { Modal } from 'components/common/modal';
-import ModalContext from 'feature/modalContext';
 import { FormProvider, useForm } from 'react-hook-form';
 import { css } from 'styled-components';
 import { useRouter } from 'next/navigation';
@@ -9,6 +8,7 @@ import InquiryFormItem from '../inquiryFormItem';
 import { useDebounce } from '@supercarmarket/hooks';
 import { form, type FormState } from 'constants/form/partnership';
 import { useRegisterPartnership } from 'http/server/inquiry';
+import { ModalContext } from 'feature/ModalProvider';
 
 const formatter = (category: string) => {
   if (category === '전체') return 'ALL';

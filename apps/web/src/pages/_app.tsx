@@ -4,7 +4,8 @@ import {
   QueryClientProvider,
 } from '@tanstack/react-query';
 import theme from 'constants/theme';
-import type { AppProps } from 'next/app';
+import type { AppContext, AppProps } from 'next/app';
+import NextAppBase from 'next/app';
 import { SessionProvider } from 'next-auth/react';
 import type { FC, ReactNode } from 'react';
 import { useState } from 'react';
@@ -14,6 +15,15 @@ import { DefaultSeo } from 'next-seo';
 import { seoConfig } from 'utils/next-seo.config';
 import { Inter } from '@next/font/google';
 import localFont from '@next/font/local';
+
+interface PageProps {
+  $ua: {
+    userAgent?: string;
+    hints?: {
+      isMobile: boolean;
+    };
+  };
+}
 
 const Nope: FC<{ children?: ReactNode }> = ({ children }) => <>{children}</>;
 
@@ -46,7 +56,7 @@ export const pretendard = localFont({
 function MyApp({
   Component,
   pageProps: { session, dehydratedState, ...pageProps },
-}: AppProps) {
+}: AppProps<PageProps>) {
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -64,6 +74,8 @@ function MyApp({
       })
   );
   const Layout = (Component as any).Layout || Nope;
+
+  console.log(pageProps);
 
   return (
     <ThemeProvider theme={theme}>
@@ -92,5 +104,25 @@ function MyApp({
     </ThemeProvider>
   );
 }
+
+MyApp.getInitialProps = async (appContext: AppContext) => {
+  const appProps = await NextAppBase.getInitialProps(appContext);
+  const headers = appContext.ctx.req?.headers;
+  const prevPageProps = (appProps.pageProps as PageProps) ?? {};
+  const nextPageProps = {
+    ...prevPageProps,
+    $ua: {
+      userAgent: headers?.['user-agent'],
+      hints: {
+        isMobile: headers?.['sec-ch-ua-mobile']?.includes('1'),
+      },
+    },
+  };
+
+  return {
+    ...appProps,
+    pageProps: nextPageProps,
+  };
+};
 
 export default MyApp;

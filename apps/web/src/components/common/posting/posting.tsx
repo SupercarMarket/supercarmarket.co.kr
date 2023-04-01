@@ -14,7 +14,6 @@ import * as React from 'react';
 import { css } from 'styled-components';
 import dynamic from 'next/dynamic';
 import { PostingHeadCommunity, PostingHeadMagainze } from './components';
-import ModalContext from 'feature/modalContext';
 import LikeIcon from '../../../assets/svg/thumb-up.svg';
 import HeadSeo from '../headSeo/headSeo';
 import { useQueryClient } from '@tanstack/react-query';
@@ -27,6 +26,7 @@ import {
 } from 'http/server/community';
 import { useMagazinePost } from 'http/server/magazine';
 import { Modal } from '../modal';
+import { ModalContext } from 'feature/ModalProvider';
 
 const PostingBody = dynamic(() => import('./components/postingBody'), {
   ssr: false,

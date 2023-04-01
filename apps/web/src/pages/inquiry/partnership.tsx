@@ -3,7 +3,7 @@ import type { NextPageWithLayout } from '@supercarmarket/types/base';
 import { PartnershipForm } from 'components/inquiry';
 import Layout from 'components/layout/layout';
 import { css } from 'styled-components';
-import { ModalProvider } from 'feature/modalContext';
+import { ModalProvider } from 'feature/ModalProvider';
 
 const Partnership: NextPageWithLayout = () => {
   return (
