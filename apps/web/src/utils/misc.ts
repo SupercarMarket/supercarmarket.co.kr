@@ -46,4 +46,9 @@ const catchNoExist = (...lists: unknown[]) => {
   });
 };
 
-export { catchNoExist, env, getErrorMessage, isValidQuery };
+const isExpire = (exp: number) => {
+  if (Date.now() < exp) return true;
+  return false;
+};
+
+export { catchNoExist, env, getErrorMessage, isValidQuery, isExpire };

@@ -44,7 +44,7 @@ export async function get<T extends unknown = any>(
   return await http<T>(path, init);
 }
 
-export async function post<T, U>(
+export async function post<T extends unknown = any, U extends unknown = any>(
   path: string,
   body: T,
   config?: FetcherRequestInit
@@ -72,7 +72,7 @@ export async function put<T, U>(
   return await http<U>(path, init);
 }
 
-export async function patch<T, U>(
+export async function patch<T extends unknown = any, U extends unknown = any>(
   path: string,
   body: T,
   config?: FetcherRequestInit
@@ -86,7 +86,7 @@ export async function patch<T, U>(
   return await http<U>(path, init);
 }
 
-export async function remove<T, U>(
+export async function remove<T extends unknown = any, U extends unknown = any>(
   path: string,
   body?: T,
   config?: FetcherRequestInit

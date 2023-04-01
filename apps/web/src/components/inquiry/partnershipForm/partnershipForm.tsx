@@ -1,17 +1,14 @@
-import { ErrorCode } from '@supercarmarket/lib';
+import * as React from 'react';
 import { Alert, Button, Form, Wrapper } from '@supercarmarket/ui';
 import { Modal } from 'components/common/modal';
 import ModalContext from 'feature/modalContext';
-import { useSession } from 'next-auth/react';
-import * as React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { css } from 'styled-components';
 import { useRouter } from 'next/navigation';
-
 import InquiryFormItem from '../inquiryFormItem';
 import { useDebounce } from '@supercarmarket/hooks';
-import { authRequest } from 'http/core';
 import { form, type FormState } from 'constants/form/partnership';
+import { useRegisterPartnership } from 'http/server/inquiry';
 
 const formatter = (category: string) => {
   if (category === '전체') return 'ALL';
@@ -23,11 +20,15 @@ const formatter = (category: string) => {
 };
 
 const PartnershipForm = () => {
-  const session = useSession();
   const [error, setError] = React.useState<string | null>(null);
   const { onClose, onOpen } = React.useContext(ModalContext);
   const { replace } = useRouter();
   const methods = useForm<FormState>();
+  const partnershipMutation = useRegisterPartnership({
+    onError: (error: Error) => {
+      setError(error.message);
+    },
+  });
 
   const handleModal = React.useCallback(
     (href: string) => {
@@ -109,14 +110,8 @@ const PartnershipForm = () => {
           formData.append('partnershipPhotoAttachmentDto', file.file)
         );
 
-        await authRequest('/partnership/inquiry', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-          data: formData,
-        })
-          .then(() => {
+        partnershipMutation.mutate(formData, {
+          onSuccess: () => {
             onOpen(
               <Modal
                 title="제휴업체 문의"
@@ -128,10 +123,8 @@ const PartnershipForm = () => {
                 onCancel={() => handleModal('/inquiry')}
               />
             );
-          })
-          .catch((error) => {
-            setError(error.message || ErrorCode[error.status]);
-          });
+          },
+        });
       }),
     300
   );
@@ -158,7 +151,7 @@ const PartnershipForm = () => {
           `}
         >
           <Button type="submit" width="104px">
-            {methods.formState.isSubmitting ? '등록 중..' : '작성 완료'}
+            {partnershipMutation.isLoading ? '등록 중..' : '작성 완료'}
           </Button>
         </Wrapper.Item>
         {error && <Alert severity="error" title={error} />}

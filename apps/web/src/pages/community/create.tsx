@@ -3,7 +3,6 @@ import type { NextPageWithLayout } from '@supercarmarket/types/base';
 import { CommunityForm } from 'components/community';
 import layout from 'components/layout';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-import { getSession } from 'http/server/auth/user';
 import { ModalProvider } from 'feature/modalContext';
 import { QueryErrorResetBoundary } from '@tanstack/react-query';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -11,6 +10,7 @@ import { ErrorFallback } from 'components/fallback';
 import { css } from 'styled-components';
 import Advertisement from 'components/common/advertisement';
 import { prefetchTemporaryStorage } from 'http/server/community';
+import { getSession } from 'http/server/next';
 
 const Create: NextPageWithLayout = ({
   temporaryStorage,

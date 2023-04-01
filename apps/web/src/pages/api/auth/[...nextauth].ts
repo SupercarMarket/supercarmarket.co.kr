@@ -1,4 +1,3 @@
-import { post } from '@supercarmarket/lib';
 import type { NextApiHandler } from 'next';
 import type {
   Account,
@@ -6,13 +5,15 @@ import type {
   NextAuthOptions,
   Profile,
 } from 'next-auth';
-import NextAuth from 'next-auth';
+import { type ServerResponse } from '@supercarmarket/types/base';
 import type { Provider } from 'next-auth/providers';
+import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
 import KakaoProvider from 'next-auth/providers/kakao';
-import { isExpire, refreshToken } from 'http/server/auth/token';
-import { ServerResponse } from '@supercarmarket/types/base';
+import { post } from '@supercarmarket/lib';
+import { refreshToken, signInOAuth } from 'http/server/auth/apis';
+import { isExpire } from 'utils/misc';
 
 const providers: Provider[] = [
   /*
@@ -224,34 +225,15 @@ const callbacks: Partial<CallbacksOptions<Profile, Account>> | undefined = {
   async signIn({ user, account }) {
     if (account?.type === 'oauth') {
       const { nickname, provider, email, picture, sub } = user;
-      const { data } = await post<
+      const { data } = await signInOAuth(
         {
-          nickname: string;
-          provider: string;
-          sub: string;
-          email?: string;
-          picture?: string;
+          nickname,
+          email,
+          picture,
+          sub,
         },
-        ServerResponse<{
-          access_token: string;
-          refresh_token: string;
-          exp: number;
-          user: {
-            id: string;
-            name: string;
-            email: string;
-            provider: string;
-          };
-          token: string;
-          newUser?: boolean;
-        }>
-      >(`${process.env.NEXT_PUBLIC_URL}/api/auth/user/oauth`, {
-        nickname,
-        provider,
-        email,
-        picture,
-        sub,
-      });
+        provider
+      );
 
       const {
         newUser,

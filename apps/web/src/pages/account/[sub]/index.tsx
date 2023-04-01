@@ -9,7 +9,6 @@ import type {
   InferGetServerSidePropsType,
 } from 'next';
 import type { Session } from 'next-auth';
-import { getSession } from 'http/server/auth/user';
 import {
   dehydrate,
   QueryClient,
@@ -25,6 +24,7 @@ import {
   links,
   type AccountCategory,
 } from 'constants/link/account';
+import { getSession } from 'http/server/next';
 
 type AccountParams = Params & {
   tab: AccountCategory | null;
