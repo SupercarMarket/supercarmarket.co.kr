@@ -5,3 +5,4 @@ export { default as MarketDetailDealer } from './marketDetailDealer/marketDetail
 export { default as MarketDetailHeader } from './marketDetailHeader/marketDetailHeader';
 export { default as MarketDetailIntroduction } from './marketDetailIntroduction/marketDetailIntroduction';
 export { default as MarketLike } from './marketLike/marketLike';
+export { default as MarketMine } from './marketMine/marketMine';

@@ -17,6 +17,7 @@ const MarketContents = (props: MarketContentsProps) => {
   const { id } = props;
   const { data, isFetching, isLoading } = useMarketPost(id);
 
+  console.log(data);
   if (isFetching || isLoading) return <MarketDetailSkeleton />;
 
   return (

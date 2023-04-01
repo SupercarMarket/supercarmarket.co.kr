@@ -19,7 +19,7 @@ export const getMarket = async ({
   const currentQuery =
     targetCategory === '전체'
       ? { filter, orderBy, page, ...rest }
-      : { targetCategory, filter, orderBy, page, ...rest };
+      : { category: targetCategory, filter, orderBy, page, ...rest };
 
   return get('/server/supercar/v1/shop', {
     method: 'GET',
@@ -46,7 +46,7 @@ export const likeMarketPost = async ({ id }: { id: string }) => {
 export const updateMarketSellStatus = async ({
   data,
 }: {
-  data: { brdSeq: number };
+  data: { seq: number };
 }) => {
   return authRequest(`/shop`, {
     method: 'PUT',

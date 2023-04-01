@@ -32,7 +32,9 @@ const Market = () => {
         {marketBest &&
           marketBest.data
             .slice(0, 8)
-            .map((post) => <MarketCard key={post.id} {...post} />)}
+            .map((post, index) => (
+              <MarketCard key={post.id} ranking={index + 1} {...post} />
+            ))}
       </Wrapper>
     </Container>
   );
