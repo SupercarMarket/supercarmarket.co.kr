@@ -66,7 +66,13 @@ const MarketColumn = (
 
   return (
     <Link href={`/market/${category}/${id}?${searchParams}`}>
-      <Container width="100%" display="flex" flexDirection="column" key={id}>
+      <Container
+        width="100%"
+        display="flex"
+        flexDirection="column"
+        key={id}
+        margin="0 0 10px 0"
+      >
         <Wrapper
           css={css`
             margin-bottom: 20px;

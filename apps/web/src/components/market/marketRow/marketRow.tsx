@@ -27,12 +27,19 @@ const MarketRow = ({
     <Link href={`/market/${category}/${id}?${searchParams}`}>
       <Wrapper
         css={css`
-          width: 100%;
-          display: flex;
-          align-items: center;
-          ${applyMediaQuery('mobile')} {
-            align-items: flex-start;
-          }
+          ${({ theme }) => css`
+            width: 100%;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid ${theme.color['greyScale-3']};
+            padding-bottom: 6px;
+
+            ${applyMediaQuery('mobile')} {
+              align-items: flex-start;
+              padding: 0;
+              border: none;
+            }
+          `}
         `}
       >
         <Wrapper.Item
