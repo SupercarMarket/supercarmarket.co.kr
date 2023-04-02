@@ -13,7 +13,6 @@ import { css } from 'styled-components';
 import { Modal } from 'components/common/modal';
 import AuthFormItem from 'components/auth/authFormItem/authFormItem';
 import { useAccountUpdateInfo } from 'http/server/account';
-import { useDebounce } from '@supercarmarket/hooks';
 import { form, FormState } from 'constants/form/updateInfo';
 import { useQueryClient } from '@tanstack/react-query';
 import {
@@ -40,6 +39,10 @@ const AccountUpdateForm = (props: AccountUpdateFormProps) => {
     },
   });
   const updateAccountMutation = useUpdateAccount({
+    onSuccess: () => {
+      queryClient.resetQueries(QUERY_KEYS.all);
+      setSuccess('개인정보를 수정했습니다.');
+    },
     onError: (error: Error) => {
       setError(error.message);
     },
@@ -95,48 +98,51 @@ const AccountUpdateForm = (props: AccountUpdateFormProps) => {
    * 내 정보 수정하기의 필드는 모두 require 필드가 아님
    * 각 필드마다 입력을 받았을 때, 다른 필드의 입력이 필수인지 아닌지 핸들링하는 함수
    */
-  const handleRequire = async (data: FormState) => {
-    setError(null);
-    setSuccess(null);
+  const handleRequire = React.useCallback(
+    async (data: FormState) => {
+      setError(null);
+      setSuccess(null);
 
-    const { authentication } = data;
-    const email = queryClient.getQueryData<string>(
-      QUERY_KEYS.duplicate('email')
-    );
-    const nickname = queryClient.getQueryData<string>(
-      QUERY_KEYS.duplicate('nickname')
-    );
-    const phone = queryClient.getQueryData<string>(QUERY_KEYS.phone());
+      const { authentication } = data;
+      const email = queryClient.getQueryData<string>(
+        QUERY_KEYS.duplicate('email')
+      );
+      const nickname = queryClient.getQueryData<string>(
+        QUERY_KEYS.duplicate('nickname')
+      );
+      const phone = queryClient.getQueryData<string>(QUERY_KEYS.phone());
 
-    const isPhoneAuthRequire = phone && !authentication;
-    const isNicknameRequire =
-      updateInfo?.data.nickname !== data.nickname && !nickname;
-    const isEmailRequire = updateInfo?.data.email !== data.email && !email;
+      const isPhoneAuthRequire = phone && !authentication;
+      const isNicknameRequire =
+        updateInfo?.data.nickname !== data.nickname && !nickname;
+      const isEmailRequire = updateInfo?.data.email !== data.email && !email;
 
-    if (isNicknameRequire) {
-      methods.setError('nickname', {
-        message: '중복검사가 필요합니다.',
-      });
-      throw '';
-    }
+      if (isNicknameRequire) {
+        methods.setError('nickname', {
+          message: '중복검사가 필요합니다.',
+        });
+        throw '';
+      }
 
-    if (isEmailRequire) {
-      methods.setError('email', {
-        message: '중복검사가 필요합니다.',
-      });
-      throw '';
-    }
+      if (isEmailRequire) {
+        methods.setError('email', {
+          message: '중복검사가 필요합니다.',
+        });
+        throw '';
+      }
 
-    if (isPhoneAuthRequire) {
-      methods.setError('authentication', {
-        message: '인증번호를 입력해주세요.',
-      });
-      throw '';
-    }
-  };
+      if (isPhoneAuthRequire) {
+        methods.setError('authentication', {
+          message: '인증번호를 입력해주세요.',
+        });
+        throw '';
+      }
+    },
+    [methods, queryClient, updateInfo]
+  );
 
-  const debouncedSubmit = useDebounce(
-    (data: FormState) =>
+  const debouncedSubmit = React.useCallback(
+    async (data: FormState) =>
       handleRequire(data).then(() => {
         if (!session?.accessToken) return;
 
@@ -145,14 +151,9 @@ const AccountUpdateForm = (props: AccountUpdateFormProps) => {
           code: data.authentication,
         };
 
-        updateAccountMutation.mutate(formData, {
-          onSuccess: () => {
-            queryClient.resetQueries(QUERY_KEYS.all);
-            setSuccess('개인정보를 수정했습니다.');
-          },
-        });
+        updateAccountMutation.mutate(formData);
       }),
-    300
+    [handleRequire, session, updateAccountMutation]
   );
 
   React.useEffect(() => {
@@ -198,8 +199,13 @@ const AccountUpdateForm = (props: AccountUpdateFormProps) => {
                 탈퇴하기
               </Button>
             </FormLabel>
-            <Button type="submit" variant="Primary" width="340px">
-              수정하기
+            <Button
+              type="submit"
+              variant="Primary"
+              width="340px"
+              disabled={updateAccountMutation.isLoading}
+            >
+              {updateAccountMutation.isLoading ? '수정중..' : '수정하기'}
             </Button>
           </>
         )}

@@ -146,12 +146,16 @@ const AuthFormItemContainer = React.memo(function AuthFormItem({
       return;
     }
 
+    setFieldError(htmlFor, { message: '' });
     setError(false);
     setSuccess(false);
 
     duplicateFieldMutation.mutate(target, {
       onSuccess: () => {
         setSuccess(true);
+      },
+      onError: () => {
+        setError(true);
       },
     });
   }, [duplicateFieldMutation, htmlFor, setFieldError, target]);
@@ -163,6 +167,7 @@ const AuthFormItemContainer = React.memo(function AuthFormItem({
       return;
     }
 
+    setFieldError(htmlFor, { message: '' });
     setError(false);
     setSuccess(false);
 
@@ -171,8 +176,10 @@ const AuthFormItemContainer = React.memo(function AuthFormItem({
     if (htmlFor === 'phone')
       sendPhoneMutation.mutate(_phone, {
         onSuccess: () => {
-          setFieldError(htmlFor, { message: '' });
           setSuccess(true);
+        },
+        onError: () => {
+          setError(true);
         },
       });
     else if (htmlFor === 'authentication' && !!phone)
@@ -180,8 +187,10 @@ const AuthFormItemContainer = React.memo(function AuthFormItem({
         { phone, code: target },
         {
           onSuccess: () => {
-            setFieldError(htmlFor, { message: '' });
             setSuccess(true);
+          },
+          onError: () => {
+            setError(true);
           },
         }
       );
