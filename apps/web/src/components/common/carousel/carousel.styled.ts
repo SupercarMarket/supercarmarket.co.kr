@@ -19,7 +19,7 @@ const bottom = css`
 
 const CarouselArea = styled.div`
   width: 100%;
-  height: 90px;
+  height: 105px;
   overflow: hidden;
   position: relative;
   ${applyMediaQuery('mobile')} {
@@ -35,7 +35,7 @@ const CarouselArea = styled.div`
 const CarouselBox = styled.div<{ page: number }>`
   position: absolute;
   display: flex;
-  gap: 10.5px;
+  gap: 10px;
   ${({ page }) => css`
     transform: translateX(${(page - 1) * -1212}px);
   `}
@@ -78,7 +78,7 @@ const ArrowButton = styled.button<ArrowButtonProps>`
 
 const CarouselImageWrapper = styled.div`
   width: 141px;
-  height: 89px;
+  aspect-ratio: 4/3;
   position: relative;
   cursor: pointer;
   transition: filter 0.2s ease-in-out;
@@ -89,7 +89,6 @@ const CarouselImageWrapper = styled.div`
 
   ${applyMediaQuery('mobile')} {
     width: 80px;
-    height: 60px;
   }
 `;
 

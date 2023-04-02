@@ -17,7 +17,7 @@ const PartnershipCard = ({
   partnerName,
   category,
   workTime,
-  phone,
+  wireNumber,
   address,
   siteUrl,
   imgSrc,
@@ -125,7 +125,7 @@ const PartnershipCard = ({
                 .work-time {
                   width: 119px;
                 }
-                .phone {
+                .wire-number {
                   width: 142px;
                 }
                 .address {
@@ -142,7 +142,7 @@ const PartnershipCard = ({
 
                   .category,
                   .work-time,
-                  .phone {
+                  .wire-number {
                     width: auto;
                   }
                   .address {
@@ -159,7 +159,7 @@ const PartnershipCard = ({
             <p className="vertical-bar">|</p>
             <p className="work-time">{workTime}</p>
             <p className="vertical-bar">|</p>
-            <p className="phone">{phone}</p>
+            <p className="wire-number">{wireNumber}</p>
             <p className="address">
               {address.split(' ').slice(0, 2).join(' ')}
             </p>
@@ -174,7 +174,7 @@ const PartnershipCard = ({
         `}
       >
         <Link
-          href={siteUrl}
+          href={`http://${siteUrl}`}
           style={{
             display: 'inline-block',
             width: '80px',

@@ -39,11 +39,10 @@ const MarketDetailCarouselItem = (props: MarketDetailCarouselItemProps) => {
       <Wrapper
         css={css`
           width: 141px;
-          height: 89px;
+          aspect-ratio: 4/3;
 
           ${applyMediaQuery('mobile')} {
             width: 80px;
-            height: 60px;
           }
         `}
       >
@@ -53,7 +52,7 @@ const MarketDetailCarouselItem = (props: MarketDetailCarouselItemProps) => {
 
   return (
     <Styled.CarouselImageWrapper onClick={handleClick}>
-      <Styled.ImageWrapper>
+      <div>
         <Image
           alt="image"
           placeholder="blur"
@@ -62,7 +61,7 @@ const MarketDetailCarouselItem = (props: MarketDetailCarouselItemProps) => {
           fill
           style={{ objectFit: 'contain' }}
         />
-      </Styled.ImageWrapper>
+      </div>
       {current === idx && (
         <Styled.CheckBox>
           <CheckIcon
@@ -113,11 +112,10 @@ const MarketDetailCarousel = ({ imgSrc, id }: MarketDetailCarouselProps) => {
           <Wrapper
             css={css`
               width: 100%;
-              height: 900px;
+              aspect-ratio: 4/3;
 
               ${applyMediaQuery('mobile')} {
                 width: 100%;
-                height: 257px;
               }
             `}
           >
