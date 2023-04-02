@@ -4,10 +4,10 @@ import { css } from 'styled-components';
 
 import MarketCard from '../marketCard';
 import { MarketDetail } from '../marketDetail';
-import { ModalProvider } from 'feature/modalContext';
 import { MarketDetailSkeleton } from 'components/fallback/loading';
 import HeadSeo from 'components/common/headSeo';
 import { useMarketPost } from 'http/server/market';
+import { ModalProvider } from 'feature/ModalProvider';
 import { useSession } from 'next-auth/react';
 import { MarketLike, MarketMine } from '../marketDetail/components';
 

@@ -7,13 +7,14 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import AuthFormItem from '../authFormItem/authFormItem';
 import * as style from '../signupForm/signupForm.styled';
-import { form } from 'constants/form/findPassword';
+import { form } from 'constants/form/findId';
 
 interface PhoneFormProps {
   uuid: string;
 }
 
 interface FormState {
+  name: string;
   phone: string;
   authentication: string;
 }
@@ -24,8 +25,9 @@ const PhoneForm = ({ uuid }: PhoneFormProps) => {
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
 
   const onSubmit = methods.handleSubmit(async (data) => {
-    const { phone, authentication } = data;
+    const { phone, authentication, name } = data;
     const response = await signIn('Phone', {
+      name,
       phone,
       authentication,
       uuid,
@@ -39,17 +41,11 @@ const PhoneForm = ({ uuid }: PhoneFormProps) => {
   return (
     <FormProvider {...methods}>
       <Form css={style.form} onSubmit={onSubmit}>
-        {form
-          .filter((_, index) => index !== 0)
-          .map((form) => (
-            <FormLabel
-              key={form.htmlFor}
-              name={form.htmlFor}
-              label={form.label}
-            >
-              <AuthFormItem {...form} />
-            </FormLabel>
-          ))}
+        {form.map((form) => (
+          <FormLabel key={form.htmlFor} name={form.htmlFor} label={form.label}>
+            <AuthFormItem {...form} />
+          </FormLabel>
+        ))}
         <Button type="submit" fullWidth>
           인증
         </Button>

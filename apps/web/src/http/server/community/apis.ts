@@ -89,8 +89,38 @@ export const deleteCommunityPost = async ({
   });
 };
 
+export const uploadCommunityPost = async (data: FormData) => {
+  return authRequest('/community', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+    data,
+  });
+};
+
+export const updateCommunityPost = async (data: FormData, id: string) => {
+  return authRequest(`/community/${id}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+    data,
+  });
+};
+
+export const uploadTemporaryStorage = async (data: FormData) => {
+  return authRequest('/community-temp', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+    data,
+  });
+};
+
 export const getTemporaryStorage = async () => {
-  return authRequest(`/server/supercar/v1/community-temp`, {
+  return authRequest(`/community-temp`, {
     method: 'GET',
   });
 };
@@ -123,7 +153,6 @@ export const prefetchTemporaryStorage = async (token: string) => {
   return get(
     `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/community-temp`,
     {
-      method: 'GET',
       headers: {
         ACCESS_TOKEN: token,
       },

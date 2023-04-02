@@ -18,6 +18,7 @@ import {
   CategoryProps,
   Container,
   FormCheckbox,
+  Pagination,
   Table,
   Wrapper,
 } from '@supercarmarket/ui';
@@ -339,6 +340,11 @@ const AccountCategoryList = React.memo(function AccountCategory({
           )),
         }[tab]
       )}
+      <Pagination
+        pageSize={20}
+        totalCount={data.totalCount}
+        totalPages={data.totalPages}
+      />
     </Container>
   );
 });

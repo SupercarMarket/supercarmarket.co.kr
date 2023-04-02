@@ -108,6 +108,7 @@ const AuthFormItemContainer = React.memo(function AuthFormItem({
   isSubmitSuccessful,
   defaultValue,
   phone,
+  readOnly,
   register,
   setValue,
   setError: setFieldError,
@@ -140,39 +141,46 @@ const AuthFormItemContainer = React.memo(function AuthFormItem({
     htmlFor === 'authentication' && phone && !success ? 179 : undefined;
 
   const handleCallback = React.useCallback(async () => {
+    setFieldError(htmlFor, { message: '' });
+    setError(false);
+    setSuccess(false);
+
     if (!target) return;
     if (validator[htmlFor](target) !== true) {
       setFieldError(htmlFor, { message: String(validator[htmlFor](target)) });
       return;
     }
-
-    setError(false);
-    setSuccess(false);
 
     duplicateFieldMutation.mutate(target, {
       onSuccess: () => {
         setSuccess(true);
       },
+      onError: () => {
+        setError(true);
+      },
     });
   }, [duplicateFieldMutation, htmlFor, setFieldError, target]);
 
   const handlePhoneAuth = React.useCallback(() => {
+    setFieldError(htmlFor, { message: '' });
+    setError(false);
+    setSuccess(false);
+
     if (!target) return;
     if (validator[htmlFor](target) !== true) {
       setFieldError(htmlFor, { message: String(validator[htmlFor](target)) });
       return;
     }
-
-    setError(false);
-    setSuccess(false);
 
     const _phone = getValues('phone');
 
     if (htmlFor === 'phone')
       sendPhoneMutation.mutate(_phone, {
         onSuccess: () => {
-          setFieldError(htmlFor, { message: '' });
           setSuccess(true);
+        },
+        onError: () => {
+          setError(true);
         },
       });
     else if (htmlFor === 'authentication' && !!phone)
@@ -180,8 +188,10 @@ const AuthFormItemContainer = React.memo(function AuthFormItem({
         { phone, code: target },
         {
           onSuccess: () => {
-            setFieldError(htmlFor, { message: '' });
             setSuccess(true);
+          },
+          onError: () => {
+            setError(true);
           },
         }
       );
@@ -230,8 +240,10 @@ const AuthFormItemContainer = React.memo(function AuthFormItem({
               button={!!button}
               buttonText={button}
               buttonWidth={buttonWidth}
+              readOnly={readOnly}
               buttonVariant="Primary-Line"
               buttonCallback={handleCallback}
+              disabled={readOnly ? true : undefined}
               {...register(htmlFor, { ...options })}
             />
           ),

@@ -1,6 +1,6 @@
 const id = (value: string) => {
   if (!value) return '아이디를 입력해주세요.';
-  if (!/^[a-zA-Z][0-9a-zA-Z]{3,10}$/.test(value))
+  if (!/^[a-zA-Z][0-9a-zA-Z]{3,9}$/.test(value))
     return '영문/숫자/ 3자 이상 10자 미만으로 입력해주세요.';
   return true;
 };
@@ -33,7 +33,7 @@ const name = (value: string) => {
 
 const nickname = (value: string) => {
   if (!value) return '닉네임을 입력해주세요.';
-  if (!/^([a-zA-Z0-9ㄱ-ㅎ|ㅏ-ㅣ|가-힣]).{2,10}$/.test(value))
+  if (!/^([a-zA-Z0-9ㄱ-ㅎ|ㅏ-ㅣ|가-힣]).{2,9}$/.test(value))
     return '한글/영문/대소문자 2자 이상 10자 미만으로 입력해주세요';
   return true;
 };

@@ -7,7 +7,6 @@ import {
 } from '@supercarmarket/ui';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Modal } from 'components/common/modal';
-import ModalContext from 'feature/modalContext';
 import {
   useDeleteMarketPost,
   useUpdateMarketSellStatus,
@@ -16,6 +15,7 @@ import * as React from 'react';
 import { css } from 'styled-components';
 import { useNextQuery } from 'hooks/useNextQuery';
 import { marketFormatter } from '@supercarmarket/lib';
+import { ModalContext } from 'feature/ModalProvider';
 
 interface MarketMineProps {
   id: string;

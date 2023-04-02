@@ -2,7 +2,7 @@ import { Container, Title } from '@supercarmarket/ui';
 import type { NextPageWithLayout } from '@supercarmarket/types/base';
 import { SignupForm } from 'components/auth';
 import AuthLayout from 'components/layout/authLayout';
-import { ModalProvider } from 'feature/modalContext';
+import { ModalProvider } from 'feature/ModalProvider';
 
 const Signup: NextPageWithLayout = () => {
   return (

@@ -6,11 +6,11 @@ import {
   type GetServerSideProps,
   type InferGetServerSidePropsType,
 } from 'next';
-import { ModalProvider } from 'feature/modalContext';
 import { QueryErrorResetBoundary } from '@tanstack/react-query';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from 'components/fallback';
 import { getSession } from 'http/server/next';
+import { ModalProvider } from 'feature/ModalProvider';
 
 const ProfileUpdate: NextPageWithLayout = ({
   sub,

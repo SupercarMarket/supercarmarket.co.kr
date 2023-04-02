@@ -65,7 +65,7 @@ const MarketRow = ({
               blurDataURL={base64}
               src={imgSrc}
               alt="thumbnail"
-              style={{ borderRadius: '4px' }}
+              style={{ borderRadius: '4px', objectFit: 'cover' }}
               fill
               sizes={`${applyMediaQuery('desktop')} 196px, ${applyMediaQuery(
                 'mobile'

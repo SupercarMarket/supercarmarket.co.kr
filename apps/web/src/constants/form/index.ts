@@ -28,6 +28,7 @@ export interface Form<K, T> {
   options: RegisterOptions & {
     option?: FormSelectOption;
   };
+  readOnly?: boolean;
   button?: string;
   buttonWidth?: string;
   tooltip?: string;

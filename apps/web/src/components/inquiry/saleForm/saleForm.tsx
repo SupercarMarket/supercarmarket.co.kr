@@ -4,12 +4,12 @@ import { useRouter } from 'next/navigation';
 import { FormProvider, useForm } from 'react-hook-form';
 import { css } from 'styled-components';
 import InquiryFormItem from '../inquiryFormItem';
-import ModalContext from 'feature/modalContext';
 import { Modal } from 'components/common/modal';
 import { Profile } from '@supercarmarket/types/account';
 import { useDebounce } from '@supercarmarket/hooks';
 import { form, type FormState } from 'constants/form/sale';
 import { useRegisterSale } from 'http/server/inquiry';
+import { ModalContext } from 'feature/ModalProvider';
 
 interface SaleFormProps {
   role: Profile['role'];

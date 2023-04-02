@@ -16,7 +16,6 @@ import * as React from 'react';
 import { css } from 'styled-components';
 import type { Editor } from '@toast-ui/react-editor';
 import type { CommunityTemporaryStorageDto } from '@supercarmarket/types/community';
-import ModalContext from 'feature/modalContext';
 import { FormProvider, useForm } from 'react-hook-form';
 import { ErrorCode, HttpError } from '@supercarmarket/lib';
 import {
@@ -31,6 +30,7 @@ import { getTemporaryStorage, QUERY_KEYS } from 'http/server/community';
 import { useDebounce } from '@supercarmarket/hooks';
 import { authRequest } from 'http/core';
 import { ServerResponse } from '@supercarmarket/types/base';
+import { ModalContext } from 'feature/ModalProvider';
 
 interface FormState {
   files: File[];
@@ -69,7 +69,6 @@ const CommunityForm = (props: CommunityFormProps) => {
   const { onClose, onOpen } = React.useContext(ModalContext);
   const methods = useForm<FormState>();
   const queryClient = useQueryClient();
-  const { formState } = methods;
 
   const handleCancel = React.useCallback(() => {
     back();
@@ -497,6 +496,11 @@ const CommunityForm = (props: CommunityFormProps) => {
             display: flex;
             justify-content: ${success ? 'space-between' : 'flex-end'};
             align-items: center;
+            ${applyMediaQuery('mobile')} {
+              flex-direction: column;
+              align-items: flex-end;
+              gap: 9px;
+            }
           `}
         >
           {success && (

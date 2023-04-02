@@ -9,7 +9,6 @@ import Posting from 'components/common/posting';
 import { ErrorFallback } from 'components/fallback';
 import layout from 'components/layout';
 import { MagazineDealer } from 'components/magazine';
-import { ModalProvider } from 'feature/modalContext';
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import dynamic from 'next/dynamic';
 import type { ParsedUrlQuery } from 'querystring';
@@ -19,6 +18,7 @@ import { css } from 'styled-components';
 import Advertisement from 'components/common/advertisement';
 import { prefetchMagazinePost, QUERY_KEYS } from 'http/server/magazine';
 import { getSession } from 'http/server/next';
+import { ModalProvider } from 'feature/ModalProvider';
 
 const Comment = dynamic(() => import('components/common/comment'), {
   ssr: false,

@@ -11,11 +11,11 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from 'components/fallback';
 import Posting from 'components/common/posting';
 import { CommunityPostingList } from 'components/community';
-import { ModalProvider } from 'feature/modalContext';
 import { css } from 'styled-components';
 import Advertisement from 'components/common/advertisement';
 import { prefetchCommunityPost, QUERY_KEYS } from 'http/server/community';
 import { getSession } from 'http/server/next';
+import { ModalProvider } from 'feature/ModalProvider';
 
 const CommunityPost: NextPageWithLayout = ({
   subject,

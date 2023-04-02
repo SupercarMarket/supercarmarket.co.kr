@@ -3,7 +3,7 @@ import type { NextPageWithLayout } from '@supercarmarket/types/base';
 import { FindPasswordForm } from 'components/auth';
 import AuthLayout from 'components/layout/authLayout';
 import * as React from 'react';
-import { ModalProvider } from 'feature/modalContext';
+import { ModalProvider } from 'feature/ModalProvider';
 
 const FindPassword: NextPageWithLayout = () => {
   return (

@@ -9,12 +9,12 @@ import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 
 import theme from 'constants/theme';
-import ModalContext from 'feature/modalContext';
 import { css } from 'styled-components';
 import { Modal } from 'components/common/modal';
 import { useLikeMarketPost } from 'http/server/market';
 import FavoriteIcon from '../../../../../assets/svg/favorite.svg';
 import FavoriteBorderIcon from '../../../../../assets/svg/favorite-border.svg';
+import { ModalContext } from 'feature/ModalProvider';
 
 interface MarketLikeProps {
   id: string;

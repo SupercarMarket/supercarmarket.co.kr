@@ -137,7 +137,7 @@ const MarketColumn = (
                 blurDataURL={base64}
                 src={imgSrc}
                 alt="thumbnail"
-                style={{ borderRadius: '4px' }}
+                style={{ borderRadius: '4px', objectFit: 'cover' }}
                 sizes={`${applyMediaQuery('desktop')} 285px, ${applyMediaQuery(
                   'mobile'
                 )} 167.5px`}

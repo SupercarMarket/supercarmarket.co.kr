@@ -71,7 +71,7 @@ const Footer = () => {
                 슈마매거진
               </Typography>
             </Link>
-            <Link href="/community/paparazzi">
+            <Link href="/community">
               <Typography
                 fontSize="body-14"
                 fontWeight="regular"

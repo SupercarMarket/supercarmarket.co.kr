@@ -1,17 +1,12 @@
 import * as React from 'react';
-import { useInterval, useMedia } from '@supercarmarket/hooks';
-import {
-  Alert,
-  applyMediaQuery,
-  Container,
-  deviceQuery,
-  Wrapper,
-} from '@supercarmarket/ui';
+import { useInterval } from '@supercarmarket/hooks';
+import { Alert, applyMediaQuery, Container, Wrapper } from '@supercarmarket/ui';
 import { useBanner } from 'http/server/home';
 import { css } from 'styled-components';
 import Image from 'next/image';
 import Skeleton from 'react-loading-skeleton';
 import { createExternalLink } from '@supercarmarket/lib';
+import { useDevice } from 'hooks/useDevice';
 
 interface BannerItemProps {
   imageUrl: string;
@@ -99,8 +94,10 @@ const BannerDot = (props: BannerDotProps) => {
 
 const Banner = () => {
   const [index, setIndex] = React.useState(0);
-  const { isMobile } = useMedia({ deviceQuery });
-  const { data, isLoading } = useBanner(isMobile ? 'M' : 'D');
+  const { isMobile } = useDevice();
+  const { data, isLoading, isFetching, refetch } = useBanner(
+    isMobile ? 'M' : 'D'
+  );
   const handleIndex = React.useCallback(() => {
     const maxLength = data?.data.length;
     const nextIndex = maxLength === index + 1 ? 0 : index + 1;
@@ -110,7 +107,11 @@ const Banner = () => {
 
   useInterval(handleIndex, 4000);
 
-  if (isLoading)
+  React.useEffect(() => {
+    refetch();
+  }, [isMobile]);
+
+  if (isLoading || isFetching)
     return (
       <Container margin="8px 0 40px 0">
         <Skeleton width="100%" height={isMobile ? 160 : 600} />

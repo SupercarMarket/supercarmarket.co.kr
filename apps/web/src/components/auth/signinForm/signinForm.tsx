@@ -18,7 +18,6 @@ import GoogleIcon from '../../../assets/svg/google.svg';
 import KakaoIcon from '../../../assets/svg/kakao.svg';
 import AuthFormItem from '../authFormItem/authFormItem';
 import * as style from './signinForm.styled';
-import { useDebounce } from '@supercarmarket/hooks';
 import { form, FormState } from 'constants/form/signin';
 
 const oauth = [
@@ -66,26 +65,29 @@ const LocalFormItem = () => {
 
   const { formState } = methods;
 
-  const debouncedSubmit = useDebounce(async (data: FormState) => {
-    setErrorMessage(null);
+  const handleSubmit = React.useCallback(
+    async (data: FormState) => {
+      setErrorMessage(null);
 
-    const { id, password } = data;
-    catchNoExist(id, password);
+      const { id, password } = data;
+      catchNoExist(id, password);
 
-    const response = await signIn('Credentials', {
-      id,
-      password,
-      redirect: false,
-    });
+      const response = await signIn('Credentials', {
+        id,
+        password,
+        redirect: false,
+      });
 
-    if (!response) setErrorMessage(ErrorCode[450]);
-    else if (response.ok) replace('/');
-    else setErrorMessage(response?.error || ErrorCode[450]);
-  }, 300);
+      if (!response) setErrorMessage(ErrorCode[450]);
+      else if (response.ok) replace('/');
+      else setErrorMessage(response?.error || ErrorCode[450]);
+    },
+    [replace]
+  );
 
   return (
     <FormProvider {...methods}>
-      <Form css={style.form} onSubmit={methods.handleSubmit(debouncedSubmit)}>
+      <Form css={style.form} onSubmit={methods.handleSubmit(handleSubmit)}>
         <Wrapper css={style.wrapper}>
           {form.map((form) => (
             <FormLabel

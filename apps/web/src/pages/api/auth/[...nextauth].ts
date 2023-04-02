@@ -80,34 +80,17 @@ const providers: Provider[] = [
     credentials: {
       phone: { label: 'phone', type: 'tel' },
       authentication: { label: 'authentication', type: 'text' },
-      uuid: { label: 'phone', type: 'text' },
+      uuid: { label: 'uuid', type: 'text' },
+      name: { label: 'name', type: 'text' },
     },
     async authorize(credentials) {
       if (!credentials) return null;
 
-      const { phone, authentication, uuid } = credentials;
+      const { phone, authentication, uuid, name } = credentials;
 
-      const { data } = await post<
-        {
-          phone: string;
-          code: string;
-          token: string;
-        },
-        ServerResponse<{
-          access_token: string;
-          refresh_token: string;
-          exp: number;
-          newUser: boolean;
-          user: {
-            id: string;
-            name: string;
-            email: string;
-            provider: 'local' | 'google' | 'kakao';
-          };
-        }>
-      >(
+      const { data } = await post(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/user/register-phone`,
-        { phone, code: authentication, token: uuid }
+        { phone, code: authentication, token: uuid, name }
       );
 
       const { access_token, refresh_token, exp, newUser, user } = data;
@@ -196,7 +179,7 @@ const callbacks: Partial<CallbacksOptions<Profile, Account>> | undefined = {
      */
     if (isExpire(token.expire)) return token;
 
-    const newToken = await refreshToken(token.refreshToken);
+    const newToken = await refreshToken(token.accessToken, token.refreshToken);
 
     return { ...token, ...newToken };
   },

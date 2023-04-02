@@ -135,7 +135,10 @@ export const resetPassword = async (data: {
   });
 };
 
-export const refreshToken = async (refreshToken: string) => {
+export const refreshToken = async (
+  accessToken: string,
+  refreshToken: string
+) => {
   return get<
     ServerResponse<{
       exp: number;
@@ -143,6 +146,7 @@ export const refreshToken = async (refreshToken: string) => {
     }>
   >(`${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/user/get-token`, {
     headers: {
+      ACCESS_TOKEN: accessToken,
       REFRESH_TOKEN: refreshToken,
     },
   }).then((res) => {

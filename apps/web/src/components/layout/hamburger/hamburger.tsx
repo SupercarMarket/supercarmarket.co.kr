@@ -49,6 +49,7 @@ const HamburgerLinkItem = React.memo(function HamburgerLinkItem({
       display="flex"
       flexDirection="column"
       padding="24px 0"
+      borderBottom="0.5px solid #8E8E95"
     >
       <Wrapper.Top
         className={clsx({
@@ -70,7 +71,6 @@ const HamburgerLinkItem = React.memo(function HamburgerLinkItem({
       >
         <SupercarmarketLink
           href={href}
-          disabled={!!children}
           callback={() => handleClick(`/${href}`)}
         >
           <Typography

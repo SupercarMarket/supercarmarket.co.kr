@@ -143,7 +143,7 @@ const CommunityCardRow = (props: CommunityCardChildrenProps) => {
               alt="thumbnail"
               width={isMobile ? 64 : 196}
               height={isMobile ? 64 : 124}
-              style={{ borderRadius: '4px' }}
+              style={{ borderRadius: '4px', objectFit: 'cover' }}
             />
           ) : (
             <Skeleton />
@@ -408,6 +408,7 @@ const CommunityCardColumn = (props: CommunityCardChildrenProps) => {
               blurDataURL={base64}
               style={{
                 borderRadius: '4px',
+                objectFit: 'cover',
               }}
               sizes={`${applyMediaQuery('desktop')} 285px, ${applyMediaQuery(
                 'mobile'
