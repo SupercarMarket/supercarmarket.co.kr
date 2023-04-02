@@ -40,21 +40,19 @@ const MarketRow = ({
             position: relative;
             overflow: hidden;
             width: 196px;
-            height: 124px;
+            aspect-ratio: 4/3;
             .react-loading-skeleton {
               width: 196px;
-              height: 124px;
               border-radius: 4px;
             }
             ${applyMediaQuery('mobile')} {
               width: 126px;
-              height: 126px;
+              aspect-ratio: 1/1;
               & > img {
                 object-fit: cover;
               }
               .react-loading-skeleton {
                 width: 126px;
-                height: 126px;
               }
             }
           `}

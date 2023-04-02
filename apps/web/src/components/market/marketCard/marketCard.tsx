@@ -71,6 +71,10 @@ const MarketColumn = (
           css={css`
             margin-bottom: 20px;
             cursor: pointer;
+
+            ${applyMediaQuery('mobile')} {
+              margin-bottom: 8px;
+            }
           `}
         >
           <Wrapper.Item
@@ -87,6 +91,7 @@ const MarketColumn = (
               }
               ${applyMediaQuery('mobile')} {
                 width: 167.5px;
+
                 .react-loading-skeleton {
                   width: 167.5px;
                 }
