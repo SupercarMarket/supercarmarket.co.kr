@@ -37,12 +37,11 @@ function Publisher(props: Props) {
               resolution: '880x495',
               frameRate: 10000000,
               videoSource: videoDevices[0].deviceId,
-              publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
-              publishVideo: true, // Whether you want to start publishing with your video enabled or not
             });
 
             newSession.publish(publich);
             publich.stream.streamManager.addVideoElement(video);
+            video.style.transform = 'rotate(0)';
           });
       });
     };

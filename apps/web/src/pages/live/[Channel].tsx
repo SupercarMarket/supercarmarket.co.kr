@@ -56,12 +56,17 @@ const Channel = (props: Props) => {
 export default Channel;
 
 const LiveInfo = ({ data }: { data: channelResType | null | undefined }) => {
-  const volumeRef = useRef<HTMLDivElement | null>(null);
+  const [volume, setVolume] = useState<number>(80);
 
-  const [volume, setVolume] = useState<number>(0);
+  const router = useRouter();
 
   const volumeChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
     setVolume(Number(event.currentTarget.value));
+  };
+
+  const deleteBroadCastHandler = () => {
+    data && data.isMine && deleteBroadcast(data.broadCastSeq);
+    router.replace('/live');
   };
 
   return (
@@ -106,16 +111,20 @@ const LiveInfo = ({ data }: { data: channelResType | null | undefined }) => {
             }}
           >
             <VolumeIcon />
-            <input
-              type="range"
-              min={0}
-              max={100}
-              value={volume}
-              onChange={volumeChangeHandler}
-            />
+            <div>
+              <input
+                type="range"
+                min={0}
+                max={100}
+                value={volume}
+                onChange={volumeChangeHandler}
+              />
+            </div>
           </div>
           <div>
-            <Button variant="Primary">나가기</Button>
+            <Button variant="Primary" onClick={deleteBroadCastHandler}>
+              나가기
+            </Button>
           </div>
         </div>
       </div>
@@ -125,6 +134,11 @@ const LiveInfo = ({ data }: { data: channelResType | null | undefined }) => {
 
 const getDetailLiveInfo = async (seq: string) => {
   const data = await authRequest.get(`live/${seq}`);
+  return data;
+};
+
+const deleteBroadcast = async (seq: number) => {
+  const data = await authRequest.delete(`/live`, { data: { seq: seq } });
   return data;
 };
 

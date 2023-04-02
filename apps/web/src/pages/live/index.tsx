@@ -24,7 +24,6 @@ const Index = (props: Props) => {
 
   useEffect(() => {
     getBroadcastList().then((res: any) => {
-      console.log(res);
       setLiveItemList(res.list);
     });
   }, []);
