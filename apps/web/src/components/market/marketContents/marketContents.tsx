@@ -8,6 +8,8 @@ import { ModalProvider } from 'feature/modalContext';
 import { MarketDetailSkeleton } from 'components/fallback/loading';
 import HeadSeo from 'components/common/headSeo';
 import { useMarketPost } from 'http/server/market';
+import { useSession } from 'next-auth/react';
+import { MarketLike, MarketMine } from '../marketDetail/components';
 
 interface MarketContentsProps {
   id: string;
@@ -15,23 +17,36 @@ interface MarketContentsProps {
 
 const MarketContents = (props: MarketContentsProps) => {
   const { id } = props;
-  const { data, isFetching, isLoading } = useMarketPost(id);
-
-  console.log(data);
-  if (isFetching || isLoading) return <MarketDetailSkeleton />;
+  const session = useSession();
+  const {
+    data: market,
+    isFetching,
+    isLoading,
+  } = useMarketPost(id, session.data?.accessToken, {
+    enabled: session.status && session.status !== 'loading',
+  });
 
   return (
     <ModalProvider>
-      {data && (
+      {market && (
         <>
           <HeadSeo
-            title={data.data.carName}
-            description={data.data.introduction}
-            image={data.data.imgSrc[0] || undefined}
+            title={market.data.carName}
+            description={market.data.introduction}
+            image={market.data.imgSrc[0] || undefined}
           />
           <Container>
             <>
-              <MarketDetail data={data.data} id={id} />
+              {isFetching || isLoading ? (
+                <MarketDetailSkeleton />
+              ) : (
+                <MarketDetail data={market.data} id={id} />
+              )}
+              {market.data.isMine ? (
+                <MarketMine id={id} brdSeq={market.data.brdSeq} />
+              ) : (
+                <MarketLike id={id} isLike={market.data.isLike} />
+              )}
               <Wrapper
                 css={css`
                   display: flex;
@@ -41,7 +56,7 @@ const MarketContents = (props: MarketContentsProps) => {
                 `}
               >
                 <Table tab="product" hidden={false} />
-                {data.carList.map((m) => (
+                {market.carList.map((m) => (
                   <React.Fragment key={m.id}>
                     <MarketCard variant="row" {...m} />
                     <Divider
