@@ -18,7 +18,6 @@ const useSearchKeyword = ({ domain }: SearchParams) => {
 
       queries.keyword = keywordRef.current.value;
       delete queries.id;
-      keywordRef.current.value = '';
 
       const queryString = Object.entries(queries)
         .map(([key, value]) => `${key}=${value}`)
