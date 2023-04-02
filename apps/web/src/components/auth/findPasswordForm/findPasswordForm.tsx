@@ -4,12 +4,12 @@ import { useRouter } from 'next/navigation';
 import { FormProvider, useForm } from 'react-hook-form';
 import AuthFormItem from '../authFormItem/authFormItem';
 import * as style from '../signupForm/signupForm.styled';
-import ModalContext from 'feature/modalContext';
 import { Modal } from 'components/common/modal';
 import { form as findPasswordForm } from 'constants/form/findPassword';
 import { form as resultPasswordForm } from 'constants/form/resultPassword';
 import { useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEYS, useResetPassword } from 'http/server/auth';
+import { ModalContext } from 'feature/ModalProvider';
 
 interface FindForms {
   password: typeof findPasswordForm;

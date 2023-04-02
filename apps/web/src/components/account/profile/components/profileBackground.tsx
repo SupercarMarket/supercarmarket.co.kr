@@ -1,19 +1,23 @@
+import * as React from 'react';
 import {
   applyMediaQuery,
   Button,
   Container,
   Wrapper,
 } from '@supercarmarket/ui';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import useBase64 from 'hooks/queries/useBase64';
-import { QUERY_KEYS } from 'http/server/account';
+import {
+  QUERY_KEYS,
+  useDeleteBackground,
+  useUploadBackground,
+} from 'http/server/account';
 import { type Session } from 'next-auth';
 import Skeleton from 'react-loading-skeleton';
 import { css } from 'styled-components';
 import Image from 'next/image';
 import uploadIconSrc from '../../../../../public/images/create.png';
 import deleteIconSrc from '../../../../../public/images/delete.png';
-import { authRequest } from 'http/core';
 
 const baseSrc =
   'https://user-images.githubusercontent.com/66871265/210207112-a0d7b276-e24b-4ae9-80a1-8e48d5cc45f2.png';
@@ -39,9 +43,11 @@ const ProfileBackground = ({
     detail: true,
     idx: 0,
   });
+  const uploadMutation = useUploadBackground();
+  const deleteMutation = useDeleteBackground();
 
-  const uploadMutation = useMutation({
-    mutationFn: async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleUpload = React.useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
       const files = e.target.files;
 
       if (!files?.length) return;
@@ -55,31 +61,27 @@ const ProfileBackground = ({
 
       e.target.value = '';
 
-      return await authRequest('/server/supercar/v1/user/background', {
-        headers: {
-          'Content-Type': 'multipart/form-data',
+      uploadMutation.mutate(formData, {
+        onSuccess: () => {
+          queryClient.invalidateQueries(QUERY_KEYS.id(sub));
         },
-        data: formData,
       });
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries(QUERY_KEYS.id(sub));
-    },
-  });
+    [queryClient, session, sub, uploadMutation]
+  );
 
-  const removeMutation = useMutation({
-    mutationFn: async (url: string) => {
+  const handleDelete = React.useCallback(
+    (url: string) => {
       if (!session) return;
 
-      return await authRequest('/server/supercar/v1/user/background', {
-        method: 'DELETE',
-        data: { url },
+      deleteMutation.mutate(url, {
+        onSuccess: () => {
+          queryClient.invalidateQueries(QUERY_KEYS.id(sub));
+        },
       });
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries(QUERY_KEYS.id(sub));
-    },
-  });
+    [deleteMutation, queryClient, session, sub]
+  );
 
   return (
     <Container position="absolute">
@@ -163,7 +165,7 @@ const ProfileBackground = ({
                   type="file"
                   accept="image/jpg, image/png, image/jpeg"
                   hidden
-                  onChange={(e) => uploadMutation.mutate(e)}
+                  onChange={handleUpload}
                 />
                 <label htmlFor="background">배경 이미지 수정</label>
                 <Image src={uploadIconSrc} alt="upload" />
@@ -176,7 +178,7 @@ const ProfileBackground = ({
                 onClick={() => {
                   if (src === baseSrc) return;
 
-                  removeMutation.mutate(src);
+                  handleDelete(src);
                 }}
                 style={{
                   height: '100%',

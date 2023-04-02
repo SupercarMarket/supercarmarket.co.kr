@@ -6,13 +6,13 @@ import { useRouter } from 'next/navigation';
 import * as style from './signupForm.styled';
 import AuthFormItem from '../authFormItem/authFormItem';
 import { FormProvider, useForm } from 'react-hook-form';
-import ModalContext from 'feature/modalContext';
 import TermModal from 'components/common/modal/termModal';
 import { Modal } from 'components/common/modal';
 import { useDebounce } from '@supercarmarket/hooks';
 import { form, type FormState } from 'constants/form/signup';
 import { QUERY_KEYS, useCreateAccount } from 'http/server/auth';
 import { useQueryClient } from '@tanstack/react-query';
+import { ModalContext } from 'feature/ModalProvider';
 
 const SignupForm = () => {
   const queryClient = useQueryClient();

@@ -10,8 +10,6 @@ import { signOut, useSession } from 'next-auth/react';
 import * as React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { css } from 'styled-components';
-
-import ModalContext from 'feature/modalContext';
 import { Modal } from 'components/common/modal';
 import AuthFormItem from 'components/auth/authFormItem/authFormItem';
 import { useAccountUpdateInfo } from 'http/server/account';
@@ -23,6 +21,7 @@ import {
   useDeleteAccount,
   useUpdateAccount,
 } from 'http/server/auth';
+import { ModalContext } from 'feature/ModalProvider';
 
 interface AccountUpdateFormProps {
   sub: string;

@@ -62,6 +62,39 @@ export const getAccountUpdateInfo = async () => {
   });
 };
 
+export const uploadBackground = async (data: FormData) => {
+  return authRequest('/user/background', {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+    data,
+  });
+};
+
+export const uploadRepresentative = async (data: FormData) => {
+  return authRequest('/user/gallery', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+    data,
+  });
+};
+
+export const deleteBackground = async (url: string) => {
+  return authRequest('/user/background', {
+    method: 'DELETE',
+    data: { url },
+  });
+};
+
+export const deleteRepresentative = async (url: string) => {
+  return authRequest('/user/gallery', {
+    method: 'DELETE',
+    data: { url },
+  });
+};
+
 export const prefetchAccount = async ({
   id,
   token,
