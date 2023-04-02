@@ -30,9 +30,22 @@ export const getMarket = async ({
   });
 };
 
-export const getMarketPost = async ({ id }: { id: string }) => {
+export const getMarketPost = async ({
+  id,
+  token,
+}: {
+  id: string;
+  token?: string;
+}) => {
+  const headers = token
+    ? {
+        ACCESS_TOKEN: token,
+      }
+    : undefined;
+
   return get(`/server/supercar/v1/shop`, {
     method: 'GET',
+    headers,
     params: id,
   });
 };
@@ -75,13 +88,13 @@ export const prefetchMarket = async (query: {
 };
 
 export const prefetchMarketPost = async ({
-  boardView,
-  token,
   id,
+  token,
+  boardView,
 }: {
   id: string;
-  boardView?: string;
   token?: string;
+  boardView?: string;
 }) => {
   let headers = {};
 

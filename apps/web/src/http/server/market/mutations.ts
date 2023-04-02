@@ -11,10 +11,10 @@ export const useLikeMarketPost = (id: string, options = {}) => {
 
   return useMutation({
     mutationFn: () => likeMarketPost({ id }),
-    useErrorBoundary: true,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.id(id) });
+      queryClient.invalidateQueries(QUERY_KEYS.id(id));
     },
+    useErrorBoundary: true,
     ...options,
   });
 };
@@ -25,10 +25,10 @@ export const useUpdateMarketSellStatus = (id: string, options = {}) => {
   return useMutation({
     mutationFn: ({ data }: { data: { brdSeq: number } }) =>
       updateMarketSellStatus({ data: { seq: data.brdSeq } }),
-    useErrorBoundary: true,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.id(id) });
+      queryClient.invalidateQueries(QUERY_KEYS.id(id));
     },
+    useErrorBoundary: true,
     ...options,
   });
 };
@@ -39,7 +39,7 @@ export const useDeleteMarketPost = (id: string, options = {}) => {
     mutationFn: ({ data }: { data: { id: string }[] }) =>
       deleteMarketPost({ data }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.id(id) });
+      queryClient.invalidateQueries(QUERY_KEYS.id(id));
     },
     useErrorBoundary: true,
     ...options,

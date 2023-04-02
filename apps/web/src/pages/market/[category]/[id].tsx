@@ -129,7 +129,6 @@ MarketDetailPage.Layout = layout;
 
 export const getServerSideProps: GetServerSideProps = async ({
   req,
-  res,
   query,
 }) => {
   const { id, category = 'sports-car' } = query as Params;
@@ -142,10 +141,12 @@ export const getServerSideProps: GetServerSideProps = async ({
   await queryClient.prefetchQuery({
     queryKey: QUERY_KEYS.id(id),
     queryFn: () =>
-      prefetchMarketPost({ boardView, token: session?.accessToken, id }),
+      prefetchMarketPost({
+        id,
+        token: session?.accessToken,
+        boardView: `${boardView}[${id}]`,
+      }),
   });
-
-  // res.setHeader('Cache-Control', 'public, max-age=500, immutable');
 
   return {
     props: {

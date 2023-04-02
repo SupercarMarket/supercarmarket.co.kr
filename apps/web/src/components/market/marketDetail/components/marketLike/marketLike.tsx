@@ -22,14 +22,13 @@ interface MarketLikeProps {
 }
 
 const MarketLike = ({ id, isLike }: MarketLikeProps) => {
-  const [like, setLike] = React.useState<boolean>(isLike);
   const { onOpen, onClose } = React.useContext(ModalContext);
-  const { data: session } = useSession();
+  const { status } = useSession();
   const { push } = useRouter();
-  const { mutate: toggleLike } = useLikeMarketPost(id);
+  const { mutate: toggleLike, isLoading } = useLikeMarketPost(id);
 
   const likeClick = React.useCallback(async () => {
-    if (!session) {
+    if (status !== 'authenticated') {
       onOpen(
         <Modal
           description="로그인 후 찜하기가 가능합니다"
@@ -49,7 +48,7 @@ const MarketLike = ({ id, isLike }: MarketLikeProps) => {
     } else {
       toggleLike();
     }
-  }, [session, onOpen, onClose, push, toggleLike]);
+  }, [status, onOpen, onClose, push, toggleLike]);
 
   return (
     <Wrapper
@@ -67,8 +66,9 @@ const MarketLike = ({ id, isLike }: MarketLikeProps) => {
       <Button
         onClick={likeClick}
         variant="Line"
+        disabled={isLoading}
         prefixx={
-          like ? (
+          isLike ? (
             <FavoriteIcon
               width={16}
               height="100%"
@@ -83,7 +83,7 @@ const MarketLike = ({ id, isLike }: MarketLikeProps) => {
           )
         }
       >
-        <Typography color={like ? 'system-1' : 'greyScale-5'}>
+        <Typography color={isLike ? 'system-1' : 'greyScale-5'}>
           찜하기
         </Typography>
       </Button>
