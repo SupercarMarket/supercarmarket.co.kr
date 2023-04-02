@@ -496,6 +496,11 @@ const CommunityForm = (props: CommunityFormProps) => {
             display: flex;
             justify-content: ${success ? 'space-between' : 'flex-end'};
             align-items: center;
+            ${applyMediaQuery('mobile')} {
+              flex-direction: column;
+              align-items: flex-end;
+              gap: 9px;
+            }
           `}
         >
           {success && (

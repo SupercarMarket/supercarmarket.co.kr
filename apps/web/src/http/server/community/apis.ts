@@ -120,7 +120,7 @@ export const uploadTemporaryStorage = async (data: FormData) => {
 };
 
 export const getTemporaryStorage = async () => {
-  return authRequest(`/server/supercar/v1/community-temp`, {
+  return authRequest(`/community-temp`, {
     method: 'GET',
   });
 };
