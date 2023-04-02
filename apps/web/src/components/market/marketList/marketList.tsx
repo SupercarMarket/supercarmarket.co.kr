@@ -30,7 +30,6 @@ const MarketList = (props: MarketListProps) => {
               display: flex;
               flex-wrap: wrap;
               margin-bottom: 80px;
-              gap: 6px;
               ${applyMediaQuery('mobile')} {
                 column-gap: 8px;
                 row-gap: 16px;

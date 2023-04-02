@@ -32,7 +32,7 @@ const MarketRow = ({
             display: flex;
             align-items: center;
             border-bottom: 1px solid ${theme.color['greyScale-3']};
-            padding-bottom: 6px;
+            padding: 6px 0;
 
             ${applyMediaQuery('mobile')} {
               align-items: flex-start;
