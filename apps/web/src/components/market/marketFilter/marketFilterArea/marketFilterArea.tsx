@@ -17,6 +17,9 @@ const MarketFilterArea = () => {
         padding: 16px 12px;
         background: ${({ theme }) => theme.color['greyScale-2']};
         border-radius: 4px;
+        ${applyMediaQuery('mobile')} {
+          gap: 16px;
+        }
       `}
     >
       <Wrapper
@@ -27,6 +30,7 @@ const MarketFilterArea = () => {
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            gap: 16px;
           }
         `}
       >
@@ -59,6 +63,7 @@ const MarketFilterArea = () => {
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            gap: 16px;
           }
         `}
       >
@@ -71,6 +76,7 @@ const MarketFilterArea = () => {
               flex-direction: column;
               box-sizing: border-box;
               padding: 10px;
+              padding-bottom: 0;
               gap: 5px;
               ${applyMediaQuery('mobile')} {
                 width: 311px;

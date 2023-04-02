@@ -44,7 +44,7 @@ const PartnershipDetail = ({ id }: Props) => {
                   css={css`
                     display: flex;
                     width: 100%;
-                    gap: 50px;
+                    gap: 20px;
 
                     ${applyMediaQuery('mobile')} {
                       flex-direction: column-reverse;
@@ -55,12 +55,11 @@ const PartnershipDetail = ({ id }: Props) => {
                   <Wrapper.Item
                     css={css`
                       width: 578px;
-                      height: 386px;
+                      aspect-ratio: 4/3;
                       position: relative;
 
                       ${applyMediaQuery('mobile')} {
                         width: 100%;
-                        height: 257px;
                       }
                     `}
                   >

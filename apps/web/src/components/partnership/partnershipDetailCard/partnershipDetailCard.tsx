@@ -16,20 +16,19 @@ const PartnershipDetailCard = ({ info }: PartnershipDetailCard) => {
     address,
     category,
     representative,
-    partnerName,
     companyName,
-    phone,
     treatedItem,
     workTime,
-    tel,
+    wireNumber,
     siteUrl,
   } = info;
+
   return (
     <Wrapper.Top
       css={css`
         ${({ theme }) => css`
           box-sizing: border-box;
-          width: 578px;
+          width: 602px;
           padding: 30px 40px;
           border: 1px solid ${({ theme }) => theme.color['greyScale-5']};
           border-radius: 4px;
@@ -75,9 +74,7 @@ const PartnershipDetailCard = ({ info }: PartnershipDetailCard) => {
         </Information>
         <Information label="대표자">{representative}</Information>
         <Information label="주소">{address}</Information>
-        <Information label="전화번호">
-          {tel} <Typography color="greyScale-5">|</Typography> {phone}
-        </Information>
+        <Information label="전화번호">{wireNumber}</Information>
       </Wrapper.Bottom>
     </Wrapper.Top>
   );
