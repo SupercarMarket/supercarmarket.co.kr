@@ -5,7 +5,7 @@ import {
   type MarketResponse,
 } from '@supercarmarket/types/market';
 import { useQuery } from '@tanstack/react-query';
-import { QUERY_KEYS } from './keys';
+import { QUERY_KEYS } from 'http/server/market';
 import { getMarket, getMarketPost } from './';
 
 export const useMarket = (
@@ -35,10 +35,10 @@ export const useMarket = (
   });
 };
 
-export const useMarketPost = (id: string, options = {}) => {
+export const useMarketPost = (id: string, token?: string, options = {}) => {
   return useQuery<MarketDetailResponse<MarketDetailDto<string>>>({
     queryKey: QUERY_KEYS.id(id),
-    queryFn: () => getMarketPost({ id }),
+    queryFn: () => getMarketPost({ id, token }),
     useErrorBoundary: true,
     ...options,
   });
