@@ -63,11 +63,13 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     };
   }
 
-  const temporaryStorage = await prefetchTemporaryStorage(session.accessToken);
+  const temporaryStorage = await prefetchTemporaryStorage(
+    session.accessToken
+  ).then((res) => res.data);
 
   return {
     props: {
-      temporaryStorage,
+      temporaryStorage: temporaryStorage,
     },
   };
 };

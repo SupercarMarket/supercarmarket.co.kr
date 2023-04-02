@@ -153,7 +153,6 @@ export const prefetchTemporaryStorage = async (token: string) => {
   return get(
     `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/community-temp`,
     {
-      method: 'GET',
       headers: {
         ACCESS_TOKEN: token,
       },
