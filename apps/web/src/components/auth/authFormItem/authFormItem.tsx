@@ -140,15 +140,15 @@ const AuthFormItemContainer = React.memo(function AuthFormItem({
     htmlFor === 'authentication' && phone && !success ? 179 : undefined;
 
   const handleCallback = React.useCallback(async () => {
+    setFieldError(htmlFor, { message: '' });
+    setError(false);
+    setSuccess(false);
+
     if (!target) return;
     if (validator[htmlFor](target) !== true) {
       setFieldError(htmlFor, { message: String(validator[htmlFor](target)) });
       return;
     }
-
-    setFieldError(htmlFor, { message: '' });
-    setError(false);
-    setSuccess(false);
 
     duplicateFieldMutation.mutate(target, {
       onSuccess: () => {
@@ -161,15 +161,15 @@ const AuthFormItemContainer = React.memo(function AuthFormItem({
   }, [duplicateFieldMutation, htmlFor, setFieldError, target]);
 
   const handlePhoneAuth = React.useCallback(() => {
+    setFieldError(htmlFor, { message: '' });
+    setError(false);
+    setSuccess(false);
+
     if (!target) return;
     if (validator[htmlFor](target) !== true) {
       setFieldError(htmlFor, { message: String(validator[htmlFor](target)) });
       return;
     }
-
-    setFieldError(htmlFor, { message: '' });
-    setError(false);
-    setSuccess(false);
 
     const _phone = getValues('phone');
 
