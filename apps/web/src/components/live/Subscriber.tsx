@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react';
 
 interface Props {
   sessionId: string;
+  volume: number;
 }
 
 function Subscriber(props: Props) {
@@ -16,6 +17,8 @@ function Subscriber(props: Props) {
     userName: 'userInfo.nickname12',
   });
 
+  const [strimManager, setStrimManager] = useState<StreamManager>();
+
   const joinSession = () => {
     const newOV = new OpenVidu();
     newOV.enableProdMode();
@@ -23,15 +26,14 @@ function Subscriber(props: Props) {
 
     const connection = () => {
       getToken().then((token: any) => {
-        console.log(token);
         newSession.connect(token);
 
         var video = document.getElementById('Streaming') as HTMLVideoElement;
 
         newSession.on('streamCreated', (event) => {
-          newSession.subscribe(event.stream, video, {
-            insertMode: 'APPEND',
-          });
+          // setStrimManager(event.stream.streamManager);
+          newSession.subscribe(event.stream, undefined);
+          event.stream.streamManager.addVideoElement(video);
         });
       });
     };
@@ -45,9 +47,10 @@ function Subscriber(props: Props) {
       {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Basic ${btoa(
-            process.env.NEXT_PUBLIC_OPENVIDU_SECRET
-          )}`,
+          Authorization: `Basic ${Buffer.from(
+            process.env.NEXT_PUBLIC_OPENVIDU_SECRET,
+            'utf8'
+          ).toString('base64')}`,
         },
       }
     );
@@ -58,15 +61,18 @@ function Subscriber(props: Props) {
     if (sessionId) joinSession();
   }, []);
 
+  useEffect(() => {
+    var video = document.getElementById('Streaming') as HTMLVideoElement;
+    video.volume = props.volume / 100;
+  }, [props.volume]);
+
   if (!sessionId) {
     return <></>;
   }
   return (
     <div style={{ width: '880px' }}>
-      <div id="Streaming" style={{ height: '495px' }}></div>
-      <div>
-        <p>딜러 닉네임</p>
-        <p>오늘의 라이브 진행합니다! 들어와서 구경하고 가세요!</p>
+      <div style={{ height: '495px' }}>
+        <video autoPlay id="Streaming" />
       </div>
     </div>
   );

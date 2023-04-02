@@ -122,7 +122,7 @@ const LiveItem = ({ data }: { data: any }) => {
             marginTop: '10px',
           }}
         >
-          {data.tags.map((data) => {
+          {data.tags.map((data: string) => {
             return `#${data}`;
           })}
         </div>

@@ -23,12 +23,11 @@ const setRequest = async (
 
   if (!session?.accessToken) throw 'require logged in';
 
-
   if (config && config.headers)
-  console.log(config.data instanceof FormData)
     config.headers = {
       ACCESS_TOKEN: `${session.accessToken}`,
-      "Content-Type": config.data instanceof FormData ? 'multipart/form-data' : contentType,
+      'Content-Type':
+        config.data instanceof FormData ? 'multipart/form-data' : contentType,
     };
 
   return config;

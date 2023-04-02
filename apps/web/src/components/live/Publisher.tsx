@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 
 interface Props {
   sessionId: string;
+  volume: number;
 }
 
 function Publisher(props: Props) {
@@ -14,9 +15,6 @@ function Publisher(props: Props) {
     userName: 'userInfo.nickname',
   });
 
-  const [session, setSession] = useState<any>();
-  const [publicher, setPublicher] = useState<any>();
-
   const joinSession = () => {
     const newOV = new OpenVidu();
     newOV.enableProdMode();
@@ -24,7 +22,6 @@ function Publisher(props: Props) {
 
     const connection = () => {
       getToken().then((token: any) => {
-        console.log(token);
         newSession
           .connect(token, { clientData: initUserData.userName })
           .then(async () => {
@@ -35,7 +32,7 @@ function Publisher(props: Props) {
             var video = document.getElementById(
               'Streaming'
             ) as HTMLVideoElement;
-            const publich = newOV.initPublisher(video, {
+            const publich = newOV.initPublisher(undefined, {
               insertMode: 'APPEND',
               resolution: '880x495',
               frameRate: 10000000,
@@ -43,23 +40,13 @@ function Publisher(props: Props) {
               publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
               publishVideo: true, // Whether you want to start publishing with your video enabled or not
             });
-            // setSession(newSession);
-            // setPublicher(publich);
 
             newSession.publish(publich);
-
-            newSession.on('streamCreated', (event) => {
-              const subscriber = newSession.subscribe(event.stream, undefined);
-              console.log(subscriber);
-            });
+            publich.stream.streamManager.addVideoElement(video);
           });
       });
     };
     connection();
-  };
-
-  const test = () => {
-    session.publish(publicher);
   };
 
   const getToken = async () => {
@@ -69,9 +56,10 @@ function Publisher(props: Props) {
       {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Basic ${btoa(
-            process.env.NEXT_PUBLIC_OPENVIDU_SECRET
-          )}`,
+          Authorization: `Basic ${Buffer.from(
+            process.env.NEXT_PUBLIC_OPENVIDU_SECRET,
+            'utf8'
+          ).toString('base64')}`,
         },
       }
     );
@@ -82,15 +70,18 @@ function Publisher(props: Props) {
     if (sessionId) joinSession();
   }, []);
 
+  useEffect(() => {
+    var video = document.getElementById('Streaming') as HTMLVideoElement;
+    video.volume = props.volume / 100;
+  }, [props.volume]);
+
   if (!sessionId) {
     return <></>;
   }
   return (
     <div style={{ width: '880px' }}>
-      <div id="Streaming" style={{ height: '495px' }} />
-      <div>
-        <p>딜러 닉네임1234</p>
-        <p>오늘의 라이브 진행합니다! 들어와서 구경하고 가세요!</p>
+      <div style={{ height: '495px' }}>
+        <video autoPlay id="Streaming" />
       </div>
     </div>
   );
