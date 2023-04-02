@@ -179,7 +179,7 @@ const callbacks: Partial<CallbacksOptions<Profile, Account>> | undefined = {
      */
     if (isExpire(token.expire)) return token;
 
-    const newToken = await refreshToken(token.refreshToken);
+    const newToken = await refreshToken(token.accessToken, token.refreshToken);
 
     return { ...token, ...newToken };
   },
