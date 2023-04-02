@@ -108,6 +108,7 @@ const AuthFormItemContainer = React.memo(function AuthFormItem({
   isSubmitSuccessful,
   defaultValue,
   phone,
+  readOnly,
   register,
   setValue,
   setError: setFieldError,
@@ -239,8 +240,10 @@ const AuthFormItemContainer = React.memo(function AuthFormItem({
               button={!!button}
               buttonText={button}
               buttonWidth={buttonWidth}
+              readOnly={readOnly}
               buttonVariant="Primary-Line"
               buttonCallback={handleCallback}
+              disabled={readOnly ? true : undefined}
               {...register(htmlFor, { ...options })}
             />
           ),
