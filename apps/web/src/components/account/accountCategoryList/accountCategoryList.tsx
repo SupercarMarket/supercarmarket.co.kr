@@ -329,15 +329,28 @@ const AccountCategoryList = React.memo(function AccountCategory({
               <CommunityCard key={d.id} variant="row" {...d} />
             </AccountCategoryItemWrapper>
           )),
-          inquiry: data.data.map((d: InquiryDto) => (
-            <AccountCategoryItemWrapper
-              key={d.id}
-              id={d.id}
-              hidden={isDeleteTarget}
+          inquiry: (
+            <Wrapper
+              css={css`
+                width: 100%;
+                ${applyMediaQuery('mobile')} {
+                  display: flex;
+                  flex-direction: column;
+                  gap: 8px;
+                }
+              `}
             >
-              <InquiryCard key={d.id} {...d} />
-            </AccountCategoryItemWrapper>
-          )),
+              {data.data.map((d: InquiryDto) => (
+                <AccountCategoryItemWrapper
+                  key={d.id}
+                  id={d.id}
+                  hidden={isDeleteTarget}
+                >
+                  <InquiryCard key={d.id} {...d} />
+                </AccountCategoryItemWrapper>
+              ))}
+            </Wrapper>
+          ),
         }[tab]
       )}
       <Wrapper
