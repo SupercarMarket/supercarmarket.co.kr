@@ -207,6 +207,7 @@ importers:
     specifiers:
       '@supercarmarket/config': workspace:*
       '@supercarmarket/hooks': workspace:*
+      '@supercarmarket/lib': workspace:*
       '@supercarmarket/tsconfig': workspace:*
       '@supercarmarket/types': workspace:*
       '@types/react': ^18.0.17
@@ -224,6 +225,7 @@ importers:
       typescript: ^4.5.2
     dependencies:
       '@supercarmarket/hooks': link:../hooks
+      '@supercarmarket/lib': link:../lib
       avvvatars-react: 0.4.2_react@18.2.0
       clsx: 1.2.1
       next: 13.1.6_react@18.2.0
