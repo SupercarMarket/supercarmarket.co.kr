@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+
 type ErrorWithMessage = {
   message: string;
 };
@@ -51,4 +53,10 @@ const isExpire = (exp: number) => {
   return false;
 };
 
-export { catchNoExist, env, getErrorMessage, isValidQuery, isExpire };
+const isToday = (date: string) => {
+  return (
+    dayjs(new Date()).format('YYYY-MM-DD') === dayjs(date).format('YYYY-MM-DD')
+  );
+};
+
+export { catchNoExist, env, getErrorMessage, isValidQuery, isExpire, isToday };
