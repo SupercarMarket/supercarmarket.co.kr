@@ -81,8 +81,13 @@ export default class MyDocument extends Document {
             href="/images/logo/safari-pinned-tab.svg"
             color="#5bbad5"
           />
-          <meta name="msapplication-TileColor" content="#da532c" />
           <meta name="theme-color" content="#ffffff" />
+          <meta name="msapplication-TileColor" content="#ffffff" />
+          <meta
+            name="msapplication-TileImage"
+            content="/pwa/icon-144x144.png"
+          />
+          <link rel="manifest" href="/manifest.json" />
           {/* 구글 애널리틱스 */}
           <Script
             strategy="afterInteractive"
