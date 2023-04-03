@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { QUERY_KEYS } from './keys';
-import { type ServerResponse } from '@supercarmarket/types/base';
+import { type Params, type ServerResponse } from '@supercarmarket/types/base';
 import { getBanner, getHome } from './apis';
 
 export const useHome = <T>(
@@ -11,11 +11,12 @@ export const useHome = <T>(
     | 'new'
     | 'community'
     | 'partnership',
+  query?: Params,
   options = {}
 ) => {
   return useQuery<ServerResponse<T>>(
     QUERY_KEYS[category](),
-    () => getHome(category),
+    () => getHome(category, query),
     {
       useErrorBoundary: true,
       staleTime: 1000 * 60,

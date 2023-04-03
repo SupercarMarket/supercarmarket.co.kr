@@ -8,6 +8,10 @@ import Skeleton from 'react-loading-skeleton';
 import { createExternalLink } from '@supercarmarket/lib';
 import { useDevice } from 'hooks/useDevice';
 
+interface BannerProps {
+  isMobile?: boolean;
+}
+
 interface BannerItemProps {
   imageUrl: string;
   currentIndex: number;
@@ -92,9 +96,8 @@ const BannerDot = (props: BannerDotProps) => {
   );
 };
 
-const Banner = () => {
+const Banner = ({ isMobile }: BannerProps) => {
   const [index, setIndex] = React.useState(0);
-  const { isMobile } = useDevice();
   const { data, isLoading, isFetching, refetch } = useBanner(
     isMobile ? 'M' : 'D'
   );

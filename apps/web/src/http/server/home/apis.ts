@@ -1,11 +1,19 @@
 import { get, homeCategoryFormatter } from '@supercarmarket/lib';
-import { ServerResponse } from '@supercarmarket/types/base';
+import { type Params, ServerResponse } from '@supercarmarket/types/base';
 
 export const getHome = async (
-  category: 'market' | 'magazine' | 'best' | 'new' | 'community' | 'partnership'
+  category:
+    | 'market'
+    | 'magazine'
+    | 'best'
+    | 'new'
+    | 'community'
+    | 'partnership',
+  query?: Params
 ) => {
   return get('/server/supercar/v1/main', {
     query: {
+      ...query,
       category: homeCategoryFormatter(category),
     },
   });

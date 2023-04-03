@@ -5,8 +5,14 @@ import { css } from 'styled-components';
 import { applyMediaQuery } from 'styles/mediaQuery';
 import { useHome } from 'http/server/home';
 
-const Market = () => {
-  const { data: marketBest } = useHome<MarketDto[]>('best');
+interface MarketProps {
+  isMobile?: boolean;
+}
+
+const Market = ({ isMobile }: MarketProps) => {
+  const { data: marketBest } = useHome<MarketDto[]>('best', {
+    pageSize: isMobile ? '4' : '8',
+  });
 
   return (
     <Container
@@ -31,7 +37,7 @@ const Market = () => {
       >
         {marketBest &&
           marketBest.data
-            .slice(0, 8)
+            .slice(0, isMobile ? 4 : 8)
             .map((post, index) => (
               <MarketCard key={post.id} ranking={index + 1} {...post} />
             ))}
