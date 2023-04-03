@@ -2,6 +2,7 @@ const { withPlaiceholder } = require('@plaiceholder/next');
 const withPWA = require('next-pwa')({
   dest: 'public',
   disableDevLogs: true,
+  buildExcludes: [/app-build-manifest.json$/],
 });
 
 /** @type {import('next').NextConfig} */

@@ -37,10 +37,6 @@ export default class MyDocument extends Document {
       <Html lang="ko" className={pretendard.className}>
         <Head>
           {/* meta */}
-          <meta
-            name="viewport"
-            content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover"
-          />
           <meta name="application-name" content={APP_NAME} />
           <meta name="apple-mobile-web-app-title" content={APP_NAME} />
           <meta name="description" content={APP_DESCRIPTION} />
@@ -79,7 +75,6 @@ export default class MyDocument extends Document {
             sizes="16x16"
             href="/images/logo/favicon-16x16.png"
           />
-          <link rel="manifest" href="/images/logo/site.webmanifest" />
           <link
             rel="mask-icon"
             href="/images/logo/safari-pinned-tab.svg"

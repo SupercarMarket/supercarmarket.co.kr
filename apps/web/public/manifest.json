@@ -4,8 +4,8 @@
   "start_url": "/",
   "display": "standalone",
   "scope": "/",
-  "name": "Supercarmarket",
-  "short_name": "Supercarmarket",
+  "name": "슈퍼카마켓",
+  "short_name": "슈퍼카마켓",
   "description": "High-performance ecommerce sites",
   "orientation": "portrait",
   "lang": "ko-KR",
@@ -43,7 +43,7 @@
       "src": "/pwa/icon-152x152.png",
       "sizes": "152x152",
       "type": "image/png",
-      "purpose": "maskable any"
+      "purpose": "any maskable"
     },
     {
       "src": "/pwa/icon-192x192.png",
@@ -60,7 +60,7 @@
       "src": "/pwa/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "maskable any"
+      "purpose": "any maskable"
     }
   ]
 }
