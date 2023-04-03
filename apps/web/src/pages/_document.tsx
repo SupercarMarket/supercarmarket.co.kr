@@ -75,14 +75,18 @@ export default class MyDocument extends Document {
             sizes="16x16"
             href="/images/logo/favicon-16x16.png"
           />
-          <link rel="manifest" href="/images/logo/site.webmanifest" />
           <link
             rel="mask-icon"
             href="/images/logo/safari-pinned-tab.svg"
             color="#5bbad5"
           />
-          <meta name="msapplication-TileColor" content="#da532c" />
           <meta name="theme-color" content="#ffffff" />
+          <meta name="msapplication-TileColor" content="#ffffff" />
+          <meta
+            name="msapplication-TileImage"
+            content="/pwa/icon-144x144.png"
+          />
+          <link rel="manifest" href="/manifest.json" />
           {/* 구글 애널리틱스 */}
           <Script
             strategy="afterInteractive"
