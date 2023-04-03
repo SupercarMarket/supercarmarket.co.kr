@@ -16,6 +16,7 @@ import { seoConfig } from 'utils/next-seo.config';
 import { Inter } from '@next/font/google';
 import localFont from '@next/font/local';
 import { DeviceProvider } from 'feature/DeviceProvider';
+import Head from 'next/head';
 
 interface PageProps {
   $ua: {
@@ -85,6 +86,12 @@ function MyApp({
             userAgent={pageProps.$ua.userAgent}
           >
             <SessionProvider session={session}>
+              <Head>
+                <meta
+                  name="viewport"
+                  content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width"
+                />
+              </Head>
               <DefaultSeo
                 openGraph={{
                   ...seoConfig.headSeo,
