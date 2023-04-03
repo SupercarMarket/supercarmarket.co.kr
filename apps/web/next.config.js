@@ -1,6 +1,7 @@
 const { withPlaiceholder } = require('@plaiceholder/next');
 const withPWA = require('next-pwa')({
   dest: 'public',
+  register: true,
   disableDevLogs: true,
   buildExcludes: [/app-build-manifest.json$/],
 });
