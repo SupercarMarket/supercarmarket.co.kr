@@ -340,11 +340,20 @@ const AccountCategoryList = React.memo(function AccountCategory({
           )),
         }[tab]
       )}
-      <Pagination
-        pageSize={20}
-        totalCount={data.totalCount}
-        totalPages={data.totalPages}
-      />
+      <Wrapper
+        css={css`
+          padding-top: 80px;
+          ${applyMediaQuery('mobile')} {
+            padding-top: 32px;
+          }
+        `}
+      >
+        <Pagination
+          pageSize={20}
+          totalCount={data.totalCount}
+          totalPages={data.totalPages}
+        />
+      </Wrapper>
     </Container>
   );
 });
