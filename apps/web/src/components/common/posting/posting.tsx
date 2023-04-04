@@ -1,5 +1,6 @@
 import {
   applyMediaQuery,
+  AttachedFile,
   Button,
   Container,
   Tab,
@@ -135,6 +136,7 @@ const CommunityPosting = ({
       enabled: session.status && session.status !== 'loading',
     }
   );
+
   const { mutate: likeMuate } = useLikeCommunityPost({
     subject,
     category,
@@ -247,9 +249,22 @@ const CommunityPosting = ({
               </Wrapper>
               <Wrapper
                 css={css`
+                  display: flex;
+                  flex-direction: column;
+                  width: 100%;
+                  align-items: center;
                   margin: 80px 0;
+                  gap: 80px;
+                  ${applyMediaQuery('mobile')} {
+                    margin: 32px 0;
+                    gap: 32px;
+                  }
                 `}
               >
+                {communityPost.data.files &&
+                  communityPost.data.files.length > 0 && (
+                    <AttachedFile files={communityPost.data.files} />
+                  )}
                 <Button
                   type="button"
                   variant="Line"

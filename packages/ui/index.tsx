@@ -17,6 +17,7 @@ export type {
   HighlightProps,
   LinkProps,
   CategoryProps,
+  AttachedFileProps,
 } from './components';
 export * from './form';
 export type {

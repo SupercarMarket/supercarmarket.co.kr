@@ -1,5 +1,7 @@
 export { Alert } from './alert';
 export type { AlertProps } from './alert';
+export { AttachedFile } from './attachedFile';
+export type { AttachedFileProps } from './attachedFile';
 export { Button } from './button';
 export type { ButtonProps } from './button';
 export { Container } from './container';

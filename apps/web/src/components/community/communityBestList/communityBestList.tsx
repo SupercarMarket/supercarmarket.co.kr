@@ -7,10 +7,16 @@ import { useHome } from 'http/server/home';
 import CommunityCard from '../communityCard';
 
 const CommunityBestList = () => {
-  const { data, isFetching, isLoading } = useHome<CommunityDto[]>('community', {
-    staleTime: 0,
-    cacheTime: 0,
-  });
+  const { data, isFetching, isLoading } = useHome<CommunityDto[]>(
+    'community',
+    {
+      pageSize: '8',
+    },
+    {
+      staleTime: 0,
+      cacheTime: 0,
+    }
+  );
 
   if (isFetching || isLoading)
     return <CardSkeleton size={4} variant="column" />;

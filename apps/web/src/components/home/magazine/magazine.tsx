@@ -8,8 +8,14 @@ import { applyMediaQuery } from 'styles/mediaQuery';
 import RouterButton from '../routerButton';
 import { useHome } from 'http/server/home';
 
-const Magazine = () => {
-  const { data: magazine } = useHome<MagazineDto[]>('magazine');
+interface MagazineProps {
+  isMobile?: boolean;
+}
+
+const Magazine = ({ isMobile }: MagazineProps) => {
+  const { data: magazine } = useHome<MagazineDto[]>('magazine', {
+    pageSize: isMobile ? '4' : '8',
+  });
 
   return (
     <Container

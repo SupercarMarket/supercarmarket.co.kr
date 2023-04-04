@@ -13,13 +13,13 @@ import Image from 'next/image';
 import { css } from 'styled-components';
 import { applyMediaQuery } from 'styles/mediaQuery';
 import { useMedia } from '@supercarmarket/hooks';
-
 import ViewIcon from '../../../assets/svg/eye.svg';
 import LikeIcon from '../../../assets/svg/thumb-up.svg';
 import Avatar from 'components/common/avatar';
 import useBase64 from 'hooks/queries/useBase64';
 import Skeleton from 'react-loading-skeleton';
 import { truncateOnWord } from '@supercarmarket/lib';
+import { isToday } from 'utils/misc';
 
 interface CommunityCardProps extends WithBlurredImage<CommunityDto> {
   variant: string;
@@ -95,9 +95,7 @@ const CommunityCardRow = (props: CommunityCardChildrenProps) => {
   } = props;
   const { isMobile } = useMedia({ deviceQuery });
 
-  const isToday =
-    dayjs(new Date()).format('YYYY-MM-DD') ===
-    dayjs(created).format('YYYY-MM-DD');
+  const today = isToday(created);
 
   return (
     <Link
@@ -253,7 +251,7 @@ const CommunityCardRow = (props: CommunityCardChildrenProps) => {
               color="greyScale-6"
               lineHeight="150%"
             >
-              {isToday
+              {today
                 ? dayjs(created).format('HH:mm')
                 : dayjs(created).format('YYYY-MM-DD')}
             </Typography>

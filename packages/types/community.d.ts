@@ -22,6 +22,7 @@ interface CommunityPostDto {
   title: string;
   like: number;
   contents: string;
+  files?: { url: string; name: string }[];
   created: string;
   updated: string;
   comments: number;

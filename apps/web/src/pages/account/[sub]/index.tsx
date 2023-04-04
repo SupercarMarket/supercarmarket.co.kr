@@ -76,6 +76,7 @@ const Account: NextPageWithLayout = ({
                       tab={tab}
                       isMyAccountPage={isMyAccountPage}
                       accountRoutes={accountRoutes}
+                      profile={profile}
                     />
                   </Wrapper>
                 </ErrorBoundary>
@@ -176,14 +177,6 @@ export const getServerSideProps: GetServerSideProps = async (
 ): Promise<any> => {
   const { req } = ctx;
   const session = await getSession({ req });
-
-  if (!session)
-    return {
-      redirect: {
-        destination: '/auth/signin',
-        permanent: false,
-      },
-    };
 
   return await getUserPageProps(ctx, session);
 };

@@ -19,8 +19,10 @@ import { css } from 'styled-components';
 import Advertisement from 'components/common/advertisement';
 import { prefetchHome, QUERY_KEYS } from 'http/server/home';
 import Banner from 'components/home/banner';
+import { useDevice } from 'hooks/useDevice';
 
 const Home: NextPageWithLayout = () => {
+  const { isMobile } = useDevice();
   return (
     <>
       <HeadSeo title={APP_NAME} description="안녕하세요 슈퍼카마켓입니다." />
@@ -44,7 +46,7 @@ const Home: NextPageWithLayout = () => {
                     margin-left: calc(-50vw + 50%);
                   `}
                 >
-                  <Banner />
+                  <Banner isMobile={isMobile} />
                 </Wrapper.Item>
               </ErrorBoundary>
               <Advertisement hidden />
@@ -53,7 +55,7 @@ const Home: NextPageWithLayout = () => {
                 onReset={reset}
                 fallbackRender={(props) => <ErrorFallback {...props} />}
               >
-                <Magazine />
+                <Magazine isMobile={isMobile} />
               </ErrorBoundary>
               <Title marginTop="80px" marginBottom="20px">
                 매물 관심 베스트
@@ -62,7 +64,7 @@ const Home: NextPageWithLayout = () => {
                 onReset={reset}
                 fallbackRender={(props) => <ErrorFallback {...props} />}
               >
-                <MarketBest />
+                <MarketBest isMobile={isMobile} />
               </ErrorBoundary>
               <Title marginTop="40px" marginBottom="20px">
                 최신 매물
@@ -71,7 +73,7 @@ const Home: NextPageWithLayout = () => {
                 onReset={reset}
                 fallbackRender={(props) => <ErrorFallback {...props} />}
               >
-                <MarketNew />
+                <MarketNew isMobile={isMobile} />
               </ErrorBoundary>
               <Title marginTop="80px" marginBottom="20px">
                 커뮤니티 인기글
@@ -80,7 +82,7 @@ const Home: NextPageWithLayout = () => {
                 onReset={reset}
                 fallbackRender={(props) => <ErrorFallback {...props} />}
               >
-                <Community />
+                <Community isMobile={isMobile} />
               </ErrorBoundary>
             </Wrapper>
           )}

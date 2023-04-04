@@ -7,8 +7,14 @@ import { applyMediaQuery } from 'styles/mediaQuery';
 import RouterButton from '../routerButton';
 import { useHome } from 'http/server/home';
 
-const Community = () => {
-  const { data: communityBest } = useHome<CommunityDto[]>('community');
+interface CommunityProps {
+  isMobile?: boolean;
+}
+
+const Community = ({ isMobile }: CommunityProps) => {
+  const { data: communityBest } = useHome<CommunityDto[]>('community', {
+    pageSize: isMobile ? '4' : '8',
+  });
 
   return (
     <Container
