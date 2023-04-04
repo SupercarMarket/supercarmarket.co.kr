@@ -15,6 +15,7 @@ import { css } from 'styled-components';
 import Advertisement from 'components/common/advertisement';
 import Banner from 'components/home/banner';
 import { isMobile } from 'utils/misc';
+import Partnership from 'components/home/partnership';
 
 const Home: NextPageWithLayout = ({
   isMobile,
@@ -82,6 +83,15 @@ const Home: NextPageWithLayout = ({
                 fallbackRender={(props) => <ErrorFallback {...props} />}
               >
                 <Community isMobile={isMobile} />
+              </ErrorBoundary>
+              <Title marginTop={marginTop} marginBottom={marginBottom}>
+                제휴업체
+              </Title>
+              <ErrorBoundary
+                onReset={reset}
+                fallbackRender={(props) => <ErrorFallback {...props} />}
+              >
+                <Partnership />
               </ErrorBoundary>
             </Wrapper>
           )}

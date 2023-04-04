@@ -9,6 +9,7 @@ const GlobalStyle = createGlobalStyle`
     width: 100%;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
 
     ${applyMediaQuery('tablet')} {}
 
