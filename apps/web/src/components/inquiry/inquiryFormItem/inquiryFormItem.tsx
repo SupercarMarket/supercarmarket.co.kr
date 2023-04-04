@@ -14,6 +14,7 @@ import {
   FormImages,
   FormTextArea,
   Wrapper,
+  applyMediaQuery,
 } from '@supercarmarket/ui';
 import { Form, FormType } from 'constants/form';
 import * as React from 'react';
@@ -62,6 +63,10 @@ const InquiryFormMixed = (
       css={css`
         position: relative;
         display: flex;
+        ${applyMediaQuery('mobile')} {
+          flex-direction: column;
+          gap: 8px;
+        }
       `}
     >
       <FormInput
@@ -69,6 +74,7 @@ const InquiryFormMixed = (
         id={htmlFor}
         ref={inputRef}
         value={value}
+        suffix={suffix}
         onChange={(e) => setValue(e.target.value)}
       />
       <Wrapper.Item
@@ -76,13 +82,14 @@ const InquiryFormMixed = (
           position: absolute;
           display: flex;
           align-items: center;
-          gap: 16px;
           right: -113px;
           top: 50%;
           transform: translateY(-50%);
+          ${applyMediaQuery('mobile')} {
+            all: unset;
+          }
         `}
       >
-        {suffix}
         <FormRadio
           ref={radioRef}
           checked={checked}
