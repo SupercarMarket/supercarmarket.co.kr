@@ -194,6 +194,10 @@ const InquiryFormItemContainer = (props: InquiryFormItemContainerProps) => {
                 <FormFiles
                   id={htmlFor}
                   name={htmlFor}
+                  description={`파일은 ${
+                    options.size ? options.size : 20
+                  }개까지만 첨부 가능합니다.`}
+                  size={options.size}
                   callback={(value) => setValue(htmlFor, value)}
                 />
               ),
@@ -209,9 +213,12 @@ const InquiryFormItemContainer = (props: InquiryFormItemContainerProps) => {
               images: (
                 <FormAttachment
                   title="사진 추가"
-                  description="사진은 20장까지만 첨부 가능합니다."
+                  description={`사진은 ${
+                    options.size ? options.size : 20
+                  }장까지만 첨부 가능합니다.`}
                   id={htmlFor}
                   name={htmlFor}
+                  size={options.size}
                   accept="image/jpg, image/png, image/jpeg"
                   callback={(value) => setValue(htmlFor, value)}
                 />
