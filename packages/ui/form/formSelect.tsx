@@ -149,12 +149,18 @@ const FormSelect = React.forwardRef(function FormSelect(
             top: 50%;
             right: 13px;
             transform: translateY(-50%);
-            width: 18px;
-            fill: ${theme.color['greyScale-6']};
             background-color: ${theme.color.white};
+            svg {
+              width: 18px;
+              height: 18px;
+              fill: ${theme.color['greyScale-6']};
+            }
             ${applyMediaQuery('mobile')} {
-              width: 16xpx;
               display: none;
+              svg {
+                width: 16px !important;
+                height: 16px !important;
+              }
             }
           `}
         >
@@ -162,6 +168,8 @@ const FormSelect = React.forwardRef(function FormSelect(
             onClick={onClick}
             viewBox="0 0 24 24"
             fill="current"
+            width="18px"
+            height="18px"
             xmlns="http://www.w3.org/2000/svg"
           >
             <g clipPath="url(#clip0_212_9286)">
