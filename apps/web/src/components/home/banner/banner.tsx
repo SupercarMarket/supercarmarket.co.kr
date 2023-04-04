@@ -6,7 +6,6 @@ import { css } from 'styled-components';
 import Image from 'next/image';
 import Skeleton from 'react-loading-skeleton';
 import { createExternalLink } from '@supercarmarket/lib';
-import { useDevice } from 'hooks/useDevice';
 
 interface BannerProps {
   isMobile?: boolean;

@@ -3,18 +3,27 @@ import type { CommunityDto } from '@supercarmarket/types/community';
 import { CommunityCard } from 'components/community';
 import { css } from 'styled-components';
 import { applyMediaQuery } from 'styles/mediaQuery';
-
 import RouterButton from '../routerButton';
 import { useHome } from 'http/server/home';
+import { CardSkeleton } from 'components/fallback/loading';
 
 interface CommunityProps {
   isMobile?: boolean;
 }
 
 const Community = ({ isMobile }: CommunityProps) => {
-  const { data: communityBest } = useHome<CommunityDto[]>('community', {
-    pageSize: isMobile ? '4' : '8',
+  const pageSize = isMobile ? 4 : 8;
+
+  const {
+    data: communityBest,
+    isLoading,
+    isFetching,
+  } = useHome<CommunityDto[]>('community', {
+    pageSize: String(pageSize),
   });
+
+  if (isLoading || isFetching)
+    return <CardSkeleton variant="column" size={pageSize} />;
 
   return (
     <Container
