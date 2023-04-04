@@ -1,8 +1,11 @@
+import * as React from 'react';
 import { Button, Typography, Wrapper } from '@supercarmarket/ui';
 import { useSession } from 'next-auth/react';
-import * as React from 'react';
 import { css } from 'styled-components';
 import { useMagazineScrap } from 'http/server/magazine';
+import { ModalContext } from 'feature/ModalProvider';
+import { Modal } from 'components/common/modal';
+import { useRouter } from 'next/navigation';
 
 interface MagazineScrapeProps {
   isScraped: boolean;
@@ -36,11 +39,33 @@ const Star = ({ isScraped }: MagazineScrapeProps) => {
 const MagazineScrape = ({ postId, isScraped }: MagazineScrapeProps) => {
   const session = useSession();
   const { mutate } = useMagazineScrap(postId);
+  const { push } = useRouter();
+  const { onClose, onOpen } = React.useContext(ModalContext);
 
   const handleScrape = React.useCallback(() => {
-    if (session.status !== 'authenticated') return;
+    if (session.status !== 'authenticated')
+      return onOpen(
+        <Modal
+          description="로그인 후 상담 신청이 가능합니다"
+          onCancel={() => {
+            onClose();
+          }}
+          onClose={() =>
+            onClose(() => {
+              push('/auth/signin');
+            })
+          }
+          onClick={() =>
+            onClose(() => {
+              push('/auth/signup');
+            })
+          }
+          closeText="로그인"
+          clickText="회원가입"
+        />
+      );
     mutate();
-  }, [mutate, session]);
+  }, [mutate, onClose, onOpen, push, session.status]);
 
   return (
     <Button variant="Line" onClick={handleScrape}>
