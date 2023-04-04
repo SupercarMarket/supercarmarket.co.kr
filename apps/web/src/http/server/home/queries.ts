@@ -19,8 +19,6 @@ export const useHome = <T>(
     () => getHome(category, query),
     {
       useErrorBoundary: true,
-      staleTime: 1000 * 60,
-      cacheTime: 1000 * 60,
       ...options,
     }
   );

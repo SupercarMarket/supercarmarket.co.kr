@@ -8,6 +8,9 @@ interface CardSkeletonProps {
   variant?: 'row' | 'column';
   size?: number;
 }
+interface MagazineBannerSkeletonProps {
+  reverse?: boolean;
+}
 
 const CardRowSkeleton = ({ size = 12 }: Pick<CardSkeletonProps, 'size'>) => {
   return (
@@ -64,22 +67,28 @@ const CardColumnSkeleton = ({ size = 12 }: Pick<CardSkeletonProps, 'size'>) => {
           ${applyMediaQuery('tablet')} {
             grid-template-columns: 1fr 1fr 1fr;
           }
-
           ${applyMediaQuery('mobile')} {
             grid-template-columns: 1fr 1fr;
+            column-gap: 8px;
+            row-gap: 16px;
           }
         `}
       >
         {Array.from({ length: size }).map((_, index) => (
-          <Container
+          <Wrapper.Item
             key={index}
-            width="100%"
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-            gap="20px"
+            css={css`
+              width: 100%;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              gap: 20px;
+              ${applyMediaQuery('mobile')} {
+                gap: 8px;
+              }
+            `}
           >
-            <Wrapper.Item
+            <Wrapper.Top
               css={css`
                 flex: 1;
                 width: 100%;
@@ -91,11 +100,17 @@ const CardColumnSkeleton = ({ size = 12 }: Pick<CardSkeletonProps, 'size'>) => {
                   width: 100%;
                   height: 180px;
                 }
+                ${applyMediaQuery('mobile')} {
+                  height: 106px;
+                  & > span {
+                    height: 106px;
+                  }
+                }
               `}
             >
               <Skeleton />
-            </Wrapper.Item>
-            <Wrapper.Item
+            </Wrapper.Top>
+            <Wrapper.Bottom
               css={css`
                 flex: 1;
                 width: 100%;
@@ -109,8 +124,8 @@ const CardColumnSkeleton = ({ size = 12 }: Pick<CardSkeletonProps, 'size'>) => {
               `}
             >
               <Skeleton count={2} />
-            </Wrapper.Item>
-          </Container>
+            </Wrapper.Bottom>
+          </Wrapper.Item>
         ))}
       </Wrapper>
     </Container>
@@ -124,11 +139,67 @@ const CardSkeleton = ({ variant = 'column', size }: CardSkeletonProps) => {
   }[variant];
 };
 
-const MagazineBannerSkeleton = () => {
+const MagazineBannerSkeleton = ({
+  reverse = false,
+}: MagazineBannerSkeletonProps) => {
   return (
-    <div>
-      <h1 />
-    </div>
+    <Container width="100%">
+      <Wrapper
+        css={css`
+          display: flex;
+          ${reverse && 'flex-direction: row-reverse;'}
+          ${applyMediaQuery('mobile')} {
+            flex-direction: column;
+          }
+          gap: 20px;
+        `}
+      >
+        <Wrapper.Left
+          css={css`
+            width: 590px;
+            height: 394px;
+            ${applyMediaQuery('mobile')} {
+              width: 343px;
+              height: 229px;
+            }
+          `}
+        >
+          <Skeleton width="100%" height="100%" />
+        </Wrapper.Left>
+        <Wrapper.Right
+          css={css`
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 590px;
+            height: 394px;
+            ${applyMediaQuery('mobile')} {
+              width: 343px;
+              height: 229px;
+            }
+          `}
+        >
+          <Wrapper.Item
+            css={css`
+              width: 480px;
+              height: 246px;
+              display: flex;
+              flex-direction: column;
+              gap: 16px;
+              ${applyMediaQuery('mobile')} {
+                width: 343px;
+                height: 100%;
+              }
+            `}
+          >
+            <Skeleton width="36px" height="24px" />
+            <Skeleton height="42px" />
+            <Skeleton height="42px" />
+            <Skeleton width="120px" height="44px" borderRadius="20px" />
+          </Wrapper.Item>
+        </Wrapper.Right>
+      </Wrapper>
+    </Container>
   );
 };
 

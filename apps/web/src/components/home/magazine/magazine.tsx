@@ -7,15 +7,33 @@ import { applyMediaQuery } from 'styles/mediaQuery';
 
 import RouterButton from '../routerButton';
 import { useHome } from 'http/server/home';
+import {
+  CardSkeleton,
+  MagazineBannerSkeleton,
+} from 'components/fallback/loading';
 
 interface MagazineProps {
   isMobile?: boolean;
 }
 
 const Magazine = ({ isMobile }: MagazineProps) => {
-  const { data: magazine } = useHome<MagazineDto[]>('magazine', {
-    pageSize: isMobile ? '4' : '8',
+  const pageSize = isMobile ? 4 : 8;
+
+  const {
+    data: magazine,
+    isLoading,
+    isFetching,
+  } = useHome<MagazineDto[]>('magazine', {
+    pageSize: String(pageSize),
   });
+
+  if (isLoading || isFetching)
+    return (
+      <Container display="flex" flexDirection="column" gap="20px">
+        <MagazineBannerSkeleton />
+        <CardSkeleton variant="column" size={pageSize} />
+      </Container>
+    );
 
   return (
     <Container
@@ -24,28 +42,29 @@ const Magazine = ({ isMobile }: MagazineProps) => {
       alignItems="center"
       justifyContent="center"
     >
-      <MagazineBanner reverse button initialData={magazine} />
-      <Wrapper
-        css={css`
-          margin: 40px 0;
-          display: grid;
-          grid-template-columns: 1fr 1fr 1fr 1fr;
-          gap: 20px;
+      {magazine && magazine.data.length > 0 && (
+        <>
+          <MagazineBanner reverse button initialData={magazine.data[0]} />
+          <Wrapper
+            css={css`
+              margin: 40px 0;
+              display: grid;
+              grid-template-columns: 1fr 1fr 1fr 1fr;
+              gap: 20px;
 
-          ${applyMediaQuery('mobile')} {
-            column-gap: 8px;
-            row-gap: 16px;
-            grid-template-columns: 1fr 1fr;
-          }
-        `}
-      >
-        {magazine &&
-          magazine.data
-            .slice(1, 4)
-            .map((list) => (
+              ${applyMediaQuery('mobile')} {
+                column-gap: 8px;
+                row-gap: 16px;
+                grid-template-columns: 1fr 1fr;
+              }
+            `}
+          >
+            {magazine.data.slice(1, 4).map((list) => (
               <MagazineCard key={list.id} type="small" {...list} />
             ))}
-      </Wrapper>
+          </Wrapper>
+        </>
+      )}
       <RouterButton href="/magazine">
         <Typography fontSize="header-16" fontWeight="bold" color="black">
           슈마 매거진 더보기

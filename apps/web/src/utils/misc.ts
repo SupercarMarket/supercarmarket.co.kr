@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import MobileDetect from 'mobile-detect';
 
 type ErrorWithMessage = {
   message: string;
@@ -59,4 +60,20 @@ const isToday = (date: string) => {
   );
 };
 
-export { catchNoExist, env, getErrorMessage, isValidQuery, isExpire, isToday };
+const isMobile = (userAgent?: string) => {
+  if (!userAgent) return false;
+
+  const mb = new MobileDetect(userAgent);
+
+  return mb.mobile() ? true : false;
+};
+
+export {
+  catchNoExist,
+  env,
+  getErrorMessage,
+  isValidQuery,
+  isExpire,
+  isToday,
+  isMobile,
+};

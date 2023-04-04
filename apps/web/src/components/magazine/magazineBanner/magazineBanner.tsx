@@ -14,7 +14,6 @@ import Arrow from '../../../assets/svg/arrow-right.svg';
 import Link from 'next/link';
 import useBase64 from 'hooks/queries/useBase64';
 import Skeleton from 'react-loading-skeleton';
-import { ServerResponse } from '@supercarmarket/types/base';
 import { useMagazine } from 'http/server/magazine';
 import { truncateOnWord } from '@supercarmarket/lib';
 
@@ -22,7 +21,7 @@ interface MagazineBannerProps {
   reverse?: boolean;
   className?: string;
   button?: boolean;
-  initialData?: ServerResponse<MagazineDto[]>;
+  initialData: MagazineDto;
 }
 
 const baseSrc = `${process.env.NEXT_PUBLIC_URL}/images/base.png`;
@@ -33,35 +32,26 @@ const MagazineBanner = ({
   className,
   initialData,
 }: MagazineBannerProps) => {
-  const { data: magazine } = useMagazine(
-    { page: 0 },
-    {
-      initialData,
-      enabled: !initialData,
-    }
-  );
   const {
     data: base64,
     isFetching,
     isLoading,
   } = useBase64(
-    magazine && magazine.data && magazine.data.length > 0
-      ? magazine.data[0].imgSrc
-      : baseSrc,
+    initialData.imgSrc ? initialData.imgSrc : baseSrc,
     {
-      src: magazine?.data[0].imgSrc || baseSrc,
+      src: initialData.imgSrc || baseSrc,
       category: 'magazine',
     },
     {
       staleTime: 1000 * 60 * 60 * 24,
       cacheTime: Infinity,
-      enabled: magazine && magazine.data.length > 0,
+      enabled: !!initialData,
     }
   );
 
   return (
     <Container width="100%" className={className}>
-      {magazine && magazine.data.length > 0 && (
+      {initialData && (
         <Wrapper
           css={css`
             display: flex;
@@ -124,7 +114,7 @@ const MagazineBanner = ({
                 lineHeight="150%"
                 className={clsx('mb-contents-heading')}
               >
-                {magazine.data[0].title}
+                {initialData.title}
               </Typography>
               <Typography
                 as="p"
@@ -136,10 +126,10 @@ const MagazineBanner = ({
                   [`mb-button`]: button,
                 })}
               >
-                {truncateOnWord(magazine.data[0].contents, 100)}
+                {truncateOnWord(initialData.contents, 100)}
               </Typography>
               {button && (
-                <Link href={`/magazine/${magazine.data[0].id}`}>
+                <Link href={`/magazine/${initialData.id}`}>
                   <Wrapper.Item
                     css={css`
                       width: 100%;
@@ -184,7 +174,7 @@ const MagazineBanner = ({
               <Skeleton />
             ) : (
               <Image
-                src={magazine.data[0].imgSrc}
+                src={initialData.imgSrc}
                 alt="thumbnail"
                 fill
                 placeholder="blur"

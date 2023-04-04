@@ -4,15 +4,24 @@ import MarketCard from 'components/market/marketCard';
 import { css } from 'styled-components';
 import { applyMediaQuery } from 'styles/mediaQuery';
 import { useHome } from 'http/server/home';
+import { CardSkeleton } from 'components/fallback/loading';
 
 interface MarketProps {
   isMobile?: boolean;
 }
 
 const Market = ({ isMobile }: MarketProps) => {
-  const { data: marketBest } = useHome<MarketDto[]>('best', {
-    pageSize: isMobile ? '4' : '8',
+  const pageSize = isMobile ? 4 : 8;
+  const {
+    data: marketBest,
+    isLoading,
+    isFetching,
+  } = useHome<MarketDto[]>('best', {
+    pageSize: String(pageSize),
   });
+
+  if (isLoading || isFetching)
+    return <CardSkeleton size={pageSize} variant="column" />;
 
   return (
     <Container
