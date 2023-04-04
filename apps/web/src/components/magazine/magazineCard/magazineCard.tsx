@@ -46,8 +46,8 @@ const MagazineCard = memo(function MagazineCard({
   );
   const imgWidth = type === 'normal' ? 387 : 285;
   const imgHeight = type === 'normal' ? 240 : 180;
+  const marginBottom = type === 'normal' ? '22px' : '20px';
   const headingFontSize = type === 'normal' ? 'header-24' : 'header-16';
-  const headingMarginTop = type === 'normal' ? '22px' : '20px';
   const bodyFontSize = type === 'normal' ? 'body-16' : 'body-14';
   const visible = type === 'normal';
 
@@ -64,6 +64,7 @@ const MagazineCard = memo(function MagazineCard({
             position: relative;
             width: ${imgWidth}px;
             height: ${imgHeight}px;
+            margin-bottom: ${marginBottom};
             .react-loading-skeleton {
               width: ${imgWidth}px;
               height: ${imgHeight}px;
@@ -72,6 +73,7 @@ const MagazineCard = memo(function MagazineCard({
             ${applyMediaQuery('mobile')} {
               width: 167.5px;
               height: 106px;
+              margin-bottom: 8px;
               .react-loading-skeleton {
                 width: 167.5px;
                 height: 106px;
@@ -105,7 +107,6 @@ const MagazineCard = memo(function MagazineCard({
           color="greyScale-6"
           lineHeight="120%"
           style={{
-            marginTop: headingMarginTop,
             marginBottom: '10px',
           }}
         >

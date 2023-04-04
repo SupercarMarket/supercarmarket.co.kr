@@ -9,12 +9,10 @@ import type { MagazineDto } from '@supercarmarket/types/magazine';
 import clsx from 'clsx';
 import Image from 'next/image';
 import { css } from 'styled-components';
-
 import Arrow from '../../../assets/svg/arrow-right.svg';
 import Link from 'next/link';
 import useBase64 from 'hooks/queries/useBase64';
 import Skeleton from 'react-loading-skeleton';
-import { useMagazine } from 'http/server/magazine';
 import { truncateOnWord } from '@supercarmarket/lib';
 
 interface MagazineBannerProps {
@@ -75,6 +73,7 @@ const MagazineBanner = ({
               fill: ${({ theme }) => theme.color.white};
               ${applyMediaQuery('mobile')} {
                 width: 343px;
+                height: 229px;
                 ${reverse ? 'height: 229px;' : 'height: 173px;'}
                 h1 {
                   font-size: ${({ theme }) =>
@@ -86,11 +85,13 @@ const MagazineBanner = ({
             <Wrapper.Item
               css={css`
                 width: 480px;
+                height: 246px;
                 display: flex;
                 flex-direction: column;
                 gap: 16px;
                 ${applyMediaQuery('mobile')} {
                   width: 100%;
+                  height: 229px;
                 }
               `}
             >

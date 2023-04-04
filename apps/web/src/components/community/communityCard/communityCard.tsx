@@ -422,6 +422,9 @@ const CommunityCardColumn = (props: CommunityCardChildrenProps) => {
             align-items: center;
             gap: 8px;
             margin-top: 20px;
+            ${applyMediaQuery('mobile')} {
+              margin-top: 8px;
+            }
           `}
         >
           <Avatar rating={rate} size={24} />
