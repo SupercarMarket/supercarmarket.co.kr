@@ -1,34 +1,39 @@
 import * as React from 'react';
-import { applyMediaQuery, Container, Wrapper } from '@supercarmarket/ui';
+import { applyMediaQuery, Button, Wrapper } from '@supercarmarket/ui';
 import { css } from 'styled-components';
 
 interface PartnershipArrowProps {
-  children?: React.ReactNode;
   direction: 'left' | 'right';
+  isMobile?: boolean;
+  disabled?: boolean;
+  children?: React.ReactNode;
   onClick?: () => void;
 }
 
 const PartnershipArrow = (props: PartnershipArrowProps) => {
-  const { direction, children, onClick } = props;
+  const { direction, disabled, children, onClick } = props;
   return (
-    <Container
-      width="fit-content"
-      position="absolute"
-      handleClick={onClick}
-      left={direction === 'left' ? '-56px' : undefined}
-      right={direction === 'right' ? '-56px' : undefined}
-      top="50%"
+    <Button
+      variant="Init"
+      type="button"
       style={{
+        width: 'fit-content',
+        position: 'absolute',
+        left: direction === 'left' ? '-56px' : undefined,
+        right: direction === 'right' ? '-56px' : undefined,
+        top: '50%',
         transform: 'translateY(-50%)',
+        zIndex: 999,
+        cursor: disabled ? 'no-drop' : 'pointer',
       }}
-      zIndex={999}
+      disabled={disabled}
+      onClick={onClick}
     >
       <Wrapper
         css={css`
           width: 40px;
           height: 40px;
           display: flex;
-          cursor: pointer;
           justify-content: center;
           align-items: center;
           border-radius: 50%;
@@ -44,7 +49,7 @@ const PartnershipArrow = (props: PartnershipArrowProps) => {
       >
         {children}
       </Wrapper>
-    </Container>
+    </Button>
   );
 };
 

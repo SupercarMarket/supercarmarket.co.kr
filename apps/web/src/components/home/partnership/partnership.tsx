@@ -1,3 +1,4 @@
+import * as React from 'react';
 import {
   applyMediaQuery,
   Container,
@@ -11,7 +12,12 @@ import { css } from 'styled-components';
 import RouterButton from '../routerButton';
 import PartnershipArrow from './components/partnershipArrow';
 
-const Partnership = () => {
+interface PartnershipProps {
+  isMobile?: boolean;
+}
+
+const Partnership = ({ isMobile }: PartnershipProps) => {
+  const pageSize = isMobile ? 2 : 4;
   const { data: partnership } = useHome<
     {
       brdSeq: string;
@@ -20,34 +26,75 @@ const Partnership = () => {
       title: string;
     }[]
   >('partnership');
+  const [index, setIndex] = React.useState(0);
+
+  const handleClick = React.useCallback(
+    (direction: 'left' | 'right') => {
+      if (!partnership || !partnership.data.length) return;
+
+      const size = partnership.data.length;
+      const maxIndex = Math.floor(size / pageSize);
+      const minIndex = 0;
+
+      if (direction === 'left') {
+        if (index === minIndex) return;
+        setIndex((prev) => prev - 1);
+      }
+
+      if (direction === 'right') {
+        if (index === maxIndex) return;
+        setIndex((prev) => prev + 1);
+      }
+    },
+    [index, pageSize, partnership]
+  );
 
   return (
     <Container
       width="100%"
+      position="relative"
       display="flex"
       flexDirection="column"
       alignItems="center"
       justifyContent="center"
     >
       {partnership && (
+        <>
+          <PartnershipArrow
+            direction="left"
+            disabled={index === 0}
+            onClick={() => handleClick('left')}
+          >
+            &lt;
+          </PartnershipArrow>
+          <PartnershipArrow
+            direction="right"
+            disabled={index === Math.floor(partnership.data.length / pageSize)}
+            onClick={() => handleClick('right')}
+          >
+            &gt;
+          </PartnershipArrow>
+        </>
+      )}
+      {partnership && (
         <Wrapper
           css={css`
             width: 100%;
             position: relative;
             margin-bottom: 40px;
+            overflow: hidden;
             ${applyMediaQuery('mobile')} {
               margin-bottom: 16px;
             }
           `}
         >
-          <PartnershipArrow direction="left">&lt;</PartnershipArrow>
-          <PartnershipArrow direction="right">&gt;</PartnershipArrow>
           <Wrapper.Item
             css={css`
               width: 100%;
               display: flex;
               gap: 20px;
-              overflow: hidden;
+              transition: all 0.3s ease-out;
+              ${`transform: translateX(-${index}00%);`}
               ${applyMediaQuery('mobile')} {
                 overflow-x: scroll;
               }
