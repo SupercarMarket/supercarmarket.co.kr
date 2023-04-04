@@ -9,7 +9,9 @@ import CommunityCard from '../communityCard';
 const CommunityBestList = () => {
   const { data, isFetching, isLoading } = useHome<CommunityDto[]>(
     'community',
-    false,
+    {
+      pageSize: '8',
+    },
     {
       staleTime: 0,
       cacheTime: 0,
