@@ -11,6 +11,7 @@ import Link from 'next/link';
 import { css } from 'styled-components';
 import RouterButton from '../routerButton';
 import PartnershipArrow from './components/partnershipArrow';
+import { CardSkeleton } from 'components/fallback/loading';
 
 interface PartnershipProps {
   isMobile?: boolean;
@@ -18,7 +19,11 @@ interface PartnershipProps {
 
 const Partnership = ({ isMobile }: PartnershipProps) => {
   const pageSize = isMobile ? 2 : 4;
-  const { data: partnership } = useHome<
+  const {
+    data: partnership,
+    isLoading,
+    isFetching,
+  } = useHome<
     {
       brdSeq: string;
       imgSrc: string;
@@ -48,6 +53,9 @@ const Partnership = ({ isMobile }: PartnershipProps) => {
     },
     [index, pageSize, partnership]
   );
+
+  if (isLoading || isFetching)
+    return <CardSkeleton variant="column" size={4} />;
 
   return (
     <Container
