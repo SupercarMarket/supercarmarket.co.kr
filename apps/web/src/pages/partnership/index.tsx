@@ -8,9 +8,8 @@ import {
   QueryClient,
   QueryErrorResetBoundary,
 } from '@tanstack/react-query';
-
 import layout from 'components/layout';
-import Banner from 'components/partnership/banner';
+import Announcement from 'components/common/announcement';
 import { ErrorFallback } from 'components/fallback';
 import { useSearchKeyword } from 'hooks/useSearchKeyword';
 import PartnershipList from 'components/partnership/partnershipList';
@@ -35,10 +34,10 @@ const PartnershipPage: NextPageWithLayout = ({
       `}
     >
       <Advertisement />
-      <Banner
+      <Announcement
         title="제휴업체 등록을 원하시나요?"
         btnTitle="등록 문의하기"
-        url="/inquiry/partnership"
+        url="/inquiry"
       />
       <Wrapper.Top
         css={css`

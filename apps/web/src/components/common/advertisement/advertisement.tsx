@@ -55,7 +55,7 @@ const Advertisement = (props: AdvertisementProps) => {
           position: absolute;
           width: 168px;
           height: 590px;
-          right: -200px;
+          left: -200px;
           top: 0;
           div {
             width: 100%;
@@ -74,7 +74,7 @@ const Advertisement = (props: AdvertisementProps) => {
           position: absolute;
           width: 168px;
           height: 590px;
-          left: -200px;
+          right: -200px;
           top: 0;
           div {
             width: 100%;

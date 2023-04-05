@@ -13,7 +13,6 @@ import {
 } from '@tanstack/react-query';
 import { ErrorFallback } from 'components/fallback';
 import layout from 'components/layout';
-import MarketBanner from 'components/market/marketBanner';
 import MarketCar from 'components/market/marketCar';
 import MarketFilter from 'components/market/marketFilter';
 import { CATEGORY, CATEGORY_VALUES } from 'constants/market';
@@ -26,6 +25,7 @@ import HeadSeo from 'components/common/headSeo';
 import Advertisement from 'components/common/advertisement';
 import { prefetchMarket, QUERY_KEYS } from 'http/server/market';
 import { linsk } from 'constants/link/market';
+import Announcement from 'components/common/announcement';
 
 const MarketFilterPage: NextPageWithLayout = ({
   category,
@@ -51,7 +51,12 @@ const MarketFilterPage: NextPageWithLayout = ({
             }
           `}
         >
-          <MarketBanner />
+          <Announcement
+            title="판매차량 등록을 원하시나요?"
+            subtitle="판매차량 등록 문의는 딜러 등록을 완료한 후에 가능합니다."
+            btnTitle="등록 문의하기"
+            url="/inquiry"
+          />
         </Wrapper>
         <Wrapper
           css={css`

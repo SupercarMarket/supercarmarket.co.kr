@@ -64,6 +64,7 @@ export const getAccountUpdateInfo = async () => {
 
 export const uploadBackground = async (data: FormData) => {
   return authRequest('/user/background', {
+    method: 'POST',
     headers: {
       'Content-Type': 'multipart/form-data',
     },

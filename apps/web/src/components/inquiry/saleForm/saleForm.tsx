@@ -146,7 +146,6 @@ const SaleForm = (props: SaleFormProps) => {
       <Form
         onSubmit={methods.handleSubmit((data) => debouncedSubmit(data))}
         css={css`
-          width: 1200px;
           display: flex;
           flex-direction: column;
           gap: 24px;

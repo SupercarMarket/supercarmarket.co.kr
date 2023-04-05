@@ -6,7 +6,7 @@ import {
   ThemeProps,
 } from 'styled-components';
 import styled from 'styled-components';
-import { theme } from '../styles';
+import { applyMediaQuery, theme } from '../styles';
 
 const Form = styled.form<{
   css:
@@ -47,6 +47,11 @@ const Label = styled.label`
 const wrapper = css`
   width: 100%;
   position: relative;
+  ${applyMediaQuery('mobile')} {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
 `;
 
 const item = css`
@@ -60,6 +65,11 @@ const suffix = css`
   right: -37px;
   top: 50%;
   transform: translateY(-50%);
+  ${applyMediaQuery('mobile')} {
+    all: unset;
+    width: 28px;
+    white-space: nowrap;
+  }
 `;
 
 const imageWrapper = css`
