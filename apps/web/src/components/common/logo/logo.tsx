@@ -4,7 +4,7 @@ import Link from 'next/link';
 const Logo = () => {
   return (
     <>
-      <Link href="/">
+      <Link href="/" aria-label="link to main">
         <svg
           viewBox="0 0 231 56"
           fill="none"

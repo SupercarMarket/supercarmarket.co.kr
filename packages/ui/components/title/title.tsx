@@ -17,7 +17,7 @@ const Title = ({
 }: TitleProps) => {
   return (
     <Typography
-      role="heading"
+      as="h1"
       fontSize="header-24"
       fontWeight="bold"
       color="greyScale-6"
