@@ -4,7 +4,7 @@ import type { NextPageWithLayout } from '@supercarmarket/types/base';
 import { ErrorFallback } from 'components/fallback';
 import Community from 'components/home/community';
 import Magazine from 'components/home/magazine';
-import { MarketBest, MarketNew } from 'components/home/market';
+import { MarketNew } from 'components/home/market';
 import Layout from 'components/layout';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import * as React from 'react';
@@ -16,6 +16,12 @@ import Advertisement from 'components/common/advertisement';
 import Banner from 'components/home/banner';
 import { isMobile } from 'utils/misc';
 import Partnership from 'components/home/partnership';
+import dynamic from 'next/dynamic';
+
+const MarketBest = dynamic(
+  () => import('components/home/market').then((mod) => mod.MarketBest),
+  { ssr: false }
+);
 
 const Home: NextPageWithLayout = ({
   isMobile,
