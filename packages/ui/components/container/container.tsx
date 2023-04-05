@@ -75,7 +75,6 @@ const Container = React.forwardRef(function Container<
         borderBottom,
         borderTop,
       };
-
   return (
     <Component
       ref={ref}

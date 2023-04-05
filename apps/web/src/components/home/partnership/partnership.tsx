@@ -11,11 +11,6 @@ import Link from 'next/link';
 import { css } from 'styled-components';
 import RouterButton from '../routerButton';
 import PartnershipArrow from './components/partnershipArrow';
-import { CardSkeleton } from 'components/fallback/loading';
-import {
-  useBooleanState,
-  useIntersectionObserver,
-} from '@supercarmarket/hooks';
 
 interface PartnershipProps {
   isMobile?: boolean;
@@ -23,22 +18,14 @@ interface PartnershipProps {
 
 const Partnership = ({ isMobile }: PartnershipProps) => {
   const pageSize = isMobile ? 2 : 4;
-  const [bool, setTrue] = useBooleanState();
-  const [entry, setEntry] = useIntersectionObserver({});
-  const {
-    data: partnership,
-    isLoading,
-    isFetching,
-  } = useHome<
+  const { data: partnership } = useHome<
     {
       brdSeq: string;
       imgSrc: string;
       category: string;
       title: string;
     }[]
-  >('partnership', undefined, {
-    enabled: !!bool,
-  });
+  >('partnership');
   const [index, setIndex] = React.useState(0);
 
   const handleClick = React.useCallback(
@@ -62,128 +49,119 @@ const Partnership = ({ isMobile }: PartnershipProps) => {
     [index, pageSize, partnership]
   );
 
-  React.useEffect(() => {
-    if (entry?.isIntersecting) setTrue();
-  }, [entry?.isIntersecting, setTrue]);
-
   return (
     <Container
-      ref={setEntry}
       width="100%"
       display="flex"
       flexDirection="column"
       alignItems="center"
       justifyContent="center"
     >
-      {isLoading || isFetching ? (
-        <CardSkeleton variant="column" size={4} />
-      ) : (
-        <Wrapper
-          css={css`
-            width: 100%;
-            position: relative;
-          `}
-        >
-          {partnership && (
-            <>
-              <PartnershipArrow
-                direction="left"
-                disabled={index === 0}
-                onClick={() => handleClick('left')}
-              >
-                &lt;
-              </PartnershipArrow>
-              <PartnershipArrow
-                direction="right"
-                disabled={
-                  index === Math.floor(partnership.data.length / pageSize)
+      <Wrapper
+        css={css`
+          width: 100%;
+          position: relative;
+        `}
+      >
+        {partnership && (
+          <>
+            <PartnershipArrow
+              direction="left"
+              disabled={index === 0}
+              onClick={() => handleClick('left')}
+            >
+              &lt;
+            </PartnershipArrow>
+            <PartnershipArrow
+              direction="right"
+              disabled={
+                index === Math.floor(partnership.data.length / pageSize)
+              }
+              onClick={() => handleClick('right')}
+            >
+              &gt;
+            </PartnershipArrow>
+            <Wrapper
+              css={css`
+                width: 100%;
+                position: relative;
+                margin-bottom: 40px;
+                overflow: hidden;
+                ${applyMediaQuery('mobile')} {
+                  margin-bottom: 16px;
                 }
-                onClick={() => handleClick('right')}
-              >
-                &gt;
-              </PartnershipArrow>
-              <Wrapper
+              `}
+            >
+              <Wrapper.Item
                 css={css`
                   width: 100%;
-                  position: relative;
-                  margin-bottom: 40px;
-                  overflow: hidden;
+                  display: flex;
+                  gap: 20px;
+                  transition: all 0.3s ease-out;
+                  ${`transform: translateX(-${index * 101.5}%);`}
                   ${applyMediaQuery('mobile')} {
-                    margin-bottom: 16px;
+                    overflow-x: scroll;
                   }
                 `}
               >
-                <Wrapper.Item
-                  css={css`
-                    width: 100%;
-                    display: flex;
-                    gap: 20px;
-                    transition: all 0.3s ease-out;
-                    ${`transform: translateX(-${index * 101.5}%);`}
-                    ${applyMediaQuery('mobile')} {
-                      overflow-x: scroll;
-                    }
-                  `}
-                >
-                  {partnership.data.map((p) => (
-                    <Link
-                      key={p.brdSeq}
-                      href={`/partnership/${p.category}/${p.brdSeq}`}
-                      style={{
-                        flex: 'none',
-                      }}
+                {partnership.data.map((p) => (
+                  <Link
+                    key={p.brdSeq}
+                    href={`/partnership/${p.category}/${p.brdSeq}`}
+                    style={{
+                      flex: 'none',
+                    }}
+                  >
+                    <Wrapper.Item
+                      css={css`
+                        width: 285px;
+                        height: 180px;
+                        flex: none;
+                        display: flex;
+                        flex-direction: column;
+                        gap: 20px;
+                        ${applyMediaQuery('mobile')} {
+                          gap: 8px;
+                        }
+                      `}
                     >
-                      <Wrapper.Item
+                      <Wrapper.Top
                         css={css`
-                          width: 285px;
+                          position: relative;
+                          width: 100%;
                           height: 180px;
-                          flex: none;
-                          display: flex;
-                          flex-direction: column;
-                          gap: 20px;
-                          ${applyMediaQuery('mobile')} {
-                            gap: 8px;
-                          }
                         `}
                       >
-                        <Wrapper.Top
-                          css={css`
-                            position: relative;
-                            width: 100%;
-                            height: 180px;
-                          `}
+                        <Image
+                          src={p.imgSrc}
+                          alt="제휴업체"
+                          fill
+                          style={{
+                            borderRadius: '4px',
+                          }}
+                          sizes={`${applyMediaQuery(
+                            'desktop'
+                          )} 285px, ${applyMediaQuery('mobile')} 167.5px`}
+                        />
+                      </Wrapper.Top>
+                      <Wrapper.Bottom>
+                        <Typography
+                          as="b"
+                          fontSize="header-16"
+                          fontWeight="bold"
+                          lineHeight="120%"
                         >
-                          <Image
-                            src={p.imgSrc}
-                            alt="제휴업체"
-                            fill
-                            style={{
-                              borderRadius: '4px',
-                            }}
-                            sizes={`${applyMediaQuery(
-                              'desktop'
-                            )} 285px, ${applyMediaQuery('mobile')} 167.5px`}
-                          />
-                        </Wrapper.Top>
-                        <Wrapper.Bottom>
-                          <Typography
-                            as="b"
-                            fontSize="header-16"
-                            fontWeight="bold"
-                            lineHeight="120%"
-                          >
-                            {p.title}
-                          </Typography>
-                        </Wrapper.Bottom>
-                      </Wrapper.Item>
-                    </Link>
-                  ))}
-                </Wrapper.Item>
-              </Wrapper>
-            </>
-          )}
-        </Wrapper>
-      )}
+                          {p.title}
+                        </Typography>
+                      </Wrapper.Bottom>
+                    </Wrapper.Item>
+                  </Link>
+                ))}
+              </Wrapper.Item>
+            </Wrapper>
+          </>
+        )}
+      </Wrapper>
       <RouterButton href="/partnership">
         <Typography fontSize="header-16" fontWeight="bold" color="black">
           제휴업체 더보기
