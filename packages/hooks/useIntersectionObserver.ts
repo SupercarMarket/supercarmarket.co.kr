@@ -5,7 +5,7 @@ interface Args extends IntersectionObserverInit {
   isFreezeOnceVisible?: boolean;
 }
 
-export const useIntersectionObserver = (
+export default function useIntersectionObserver(
   elementRef: React.RefObject<Element>,
   {
     threshold = 0,
@@ -13,7 +13,7 @@ export const useIntersectionObserver = (
     rootMargin = '0%',
     isFreezeOnceVisible = false,
   }: Args
-): IntersectionObserverEntry | undefined => {
+): IntersectionObserverEntry | undefined {
   const [entry, setEntry] = React.useState<IntersectionObserverEntry>();
 
   const frozen = entry?.isIntersecting && isFreezeOnceVisible;
@@ -39,4 +39,4 @@ export const useIntersectionObserver = (
   }, [elementRef, JSON.stringify(threshold), root, rootMargin, frozen]);
 
   return entry;
-};
+}

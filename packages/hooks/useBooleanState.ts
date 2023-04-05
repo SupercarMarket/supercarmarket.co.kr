@@ -1,8 +1,8 @@
 import * as React from 'react';
 
-export const useBooleanState = (
+export default function useBooleanState(
   defaultValue = false
-): readonly [boolean, VoidFunction, VoidFunction, VoidFunction] => {
+): readonly [boolean, VoidFunction, VoidFunction, VoidFunction] {
   const [bool, setBool] = React.useState(defaultValue);
 
   const setTrue = React.useCallback(() => {
@@ -18,4 +18,4 @@ export const useBooleanState = (
   }, []);
 
   return [bool, setTrue, setFalse, toggle] as const;
-};
+}
