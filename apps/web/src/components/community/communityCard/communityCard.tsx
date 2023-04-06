@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import {
+  applyMediaQuery,
   Container,
   deviceQuery,
   Divider,
@@ -11,7 +12,6 @@ import type { WithBlurredImage } from '@supercarmarket/types/magazine';
 import dayjs from 'dayjs';
 import Image from 'next/image';
 import { css } from 'styled-components';
-import { applyMediaQuery } from 'styles/mediaQuery';
 import { useMedia } from '@supercarmarket/hooks';
 import ViewIcon from '../../../assets/svg/eye.svg';
 import LikeIcon from '../../../assets/svg/thumb-up.svg';
