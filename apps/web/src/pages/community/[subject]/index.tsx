@@ -34,9 +34,6 @@ const CommunityCategory: NextPageWithLayout = () => {
                 display: flex;
                 flex-direction: column;
                 gap: 27.5px;
-                ${applyMediaQuery('mobile')} {
-                  padding: 0 23.5px;
-                }
               `}
             >
               <Advertisement />

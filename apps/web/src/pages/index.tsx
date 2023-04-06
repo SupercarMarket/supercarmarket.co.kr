@@ -1,5 +1,5 @@
 import { QueryErrorResetBoundary } from '@tanstack/react-query';
-import { Container, Wrapper, Title, applyMediaQuery } from '@supercarmarket/ui';
+import { Container, Wrapper, Title } from '@supercarmarket/ui';
 import type { NextPageWithLayout } from '@supercarmarket/types/base';
 import { ErrorFallback } from 'components/fallback';
 import Community from 'components/home/community';
@@ -29,13 +29,7 @@ const Home: NextPageWithLayout = ({
       <Container>
         <QueryErrorResetBoundary>
           {({ reset }) => (
-            <Wrapper
-              css={css`
-                ${applyMediaQuery('mobile')} {
-                  padding: 0 23.5px;
-                }
-              `}
-            >
+            <Wrapper>
               <ErrorBoundary
                 onReset={reset}
                 fallbackRender={(props) => <ErrorFallback {...props} />}

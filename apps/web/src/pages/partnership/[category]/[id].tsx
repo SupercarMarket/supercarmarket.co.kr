@@ -40,7 +40,6 @@ const PartnershipDetailPage: NextPageWithLayout = ({
           box-sizing: border-box;
           ${applyMediaQuery('mobile')} {
             width: 100%;
-            padding: 0 23.5px;
           }
         `}
       >

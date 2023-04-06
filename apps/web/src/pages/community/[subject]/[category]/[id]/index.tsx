@@ -11,7 +11,6 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from 'components/fallback';
 import Posting from 'components/common/posting';
 import { CommunityPostingList } from 'components/community';
-import { css } from 'styled-components';
 import Advertisement from 'components/common/advertisement';
 import { prefetchCommunityPost, QUERY_KEYS } from 'http/server/community';
 import { getSession } from 'http/server/next';
@@ -26,13 +25,7 @@ const CommunityPost: NextPageWithLayout = ({
     <Container>
       <QueryErrorResetBoundary>
         {({ reset }) => (
-          <Wrapper
-            css={css`
-              ${applyMediaQuery('mobile')} {
-                padding: 0 23.5px;
-              }
-            `}
-          >
+          <Wrapper>
             <ErrorBoundary
               onReset={reset}
               fallbackRender={(props) => (

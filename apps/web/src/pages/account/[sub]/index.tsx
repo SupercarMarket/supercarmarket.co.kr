@@ -1,4 +1,4 @@
-import { applyMediaQuery, Container, Wrapper } from '@supercarmarket/ui';
+import { Container, Wrapper } from '@supercarmarket/ui';
 import type { Params, NextPageWithLayout } from '@supercarmarket/types/base';
 import { AccountCategoryList, Profile } from 'components/account';
 import AccountLayout from 'components/layout/accountLayout';
@@ -18,7 +18,6 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from 'components/fallback';
 import HeadSeo from 'components/common/headSeo/headSeo';
 import { prefetchAccount, QUERY_KEYS } from 'http/server/account';
-import { css } from 'styled-components';
 import {
   accountCategory,
   links,
@@ -64,13 +63,7 @@ const Account: NextPageWithLayout = ({
                     <ErrorFallback {...props} margin="100px 0" />
                   )}
                 >
-                  <Wrapper
-                    css={css`
-                      ${applyMediaQuery('mobile')} {
-                        padding: 0 23.5px;
-                      }
-                    `}
-                  >
+                  <Wrapper>
                     <AccountCategoryList
                       sub={sub}
                       tab={tab}

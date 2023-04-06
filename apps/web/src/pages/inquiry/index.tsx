@@ -1,4 +1,4 @@
-import { applyMediaQuery, Container, Title, Wrapper } from '@supercarmarket/ui';
+import { Container, Title, Wrapper } from '@supercarmarket/ui';
 import type { NextPageWithLayout } from '@supercarmarket/types/base';
 import { InquiryNavbar } from 'components/inquiry';
 import Layout from 'components/layout/layout';
@@ -16,9 +16,6 @@ const Inquiry: NextPageWithLayout = () => {
           display: flex;
           flex-direction: column;
           gap: 20px;
-          ${applyMediaQuery('mobile')} {
-            padding: 0 23.5px;
-          }
         `}
       >
         <Title>어떤 문의를 원하시나요?</Title>

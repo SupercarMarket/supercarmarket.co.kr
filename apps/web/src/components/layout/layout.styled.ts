@@ -6,7 +6,7 @@ const availableWidth = {
   wideDesktop: '1200px',
   desktop: '1200px',
   tablet: '768px',
-  mobile: '375px',
+  mobile: '328px',
 };
 
 const Container = styled.div`

@@ -1,4 +1,4 @@
-import { applyMediaQuery, Container, Title, Wrapper } from '@supercarmarket/ui';
+import { Container, Title, Wrapper } from '@supercarmarket/ui';
 import type { NextPageWithLayout } from '@supercarmarket/types/base';
 import { CommunityForm } from 'components/community';
 import layout from 'components/layout';
@@ -24,9 +24,6 @@ const Create: NextPageWithLayout = ({
               display: flex;
               flex-direction: column;
               gap: 20px;
-              ${applyMediaQuery('mobile')} {
-                padding: 0 23.5px;
-              }
             `}
           >
             <Advertisement />
