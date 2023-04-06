@@ -62,6 +62,9 @@ const Tab = ({
             css={css`
               display: flex;
               gap: 9px;
+              ${applyMediaQuery('mobile')} {
+                gap: 4px;
+              }
             `}
           >
             <Link href={update}>
@@ -88,6 +91,7 @@ const Tab = ({
             justify-content: flex-end;
             gap: 9px;
             ${applyMediaQuery('mobile')} {
+              gap: 4px;
             }
           `}
         >

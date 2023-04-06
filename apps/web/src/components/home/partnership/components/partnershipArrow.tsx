@@ -23,7 +23,6 @@ const PartnershipArrow = (props: PartnershipArrowProps) => {
         right: direction === 'right' ? '-56px' : undefined,
         top: '50%',
         transform: 'translateY(-50%)',
-        zIndex: 999,
         cursor: disabled ? 'no-drop' : 'pointer',
       }}
       disabled={disabled}
