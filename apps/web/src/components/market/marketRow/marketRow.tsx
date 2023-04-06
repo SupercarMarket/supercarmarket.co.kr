@@ -53,13 +53,13 @@ const MarketRow = ({
               border-radius: 4px;
             }
             ${applyMediaQuery('mobile')} {
-              width: 126px;
+              width: 128px;
               aspect-ratio: 1/1;
               & > img {
                 object-fit: cover;
               }
               .react-loading-skeleton {
-                width: 126px;
+                width: 128px;
               }
             }
           `}

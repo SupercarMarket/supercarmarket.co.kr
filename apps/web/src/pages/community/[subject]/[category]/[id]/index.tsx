@@ -1,4 +1,4 @@
-import { Container, Title, Wrapper } from '@supercarmarket/ui';
+import { applyMediaQuery, Container, Title, Wrapper } from '@supercarmarket/ui';
 import type { NextPageWithLayout, Params } from '@supercarmarket/types/base';
 import layout from 'components/layout';
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
@@ -11,7 +11,6 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from 'components/fallback';
 import Posting from 'components/common/posting';
 import { CommunityPostingList } from 'components/community';
-import { css } from 'styled-components';
 import Advertisement from 'components/common/advertisement';
 import { prefetchCommunityPost, QUERY_KEYS } from 'http/server/community';
 import { getSession } from 'http/server/next';
@@ -26,11 +25,7 @@ const CommunityPost: NextPageWithLayout = ({
     <Container>
       <QueryErrorResetBoundary>
         {({ reset }) => (
-          <Wrapper
-            css={css`
-              padding: 0 16px;
-            `}
-          >
+          <Wrapper>
             <ErrorBoundary
               onReset={reset}
               fallbackRender={(props) => (

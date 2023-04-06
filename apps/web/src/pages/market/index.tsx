@@ -44,13 +44,7 @@ const MarketFilterPage: NextPageWithLayout = ({
       />
       <Advertisement />
       <Container display="flex" flexDirection="column" margin="20px 0 0 0">
-        <Wrapper
-          css={css`
-            ${applyMediaQuery('mobile')} {
-              padding: 0 16px;
-            }
-          `}
-        >
+        <Wrapper>
           <Announcement
             title="판매차량 등록을 원하시나요?"
             subtitle="판매차량 등록 문의는 딜러 등록을 완료한 후에 가능합니다."
@@ -66,7 +60,6 @@ const MarketFilterPage: NextPageWithLayout = ({
             margin: 80px 0;
             ${applyMediaQuery('mobile')} {
               margin: 32px 0;
-              padding: 0 16px;
             }
           `}
         >
@@ -81,20 +74,14 @@ const MarketFilterPage: NextPageWithLayout = ({
             <Searchbar
               variant="Line"
               placeholder="원하는 차량을 검색하세요"
-              onKeyDown={keydownHandler}
               ref={keywordRef}
+              handleClick={keydownHandler}
             />
           </Wrapper.Item>
         </Wrapper>
         <QueryErrorResetBoundary>
           {({ reset }) => (
-            <Wrapper
-              css={css`
-                ${applyMediaQuery('mobile')} {
-                  padding: 0 16px;
-                }
-              `}
-            >
+            <Wrapper>
               <ErrorBoundary
                 onReset={reset}
                 fallbackRender={(props) => <ErrorFallback {...props} />}

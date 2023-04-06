@@ -29,8 +29,8 @@ const Toggle = () => {
           color: #1e1e20;
         }
         ${applyMediaQuery('mobile')} {
-          right: 40px;
-          bottom: 20px;
+          right: 16px;
+          bottom: 16px;
           button {
             padding: 15px 20px;
           }

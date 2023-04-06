@@ -71,11 +71,11 @@ const MagazineCard = memo(function MagazineCard({
               border-radius: 4px;
             }
             ${applyMediaQuery('mobile')} {
-              width: 167.5px;
+              width: 160px;
               height: 106px;
               margin-bottom: 8px;
               .react-loading-skeleton {
-                width: 167.5px;
+                width: 160px;
                 height: 106px;
               }
             }

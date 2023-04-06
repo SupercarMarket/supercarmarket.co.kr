@@ -10,7 +10,7 @@ import React from 'react';
 
 import { css } from 'styled-components';
 import { PartnershipDto } from '@supercarmarket/types/partnership';
-import { partnershipFormatter } from '@supercarmarket/lib';
+import { createExternalLink, partnershipFormatter } from '@supercarmarket/lib';
 
 const PartnershipCard = ({
   brdSeq,
@@ -57,6 +57,9 @@ const PartnershipCard = ({
             alt="thumbnail"
             style={{ borderRadius: '4px', objectFit: 'cover' }}
             fill
+            sizes={`${applyMediaQuery('desktop')} 196px, ${applyMediaQuery(
+              'mobile'
+            )} 64px`}
           />
         </Wrapper>
         <Wrapper.Item
@@ -173,8 +176,10 @@ const PartnershipCard = ({
           }
         `}
       >
-        <Link
-          href={`http://${siteUrl}`}
+        <a
+          href={createExternalLink(siteUrl)}
+          target="_blank"
+          rel="noopener noreferrer"
           style={{
             display: 'inline-block',
             width: '80px',
@@ -190,7 +195,7 @@ const PartnershipCard = ({
           >
             바로가기
           </Typography>
-        </Link>
+        </a>
       </Wrapper>
     </Container>
   );

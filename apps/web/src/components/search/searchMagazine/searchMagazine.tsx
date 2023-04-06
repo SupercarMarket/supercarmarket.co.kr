@@ -20,7 +20,7 @@ const SearchMagazine = ({
   const isMagazine = data && data.length > 0;
 
   return (
-    <Container width="100%">
+    <Container display="flex" flexDirection="column" width="100%" gap="80px">
       {isMagazine ? (
         <Wrapper
           css={css`
@@ -35,6 +35,8 @@ const SearchMagazine = ({
 
             ${applyMediaQuery('mobile')} {
               grid-template-columns: 1fr 1fr;
+              column-gap: 8px;
+              row-gap: 16px;
             }
           `}
         >

@@ -40,7 +40,6 @@ const PartnershipDetailPage: NextPageWithLayout = ({
           box-sizing: border-box;
           ${applyMediaQuery('mobile')} {
             width: 100%;
-            padding: 0 16px;
           }
         `}
       >
@@ -72,8 +71,8 @@ const PartnershipDetailPage: NextPageWithLayout = ({
                   <Searchbar
                     variant="Line"
                     placeholder="검색어를 입력하세요"
-                    onKeyDown={keydownHandler}
                     ref={keywordRef}
+                    handleClick={keydownHandler}
                   />
                 </Wrapper>
               </Wrapper>

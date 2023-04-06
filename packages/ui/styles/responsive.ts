@@ -7,7 +7,7 @@ const width = {
   wideDesktop: 1200,
   desktop: 1200,
   tablet: 768,
-  mobile: 375,
+  mobile: 360,
 };
 
 const Responsive = styled.div`

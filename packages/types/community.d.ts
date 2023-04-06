@@ -5,7 +5,7 @@ interface CommunityDto {
   id: string;
   nickname: string;
   title: string;
-  date: Date;
+  date: string;
   view: number;
   like: number;
   profileSrc?: string;

@@ -34,9 +34,6 @@ const CommunityCategory: NextPageWithLayout = () => {
                 display: flex;
                 flex-direction: column;
                 gap: 27.5px;
-                ${applyMediaQuery('mobile')} {
-                  padding: 0 16px;
-                }
               `}
             >
               <Advertisement />
@@ -55,6 +52,7 @@ const CommunityCategory: NextPageWithLayout = () => {
                   gap: 27.5px;
                 `}
               >
+                <CommunityNavbar />
                 <Wrapper.Item
                   css={css`
                     width: 100%;
@@ -78,7 +76,6 @@ const CommunityCategory: NextPageWithLayout = () => {
                     }
                   />
                 </Wrapper.Item>
-                <CommunityNavbar />
               </Wrapper>
               <ErrorBoundary
                 onReset={reset}

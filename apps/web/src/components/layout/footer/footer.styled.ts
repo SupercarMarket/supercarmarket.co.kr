@@ -1,6 +1,6 @@
-import DEVICE_LIST from 'constants/device';
+import { applyMediaQuery } from '@supercarmarket/ui';
+import DEVICE_LIST from '@supercarmarket/ui/styles/device';
 import { css } from 'styled-components';
-import { applyMediaQuery } from 'styles/mediaQuery';
 
 const availableWidth = {
   wideDesktop: '1200px',
@@ -20,12 +20,17 @@ const footer = css`
   display: grid;
   grid-template-columns: 1fr 1fr;
   padding: 62px 0;
+  ${applyMediaQuery('mobile')} {
+    padding: 32px 16px;
+  }
 `;
 
 const footerLeft = css`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  padding-left: 16px;
+  ${applyMediaQuery('mobile')} {
+    gap: 0;
+  }
 `;
 
 const footerLeftItem = css`
@@ -39,7 +44,9 @@ const footerRight = css`
   display: flex;
   justify-content: flex-end;
   gap: 17px;
-  padding-right: 16px;
+  ${applyMediaQuery('mobile')} {
+    justify-content: flex-start;
+  }
 `;
 
 export { footer, footerLeft, footerLeftItem, footerRight };

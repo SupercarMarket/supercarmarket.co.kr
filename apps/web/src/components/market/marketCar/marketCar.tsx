@@ -20,6 +20,9 @@ const MarketCar = () => {
           css={css`
             display: flex;
             gap: 9px;
+            ${applyMediaQuery('mobile')} {
+              gap: 4px;
+            }
           `}
         >
           <Wrapper.Left

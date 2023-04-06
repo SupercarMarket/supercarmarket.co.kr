@@ -32,6 +32,7 @@ export const registerPartnership = async (data: FormData) => {
 
 export const registerAdvertisement = async (data: FormData) => {
   return authRequest('/inquiry-advertisement', {
+    method: 'POST',
     headers: {
       'Content-Type': 'multipart/form-data',
     },

@@ -24,7 +24,6 @@ const CommunityUpdate: NextPageWithLayout = ({
               display: flex;
               flex-direction: column;
               gap: 20px;
-              padding: 0 16px;
             `}
           >
             <Advertisement />

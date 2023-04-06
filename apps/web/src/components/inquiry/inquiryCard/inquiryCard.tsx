@@ -8,9 +8,10 @@ import type { InquiryDto } from '@supercarmarket/types/inquiry';
 import { css } from 'styled-components';
 import dayjs from 'dayjs';
 import { isToday } from 'utils/misc';
+import { inquiryStatusFormatter } from '@supercarmarket/lib';
 
 const InquiryCard = (props: InquiryDto) => {
-  const { title, category, created, progress } = props;
+  const { title, category, created, status } = props;
 
   const today = isToday(created);
   return (
@@ -112,7 +113,7 @@ const InquiryCard = (props: InquiryDto) => {
             lineHeight="150%"
             color="greyScale-6"
           >
-            {progress}
+            {inquiryStatusFormatter(status)}
           </Typography>
         </Wrapper.Item>
       </Wrapper>

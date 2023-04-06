@@ -8,7 +8,7 @@ const form = css`
   align-items: center;
   gap: 26px;
   ${applyMediaQuery('mobile')} {
-    width: 375px;
+    width: 328px;
     gap: 16px;
     & > button[type='submit'] {
       width: 100% !important;

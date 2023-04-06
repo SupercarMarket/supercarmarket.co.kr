@@ -1,4 +1,4 @@
-import { applyMediaQuery, Container, Wrapper } from '@supercarmarket/ui';
+import { Container, Wrapper } from '@supercarmarket/ui';
 import type { NextPageWithLayout } from '@supercarmarket/types/base';
 import {
   dehydrate,
@@ -44,9 +44,6 @@ const MagazinePost: NextPageWithLayout = ({
                 align-items: center;
                 justify-content: flex-start;
                 gap: 80px;
-                ${applyMediaQuery('mobile')} {
-                  padding: 0 16px;
-                }
               `}
             >
               <ErrorBoundary

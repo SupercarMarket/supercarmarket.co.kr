@@ -1,4 +1,4 @@
-import { applyMediaQuery, Container, Title, Wrapper } from '@supercarmarket/ui';
+import { Container, Title, Wrapper } from '@supercarmarket/ui';
 import type { NextPageWithLayout } from '@supercarmarket/types/base';
 import { AdvertisementForm } from 'components/inquiry';
 import Layout from 'components/layout/layout';
@@ -13,9 +13,6 @@ const Advertisement: NextPageWithLayout = () => {
           display: flex;
           flex-direction: column;
           gap: 40px;
-          ${applyMediaQuery('mobile')} {
-            padding: 0 16px;
-          }
         `}
       >
         <Title>광고 문의</Title>

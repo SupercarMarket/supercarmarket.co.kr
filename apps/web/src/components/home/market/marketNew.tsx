@@ -1,8 +1,12 @@
-import { Container, Typography, Wrapper } from '@supercarmarket/ui';
+import {
+  applyMediaQuery,
+  Container,
+  Typography,
+  Wrapper,
+} from '@supercarmarket/ui';
 import type { MarketDto } from '@supercarmarket/types/market';
 import MarketCard from 'components/market/marketCard';
 import { css } from 'styled-components';
-import { applyMediaQuery } from 'styles/mediaQuery';
 import RouterButton from '../routerButton';
 import { useHome } from 'http/server/home';
 import { CardSkeleton } from 'components/fallback/loading';

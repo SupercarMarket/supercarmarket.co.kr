@@ -130,7 +130,7 @@ const CommunityList = (props: CommunityListProps) => {
           gap: 20px;
           justify-content: center;
           ${applyMediaQuery('mobile')} {
-            width: 375px;
+            width: 328px;
           }
         `}
       >

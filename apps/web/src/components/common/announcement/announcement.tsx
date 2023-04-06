@@ -38,6 +38,7 @@ const Announcement = ({ title, subtitle, btnTitle, url }: BannerProps) => {
           flex-direction: column;
           align-items: flex-start;
           gap: 16px;
+          padding: 24px;
         }
       `}
     >

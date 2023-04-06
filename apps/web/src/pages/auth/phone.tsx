@@ -1,22 +1,33 @@
-import { Container, Title } from '@supercarmarket/ui';
+import { applyMediaQuery, Container, Title, Wrapper } from '@supercarmarket/ui';
 import { PhoneForm } from 'components/auth';
 import AuthLayout from 'components/layout/authLayout';
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import type { NextPageWithLayout, Params } from '@supercarmarket/types/base';
+import { css } from 'styled-components';
 
 const Phone: NextPageWithLayout = ({
   uuid,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   return (
-    <Container
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-      margin="80px 0"
-      gap="60px"
-    >
-      <Title textAlign="center">핸드폰 인증</Title>
-      <PhoneForm uuid={uuid} />
+    <Container display="flex" justifyContent="center">
+      <Wrapper
+        css={css`
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 60px;
+          padding: 53px;
+          ${applyMediaQuery('mobile')} {
+            gap: 24px;
+            padding: 24px;
+            width: 328px;
+          }
+        `}
+      >
+        <Title textAlign="center">핸드폰 인증</Title>
+        <PhoneForm uuid={uuid} />
+      </Wrapper>
     </Container>
   );
 };
