@@ -45,7 +45,7 @@ const MagazinePost: NextPageWithLayout = ({
                 justify-content: flex-start;
                 gap: 80px;
                 ${applyMediaQuery('mobile')} {
-                  padding: 0 16px;
+                  padding: 0 23.5px;
                 }
               `}
             >

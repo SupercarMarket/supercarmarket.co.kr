@@ -388,10 +388,10 @@ const CommunityCardColumn = (props: CommunityCardChildrenProps) => {
               border-radius: 4px;
             }
             ${applyMediaQuery('mobile')} {
-              width: 167.5px;
+              width: 160px;
               height: 101px;
               .react-loading-skeleton {
-                width: 167.5px;
+                width: 160px;
                 height: 101px;
               }
             }

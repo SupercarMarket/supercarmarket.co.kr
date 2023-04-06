@@ -61,7 +61,7 @@ const Header = () => {
           }
           ${applyMediaQuery('mobile')} {
             height: 56px;
-            padding: 14px 16px;
+            padding: 14px 23.5px;
           }
         `}
       >
@@ -112,6 +112,7 @@ const Header = () => {
               width: 100%;
               display: flex;
               align-items: center;
+              justify-content: space-between;
               gap: 32px;
             `}
           >
@@ -237,7 +238,7 @@ const Header = () => {
           align-items: center;
           justify-content: space-between;
           transition: all 0.5s ease-in-out;
-          padding: 0 16px;
+          padding: 0 23.5px;
           ${search && ' transition-delay: 0.5s;'}
           &.hidden {
             visibility: hidden;

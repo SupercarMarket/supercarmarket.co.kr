@@ -17,7 +17,7 @@ const Inquiry: NextPageWithLayout = () => {
           flex-direction: column;
           gap: 20px;
           ${applyMediaQuery('mobile')} {
-            padding: 0 16px;
+            padding: 0 23.5px;
           }
         `}
       >

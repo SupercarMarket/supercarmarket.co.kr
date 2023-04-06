@@ -129,6 +129,8 @@ const Partnership = ({ isMobile }: PartnershipProps) => {
                         flex-direction: column;
                         gap: 20px;
                         ${applyMediaQuery('mobile')} {
+                          width: 220px;
+                          height: 139px;
                           gap: 8px;
                         }
                       `}

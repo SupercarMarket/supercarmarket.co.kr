@@ -47,7 +47,7 @@ const MarketFilterPage: NextPageWithLayout = ({
         <Wrapper
           css={css`
             ${applyMediaQuery('mobile')} {
-              padding: 0 16px;
+              padding: 0 23.5px;
             }
           `}
         >
@@ -66,7 +66,7 @@ const MarketFilterPage: NextPageWithLayout = ({
             margin: 80px 0;
             ${applyMediaQuery('mobile')} {
               margin: 32px 0;
-              padding: 0 16px;
+              padding: 0 23.5px;
             }
           `}
         >
@@ -91,7 +91,7 @@ const MarketFilterPage: NextPageWithLayout = ({
             <Wrapper
               css={css`
                 ${applyMediaQuery('mobile')} {
-                  padding: 0 16px;
+                  padding: 0 23.5px;
                 }
               `}
             >

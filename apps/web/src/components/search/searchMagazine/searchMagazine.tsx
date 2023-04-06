@@ -35,6 +35,8 @@ const SearchMagazine = ({
 
             ${applyMediaQuery('mobile')} {
               grid-template-columns: 1fr 1fr;
+              column-gap: 8px;
+              row-gap: 16px;
             }
           `}
         >

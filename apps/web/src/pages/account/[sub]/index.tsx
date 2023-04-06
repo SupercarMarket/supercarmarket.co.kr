@@ -67,7 +67,7 @@ const Account: NextPageWithLayout = ({
                   <Wrapper
                     css={css`
                       ${applyMediaQuery('mobile')} {
-                        padding: 0 16px;
+                        padding: 0 23.5px;
                       }
                     `}
                   >

@@ -405,7 +405,7 @@ const CommentBody = ({
       {comments.length === 0 && (
         <Alert
           severity="info"
-          title="댓글이 아직 없습니다. 댓글을 남겨보세요."
+          title={`댓글이 아직 없습니다.\n댓글을 남겨보세요.`}
         />
       )}
       {comments.map((comment) => (

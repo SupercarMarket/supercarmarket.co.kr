@@ -5,7 +5,7 @@ import { makeQuery } from 'utils/market/marketQuery';
 import { SelectType } from '@supercarmarket/types/market';
 import { useNextQuery } from 'hooks/useNextQuery';
 import { useSearchParams } from 'next/navigation';
-import { Typography, Wrapper, applyMediaQuery } from '@supercarmarket/ui';
+import { Wrapper, applyMediaQuery } from '@supercarmarket/ui';
 
 import * as S from './select.styled';
 import ArrowBottom from '../../../assets/svg/arrow-bottom.svg';

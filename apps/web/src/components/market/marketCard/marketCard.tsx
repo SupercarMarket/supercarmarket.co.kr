@@ -96,10 +96,10 @@ const MarketColumn = (
                 border-radius: 4px;
               }
               ${applyMediaQuery('mobile')} {
-                width: 167.5px;
+                width: 160px;
 
                 .react-loading-skeleton {
-                  width: 167.5px;
+                  width: 160px;
                 }
               }
             `}

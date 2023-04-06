@@ -72,8 +72,8 @@ const MagazineBanner = ({
               align-items: center;
               fill: ${({ theme }) => theme.color.white};
               ${applyMediaQuery('mobile')} {
-                width: 343px;
-                height: 229px;
+                width: 328px;
+                height: 219px;
                 ${reverse ? 'height: 229px;' : 'height: 173px;'}
                 h1 {
                   font-size: ${({ theme }) =>
@@ -91,7 +91,7 @@ const MagazineBanner = ({
                 gap: 16px;
                 ${applyMediaQuery('mobile')} {
                   width: 100%;
-                  height: 229px;
+                  height: 219px;
                 }
               `}
             >
@@ -162,11 +162,11 @@ const MagazineBanner = ({
                 border-radius: 4px;
               }
               ${applyMediaQuery('mobile')} {
-                width: 343px;
-                height: 264px;
+                width: 328px;
+                height: 219px;
                 .react-loading-skeleton {
-                  width: 343px;
-                  height: 264px;
+                  width: 323px;
+                  height: 219px;
                 }
               }
             `}
@@ -187,7 +187,7 @@ const MagazineBanner = ({
                 priority
                 sizes={`${applyMediaQuery('desktop')} 590px, ${applyMediaQuery(
                   'mobile'
-                )} 343px`}
+                )} 328px`}
               />
             )}
           </Wrapper.Bottom>

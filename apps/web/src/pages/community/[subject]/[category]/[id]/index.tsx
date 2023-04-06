@@ -1,4 +1,4 @@
-import { Container, Title, Wrapper } from '@supercarmarket/ui';
+import { applyMediaQuery, Container, Title, Wrapper } from '@supercarmarket/ui';
 import type { NextPageWithLayout, Params } from '@supercarmarket/types/base';
 import layout from 'components/layout';
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
@@ -28,7 +28,9 @@ const CommunityPost: NextPageWithLayout = ({
         {({ reset }) => (
           <Wrapper
             css={css`
-              padding: 0 16px;
+              ${applyMediaQuery('mobile')} {
+                padding: 0 23.5px;
+              }
             `}
           >
             <ErrorBoundary
