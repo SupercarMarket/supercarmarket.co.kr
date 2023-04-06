@@ -1,7 +1,6 @@
+import { applyMediaQuery } from '@supercarmarket/ui';
 import { createGlobalStyle } from 'styled-components';
 import reset from 'styled-reset';
-
-import { applyMediaQuery } from './mediaQuery';
 
 const GlobalStyle = createGlobalStyle`
   ${reset}

@@ -1,6 +1,6 @@
-import DEVICE_LIST from 'constants/device';
+import { applyMediaQuery } from '@supercarmarket/ui';
+import DEVICE_LIST from '@supercarmarket/ui/styles/device';
 import styled, { css } from 'styled-components';
-import { applyMediaQuery } from 'styles/mediaQuery';
 
 const availableWidth = {
   wideDesktop: '1200px',
