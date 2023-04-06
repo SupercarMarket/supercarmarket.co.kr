@@ -4,8 +4,7 @@ import { useUrlQuery } from '@supercarmarket/hooks';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { css } from 'styled-components';
-import { applyMediaQuery } from 'styles/mediaQuery';
-import { theme } from '../../styles';
+import { applyMediaQuery, theme } from '../../styles';
 
 import { Button } from '../button';
 import { Container } from '../container';
