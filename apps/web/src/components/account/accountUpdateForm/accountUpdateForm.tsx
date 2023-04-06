@@ -172,10 +172,9 @@ const AccountUpdateForm = (props: AccountUpdateFormProps) => {
           display: flex;
           flex-direction: column;
           align-items: center;
-          padding-top: 60px;
           gap: 26px;
           ${applyMediaQuery('mobile')} {
-            width: 343px;
+            width: 328px;
             gap: 16px;
           }
         `}
