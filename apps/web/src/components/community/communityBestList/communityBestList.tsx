@@ -31,7 +31,7 @@ const CommunityBestList = () => {
           align-items: center;
           justify-content: center;
           ${applyMediaQuery('mobile')} {
-            height: 217px;
+            height: auto;
           }
         `}
       >
@@ -44,12 +44,17 @@ const CommunityBestList = () => {
               ${applyMediaQuery('mobile')} {
                 column-gap: 8px;
                 row-gap: 16px;
-                overflow-x: scroll;
+                grid-template-columns: 1fr 1fr;
               }
             `}
           >
             {data.data.map((value) => (
-              <CommunityCard key={value.id} variant="column" {...value} />
+              <CommunityCard
+                key={value.id}
+                variant="column"
+                {...value}
+                created={value.date}
+              />
             ))}
           </Wrapper.Item>
         ) : (

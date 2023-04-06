@@ -367,8 +367,20 @@ const CommunityCardRow = (props: CommunityCardChildrenProps) => {
 };
 
 const CommunityCardColumn = (props: CommunityCardChildrenProps) => {
-  const { id, imgSrc, base64, category, nickname, title, rate, comments } =
-    props;
+  const {
+    id,
+    imgSrc,
+    base64,
+    category,
+    nickname,
+    title,
+    rate,
+    comments,
+    created,
+    view,
+    like,
+  } = props;
+  const today = isToday(created);
 
   return (
     <Link
@@ -461,6 +473,81 @@ const CommunityCardColumn = (props: CommunityCardChildrenProps) => {
               ({comments})
             </Typography>
           </Typography>
+        </Wrapper>
+        <Wrapper
+          css={css`
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding-top: 10px;
+            svg {
+              width: 18px;
+              height: 18px;
+              fill: ${({ theme }) => theme.color['greyScale-5']};
+            }
+            ${applyMediaQuery('mobile')} {
+              padding-top: 2px;
+              gap: 4px;
+              svg {
+                width: 16px;
+                height: 16px;
+                fill: ${({ theme }) => theme.color['greyScale-5']};
+              }
+            }
+          `}
+        >
+          <Typography
+            as="span"
+            fontSize="body-14"
+            fontWeight="regular"
+            color="greyScale-5"
+          >
+            {today
+              ? dayjs(created).format('HH:mm')
+              : dayjs(created).format('YYYY-MM-DD')}
+          </Typography>
+          <Wrapper.Item
+            css={css`
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              gap: 4px;
+              ${applyMediaQuery('mobile')} {
+                gap: 2px;
+              }
+            `}
+          >
+            <ViewIcon />
+            <Typography
+              as="span"
+              fontSize="body-14"
+              fontWeight="regular"
+              color="greyScale-5"
+            >
+              {view}
+            </Typography>
+          </Wrapper.Item>
+          <Wrapper.Item
+            css={css`
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              gap: 4px;
+              ${applyMediaQuery('mobile')} {
+                gap: 2px;
+              }
+            `}
+          >
+            <LikeIcon />
+            <Typography
+              as="span"
+              fontSize="body-14"
+              fontWeight="regular"
+              color="greyScale-5"
+            >
+              {like}
+            </Typography>
+          </Wrapper.Item>
         </Wrapper>
       </Container>
     </Link>
