@@ -74,8 +74,8 @@ const MarketFilterPage: NextPageWithLayout = ({
             <Searchbar
               variant="Line"
               placeholder="원하는 차량을 검색하세요"
-              onKeyDown={keydownHandler}
               ref={keywordRef}
+              handleClick={keydownHandler}
             />
           </Wrapper.Item>
         </Wrapper>

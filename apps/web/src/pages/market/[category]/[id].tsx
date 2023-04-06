@@ -14,40 +14,23 @@ import {
 import layout from 'components/layout';
 import MarketContents from 'components/market/marketContents';
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-import { useRouter, useSearchParams } from 'next/navigation';
 import * as React from 'react';
 import { css } from 'styled-components';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from 'components/fallback';
 import { CATEGORY } from 'constants/market';
-import { makeQuery } from 'utils/market/marketQuery';
 import Advertisement from 'components/common/advertisement';
 import { prefetchMarketPost, QUERY_KEYS } from 'http/server/market';
 import { getSession } from 'http/server/next';
-import { useNextQuery } from 'hooks/useNextQuery';
+import { useSearchKeyword } from 'hooks/useSearchKeyword';
 
 const MarketDetailPage: NextPageWithLayout = ({
   id,
   category,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const { push } = useRouter();
-  const searchParams = useSearchParams();
-  const { query } = useNextQuery(searchParams);
-  const keywordRef = React.useRef<HTMLInputElement>(null);
-
-  const keydownHandler = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && keywordRef.current !== null) {
-      const queries = query as Params;
-
-      delete queries.id;
-      delete queries.category;
-      queries.keyword = keywordRef.current.value;
-
-      const queryString = makeQuery(queries);
-
-      push(`/market?category=all&${queryString}`);
-    }
-  };
+  const { keydownHandler, keywordRef } = useSearchKeyword({
+    domain: 'market',
+  });
 
   const listCategory = React.useMemo(() => {
     const foundCategory = CATEGORY.find(
@@ -111,8 +94,8 @@ const MarketDetailPage: NextPageWithLayout = ({
                   <Searchbar
                     variant="Line"
                     placeholder="검색어를 입력하세요"
-                    onKeyDown={keydownHandler}
                     ref={keywordRef}
+                    handleClick={keydownHandler}
                   />
                 </Wrapper>
               </Wrapper>

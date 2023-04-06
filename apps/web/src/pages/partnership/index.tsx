@@ -58,8 +58,8 @@ const PartnershipPage: NextPageWithLayout = ({
             width="100%"
             variant="Line"
             placeholder="원하시는 업체를 검색하세요"
-            onKeyDown={keydownHandler}
             ref={keywordRef}
+            handleClick={keydownHandler}
           />
         </Wrapper.Item>
       </Wrapper.Top>
