@@ -24,6 +24,13 @@ export const partnershipFormatter = (category: string) => {
   return 'ETC';
 };
 
+export const inquiryStatusFormatter = (status: number) => {
+  if (status === 0) return '대기중';
+  if (status === 1) return '처리 완료';
+  if (status === 2) return '답변 완료';
+  return '반려';
+};
+
 export const searchTypeFormatter = (
   searchType: string,
   options?: {
