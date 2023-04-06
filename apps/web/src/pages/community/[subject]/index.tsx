@@ -52,6 +52,7 @@ const CommunityCategory: NextPageWithLayout = () => {
                   gap: 27.5px;
                 `}
               >
+                <CommunityNavbar />
                 <Wrapper.Item
                   css={css`
                     width: 100%;
@@ -75,7 +76,6 @@ const CommunityCategory: NextPageWithLayout = () => {
                     }
                   />
                 </Wrapper.Item>
-                <CommunityNavbar />
               </Wrapper>
               <ErrorBoundary
                 onReset={reset}
