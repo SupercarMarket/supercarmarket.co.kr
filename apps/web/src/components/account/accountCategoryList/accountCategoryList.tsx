@@ -142,7 +142,9 @@ const AccountCategoryList = React.memo(function AccountCategory({
   const session = useSession();
   const queryClient = useQueryClient();
   const isDeleteTarget =
-    isMyAccountPage && (tab === 'community' || profile.role === 'dealer');
+    isMyAccountPage &&
+    (tab === 'community' ||
+      (profile.role === 'dealer' && tab === 'dealer-product'));
   const { data, isLoading, isFetching, refetch } = useAccountCategory(
     sub,
     {
