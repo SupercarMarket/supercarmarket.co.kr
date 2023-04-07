@@ -1,9 +1,9 @@
 import { applyMediaQuery, Container, Title, Wrapper } from '@supercarmarket/ui';
 import { PhoneForm } from 'components/auth';
-import AuthLayout from 'components/layout/authLayout';
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import type { NextPageWithLayout, Params } from '@supercarmarket/types/base';
 import { css } from 'styled-components';
+import Layout from 'components/layout/layout';
 
 const Phone: NextPageWithLayout = ({
   uuid,
@@ -32,7 +32,7 @@ const Phone: NextPageWithLayout = ({
   );
 };
 
-Phone.Layout = AuthLayout;
+Phone.Layout = Layout;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { uuid } = ctx.query as Params;

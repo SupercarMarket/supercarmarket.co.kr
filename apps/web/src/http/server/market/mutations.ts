@@ -19,28 +19,19 @@ export const useLikeMarketPost = (id: string, options = {}) => {
   });
 };
 
-export const useUpdateMarketSellStatus = (id: string, options = {}) => {
-  const queryClient = useQueryClient();
-
+export const useUpdateMarketSellStatus = (options = {}) => {
   return useMutation({
     mutationFn: ({ data }: { data: { brdSeq: number } }) =>
       updateMarketSellStatus({ data: { seq: data.brdSeq } }),
-    onSuccess: () => {
-      queryClient.invalidateQueries(QUERY_KEYS.id(id));
-    },
     useErrorBoundary: true,
     ...options,
   });
 };
 
-export const useDeleteMarketPost = (id: string, options = {}) => {
-  const queryClient = useQueryClient();
+export const useDeleteMarketPost = (options = {}) => {
   return useMutation({
     mutationFn: ({ data }: { data: { id: string }[] }) =>
       deleteMarketPost({ data }),
-    onSuccess: () => {
-      queryClient.invalidateQueries(QUERY_KEYS.id(id));
-    },
     useErrorBoundary: true,
     ...options,
   });

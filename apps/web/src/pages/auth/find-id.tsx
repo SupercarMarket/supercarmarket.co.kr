@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { applyMediaQuery, Container, Title, Wrapper } from '@supercarmarket/ui';
 import type { NextPageWithLayout } from '@supercarmarket/types/base';
-import AuthLayout from 'components/layout/authLayout';
 import { FindIdForm } from 'components/auth';
 import { css } from 'styled-components';
+import Layout from 'components/layout';
 
 const FindPassword: NextPageWithLayout = () => {
   return (
@@ -30,6 +30,6 @@ const FindPassword: NextPageWithLayout = () => {
   );
 };
 
-FindPassword.Layout = AuthLayout;
+FindPassword.Layout = Layout;
 
 export default FindPassword;
