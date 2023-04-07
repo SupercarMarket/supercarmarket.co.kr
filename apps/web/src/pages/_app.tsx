@@ -18,8 +18,9 @@ import localFont from '@next/font/local';
 import { DeviceProvider } from 'feature/DeviceProvider';
 import Head from 'next/head';
 
-interface PageProps {
+export interface PageProps {
   $ua: {
+    pathname: string;
     userAgent?: string;
     hints?: {
       isMobile: boolean;
@@ -119,10 +120,12 @@ function MyApp({
 MyApp.getInitialProps = async (appContext: AppContext) => {
   const appProps = await NextAppBase.getInitialProps(appContext);
   const headers = appContext.ctx.req?.headers;
+  const pathname = appContext.router.pathname;
   const prevPageProps = (appProps.pageProps as PageProps) ?? {};
   const nextPageProps = {
     ...prevPageProps,
     $ua: {
+      pathname,
       userAgent: headers?.['user-agent'],
       hints: {
         isMobile: headers?.['sec-ch-ua-mobile']?.includes('1'),
