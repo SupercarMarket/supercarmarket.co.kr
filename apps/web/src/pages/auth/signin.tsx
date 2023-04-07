@@ -1,8 +1,8 @@
 import { applyMediaQuery, Container, Title, Wrapper } from '@supercarmarket/ui';
 import type { NextPageWithLayout } from '@supercarmarket/types/base';
 import { SigninForm } from 'components/auth';
-import AuthLayout from 'components/layout/authLayout';
 import { css } from 'styled-components';
+import Layout from 'components/layout/layout';
 
 const Signin: NextPageWithLayout = () => {
   return (
@@ -29,6 +29,6 @@ const Signin: NextPageWithLayout = () => {
   );
 };
 
-Signin.Layout = AuthLayout;
+Signin.Layout = Layout;
 
 export default Signin;
