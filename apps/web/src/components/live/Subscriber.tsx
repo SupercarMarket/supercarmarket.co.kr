@@ -30,10 +30,12 @@ function Subscriber(props: Props) {
 
         var video = document.getElementById('Streaming') as HTMLVideoElement;
 
-        newSession.on('streamCreated', (event) => {
-          // setStrimManager(event.stream.streamManager);
-          newSession.subscribe(event.stream, undefined);
-          event.stream.streamManager.addVideoElement(video);
+        newSession.on('connectionCreated', (event) => {
+          if (event.connection.stream) {
+            newSession.subscribe(event.connection.stream, video);
+            console.log(event.connection.stream.streamManager);
+            event.connection.stream.streamManager.addVideoElement(video);
+          }
         });
       });
     };
@@ -72,7 +74,12 @@ function Subscriber(props: Props) {
   return (
     <div style={{ width: '880px' }}>
       <div style={{ height: '495px' }}>
-        <video autoPlay id="Streaming" />
+        <video
+          autoPlay
+          id="Streaming"
+          style={{ width: '100%', height: '100%' }}
+          controls
+        />
       </div>
     </div>
   );

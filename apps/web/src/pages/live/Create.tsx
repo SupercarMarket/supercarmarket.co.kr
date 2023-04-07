@@ -121,7 +121,6 @@ const Create = (props: Props) => {
   };
 
   useEffect(() => {
-    console.log(broadcastData);
     if (broadcastData.isPrivate) {
       (passwordRef.current as HTMLInputElement).style.display = 'block';
     } else {
@@ -273,7 +272,6 @@ const Create = (props: Props) => {
                 display: 'flex',
                 marginBottom: '10px',
                 alignItems: 'center',
-                height: '45px',
               }}
             >
               <img src={filePath ?? ''} alt="" />

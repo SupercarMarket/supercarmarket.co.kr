@@ -1,0 +1,229 @@
+import React, { useEffect, useRef, useState } from 'react';
+import liveCss from 'public/css/live.module.css';
+import { Client, StompSubscription } from '@stomp/stompjs';
+import { Button } from '@supercarmarket/ui';
+import { getSession } from 'next-auth/react';
+
+interface Props {
+  data: channelResType | null | undefined;
+}
+
+interface channelResType {
+  broadCastSeq: number;
+  isMine: boolean;
+  sessionId: string;
+  tags: string[];
+  title: string;
+  userCount: number;
+  userName: string;
+  userSeq: number;
+}
+
+interface messageType {
+  type: string;
+  sender: string;
+  channelid: string;
+  data: string;
+}
+
+function ChatInfo(props: Props) {
+  const {} = props;
+  const [chats, setChats] = useState<messageType[]>([]);
+  const [stomp, setStomp] = useState<Client>();
+  const [subscribes, setSubscribes] = useState<StompSubscription>();
+  const [testName, setTestName] = useState(`test_${Math.random()}`);
+
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  const chatWrapRef = useRef<HTMLDivElement>(null);
+
+  const joinChat = async () => {
+    const session = await getSession();
+
+    if (!session?.accessToken) throw 'require logged in';
+
+    const client = new Client({
+      brokerURL: `wss://back.doyup.shop/ws`,
+      connectHeaders: {
+        ACCESS_TOKEN: `${session.accessToken}`,
+      },
+      debug: function (str) {
+        console.log(str);
+      },
+      reconnectDelay: 5000,
+      heartbeatIncoming: 4000,
+      heartbeatOutgoing: 4000,
+    });
+
+    setStomp(client);
+
+    client.onConnect = function (frame) {
+      const subscribe = client.subscribe(
+        `/sub/${props.data?.sessionId}`,
+        (frame) => {
+          console.log(frame.body);
+          const getMessage = JSON.parse(frame.body);
+          setChats((prevState: messageType[]) => {
+            return prevState.concat([getMessage]);
+          });
+        }
+      );
+
+      setSubscribes(subscribe);
+
+      client.publish({
+        destination: `/sub/${props.data?.sessionId}`,
+        body: `{
+          "type": "ENTER",
+          "sender": "${testName}",
+          "channelid": "${props.data?.sessionId}",
+          "data": "'${testName}' 님이 접속하셨습니다."
+        }`,
+      });
+    };
+
+    client.onStompError = function (frame) {
+      console.log('Broker reported error: ' + frame.headers['message']);
+      console.log('Additional details: ' + frame.body);
+    };
+
+    client.activate();
+  };
+
+  const sendChat = () => {
+    stomp?.publish({
+      destination: `/sub/${props.data?.sessionId}`,
+      body: `{
+        "type": "TALK",
+        "sender": "${testName}",
+        "channelid": "${props.data?.sessionId}",
+        "data": "${textAreaRef.current?.value ?? ''}"
+      }`,
+    });
+    setTimeout(() => {
+      if (chatWrapRef.current) {
+        chatWrapRef.current.scrollTop = chatWrapRef.current.scrollHeight;
+      }
+    }, 100);
+  };
+
+  useEffect(() => {
+    joinChat();
+    return () => {
+      if (stomp) {
+        stomp.deactivate();
+        console.log('test');
+      }
+    };
+  }, []);
+  return (
+    <div
+      style={{
+        marginLeft: '16px',
+        width: '304px',
+      }}
+    >
+      <div
+        style={{
+          height: '500px',
+          overflowY: 'auto',
+        }}
+        ref={chatWrapRef}
+      >
+        {chats.map((data, idx) => {
+          if (data.type === 'ENTER') {
+            return (
+              <InitUserChat chat={data.data} key={`InitUserChat_${idx}`} />
+            );
+          }
+          if (data.sender === testName) {
+            return <MyChat chat={data.data} key={`MyChat_${idx}`} />;
+          }
+          return (
+            <UserChat
+              nickname={data.sender}
+              chat={data.data}
+              key={`UserChat_${idx}`}
+            />
+          );
+        })}
+      </div>
+      <div
+        style={{
+          padding: '12px 16px',
+          border: '1px solid #C3C3C7',
+          display: 'flex',
+          borderRadius: '4px',
+          height: '97px',
+          alignItems: 'flex-end',
+        }}
+      >
+        <textarea
+          placeholder="채팅을 남겨보세요"
+          className={liveCss.chatTextarea}
+          maxLength={100}
+          ref={textAreaRef}
+        />
+        <Button
+          style={{
+            width: '72px',
+            height: '38px',
+          }}
+          onClick={sendChat}
+        >
+          등록
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+const UserChat = ({ nickname, chat }: { nickname: string; chat: string }) => {
+  return (
+    <div
+      style={{
+        backgroundColor: '#F7F7F8',
+        borderRadius: '4px 16px 16px 16px',
+        padding: '12px 16px',
+        gap: '8px',
+        marginBottom: '10px',
+      }}
+    >
+      <span style={{ fontSize: '14px', lineHeight: '150%' }}>{nickname}</span>{' '}
+      {chat}
+    </div>
+  );
+};
+
+const MyChat = ({ chat }: { chat: string }) => {
+  return (
+    <div
+      style={{
+        backgroundColor: '#EBE6DE',
+        borderRadius: '16px 4px 16px 16px',
+        padding: '12px 16px',
+        gap: '8px',
+        marginBottom: '10px',
+      }}
+    >
+      {chat}
+    </div>
+  );
+};
+
+const InitUserChat = ({ chat }: { chat: string }) => {
+  return (
+    <div
+      style={{
+        borderRadius: '16px 4px 16px 16px',
+        padding: '12px 16px',
+        gap: '8px',
+        marginBottom: '10px',
+        fontSize: '14px',
+      }}
+    >
+      {chat}
+    </div>
+  );
+};
+
+export default ChatInfo;

@@ -15,6 +15,7 @@ import Subscriber from 'components/live/Subscriber';
 import { authRequest } from 'http/core';
 import SubscriberIcon from 'public/images/live/icons/SubscriberIcon.svg';
 import VolumeIcon from 'public/images/live/icons/VolumeIcon.svg';
+import ChatInfo from 'components/live/ChatInfo';
 
 interface Props {}
 
@@ -46,7 +47,12 @@ const Channel = (props: Props) => {
     <Container>
       <Layout>
         <div style={{ display: 'flex', marginTop: '10px' }}>
-          <LiveInfo data={channelData} />
+          {channelData && (
+            <>
+              <LiveInfo data={channelData} />
+              <ChatInfo data={channelData} />
+            </>
+          )}
         </div>
       </Layout>
     </Container>
@@ -71,12 +77,15 @@ const LiveInfo = ({ data }: { data: channelResType | null | undefined }) => {
 
   return (
     <div style={{ width: '880px' }}>
-      {data &&
-        (data.isMine ? (
+      {data ? (
+        data.isMine ? (
           <Publisher sessionId={data.sessionId as string} volume={volume} />
         ) : (
           <Subscriber sessionId={data.sessionId as string} volume={volume} />
-        ))}
+        )
+      ) : (
+        <div style={{ backgroundColor: '#000000', height: '495px' }} />
+      )}
       <div>
         <div
           style={{
@@ -88,7 +97,7 @@ const LiveInfo = ({ data }: { data: channelResType | null | undefined }) => {
           <p style={publisherStyle}>{data?.userName}</p>
           <div style={{ color: '#725B30', display: 'flex' }}>
             <SubscriberIcon />
-            <p style={subscriberStyle}>{data?.userCount}</p>
+            <p style={subscriberStyle}>{data?.userCount || 0}</p>
           </div>
         </div>
         <div>
