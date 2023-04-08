@@ -18,7 +18,7 @@ import { PostingHeadCommunity, PostingHeadMagainze } from './components';
 import LikeIcon from '../../../assets/svg/thumb-up.svg';
 import HeadSeo from '../headSeo/headSeo';
 import { useQueryClient } from '@tanstack/react-query';
-import { MagazineScrape } from 'components/magazine';
+import { MagazineDealer, MagazineScrape } from 'components/magazine';
 import {
   QUERY_KEYS,
   useCommunityPost,
@@ -110,6 +110,10 @@ const MagazinePosting = ({ postId }: Omit<PostingProps, 'type'>) => {
             </Wrapper>
           </Container>
           <MagazineScrape postId={postId} isScraped={magazinePost.isScraped} />
+          <MagazineDealer
+            postId={postId}
+            isCounseling={magazinePost.data.isCounseling}
+          />
         </>
       )}
     </>
