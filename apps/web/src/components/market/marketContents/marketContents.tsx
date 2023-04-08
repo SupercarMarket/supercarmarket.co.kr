@@ -1,4 +1,10 @@
-import { Container, Divider, Table, Wrapper } from '@supercarmarket/ui';
+import {
+  applyMediaQuery,
+  Container,
+  Divider,
+  Table,
+  Wrapper,
+} from '@supercarmarket/ui';
 import * as React from 'react';
 import { css } from 'styled-components';
 
@@ -55,6 +61,23 @@ const MarketContents = (props: MarketContentsProps) => {
                   margin-bottom: 20px;
                 `}
               >
+                <Wrapper
+                  css={css`
+                    display: none;
+                    ${applyMediaQuery('mobile')} {
+                      display: block;
+                      width: 100vw;
+                      margin-left: calc(-50vw + 50%);
+                    }
+                  `}
+                >
+                  <Divider
+                    width="100%"
+                    height="8px"
+                    color="#F7F7F8"
+                    borderTop="1px solid #EAEAEC"
+                  />
+                </Wrapper>
                 <Table tab="product" hidden={false} />
                 {market.carList.map((m) => (
                   <React.Fragment key={m.id}>
