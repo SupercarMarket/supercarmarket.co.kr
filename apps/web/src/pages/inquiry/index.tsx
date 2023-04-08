@@ -3,14 +3,12 @@ import type { NextPageWithLayout } from '@supercarmarket/types/base';
 import { InquiryNavbar } from 'components/inquiry';
 import Layout from 'components/layout/layout';
 import { css } from 'styled-components';
-import Advertisement from 'components/common/advertisement';
 import { links } from 'constants/link/inquiry';
 import { ModalProvider } from 'feature/ModalProvider';
 
 const Inquiry: NextPageWithLayout = () => {
   return (
     <Container>
-      <Advertisement />
       <Wrapper
         css={css`
           display: flex;

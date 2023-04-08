@@ -15,7 +15,6 @@ import type { ParsedUrlQuery } from 'querystring';
 import * as React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { css } from 'styled-components';
-import Advertisement from 'components/common/advertisement';
 import { prefetchMagazinePost, QUERY_KEYS } from 'http/server/magazine';
 import { getSession } from 'http/server/next';
 import { ModalProvider } from 'feature/ModalProvider';
@@ -34,7 +33,6 @@ const MagazinePost: NextPageWithLayout = ({
   return (
     <ModalProvider>
       <Container>
-        <Advertisement />
         <QueryErrorResetBoundary>
           {({ reset }) => (
             <Wrapper

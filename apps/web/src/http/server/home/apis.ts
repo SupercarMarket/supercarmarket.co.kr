@@ -34,6 +34,21 @@ export const getBanner = async (type: 'D' | 'M' = 'D') => {
   });
 };
 
+export const getAdvertisement = async ({
+  type = 'D',
+  code,
+}: {
+  code: string;
+  type: 'D' | 'M';
+}) => {
+  return get('/server/supercar/v1/ad', {
+    query: {
+      page: code,
+      type,
+    },
+  });
+};
+
 export const prefetchHome = async (
   category: 'market' | 'magazine' | 'best' | 'new' | 'community' | 'partnership'
 ) => {

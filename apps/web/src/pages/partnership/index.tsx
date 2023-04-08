@@ -19,7 +19,6 @@ import { ErrorFallback } from 'components/fallback';
 import { useSearchKeyword } from 'hooks/useSearchKeyword';
 import PartnershipList from 'components/partnership/partnershipList';
 import PartnershipCategory from 'components/partnership/partnershipCategory';
-import Advertisement from 'components/common/advertisement';
 import { prefetchPartnership, QUERY_KEYS } from 'http/server/partnership';
 import { links } from 'constants/link/partnership';
 
@@ -32,7 +31,6 @@ const PartnershipPage: NextPageWithLayout = ({
 
   return (
     <Container>
-      <Advertisement />
       <Announcement
         title="제휴업체 등록을 원하시나요?"
         btnTitle="등록 문의하기"

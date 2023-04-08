@@ -116,8 +116,13 @@ const LocalFormItem = () => {
 };
 
 const OauthFormItem = () => {
-  const handleOauthLogin = (provider: string) => {
-    signIn(provider);
+  const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
+  const { replace } = useRouter();
+
+  const handleOauthLogin = async (provider: string) => {
+    await signIn(provider).then(() => {
+      replace('/');
+    });
   };
 
   return (
@@ -144,6 +149,7 @@ const OauthFormItem = () => {
           </Wrapper>
         </Button>
       ))}
+      {errorMessage && <Alert title={errorMessage} severity="error" />}
     </Container>
   );
 };

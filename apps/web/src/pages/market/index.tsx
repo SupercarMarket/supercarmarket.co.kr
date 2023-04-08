@@ -22,7 +22,6 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { useSearchKeyword } from 'hooks/useSearchKeyword';
 import { css } from 'styled-components';
 import HeadSeo from 'components/common/headSeo';
-import Advertisement from 'components/common/advertisement';
 import { prefetchMarket, QUERY_KEYS } from 'http/server/market';
 import { linsk } from 'constants/link/market';
 import Announcement from 'components/common/announcement';
@@ -42,7 +41,6 @@ const MarketFilterPage: NextPageWithLayout = ({
           CATEGORY.find((value) => value.value === category)?.option ?? ''
         }에 대한 매물`}
       />
-      <Advertisement />
       <Container display="flex" flexDirection="column" margin="20px 0 0 0">
         <Wrapper>
           <Announcement

@@ -7,4 +7,5 @@ export const QUERY_KEYS = {
   new: () => [...QUERY_KEYS.all, 'new'] as const,
   best: () => [...QUERY_KEYS.all, 'best'] as const,
   banner: () => [...QUERY_KEYS.all, 'banner'] as const,
+  advertisement: () => [...QUERY_KEYS.all, 'advertisement'] as const,
 };

@@ -19,7 +19,6 @@ import { css } from 'styled-components';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from 'components/fallback';
 import { CATEGORY } from 'constants/market';
-import Advertisement from 'components/common/advertisement';
 import { prefetchMarketPost, QUERY_KEYS } from 'http/server/market';
 import { getSession } from 'http/server/next';
 import { useSearchKeyword } from 'hooks/useSearchKeyword';
@@ -41,7 +40,6 @@ const MarketDetailPage: NextPageWithLayout = ({
 
   return (
     <Container>
-      <Advertisement />
       <Wrapper
         css={css`
           width: 1200px;

@@ -11,9 +11,6 @@ import * as React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import HeadSeo from 'components/common/headSeo';
 import { APP_NAME } from 'constants/core';
-import { css } from 'styled-components';
-import Advertisement from 'components/common/advertisement';
-import Banner from 'components/home/banner';
 import { isMobile } from 'utils/misc';
 import Partnership from 'components/home/partnership';
 
@@ -30,20 +27,6 @@ const Home: NextPageWithLayout = ({
         <QueryErrorResetBoundary>
           {({ reset }) => (
             <Wrapper>
-              <ErrorBoundary
-                onReset={reset}
-                fallbackRender={(props) => <ErrorFallback {...props} />}
-              >
-                <Wrapper.Item
-                  css={css`
-                    width: 100vw;
-                    margin-left: calc(-50vw + 50%);
-                  `}
-                >
-                  <Banner isMobile={isMobile} />
-                </Wrapper.Item>
-              </ErrorBoundary>
-              <Advertisement hidden />
               <Title marginBottom={marginBottom}>슈마매거진</Title>
               <ErrorBoundary
                 onReset={reset}

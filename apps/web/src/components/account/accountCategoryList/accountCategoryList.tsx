@@ -28,6 +28,10 @@ import { QUERY_KEYS, useAccountCategory } from 'http/server/account';
 import { useDebounce } from '@supercarmarket/hooks';
 import { type AccountCategory } from 'constants/link/account';
 import { type Profile } from '@supercarmarket/types/account';
+import {
+  useDeleteMarketPost,
+  useUpdateMarketSellStatus,
+} from 'http/server/market';
 
 interface AccountCategoryProps {
   sub: string;
@@ -171,6 +175,34 @@ const AccountCategoryList = React.memo(function AccountCategory({
       });
     },
   });
+  const removeSaleMutation = useDeleteMarketPost({
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [
+          ...QUERY_KEYS.id(sub),
+          {
+            category: tab,
+            page: 0,
+            size: 20,
+          },
+        ],
+      });
+    },
+  });
+  const updaeSaleMutation = useUpdateMarketSellStatus({
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [
+          ...QUERY_KEYS.id(sub),
+          {
+            category: tab,
+            page: 0,
+            size: 20,
+          },
+        ],
+      });
+    },
+  });
 
   const handleCheckbox = React.useCallback(() => {
     setAllChecked((prev) => !prev);
@@ -186,6 +218,23 @@ const AccountCategoryList = React.memo(function AccountCategory({
       removeCategoryMutation.mutate({
         data: deleteList,
       });
+    }
+    if (tab === 'dealer-product') {
+      removeSaleMutation.mutate({
+        data: deleteList.map((l) => ({ id: l.id })),
+      });
+    }
+
+    refetch();
+  }, 300);
+
+  const debouncedUpdate = useDebounce(async () => {
+    if (!isDeleteTarget) return;
+    if (!session) return;
+
+    if (!deleteList.length) return;
+
+    if (tab === 'community') {
     }
 
     refetch();
@@ -223,6 +272,21 @@ const AccountCategoryList = React.memo(function AccountCategory({
               }}
             >
               삭제
+            </Button>
+          )}
+          {isDeleteTarget && tab === 'dealer-product' && (
+            <Button
+              type="button"
+              variant="Primary-Line"
+              width="92px"
+              disabled={removeCategoryMutation.isLoading}
+              onClick={debouncedUpdate}
+              style={{
+                padding: 0,
+                height: '44px',
+              }}
+            >
+              판매 완료
             </Button>
           )}
         </Wrapper.Item>

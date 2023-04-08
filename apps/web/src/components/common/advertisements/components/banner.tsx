@@ -98,7 +98,11 @@ const BannerDot = (props: BannerDotProps) => {
 const Banner = ({ isMobile }: BannerProps) => {
   const [index, setIndex] = React.useState(0);
   const { data, isLoading, isFetching, refetch } = useBanner(
-    isMobile ? 'M' : 'D'
+    isMobile ? 'M' : 'D',
+    {
+      staleTime: 1000 * 60,
+      cacheTime: 1000 * 60,
+    }
   );
   const handleIndex = React.useCallback(() => {
     const maxLength = data?.data.length;
