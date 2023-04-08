@@ -7,7 +7,6 @@ import { QueryErrorResetBoundary } from '@tanstack/react-query';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from 'components/fallback';
 import { css } from 'styled-components';
-import Advertisement from 'components/common/advertisement';
 import { prefetchTemporaryStorage } from 'http/server/community';
 import { getSession } from 'http/server/next';
 import { ModalProvider } from 'feature/ModalProvider';
@@ -26,7 +25,6 @@ const Create: NextPageWithLayout = ({
               gap: 20px;
             `}
           >
-            <Advertisement />
             <Title>게시글 작성</Title>
             <ErrorBoundary
               onReset={reset}

@@ -4,14 +4,29 @@ import {
   Typography,
   Wrapper,
 } from '@supercarmarket/ui';
+import { useAdvertisement } from 'http/server/home';
+import Skeleton from 'react-loading-skeleton';
 import { css } from 'styled-components';
 
 interface AdvertisementProps {
+  code: string;
   hidden?: boolean;
+  isMobile?: boolean;
 }
 
 const Advertisement = (props: AdvertisementProps) => {
-  const { hidden = false } = props;
+  const { code, isMobile, hidden = false } = props;
+  const { data, isLoading, isFetching } = useAdvertisement(
+    {
+      type: isMobile ? 'M' : 'D',
+      code,
+    },
+    {
+      staleTime: 1000 * 60,
+      cacheTime: 1000 * 60,
+    }
+  );
+
   return (
     <Container position="relative">
       {!hidden && (
@@ -28,6 +43,10 @@ const Advertisement = (props: AdvertisementProps) => {
               justify-content: center;
               background-color: ${({ theme }) => theme.color['greyScale-3']};
             }
+            .react-loading-skeleton {
+              width: 100%;
+              height: 180px;
+            }
             ${applyMediaQuery('mobile')} {
               margin-top: 0;
               margin-bottom: 32px;
@@ -36,18 +55,28 @@ const Advertisement = (props: AdvertisementProps) => {
                 margin-left: calc(-50vw + 50%);
                 height: 100px;
               }
+              .react-loading-skeleton {
+                width: 100vw;
+                margin-left: calc(-50vw + 50%);
+                height: 100px;
+                height: 180px;
+              }
             }
           `}
         >
-          <div>
-            <Typography
-              fontSize="body-20"
-              fontWeight="regular"
-              color="greyScale-6"
-            >
-              광고 배너
-            </Typography>
-          </div>
+          {isFetching || isLoading ? (
+            <Skeleton />
+          ) : (
+            <div>
+              <Typography
+                fontSize="body-20"
+                fontWeight="regular"
+                color="greyScale-6"
+              >
+                광고 배너
+              </Typography>
+            </div>
+          )}
         </Wrapper.Item>
       )}
       <Wrapper.Left
@@ -62,12 +91,19 @@ const Advertisement = (props: AdvertisementProps) => {
             height: 100%;
             background-color: ${({ theme }) => theme.color['greyScale-3']};
           }
+          .react-loading-skeleton {
+            width: 100%;
+            height: 100%;
+          }
           ${applyMediaQuery('mobile')} {
             display: none;
+            .react-loading-skeleton {
+              display: none;
+            }
           }
         `}
       >
-        <div />
+        {isFetching || isLoading ? <Skeleton /> : <div />}
       </Wrapper.Left>
       <Wrapper.Right
         css={css`
@@ -81,8 +117,15 @@ const Advertisement = (props: AdvertisementProps) => {
             height: 100%;
             background-color: ${({ theme }) => theme.color['greyScale-3']};
           }
+          .react-loading-skeleton {
+            width: 100%;
+            height: 100%;
+          }
           ${applyMediaQuery('mobile')} {
             display: none;
+            .react-loading-skeleton {
+              display: none;
+            }
           }
         `}
       >

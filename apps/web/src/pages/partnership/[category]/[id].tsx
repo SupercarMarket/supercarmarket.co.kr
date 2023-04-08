@@ -17,7 +17,6 @@ import Layout from 'components/layout';
 import { ErrorFallback } from 'components/fallback';
 import { useSearchKeyword } from 'hooks/useSearchKeyword';
 import PartnershipContents from 'components/partnership/partnershipContents';
-import Advertisement from 'components/common/advertisement';
 import { prefetchPartnershipPost, QUERY_KEYS } from 'http/server/partnership';
 
 const PartnershipDetailPage: NextPageWithLayout = ({
@@ -30,7 +29,6 @@ const PartnershipDetailPage: NextPageWithLayout = ({
 
   return (
     <Container>
-      <Advertisement />
       <Wrapper
         css={css`
           width: 1200px;

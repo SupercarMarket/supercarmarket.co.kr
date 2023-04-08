@@ -1,4 +1,4 @@
-import { applyMediaQuery, Container, Title, Wrapper } from '@supercarmarket/ui';
+import { Container, Title, Wrapper } from '@supercarmarket/ui';
 import type { NextPageWithLayout, Params } from '@supercarmarket/types/base';
 import layout from 'components/layout';
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
@@ -11,7 +11,6 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from 'components/fallback';
 import Posting from 'components/common/posting';
 import { CommunityPostingList } from 'components/community';
-import Advertisement from 'components/common/advertisement';
 import { prefetchCommunityPost, QUERY_KEYS } from 'http/server/community';
 import { getSession } from 'http/server/next';
 import { ModalProvider } from 'feature/ModalProvider';
@@ -32,7 +31,6 @@ const CommunityPost: NextPageWithLayout = ({
                 <ErrorFallback margin="100px 0" {...props} />
               )}
             >
-              <Advertisement />
               <Title>커뮤니티 게시글</Title>
               <ModalProvider>
                 <Posting
