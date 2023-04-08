@@ -1,3 +1,4 @@
+import { createExternalLink } from '@supercarmarket/lib';
 import {
   applyMediaQuery,
   Container,
@@ -5,6 +6,7 @@ import {
   Wrapper,
 } from '@supercarmarket/ui';
 import { useAdvertisement } from 'http/server/home';
+import Image from 'next/image';
 import Skeleton from 'react-loading-skeleton';
 import { css } from 'styled-components';
 
@@ -16,7 +18,11 @@ interface AdvertisementProps {
 
 const Advertisement = (props: AdvertisementProps) => {
   const { code, isMobile, hidden = false } = props;
-  const { data, isLoading, isFetching } = useAdvertisement(
+  const {
+    data: ad,
+    isLoading,
+    isFetching,
+  } = useAdvertisement(
     {
       type: isMobile ? 'M' : 'D',
       code,
@@ -66,16 +72,18 @@ const Advertisement = (props: AdvertisementProps) => {
         >
           {isFetching || isLoading ? (
             <Skeleton />
+          ) : ad ? (
+            <a
+              href={createExternalLink(ad.data[0].url)}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <div>
+                <Image src={ad.data[0].imageUrl} alt="ad_m" fill />
+              </div>
+            </a>
           ) : (
-            <div>
-              <Typography
-                fontSize="body-20"
-                fontWeight="regular"
-                color="greyScale-6"
-              >
-                광고 배너
-              </Typography>
-            </div>
+            <Skeleton />
           )}
         </Wrapper.Item>
       )}
@@ -103,7 +111,21 @@ const Advertisement = (props: AdvertisementProps) => {
           }
         `}
       >
-        {isFetching || isLoading ? <Skeleton /> : <div />}
+        {isFetching || isLoading ? (
+          <Skeleton />
+        ) : ad ? (
+          <a
+            href={createExternalLink(ad.data[2].url)}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <div>
+              <Image src={ad.data[2].imageUrl} alt="ad_l" fill />
+            </div>
+          </a>
+        ) : (
+          <Skeleton />
+        )}
       </Wrapper.Left>
       <Wrapper.Right
         css={css`
@@ -129,7 +151,21 @@ const Advertisement = (props: AdvertisementProps) => {
           }
         `}
       >
-        <div />
+        {isFetching || isLoading ? (
+          <Skeleton />
+        ) : ad ? (
+          <a
+            href={createExternalLink(ad.data[1].url)}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <div>
+              <Image src={ad.data[1].imageUrl} alt="ad_r" fill />
+            </div>
+          </a>
+        ) : (
+          <Skeleton />
+        )}
       </Wrapper.Right>
     </Container>
   );

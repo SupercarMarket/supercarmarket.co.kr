@@ -41,7 +41,7 @@ export const getAdvertisement = async ({
   code: string;
   type: 'D' | 'M';
 }) => {
-  return get('/server/supercar/v1/main/ad', {
+  return get('/server/supercar/v1/ad', {
     query: {
       page: code,
       type,
