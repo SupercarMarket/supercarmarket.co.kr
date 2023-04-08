@@ -3,6 +3,7 @@ import {
   AttachedFile,
   Button,
   Container,
+  Divider,
   Tab,
   theme,
   Typography,
@@ -18,7 +19,7 @@ import { PostingHeadCommunity, PostingHeadMagainze } from './components';
 import LikeIcon from '../../../assets/svg/thumb-up.svg';
 import HeadSeo from '../headSeo/headSeo';
 import { useQueryClient } from '@tanstack/react-query';
-import { MagazineScrape } from 'components/magazine';
+import { MagazineDealer, MagazineScrape } from 'components/magazine';
 import {
   QUERY_KEYS,
   useCommunityPost,
@@ -110,6 +111,10 @@ const MagazinePosting = ({ postId }: Omit<PostingProps, 'type'>) => {
             </Wrapper>
           </Container>
           <MagazineScrape postId={postId} isScraped={magazinePost.isScraped} />
+          <MagazineDealer
+            postId={postId}
+            isCounseling={magazinePost.data.isCounseling}
+          />
         </>
       )}
     </>
@@ -340,6 +345,9 @@ const CommunityPosting = ({
                   justify-content: space-between;
                   margin-top: 20px;
                   margin-bottom: 80px;
+                  ${applyMediaQuery('mobile')} {
+                    margin-bottom: 32px;
+                  }
                 `}
               >
                 <Tab
@@ -358,6 +366,24 @@ const CommunityPosting = ({
                     communityPost.data.isMyPost ? handleRemove : undefined
                   }
                   scroll
+                />
+              </Wrapper>
+              <Wrapper
+                css={css`
+                  display: none;
+                  ${applyMediaQuery('mobile')} {
+                    display: block;
+                    width: 100vw;
+                    margin-left: calc(-50vw + 50%);
+                    margin-bottom: 40px;
+                  }
+                `}
+              >
+                <Divider
+                  width="100%"
+                  height="8px"
+                  color="#F7F7F8"
+                  borderTop="1px solid #EAEAEC"
                 />
               </Wrapper>
             </>

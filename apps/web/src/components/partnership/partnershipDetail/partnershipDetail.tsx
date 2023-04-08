@@ -21,6 +21,9 @@ const PartnershipDetail = ({ id }: Props) => {
     <Wrapper
       css={css`
         margin-bottom: 80px;
+        ${applyMediaQuery('mobile')} {
+          margin-bottom: 32px;
+        }
       `}
     >
       {partnerships && (

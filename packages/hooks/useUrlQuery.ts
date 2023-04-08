@@ -4,6 +4,7 @@ export default function useUrlQuery() {
   const searchParams = useSearchParams();
 
   const page = searchParams.get('page');
+  const comment = searchParams.get('comment');
   const orderBy = searchParams.get('orderBy');
   const filter = searchParams.get('filter');
   const category = searchParams.get('category');
@@ -24,6 +25,7 @@ export default function useUrlQuery() {
 
   return {
     page: page ? parseInt(page) : 0,
+    comment: comment ? parseInt(comment) : 0,
     orderBy: orderBy ?? 'DESC',
     filter: filter ?? 'created_date',
     category: category ?? 'all',

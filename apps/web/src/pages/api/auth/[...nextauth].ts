@@ -205,25 +205,13 @@ const callbacks: Partial<CallbacksOptions<Profile, Account>> | undefined = {
     | Callback : Sign In
     |--------------------------------------------------------------------------
     */
-  async signIn({ user, account, profile }) {
+  async signIn({ user, account }) {
     if (account?.type === 'oauth') {
-      const {
-        provider = 'google',
-        nickname,
-        email,
-        picture,
-        sub,
-        image,
-        name,
-        id,
-      } = user;
+      const { provider = 'google' } = user;
 
       const { data } = await signInOAuth(
         {
-          nickname: nickname ?? name,
-          picture: picture ?? image ?? undefined,
-          sub: sub ?? id,
-          email,
+          code: account.access_token || '',
         },
         provider
       );

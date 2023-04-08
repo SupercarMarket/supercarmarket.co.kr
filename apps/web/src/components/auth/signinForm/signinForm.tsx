@@ -117,11 +117,12 @@ const LocalFormItem = () => {
 
 const OauthFormItem = () => {
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
-  const { replace } = useRouter();
 
   const handleOauthLogin = async (provider: string) => {
-    await signIn(provider).then(() => {
-      replace('/');
+    await signIn(provider, {
+      callbackUrl: '/',
+    }).catch((error) => {
+      setErrorMessage(error.message);
     });
   };
 

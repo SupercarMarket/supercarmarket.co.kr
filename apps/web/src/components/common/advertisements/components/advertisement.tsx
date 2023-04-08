@@ -79,7 +79,17 @@ const Advertisement = (props: AdvertisementProps) => {
               rel="noopener noreferrer"
             >
               <div>
-                <Image src={ad.data[0].imageUrl} alt="ad_m" fill />
+                <Image
+                  src={ad.data[0].imageUrl}
+                  alt="ad_m"
+                  fill
+                  style={{
+                    objectFit: 'cover',
+                  }}
+                  sizes={`${applyMediaQuery(
+                    'desktop'
+                  )} 1200px, ${applyMediaQuery('mobile')} 420px`}
+                />
               </div>
             </a>
           ) : (
@@ -87,86 +97,110 @@ const Advertisement = (props: AdvertisementProps) => {
           )}
         </Wrapper.Item>
       )}
-      <Wrapper.Left
-        css={css`
-          position: absolute;
-          width: 168px;
-          height: 590px;
-          left: -200px;
-          top: 0;
-          div {
-            width: 100%;
-            height: 100%;
-            background-color: ${({ theme }) => theme.color['greyScale-3']};
-          }
-          .react-loading-skeleton {
-            width: 100%;
-            height: 100%;
-          }
-          ${applyMediaQuery('mobile')} {
-            display: none;
-            .react-loading-skeleton {
-              display: none;
+      {!isMobile && (
+        <Wrapper.Left
+          css={css`
+            position: absolute;
+            width: 168px;
+            height: 590px;
+            left: -200px;
+            top: 0;
+            div {
+              width: 100%;
+              height: 100%;
+              background-color: ${({ theme }) => theme.color['greyScale-3']};
             }
-          }
-        `}
-      >
-        {isFetching || isLoading ? (
-          <Skeleton />
-        ) : ad ? (
-          <a
-            href={createExternalLink(ad.data[2].url)}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <div>
-              <Image src={ad.data[2].imageUrl} alt="ad_l" fill />
-            </div>
-          </a>
-        ) : (
-          <Skeleton />
-        )}
-      </Wrapper.Left>
-      <Wrapper.Right
-        css={css`
-          position: absolute;
-          width: 168px;
-          height: 590px;
-          right: -200px;
-          top: 0;
-          div {
-            width: 100%;
-            height: 100%;
-            background-color: ${({ theme }) => theme.color['greyScale-3']};
-          }
-          .react-loading-skeleton {
-            width: 100%;
-            height: 100%;
-          }
-          ${applyMediaQuery('mobile')} {
-            display: none;
             .react-loading-skeleton {
-              display: none;
+              width: 100%;
+              height: 100%;
             }
-          }
-        `}
-      >
-        {isFetching || isLoading ? (
-          <Skeleton />
-        ) : ad ? (
-          <a
-            href={createExternalLink(ad.data[1].url)}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <div>
-              <Image src={ad.data[1].imageUrl} alt="ad_r" fill />
-            </div>
-          </a>
-        ) : (
-          <Skeleton />
-        )}
-      </Wrapper.Right>
+            ${applyMediaQuery('mobile')} {
+              display: none;
+              .react-loading-skeleton {
+                display: none;
+              }
+            }
+          `}
+        >
+          {isFetching || isLoading ? (
+            <Skeleton />
+          ) : ad ? (
+            <a
+              href={createExternalLink(ad.data[2].url)}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <div>
+                <Image
+                  src={ad.data[2].imageUrl}
+                  alt="ad_l"
+                  fill
+                  style={{
+                    objectFit: 'cover',
+                  }}
+                  sizes={`${applyMediaQuery(
+                    'desktop'
+                  )} 168px, ${applyMediaQuery('mobile')} 100px`}
+                />
+              </div>
+            </a>
+          ) : (
+            <Skeleton />
+          )}
+        </Wrapper.Left>
+      )}
+      {!isMobile && (
+        <Wrapper.Right
+          css={css`
+            position: absolute;
+            width: 168px;
+            height: 590px;
+            right: -200px;
+            top: 0;
+            div {
+              width: 100%;
+              height: 100%;
+              background-color: ${({ theme }) => theme.color['greyScale-3']};
+            }
+            .react-loading-skeleton {
+              width: 100%;
+              height: 100%;
+            }
+            ${applyMediaQuery('mobile')} {
+              display: none;
+              .react-loading-skeleton {
+                display: none;
+              }
+            }
+          `}
+        >
+          {isFetching || isLoading ? (
+            <Skeleton />
+          ) : ad ? (
+            <a
+              href={createExternalLink(ad.data[1].url)}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <div>
+                <Image
+                  src={ad.data[1].imageUrl}
+                  alt="ad_r"
+                  fill
+                  style={{
+                    objectFit: 'cover',
+                  }}
+                  sizes={`${applyMediaQuery(
+                    'desktop'
+                  )} 168px, ${applyMediaQuery('mobile')} 100px`}
+                />
+              </div>
+            </a>
+          ) : (
+            <Skeleton />
+          )}
+        </Wrapper.Right>
+      )}
     </Container>
   );
 };

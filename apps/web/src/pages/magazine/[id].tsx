@@ -51,7 +51,6 @@ const MagazinePost: NextPageWithLayout = ({
                 )}
               >
                 <Posting postId={id} type="magazine" />
-                <MagazineDealer postId={id} />
                 <Comment id={id} />
               </ErrorBoundary>
             </Wrapper>
