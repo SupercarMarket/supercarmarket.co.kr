@@ -3,9 +3,11 @@ import type { PropsWithChildren } from 'react';
 import { DeviceContext } from './deviceContext';
 
 export interface DeviceInfoProviderProps {
-  userAgent?: string;
-  hints?: {
-    isMobile: boolean;
+  $ua: {
+    userAgent?: string;
+    hints?: {
+      isMobile: boolean;
+    };
   };
 }
 
@@ -14,8 +16,7 @@ const validateIos = (userAgent: string) => /iPhone|iPod|iPad/gi.test(userAgent);
 const validateAndroid = (userAgent: string) => /Android/gi.test(userAgent);
 
 export const DeviceProvider = ({
-  userAgent,
-  hints,
+  $ua: { userAgent, hints },
   children,
 }: PropsWithChildren<DeviceInfoProviderProps>) => {
   const clientUserAgent = userAgent ?? globalThis.navigator?.userAgent ?? '';

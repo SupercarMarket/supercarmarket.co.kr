@@ -82,10 +82,7 @@ function MyApp({
     <ThemeProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
         <Hydrate state={dehydratedState}>
-          <DeviceProvider
-            hints={pageProps.$ua.hints}
-            userAgent={pageProps.$ua.userAgent}
-          >
+          <DeviceProvider $ua={pageProps.$ua}>
             <SessionProvider session={session}>
               <Head>
                 <meta
