@@ -47,3 +47,14 @@ export const searchTypeFormatter = (
   if (searchType === '제목 + 본문') return 'title-contents';
   return 'title';
 };
+
+export const supercarmarketCodeFormatter = (category: string) => {
+  if (category === 'market') return 'SM002';
+  if (category === 'magazine') return 'SM003';
+  if (category === 'community') return 'SM004';
+  if (category === 'partnership') return 'SM005';
+  if (category === 'inquiry') return 'SM006';
+  if (category === 'search') return 'SM007';
+  if (category === 'live') return 'SM008';
+  return 'SM001';
+};
