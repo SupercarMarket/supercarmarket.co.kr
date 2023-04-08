@@ -16,13 +16,15 @@ const validateIos = (userAgent: string) => /iPhone|iPod|iPad/gi.test(userAgent);
 const validateAndroid = (userAgent: string) => /Android/gi.test(userAgent);
 
 export const DeviceProvider = ({
-  $ua: { userAgent, hints },
+  $ua,
   children,
 }: PropsWithChildren<DeviceInfoProviderProps>) => {
+  const { userAgent = '', hints } = $ua;
   const clientUserAgent = userAgent ?? globalThis.navigator?.userAgent ?? '';
   const [isMobile] = React.useState<boolean>(
     hints?.isMobile ?? validateMobile(clientUserAgent)
   );
+  console.log(clientUserAgent, userAgent);
 
   const isIos = validateIos(clientUserAgent);
   const isAndroid = validateAndroid(clientUserAgent);
