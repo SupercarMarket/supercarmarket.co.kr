@@ -46,7 +46,7 @@ const InquiryNavbar = ({
   const { replace, push } = useRouter();
 
   React.useEffect(() => {
-    if (session.status !== 'authenticated')
+    if (session.status !== 'loading' && session.status !== 'authenticated')
       onOpen(
         <Modal
           description="로그인 후 서비스 이용 가능합니다"
