@@ -73,8 +73,8 @@ const MagazineBanner = ({
               fill: ${({ theme }) => theme.color.white};
               ${applyMediaQuery('mobile')} {
                 width: 328px;
-                height: 219px;
-                ${reverse ? 'height: 229px;' : 'height: 173px;'}
+                height: fit-content;
+                justify-content: unset;
                 h1 {
                   font-size: ${({ theme }) =>
                     theme.fontSize['header-24']} !important;
@@ -91,7 +91,7 @@ const MagazineBanner = ({
                 gap: 16px;
                 ${applyMediaQuery('mobile')} {
                   width: 100%;
-                  height: 219px;
+                  height: fit-content;
                 }
               `}
             >
