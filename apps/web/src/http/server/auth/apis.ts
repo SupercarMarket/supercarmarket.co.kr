@@ -30,23 +30,19 @@ export const createAccount = async (data: Signup) => {
 
 export const signInOAuth = async (
   data: {
-    sub: string;
-    nickname: string;
-    email?: string;
-    picture?: string;
+    code: string;
   },
   provider: 'google' | 'kakao' | 'local'
 ) => {
-  const { sub, nickname, email, picture } = data;
+  const { code } = data;
   return post(
     `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/user/login`,
+    undefined,
     {
-      sub,
-      name: nickname,
-      email,
-      picture,
-    },
-    {
+      query: {
+        code,
+        oauthName: provider,
+      },
       params: provider,
     }
   );
