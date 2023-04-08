@@ -222,8 +222,8 @@ const callbacks: Partial<CallbacksOptions<Profile, Account>> | undefined = {
         {
           nickname: nickname ?? name,
           picture: picture ?? image ?? undefined,
+          sub: sub ?? id,
           email,
-          sub,
         },
         provider
       );
