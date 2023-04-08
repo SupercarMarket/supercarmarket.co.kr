@@ -120,10 +120,9 @@ const OauthFormItem = () => {
   const { replace } = useRouter();
 
   const handleOauthLogin = async (provider: string) => {
-    const response = await signIn(provider);
-
-    if (!response) setErrorMessage(ErrorCode[450]);
-    else if (response.ok) replace('/');
+    await signIn(provider).then(() => {
+      replace('/');
+    });
   };
 
   return (
