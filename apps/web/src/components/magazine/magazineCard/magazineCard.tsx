@@ -100,50 +100,70 @@ const MagazineCard = memo(function MagazineCard({
             />
           )}
         </Wrapper.Item>
-        <Typography
-          as="h2"
-          fontSize={headingFontSize}
-          fontWeight="bold"
-          color="greyScale-6"
-          lineHeight="120%"
-          style={{
-            marginBottom: '10px',
-          }}
+        <Wrapper.Item
+          css={css`
+            ${applyMediaQuery('mobile')} {
+              p {
+                display: none !important;
+              }
+              h2 {
+                font-size: ${({ theme }) =>
+                  theme.fontSize['body-16']} !important;
+                font-weight: ${({ theme }) =>
+                  theme.fontWeight.regular} !important;
+              }
+              span {
+                font-size: ${({ theme }) =>
+                  theme.fontSize['body-14']} !important;
+              }
+            }
+          `}
         >
-          {title}
-          {` `}
           <Typography
-            as="b"
-            color="system-1"
+            as="h2"
+            fontSize={headingFontSize}
+            fontWeight="bold"
+            color="greyScale-6"
             lineHeight="120%"
-          >{`(${comments})`}</Typography>
-        </Typography>
-        {visible && (
-          <Typography
-            as="p"
-            fontSize="body-16"
-            fontWeight="regular"
-            color="greyScale-5"
-            lineHeight="150%"
             style={{
               marginBottom: '10px',
             }}
           >
-            {truncateOnWord(contents, 80)}
+            {title}
+            {` `}
+            <Typography
+              as="b"
+              color="system-1"
+              lineHeight="120%"
+            >{`(${comments})`}</Typography>
           </Typography>
-        )}
-        <Typography
-          as="span"
-          fontSize={bodyFontSize}
-          fontWeight="regular"
-          color="greyScale-5"
-          lineHeight="150%"
-          style={{
-            lineHeight: '19.36px',
-          }}
-        >
-          {created}
-        </Typography>
+          {visible && (
+            <Typography
+              as="p"
+              fontSize="body-16"
+              fontWeight="regular"
+              color="greyScale-5"
+              lineHeight="150%"
+              style={{
+                marginBottom: '10px',
+              }}
+            >
+              {truncateOnWord(contents, 80)}
+            </Typography>
+          )}
+          <Typography
+            as="span"
+            fontSize={bodyFontSize}
+            fontWeight="regular"
+            color="greyScale-5"
+            lineHeight="150%"
+            style={{
+              lineHeight: '19.36px',
+            }}
+          >
+            {created}
+          </Typography>
+        </Wrapper.Item>
       </Container>
     </Link>
   );
