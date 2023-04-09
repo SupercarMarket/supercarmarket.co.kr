@@ -1,6 +1,6 @@
 /* eslint-disable turbo/no-undeclared-env-vars */
 /* eslint-disable prettier/prettier */
-import React, { useState, useEffect, ChangeEvent } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Container } from '@supercarmarket/ui';
 import { useRouter } from 'next/router';
 import { authRequest } from 'http/core';
@@ -9,11 +9,9 @@ import Publisher from 'components/live/Publisher';
 import Subscriber from 'components/live/Subscriber';
 import ChatInfo from 'components/live/ChatInfo';
 
-import SubscriberIcon from 'public/images/live/icons/SubscriberIcon.svg';
-import VolumeIcon from 'public/images/live/icons/VolumeIcon.svg';
-import CameraCloseIcon from 'public/images/live/icons/CameraCloseIcon.svg';
-
-interface Props {}
+interface Props {
+  isSSR: boolean;
+}
 
 interface channelResType {
   broadCastSeq: number;
@@ -28,11 +26,14 @@ interface channelResType {
 
 const Channel = (props: Props) => {
   const [channelData, setChannelData] = useState<channelResType | null>();
+  const [isBroad, setisBroad] = useState(true);
 
   const router = useRouter();
 
   useEffect(() => {
-    if (router.query.Channel)
+    if (props.isSSR) {
+      router.replace('/live');
+    } else if (router.query.Channel)
       getDetailLiveInfo(router.query.Channel as string).then((data) => {
         setChannelData(data.data);
       });
@@ -45,8 +46,12 @@ const Channel = (props: Props) => {
         <div style={{ display: 'flex', marginTop: '10px' }}>
           {channelData && (
             <>
-              <LiveInfo data={channelData} />
-              <ChatInfo data={channelData} />
+              <LiveInfo
+                data={channelData}
+                setisBroad={setisBroad}
+                isBroad={isBroad}
+              />
+              <ChatInfo data={channelData} isBroad={isBroad} />
             </>
           )}
         </div>
@@ -57,14 +62,35 @@ const Channel = (props: Props) => {
 
 export default Channel;
 
-const LiveInfo = ({ data }: { data: channelResType | null | undefined }) => {
+Channel.getInitialProps = async (context: any) => {
+  const { req } = context;
+  return { isSSR: !!req };
+};
+
+interface LiveInfo {
+  data: channelResType | null | undefined;
+  setisBroad: (broad: boolean) => void;
+  isBroad: boolean;
+}
+const LiveInfo = (props: LiveInfo) => {
+  const { data, isBroad, setisBroad } = props;
   return (
     <div style={{ width: '880px' }}>
       {data ? (
         data.isMine ? (
-          <Publisher sessionId={data.sessionId as string} data={data} />
+          <Publisher
+            sessionId={data.sessionId as string}
+            data={data}
+            setisBroad={setisBroad}
+            isBroad={isBroad}
+          />
         ) : (
-          <Subscriber sessionId={data.sessionId as string} data={data} />
+          <Subscriber
+            sessionId={data.sessionId as string}
+            data={data}
+            setisBroad={setisBroad}
+            isBroad={isBroad}
+          />
         )
       ) : (
         <div style={{ backgroundColor: '#000000', height: '495px' }} />

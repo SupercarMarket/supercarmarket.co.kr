@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import liveCss from 'public/css/live.module.css';
 import { Client, StompSubscription } from '@stomp/stompjs';
 import { Button } from '@supercarmarket/ui';
@@ -6,6 +6,7 @@ import { getSession } from 'next-auth/react';
 
 interface Props {
   data: channelResType | null | undefined;
+  isBroad: boolean;
 }
 
 interface channelResType {
@@ -27,7 +28,7 @@ interface messageType {
 }
 
 function ChatInfo(props: Props) {
-  const {} = props;
+  const { isBroad } = props;
   const [chats, setChats] = useState<messageType[]>([]);
   const [stomp, setStomp] = useState<Client>();
   const [subscribes, setSubscribes] = useState<StompSubscription>();
@@ -108,14 +109,41 @@ function ChatInfo(props: Props) {
     }, 100);
   };
 
+  const exitChat = () => {
+    if (stomp) {
+      stomp.publish({
+        destination: `/sub/${props.data?.sessionId}`,
+        body: `{
+            "type": "EXIT",
+            "sender": "${testName}",
+            "channelid": "${props.data?.sessionId}",
+            "data": "'${testName}' 님이 종료하셨습니다."
+          }`,
+      });
+    }
+    setTimeout(() => {
+      if (chatWrapRef.current) {
+        chatWrapRef.current.scrollTop = chatWrapRef.current.scrollHeight;
+      }
+      stomp?.deactivate();
+    }, 100);
+  };
+
   useEffect(() => {
     joinChat();
+
     return () => {
       if (stomp) {
         stomp.deactivate();
       }
     };
   }, []);
+
+  useEffect(() => {
+    if (!isBroad) {
+      exitChat();
+    }
+  }, [isBroad]);
   return (
     <div
       style={{
@@ -131,7 +159,7 @@ function ChatInfo(props: Props) {
         ref={chatWrapRef}
       >
         {chats.map((data, idx) => {
-          if (data.type === 'ENTER') {
+          if (data.type === 'ENTER' || data.type === 'EXIT') {
             return (
               <InitUserChat chat={data.data} key={`InitUserChat_${idx}`} />
             );

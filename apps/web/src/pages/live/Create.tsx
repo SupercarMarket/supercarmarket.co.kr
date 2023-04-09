@@ -307,7 +307,10 @@ const getSessionId = async () => {
     {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Basic ${btoa(process.env.NEXT_PUBLIC_OPENVIDU_SECRET)}`,
+        Authorization: `Basic ${Buffer.from(
+          process.env.NEXT_PUBLIC_OPENVIDU_SECRET as string,
+          'utf8'
+        ).toString('base64')}`,
       },
     }
   );

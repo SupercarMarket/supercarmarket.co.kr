@@ -1,18 +1,18 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { OpenVidu, Session, StreamManager } from 'openvidu-browser';
+import { OpenVidu, Session } from 'openvidu-browser';
 
 import axios from 'axios';
-import { authRequest } from 'http/core';
 import { Button } from '@supercarmarket/ui';
 
 import SubscriberIcon from 'public/images/live/icons/SubscriberIcon.svg';
 import VolumeIcon from 'public/images/live/icons/VolumeIcon.svg';
-import CameraCloseIcon from 'public/images/live/icons/CameraCloseIcon.svg';
 
 interface Props {
   sessionId: string;
   data: channelResType;
+  setisBroad: (broad: boolean) => void;
+  isBroad: boolean;
 }
 
 interface channelResType {
@@ -27,6 +27,7 @@ interface channelResType {
 }
 
 function Subscriber(props: Props) {
+  const { isBroad, setisBroad } = props;
   const newOV = new OpenVidu();
   newOV.enableProdMode();
   const { sessionId, data } = props;
@@ -41,29 +42,23 @@ function Subscriber(props: Props) {
 
   const deleteBroadCastHandler = () => {
     session.disconnect();
-    router.replace('/live');
+    setisBroad(false);
+    setTimeout(() => {
+      router.replace('/live');
+    }, 100);
   };
 
   const joinSession = () => {
     var video = document.getElementById('Streaming') as HTMLVideoElement;
     const connection = () => {
       getToken().then((token: any) => {
-        session.connect(token);
-
-        // session.on('connectionCreated', (event) => {
-        //   if (event.connection.stream) {
-        //     session.subscribe(event.connection.stream, video);
-        //     event.connection.stream.streamManager.addVideoElement(video);
-        //   }
-        // });
-
-        session.on('streamCreated', (event) => {
+        session.on('streamCreated', async (event) => {
           session.subscribe(event.stream, undefined);
           event.stream.streamManager.addVideoElement(video);
         });
 
-        session.on('streamDestroyed', (event) => {
-          event.stream.streamManager.removeAllVideos();
+        session.connect(token, {
+          id: `test_${Math.random()}`,
         });
       });
     };
@@ -78,7 +73,7 @@ function Subscriber(props: Props) {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Basic ${Buffer.from(
-            process.env.NEXT_PUBLIC_OPENVIDU_SECRET,
+            process.env.NEXT_PUBLIC_OPENVIDU_SECRET as string,
             'utf8'
           ).toString('base64')}`,
         },
@@ -89,19 +84,15 @@ function Subscriber(props: Props) {
 
   useEffect(() => {
     if (sessionId) joinSession();
+    return () => {
+      session.disconnect();
+    };
   }, []);
 
   useEffect(() => {
     var video = document.getElementById('Streaming') as HTMLVideoElement;
     video.volume = volume / 100;
   }, [volume]);
-
-  useEffect(() => {
-    window.addEventListener('unload', deleteBroadCastHandler);
-    return () => {
-      window.removeEventListener('unload', deleteBroadCastHandler);
-    };
-  }, []);
 
   if (!sessionId) {
     return <></>;
@@ -180,11 +171,6 @@ function Subscriber(props: Props) {
 }
 
 export default Subscriber;
-
-const deleteBroadcast = async (seq: number) => {
-  const data = await authRequest.delete(`/live`, { data: { seq: seq } });
-  return data;
-};
 
 const publisherStyle = {
   fontSize: '16px',

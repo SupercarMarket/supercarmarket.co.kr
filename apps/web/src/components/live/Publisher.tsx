@@ -2,8 +2,8 @@ import { Button } from '@supercarmarket/ui';
 import axios from 'axios';
 import { authRequest } from 'http/core';
 import { useRouter } from 'next/router';
-import { OpenVidu, Session, Publisher } from 'openvidu-browser';
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import { OpenVidu, Publisher as Publishers, Session } from 'openvidu-browser';
+import React, { ChangeEvent, useContext, useEffect, useState } from 'react';
 
 import SubscriberIcon from 'public/images/live/icons/SubscriberIcon.svg';
 import VolumeIcon from 'public/images/live/icons/VolumeIcon.svg';
@@ -12,6 +12,8 @@ import CameraCloseIcon from 'public/images/live/icons/CameraCloseIcon.svg';
 interface Props {
   sessionId: string;
   data: channelResType;
+  setisBroad: (broad: boolean) => void;
+  isBroad: boolean;
 }
 
 interface channelResType {
@@ -26,14 +28,14 @@ interface channelResType {
 }
 
 function Publisher(props: Props) {
+  const { isBroad, setisBroad } = props;
   const newOV = new OpenVidu();
   newOV.enableProdMode();
   const { sessionId, data } = props;
   const [volume, setVolume] = useState<number>(80);
-  const [isBroad, setisBroad] = useState(false);
 
   const [session, setSession] = useState<Session>(newOV.initSession());
-  const [publisher, setPublisher] = useState<Publisher>();
+  const [publisher, setPublisher] = useState<Publishers>();
 
   const router = useRouter();
 
@@ -65,25 +67,31 @@ function Publisher(props: Props) {
   const joinSession = () => {
     const connection = () => {
       getToken().then((token: any) => {
-        session.connect(token).then(async () => {
-          var devices = await newOV.getDevices();
-          var videoDevices = devices.filter(
-            (device) => device.kind === 'videoinput'
-          );
-          var video = document.getElementById('Streaming') as HTMLVideoElement;
-          const publich = newOV.initPublisher(undefined, {
-            insertMode: 'APPEND',
-            resolution: '880x495',
-            frameRate: 10000000,
-            videoSource: videoDevices[0].deviceId,
-          });
+        session
+          .connect(token, {
+            id: `test_${Math.random()}`,
+          })
+          .then(async () => {
+            var devices = await newOV.getDevices();
+            var videoDevices = devices.filter(
+              (device) => device.kind === 'videoinput'
+            );
+            var video = document.getElementById(
+              'Streaming'
+            ) as HTMLVideoElement;
+            const publich = newOV.initPublisher(undefined, {
+              insertMode: 'APPEND',
+              resolution: '880x495',
+              frameRate: 10000000,
+              videoSource: videoDevices[0].deviceId,
+            });
 
-          session.publish(publich);
-          setPublisher(publich);
-          setisBroad(true);
-          publich.stream.streamManager.addVideoElement(video);
-          video.style.transform = 'rotate(0)';
-        });
+            session.publish(publich);
+            setPublisher(publich);
+            setisBroad(true);
+            publich.stream.streamManager.addVideoElement(video);
+            video.style.transform = 'rotate(0)';
+          });
       });
     };
     connection();
@@ -97,7 +105,7 @@ function Publisher(props: Props) {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Basic ${Buffer.from(
-            process.env.NEXT_PUBLIC_OPENVIDU_SECRET,
+            process.env.NEXT_PUBLIC_OPENVIDU_SECRET as string,
             'utf8'
           ).toString('base64')}`,
         },
