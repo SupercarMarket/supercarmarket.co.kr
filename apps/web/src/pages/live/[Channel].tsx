@@ -58,6 +58,8 @@ const Channel = (props: Props) => {
   );
 };
 
+Channel.Layout = Layout;
+
 export default Channel;
 
 Channel.getInitialProps = async (context: any) => {

@@ -294,6 +294,8 @@ const Create = (props: Props) => {
   );
 };
 
+Create.Layout = Layout;
+
 export default Create;
 
 const getSessionId = async () => {

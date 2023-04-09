@@ -11,7 +11,7 @@ import VolumeIcon from 'public/images/live/icons/VolumeIcon.svg';
 interface Props {
   sessionId: string;
   data: channelResType;
-  setisBroad: (broad: boolean) => void;
+  setIsBroad: (broad: boolean) => void;
   isBroad: boolean;
 }
 
@@ -27,7 +27,7 @@ interface channelResType {
 }
 
 function Subscriber(props: Props) {
-  const { isBroad, setisBroad } = props;
+  const { isBroad, setIsBroad } = props;
   const newOV = new OpenVidu();
   newOV.enableProdMode();
   const { sessionId, data } = props;
@@ -42,7 +42,7 @@ function Subscriber(props: Props) {
 
   const deleteBroadCastHandler = () => {
     session.disconnect();
-    setisBroad(false);
+    setIsBroad(false);
     setTimeout(() => {
       router.replace('/live');
     }, 100);

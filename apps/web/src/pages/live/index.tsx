@@ -71,6 +71,8 @@ const Index = (props: Props) => {
   );
 };
 
+Index.Layout = Layout;
+
 export default Index;
 
 const LiveItem = ({ data }: { data: any }) => {
