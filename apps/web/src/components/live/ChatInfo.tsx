@@ -34,7 +34,7 @@ function ChatInfo(props: Props) {
   const [subscribes, setSubscribes] = useState<StompSubscription>();
   const [testName, setTestName] = useState(`test_${Math.random()}`);
 
-  const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  const textAreaRef = useRef<HTMLInputElement>(null);
   const chatWrapRef = useRef<HTMLDivElement>(null);
 
   const joinChat = async () => {
@@ -186,7 +186,7 @@ function ChatInfo(props: Props) {
           alignItems: 'flex-end',
         }}
       >
-        <textarea
+        <input
           placeholder="채팅을 남겨보세요"
           className={liveCss.chatTextarea}
           maxLength={100}
@@ -215,6 +215,7 @@ const UserChat = ({ nickname, chat }: { nickname: string; chat: string }) => {
         padding: '12px 16px',
         gap: '8px',
         marginBottom: '10px',
+        width: 'fit-content',
       }}
     >
       <span style={{ fontSize: '14px', lineHeight: '150%' }}>{nickname}</span>{' '}
@@ -232,6 +233,8 @@ const MyChat = ({ chat }: { chat: string }) => {
         padding: '12px 16px',
         gap: '8px',
         marginBottom: '10px',
+        marginLeft: 'auto',
+        width: 'fit-content',
       }}
     >
       {chat}
