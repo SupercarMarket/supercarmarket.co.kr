@@ -29,46 +29,44 @@ const Index = (props: Props) => {
 
   return (
     <Container>
-      <Layout>
-        <Wrapper
-          css={css`
-            padding-bottom: 40px;
-          `}
-        >
-          <div style={{ display: 'flex', marginTop: '40px' }}>
-            <Title>라이브</Title>
-            <Button
-              variant="Line"
-              style={{
-                width: '145px',
-                height: '44px',
-                color: '#B79F7B',
-                border: '1px solid #B79F7B',
-              }}
-              onClick={() => {
-                router.push('/live/Create');
-              }}
-            >
-              라이브 시작하기
-            </Button>
+      <Wrapper
+        css={css`
+          padding-bottom: 40px;
+        `}
+      >
+        <div style={{ display: 'flex', marginTop: '40px' }}>
+          <Title>라이브</Title>
+          <Button
+            variant="Line"
+            style={{
+              width: '145px',
+              height: '44px',
+              color: '#B79F7B',
+              border: '1px solid #B79F7B',
+            }}
+            onClick={() => {
+              router.push('/live/Create');
+            }}
+          >
+            라이브 시작하기
+          </Button>
+        </div>
+        <div style={{ marginTop: '20px' }}>
+          <div
+            style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: '20px 0',
+              flex: 'auto',
+            }}
+          >
+            {liveItemList?.map((data, idx) => {
+              return <LiveItem key={`LiveItem_${idx}`} data={data} />;
+            })}
           </div>
-          <div style={{ marginTop: '20px' }}>
-            <div
-              style={{
-                display: 'flex',
-                flexWrap: 'wrap',
-                gap: '20px 0',
-                flex: 'auto',
-              }}
-            >
-              {liveItemList?.map((data, idx) => {
-                return <LiveItem key={`LiveItem_${idx}`} data={data} />;
-              })}
-            </div>
-          </div>
-        </Wrapper>
-        <Pagination pageSize={1} totalCount={1} totalPages={1} />
-      </Layout>
+        </div>
+      </Wrapper>
+      <Pagination pageSize={1} totalCount={1} totalPages={1} />
     </Container>
   );
 };

@@ -130,79 +130,58 @@ const Create = (props: Props) => {
 
   return (
     <Container>
-      <Layout>
-        <Wrapper
-          css={css`
-            padding-bottom: 40px;
-          `}
-        >
-          <div style={{ display: 'flex', marginTop: '40px' }}>
-            <Title>라이브 시작하기</Title>
+      <Wrapper
+        css={css`
+          padding-bottom: 40px;
+        `}
+      >
+        <div style={{ display: 'flex', marginTop: '40px' }}>
+          <Title>라이브 시작하기</Title>
+        </div>
+        <div style={{ padding: '10px' }}>
+          <div
+            style={{
+              display: 'flex',
+              marginBottom: '10px',
+              alignItems: 'center',
+              height: '45px',
+            }}
+          >
+            <div>제목&nbsp;&nbsp;</div>
+            <div>
+              <Input
+                onChange={(event) => {
+                  broadcastStateChangeHandler(
+                    'title',
+                    event.currentTarget.value
+                  );
+                }}
+              />
+            </div>
           </div>
-          <div style={{ padding: '10px' }}>
-            <div
-              style={{
-                display: 'flex',
-                marginBottom: '10px',
-                alignItems: 'center',
-                height: '45px',
-              }}
-            >
-              <div>제목&nbsp;&nbsp;</div>
-              <div>
-                <Input
-                  onChange={(event) => {
-                    broadcastStateChangeHandler(
-                      'title',
-                      event.currentTarget.value
-                    );
-                  }}
-                />
-              </div>
+          <div
+            style={{
+              display: 'flex',
+              marginBottom: '10px',
+              alignItems: 'center',
+              height: '45px',
+            }}
+          >
+            <div>태그&nbsp;&nbsp;</div>
+            <div>
+              <Input ref={tagsRef} />
             </div>
-            <div
-              style={{
-                display: 'flex',
-                marginBottom: '10px',
-                alignItems: 'center',
-                height: '45px',
-              }}
-            >
-              <div>태그&nbsp;&nbsp;</div>
-              <div>
-                <Input ref={tagsRef} />
-              </div>
-              <div style={{ marginLeft: '8px' }}>
-                <Button
-                  onClick={() => {
-                    addTagsHandler(tagsRef.current?.value as string);
-                  }}
-                >
-                  추가
-                </Button>
-              </div>
-            </div>
-            {broadcastData.tags.length > 0 && (
-              <div
-                style={{
-                  display: 'flex',
-                  marginBottom: '10px',
-                  alignItems: 'center',
-                  height: '45px',
+            <div style={{ marginLeft: '8px' }}>
+              <Button
+                onClick={() => {
+                  addTagsHandler(tagsRef.current?.value as string);
                 }}
               >
-                {broadcastData.tags.map((data, idx) => {
-                  return (
-                    <Tags
-                      tags={data}
-                      index={idx}
-                      deleteTagsHandler={deleteTagsHandler}
-                      key={`tag_${idx}`}
-                    />
-                  );
-                })}
-              </div>
-            )}
+                추가
+              </Button>
+            </div>
+          </div>
+          {broadcastData.tags.length > 0 && (
             <div
               style={{
                 display: 'flex',
@@ -211,87 +190,106 @@ const Create = (props: Props) => {
                 height: '45px',
               }}
             >
-              <div>공개여부&nbsp;&nbsp;</div>
-              <div>
-                <input
-                  type="radio"
-                  id="public"
-                  name="publicType"
-                  onChange={(event) => {
-                    broadcastStateChangeHandler('isPrivate', false);
-                  }}
-                  checked={!broadcastData.isPrivate}
-                />
-                <label htmlFor="public">공개</label>
-                <input
-                  type="radio"
-                  id="private"
-                  name="publicType"
-                  onChange={(event) => {
-                    broadcastStateChangeHandler('isPrivate', true);
-                  }}
-                  checked={broadcastData.isPrivate}
-                />
-                <label htmlFor="private">비공개</label>
-              </div>
-              <div style={{ marginLeft: '5px' }}>
-                <Input
-                  id="broadcastPassword"
-                  placeholder="비밀번호를 입력해주세요"
-                  onChange={(event) => {
-                    broadcastStateChangeHandler(
-                      'password',
-                      event.currentTarget.value
-                    );
-                  }}
-                  ref={passwordRef}
-                />
-              </div>
+              {broadcastData.tags.map((data, idx) => {
+                return (
+                  <Tags
+                    tags={data}
+                    index={idx}
+                    deleteTagsHandler={deleteTagsHandler}
+                    key={`tag_${idx}`}
+                  />
+                );
+              })}
             </div>
-            <div
-              style={{
-                display: 'flex',
-                marginBottom: '10px',
-                alignItems: 'center',
-              }}
-            >
-              <div>썸네일&nbsp;&nbsp;</div>
-              <div>
-                <Button onClick={fileuploadButtonHandler}>사진 추가</Button>
-                <input
-                  type="file"
-                  id="thumbnail"
-                  style={{ display: 'none' }}
-                  ref={imageFileRef}
-                  onChange={fileChangeHandler}
-                />
-              </div>
+          )}
+          <div
+            style={{
+              display: 'flex',
+              marginBottom: '10px',
+              alignItems: 'center',
+              height: '45px',
+            }}
+          >
+            <div>공개여부&nbsp;&nbsp;</div>
+            <div>
+              <input
+                type="radio"
+                id="public"
+                name="publicType"
+                onChange={(event) => {
+                  broadcastStateChangeHandler('isPrivate', false);
+                }}
+                checked={!broadcastData.isPrivate}
+              />
+              <label htmlFor="public">공개</label>
+              <input
+                type="radio"
+                id="private"
+                name="publicType"
+                onChange={(event) => {
+                  broadcastStateChangeHandler('isPrivate', true);
+                }}
+                checked={broadcastData.isPrivate}
+              />
+              <label htmlFor="private">비공개</label>
             </div>
-            <div
-              style={{
-                display: 'flex',
-                marginBottom: '10px',
-                alignItems: 'center',
-              }}
-            >
-              <img src={filePath ?? ''} alt="" />
+            <div style={{ marginLeft: '5px' }}>
+              <Input
+                id="broadcastPassword"
+                placeholder="비밀번호를 입력해주세요"
+                onChange={(event) => {
+                  broadcastStateChangeHandler(
+                    'password',
+                    event.currentTarget.value
+                  );
+                }}
+                ref={passwordRef}
+              />
             </div>
           </div>
-
-          <Button
-            variant="Line"
+          <div
             style={{
-              width: '145px',
-              height: '44px',
-              color: '#B79F7B',
-              border: '1px solid #B79F7B',
+              display: 'flex',
+              marginBottom: '10px',
+              alignItems: 'center',
             }}
-            onClick={createBroadCastRoom}
           >
-            시작하기
-          </Button>
-        </Wrapper>
-      </Layout>
+            <div>썸네일&nbsp;&nbsp;</div>
+            <div>
+              <Button onClick={fileuploadButtonHandler}>사진 추가</Button>
+              <input
+                type="file"
+                id="thumbnail"
+                style={{ display: 'none' }}
+                ref={imageFileRef}
+                onChange={fileChangeHandler}
+              />
+            </div>
+          </div>
+          <div
+            style={{
+              display: 'flex',
+              marginBottom: '10px',
+              alignItems: 'center',
+            }}
+          >
+            <img src={filePath ?? ''} alt="" />
+          </div>
+        </div>
+
+        <Button
+          variant="Line"
+          style={{
+            width: '145px',
+            height: '44px',
+            color: '#B79F7B',
+            border: '1px solid #B79F7B',
+          }}
+          onClick={createBroadCastRoom}
+        >
+          시작하기
+        </Button>
+      </Wrapper>
     </Container>
   );
 };

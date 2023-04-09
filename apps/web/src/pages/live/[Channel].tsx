@@ -42,20 +42,18 @@ const Channel = (props: Props) => {
 
   return (
     <Container>
-      <Layout>
-        <div style={{ display: 'flex', marginTop: '10px' }}>
-          {channelData && (
-            <>
-              <LiveInfo
-                data={channelData}
-                setIsBroad={setIsBroad}
-                isBroad={isBroad}
-              />
-              <ChatInfo data={channelData} isBroad={isBroad} />
-            </>
-          )}
-        </div>
-      </Layout>
+      <div style={{ display: 'flex', marginTop: '10px' }}>
+        {channelData && (
+          <>
+            <LiveInfo
+              data={channelData}
+              setIsBroad={setIsBroad}
+              isBroad={isBroad}
+            />
+            <ChatInfo data={channelData} isBroad={isBroad} />
+          </>
+        )}
+      </div>
     </Container>
   );
 };
