@@ -24,7 +24,6 @@ export const DeviceProvider = ({
   const [isMobile] = React.useState<boolean>(
     hints?.isMobile ?? validateMobile(clientUserAgent)
   );
-  console.log(clientUserAgent, userAgent);
 
   const isIos = validateIos(clientUserAgent);
   const isAndroid = validateAndroid(clientUserAgent);

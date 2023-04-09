@@ -5,7 +5,12 @@ import { FormProvider, useForm } from 'react-hook-form';
 import AuthFormItem from '../authFormItem/authFormItem';
 import * as style from '../signupForm/signupForm.styled';
 import { useQueryClient } from '@tanstack/react-query';
-import { QUERY_KEYS, useFindId } from 'http/server/auth';
+import {
+  QUERY_KEYS,
+  useFindId,
+  useSendCode,
+  useSendPhone,
+} from 'http/server/auth';
 import { form } from 'constants/form/findId';
 
 interface FormsState {
@@ -24,6 +29,8 @@ const FindIdForm = () => {
   });
   const [error, setError] = React.useState<string | null>(null);
   const { replace } = useRouter();
+  const sendPhoneMutation = useSendPhone();
+  const sendCodeMutation = useSendCode();
 
   const handleRequire = async (data: FormsState) => {
     const { phone, authentication, name } = data;
@@ -93,7 +100,11 @@ const FindIdForm = () => {
       >
         {form.map((form) => (
           <FormLabel key={form.htmlFor} name={form.htmlFor} label={form.label}>
-            <AuthFormItem {...form} />
+            <AuthFormItem
+              {...form}
+              sendCodeMutation={sendCodeMutation}
+              sendPhoneMutation={sendPhoneMutation}
+            />
           </FormLabel>
         ))}
         {error && <Alert title={error} severity="error" />}
