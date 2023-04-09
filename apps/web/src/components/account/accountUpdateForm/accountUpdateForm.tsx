@@ -18,6 +18,8 @@ import { useQueryClient } from '@tanstack/react-query';
 import {
   QUERY_KEYS,
   useDeleteAccount,
+  useSendCode,
+  useSendPhone,
   useUpdateAccount,
 } from 'http/server/auth';
 import { ModalContext } from 'feature/ModalProvider';
@@ -33,6 +35,8 @@ const AccountUpdateForm = (props: AccountUpdateFormProps) => {
   const [error, setError] = React.useState<string | null>(null);
   const [success, setSuccess] = React.useState<string | null>(null);
   const { data: session } = useSession();
+  const sendPhoneMutation = useSendPhone();
+  const sendCodeMutation = useSendCode();
   const { data: updateInfo } = useAccountUpdateInfo(sub, {
     onError: (error: Error) => {
       setError(error.message);
@@ -189,6 +193,8 @@ const AccountUpdateForm = (props: AccountUpdateFormProps) => {
                       ? updateInfo?.data[f.htmlFor]
                       : undefined
                   }
+                  sendCodeMutation={sendCodeMutation}
+                  sendPhoneMutation={sendPhoneMutation}
                   {...f}
                 />
               </FormLabel>

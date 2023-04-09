@@ -10,7 +10,12 @@ import TermModal from 'components/common/modal/termModal';
 import { Modal } from 'components/common/modal';
 import { useDebounce } from '@supercarmarket/hooks';
 import { form, type FormState } from 'constants/form/signup';
-import { QUERY_KEYS, useCreateAccount } from 'http/server/auth';
+import {
+  QUERY_KEYS,
+  useCreateAccount,
+  useSendCode,
+  useSendPhone,
+} from 'http/server/auth';
 import { useQueryClient } from '@tanstack/react-query';
 import { ModalContext } from 'feature/ModalProvider';
 
@@ -20,6 +25,8 @@ const SignupForm = () => {
   const [error, setError] = React.useState<string | null>(null);
   const { onOpen, onClose } = React.useContext(ModalContext);
   const methods = useForm<FormState>();
+  const sendPhoneMutation = useSendPhone();
+  const sendCodeMutation = useSendCode();
   const createAccountMutation = useCreateAccount({
     onSuccess: () => {
       onOpen(
@@ -146,6 +153,8 @@ const SignupForm = () => {
               <AuthFormItem
                 key={props.htmlFor}
                 handleModal={handleModal}
+                sendCodeMutation={sendCodeMutation}
+                sendPhoneMutation={sendPhoneMutation}
                 {...props}
               />
             </FormLabel>
