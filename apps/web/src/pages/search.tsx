@@ -5,7 +5,7 @@ import {
 } from '@tanstack/react-query';
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import type { NextPageWithLayout, Params } from '@supercarmarket/types/base';
-import { Alert, applyMediaQuery, Container, Wrapper } from '@supercarmarket/ui';
+import { Alert, Container, Wrapper } from '@supercarmarket/ui';
 import Layout from 'components/layout';
 import { css } from 'styled-components';
 import { SearchList } from 'components/search';
@@ -25,14 +25,7 @@ const Search: NextPageWithLayout = ({
         description={`${keyword}에 대한 검색결과입니다.`}
       />
       <Container>
-        <Wrapper
-          css={css`
-            transform: translateY();
-            ${applyMediaQuery('mobile')} {
-              padding: 0 16px;
-            }
-          `}
-        >
+        <Wrapper>
           <QueryErrorResetBoundary>
             {({ reset }) => (
               <ErrorBoundary

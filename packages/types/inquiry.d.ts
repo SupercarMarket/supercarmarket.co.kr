@@ -8,7 +8,7 @@ interface InquiryDto {
   id: string;
   title: string;
   category: string;
-  progress: string;
+  status: number;
   created: string;
 }
 

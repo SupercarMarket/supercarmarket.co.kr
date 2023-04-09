@@ -14,13 +14,10 @@ import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 import * as React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-
 import GoogleIcon from '../../../assets/svg/google.svg';
 import KakaoIcon from '../../../assets/svg/kakao.svg';
 import AuthFormItem from '../authFormItem/authFormItem';
 import * as style from './signinForm.styled';
-import useAuth from 'hooks/useAuth';
-import { useDebounce } from '@supercarmarket/hooks';
 import { form, FormState } from 'constants/form/signin';
 
 const oauth = [
@@ -32,7 +29,7 @@ const Links = () => {
   return (
     <Container display="flex" alignItems="center" justifyContent="center">
       <Link
-        href="/auth/find?type=id"
+        href="/auth/find-id"
         style={{
           cursor: 'pointer',
         }}
@@ -41,7 +38,7 @@ const Links = () => {
       </Link>
       <Divider width="1px" height="10px" color="#C3C3C7" margin="0 10px" />
       <Link
-        href="/auth/find?type=password"
+        href="/auth/find-password"
         style={{
           cursor: 'pointer',
         }}
@@ -63,32 +60,34 @@ const Links = () => {
 
 const LocalFormItem = () => {
   const methods = useForm<FormState>();
-  const { authState } = useAuth();
   const { replace } = useRouter();
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
 
   const { formState } = methods;
 
-  const debouncedSubmit = useDebounce(async (data: FormState) => {
-    setErrorMessage(null);
+  const handleSubmit = React.useCallback(
+    async (data: FormState) => {
+      setErrorMessage(null);
 
-    const { id, password } = data;
-    catchNoExist(id, password);
+      const { id, password } = data;
+      catchNoExist(id, password);
 
-    const response = await signIn('Credentials', {
-      id,
-      password,
-      redirect: false,
-    });
+      const response = await signIn('Credentials', {
+        id,
+        password,
+        redirect: false,
+      });
 
-    if (!response) setErrorMessage(ErrorCode[450]);
-    else if (response.ok) replace('/');
-    else setErrorMessage(response?.error || ErrorCode[450]);
-  }, 300);
+      if (!response) setErrorMessage(ErrorCode[450]);
+      else if (response.ok) replace('/');
+      else setErrorMessage(response?.error || ErrorCode[450]);
+    },
+    [replace]
+  );
 
   return (
     <FormProvider {...methods}>
-      <Form css={style.form} onSubmit={methods.handleSubmit(debouncedSubmit)}>
+      <Form css={style.form} onSubmit={methods.handleSubmit(handleSubmit)}>
         <Wrapper css={style.wrapper}>
           {form.map((form) => (
             <FormLabel
@@ -97,7 +96,7 @@ const LocalFormItem = () => {
               label={form.label}
               hidden
             >
-              <AuthFormItem {...form} state={authState} tooltip="" />
+              <AuthFormItem {...form} tooltip="" />
             </FormLabel>
           ))}
         </Wrapper>
@@ -117,8 +116,14 @@ const LocalFormItem = () => {
 };
 
 const OauthFormItem = () => {
-  const handleOauthLogin = (provider: string) => {
-    signIn(provider);
+  const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
+
+  const handleOauthLogin = async (provider: string) => {
+    await signIn(provider, {
+      callbackUrl: '/',
+    }).catch((error) => {
+      setErrorMessage(error.message);
+    });
   };
 
   return (
@@ -145,6 +150,7 @@ const OauthFormItem = () => {
           </Wrapper>
         </Button>
       ))}
+      {errorMessage && <Alert title={errorMessage} severity="error" />}
     </Container>
   );
 };
@@ -152,7 +158,7 @@ const OauthFormItem = () => {
 const SigninForm = () => {
   return (
     <Container
-      width="340px"
+      width="100%"
       display="flex"
       flexDirection="column"
       alignItems="center"

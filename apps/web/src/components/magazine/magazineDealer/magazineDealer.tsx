@@ -7,7 +7,6 @@ import {
   Wrapper,
 } from '@supercarmarket/ui';
 import { Modal } from 'components/common/modal';
-import ModalContext from 'feature/modalContext';
 import * as React from 'react';
 import { css } from 'styled-components';
 import { useSession } from 'next-auth/react';
@@ -17,12 +16,14 @@ import { get } from '@supercarmarket/lib';
 import { ServerResponse } from '@supercarmarket/types/base';
 import { QUERY_KEYS, useMagazineInquiry } from 'http/server/magazine';
 import Avatar from 'components/common/avatar';
+import { ModalContext } from 'feature/ModalProvider';
 
 interface MagazineDealerProps {
+  isCounseling: boolean;
   postId: string;
 }
 
-const MagazineDealer = ({ postId }: MagazineDealerProps) => {
+const MagazineDealer = ({ postId, isCounseling }: MagazineDealerProps) => {
   const queryClient = useQueryClient();
   const session = useSession();
   const [error, setError] = React.useState<string | null>(null);
@@ -39,7 +40,7 @@ const MagazineDealer = ({ postId }: MagazineDealerProps) => {
       }),
     enabled: session.status === 'authenticated',
   });
-  const { mutate: inquiryMutation } = useMagazineInquiry(postId, {
+  const { mutate: inquiryMutation, isLoading } = useMagazineInquiry(postId, {
     onSuccess: () => {
       queryClient.invalidateQueries(QUERY_KEYS.id(postId));
     },
@@ -216,8 +217,16 @@ const MagazineDealer = ({ postId }: MagazineDealerProps) => {
               lineHeight="150%"
               color="greyScale-6"
               space
-            >{`더 자세한 정보를 원하신다면\n언제든지 문의 주세요.`}</Typography>
-            <Button variant="Primary" onClick={onModal}>
+            >
+              {isCounseling
+                ? '상담 신청이 완료되었습니다.'
+                : `더 자세한 정보를 원하신다면\n언제든지 문의 주세요.`}
+            </Typography>
+            <Button
+              variant="Primary"
+              onClick={onModal}
+              disabled={isCounseling || isLoading}
+            >
               상담 신청
             </Button>
           </Wrapper.Right>

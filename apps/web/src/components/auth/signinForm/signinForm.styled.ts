@@ -3,7 +3,7 @@
 import { css } from 'styled-components';
 
 const form = css`
-  width: 340px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;

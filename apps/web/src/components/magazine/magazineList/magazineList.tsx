@@ -20,29 +20,29 @@ const MagazineList = () => {
 
   return (
     <Container display="flex" flexDirection="column" alignItems="center">
-      <MagazineBanner initialData={magazine} />
-      <Wrapper
-        css={css`
-          width: 880px;
-          margin-top: 80px;
-          ${applyMediaQuery('mobile')} {
-            width: 100%;
-            margin-top: 32px;
-          }
-        `}
-      >
-        <Searchbar
-          variant="Line"
-          border="normal"
-          placeholder="검색어를 입력해주세요."
-          handleClick={(query) => {
-            if (query.length <= 1) return;
-            push(`/magazine?keyword=${query}`);
-          }}
-        />
-      </Wrapper>
       {magazine && magazine.data.length > 0 ? (
         <>
+          <MagazineBanner initialData={magazine.data[0]} />
+          <Wrapper
+            css={css`
+              width: 880px;
+              margin-top: 80px;
+              ${applyMediaQuery('mobile')} {
+                width: 100%;
+                margin-top: 32px;
+              }
+            `}
+          >
+            <Searchbar
+              variant="Line"
+              border="normal"
+              placeholder="검색어를 입력해주세요."
+              handleClick={(query) => {
+                if (query.length <= 1) return;
+                push(`/magazine?keyword=${query}`);
+              }}
+            />
+          </Wrapper>
           <Wrapper
             css={css`
               margin: 80px 0;

@@ -1,4 +1,10 @@
 const { withPlaiceholder } = require('@plaiceholder/next');
+const withPWA = require('next-pwa')({
+  dest: 'public',
+  register: true,
+  disableDevLogs: true,
+  buildExcludes: [/app-build-manifest.json$/],
+});
 
 /** @type {import('next').NextConfig} */
 
@@ -62,4 +68,6 @@ const nextConfig = {
   },
 };
 
-module.exports = withPlaiceholder(nextConfig);
+const pwaConfig = withPWA(nextConfig);
+
+module.exports = withPlaiceholder(pwaConfig);

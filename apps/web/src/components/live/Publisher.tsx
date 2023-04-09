@@ -12,7 +12,7 @@ import CameraCloseIcon from 'public/images/live/icons/CameraCloseIcon.svg';
 interface Props {
   sessionId: string;
   data: channelResType;
-  setisBroad: (broad: boolean) => void;
+  setIsBroad: (broad: boolean) => void;
   isBroad: boolean;
 }
 
@@ -28,11 +28,12 @@ interface channelResType {
 }
 
 function Publisher(props: Props) {
-  const { isBroad, setisBroad } = props;
+  const { isBroad, setIsBroad } = props;
   const newOV = new OpenVidu();
   newOV.enableProdMode();
   const { sessionId, data } = props;
   const [volume, setVolume] = useState<number>(80);
+  const [isCamera, setIsCamera] = useState(true);
 
   const [session, setSession] = useState<Session>(newOV.initSession());
   const [publisher, setPublisher] = useState<Publishers>();
@@ -49,17 +50,14 @@ function Publisher(props: Props) {
     router.replace('/live');
   };
 
-  const cameraOnOffHandler = () => {
+  const cameraOnOffHandler = async () => {
     if (session && publisher) {
-      var video = document.getElementById('Streaming') as HTMLVideoElement;
-      if (isBroad) {
-        session.unpublish(publisher);
-        setisBroad(false);
+      if (isCamera) {
+        publisher.publishVideo(false);
+        setIsCamera(false);
       } else {
-        session.publish(publisher);
-        setisBroad(true);
-        publisher.stream.streamManager.addVideoElement(video);
-        video.style.transform = 'rotate(0)';
+        publisher.publishVideo(true);
+        setIsCamera(true);
       }
     }
   };
@@ -88,7 +86,7 @@ function Publisher(props: Props) {
 
             session.publish(publich);
             setPublisher(publich);
-            setisBroad(true);
+            setIsBroad(true);
             publich.stream.streamManager.addVideoElement(video);
             video.style.transform = 'rotate(0)';
           });
@@ -116,6 +114,9 @@ function Publisher(props: Props) {
 
   useEffect(() => {
     if (sessionId) joinSession();
+    return () => {
+      session.disconnect();
+    };
   }, []);
 
   useEffect(() => {
@@ -186,7 +187,7 @@ function Publisher(props: Props) {
             }}
           >
             <Button variant="Primary-Line" onClick={cameraOnOffHandler}>
-              카메라 {isBroad ? '끄기' : '켜기'}
+              카메라 {isCamera ? '끄기' : '켜기'}
               <CameraCloseIcon />
             </Button>
             <Button variant="Primary" onClick={deleteBroadCastHandler}>

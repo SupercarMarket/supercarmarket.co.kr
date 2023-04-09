@@ -4,8 +4,7 @@ import { useUrlQuery } from '@supercarmarket/hooks';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { css } from 'styled-components';
-import { applyMediaQuery } from 'styles/mediaQuery';
-import { theme } from '../../styles';
+import { applyMediaQuery, theme } from '../../styles';
 
 import { Button } from '../button';
 import { Container } from '../container';
@@ -63,6 +62,9 @@ const Tab = ({
             css={css`
               display: flex;
               gap: 9px;
+              ${applyMediaQuery('mobile')} {
+                gap: 4px;
+              }
             `}
           >
             <Link href={update}>
@@ -89,6 +91,7 @@ const Tab = ({
             justify-content: flex-end;
             gap: 9px;
             ${applyMediaQuery('mobile')} {
+              gap: 4px;
             }
           `}
         >

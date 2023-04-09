@@ -3,14 +3,13 @@ import type { NextPageWithLayout } from '@supercarmarket/types/base';
 import { CommunityForm } from 'components/community';
 import layout from 'components/layout';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-import { getSession } from 'http/server/auth/user';
-import { ModalProvider } from 'feature/modalContext';
 import { QueryErrorResetBoundary } from '@tanstack/react-query';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from 'components/fallback';
 import { css } from 'styled-components';
-import Advertisement from 'components/common/advertisement';
 import { prefetchTemporaryStorage } from 'http/server/community';
+import { getSession } from 'http/server/next';
+import { ModalProvider } from 'feature/ModalProvider';
 
 const Create: NextPageWithLayout = ({
   temporaryStorage,
@@ -24,10 +23,8 @@ const Create: NextPageWithLayout = ({
               display: flex;
               flex-direction: column;
               gap: 20px;
-              padding: 0 16px;
             `}
           >
-            <Advertisement />
             <Title>게시글 작성</Title>
             <ErrorBoundary
               onReset={reset}
@@ -63,11 +60,13 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     };
   }
 
-  const temporaryStorage = await prefetchTemporaryStorage(session.accessToken);
+  const temporaryStorage = await prefetchTemporaryStorage(
+    session.accessToken
+  ).then((res) => res.data);
 
   return {
     props: {
-      temporaryStorage,
+      temporaryStorage: temporaryStorage,
     },
   };
 };

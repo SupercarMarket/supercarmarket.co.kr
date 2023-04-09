@@ -7,15 +7,13 @@ import {
   QueryClient,
   QueryErrorResetBoundary,
 } from '@tanstack/react-query';
-import { getSession } from 'http/server/auth/user';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from 'components/fallback';
 import Posting from 'components/common/posting';
 import { CommunityPostingList } from 'components/community';
-import { ModalProvider } from 'feature/modalContext';
-import { css } from 'styled-components';
-import Advertisement from 'components/common/advertisement';
 import { prefetchCommunityPost, QUERY_KEYS } from 'http/server/community';
+import { getSession } from 'http/server/next';
+import { ModalProvider } from 'feature/ModalProvider';
 
 const CommunityPost: NextPageWithLayout = ({
   subject,
@@ -26,18 +24,13 @@ const CommunityPost: NextPageWithLayout = ({
     <Container>
       <QueryErrorResetBoundary>
         {({ reset }) => (
-          <Wrapper
-            css={css`
-              padding: 0 16px;
-            `}
-          >
+          <Wrapper>
             <ErrorBoundary
               onReset={reset}
               fallbackRender={(props) => (
                 <ErrorFallback margin="100px 0" {...props} />
               )}
             >
-              <Advertisement />
               <Title>커뮤니티 게시글</Title>
               <ModalProvider>
                 <Posting

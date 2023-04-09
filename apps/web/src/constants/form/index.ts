@@ -27,7 +27,9 @@ export interface Form<K, T> {
   divider?: boolean;
   options: RegisterOptions & {
     option?: FormSelectOption;
+    size?: number;
   };
+  readOnly?: boolean;
   button?: string;
   buttonWidth?: string;
   tooltip?: string;

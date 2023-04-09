@@ -51,7 +51,7 @@ const ProfileRepresentative = ({
           grid-template-columns: 1fr 1fr 1fr;
           align-items: center;
           ${applyMediaQuery('mobile')} {
-            margin: 0 16px;
+            margin: 0 23.5px;
             overflow-x: scroll;
           }
         `}
@@ -105,7 +105,7 @@ const ProfileRepresentativeItem = (props: ProfileRepresentativeItemProps) => {
 
       e.target.value = '';
 
-      return await authRequest('/server/supercar/v1/user/gallery', {
+      return await authRequest('/user/gallery', {
         method: 'POST',
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -123,7 +123,7 @@ const ProfileRepresentativeItem = (props: ProfileRepresentativeItemProps) => {
     mutationFn: async (url: string) => {
       if (!session) return;
 
-      return await authRequest('/server/supercar/v1/user/gallery', {
+      return await authRequest('/user/gallery', {
         method: 'DELETE',
         data: { url },
       });

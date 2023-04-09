@@ -1,26 +1,49 @@
 'use client';
 
+import * as React from 'react';
 import { Alert, Button, Divider, Form, FormLabel } from '@supercarmarket/ui';
 import { useRouter } from 'next/navigation';
-import * as React from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
-
-import AuthFormItem from '../authFormItem/authFormItem';
 import * as style from './signupForm.styled';
-import ModalContext from 'feature/modalContext';
+import AuthFormItem from '../authFormItem/authFormItem';
+import { FormProvider, useForm } from 'react-hook-form';
 import TermModal from 'components/common/modal/termModal';
-import useAuth from 'hooks/useAuth';
 import { Modal } from 'components/common/modal';
 import { useDebounce } from '@supercarmarket/hooks';
 import { form, type FormState } from 'constants/form/signup';
+import { QUERY_KEYS, useCreateAccount } from 'http/server/auth';
+import { useQueryClient } from '@tanstack/react-query';
+import { ModalContext } from 'feature/ModalProvider';
 
 const SignupForm = () => {
+  const queryClient = useQueryClient();
   const { replace } = useRouter();
   const [error, setError] = React.useState<string | null>(null);
   const { onOpen, onClose } = React.useContext(ModalContext);
   const methods = useForm<FormState>();
-  const { authState, duplicate, sendPhone, sendCode, signUp, resetField } =
-    useAuth();
+  const createAccountMutation = useCreateAccount({
+    onSuccess: () => {
+      onOpen(
+        <Modal
+          title="회원가입 성공 🎉🎊"
+          description="Welcome to 슈퍼카마켓"
+          background="rgba(30, 30, 32, 0.5)"
+          onCancel={() => {
+            onClose();
+            replace('/auth/signin');
+          }}
+          clickText="로그인"
+          onClick={() => {
+            onClose();
+            replace('/auth/signin');
+          }}
+        />
+      );
+    },
+    onError: (error: Error) => {
+      setError(error.message);
+    },
+    useErrorBoundary: false,
+  });
 
   const handleModal = React.useCallback(
     (htmlFor: keyof FormState) => {
@@ -46,75 +69,61 @@ const SignupForm = () => {
   const handleRequire = async (data: FormState) => {
     setError(null);
 
-    const { id, nickname, email, phone, authentication } = data;
-    const {
-      id: _id,
-      nickname: _nickname,
-      email: _email,
-      phone: _phone,
-      authentication: _authentication,
-    } = authState;
+    const _id = queryClient.getQueryData<string>(QUERY_KEYS.duplicate('id'));
+    const _email = queryClient.getQueryData<string>(
+      QUERY_KEYS.duplicate('email')
+    );
+    const _nickname = queryClient.getQueryData<string>(
+      QUERY_KEYS.duplicate('nickname')
+    );
+    const _phone = queryClient.getQueryData<string>(QUERY_KEYS.phone());
+    const _authentication = queryClient.getQueryData<string>(QUERY_KEYS.code());
 
-    if (!(_id.success && _nickname.success && _email.success)) {
+    const { id, nickname, email, phone, authentication } = data;
+
+    if (!(_id && _nickname && _email)) {
       setError('중복검사가 필요합니다.');
       throw '중복검사가 필요합니다.';
     }
 
-    if (
-      _id.success !== id ||
-      _nickname.success !== nickname ||
-      _email.success !== email
-    ) {
+    if (_id !== id || _nickname !== nickname || _email !== email) {
       setError('중복검사에 사용한 값을 입력해주세요.');
       throw '중복검사에 사용한 값을 입력해주세요.';
     }
 
-    if (!_phone.success) {
+    if (!_phone) {
       setError('휴대폰 인증이 필요합니다.');
       throw '휴대폰 인증이 필요합니다.';
     }
 
-    if (phone !== _phone.success) {
+    if (phone !== _phone) {
       setError('휴대폰 인증에 사용하신 번호를 입력해주세요.');
       throw '휴대폰 인증에 사용하신 번호를 입력해주세요.';
     }
 
-    if (!_authentication.success) {
+    if (!_authentication) {
       setError('인증번호 확인이 필요합니다.');
       throw '인증번호 확인이 필요합니다.';
     }
 
-    if (authentication !== _authentication.success) {
+    if (authentication !== _authentication) {
       setError('인증번호 확인에 사용하신 번호를 입력해주세요.');
       throw '인증번호 확인에 사용하신 번호를 입력해주세요.';
     }
   };
 
   const debouncedSubmit = useDebounce(async (data: FormState) => {
-    await signUp(data)
-      .then(() => {
-        onOpen(
-          <Modal
-            title="회원가입 성공 🎉🎊"
-            description="Welcome to 슈퍼카마켓"
-            background="rgba(30, 30, 32, 0.5)"
-            onCancel={() => {
-              onClose();
-              replace('/auth/signin');
-            }}
-            clickText="로그인"
-            onClick={() => {
-              onClose();
-              replace('/auth/signin');
-            }}
-          />
-        );
-      })
-      .catch((error) => setError(error.message));
+    await createAccountMutation.mutate(data, {
+      onSuccess: () => {
+        methods.reset();
+      },
+    });
   }, 300);
 
   React.useEffect(() => {
-    return () => resetField();
+    return () => {
+      queryClient.resetQueries({ queryKey: QUERY_KEYS.all });
+    };
   }, []);
 
   return (
@@ -136,10 +145,6 @@ const SignupForm = () => {
             >
               <AuthFormItem
                 key={props.htmlFor}
-                state={authState}
-                duplicate={duplicate}
-                sendPhone={sendPhone}
-                sendCode={sendCode}
                 handleModal={handleModal}
                 {...props}
               />
@@ -151,7 +156,7 @@ const SignupForm = () => {
         ))}
         {error && <Alert severity="error" title={error} />}
         <Button width="340px" type="submit" variant="Primary">
-          가입하기
+          {createAccountMutation.isLoading ? '가입중..' : '가입하기'}
         </Button>
       </Form>
     </FormProvider>

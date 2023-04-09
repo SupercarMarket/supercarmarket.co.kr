@@ -12,13 +12,12 @@ const useSearchKeyword = ({ domain }: SearchParams) => {
   const { query } = useNextQuery(searchParams);
   const keywordRef = React.useRef<HTMLInputElement>(null);
 
-  const keydownHandler = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && keywordRef.current !== null) {
+  const keydownHandler = () => {
+    if (keywordRef.current !== null) {
       const queries = { ...query };
 
       queries.keyword = keywordRef.current.value;
       delete queries.id;
-      keywordRef.current.value = '';
 
       const queryString = Object.entries(queries)
         .map(([key, value]) => `${key}=${value}`)

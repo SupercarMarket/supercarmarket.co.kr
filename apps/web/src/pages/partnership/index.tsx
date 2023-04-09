@@ -2,20 +2,23 @@ import { css } from 'styled-components';
 import { ErrorBoundary } from 'react-error-boundary';
 import { InferGetServerSidePropsType, NextPageContext } from 'next/types';
 import { NextPageWithLayout, Params } from '@supercarmarket/types/base';
-import { applyMediaQuery, Searchbar, Wrapper } from '@supercarmarket/ui';
+import {
+  applyMediaQuery,
+  Container,
+  Searchbar,
+  Wrapper,
+} from '@supercarmarket/ui';
 import {
   dehydrate,
   QueryClient,
   QueryErrorResetBoundary,
 } from '@tanstack/react-query';
-
 import layout from 'components/layout';
-import Banner from 'components/partnership/banner';
+import Announcement from 'components/common/announcement';
 import { ErrorFallback } from 'components/fallback';
 import { useSearchKeyword } from 'hooks/useSearchKeyword';
 import PartnershipList from 'components/partnership/partnershipList';
 import PartnershipCategory from 'components/partnership/partnershipCategory';
-import Advertisement from 'components/common/advertisement';
 import { prefetchPartnership, QUERY_KEYS } from 'http/server/partnership';
 import { links } from 'constants/link/partnership';
 
@@ -27,18 +30,11 @@ const PartnershipPage: NextPageWithLayout = ({
   });
 
   return (
-    <Wrapper
-      css={css`
-        ${applyMediaQuery('mobile')} {
-          padding: 0 16px;
-        }
-      `}
-    >
-      <Advertisement />
-      <Banner
+    <Container>
+      <Announcement
         title="제휴업체 등록을 원하시나요?"
         btnTitle="등록 문의하기"
-        url="/inquiry/partnership"
+        url="/inquiry"
       />
       <Wrapper.Top
         css={css`
@@ -60,8 +56,8 @@ const PartnershipPage: NextPageWithLayout = ({
             width="100%"
             variant="Line"
             placeholder="원하시는 업체를 검색하세요"
-            onKeyDown={keydownHandler}
             ref={keywordRef}
+            handleClick={keydownHandler}
           />
         </Wrapper.Item>
       </Wrapper.Top>
@@ -76,7 +72,7 @@ const PartnershipPage: NextPageWithLayout = ({
           </ErrorBoundary>
         )}
       </QueryErrorResetBoundary>
-    </Wrapper>
+    </Container>
   );
 };
 

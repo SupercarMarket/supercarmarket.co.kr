@@ -27,7 +27,7 @@ const bottom = css`
 
 const CarouselArea = styled.div`
   width: 100%;
-  height: 90px;
+  height: 105px;
   overflow: hidden;
   position: relative;
 
@@ -45,6 +45,7 @@ const CarouselArea = styled.div`
 const CarouselBox = styled.div<{ page: number }>`
   position: absolute;
   display: flex;
+  align-items: center;
   gap: 10.5px;
   ${({ page }) => css`
     transform: translateX(${(page - 1) * -1212}px);
@@ -91,8 +92,10 @@ const ArrowButton = styled.button<ArrowButtonProps>`
 `;
 
 const CarouselImageWrapper = styled.div`
+  display: flex;
+  align-items: center;
   width: 141px;
-  height: 89px;
+  aspect-ratio: 4/3;
   position: relative;
   cursor: pointer;
   :hover {
@@ -102,18 +105,6 @@ const CarouselImageWrapper = styled.div`
 
   ${applyMediaQuery('mobile')} {
     width: 80px;
-    height: 60px;
-  }
-`;
-
-const ImageWrapper = styled.div`
-  width: 141px;
-  height: 105px;
-  position: relative;
-
-  ${applyMediaQuery('mobile')} {
-    width: 80px;
-    height: 60px;
   }
 `;
 
@@ -133,7 +124,6 @@ export {
   CarouselArea,
   CarouselBox,
   CarouselImageWrapper,
-  ImageWrapper,
   CheckBox,
   top,
 };

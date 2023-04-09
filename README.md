@@ -39,6 +39,12 @@
 
 <img src="https://img.shields.io/badge/Typescript-3278C6?style=for-the-badge&logo=react_hook_form&logoColor=white">
 
+### Service Environment
+
+- `Web`: enabled
+- `PWA`: enabled
+- `Android`: comming soon with `TWA`
+
 ### Apps and Packages
 
 - `web`: SupercarMarket_Client

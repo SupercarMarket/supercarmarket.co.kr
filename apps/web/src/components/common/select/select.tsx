@@ -5,7 +5,7 @@ import { makeQuery } from 'utils/market/marketQuery';
 import { SelectType } from '@supercarmarket/types/market';
 import { useNextQuery } from 'hooks/useNextQuery';
 import { useSearchParams } from 'next/navigation';
-import { Typography, Wrapper } from '@supercarmarket/ui';
+import { Wrapper, applyMediaQuery } from '@supercarmarket/ui';
 
 import * as S from './select.styled';
 import ArrowBottom from '../../../assets/svg/arrow-bottom.svg';
@@ -14,9 +14,10 @@ interface SelectProps {
   width?: string;
   align?: 'left' | 'center' | 'right';
   options: SelectType;
+  nongray?: boolean;
 }
 
-const Select = ({ options, width = '100%', align }: SelectProps) => {
+const Select = ({ options, width = '100%', align, nongray }: SelectProps) => {
   const { optionSet, defaultLabel } = options;
   const searchParams = useSearchParams();
   const { query } = useNextQuery(searchParams);
@@ -59,13 +60,29 @@ const Select = ({ options, width = '100%', align }: SelectProps) => {
         box-sizing: border-box;
         position: relative;
         width: ${width};
+
+        ${({ theme }) => css`
+          p {
+            font-size: ${theme.fontSize['body-16']};
+          }
+          .gray {
+            color: ${theme.color['greyScale-5']};
+          }
+          ${applyMediaQuery('mobile')} {
+            p {
+              font-size: ${theme.fontSize['body-14']};
+            }
+          }
+        `}
       `}
     >
       <S.Backdrop toggle={toggle} onClick={closeToggle} />
       <S.SelectCurrentButton type="button" onClick={onToggle} align={align}>
-        <Typography fontSize="body-16">
-          {optionValue.option || defaultLabel}
-        </Typography>
+        {!optionValue.option ? (
+          <p className={nongray ? '' : 'gray'}>{defaultLabel}</p>
+        ) : (
+          <p>{optionValue.option}</p>
+        )}
         <ArrowBottom width="13px" height="13px" />
       </S.SelectCurrentButton>
       <S.SelectOptionList width={width} toggle={toggle}>
@@ -77,7 +94,7 @@ const Select = ({ options, width = '100%', align }: SelectProps) => {
                 active={optionValue.option === option}
                 align={align}
               >
-                <Typography fontSize="body-16">{option}</Typography>
+                <p>{option}</p>
               </S.SelectOptionButton>
             </Link>
           </S.SelectOptionItem>

@@ -45,7 +45,7 @@ const FormInput = React.forwardRef(function FormInput(
         )}
         {suffix && (
           <Wrapper.Item css={style.suffix}>
-            <Typography>{suffix}</Typography>
+            <Typography fontSize="body-16">{suffix}</Typography>
           </Wrapper.Item>
         )}
       </Wrapper>

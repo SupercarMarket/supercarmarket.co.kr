@@ -5,13 +5,15 @@ import {
   FormMessage,
   Wrapper,
 } from '@supercarmarket/ui';
+import { useQueryClient } from '@tanstack/react-query';
 import { type Form, type FormType } from 'constants/form';
 import { type FormState } from 'constants/form/signup';
 import {
-  type AuthState,
-  type AuthStateField,
-  type UseAuth,
-} from 'hooks/useAuth';
+  QUERY_KEYS,
+  useDuplicateField,
+  useSendCode,
+  useSendPhone,
+} from 'http/server/auth';
 import * as React from 'react';
 import type {
   FieldError,
@@ -42,11 +44,7 @@ interface AuthFormItemProps
     keyof FormState,
     Extract<FormType, 'text' | 'password' | 'tel' | 'email' | 'agreement'>
   > {
-  state: AuthState;
   defaultValue?: string | string[];
-  duplicate?: UseAuth['duplicate'];
-  sendPhone?: UseAuth['sendPhone'];
-  sendCode?: UseAuth['sendCode'];
   handleModal?: (htmlFor: keyof FormState) => void;
 }
 
@@ -55,8 +53,7 @@ interface AuthFormItemContainerProps extends Omit<AuthFormItemProps, 'state'> {
   setValue: UseFormSetValue<FieldValues>;
   setError: UseFormSetError<FieldValues>;
   getValues: UseFormGetValues<FieldValues>;
-  authState?: AuthStateField;
-  sended: boolean;
+  phone?: string;
   patternError?:
     | FieldError
     | Merge<FieldError, FieldErrorsImpl<any>>
@@ -66,18 +63,7 @@ interface AuthFormItemContainerProps extends Omit<AuthFormItemProps, 'state'> {
 }
 
 const AuthFormItem = (props: AuthFormItemProps) => {
-  const { htmlFor, state, handleModal, ...rest } = props;
-  const authState = React.useMemo(() => {
-    if (
-      htmlFor !== 'password' &&
-      htmlFor !== 'passwordConfirm' &&
-      htmlFor !== 'name' &&
-      htmlFor !== 'description' &&
-      htmlFor !== 'service' &&
-      htmlFor !== 'privacy'
-    )
-      return state[htmlFor];
-  }, [state, htmlFor]);
+  const { htmlFor, handleModal, ...rest } = props;
   const {
     register,
     setValue,
@@ -85,8 +71,10 @@ const AuthFormItem = (props: AuthFormItemProps) => {
     setError,
     formState: { errors, isSubmitSuccessful },
   } = useFormContext();
+  const queryClient = useQueryClient();
   const patternError = errors[htmlFor];
   const target = useWatch({ name: htmlFor });
+  const phone = queryClient.getQueryData<string>(QUERY_KEYS.phone());
 
   return (
     <AuthFormItemContainer
@@ -97,8 +85,7 @@ const AuthFormItem = (props: AuthFormItemProps) => {
       handleModal={handleModal}
       target={target}
       htmlFor={htmlFor}
-      authState={authState}
-      sended={!!state['phone'].success}
+      phone={phone}
       patternError={patternError}
       isSubmitSuccessful={isSubmitSuccessful}
       {...rest}
@@ -111,25 +98,22 @@ const AuthFormItemContainer = React.memo(function AuthFormItem({
   button,
   placeholder,
   tooltip,
-  sended,
   type = 'text',
   options,
   buttonWidth,
   errorMessage,
   successMessage,
   target,
-  authState,
   patternError,
   isSubmitSuccessful,
   defaultValue,
+  phone,
+  readOnly,
   register,
   setValue,
   setError: setFieldError,
   getValues,
   handleModal,
-  sendPhone,
-  duplicate,
-  sendCode,
 }: AuthFormItemContainerProps) {
   const [error, setError] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
@@ -138,64 +122,91 @@ const AuthFormItemContainer = React.memo(function AuthFormItem({
     else if (patternError) return patternError.message as string;
     else return undefined;
   }, [error, errorMessage, patternError]);
+  const duplicateFieldMutation = useDuplicateField(htmlFor);
+  const sendPhoneMutation = useSendPhone();
+  const sendCodeMutation = useSendCode();
 
   const attr = { id: htmlFor, type, placeholder };
   const phoneBtnAttr: InputBtnAttr = {
     button: !!button,
-    buttonText: htmlFor === 'phone' && sended ? '재시도' : button,
+    buttonText: htmlFor === 'phone' && phone ? '재시도' : button,
     buttonWidth: buttonWidth,
-    buttonVariant: (htmlFor === 'authentication' ? !sended : !!sended)
+    buttonVariant: (htmlFor === 'authentication' ? !phone : !!phone)
       ? 'Line'
       : 'Primary-Line',
     buttonDisabled: false,
-    count: htmlFor === 'authentication' && sended && !success ? 179 : undefined,
+    count: htmlFor === 'authentication' && phone && !success ? 179 : undefined,
   };
   const count =
-    htmlFor === 'authentication' && sended && !success ? 179 : undefined;
+    htmlFor === 'authentication' && phone && !success ? 179 : undefined;
 
   const handleCallback = React.useCallback(async () => {
+    setFieldError(htmlFor, { message: '' });
+    setError(false);
+    setSuccess(false);
+
     if (!target) return;
     if (validator[htmlFor](target) !== true) {
       setFieldError(htmlFor, { message: String(validator[htmlFor](target)) });
       return;
     }
 
-    setError(false);
-    setSuccess(false);
-
-    if (duplicate)
-      duplicate(htmlFor, target).then(() => {
-        setFieldError(htmlFor, { message: '' });
+    duplicateFieldMutation.mutate(target, {
+      onSuccess: () => {
         setSuccess(true);
-      });
-  }, [duplicate, htmlFor, setFieldError, target]);
+      },
+      onError: () => {
+        setError(true);
+      },
+    });
+  }, [duplicateFieldMutation, htmlFor, setFieldError, target]);
 
   const handlePhoneAuth = React.useCallback(() => {
+    setFieldError(htmlFor, { message: '' });
+    setError(false);
+    setSuccess(false);
+
     if (!target) return;
     if (validator[htmlFor](target) !== true) {
       setFieldError(htmlFor, { message: String(validator[htmlFor](target)) });
       return;
     }
 
-    setError(false);
-    setSuccess(false);
+    const _phone = getValues('phone');
 
-    const phone = getValues('phone');
-
-    if (htmlFor === 'phone' && sendPhone)
-      sendPhone(phone).then(() => {
-        setFieldError(htmlFor, { message: '' });
-        setSuccess(true);
+    if (htmlFor === 'phone')
+      sendPhoneMutation.mutate(_phone, {
+        onSuccess: () => {
+          setSuccess(true);
+        },
+        onError: () => {
+          setError(true);
+        },
       });
-    else if (htmlFor === 'authentication' && sendCode && !!phone)
-      sendCode(phone, target).then(() => {
-        setFieldError(htmlFor, { message: '' });
-        setSuccess(true);
-      });
-  }, [target, htmlFor, sendPhone, getValues, sendCode, setFieldError]);
+    else if (htmlFor === 'authentication' && !!phone)
+      sendCodeMutation.mutate(
+        { phone, code: target },
+        {
+          onSuccess: () => {
+            setSuccess(true);
+          },
+          onError: () => {
+            setError(true);
+          },
+        }
+      );
+  }, [
+    target,
+    htmlFor,
+    phone,
+    sendPhoneMutation,
+    sendCodeMutation,
+    getValues,
+    setFieldError,
+  ]);
 
   const buttonDisabled = () => {
-    if (htmlFor === 'authentication') return !sended;
+    if (htmlFor === 'authentication') return !phone;
     return undefined;
   };
 
@@ -205,16 +216,6 @@ const AuthFormItemContainer = React.memo(function AuthFormItem({
       setSuccess(false);
     }
   }, [isSubmitSuccessful]);
-
-  React.useEffect(() => {
-    if (authState && authState.success) setSuccess(true);
-    if (authState && authState.error) setError(true);
-  }, [authState]);
-
-  React.useEffect(() => {
-    if (authState && !authState.success) setSuccess(false);
-    if (authState && !authState.error) setError(false);
-  }, [authState]);
 
   return (
     <Wrapper
@@ -239,8 +240,10 @@ const AuthFormItemContainer = React.memo(function AuthFormItem({
               button={!!button}
               buttonText={button}
               buttonWidth={buttonWidth}
+              readOnly={readOnly}
               buttonVariant="Primary-Line"
               buttonCallback={handleCallback}
+              disabled={readOnly ? true : undefined}
               {...register(htmlFor, { ...options })}
             />
           ),

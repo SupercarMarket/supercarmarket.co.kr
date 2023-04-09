@@ -46,6 +46,9 @@ const Create = (props: Props) => {
 
   const addTagsHandler = (tag: string) => {
     console.log(broadcastData.tags.length);
+    if (broadcastData.tags.length < 0) {
+      alert('태그란이 비어있습니다.');
+    }
     if (broadcastData.tags.length > 2 || tag.length > 6) {
       alert('태그는 최대 6자, 3개까지만 등록이 가능합니다');
       return null;
@@ -112,11 +115,6 @@ const Create = (props: Props) => {
     );
 
     const data = await authRequest.post(`/live`, formData);
-
-    (
-      (document.getElementById('thumbnail') as HTMLInputElement)
-        .files as FileList
-    )[0];
 
     console.log(data);
     router.push(`${data.data.bcSeq}`);

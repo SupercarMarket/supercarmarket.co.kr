@@ -1,4 +1,3 @@
-import { post } from '@supercarmarket/lib';
 import type { NextApiHandler } from 'next';
 import type {
   Account,
@@ -6,13 +5,15 @@ import type {
   NextAuthOptions,
   Profile,
 } from 'next-auth';
-import NextAuth from 'next-auth';
+import { type ServerResponse } from '@supercarmarket/types/base';
 import type { Provider } from 'next-auth/providers';
+import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
 import KakaoProvider from 'next-auth/providers/kakao';
-import { isExpire, refreshToken } from 'http/server/auth/token';
-import { ServerResponse } from '@supercarmarket/types/base';
+import { post } from '@supercarmarket/lib';
+import { refreshToken, signInOAuth } from 'http/server/auth/apis';
+import { isExpire } from 'utils/misc';
 
 const providers: Provider[] = [
   /*
@@ -79,34 +80,17 @@ const providers: Provider[] = [
     credentials: {
       phone: { label: 'phone', type: 'tel' },
       authentication: { label: 'authentication', type: 'text' },
-      uuid: { label: 'phone', type: 'text' },
+      uuid: { label: 'uuid', type: 'text' },
+      name: { label: 'name', type: 'text' },
     },
     async authorize(credentials) {
       if (!credentials) return null;
 
-      const { phone, authentication, uuid } = credentials;
+      const { phone, authentication, uuid, name } = credentials;
 
-      const { data } = await post<
-        {
-          phone: string;
-          code: string;
-          token: string;
-        },
-        ServerResponse<{
-          access_token: string;
-          refresh_token: string;
-          exp: number;
-          newUser: boolean;
-          user: {
-            id: string;
-            name: string;
-            email: string;
-            provider: 'local' | 'google' | 'kakao';
-          };
-        }>
-      >(
+      const { data } = await post(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/user/register-phone`,
-        { phone, code: authentication, token: uuid }
+        { phone, code: authentication, token: uuid, name }
       );
 
       const { access_token, refresh_token, exp, newUser, user } = data;
@@ -195,7 +179,7 @@ const callbacks: Partial<CallbacksOptions<Profile, Account>> | undefined = {
      */
     if (isExpire(token.expire)) return token;
 
-    const newToken = await refreshToken(token.refreshToken);
+    const newToken = await refreshToken(token.accessToken, token.refreshToken);
 
     return { ...token, ...newToken };
   },
@@ -223,35 +207,14 @@ const callbacks: Partial<CallbacksOptions<Profile, Account>> | undefined = {
     */
   async signIn({ user, account }) {
     if (account?.type === 'oauth') {
-      const { nickname, provider, email, picture, sub } = user;
-      const { data } = await post<
+      const { provider = 'google' } = user;
+
+      const { data } = await signInOAuth(
         {
-          nickname: string;
-          provider: string;
-          sub: string;
-          email?: string;
-          picture?: string;
+          code: account.access_token || '',
         },
-        ServerResponse<{
-          access_token: string;
-          refresh_token: string;
-          exp: number;
-          user: {
-            id: string;
-            name: string;
-            email: string;
-            provider: string;
-          };
-          token: string;
-          newUser?: boolean;
-        }>
-      >(`${process.env.NEXT_PUBLIC_URL}/api/auth/user/oauth`, {
-        nickname,
-        provider,
-        email,
-        picture,
-        sub,
-      });
+        provider
+      );
 
       const {
         newUser,

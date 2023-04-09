@@ -26,10 +26,10 @@ export const useMagazinePost = (id: string, token?: string, options = {}) => {
     ServerResponse<
       Posting & {
         imgSrc: string;
+        isCounseling: boolean;
       }
     > & {
       isScraped: boolean;
-      isCounseling: boolean;
     }
   >({
     queryKey: QUERY_KEYS.id(id),

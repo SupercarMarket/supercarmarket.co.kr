@@ -109,6 +109,7 @@ const Alert = (props: AlertProps) => {
         .alert-contents > h2 {
           font-weight: bold;
           line-height: 120%;
+          white-space: pre-wrap;
           color: ${contentColor};
         }
         .alert-contents > p {

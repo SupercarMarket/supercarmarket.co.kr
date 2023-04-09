@@ -28,6 +28,7 @@ interface PaginationProps {
   totalPages: number;
   className?: string;
   scrollTarget?: React.RefObject<HTMLDivElement>;
+  type?: 'comment' | 'list';
 }
 
 const PaginationLink = ({
@@ -81,12 +82,14 @@ const PaginationItem = React.memo(function PaginationItem({
 
 const Pagination = memo(function Pagination({
   pageSize = 10,
+  type = 'list',
   totalPages,
   scrollTarget,
   className = 'pagination',
 }: PaginationProps) {
   const {
-    page,
+    page: _page,
+    comment,
     orderBy,
     filter,
     searchType,
@@ -95,6 +98,10 @@ const Pagination = memo(function Pagination({
     variant,
     ...rest
   } = useUrlQuery();
+  const page = React.useMemo(() => {
+    if (type === 'comment') return comment;
+    return _page;
+  }, [_page, comment, type]);
   const restQuery = React.useMemo(() => {
     const filteredQuery = Object.entries(rest).filter(([, val]) => val);
     return Object.fromEntries(filteredQuery);
@@ -109,6 +116,17 @@ const Pagination = memo(function Pagination({
       .shift();
   }, [page, pageSize, totalPages]);
   const [prevPage, setPrevPage] = React.useState(0);
+  const getPage = React.useCallback((nextPage: number) => {
+    if (type === 'comment') {
+      return {
+        page: _page,
+        comment: nextPage,
+      };
+    }
+    return {
+      page: nextPage,
+    };
+  }, []);
 
   const categoryQuery = category !== 'all' && {
     category,
@@ -139,7 +157,7 @@ const Pagination = memo(function Pagination({
         href={{
           pathname,
           query: {
-            page: 0,
+            ...getPage(0),
             variant,
             ...categoryQuery,
             ...keywordQuery,
@@ -177,8 +195,8 @@ const Pagination = memo(function Pagination({
         href={{
           pathname,
           query: {
-            page: page - 1,
             variant,
+            ...getPage(page - 1),
             ...categoryQuery,
             ...keywordQuery,
             ...filterQuery,
@@ -214,7 +232,7 @@ const Pagination = memo(function Pagination({
             href={{
               pathname,
               query: {
-                page: p - 1,
+                ...getPage(p - 1),
                 variant,
                 ...categoryQuery,
                 ...keywordQuery,
@@ -231,7 +249,7 @@ const Pagination = memo(function Pagination({
         href={{
           pathname,
           query: {
-            page: page + 1,
+            ...getPage(page + 1),
             variant,
             ...categoryQuery,
             ...keywordQuery,

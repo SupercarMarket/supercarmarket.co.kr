@@ -1,11 +1,19 @@
 import { get, homeCategoryFormatter } from '@supercarmarket/lib';
-import { ServerResponse } from '@supercarmarket/types/base';
+import { type Params, ServerResponse } from '@supercarmarket/types/base';
 
 export const getHome = async (
-  category: 'market' | 'magazine' | 'best' | 'new' | 'community' | 'partnership'
+  category:
+    | 'market'
+    | 'magazine'
+    | 'best'
+    | 'new'
+    | 'community'
+    | 'partnership',
+  query?: Params
 ) => {
   return get('/server/supercar/v1/main', {
     query: {
+      ...query,
       category: homeCategoryFormatter(category),
     },
   });
@@ -21,6 +29,21 @@ export const getBanner = async (type: 'D' | 'M' = 'D') => {
     >
   >('/server/supercar/v1/main/banner', {
     query: {
+      type,
+    },
+  });
+};
+
+export const getAdvertisement = async ({
+  type = 'D',
+  code,
+}: {
+  code: string;
+  type: 'D' | 'M';
+}) => {
+  return get('/server/supercar/v1/ad', {
+    query: {
+      page: code,
       type,
     },
   });

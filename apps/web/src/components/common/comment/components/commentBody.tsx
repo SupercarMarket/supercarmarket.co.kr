@@ -1,3 +1,4 @@
+import * as React from 'react';
 import {
   Alert,
   applyMediaQuery,
@@ -7,10 +8,7 @@ import {
   Typography,
   Wrapper,
 } from '@supercarmarket/ui';
-
-import * as React from 'react';
 import type { Comment } from '@supercarmarket/types/comment';
-
 import LikeIcon from '../../../../assets/svg/thumb-up.svg';
 import * as style from '../comment.styled';
 import { CommentArea } from '.';
@@ -19,6 +17,9 @@ import Avatar from '../../avatar';
 import Link from 'next/link';
 import { Session } from 'next-auth';
 import { useDeleteComment, useLikeComment } from 'http/server/comment';
+import { ModalContext } from 'feature/ModalProvider';
+import { useRouter } from 'next/navigation';
+import { Modal } from 'components/common/modal';
 
 const CommentCard = ({
   isMyComment = true,
@@ -53,6 +54,8 @@ const CommentCard = ({
     postId,
     commentId: id,
   });
+  const { push } = useRouter();
+  const { onClose, onOpen } = React.useContext(ModalContext);
   const [modify, setModify] = React.useState(false);
   const [open, setOpen] = React.useState(false);
 
@@ -72,9 +75,29 @@ const CommentCard = ({
   }, [deleteMutate, session]);
 
   const handleLike = React.useCallback(() => {
-    if (!session) return;
+    if (!session)
+      return onOpen(
+        <Modal
+          description="로그인 후 상담 신청이 가능합니다"
+          onCancel={() => {
+            onClose();
+          }}
+          onClose={() =>
+            onClose(() => {
+              push('/auth/signin');
+            })
+          }
+          onClick={() =>
+            onClose(() => {
+              push('/auth/signup');
+            })
+          }
+          closeText="로그인"
+          clickText="회원가입"
+        />
+      );
     likeMuate();
-  }, [likeMuate, session]);
+  }, [likeMuate, onClose, onOpen, push, session]);
   return (
     <>
       {isRemoved ? (
@@ -382,7 +405,7 @@ const CommentBody = ({
       {comments.length === 0 && (
         <Alert
           severity="info"
-          title="댓글이 아직 없습니다. 댓글을 남겨보세요."
+          title={`댓글이 아직 없습니다.\n댓글을 남겨보세요.`}
         />
       )}
       {comments.map((comment) => (

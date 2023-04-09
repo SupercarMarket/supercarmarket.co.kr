@@ -1,7 +1,9 @@
 import {
   applyMediaQuery,
+  AttachedFile,
   Button,
   Container,
+  Divider,
   Tab,
   theme,
   Typography,
@@ -14,11 +16,10 @@ import * as React from 'react';
 import { css } from 'styled-components';
 import dynamic from 'next/dynamic';
 import { PostingHeadCommunity, PostingHeadMagainze } from './components';
-import ModalContext from 'feature/modalContext';
 import LikeIcon from '../../../assets/svg/thumb-up.svg';
 import HeadSeo from '../headSeo/headSeo';
 import { useQueryClient } from '@tanstack/react-query';
-import { MagazineScrape } from 'components/magazine';
+import { MagazineDealer, MagazineScrape } from 'components/magazine';
 import {
   QUERY_KEYS,
   useCommunityPost,
@@ -27,6 +28,7 @@ import {
 } from 'http/server/community';
 import { useMagazinePost } from 'http/server/magazine';
 import { Modal } from '../modal';
+import { ModalContext } from 'feature/ModalProvider';
 
 const PostingBody = dynamic(() => import('./components/postingBody'), {
   ssr: false,
@@ -109,6 +111,10 @@ const MagazinePosting = ({ postId }: Omit<PostingProps, 'type'>) => {
             </Wrapper>
           </Container>
           <MagazineScrape postId={postId} isScraped={magazinePost.isScraped} />
+          <MagazineDealer
+            postId={postId}
+            isCounseling={magazinePost.data.isCounseling}
+          />
         </>
       )}
     </>
@@ -135,6 +141,7 @@ const CommunityPosting = ({
       enabled: session.status && session.status !== 'loading',
     }
   );
+
   const { mutate: likeMuate } = useLikeCommunityPost({
     subject,
     category,
@@ -247,9 +254,22 @@ const CommunityPosting = ({
               </Wrapper>
               <Wrapper
                 css={css`
+                  display: flex;
+                  flex-direction: column;
+                  width: 100%;
+                  align-items: center;
                   margin: 80px 0;
+                  gap: 80px;
+                  ${applyMediaQuery('mobile')} {
+                    margin: 32px 0;
+                    gap: 32px;
+                  }
                 `}
               >
+                {communityPost.data.files &&
+                  communityPost.data.files.length > 0 && (
+                    <AttachedFile files={communityPost.data.files} />
+                  )}
                 <Button
                   type="button"
                   variant="Line"
@@ -325,6 +345,9 @@ const CommunityPosting = ({
                   justify-content: space-between;
                   margin-top: 20px;
                   margin-bottom: 80px;
+                  ${applyMediaQuery('mobile')} {
+                    margin-bottom: 32px;
+                  }
                 `}
               >
                 <Tab
@@ -343,6 +366,24 @@ const CommunityPosting = ({
                     communityPost.data.isMyPost ? handleRemove : undefined
                   }
                   scroll
+                />
+              </Wrapper>
+              <Wrapper
+                css={css`
+                  display: none;
+                  ${applyMediaQuery('mobile')} {
+                    display: block;
+                    width: 100vw;
+                    margin-left: calc(-50vw + 50%);
+                    margin-bottom: 40px;
+                  }
+                `}
+              >
+                <Divider
+                  width="100%"
+                  height="8px"
+                  color="#F7F7F8"
+                  borderTop="1px solid #EAEAEC"
                 />
               </Wrapper>
             </>

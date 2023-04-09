@@ -10,14 +10,14 @@ import React from 'react';
 
 import { css } from 'styled-components';
 import { PartnershipDto } from '@supercarmarket/types/partnership';
-import { partnershipFormatter } from '@supercarmarket/lib';
+import { createExternalLink, partnershipFormatter } from '@supercarmarket/lib';
 
 const PartnershipCard = ({
   brdSeq,
   partnerName,
   category,
   workTime,
-  phone,
+  wireNumber,
   address,
   siteUrl,
   imgSrc,
@@ -57,6 +57,9 @@ const PartnershipCard = ({
             alt="thumbnail"
             style={{ borderRadius: '4px', objectFit: 'cover' }}
             fill
+            sizes={`${applyMediaQuery('desktop')} 196px, ${applyMediaQuery(
+              'mobile'
+            )} 64px`}
           />
         </Wrapper>
         <Wrapper.Item
@@ -125,7 +128,7 @@ const PartnershipCard = ({
                 .work-time {
                   width: 119px;
                 }
-                .phone {
+                .wire-number {
                   width: 142px;
                 }
                 .address {
@@ -142,7 +145,7 @@ const PartnershipCard = ({
 
                   .category,
                   .work-time,
-                  .phone {
+                  .wire-number {
                     width: auto;
                   }
                   .address {
@@ -159,7 +162,7 @@ const PartnershipCard = ({
             <p className="vertical-bar">|</p>
             <p className="work-time">{workTime}</p>
             <p className="vertical-bar">|</p>
-            <p className="phone">{phone}</p>
+            <p className="wire-number">{wireNumber}</p>
             <p className="address">
               {address.split(' ').slice(0, 2).join(' ')}
             </p>
@@ -173,8 +176,10 @@ const PartnershipCard = ({
           }
         `}
       >
-        <Link
-          href={siteUrl}
+        <a
+          href={createExternalLink(siteUrl)}
+          target="_blank"
+          rel="noopener noreferrer"
           style={{
             display: 'inline-block',
             width: '80px',
@@ -190,7 +195,7 @@ const PartnershipCard = ({
           >
             바로가기
           </Typography>
-        </Link>
+        </a>
       </Wrapper>
     </Container>
   );

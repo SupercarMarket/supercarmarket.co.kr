@@ -17,10 +17,10 @@ import Tr2Icon from '../../../../public/images/icons/tr_2.svg';
 import Tr3Icon from '../../../../public/images/icons/tr_3.svg';
 import Tr4Icon from '../../../../public/images/icons/tr_4.svg';
 import Tr5Icon from '../../../../public/images/icons/tr_5.svg';
-import ModalContext from 'feature/modalContext';
 import { Modal } from 'components/common/modal';
 import { useMedia } from '@supercarmarket/hooks';
 import { type Links } from 'constants/link';
+import { ModalContext } from 'feature/ModalProvider';
 
 const getSvgIcon = (index: number) => {
   return {
@@ -46,7 +46,7 @@ const InquiryNavbar = ({
   const { replace, push } = useRouter();
 
   React.useEffect(() => {
-    if (session.status !== 'authenticated')
+    if (session.status !== 'loading' && session.status !== 'authenticated')
       onOpen(
         <Modal
           description="로그인 후 서비스 이용 가능합니다"

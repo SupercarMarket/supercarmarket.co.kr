@@ -1,5 +1,11 @@
 import type { SearchAll as SearchAllType } from '@supercarmarket/types/search';
-import { Container, Table, Title, Wrapper } from '@supercarmarket/ui';
+import {
+  applyMediaQuery,
+  Container,
+  Table,
+  Title,
+  Wrapper,
+} from '@supercarmarket/ui';
 import { CommunityCard } from 'components/community';
 import RouterButton from 'components/home/routerButton';
 import MagazineCard from 'components/magazine/magazineCard/magazineCard';
@@ -40,7 +46,15 @@ const SearchAll = ({ keyword, data }: SearchAllProps) => {
         `}
       >
         {isProduct ? (
-          product.map((p) => <MarketCard variant="row" key={p.id} {...p} />)
+          <Wrapper.Item
+            css={css`
+              width: 100%;
+            `}
+          >
+            {product.map((p) => (
+              <MarketCard variant="row" key={p.id} {...p} />
+            ))}
+          </Wrapper.Item>
         ) : (
           <SearchNotify keyword={keyword} totalCount={product.length} />
         )}
@@ -72,6 +86,11 @@ const SearchAll = ({ keyword, data }: SearchAllProps) => {
               display: grid;
               grid-template-columns: 1fr 1fr 1fr 1fr;
               gap: 20px;
+              ${applyMediaQuery('mobile')} {
+                grid-template-columns: 1fr 1fr;
+                column-gap: 8px;
+                row-gap: 16px;
+              }
             `}
           >
             {magazine.map((m) => (

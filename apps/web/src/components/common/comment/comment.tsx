@@ -15,7 +15,7 @@ interface CommentProps {
 const Comment = ({ id, kind = 'magazine' }: CommentProps) => {
   const session = useSession();
   const { isMobile } = useMedia({ deviceQuery });
-  const { page, orderBy, category } = useUrlQuery();
+  const { comment: page, orderBy, category } = useUrlQuery();
   const scrollTarget = React.useRef<HTMLDivElement>(null);
 
   const { data: comment, isLoading } = useComment(
@@ -65,6 +65,7 @@ const Comment = ({ id, kind = 'magazine' }: CommentProps) => {
               totalPages={comment.totalPages}
               totalCount={comment.totalCount}
               pageSize={10}
+              type="comment"
             />
             <CommentArea
               postId={id}

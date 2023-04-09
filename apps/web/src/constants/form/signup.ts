@@ -60,16 +60,6 @@ export const form = [
     },
   },
   {
-    htmlFor: 'password',
-    label: '새 비밀번호',
-    type: 'password',
-    placeholder: '비밀번호를 입력해주세요',
-    tooltip: '영문/숫자/특수문자를 포함하여 8자 이상으로 입력해주세요.',
-    options: {
-      validate: password,
-    },
-  },
-  {
     htmlFor: 'name',
     label: '이름',
     type: 'text',

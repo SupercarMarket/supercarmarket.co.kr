@@ -1,5 +1,6 @@
 'use client';
 
+import { applyMediaQuery } from '@supercarmarket/ui';
 import styled, { css } from 'styled-components';
 
 interface SelectProps {
@@ -34,6 +35,7 @@ interface AlignProps {
 }
 
 const SelectCurrentButton = styled.button<AlignProps>`
+  all: unset;
   box-sizing: border-box;
   position: relative;
   width: 100%;
@@ -46,6 +48,9 @@ const SelectCurrentButton = styled.button<AlignProps>`
   border: 1px solid ${({ theme }) => theme.color['greyScale-4']};
   border-radius: 4px;
   cursor: pointer;
+  ${applyMediaQuery('mobile')} {
+    height: 40px;
+  }
 
   ${({ align }) =>
     align &&

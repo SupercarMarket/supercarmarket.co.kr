@@ -8,7 +8,6 @@ import {
   FormMessage,
   Wrapper,
 } from '@supercarmarket/ui';
-import { useSession } from 'next-auth/react';
 import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { css } from 'styled-components';
@@ -70,13 +69,12 @@ const AccountPasswordForm = (props: AccountPasswordFormProps) => {
           display: flex;
           flex-direction: column;
           gap: 26px;
-          margin-top: 60px;
           align-items: center;
           button[type='submit'] {
             width: 340px;
           }
           ${applyMediaQuery('mobile')} {
-            width: 343px;
+            width: 328px;
             gap: 16px;
           }
         `}

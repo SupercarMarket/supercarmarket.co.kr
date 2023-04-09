@@ -1,24 +1,25 @@
-'use client';
-
-import { Alert, Button, Form } from '@supercarmarket/ui';
-import { ErrorCode } from '@supercarmarket/lib';
-import { useRouter } from 'next/navigation';
 import * as React from 'react';
+import { Alert, Button, Form } from '@supercarmarket/ui';
+import { useRouter } from 'next/navigation';
 import { FormProvider, useForm } from 'react-hook-form';
 import { css } from 'styled-components';
-
 import InquiryFormItem from '../inquiryFormItem';
-import ModalContext from 'feature/modalContext';
 import { Modal } from 'components/common/modal';
 import { useDebounce } from '@supercarmarket/hooks';
-import { authRequest } from 'http/core';
 import { form, FormState } from 'constants/form/dealer';
+import { useRegisterDealer } from 'http/server/inquiry';
+import { ModalContext } from 'feature/ModalProvider';
 
 const DealerForm = () => {
   const methods = useForm<FormState>();
   const { onOpen, onClose } = React.useContext(ModalContext);
   const [error, setError] = React.useState<string | null>(null);
   const { replace } = useRouter();
+  const dealerMutation = useRegisterDealer({
+    onError: (error: Error) => {
+      setError(error.message);
+    },
+  });
 
   const handleRequire = async (data: FormState) => {
     const { addional: _, ...rest } = data;
@@ -98,14 +99,8 @@ const DealerForm = () => {
         profileImage.forEach((file) => formData.append('profileImage', file));
         regImage.forEach((file) => formData.append('regImage', file));
 
-        await authRequest('/inquiry-dealer', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-          data: formData,
-        })
-          .then(() => {
+        dealerMutation.mutate(formData, {
+          onSuccess: () => {
             onOpen(
               <Modal
                 title="딜러 등록 문의"
@@ -122,10 +117,8 @@ const DealerForm = () => {
                 }}
               />
             );
-          })
-          .catch((error) => {
-            setError(error.message || ErrorCode[error.status]);
-          });
+          },
+        });
       }),
     300
   );
@@ -146,7 +139,7 @@ const DealerForm = () => {
           <InquiryFormItem key={data.htmlFor} {...data} />
         ))}
         <Button type="submit" width="104px">
-          {methods.formState.isSubmitting ? '등록 중..' : '작성 완료'}
+          {dealerMutation.isLoading ? '등록 중..' : '작성 완료'}
         </Button>
         {error && <Alert title={error} severity="error" />}
       </Form>

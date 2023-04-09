@@ -34,13 +34,15 @@ function ChatInfo(props: Props) {
   const [subscribes, setSubscribes] = useState<StompSubscription>();
   const [testName, setTestName] = useState(`test_${Math.random()}`);
 
-  const textAreaRef = useRef<HTMLInputElement>(null);
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const chatWrapRef = useRef<HTMLDivElement>(null);
 
   const joinChat = async () => {
     const session = await getSession();
 
     if (!session?.accessToken) throw 'require logged in';
+
+    setTestName(session.nickname);
 
     const client = new Client({
       brokerURL: `wss://back.doyup.shop/ws`,
@@ -92,15 +94,22 @@ function ChatInfo(props: Props) {
   };
 
   const sendChat = () => {
-    stomp?.publish({
-      destination: `/sub/${props.data?.sessionId}`,
-      body: `{
+    if (stomp && textAreaRef.current && textAreaRef.current.value.length > 0) {
+      stomp.publish({
+        destination: `/sub/${props.data?.sessionId}`,
+        body: `{
         "type": "TALK",
         "sender": "${testName}",
         "channelid": "${props.data?.sessionId}",
-        "data": "${textAreaRef.current?.value ?? ''}"
+        "data": "${
+          textAreaRef.current?.value.replaceAll(/(\n|\r\n)/g, '<br>') ?? ''
+        }"
       }`,
-    });
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+    }
     if (textAreaRef.current) textAreaRef.current.value = '';
     setTimeout(() => {
       if (chatWrapRef.current) {
@@ -129,9 +138,14 @@ function ChatInfo(props: Props) {
     }, 100);
   };
 
+  const test = async () => {
+    const session = await getSession();
+    console.log(session);
+  };
+
   useEffect(() => {
     joinChat();
-
+    test();
     return () => {
       if (stomp) {
         stomp.deactivate();
@@ -144,6 +158,22 @@ function ChatInfo(props: Props) {
       exitChat();
     }
   }, [isBroad]);
+
+  useEffect(() => {
+    if (stomp) {
+      textAreaRef.current?.addEventListener('keypress', (event) => {
+        if (event.key === 'Enter' && !event.shiftKey) {
+          event.preventDefault();
+          sendChat();
+        }
+      });
+    }
+    return () => {
+      if (stomp) {
+        stomp.deactivate();
+      }
+    };
+  }, [stomp]);
   return (
     <div
       style={{
@@ -186,7 +216,7 @@ function ChatInfo(props: Props) {
           alignItems: 'flex-end',
         }}
       >
-        <input
+        <textarea
           placeholder="채팅을 남겨보세요"
           className={liveCss.chatTextarea}
           maxLength={100}
@@ -219,7 +249,7 @@ const UserChat = ({ nickname, chat }: { nickname: string; chat: string }) => {
       }}
     >
       <span style={{ fontSize: '14px', lineHeight: '150%' }}>{nickname}</span>{' '}
-      {chat}
+      <span dangerouslySetInnerHTML={{ __html: chat }} />
     </div>
   );
 };
@@ -237,7 +267,7 @@ const MyChat = ({ chat }: { chat: string }) => {
         width: 'fit-content',
       }}
     >
-      {chat}
+      <span dangerouslySetInnerHTML={{ __html: chat }} />
     </div>
   );
 };

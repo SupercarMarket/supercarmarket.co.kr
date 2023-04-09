@@ -1,12 +1,26 @@
-import { Container, Wrapper } from '@supercarmarket/ui';
+import { applyMediaQuery, Container, Wrapper } from '@supercarmarket/ui';
 import type { MarketDto } from '@supercarmarket/types/market';
 import MarketCard from 'components/market/marketCard';
 import { css } from 'styled-components';
-import { applyMediaQuery } from 'styles/mediaQuery';
 import { useHome } from 'http/server/home';
+import { CardSkeleton } from 'components/fallback/loading';
 
-const Market = () => {
-  const { data: marketBest } = useHome<MarketDto[]>('best');
+interface MarketProps {
+  isMobile?: boolean;
+}
+
+const Market = ({ isMobile }: MarketProps) => {
+  const pageSize = isMobile ? 4 : 8;
+  const {
+    data: marketBest,
+    isLoading,
+    isFetching,
+  } = useHome<MarketDto[]>('best', {
+    pageSize: String(pageSize),
+  });
+
+  if (isLoading || isFetching)
+    return <CardSkeleton size={pageSize} variant="column" />;
 
   return (
     <Container
@@ -31,7 +45,7 @@ const Market = () => {
       >
         {marketBest &&
           marketBest.data
-            .slice(0, 8)
+            .slice(0, isMobile ? 4 : 8)
             .map((post, index) => (
               <MarketCard key={post.id} ranking={index + 1} {...post} />
             ))}

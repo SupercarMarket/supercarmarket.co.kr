@@ -1,14 +1,33 @@
-import { Container, Typography, Wrapper } from '@supercarmarket/ui';
+import {
+  applyMediaQuery,
+  Container,
+  Typography,
+  Wrapper,
+} from '@supercarmarket/ui';
 import type { CommunityDto } from '@supercarmarket/types/community';
 import { CommunityCard } from 'components/community';
 import { css } from 'styled-components';
-import { applyMediaQuery } from 'styles/mediaQuery';
-
 import RouterButton from '../routerButton';
 import { useHome } from 'http/server/home';
+import { CardSkeleton } from 'components/fallback/loading';
 
-const Community = () => {
-  const { data: communityBest } = useHome<CommunityDto[]>('community');
+interface CommunityProps {
+  isMobile?: boolean;
+}
+
+const Community = ({ isMobile }: CommunityProps) => {
+  const pageSize = isMobile ? 4 : 8;
+
+  const {
+    data: communityBest,
+    isLoading,
+    isFetching,
+  } = useHome<CommunityDto[]>('community', {
+    pageSize: String(pageSize),
+  });
+
+  if (isLoading || isFetching)
+    return <CardSkeleton variant="column" size={pageSize} />;
 
   return (
     <Container

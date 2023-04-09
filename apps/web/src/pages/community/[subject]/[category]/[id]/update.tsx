@@ -2,11 +2,10 @@ import { get } from '@supercarmarket/lib';
 import { NextPageWithLayout, Params } from '@supercarmarket/types/base';
 import { Container, Title, Wrapper } from '@supercarmarket/ui';
 import { QueryErrorResetBoundary } from '@tanstack/react-query';
-import Advertisement from 'components/common/advertisement';
 import { CommunityForm } from 'components/community';
 import { ErrorFallback } from 'components/fallback';
 import Layout from 'components/layout';
-import { getSession } from 'http/server/auth/user';
+import { getSession } from 'http/server/next';
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { ErrorBoundary } from 'react-error-boundary';
 import { css } from 'styled-components';
@@ -24,10 +23,8 @@ const CommunityUpdate: NextPageWithLayout = ({
               display: flex;
               flex-direction: column;
               gap: 20px;
-              padding: 0 16px;
             `}
           >
-            <Advertisement />
             <Title>게시글 수정</Title>
             <ErrorBoundary
               onReset={reset}

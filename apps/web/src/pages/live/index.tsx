@@ -1,7 +1,6 @@
 /* eslint-disable turbo/no-undeclared-env-vars */
 /* eslint-disable prettier/prettier */
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 
 import {
   Button,

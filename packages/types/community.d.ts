@@ -5,7 +5,7 @@ interface CommunityDto {
   id: string;
   nickname: string;
   title: string;
-  date: Date;
+  date: string;
   view: number;
   like: number;
   profileSrc?: string;
@@ -22,6 +22,7 @@ interface CommunityPostDto {
   title: string;
   like: number;
   contents: string;
+  files?: { url: string; name: string }[];
   created: string;
   updated: string;
   comments: number;

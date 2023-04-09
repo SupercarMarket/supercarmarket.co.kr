@@ -1,4 +1,4 @@
-import { applyMediaQuery, Container, Wrapper } from '@supercarmarket/ui';
+import { Container, Wrapper } from '@supercarmarket/ui';
 import type { NextPageWithLayout } from '@supercarmarket/types/base';
 import {
   dehydrate,
@@ -9,16 +9,15 @@ import Posting from 'components/common/posting';
 import { ErrorFallback } from 'components/fallback';
 import layout from 'components/layout';
 import { MagazineDealer } from 'components/magazine';
-import { ModalProvider } from 'feature/modalContext';
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import dynamic from 'next/dynamic';
 import type { ParsedUrlQuery } from 'querystring';
 import * as React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { css } from 'styled-components';
-import { getSession } from 'http/server/auth/user';
-import Advertisement from 'components/common/advertisement';
 import { prefetchMagazinePost, QUERY_KEYS } from 'http/server/magazine';
+import { getSession } from 'http/server/next';
+import { ModalProvider } from 'feature/ModalProvider';
 
 const Comment = dynamic(() => import('components/common/comment'), {
   ssr: false,
@@ -34,7 +33,6 @@ const MagazinePost: NextPageWithLayout = ({
   return (
     <ModalProvider>
       <Container>
-        <Advertisement />
         <QueryErrorResetBoundary>
           {({ reset }) => (
             <Wrapper
@@ -44,9 +42,6 @@ const MagazinePost: NextPageWithLayout = ({
                 align-items: center;
                 justify-content: flex-start;
                 gap: 80px;
-                ${applyMediaQuery('mobile')} {
-                  padding: 0 16px;
-                }
               `}
             >
               <ErrorBoundary
@@ -56,7 +51,6 @@ const MagazinePost: NextPageWithLayout = ({
                 )}
               >
                 <Posting postId={id} type="magazine" />
-                <MagazineDealer postId={id} />
                 <Comment id={id} />
               </ErrorBoundary>
             </Wrapper>

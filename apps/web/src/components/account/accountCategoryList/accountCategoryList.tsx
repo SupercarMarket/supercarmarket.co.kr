@@ -18,6 +18,7 @@ import {
   CategoryProps,
   Container,
   FormCheckbox,
+  Pagination,
   Table,
   Wrapper,
 } from '@supercarmarket/ui';
@@ -26,12 +27,18 @@ import { useRemoveCommunityPost } from 'http/server/community';
 import { QUERY_KEYS, useAccountCategory } from 'http/server/account';
 import { useDebounce } from '@supercarmarket/hooks';
 import { type AccountCategory } from 'constants/link/account';
+import { type Profile } from '@supercarmarket/types/account';
+import {
+  useDeleteMarketPost,
+  useUpdateMarketSellStatus,
+} from 'http/server/market';
 
 interface AccountCategoryProps {
   sub: string;
   tab: AccountCategory;
   isMyAccountPage: boolean;
   accountRoutes: CategoryProps['links'];
+  profile: Profile;
 }
 
 type AccountCategoryItemWrapperProps = React.PropsWithChildren & {
@@ -127,6 +134,7 @@ const AccountCategoryList = React.memo(function AccountCategory({
   tab,
   isMyAccountPage,
   accountRoutes,
+  profile,
 }: AccountCategoryProps) {
   const [deleteList, setDeleteList] = React.useState<
     {
@@ -137,7 +145,10 @@ const AccountCategoryList = React.memo(function AccountCategory({
   const [allChecked, setAllChecked] = React.useState(false);
   const session = useSession();
   const queryClient = useQueryClient();
-  const isDeleteTarget = isMyAccountPage && tab === 'community';
+  const isDeleteTarget =
+    isMyAccountPage &&
+    (tab === 'community' ||
+      (profile.role === 'dealer' && tab === 'dealer-product'));
   const { data, isLoading, isFetching, refetch } = useAccountCategory(
     sub,
     {
@@ -151,6 +162,34 @@ const AccountCategoryList = React.memo(function AccountCategory({
     }
   );
   const removeCategoryMutation = useRemoveCommunityPost({
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [
+          ...QUERY_KEYS.id(sub),
+          {
+            category: tab,
+            page: 0,
+            size: 20,
+          },
+        ],
+      });
+    },
+  });
+  const removeSaleMutation = useDeleteMarketPost({
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [
+          ...QUERY_KEYS.id(sub),
+          {
+            category: tab,
+            page: 0,
+            size: 20,
+          },
+        ],
+      });
+    },
+  });
+  const updaeSaleMutation = useUpdateMarketSellStatus({
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [
@@ -180,6 +219,23 @@ const AccountCategoryList = React.memo(function AccountCategory({
         data: deleteList,
       });
     }
+    if (tab === 'dealer-product') {
+      removeSaleMutation.mutate({
+        data: deleteList.map((l) => ({ id: l.id })),
+      });
+    }
+
+    refetch();
+  }, 300);
+
+  const debouncedUpdate = useDebounce(async () => {
+    if (!isDeleteTarget) return;
+    if (!session) return;
+
+    if (!deleteList.length) return;
+
+    if (tab === 'community') {
+    }
 
     refetch();
   }, 300);
@@ -208,6 +264,7 @@ const AccountCategoryList = React.memo(function AccountCategory({
               type="button"
               variant="Primary-Line"
               width="92px"
+              disabled={removeCategoryMutation.isLoading}
               onClick={debouncedDelete}
               style={{
                 padding: 0,
@@ -215,6 +272,21 @@ const AccountCategoryList = React.memo(function AccountCategory({
               }}
             >
               삭제
+            </Button>
+          )}
+          {isDeleteTarget && tab === 'dealer-product' && (
+            <Button
+              type="button"
+              variant="Primary-Line"
+              width="92px"
+              disabled={removeCategoryMutation.isLoading}
+              onClick={debouncedUpdate}
+              style={{
+                padding: 0,
+                height: '44px',
+              }}
+            >
+              판매 완료
             </Button>
           )}
         </Wrapper.Item>
@@ -267,6 +339,8 @@ const AccountCategoryList = React.memo(function AccountCategory({
                   key={d.id}
                   id={d.id}
                   hidden={isDeleteTarget}
+                  allChecked={allChecked}
+                  setDeleteList={setDeleteList}
                 >
                   <MarketCard variant="row" {...d} />
                 </AccountCategoryItemWrapper>
@@ -328,17 +402,44 @@ const AccountCategoryList = React.memo(function AccountCategory({
               <CommunityCard key={d.id} variant="row" {...d} />
             </AccountCategoryItemWrapper>
           )),
-          inquiry: data.data.map((d: InquiryDto) => (
-            <AccountCategoryItemWrapper
-              key={d.id}
-              id={d.id}
-              hidden={isDeleteTarget}
+          inquiry: (
+            <Wrapper
+              css={css`
+                width: 100%;
+                ${applyMediaQuery('mobile')} {
+                  display: flex;
+                  flex-direction: column;
+                  gap: 8px;
+                }
+              `}
             >
-              <InquiryCard key={d.id} {...d} />
-            </AccountCategoryItemWrapper>
-          )),
+              {data.data.map((d: InquiryDto) => (
+                <AccountCategoryItemWrapper
+                  key={d.id}
+                  id={d.id}
+                  hidden={isDeleteTarget}
+                >
+                  <InquiryCard key={d.id} {...d} />
+                </AccountCategoryItemWrapper>
+              ))}
+            </Wrapper>
+          ),
         }[tab]
       )}
+      <Wrapper
+        css={css`
+          padding-top: 80px;
+          ${applyMediaQuery('mobile')} {
+            padding-top: 32px;
+          }
+        `}
+      >
+        <Pagination
+          pageSize={20}
+          totalCount={data.totalCount}
+          totalPages={data.totalPages}
+        />
+      </Wrapper>
     </Container>
   );
 });

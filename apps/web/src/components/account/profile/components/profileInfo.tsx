@@ -67,7 +67,7 @@ const ProfileInfo = ({ isMyAccountPage, profile, sub }: ProfileInfoProps) => {
         ${applyMediaQuery('mobile')} {
           width: 100vw;
           margin-left: calc(-50vw + 50%);
-          padding: 24px;
+          padding: 22.5px;
           height: 100%;
           border: 1px solid ${theme.color.white};
         }

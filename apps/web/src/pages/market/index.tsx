@@ -13,7 +13,6 @@ import {
 } from '@tanstack/react-query';
 import { ErrorFallback } from 'components/fallback';
 import layout from 'components/layout';
-import MarketBanner from 'components/market/marketBanner';
 import MarketCar from 'components/market/marketCar';
 import MarketFilter from 'components/market/marketFilter';
 import { CATEGORY, CATEGORY_VALUES } from 'constants/market';
@@ -23,9 +22,9 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { useSearchKeyword } from 'hooks/useSearchKeyword';
 import { css } from 'styled-components';
 import HeadSeo from 'components/common/headSeo';
-import Advertisement from 'components/common/advertisement';
 import { prefetchMarket, QUERY_KEYS } from 'http/server/market';
 import { linsk } from 'constants/link/market';
+import Announcement from 'components/common/announcement';
 
 const MarketFilterPage: NextPageWithLayout = ({
   category,
@@ -42,16 +41,14 @@ const MarketFilterPage: NextPageWithLayout = ({
           CATEGORY.find((value) => value.value === category)?.option ?? ''
         }에 대한 매물`}
       />
-      <Advertisement />
       <Container display="flex" flexDirection="column" margin="20px 0 0 0">
-        <Wrapper
-          css={css`
-            ${applyMediaQuery('mobile')} {
-              padding: 0 16px;
-            }
-          `}
-        >
-          <MarketBanner />
+        <Wrapper>
+          <Announcement
+            title="판매차량 등록을 원하시나요?"
+            subtitle="판매차량 등록 문의는 딜러 등록을 완료한 후에 가능합니다."
+            btnTitle="등록 문의하기"
+            url="/inquiry"
+          />
         </Wrapper>
         <Wrapper
           css={css`
@@ -61,7 +58,6 @@ const MarketFilterPage: NextPageWithLayout = ({
             margin: 80px 0;
             ${applyMediaQuery('mobile')} {
               margin: 32px 0;
-              padding: 0 16px;
             }
           `}
         >
@@ -76,20 +72,14 @@ const MarketFilterPage: NextPageWithLayout = ({
             <Searchbar
               variant="Line"
               placeholder="원하는 차량을 검색하세요"
-              onKeyDown={keydownHandler}
               ref={keywordRef}
+              handleClick={keydownHandler}
             />
           </Wrapper.Item>
         </Wrapper>
         <QueryErrorResetBoundary>
           {({ reset }) => (
-            <Wrapper
-              css={css`
-                ${applyMediaQuery('mobile')} {
-                  padding: 0 16px;
-                }
-              `}
-            >
+            <Wrapper>
               <ErrorBoundary
                 onReset={reset}
                 fallbackRender={(props) => <ErrorFallback {...props} />}

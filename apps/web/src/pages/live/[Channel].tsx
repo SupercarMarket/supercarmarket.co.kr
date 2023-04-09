@@ -26,7 +26,7 @@ interface channelResType {
 
 const Channel = (props: Props) => {
   const [channelData, setChannelData] = useState<channelResType | null>();
-  const [isBroad, setisBroad] = useState(true);
+  const [isBroad, setIsBroad] = useState(true);
 
   const router = useRouter();
 
@@ -48,7 +48,7 @@ const Channel = (props: Props) => {
             <>
               <LiveInfo
                 data={channelData}
-                setisBroad={setisBroad}
+                setIsBroad={setIsBroad}
                 isBroad={isBroad}
               />
               <ChatInfo data={channelData} isBroad={isBroad} />
@@ -69,11 +69,11 @@ Channel.getInitialProps = async (context: any) => {
 
 interface LiveInfo {
   data: channelResType | null | undefined;
-  setisBroad: (broad: boolean) => void;
+  setIsBroad: (broad: boolean) => void;
   isBroad: boolean;
 }
 const LiveInfo = (props: LiveInfo) => {
-  const { data, isBroad, setisBroad } = props;
+  const { data, isBroad, setIsBroad } = props;
   return (
     <div style={{ width: '880px' }}>
       {data ? (
@@ -81,14 +81,14 @@ const LiveInfo = (props: LiveInfo) => {
           <Publisher
             sessionId={data.sessionId as string}
             data={data}
-            setisBroad={setisBroad}
+            setIsBroad={setIsBroad}
             isBroad={isBroad}
           />
         ) : (
           <Subscriber
             sessionId={data.sessionId as string}
             data={data}
-            setisBroad={setisBroad}
+            setIsBroad={setIsBroad}
             isBroad={isBroad}
           />
         )

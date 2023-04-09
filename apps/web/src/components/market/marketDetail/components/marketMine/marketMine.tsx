@@ -1,3 +1,4 @@
+import * as React from 'react';
 import {
   Button,
   Typography,
@@ -7,15 +8,16 @@ import {
 } from '@supercarmarket/ui';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Modal } from 'components/common/modal';
-import ModalContext from 'feature/modalContext';
 import {
+  QUERY_KEYS,
   useDeleteMarketPost,
   useUpdateMarketSellStatus,
 } from 'http/server/market';
-import * as React from 'react';
 import { css } from 'styled-components';
 import { useNextQuery } from 'hooks/useNextQuery';
 import { marketFormatter } from '@supercarmarket/lib';
+import { ModalContext } from 'feature/ModalProvider';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface MarketMineProps {
   id: string;
@@ -25,11 +27,17 @@ interface MarketMineProps {
 const MarketMine = ({ id, brdSeq }: MarketMineProps) => {
   const { push } = useRouter();
   const searchParams = useSearchParams();
+  const queryClient = useQueryClient();
   const { query } = useNextQuery(searchParams);
   const { onOpen, onClose } = React.useContext(ModalContext);
-  const { mutate: changeSellStatus } = useUpdateMarketSellStatus(id);
-  const { mutate: deleteMarketById } = useDeleteMarketPost(id, {
+  const { mutate: changeSellStatus } = useUpdateMarketSellStatus({
     onSuccess: () => {
+      queryClient.invalidateQueries(QUERY_KEYS.id(id));
+    },
+  });
+  const { mutate: deleteMarketById } = useDeleteMarketPost({
+    onSuccess: () => {
+      queryClient.invalidateQueries(QUERY_KEYS.id(id));
       push(`/market?category=${marketFormatter(query.category)}`);
     },
   });

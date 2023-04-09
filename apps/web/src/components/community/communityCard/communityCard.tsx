@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import {
+  applyMediaQuery,
   Container,
   deviceQuery,
   Divider,
@@ -11,15 +12,14 @@ import type { WithBlurredImage } from '@supercarmarket/types/magazine';
 import dayjs from 'dayjs';
 import Image from 'next/image';
 import { css } from 'styled-components';
-import { applyMediaQuery } from 'styles/mediaQuery';
 import { useMedia } from '@supercarmarket/hooks';
-
 import ViewIcon from '../../../assets/svg/eye.svg';
 import LikeIcon from '../../../assets/svg/thumb-up.svg';
 import Avatar from 'components/common/avatar';
 import useBase64 from 'hooks/queries/useBase64';
 import Skeleton from 'react-loading-skeleton';
 import { truncateOnWord } from '@supercarmarket/lib';
+import { isToday } from 'utils/misc';
 
 interface CommunityCardProps extends WithBlurredImage<CommunityDto> {
   variant: string;
@@ -95,9 +95,7 @@ const CommunityCardRow = (props: CommunityCardChildrenProps) => {
   } = props;
   const { isMobile } = useMedia({ deviceQuery });
 
-  const isToday =
-    dayjs(new Date()).format('YYYY-MM-DD') ===
-    dayjs(created).format('YYYY-MM-DD');
+  const today = isToday(created);
 
   return (
     <Link
@@ -143,7 +141,7 @@ const CommunityCardRow = (props: CommunityCardChildrenProps) => {
               alt="thumbnail"
               width={isMobile ? 64 : 196}
               height={isMobile ? 64 : 124}
-              style={{ borderRadius: '4px' }}
+              style={{ borderRadius: '4px', objectFit: 'cover' }}
             />
           ) : (
             <Skeleton />
@@ -253,7 +251,7 @@ const CommunityCardRow = (props: CommunityCardChildrenProps) => {
               color="greyScale-6"
               lineHeight="150%"
             >
-              {isToday
+              {today
                 ? dayjs(created).format('HH:mm')
                 : dayjs(created).format('YYYY-MM-DD')}
             </Typography>
@@ -369,8 +367,20 @@ const CommunityCardRow = (props: CommunityCardChildrenProps) => {
 };
 
 const CommunityCardColumn = (props: CommunityCardChildrenProps) => {
-  const { id, imgSrc, base64, category, nickname, title, rate, comments } =
-    props;
+  const {
+    id,
+    imgSrc,
+    base64,
+    category,
+    nickname,
+    title,
+    rate,
+    comments,
+    created,
+    view,
+    like,
+  } = props;
+  const today = isToday(created);
 
   return (
     <Link
@@ -390,10 +400,10 @@ const CommunityCardColumn = (props: CommunityCardChildrenProps) => {
               border-radius: 4px;
             }
             ${applyMediaQuery('mobile')} {
-              width: 167.5px;
+              width: 160px;
               height: 101px;
               .react-loading-skeleton {
-                width: 167.5px;
+                width: 160px;
                 height: 101px;
               }
             }
@@ -408,6 +418,7 @@ const CommunityCardColumn = (props: CommunityCardChildrenProps) => {
               blurDataURL={base64}
               style={{
                 borderRadius: '4px',
+                objectFit: 'cover',
               }}
               sizes={`${applyMediaQuery('desktop')} 285px, ${applyMediaQuery(
                 'mobile'
@@ -423,6 +434,9 @@ const CommunityCardColumn = (props: CommunityCardChildrenProps) => {
             align-items: center;
             gap: 8px;
             margin-top: 20px;
+            ${applyMediaQuery('mobile')} {
+              margin-top: 8px;
+            }
           `}
         >
           <Avatar rating={rate} size={24} />
@@ -459,6 +473,81 @@ const CommunityCardColumn = (props: CommunityCardChildrenProps) => {
               ({comments})
             </Typography>
           </Typography>
+        </Wrapper>
+        <Wrapper
+          css={css`
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding-top: 10px;
+            svg {
+              width: 18px;
+              height: 18px;
+              fill: ${({ theme }) => theme.color['greyScale-5']};
+            }
+            ${applyMediaQuery('mobile')} {
+              padding-top: 2px;
+              gap: 4px;
+              svg {
+                width: 16px;
+                height: 16px;
+                fill: ${({ theme }) => theme.color['greyScale-5']};
+              }
+            }
+          `}
+        >
+          <Typography
+            as="span"
+            fontSize="body-14"
+            fontWeight="regular"
+            color="greyScale-5"
+          >
+            {today
+              ? dayjs(created).format('HH:mm')
+              : dayjs(created).format('YYYY-MM-DD')}
+          </Typography>
+          <Wrapper.Item
+            css={css`
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              gap: 4px;
+              ${applyMediaQuery('mobile')} {
+                gap: 2px;
+              }
+            `}
+          >
+            <ViewIcon />
+            <Typography
+              as="span"
+              fontSize="body-14"
+              fontWeight="regular"
+              color="greyScale-5"
+            >
+              {view}
+            </Typography>
+          </Wrapper.Item>
+          <Wrapper.Item
+            css={css`
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              gap: 4px;
+              ${applyMediaQuery('mobile')} {
+                gap: 2px;
+              }
+            `}
+          >
+            <LikeIcon />
+            <Typography
+              as="span"
+              fontSize="body-14"
+              fontWeight="regular"
+              color="greyScale-5"
+            >
+              {like}
+            </Typography>
+          </Wrapper.Item>
         </Wrapper>
       </Container>
     </Link>

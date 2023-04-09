@@ -66,11 +66,21 @@ const MarketColumn = (
 
   return (
     <Link href={`/market/${category}/${id}?${searchParams}`}>
-      <Container width="100%" display="flex" flexDirection="column" key={id}>
+      <Container
+        width="100%"
+        display="flex"
+        flexDirection="column"
+        key={id}
+        margin="0 0 10px 0"
+      >
         <Wrapper
           css={css`
             margin-bottom: 20px;
             cursor: pointer;
+
+            ${applyMediaQuery('mobile')} {
+              margin-bottom: 8px;
+            }
           `}
         >
           <Wrapper.Item
@@ -86,9 +96,10 @@ const MarketColumn = (
                 border-radius: 4px;
               }
               ${applyMediaQuery('mobile')} {
-                width: 167.5px;
+                width: 160px;
+
                 .react-loading-skeleton {
-                  width: 167.5px;
+                  width: 160px;
                 }
               }
             `}
@@ -137,7 +148,7 @@ const MarketColumn = (
                 blurDataURL={base64}
                 src={imgSrc}
                 alt="thumbnail"
-                style={{ borderRadius: '4px' }}
+                style={{ borderRadius: '4px', objectFit: 'cover' }}
                 sizes={`${applyMediaQuery('desktop')} 285px, ${applyMediaQuery(
                   'mobile'
                 )} 167.5px`}

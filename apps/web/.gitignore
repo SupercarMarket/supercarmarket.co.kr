@@ -43,3 +43,8 @@ package-lock.json
 
 # mock
 /public/mockServiceWorker.js
+
+#pwa
+public/sw.js
+public/sw.js.map
+public/workbox*.*

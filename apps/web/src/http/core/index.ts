@@ -43,10 +43,11 @@ authRequest.interceptors.response.use(setResponse, (error) => {
   const { request, response } = error;
   const errorJson = response.data;
 
-  return HttpError.fromRequest(request, {
+  const customErr = HttpError.fromRequest(request, {
     ...response,
     statusText: errorJson.message || response.statusText,
   });
+  throw customErr;
 });
 
 export { authRequest };

@@ -1,33 +1,33 @@
-import { Button, Container, Typography, Wrapper } from '@supercarmarket/ui';
-import type { UseAuth } from 'hooks/useAuth';
-import Link from 'next/link';
 import * as React from 'react';
-import { useRouter } from 'next/navigation';
-
+import { Button, Container, Typography, Wrapper } from '@supercarmarket/ui';
+import Link from 'next/link';
 import * as style from './resultId.styled';
-import { useFormContext } from 'react-hook-form';
+import { useQueryClient } from '@tanstack/react-query';
+import { QUERY_KEYS } from 'http/server/auth';
+import dayjs from 'dayjs';
 
-interface ResultIdProps {
-  authState: UseAuth['authState'];
-  resetField: UseAuth['resetField'];
-}
+const ResultId = () => {
+  const queryClient = useQueryClient();
+  const findIdResult = queryClient.getQueryData<{
+    data: {
+      boardCount: number;
+      createdDate: string;
+      id: string;
+      nickname: string;
+      phone: string;
+      userRating: string;
+    };
+  }>(QUERY_KEYS.findId());
 
-const ResultId = (props: ResultIdProps) => {
-  const { reset } = useFormContext();
-  const { authState, resetField } = props;
-  const { push } = useRouter();
-
-  const { findIdResult } = authState;
-
-  const handleClick = React.useCallback(() => {
-    resetField();
-    reset();
-    push('/auth/find?type=password');
-  }, [push, reset, resetField]);
+  React.useEffect(() => {
+    return () => {
+      queryClient.resetQueries(QUERY_KEYS.all);
+    };
+  }, []);
 
   return (
     <Container display="flex" flexDirection="column" width="340px" gap="60px">
-      {findIdResult.success && (
+      {findIdResult?.data && (
         <>
           <Wrapper css={style.content}>
             <Wrapper.Item css={style.desc}>
@@ -58,25 +58,24 @@ const ResultId = (props: ResultIdProps) => {
                 color="greyScale-6"
                 lineHeight="120%"
               >
-                {findIdResult.success.id}
+                {findIdResult.data.id}
               </Typography>
               <Typography
                 fontSize="body-14"
                 fontWeight="regular"
                 color="greyScale-5"
                 lineHeight="150%"
-              >{`가입일 ${findIdResult.success.createdDate}`}</Typography>
+              >{`가입일 ${dayjs(findIdResult.data.createdDate).format(
+                'YYYY-MM-DD'
+              )}`}</Typography>
             </Wrapper.Item>
           </Wrapper>
           <Wrapper css={style.button}>
-            <Button
-              type="button"
-              variant="Primary-Line"
-              fullWidth
-              onClick={handleClick}
-            >
-              비밀번호 찾기
-            </Button>
+            <Link href="/auth/find-password" shallow>
+              <Button type="button" variant="Primary-Line" fullWidth>
+                비밀번호 찾기
+              </Button>
+            </Link>
             <Link href="/auth/signin" shallow>
               <Button type="button" variant="Primary" fullWidth>
                 로그인

@@ -104,10 +104,11 @@ export const form = [
   {
     htmlFor: 'partnershipAttachment',
     label: '첨부파일',
-    type: 'file',
+    type: 'files',
     placeholder: '',
     options: {
       required: true,
+      size: 3,
     },
   },
   {
@@ -126,6 +127,7 @@ export const form = [
     placeholder: '내용을 입력해주세요.',
     options: {
       required: true,
+      size: 8,
     },
   },
 ] as Form<keyof FormState, Exclude<FormType, 'tel' | 'email' | 'password'>>[];

@@ -1,9 +1,9 @@
-import { applyMediaQuery, Container, Title, Wrapper } from '@supercarmarket/ui';
+import { Container, Title, Wrapper } from '@supercarmarket/ui';
 import type { NextPageWithLayout } from '@supercarmarket/types/base';
 import { DealerForm } from 'components/inquiry';
 import Layout from 'components/layout/layout';
 import { css } from 'styled-components';
-import { ModalProvider } from 'feature/modalContext';
+import { ModalProvider } from 'feature/ModalProvider';
 
 const Dealer: NextPageWithLayout = () => {
   return (
@@ -13,9 +13,6 @@ const Dealer: NextPageWithLayout = () => {
           display: flex;
           flex-direction: column;
           gap: 40px;
-          ${applyMediaQuery('mobile')} {
-            padding: 0 16px;
-          }
         `}
       >
         <Title>딜러 등록 문의</Title>

@@ -1,24 +1,19 @@
-import { applyMediaQuery, Container, Title, Wrapper } from '@supercarmarket/ui';
+import { Container, Title, Wrapper } from '@supercarmarket/ui';
 import type { NextPageWithLayout } from '@supercarmarket/types/base';
 import { InquiryNavbar } from 'components/inquiry';
 import Layout from 'components/layout/layout';
 import { css } from 'styled-components';
-import { ModalProvider } from 'feature/modalContext';
-import Advertisement from 'components/common/advertisement';
 import { links } from 'constants/link/inquiry';
+import { ModalProvider } from 'feature/ModalProvider';
 
 const Inquiry: NextPageWithLayout = () => {
   return (
     <Container>
-      <Advertisement />
       <Wrapper
         css={css`
           display: flex;
           flex-direction: column;
           gap: 20px;
-          ${applyMediaQuery('mobile')} {
-            padding: 0 16px;
-          }
         `}
       >
         <Title>어떤 문의를 원하시나요?</Title>

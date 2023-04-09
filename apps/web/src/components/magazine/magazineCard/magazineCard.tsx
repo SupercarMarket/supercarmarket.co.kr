@@ -46,8 +46,8 @@ const MagazineCard = memo(function MagazineCard({
   );
   const imgWidth = type === 'normal' ? 387 : 285;
   const imgHeight = type === 'normal' ? 240 : 180;
+  const marginBottom = type === 'normal' ? '22px' : '20px';
   const headingFontSize = type === 'normal' ? 'header-24' : 'header-16';
-  const headingMarginTop = type === 'normal' ? '22px' : '20px';
   const bodyFontSize = type === 'normal' ? 'body-16' : 'body-14';
   const visible = type === 'normal';
 
@@ -64,16 +64,18 @@ const MagazineCard = memo(function MagazineCard({
             position: relative;
             width: ${imgWidth}px;
             height: ${imgHeight}px;
+            margin-bottom: ${marginBottom};
             .react-loading-skeleton {
               width: ${imgWidth}px;
               height: ${imgHeight}px;
               border-radius: 4px;
             }
             ${applyMediaQuery('mobile')} {
-              width: 167.5px;
+              width: 160px;
               height: 106px;
+              margin-bottom: 8px;
               .react-loading-skeleton {
-                width: 167.5px;
+                width: 160px;
                 height: 106px;
               }
             }
@@ -98,51 +100,70 @@ const MagazineCard = memo(function MagazineCard({
             />
           )}
         </Wrapper.Item>
-        <Typography
-          as="h2"
-          fontSize={headingFontSize}
-          fontWeight="bold"
-          color="greyScale-6"
-          lineHeight="120%"
-          style={{
-            marginTop: headingMarginTop,
-            marginBottom: '10px',
-          }}
+        <Wrapper.Item
+          css={css`
+            ${applyMediaQuery('mobile')} {
+              p {
+                display: none !important;
+              }
+              h2 {
+                font-size: ${({ theme }) =>
+                  theme.fontSize['body-16']} !important;
+                font-weight: ${({ theme }) =>
+                  theme.fontWeight.regular} !important;
+              }
+              span {
+                font-size: ${({ theme }) =>
+                  theme.fontSize['body-14']} !important;
+              }
+            }
+          `}
         >
-          {title}
-          {` `}
           <Typography
-            as="b"
-            color="system-1"
+            as="h2"
+            fontSize={headingFontSize}
+            fontWeight="bold"
+            color="greyScale-6"
             lineHeight="120%"
-          >{`(${comments})`}</Typography>
-        </Typography>
-        {visible && (
-          <Typography
-            as="p"
-            fontSize="body-16"
-            fontWeight="regular"
-            color="greyScale-5"
-            lineHeight="150%"
             style={{
               marginBottom: '10px',
             }}
           >
-            {truncateOnWord(contents, 80)}
+            {title}
+            {` `}
+            <Typography
+              as="b"
+              color="system-1"
+              lineHeight="120%"
+            >{`(${comments})`}</Typography>
           </Typography>
-        )}
-        <Typography
-          as="span"
-          fontSize={bodyFontSize}
-          fontWeight="regular"
-          color="greyScale-5"
-          lineHeight="150%"
-          style={{
-            lineHeight: '19.36px',
-          }}
-        >
-          {created}
-        </Typography>
+          {visible && (
+            <Typography
+              as="p"
+              fontSize="body-16"
+              fontWeight="regular"
+              color="greyScale-5"
+              lineHeight="150%"
+              style={{
+                marginBottom: '10px',
+              }}
+            >
+              {truncateOnWord(contents, 80)}
+            </Typography>
+          )}
+          <Typography
+            as="span"
+            fontSize={bodyFontSize}
+            fontWeight="regular"
+            color="greyScale-5"
+            lineHeight="150%"
+            style={{
+              lineHeight: '19.36px',
+            }}
+          >
+            {created}
+          </Typography>
+        </Wrapper.Item>
       </Container>
     </Link>
   );

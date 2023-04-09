@@ -1,3 +1,6 @@
+import dayjs from 'dayjs';
+import MobileDetect from 'mobile-detect';
+
 type ErrorWithMessage = {
   message: string;
 };
@@ -46,4 +49,31 @@ const catchNoExist = (...lists: unknown[]) => {
   });
 };
 
-export { catchNoExist, env, getErrorMessage, isValidQuery };
+const isExpire = (exp: number) => {
+  if (Date.now() < exp) return true;
+  return false;
+};
+
+const isToday = (date: string) => {
+  return (
+    dayjs(new Date()).format('YYYY-MM-DD') === dayjs(date).format('YYYY-MM-DD')
+  );
+};
+
+const isMobile = (userAgent?: string) => {
+  if (!userAgent) return false;
+
+  const mb = new MobileDetect(userAgent);
+
+  return mb.mobile() ? true : false;
+};
+
+export {
+  catchNoExist,
+  env,
+  getErrorMessage,
+  isValidQuery,
+  isExpire,
+  isToday,
+  isMobile,
+};

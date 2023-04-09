@@ -27,12 +27,19 @@ const MarketRow = ({
     <Link href={`/market/${category}/${id}?${searchParams}`}>
       <Wrapper
         css={css`
-          width: 100%;
-          display: flex;
-          align-items: center;
-          ${applyMediaQuery('mobile')} {
-            align-items: flex-start;
-          }
+          ${({ theme }) => css`
+            width: 100%;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid ${theme.color['greyScale-3']};
+            padding: 6px 0;
+
+            ${applyMediaQuery('mobile')} {
+              align-items: flex-start;
+              padding: 0;
+              border: none;
+            }
+          `}
         `}
       >
         <Wrapper.Item
@@ -40,21 +47,19 @@ const MarketRow = ({
             position: relative;
             overflow: hidden;
             width: 196px;
-            height: 124px;
+            aspect-ratio: 4/3;
             .react-loading-skeleton {
               width: 196px;
-              height: 124px;
               border-radius: 4px;
             }
             ${applyMediaQuery('mobile')} {
-              width: 126px;
-              height: 126px;
+              width: 128px;
+              aspect-ratio: 1/1;
               & > img {
                 object-fit: cover;
               }
               .react-loading-skeleton {
-                width: 126px;
-                height: 126px;
+                width: 128px;
               }
             }
           `}
@@ -65,7 +70,7 @@ const MarketRow = ({
               blurDataURL={base64}
               src={imgSrc}
               alt="thumbnail"
-              style={{ borderRadius: '4px' }}
+              style={{ borderRadius: '4px', objectFit: 'cover' }}
               fill
               sizes={`${applyMediaQuery('desktop')} 196px, ${applyMediaQuery(
                 'mobile'

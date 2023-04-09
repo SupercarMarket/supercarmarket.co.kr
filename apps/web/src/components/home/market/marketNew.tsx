@@ -1,14 +1,33 @@
-import { Container, Typography, Wrapper } from '@supercarmarket/ui';
+import {
+  applyMediaQuery,
+  Container,
+  Typography,
+  Wrapper,
+} from '@supercarmarket/ui';
 import type { MarketDto } from '@supercarmarket/types/market';
 import MarketCard from 'components/market/marketCard';
 import { css } from 'styled-components';
-import { applyMediaQuery } from 'styles/mediaQuery';
-
 import RouterButton from '../routerButton';
 import { useHome } from 'http/server/home';
+import { CardSkeleton } from 'components/fallback/loading';
 
-const MarketNew = () => {
-  const { data: marketNew } = useHome<MarketDto[]>('new');
+interface MarketProps {
+  isMobile?: boolean;
+}
+
+const MarketNew = ({ isMobile }: MarketProps) => {
+  const pageSize = isMobile ? 4 : 8;
+
+  const {
+    data: marketNew,
+    isLoading,
+    isFetching,
+  } = useHome<MarketDto[]>('new', {
+    pageSize: String(pageSize),
+  });
+
+  if (isLoading || isFetching)
+    return <CardSkeleton size={pageSize} variant="column" />;
 
   return (
     <Container
@@ -33,7 +52,7 @@ const MarketNew = () => {
       >
         {marketNew &&
           marketNew.data
-            .slice(0, 8)
+            .slice(0, isMobile ? 4 : 8)
             .map((post) => <MarketCard key={post.id} {...post} />)}
       </Wrapper>
       <RouterButton href="/market">

@@ -20,8 +20,15 @@ export const partnershipFormatter = (category: string) => {
   if (category === '자동차매장') return 'DEALER_SHOP';
   if (category === '공업사') return 'CAR_CENTER';
   if (category === '도색') return 'PAINTING';
-  if (category === '디테일링') return 'DEATILING';
+  if (category === '디테일링') return 'DETAILING';
   return 'ETC';
+};
+
+export const inquiryStatusFormatter = (status: number) => {
+  if (status === 0) return '대기중';
+  if (status === 1) return '처리 완료';
+  if (status === 2) return '답변 완료';
+  return '반려';
 };
 
 export const searchTypeFormatter = (
@@ -39,4 +46,15 @@ export const searchTypeFormatter = (
   if (searchType === '닉네임') return 'user';
   if (searchType === '제목 + 본문') return 'title-contents';
   return 'title';
+};
+
+export const supercarmarketCodeFormatter = (category: string) => {
+  if (category === 'market') return 'SM002';
+  if (category === 'magazine') return 'SM003';
+  if (category === 'community') return 'SM004';
+  if (category === 'partnership') return 'SM005';
+  if (category === 'inquiry') return 'SM006';
+  if (category === 'search') return 'SM007';
+  if (category === 'live') return 'SM008';
+  return 'SM001';
 };
