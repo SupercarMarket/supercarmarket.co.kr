@@ -8,6 +8,7 @@ import Layout from 'components/layout';
 import { css } from 'styled-components';
 import { authRequest } from 'http/core';
 import { useRouter } from 'next/router';
+import TagCloseBtn from 'public/images/live/icons/TagCloseBtn.svg';
 
 interface Props {}
 
@@ -44,7 +45,8 @@ const Create = (props: Props) => {
   };
 
   const addTagsHandler = (tag: string) => {
-    if (broadcastData.tags.length > 2 && tag.length > 6) {
+    console.log(broadcastData.tags.length);
+    if (broadcastData.tags.length > 2 || tag.length > 6) {
       alert('태그는 최대 6자, 3개까지만 등록이 가능합니다');
       return null;
     } else {
@@ -336,7 +338,7 @@ const Tags = ({
         onClick={() => deleteTagsHandler(index)}
         style={{ marginLeft: '2px', cursor: 'pointer' }}
       >
-        X
+        <TagCloseBtn />
       </div>
     </div>
   );

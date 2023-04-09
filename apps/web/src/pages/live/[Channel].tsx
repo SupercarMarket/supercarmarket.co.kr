@@ -1,21 +1,17 @@
 /* eslint-disable turbo/no-undeclared-env-vars */
 /* eslint-disable prettier/prettier */
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  MutableRefObject,
-  ChangeEvent,
-} from 'react';
-import { Button, Container, Title, Wrapper } from '@supercarmarket/ui';
-import Layout from 'components/layout';
+import React, { useState, useEffect, ChangeEvent } from 'react';
+import { Button, Container } from '@supercarmarket/ui';
 import { useRouter } from 'next/router';
+import { authRequest } from 'http/core';
+import Layout from 'components/layout';
 import Publisher from 'components/live/Publisher';
 import Subscriber from 'components/live/Subscriber';
-import { authRequest } from 'http/core';
+import ChatInfo from 'components/live/ChatInfo';
+
 import SubscriberIcon from 'public/images/live/icons/SubscriberIcon.svg';
 import VolumeIcon from 'public/images/live/icons/VolumeIcon.svg';
-import ChatInfo from 'components/live/ChatInfo';
+import CameraCloseIcon from 'public/images/live/icons/CameraCloseIcon.svg';
 
 interface Props {}
 
@@ -62,81 +58,17 @@ const Channel = (props: Props) => {
 export default Channel;
 
 const LiveInfo = ({ data }: { data: channelResType | null | undefined }) => {
-  const [volume, setVolume] = useState<number>(80);
-
-  const router = useRouter();
-
-  const volumeChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
-    setVolume(Number(event.currentTarget.value));
-  };
-
-  const deleteBroadCastHandler = () => {
-    data && data.isMine && deleteBroadcast(data.broadCastSeq);
-    router.replace('/live');
-  };
-
   return (
     <div style={{ width: '880px' }}>
       {data ? (
         data.isMine ? (
-          <Publisher sessionId={data.sessionId as string} volume={volume} />
+          <Publisher sessionId={data.sessionId as string} data={data} />
         ) : (
-          <Subscriber sessionId={data.sessionId as string} volume={volume} />
+          <Subscriber sessionId={data.sessionId as string} data={data} />
         )
       ) : (
         <div style={{ backgroundColor: '#000000', height: '495px' }} />
       )}
-      <div>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            marginTop: '16px',
-          }}
-        >
-          <p style={publisherStyle}>{data?.userName}</p>
-          <div style={{ color: '#725B30', display: 'flex' }}>
-            <SubscriberIcon />
-            <p style={subscriberStyle}>{data?.userCount || 0}</p>
-          </div>
-        </div>
-        <div>
-          <p style={liveTitleStyle}>{data?.title}</p>
-        </div>
-        <div>
-          <p style={hashtagStyle}>{data?.tags.map((data) => `#${data}`)}</p>
-        </div>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-          }}
-        >
-          <div
-            style={{
-              marginTop: '15px',
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
-            <VolumeIcon />
-            <div>
-              <input
-                type="range"
-                min={0}
-                max={100}
-                value={volume}
-                onChange={volumeChangeHandler}
-              />
-            </div>
-          </div>
-          <div>
-            <Button variant="Primary" onClick={deleteBroadCastHandler}>
-              나가기
-            </Button>
-          </div>
-        </div>
-      </div>
     </div>
   );
 };
@@ -144,34 +76,4 @@ const LiveInfo = ({ data }: { data: channelResType | null | undefined }) => {
 const getDetailLiveInfo = async (seq: string) => {
   const data = await authRequest.get(`live/${seq}`);
   return data;
-};
-
-const deleteBroadcast = async (seq: number) => {
-  const data = await authRequest.delete(`/live`, { data: { seq: seq } });
-  return data;
-};
-
-const subscriberStyle = {
-  marginLeft: '8px',
-  fontSize: '16px',
-  lineHeight: '120%',
-};
-
-const publisherStyle = {
-  fontSize: '16px',
-  fontWeight: '500',
-  lineHeight: '150%',
-};
-
-const liveTitleStyle = {
-  marginTop: '8px',
-  fontSize: '20px',
-  fontWeight: '700',
-  lineHeight: '120%',
-};
-
-const hashtagStyle = {
-  color: '#725B30',
-  fontSize: '14px',
-  lineHeight: '150%',
 };

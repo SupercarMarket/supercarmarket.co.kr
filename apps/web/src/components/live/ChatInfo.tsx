@@ -46,9 +46,6 @@ function ChatInfo(props: Props) {
       connectHeaders: {
         ACCESS_TOKEN: `${session.accessToken}`,
       },
-      debug: function (str) {
-        console.log(str);
-      },
       reconnectDelay: 5000,
       heartbeatIncoming: 4000,
       heartbeatOutgoing: 4000,
@@ -60,11 +57,15 @@ function ChatInfo(props: Props) {
       const subscribe = client.subscribe(
         `/sub/${props.data?.sessionId}`,
         (frame) => {
-          console.log(frame.body);
           const getMessage = JSON.parse(frame.body);
           setChats((prevState: messageType[]) => {
             return prevState.concat([getMessage]);
           });
+          setTimeout(() => {
+            if (chatWrapRef.current) {
+              chatWrapRef.current.scrollTop = chatWrapRef.current.scrollHeight;
+            }
+          }, 100);
         }
       );
 
@@ -99,6 +100,7 @@ function ChatInfo(props: Props) {
         "data": "${textAreaRef.current?.value ?? ''}"
       }`,
     });
+    if (textAreaRef.current) textAreaRef.current.value = '';
     setTimeout(() => {
       if (chatWrapRef.current) {
         chatWrapRef.current.scrollTop = chatWrapRef.current.scrollHeight;
@@ -111,7 +113,6 @@ function ChatInfo(props: Props) {
     return () => {
       if (stomp) {
         stomp.deactivate();
-        console.log('test');
       }
     };
   }, []);

@@ -1,41 +1,69 @@
-import { Container } from '@supercarmarket/ui';
-import axios from 'axios';
-import Layout from 'components/layout/layout';
+import React, { ChangeEvent, useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import { OpenVidu, Session, StreamManager } from 'openvidu-browser';
-import React, { useEffect, useState } from 'react';
+
+import axios from 'axios';
+import { authRequest } from 'http/core';
+import { Button } from '@supercarmarket/ui';
+
+import SubscriberIcon from 'public/images/live/icons/SubscriberIcon.svg';
+import VolumeIcon from 'public/images/live/icons/VolumeIcon.svg';
+import CameraCloseIcon from 'public/images/live/icons/CameraCloseIcon.svg';
 
 interface Props {
   sessionId: string;
-  volume: number;
+  data: channelResType;
+}
+
+interface channelResType {
+  broadCastSeq: number;
+  isMine: boolean;
+  sessionId: string;
+  tags: string[];
+  title: string;
+  userCount: number;
+  userName: string;
+  userSeq: number;
 }
 
 function Subscriber(props: Props) {
-  const { sessionId } = props;
+  const newOV = new OpenVidu();
+  newOV.enableProdMode();
+  const { sessionId, data } = props;
+  const [volume, setVolume] = useState<number>(80);
+  const [session, setSession] = useState<Session>(newOV.initSession());
 
-  const [initUserData, setInitUserData] = useState({
-    sessionId: 'channelId',
-    userName: 'userInfo.nickname12',
-  });
+  const router = useRouter();
 
-  const [strimManager, setStrimManager] = useState<StreamManager>();
+  const volumeChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+    setVolume(Number(event.currentTarget.value));
+  };
+
+  const deleteBroadCastHandler = () => {
+    session.disconnect();
+    router.replace('/live');
+  };
 
   const joinSession = () => {
-    const newOV = new OpenVidu();
-    newOV.enableProdMode();
-    const newSession = newOV.initSession();
-
+    var video = document.getElementById('Streaming') as HTMLVideoElement;
     const connection = () => {
       getToken().then((token: any) => {
-        newSession.connect(token);
+        session.connect(token);
 
-        var video = document.getElementById('Streaming') as HTMLVideoElement;
+        // session.on('connectionCreated', (event) => {
+        //   if (event.connection.stream) {
+        //     session.subscribe(event.connection.stream, video);
+        //     event.connection.stream.streamManager.addVideoElement(video);
+        //   }
+        // });
 
-        newSession.on('connectionCreated', (event) => {
-          if (event.connection.stream) {
-            newSession.subscribe(event.connection.stream, video);
-            console.log(event.connection.stream.streamManager);
-            event.connection.stream.streamManager.addVideoElement(video);
-          }
+        session.on('streamCreated', (event) => {
+          session.subscribe(event.stream, undefined);
+          event.stream.streamManager.addVideoElement(video);
+        });
+
+        session.on('streamDestroyed', (event) => {
+          event.stream.streamManager.removeAllVideos();
         });
       });
     };
@@ -65,24 +93,120 @@ function Subscriber(props: Props) {
 
   useEffect(() => {
     var video = document.getElementById('Streaming') as HTMLVideoElement;
-    video.volume = props.volume / 100;
-  }, [props.volume]);
+    video.volume = volume / 100;
+  }, [volume]);
+
+  useEffect(() => {
+    window.addEventListener('unload', deleteBroadCastHandler);
+    return () => {
+      window.removeEventListener('unload', deleteBroadCastHandler);
+    };
+  }, []);
 
   if (!sessionId) {
     return <></>;
   }
   return (
-    <div style={{ width: '880px' }}>
-      <div style={{ height: '495px' }}>
-        <video
-          autoPlay
-          id="Streaming"
-          style={{ width: '100%', height: '100%' }}
-          controls
-        />
+    <div>
+      <div style={{ width: '880px' }}>
+        <div style={{ backgroundColor: '#000000', height: '495px' }}>
+          <video
+            autoPlay
+            id="Streaming"
+            style={{ width: '100%', height: '100%' }}
+            controls
+          />
+        </div>
+      </div>
+      <div>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            marginTop: '16px',
+          }}
+        >
+          <p style={publisherStyle}>{data?.userName}</p>
+          <div style={{ color: '#725B30', display: 'flex' }}>
+            <SubscriberIcon />
+            <p style={subscriberStyle}>{data?.userCount || 0}</p>
+          </div>
+        </div>
+        <div>
+          <p style={liveTitleStyle}>{data?.title}</p>
+        </div>
+        <div>
+          <p style={hashtagStyle}>{data?.tags.map((data) => `#${data}`)}</p>
+        </div>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+          }}
+        >
+          <div
+            style={{
+              marginTop: '15px',
+              display: 'flex',
+              alignItems: 'center',
+            }}
+          >
+            <VolumeIcon />
+            <div>
+              <input
+                type="range"
+                min={0}
+                max={100}
+                value={volume}
+                onChange={volumeChangeHandler}
+              />
+            </div>
+          </div>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              gap: '16px',
+            }}
+          >
+            <Button variant="Primary" onClick={deleteBroadCastHandler}>
+              나가기
+            </Button>
+          </div>
+        </div>
       </div>
     </div>
   );
 }
 
 export default Subscriber;
+
+const deleteBroadcast = async (seq: number) => {
+  const data = await authRequest.delete(`/live`, { data: { seq: seq } });
+  return data;
+};
+
+const publisherStyle = {
+  fontSize: '16px',
+  fontWeight: '500',
+  lineHeight: '150%',
+};
+
+const subscriberStyle = {
+  marginLeft: '8px',
+  fontSize: '16px',
+  lineHeight: '120%',
+};
+
+const liveTitleStyle = {
+  marginTop: '8px',
+  fontSize: '20px',
+  fontWeight: '700',
+  lineHeight: '120%',
+};
+
+const hashtagStyle = {
+  color: '#725B30',
+  fontSize: '14px',
+  lineHeight: '150%',
+};
