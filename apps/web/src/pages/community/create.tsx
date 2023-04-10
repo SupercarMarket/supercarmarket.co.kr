@@ -1,20 +1,13 @@
 import { Container, Title, Wrapper } from '@supercarmarket/ui';
 import type { NextPageWithLayout } from '@supercarmarket/types/base';
 import layout from 'components/layout';
-import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-import { QueryErrorResetBoundary } from '@tanstack/react-query';
-import { ErrorBoundary } from 'react-error-boundary';
-import { ErrorFallback } from 'components/fallback';
+import { GetServerSideProps } from 'next';
 import { css } from 'styled-components';
-import { prefetchTemporaryStorage } from 'http/server/community';
 import { getSession } from 'http/server/next';
 import { ModalProvider } from 'feature/ModalProvider';
-import { CommunityForm } from 'components/community';
-import CommunityCreate from 'components/community/communityForm/communityCreate';
+import { CommunityCreate } from 'components/community/communityForm';
 
-const Create: NextPageWithLayout = ({
-  temporaryStorage,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const Create: NextPageWithLayout = () => {
   return (
     <Container>
       <Wrapper
@@ -50,13 +43,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     };
   }
 
-  const temporaryStorage = await prefetchTemporaryStorage(
-    session.accessToken
-  ).then((res) => res.data);
-
   return {
     props: {
-      temporaryStorage: temporaryStorage,
+      sub: session.sub,
     },
   };
 };

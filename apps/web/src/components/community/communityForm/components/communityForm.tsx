@@ -21,7 +21,7 @@ import {
   formatter,
   getCategoryPathname,
   reverseFormatter,
-} from '../communityCard/communityCard';
+} from '../../communityCard/communityCard';
 import dayjs from 'dayjs';
 import { Modal } from 'components/common/modal';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
