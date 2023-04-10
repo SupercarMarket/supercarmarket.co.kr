@@ -8,12 +8,13 @@ import {
 } from '@supercarmarket/ui';
 import Image from 'next/image';
 import { css } from 'styled-components';
-import { PageProps } from './_app';
+import { type PageProps } from './_app';
 import Link from 'next/link';
-import { useDevice } from 'hooks/useDevice';
 
 const NotFound = (props: PageProps) => {
-  const { isMobile } = useDevice();
+  const {
+    $ua: { isMobile = false },
+  } = props;
 
   return (
     <Container>
