@@ -5,22 +5,22 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { css } from 'styled-components';
 import InquiryFormItem from '../inquiryFormItem';
 import { Modal } from 'components/common/modal';
-import { Profile } from '@supercarmarket/types/account';
 import { useDebounce } from '@supercarmarket/hooks';
 import { form, type FormState } from 'constants/form/sale';
 import { useRegisterSale } from 'http/server/inquiry';
 import { ModalContext } from 'feature/ModalProvider';
+import { useAccountUpdateInfo } from 'http/server/account';
+import { useSession } from 'next-auth/react';
 
-interface SaleFormProps {
-  role: Profile['role'];
-}
-
-const SaleForm = (props: SaleFormProps) => {
-  const { role } = props;
+const SaleForm = () => {
   const methods = useForm<FormState>();
   const { onOpen, onClose } = React.useContext(ModalContext);
   const [error, setError] = React.useState<string | null>(null);
   const { replace } = useRouter();
+  const { data: session, status } = useSession();
+  const { data } = useAccountUpdateInfo(session?.sub || '', {
+    enabled: !!session,
+  });
   const saleMutation = useRegisterSale({
     onError: (error: Error) => {
       setError(error.message);
@@ -123,7 +123,10 @@ const SaleForm = (props: SaleFormProps) => {
   );
 
   React.useEffect(() => {
-    if (!role || role === 'user')
+    if (
+      (status !== 'loading' && status !== 'authenticated') ||
+      (data && data.data.role !== 'dealer')
+    )
       onOpen(
         <Modal
           title="판매 등록 문의"
@@ -140,7 +143,10 @@ const SaleForm = (props: SaleFormProps) => {
           }}
         />
       );
-  }, [onClose, onOpen, replace, role]);
+  }, [data, onClose, onOpen, replace, status]);
+
+  console.log(data);
+
   return (
     <FormProvider {...methods}>
       <Form
