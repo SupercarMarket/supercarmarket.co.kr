@@ -11,7 +11,7 @@ import { usePathname } from 'next/navigation';
 
 const Advertisements = (props: PageProps) => {
   const { $ua } = props;
-  const { isMobile = false } = $ua;
+  const isMobile = $ua?.isMobile ?? false;
   const pathname = usePathname() || '/';
 
   const code = supercarmarketCodeFormatter(pathname.split('/')[1]);
