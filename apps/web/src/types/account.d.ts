@@ -5,7 +5,7 @@ declare module Account {
   interface Common {
     background?: string;
     gallery?: string[];
-    description?: number;
+    description?: string;
   }
 
   interface ProfileDto extends Account.Common {
@@ -25,5 +25,6 @@ declare module Account {
     nickname: string;
     phone: string;
     email: string;
+    role: Role;
   }
 }
