@@ -4,10 +4,10 @@ declare module ADs {
     url: string;
   }
 
-  interface AD extends ADs.Common {
+  interface AdDto extends ADs.Common {
     adPosition: 'M' | 'L' | 'R';
     imageName: string;
   }
 
-  type Banner = ADs.Common;
+  type BannerDto = ADs.Common;
 }
