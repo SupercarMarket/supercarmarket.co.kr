@@ -1,3 +1,4 @@
+import { CommunityFormSkeleton } from 'components/fallback/loading';
 import { useTemporaryStorage } from 'http/server/community';
 import { useSession } from 'next-auth/react';
 import CommunityForm from './communityForm';
@@ -8,9 +9,7 @@ const CommunityCreate = () => {
     enabled: !!session,
   });
 
-  if (!temporaryStorage) return <div>loading..</div>;
-
-  console.log(temporaryStorage);
+  if (!temporaryStorage) return <CommunityFormSkeleton />;
 
   return (
     <CommunityForm sub={session?.sub} initialData={temporaryStorage.data} />
