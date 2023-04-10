@@ -15,9 +15,8 @@ import { useRouter } from 'next/navigation';
 import * as React from 'react';
 import { css } from 'styled-components';
 import type { Editor } from '@toast-ui/react-editor';
-import type { CommunityTemporaryStorageDto } from '@supercarmarket/types/community';
 import { FormProvider, useForm } from 'react-hook-form';
-import { ErrorCode, HttpError } from '@supercarmarket/lib';
+import { ErrorCode } from '@supercarmarket/lib';
 import {
   formatter,
   getCategoryPathname,
@@ -26,7 +25,7 @@ import {
 import dayjs from 'dayjs';
 import { Modal } from 'components/common/modal';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { getTemporaryStorage, QUERY_KEYS } from 'http/server/community';
+import { QUERY_KEYS } from 'http/server/community';
 import { useDebounce } from '@supercarmarket/hooks';
 import { authRequest } from 'http/core';
 import { ServerResponse } from '@supercarmarket/types/base';
@@ -41,8 +40,9 @@ interface FormState {
 }
 
 interface CommunityFormProps {
+  initialData: Community.CommunityTemporaryStorageDto;
+  sub?: string;
   id?: string;
-  initialData: CommunityTemporaryStorageDto;
 }
 
 interface CommunityFormEditorImages {
@@ -55,11 +55,11 @@ const CommunityEditor = dynamic(() => import('./communityEditor'), {
 });
 
 const CommunityForm = (props: CommunityFormProps) => {
-  const { id, initialData: _initialData } = props;
+  const { sub, id, initialData: _initialData } = props;
 
   const { back, push } = useRouter();
   const [initialData, setInitialData] =
-    React.useState<CommunityTemporaryStorageDto>(_initialData);
+    React.useState<Community.CommunityTemporaryStorageDto>(_initialData);
   const [category, setCategory] = React.useState('');
   const [isInitialize, setIsInitialize] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
@@ -80,7 +80,7 @@ const CommunityForm = (props: CommunityFormProps) => {
   }, []);
 
   const handleInitialize = React.useCallback(
-    (data: CommunityTemporaryStorageDto) => {
+    (data: Community.CommunityTemporaryStorageDto) => {
       setIsInitialize(true);
       const instance = editor.current?.getInstance();
 
@@ -117,7 +117,7 @@ const CommunityForm = (props: CommunityFormProps) => {
       setImages((prev) => [...prev, { file: blob, local }]);
       dropImage(local, local);
     });
-  }, [id, initialData.contents]);
+  }, [id, initialData]);
 
   const handleEditorHtml = React.useCallback(async () => {
     const instance = editor.current?.getInstance();
@@ -130,7 +130,8 @@ const CommunityForm = (props: CommunityFormProps) => {
     const document = new DOMParser().parseFromString(html, 'text/html');
     const img = Array.from(document.querySelectorAll('img'));
     const isImg = img.length > 0;
-    const isTempImg = initialData.images && initialData.images.length > 0;
+    const isTempImg =
+      initialData && initialData.images && initialData.images.length > 0;
     const thumbnail = img[0]?.src || null;
     const isContents = Array.from(document.querySelectorAll('p')).some(
       (element) => element.innerText
@@ -141,9 +142,9 @@ const CommunityForm = (props: CommunityFormProps) => {
       throw 'contents is require';
     }
 
-    let addImgSrcs = null;
-    let deleteImgSrcs = null;
-    let addImgFiles = null;
+    let addImgSrcs: string[] = [];
+    let deleteImgSrcs: string[] = [];
+    let addImgFiles: File[] = [];
 
     // * case 1-1 @임시저장을 불러오지 않음
     // * 내부 에디터에 이미지가 존재하지 않는 경우
@@ -183,19 +184,19 @@ const CommunityForm = (props: CommunityFormProps) => {
         (i) => !currentImages.some((el) => el.local === i)
       );
       const addImg = currentImages.filter((i) => i.local.includes('blob'));
-      addImgSrcs = addImg.map((i) => i.local) || null;
-      addImgFiles = addImg.map((i) => i.file) || null;
+      addImgSrcs = addImg.map((i) => i.local) || [];
+      addImgFiles = addImg.map((i) => i.file) || [];
     }
 
     return {
-      tempId: initialData.tempId || null,
+      tempId: initialData?.tempId || null,
       thumbnail,
       deleteImgSrcs,
       addImgSrcs,
       addImgFiles,
       html,
     };
-  }, [images, initialData.images, initialData.tempId, isInitialize]);
+  }, [images, initialData, isInitialize]);
 
   const handleFiles = React.useCallback(
     async (data: FormState) => {
@@ -233,7 +234,7 @@ const CommunityForm = (props: CommunityFormProps) => {
         const currentTempFiles = initialData?.files || [];
 
         if (isLibrary && !isSelecteLibrary) {
-          deleteFileSrcs = initialData.files.map((file) => file.url);
+          deleteFileSrcs = initialData?.files?.map((file) => file.url) || [];
         }
 
         // * case 2-2
@@ -253,7 +254,7 @@ const CommunityForm = (props: CommunityFormProps) => {
         deleteFileSrcs,
       };
     },
-    [category, initialData?.category, initialData.files, isInitialize]
+    [category, initialData, isInitialize]
   );
 
   const handleRequire = React.useCallback(async (data: FormState) => {
@@ -329,7 +330,7 @@ const CommunityForm = (props: CommunityFormProps) => {
         setError(error.message || ErrorCode[error.status]);
       });
 
-      if (!result) throw new HttpError({ statusCode: 500 });
+      if (!result) throw '';
 
       return {
         id: result.data?.id,
@@ -339,9 +340,14 @@ const CommunityForm = (props: CommunityFormProps) => {
     },
     onSuccess: async ({ id: _id, temporaryStorage }) => {
       if (temporaryStorage) {
+        setIsInitialize(true);
         setSuccess(dayjs(new Date()).format('HH:mm'));
-        await getTemporaryStorage().then((res) => handleInitialize(res.data));
+        queryClient.refetchQueries(QUERY_KEYS.temporaryStorage(sub ?? ''));
         return;
+      } else {
+        queryClient.removeQueries({
+          queryKey: QUERY_KEYS.temporaryStorage(sub ?? ''),
+        });
       }
 
       if (id)
@@ -385,7 +391,7 @@ const CommunityForm = (props: CommunityFormProps) => {
 
   // * 임시저장 데이터 불러오기
   React.useEffect(() => {
-    if (_initialData.tempId && !id)
+    if (_initialData && _initialData.tempId && !id)
       onOpen(
         <Modal
           title="임시저장된 글이 있습니다. 불러오시겠습니까?"
@@ -409,6 +415,10 @@ const CommunityForm = (props: CommunityFormProps) => {
   React.useEffect(() => {
     if (id) handleInitialize(_initialData);
   }, []);
+
+  React.useEffect(() => {
+    if (isInitialize) handleInitialize(_initialData);
+  }, [handleInitialize, _initialData]);
 
   React.useEffect(() => {
     (() => {
@@ -479,6 +489,7 @@ const CommunityForm = (props: CommunityFormProps) => {
               defaultValues={
                 isInitialize &&
                 initialData.category === 'information' &&
+                initialData.files &&
                 initialData.files.length > 0
                   ? initialData.files.map(
                       (file) => new File([file.url], file.name)
@@ -540,7 +551,7 @@ const CommunityForm = (props: CommunityFormProps) => {
                 }}
                 disabled={uploadMutation.isLoading}
               >
-                임시저장
+                {uploadMutation.isLoading ? '임시저장 중..' : '임시저장'}
               </Button>
             )}
             <Button
