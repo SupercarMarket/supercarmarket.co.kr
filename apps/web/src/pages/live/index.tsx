@@ -9,7 +9,6 @@ import {
 import Layout from 'components/layout';
 import { css } from 'styled-components';
 import { useRouter } from 'next/router';
-import { authRequest } from 'http/core';
 import { useBroadCast } from 'http/server/live/queries';
 import { type NextPageWithLayout } from '@supercarmarket/types/base';
 
@@ -129,9 +128,4 @@ const LiveItem = ({ data }: { data: any }) => {
       </div>
     </div>
   );
-};
-
-const getBroadcastList = async () => {
-  const data = await authRequest.get(`/live?page=1&pageSize=16`);
-  return data;
 };

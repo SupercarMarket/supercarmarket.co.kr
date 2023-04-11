@@ -8,20 +8,9 @@ import { getOpenViduSessionToken } from 'http/server/live';
 
 interface Props {
   sessionId: string;
-  data: channelResType;
+  data: Live.LiveRoomDto;
   setIsBroad: (broad: boolean) => void;
   isBroad: boolean;
-}
-
-interface channelResType {
-  broadCastSeq: number;
-  isMine: boolean;
-  sessionId: string;
-  tags: string[];
-  title: string;
-  userCount: number;
-  userName: string;
-  userSeq: number;
 }
 
 function Subscriber(props: Props) {

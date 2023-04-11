@@ -1,23 +1,12 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import liveCss from 'public/css/live.module.css';
 import { Client, StompSubscription } from '@stomp/stompjs';
 import { Button } from '@supercarmarket/ui';
 import { getSession } from 'next-auth/react';
 
 interface Props {
-  data: channelResType | null | undefined;
+  data: Live.LiveRoomDto | null | undefined;
   isBroad: boolean;
-}
-
-interface channelResType {
-  broadCastSeq: number;
-  isMine: boolean;
-  sessionId: string;
-  tags: string[];
-  title: string;
-  userCount: number;
-  userName: string;
-  userSeq: number;
 }
 
 interface messageType {
