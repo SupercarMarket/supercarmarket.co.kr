@@ -10,18 +10,11 @@ export const getBroadCast = async (
     pageSize: 16,
   }
 ) => {
-  return authRequest({
+  return authRequest('/live', {
     method: 'GET',
-    url: '/live',
     params: query,
-  }).then((res) => {
-    const result = res as unknown as {
-      list: Live.LiveDto[];
-      isLastPage: boolean;
-      totalCount: number;
-      totalPages: number;
-    };
-    return result;
+  }).then((result) => {
+    return result as unknown as Common.PaginationResponse<Live.LiveDto[]>;
   });
 };
 

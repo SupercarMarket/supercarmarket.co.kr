@@ -59,7 +59,7 @@ const Index: NextPageWithLayout = () => {
               }
             `}
           >
-            {broadCast.list.map((data, idx) => {
+            {broadCast.data.map((data, idx) => {
               return <LiveItem key={`LiveItem_${idx}`} data={data} />;
             })}
           </Wrapper.Item>
