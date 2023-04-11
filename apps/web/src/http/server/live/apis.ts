@@ -60,7 +60,13 @@ export const getOpenViduSessionToken = async (id: string) => {
 };
 
 export const createBroadCastRoom = async (formData: FormData) => {
-  return authRequest.post(`/live`, formData);
+  return authRequest(`/live`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+    data: formData,
+  });
 };
 
 export const deleteBroadCastRoom = async (id: number) => {

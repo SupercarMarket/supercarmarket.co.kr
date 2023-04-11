@@ -27,8 +27,7 @@ const setRequest = async (
   if (config && config.headers)
     config.headers = {
       ACCESS_TOKEN: `${session.accessToken}`,
-      'Content-Type':
-        config.data instanceof FormData ? 'multipart/form-data' : contentType,
+      ContentType: contentType,
     };
 
   return config;

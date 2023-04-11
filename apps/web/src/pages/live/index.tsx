@@ -5,12 +5,13 @@ import {
   Title,
   Wrapper,
   Pagination,
+  applyMediaQuery,
 } from '@supercarmarket/ui';
 import Layout from 'components/layout';
 import { css } from 'styled-components';
-import { useRouter } from 'next/router';
 import { useBroadCast } from 'http/server/live/queries';
 import { type NextPageWithLayout } from '@supercarmarket/types/base';
+import Link from 'next/link';
 
 const Index: NextPageWithLayout = () => {
   const {
@@ -22,8 +23,6 @@ const Index: NextPageWithLayout = () => {
     pageSize: 16,
   });
 
-  const router = useRouter();
-
   if (isLoading || isFetching || !broadCast) return <div>loading..</div>;
 
   return (
@@ -33,38 +32,37 @@ const Index: NextPageWithLayout = () => {
           padding-bottom: 40px;
         `}
       >
-        <div style={{ display: 'flex', marginTop: '40px' }}>
+        <Wrapper.Item
+          css={css`
+            display: flex;
+          `}
+        >
           <Title>라이브</Title>
-          <Button
-            variant="Line"
-            style={{
-              width: '145px',
-              height: '44px',
-              color: '#B79F7B',
-              border: '1px solid #B79F7B',
-            }}
-            onClick={() => {
-              router.push('/live/Create');
-            }}
-          >
-            라이브 시작하기
-          </Button>
-        </div>
+          <Link href="/live/Create">
+            <Button variant="Primary-Line" type="button">
+              라이브 시작하기
+            </Button>
+          </Link>
+        </Wrapper.Item>
         {broadCast && (
-          <div style={{ marginTop: '20px' }}>
-            <div
-              style={{
-                display: 'flex',
-                flexWrap: 'wrap',
-                gap: '20px 0',
-                flex: 'auto',
-              }}
-            >
-              {broadCast.list.map((data, idx) => {
-                return <LiveItem key={`LiveItem_${idx}`} data={data} />;
-              })}
-            </div>
-          </div>
+          <Wrapper.Item
+            css={css`
+              margin-top: 20px;
+              display: grid;
+              grid-template-columns: 1fr 1fr 1fr 1fr;
+              column-gap: 20px;
+              row-gap: 40px;
+              ${applyMediaQuery('mobile')} {
+                grid-template-columns: 1fr 1fr;
+                column-gap: 8px;
+                row-gap: 16px;
+              }
+            `}
+          >
+            {broadCast.list.map((data, idx) => {
+              return <LiveItem key={`LiveItem_${idx}`} data={data} />;
+            })}
+          </Wrapper.Item>
         )}
       </Wrapper>
       <Pagination pageSize={1} totalCount={1} totalPages={1} />
@@ -77,55 +75,53 @@ Index.Layout = Layout;
 export default Index;
 
 const LiveItem = ({ data }: { data: any }) => {
-  const router = useRouter();
-  const clickItem = () => {
-    router.push(`live/${data.id}`);
-  };
   return (
-    <div style={{ cursor: 'pointer', width: '25%' }} onClick={clickItem}>
-      <div
-        style={{
-          width: '97%',
-          height: '180px',
-          backgroundColor: '#000000',
-          margin: 'auto',
-        }}
-      >
-        <img
-          src={data.thumbnailUrl}
-          style={{ width: '100%', height: '100%' }}
-        />
-      </div>
-      <div style={{ margin: 'auto', width: '95%', marginTop: '20px' }}>
-        <div
-          style={{ fontWeight: '500', fontSize: '16px', lineHeight: '24px' }}
-        >
-          {data.name}
-        </div>
+    <Link href={`/live/${data.id}`}>
+      <Container>
         <div
           style={{
-            fontWeight: '700',
-            fontSize: '16px',
-            lineHeight: '19.2px',
-            marginTop: '10px',
+            width: '100%',
+            height: '180px',
+            backgroundColor: '#000000',
+            margin: 'auto',
           }}
         >
-          {data.title}
+          <img
+            src={data.thumbnailUrl}
+            style={{ width: '100%', height: '100%' }}
+          />
         </div>
-        <div
-          style={{
-            fontWeight: '700',
-            fontSize: '14px',
-            lineHeight: '21px',
-            color: '#B78F7B',
-            marginTop: '10px',
-          }}
-        >
-          {data.tags.map((data: string) => {
-            return `#${data}`;
-          })}
+        <div style={{ margin: 'auto', width: '95%', marginTop: '20px' }}>
+          <div
+            style={{ fontWeight: '500', fontSize: '16px', lineHeight: '24px' }}
+          >
+            {data.name}
+          </div>
+          <div
+            style={{
+              fontWeight: '700',
+              fontSize: '16px',
+              lineHeight: '19.2px',
+              marginTop: '10px',
+            }}
+          >
+            {data.title}
+          </div>
+          <div
+            style={{
+              fontWeight: '700',
+              fontSize: '14px',
+              lineHeight: '21px',
+              color: '#B78F7B',
+              marginTop: '10px',
+            }}
+          >
+            {data.tags.map((data: string) => {
+              return `#${data}`;
+            })}
+          </div>
         </div>
-      </div>
-    </div>
+      </Container>
+    </Link>
   );
 };
