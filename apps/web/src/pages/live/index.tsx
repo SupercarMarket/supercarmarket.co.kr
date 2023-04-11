@@ -1,7 +1,4 @@
-/* eslint-disable turbo/no-undeclared-env-vars */
-/* eslint-disable prettier/prettier */
-import React, { useState, useEffect } from 'react';
-
+import * as React from 'react';
 import {
   Button,
   Container,
@@ -13,19 +10,22 @@ import Layout from 'components/layout';
 import { css } from 'styled-components';
 import { useRouter } from 'next/router';
 import { authRequest } from 'http/core';
+import { useBroadCast } from 'http/server/live/queries';
+import { type NextPageWithLayout } from '@supercarmarket/types/base';
 
-interface Props {}
-
-const Index = (props: Props) => {
-  const [liveItemList, setLiveItemList] = useState([]);
+const Index: NextPageWithLayout = () => {
+  const {
+    data: broadCast,
+    isLoading,
+    isFetching,
+  } = useBroadCast({
+    page: 1,
+    pageSize: 16,
+  });
 
   const router = useRouter();
 
-  useEffect(() => {
-    getBroadcastList().then((res: any) => {
-      setLiveItemList(res.list);
-    });
-  }, []);
+  if (isLoading || isFetching || !broadCast) return <div>loading..</div>;
 
   return (
     <Container>
@@ -51,20 +51,22 @@ const Index = (props: Props) => {
             라이브 시작하기
           </Button>
         </div>
-        <div style={{ marginTop: '20px' }}>
-          <div
-            style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              gap: '20px 0',
-              flex: 'auto',
-            }}
-          >
-            {liveItemList?.map((data, idx) => {
-              return <LiveItem key={`LiveItem_${idx}`} data={data} />;
-            })}
+        {broadCast && (
+          <div style={{ marginTop: '20px' }}>
+            <div
+              style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: '20px 0',
+                flex: 'auto',
+              }}
+            >
+              {broadCast.list.map((data, idx) => {
+                return <LiveItem key={`LiveItem_${idx}`} data={data} />;
+              })}
+            </div>
           </div>
-        </div>
+        )}
       </Wrapper>
       <Pagination pageSize={1} totalCount={1} totalPages={1} />
     </Container>

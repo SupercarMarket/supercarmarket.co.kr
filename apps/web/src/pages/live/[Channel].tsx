@@ -1,56 +1,39 @@
-/* eslint-disable turbo/no-undeclared-env-vars */
-/* eslint-disable prettier/prettier */
-import React, { useState, useEffect } from 'react';
-import { Button, Container } from '@supercarmarket/ui';
-import { useRouter } from 'next/router';
-import { authRequest } from 'http/core';
+import * as React from 'react';
+import { Container } from '@supercarmarket/ui';
 import Layout from 'components/layout';
 import Publisher from 'components/live/Publisher';
 import Subscriber from 'components/live/Subscriber';
 import ChatInfo from 'components/live/ChatInfo';
+import { useBroadCastRoom } from 'http/server/live/queries';
+import {
+  type GetServerSideProps,
+  type InferGetServerSidePropsType,
+} from 'next';
+import { type NextPageWithLayout } from '@supercarmarket/types/base';
 
-interface Props {
-  isSSR: boolean;
-}
+const Channel: NextPageWithLayout = ({
+  Channel,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const [isBroad, setIsBroad] = React.useState(true);
+  const {
+    data: broadCastRoom,
+    isLoading,
+    isFetching,
+  } = useBroadCastRoom(Channel);
 
-interface channelResType {
-  broadCastSeq: number;
-  isMine: boolean;
-  sessionId: string;
-  tags: string[];
-  title: string;
-  userCount: number;
-  userName: string;
-  userSeq: number;
-}
-
-const Channel = (props: Props) => {
-  const [channelData, setChannelData] = useState<channelResType | null>();
-  const [isBroad, setIsBroad] = useState(true);
-
-  const router = useRouter();
-
-  useEffect(() => {
-    if (props.isSSR) {
-      router.replace('/live');
-    } else if (router.query.Channel)
-      getDetailLiveInfo(router.query.Channel as string).then((data) => {
-        setChannelData(data.data);
-      });
-    return () => {};
-  }, [router.isReady, router.query.Channel]);
+  if (isLoading || isFetching || !broadCastRoom) return <div>loading..</div>;
 
   return (
     <Container>
       <div style={{ display: 'flex', marginTop: '10px' }}>
-        {channelData && (
+        {broadCastRoom.data && (
           <>
             <LiveInfo
-              data={channelData}
+              data={broadCastRoom.data}
               setIsBroad={setIsBroad}
               isBroad={isBroad}
             />
-            <ChatInfo data={channelData} isBroad={isBroad} />
+            <ChatInfo data={broadCastRoom.data} isBroad={isBroad} />
           </>
         )}
       </div>
@@ -60,15 +43,20 @@ const Channel = (props: Props) => {
 
 Channel.Layout = Layout;
 
-export default Channel;
-
-Channel.getInitialProps = async (context: any) => {
-  const { req } = context;
-  return { isSSR: !!req };
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const { query } = ctx;
+  const { Channel } = query;
+  return {
+    props: {
+      Channel,
+    },
+  };
 };
 
+export default Channel;
+
 interface LiveInfo {
-  data: channelResType | null | undefined;
+  data: Live.LiveRoomDto | null | undefined;
   setIsBroad: (broad: boolean) => void;
   isBroad: boolean;
 }
@@ -97,9 +85,4 @@ const LiveInfo = (props: LiveInfo) => {
       )}
     </div>
   );
-};
-
-const getDetailLiveInfo = async (seq: string) => {
-  const data = await authRequest.get(`live/${seq}`);
-  return data;
 };

@@ -1,12 +1,10 @@
-import React, { ChangeEvent, useContext, useEffect, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { OpenVidu, Session } from 'openvidu-browser';
-
-import axios from 'axios';
 import { Button } from '@supercarmarket/ui';
-
 import SubscriberIcon from 'public/images/live/icons/SubscriberIcon.svg';
 import VolumeIcon from 'public/images/live/icons/VolumeIcon.svg';
+import { getOpenViduSessionToken } from 'http/server/live';
 
 interface Props {
   sessionId: string;
@@ -51,7 +49,7 @@ function Subscriber(props: Props) {
   const joinSession = () => {
     var video = document.getElementById('Streaming') as HTMLVideoElement;
     const connection = () => {
-      getToken().then((token: any) => {
+      getOpenViduSessionToken(sessionId).then((token: any) => {
         session.on('streamCreated', async (event) => {
           session.subscribe(event.stream, undefined);
           event.stream.streamManager.addVideoElement(video);
@@ -63,23 +61,6 @@ function Subscriber(props: Props) {
       });
     };
     connection();
-  };
-
-  const getToken = async () => {
-    const resData = await axios.post(
-      `${process.env.NEXT_PUBLIC_OPENVIDU_API_URL}/openvidu/api/sessions/${sessionId}/connection`,
-      {},
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Basic ${Buffer.from(
-            process.env.NEXT_PUBLIC_OPENVIDU_SECRET as string,
-            'utf8'
-          ).toString('base64')}`,
-        },
-      }
-    );
-    return resData.data.token;
   };
 
   useEffect(() => {

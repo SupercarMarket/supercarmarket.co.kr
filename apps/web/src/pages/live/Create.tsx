@@ -1,16 +1,16 @@
 /* eslint-disable turbo/no-undeclared-env-vars */
 /* eslint-disable prettier/prettier */
 import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
-
 import { Button, Container, Input, Title, Wrapper } from '@supercarmarket/ui';
 import Layout from 'components/layout';
 import { css } from 'styled-components';
-import { authRequest } from 'http/core';
 import { useRouter } from 'next/router';
 import TagCloseBtn from 'public/images/live/icons/TagCloseBtn.svg';
-
-interface Props {}
+import { getOpenViduSessionId } from 'http/server/live';
+import { useCreateBroadCastRoom } from 'http/server/live/mutaitons';
+import { useQueryClient } from '@tanstack/react-query';
+import { QUERY_KEYS } from 'http/server/live/keys';
+import { type NextPageWithLayout } from '@supercarmarket/types/base';
 
 interface broadcastDataType {
   title: string;
@@ -19,7 +19,7 @@ interface broadcastDataType {
   password?: string;
 }
 
-const Create = (props: Props) => {
+const Create: NextPageWithLayout = () => {
   const [broadcastData, setBroadcastData] = useState<broadcastDataType>({
     title: '',
     tags: [],
@@ -31,6 +31,9 @@ const Create = (props: Props) => {
   const tagsRef = useRef<HTMLInputElement | null>(null);
   const imageFileRef = useRef<HTMLInputElement | null>(null);
   const router = useRouter();
+
+  const queryClient = useQueryClient();
+  const createBroadCastRoomMutation = useCreateBroadCastRoom();
 
   const broadcastStateChangeHandler = (
     target: 'title' | 'isPrivate' | 'password',
@@ -92,7 +95,7 @@ const Create = (props: Props) => {
     if (broadcastData.isPrivate && !broadcastData.password) {
       alert('비밀번호를 설정해주세요');
     }
-    const sessionId = await getSessionId();
+    const sessionId = await getOpenViduSessionId();
     console.log(sessionId);
 
     const params = {
@@ -114,10 +117,12 @@ const Create = (props: Props) => {
       )[0]
     );
 
-    const data = await authRequest.post(`/live`, formData);
-
-    console.log(data);
-    router.push(`${data.data.bcSeq}`);
+    createBroadCastRoomMutation.mutate(formData, {
+      onSuccess: (result) => {
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.live() });
+        router.push(`${result.data.bcSeq}`);
+      },
+    });
   };
 
   useEffect(() => {
@@ -297,23 +302,6 @@ const Create = (props: Props) => {
 Create.Layout = Layout;
 
 export default Create;
-
-const getSessionId = async () => {
-  const data = await axios.post(
-    `${process.env.NEXT_PUBLIC_OPENVIDU_API_URL}/openvidu/api/sessions`,
-    {},
-    {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Basic ${Buffer.from(
-          process.env.NEXT_PUBLIC_OPENVIDU_SECRET as string,
-          'utf8'
-        ).toString('base64')}`,
-      },
-    }
-  );
-  return data.data.id;
-};
 
 const Tags = ({
   tags,
