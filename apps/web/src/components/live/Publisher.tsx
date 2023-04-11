@@ -40,9 +40,6 @@ function Publisher(props: Props) {
     deleteBroadCastRoomMutation.mutate(data.broadCastSeq, {
       onSuccess: () => {
         queryClient.refetchQueries({ queryKey: QUERY_KEYS.live() });
-        queryClient.invalidateQueries({
-          queryKey: QUERY_KEYS.id(String(data.broadCastSeq)),
-        });
         session.disconnect();
         router.replace('/live');
       },
