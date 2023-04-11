@@ -1,44 +1,27 @@
 import { Container, Title, Wrapper } from '@supercarmarket/ui';
 import type { NextPageWithLayout } from '@supercarmarket/types/base';
-import { CommunityForm } from 'components/community';
 import layout from 'components/layout';
-import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-import { QueryErrorResetBoundary } from '@tanstack/react-query';
-import { ErrorBoundary } from 'react-error-boundary';
-import { ErrorFallback } from 'components/fallback';
+import { GetServerSideProps } from 'next';
 import { css } from 'styled-components';
-import { prefetchTemporaryStorage } from 'http/server/community';
 import { getSession } from 'http/server/next';
 import { ModalProvider } from 'feature/ModalProvider';
+import { CommunityCreate } from 'components/community/communityForm';
 
-const Create: NextPageWithLayout = ({
-  temporaryStorage,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const Create: NextPageWithLayout = () => {
   return (
     <Container>
-      <QueryErrorResetBoundary>
-        {({ reset }) => (
-          <Wrapper
-            css={css`
-              display: flex;
-              flex-direction: column;
-              gap: 20px;
-            `}
-          >
-            <Title>게시글 작성</Title>
-            <ErrorBoundary
-              onReset={reset}
-              fallbackRender={(props) => (
-                <ErrorFallback margin="100px 0" {...props} />
-              )}
-            >
-              <ModalProvider>
-                <CommunityForm initialData={temporaryStorage} />
-              </ModalProvider>
-            </ErrorBoundary>
-          </Wrapper>
-        )}
-      </QueryErrorResetBoundary>
+      <Wrapper
+        css={css`
+          display: flex;
+          flex-direction: column;
+          gap: 20px;
+        `}
+      >
+        <Title>게시글 작성</Title>
+        <ModalProvider>
+          <CommunityCreate />
+        </ModalProvider>
+      </Wrapper>
     </Container>
   );
 };
@@ -60,13 +43,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     };
   }
 
-  const temporaryStorage = await prefetchTemporaryStorage(
-    session.accessToken
-  ).then((res) => res.data);
-
   return {
     props: {
-      temporaryStorage: temporaryStorage,
+      sub: session.sub,
     },
   };
 };

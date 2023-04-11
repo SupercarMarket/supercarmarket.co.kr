@@ -46,6 +46,8 @@ interface AuthFormItemProps
   > {
   defaultValue?: string | string[];
   handleModal?: (htmlFor: keyof FormState) => void;
+  sendPhoneMutation?: ReturnType<typeof useSendPhone>;
+  sendCodeMutation?: ReturnType<typeof useSendCode>;
 }
 
 interface AuthFormItemContainerProps extends Omit<AuthFormItemProps, 'state'> {
@@ -53,6 +55,7 @@ interface AuthFormItemContainerProps extends Omit<AuthFormItemProps, 'state'> {
   setValue: UseFormSetValue<FieldValues>;
   setError: UseFormSetError<FieldValues>;
   getValues: UseFormGetValues<FieldValues>;
+  duplicateFieldMutation?: ReturnType<typeof useDuplicateField>;
   phone?: string;
   patternError?:
     | FieldError
@@ -75,6 +78,7 @@ const AuthFormItem = (props: AuthFormItemProps) => {
   const patternError = errors[htmlFor];
   const target = useWatch({ name: htmlFor });
   const phone = queryClient.getQueryData<string>(QUERY_KEYS.phone());
+  const duplicateFieldMutation = useDuplicateField(htmlFor);
 
   return (
     <AuthFormItemContainer
@@ -83,6 +87,7 @@ const AuthFormItem = (props: AuthFormItemProps) => {
       setError={setError}
       getValues={getValues}
       handleModal={handleModal}
+      duplicateFieldMutation={duplicateFieldMutation}
       target={target}
       htmlFor={htmlFor}
       phone={phone}
@@ -114,6 +119,9 @@ const AuthFormItemContainer = React.memo(function AuthFormItem({
   setError: setFieldError,
   getValues,
   handleModal,
+  duplicateFieldMutation,
+  sendCodeMutation,
+  sendPhoneMutation,
 }: AuthFormItemContainerProps) {
   const [error, setError] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
@@ -122,9 +130,6 @@ const AuthFormItemContainer = React.memo(function AuthFormItem({
     else if (patternError) return patternError.message as string;
     else return undefined;
   }, [error, errorMessage, patternError]);
-  const duplicateFieldMutation = useDuplicateField(htmlFor);
-  const sendPhoneMutation = useSendPhone();
-  const sendCodeMutation = useSendCode();
 
   const attr = { id: htmlFor, type, placeholder };
   const phoneBtnAttr: InputBtnAttr = {
@@ -135,10 +140,11 @@ const AuthFormItemContainer = React.memo(function AuthFormItem({
       ? 'Line'
       : 'Primary-Line',
     buttonDisabled: false,
-    count: htmlFor === 'authentication' && phone && !success ? 179 : undefined,
   };
   const count =
-    htmlFor === 'authentication' && phone && !success ? 179 : undefined;
+    htmlFor === 'authentication' && sendPhoneMutation?.isSuccess
+      ? 180
+      : undefined;
 
   const handleCallback = React.useCallback(async () => {
     setFieldError(htmlFor, { message: '' });
@@ -151,14 +157,15 @@ const AuthFormItemContainer = React.memo(function AuthFormItem({
       return;
     }
 
-    duplicateFieldMutation.mutate(target, {
-      onSuccess: () => {
-        setSuccess(true);
-      },
-      onError: () => {
-        setError(true);
-      },
-    });
+    if (duplicateFieldMutation)
+      duplicateFieldMutation.mutate(target, {
+        onSuccess: () => {
+          setSuccess(true);
+        },
+        onError: () => {
+          setError(true);
+        },
+      });
   }, [duplicateFieldMutation, htmlFor, setFieldError, target]);
 
   const handlePhoneAuth = React.useCallback(() => {
@@ -174,7 +181,7 @@ const AuthFormItemContainer = React.memo(function AuthFormItem({
 
     const _phone = getValues('phone');
 
-    if (htmlFor === 'phone')
+    if (htmlFor === 'phone' && sendPhoneMutation) {
       sendPhoneMutation.mutate(_phone, {
         onSuccess: () => {
           setSuccess(true);
@@ -183,7 +190,7 @@ const AuthFormItemContainer = React.memo(function AuthFormItem({
           setError(true);
         },
       });
-    else if (htmlFor === 'authentication' && !!phone)
+    } else if (htmlFor === 'authentication' && !!phone && sendCodeMutation)
       sendCodeMutation.mutate(
         { phone, code: target },
         {
@@ -196,13 +203,13 @@ const AuthFormItemContainer = React.memo(function AuthFormItem({
         }
       );
   }, [
-    target,
-    htmlFor,
-    phone,
-    sendPhoneMutation,
-    sendCodeMutation,
-    getValues,
     setFieldError,
+    getValues,
+    htmlFor,
+    target,
+    sendPhoneMutation,
+    phone,
+    sendCodeMutation,
   ]);
 
   const buttonDisabled = () => {

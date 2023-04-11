@@ -300,6 +300,97 @@ const MarketDetailSkeleton = () => {
   );
 };
 
+const CommunityFormSkeleton = () => {
+  return (
+    <Container>
+      <Wrapper
+        css={css`
+          display: flex;
+          flex-direction: column;
+          gap: 24px;
+        `}
+      >
+        <Wrapper.Item
+          css={css`
+            width: 100%;
+            display: flex;
+            align-items: center;
+            ${applyMediaQuery('mobile')} {
+              flex-direction: column;
+              align-items: unset;
+              gap: 4px;
+            }
+          `}
+        >
+          <Wrapper.Left
+            css={css`
+              width: 140px;
+            `}
+          >
+            <Skeleton width={70} height={24} />
+          </Wrapper.Left>
+          <Wrapper.Right
+            css={css`
+              width: 100%;
+              flex: 1;
+            `}
+          >
+            <Skeleton height={43} />
+          </Wrapper.Right>
+        </Wrapper.Item>
+        <Wrapper.Item
+          css={css`
+            width: 100%;
+            display: flex;
+            align-items: center;
+            ${applyMediaQuery('mobile')} {
+              flex-direction: column;
+              align-items: unset;
+              gap: 4px;
+            }
+          `}
+        >
+          <Wrapper.Left
+            css={css`
+              width: 140px;
+            `}
+          >
+            <Skeleton width={35} height={24} />
+          </Wrapper.Left>
+          <Wrapper.Right
+            css={css`
+              width: 100%;
+              flex: 1;
+            `}
+          >
+            <Skeleton height={43} />
+          </Wrapper.Right>
+        </Wrapper.Item>
+        <Wrapper.Item
+          css={css`
+            width: 100%;
+            height: 800px;
+          `}
+        >
+          <Skeleton height="100%" />
+        </Wrapper.Item>
+        <Wrapper.Item
+          css={css`
+            display: flex;
+            gap: 9px;
+            width: 100%;
+            justify-content: flex-end;
+          `}
+        >
+          <Skeleton width={58.2} height={40} />
+          <Skeleton width={82.4} height={40} />
+          <Skeleton width={85.91} height={40} />
+        </Wrapper.Item>
+      </Wrapper>
+    </Container>
+  );
+};
+
 const PartnershipSkeleton = () => {
   return (
     <Wrapper>
@@ -347,9 +438,6 @@ const PartnershipSkeleton = () => {
 
                 .title {
                   height: 24px;
-                }
-
-                .address {
                 }
 
                 ${applyMediaQuery('mobile')} {
@@ -645,6 +733,7 @@ export {
   CommentSkeleton,
   MagazineBannerSkeleton,
   MarketDetailSkeleton,
+  CommunityFormSkeleton,
   PartnershipSkeleton,
   PartnershipDetailSkeleton,
 };
