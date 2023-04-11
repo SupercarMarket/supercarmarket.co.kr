@@ -116,7 +116,6 @@ const Create = (props: Props) => {
 
     const data = await authRequest.post(`/live`, formData);
 
-    console.log(data);
     router.push(`${data.data.bcSeq}`);
   };
 

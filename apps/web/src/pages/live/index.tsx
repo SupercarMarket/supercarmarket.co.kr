@@ -8,11 +8,15 @@ import {
   Title,
   Wrapper,
   Pagination,
+  Typography,
 } from '@supercarmarket/ui';
 import Layout from 'components/layout';
 import { css } from 'styled-components';
 import { useRouter } from 'next/router';
 import { authRequest } from 'http/core';
+
+import { ModalContext } from 'feature/ModalProvider';
+import Modal from 'components/live/modal';
 
 interface Props {}
 
@@ -23,7 +27,7 @@ const Index = (props: Props) => {
 
   useEffect(() => {
     getBroadcastList().then((res: any) => {
-      setLiveItemList(res.list);
+      setLiveItemList(res.data);
     });
   }, []);
 
@@ -75,10 +79,22 @@ Index.Layout = Layout;
 
 export default Index;
 
-const LiveItem = ({ data }: { data: any }) => {
+interface LiveItem {
+  id: number;
+  isPrivate: boolean;
+  tags: string[];
+  thumbnailUrl: string;
+  title: string;
+  name: string;
+}
+
+const LiveItem = ({ data }: { data: LiveItem }) => {
   const router = useRouter();
+  const [isOpen, setIsOpen] = useState(false);
   const clickItem = () => {
-    router.push(`live/${data.id}`);
+    if (data.isPrivate) {
+      setIsOpen(false);
+    } else router.push(`live/${data.id}`);
   };
   return (
     <div style={{ cursor: 'pointer', width: '25%' }} onClick={clickItem}>
@@ -125,11 +141,34 @@ const LiveItem = ({ data }: { data: any }) => {
           })}
         </div>
       </div>
+      <Modal open={isOpen}>
+        <div
+          style={{
+            width: '552px',
+            height: '213px',
+            borderRadius: '4px',
+            padding: '24px',
+            gap: '24px',
+            backgroundColor: '#FFFFFF',
+          }}
+        >
+          <Typography>{data.title}</Typography>
+          <div></div>
+        </div>
+      </Modal>
     </div>
   );
 };
 
 const getBroadcastList = async () => {
-  const data = await authRequest.get(`/live?page=1&pageSize=16`);
-  return data;
+  return await authRequest.get(`/live?page=1&pageSize=16`);
+};
+
+interface postCheckPasswordParams {
+  seq: number;
+  password: string;
+}
+
+const postCheckPassword = async (params: postCheckPasswordParams) => {
+  return await authRequest.get(`/live/password`, { params });
 };
