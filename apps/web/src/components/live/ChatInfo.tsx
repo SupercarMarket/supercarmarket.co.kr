@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import * as React from 'react';
 import liveCss from 'public/css/live.module.css';
 import { Client, StompSubscription } from '@stomp/stompjs';
 import { Button } from '@supercarmarket/ui';
@@ -18,13 +18,13 @@ interface messageType {
 
 function ChatInfo(props: Props) {
   const { isBroad } = props;
-  const [chats, setChats] = useState<messageType[]>([]);
-  const [stomp, setStomp] = useState<Client>();
-  const [subscribes, setSubscribes] = useState<StompSubscription>();
-  const [testName, setTestName] = useState(`test_${Math.random()}`);
+  const [chats, setChats] = React.useState<messageType[]>([]);
+  const [stomp, setStomp] = React.useState<Client>();
+  const [subscribes, setSubscribes] = React.useState<StompSubscription>();
+  const [testName, setTestName] = React.useState(`test_${Math.random()}`);
 
-  const textAreaRef = useRef<HTMLTextAreaElement>(null);
-  const chatWrapRef = useRef<HTMLDivElement>(null);
+  const textAreaRef = React.useRef<HTMLTextAreaElement>(null);
+  const chatWrapRef = React.useRef<HTMLDivElement>(null);
 
   const joinChat = async () => {
     const session = await getSession();
@@ -132,7 +132,7 @@ function ChatInfo(props: Props) {
     console.log(session);
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     joinChat();
     test();
     return () => {
@@ -142,13 +142,13 @@ function ChatInfo(props: Props) {
     };
   }, []);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!isBroad) {
       exitChat();
     }
   }, [isBroad]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (stomp) {
       textAreaRef.current?.addEventListener('keypress', (event) => {
         if (event.key === 'Enter' && !event.shiftKey) {

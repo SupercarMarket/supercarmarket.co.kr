@@ -1,7 +1,7 @@
 import { Button } from '@supercarmarket/ui';
 import { useRouter } from 'next/router';
 import { OpenVidu, Publisher as Publishers, Session } from 'openvidu-browser';
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import * as React from 'react';
 import SubscriberIcon from 'public/images/live/icons/SubscriberIcon.svg';
 import VolumeIcon from 'public/images/live/icons/VolumeIcon.svg';
 import CameraCloseIcon from 'public/images/live/icons/CameraCloseIcon.svg';
@@ -22,17 +22,17 @@ function Publisher(props: Props) {
   const newOV = new OpenVidu();
   newOV.enableProdMode();
   const { sessionId, data } = props;
-  const [volume, setVolume] = useState<number>(80);
-  const [isCamera, setIsCamera] = useState(true);
-  const [session, setSession] = useState<Session>(newOV.initSession());
-  const [publisher, setPublisher] = useState<Publishers>();
+  const [volume, setVolume] = React.useState<number>(80);
+  const [isCamera, setIsCamera] = React.useState(true);
+  const [session, setSession] = React.useState<Session>(newOV.initSession());
+  const [publisher, setPublisher] = React.useState<Publishers>();
 
   const queryClient = useQueryClient();
   const deleteBroadCastRoomMutation = useDeleteBroadCastRoom();
 
   const router = useRouter();
 
-  const volumeChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+  const volumeChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setVolume(Number(event.currentTarget.value));
   };
 
@@ -94,14 +94,14 @@ function Publisher(props: Props) {
     connection();
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (sessionId) joinSession();
     return () => {
       session.disconnect();
     };
   }, []);
 
-  useEffect(() => {
+  React.useEffect(() => {
     var video = document.getElementById('Streaming') as HTMLVideoElement;
     video.volume = volume / 100;
   }, [volume]);

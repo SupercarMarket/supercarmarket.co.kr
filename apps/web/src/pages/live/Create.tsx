@@ -1,6 +1,6 @@
 /* eslint-disable turbo/no-undeclared-env-vars */
 /* eslint-disable prettier/prettier */
-import React, { useState, useEffect, useRef } from 'react';
+import * as React from 'react';
 import { Button, Container, Input, Title, Wrapper } from '@supercarmarket/ui';
 import Layout from 'components/layout';
 import { css } from 'styled-components';
@@ -20,16 +20,16 @@ interface broadcastDataType {
 }
 
 const Create: NextPageWithLayout = () => {
-  const [broadcastData, setBroadcastData] = useState<broadcastDataType>({
+  const [broadcastData, setBroadcastData] = React.useState<broadcastDataType>({
     title: '',
     tags: [],
     isPrivate: true,
   });
-  const [filePath, setfilePath] = useState<string | null>(null);
+  const [filePath, setfilePath] = React.useState<string | null>(null);
 
-  const passwordRef = useRef<HTMLInputElement | null>(null);
-  const tagsRef = useRef<HTMLInputElement | null>(null);
-  const imageFileRef = useRef<HTMLInputElement | null>(null);
+  const passwordRef = React.useRef<HTMLInputElement | null>(null);
+  const tagsRef = React.useRef<HTMLInputElement | null>(null);
+  const imageFileRef = React.useRef<HTMLInputElement | null>(null);
   const router = useRouter();
 
   const queryClient = useQueryClient();
@@ -125,7 +125,7 @@ const Create: NextPageWithLayout = () => {
     });
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (broadcastData.isPrivate) {
       (passwordRef.current as HTMLInputElement).style.display = 'block';
     } else {

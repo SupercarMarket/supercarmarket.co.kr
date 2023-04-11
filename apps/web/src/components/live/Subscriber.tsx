@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import * as React from 'react';
 import { useRouter } from 'next/router';
 import { OpenVidu, Session } from 'openvidu-browser';
 import { Button } from '@supercarmarket/ui';
@@ -18,12 +18,12 @@ function Subscriber(props: Props) {
   const newOV = new OpenVidu();
   newOV.enableProdMode();
   const { sessionId, data } = props;
-  const [volume, setVolume] = useState<number>(80);
-  const [session, setSession] = useState<Session>(newOV.initSession());
+  const [volume, setVolume] = React.useState<number>(80);
+  const [session, setSession] = React.useState<Session>(newOV.initSession());
 
   const router = useRouter();
 
-  const volumeChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+  const volumeChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setVolume(Number(event.currentTarget.value));
   };
 
@@ -52,14 +52,14 @@ function Subscriber(props: Props) {
     connection();
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (sessionId) joinSession();
     return () => {
       session.disconnect();
     };
   }, []);
 
-  useEffect(() => {
+  React.useEffect(() => {
     var video = document.getElementById('Streaming') as HTMLVideoElement;
     video.volume = volume / 100;
   }, [volume]);
