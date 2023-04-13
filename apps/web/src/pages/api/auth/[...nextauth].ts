@@ -137,6 +137,7 @@ const providers: Provider[] = [
         const { tokens } = ctx;
 
         return {
+          ...tokens,
           newUser: tokens.newUser,
           uuid: tokens.token,
           id: EMPTY_FIELD,
@@ -192,6 +193,7 @@ const providers: Provider[] = [
 
         return {
           ...tokens,
+          newUser: tokens.newUser,
           uuid: tokens.token,
           id: EMPTY_FIELD,
           sub: EMPTY_FIELD,
