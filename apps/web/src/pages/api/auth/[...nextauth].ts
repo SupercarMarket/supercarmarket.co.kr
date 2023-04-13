@@ -5,15 +5,16 @@ import type {
   NextAuthOptions,
   Profile,
 } from 'next-auth';
-import { type ServerResponse } from '@supercarmarket/types/base';
 import type { Provider } from 'next-auth/providers';
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
 import KakaoProvider from 'next-auth/providers/kakao';
-import { HttpError, post } from '@supercarmarket/lib';
+import { HttpError, get, post } from '@supercarmarket/lib';
 import { refreshToken, signInOAuth } from 'http/server/auth/apis';
 import { isExpire } from 'utils/misc';
+
+const EMPTY_FIELD = 'empty';
 
 const providers: Provider[] = [
   /*
@@ -116,7 +117,7 @@ const providers: Provider[] = [
       url: `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/user/login/google`,
       request: async (ctx) => {
         const { code } = ctx.params;
-        console.log('google oauth ctx params: ', ctx.params);
+        const { code_verifier } = ctx.checks;
 
         if (!code)
           throw new HttpError({
@@ -124,28 +125,38 @@ const providers: Provider[] = [
             statusCode: 500,
           });
 
-        const client = await signInOAuth({ code }, 'google').catch((error) =>
-          console.error('google oauth error:', error)
-        );
+        const tokens = await signInOAuth({ code, code_verifier }, 'google');
 
-        console.log('google oauth client', client);
         return {
-          tokens: {},
+          tokens: tokens.data,
         };
       },
     },
-    userinfo: {},
-    profile: () => {
+    userinfo: {
+      request: async (ctx) => {
+        const { tokens } = ctx;
+
+        return {
+          newUser: tokens.newUser,
+          uuid: tokens.token,
+          id: EMPTY_FIELD,
+          sub: EMPTY_FIELD,
+        };
+      },
+    },
+    profile: (profile) => {
       return {
-        id: '',
-        sub: '',
         provider: 'google',
-        accessToken: '',
-        refreshToken: '',
-        expire: 0,
-        nickname: '',
-        picture: '',
-        email: '',
+        newUser: profile.newUser,
+        id: profile.user?.id ?? EMPTY_FIELD,
+        sub: profile.user?.id ?? EMPTY_FIELD,
+        nickname: profile.user?.name ?? EMPTY_FIELD,
+        uuid: profile.uuid ?? EMPTY_FIELD,
+        accessToken: profile.access_token ?? EMPTY_FIELD,
+        refreshToken: profile.refresh_token ?? EMPTY_FIELD,
+        picture: profile.picture ?? EMPTY_FIELD,
+        email: profile.email ?? EMPTY_FIELD,
+        expire: profile.exp ?? 0,
       };
     },
   }),
@@ -158,10 +169,9 @@ const providers: Provider[] = [
     clientId: process.env.NEXT_PUBLIC_KAKAO_ID,
     clientSecret: process.env.NEXT_PUBLIC_KAKAO_SECRET,
     token: {
-      url: `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/user/login/google`,
+      url: `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/user/login/kakao`,
       request: async (ctx) => {
         const { code } = ctx.params;
-        console.log('kakao oauth ctx params: ', ctx.params);
 
         if (!code)
           throw new HttpError({
@@ -169,28 +179,38 @@ const providers: Provider[] = [
             statusCode: 500,
           });
 
-        const client = await signInOAuth({ code }, 'kakao').catch((error) =>
-          console.error('kakao oauth error:', error)
-        );
+        const tokens = await signInOAuth({ code }, 'kakao');
 
-        console.log('kakao oauth client', client);
         return {
-          tokens: {},
+          tokens: tokens.data,
         };
       },
     },
-    userinfo: {},
-    profile: () => {
+    userinfo: {
+      request: async (ctx) => {
+        const { tokens } = ctx;
+
+        return {
+          ...tokens,
+          uuid: tokens.token,
+          id: EMPTY_FIELD,
+          sub: EMPTY_FIELD,
+        };
+      },
+    },
+    profile: (profile) => {
       return {
-        id: '',
-        sub: '',
         provider: 'kakao',
-        accessToken: '',
-        refreshToken: '',
-        expire: 0,
-        nickname: '',
-        picture: '',
-        email: '',
+        newUser: profile.newUser,
+        id: profile.user?.id ?? EMPTY_FIELD,
+        sub: profile.user?.id ?? EMPTY_FIELD,
+        nickname: profile.user?.name ?? EMPTY_FIELD,
+        uuid: profile.uuid ?? EMPTY_FIELD,
+        accessToken: profile.access_token ?? EMPTY_FIELD,
+        refreshToken: profile.refresh_token ?? EMPTY_FIELD,
+        picture: profile.picture ?? EMPTY_FIELD,
+        email: profile.email ?? EMPTY_FIELD,
+        expire: profile.exp ?? 0,
       };
     },
   }),
@@ -251,39 +271,11 @@ const callbacks: Partial<CallbacksOptions<Profile, Account>> | undefined = {
     */
   async signIn({ user, account }) {
     if (account?.type === 'oauth') {
-      const { provider = 'google' } = user;
-
-      const { data } = await signInOAuth(
-        {
-          code: account.access_token || '',
-        },
-        provider
-      );
-
-      const {
-        newUser,
-        token,
-        access_token,
-        refresh_token,
-        exp,
-        user: _user,
-      } = data;
-
-      user.newUser = newUser;
-
       /**
        * 처음 가입한 유저 핸드폰 등록으로 리다이렉트
        */
-      if (newUser) return `/auth/phone?uuid=${token}`;
-
-      user.accessToken = access_token;
-      user.refreshToken = refresh_token;
-      user.expire = exp;
-      user.sub = _user.id;
-
-      return true;
+      if (user.newUser) return `/auth/phone?uuid=${user.uuid}`;
     }
-
     return true;
   },
 };
