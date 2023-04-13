@@ -11,7 +11,7 @@ import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
 import KakaoProvider from 'next-auth/providers/kakao';
-import { post } from '@supercarmarket/lib';
+import { HttpError, post } from '@supercarmarket/lib';
 import { refreshToken, signInOAuth } from 'http/server/auth/apis';
 import { isExpire } from 'utils/misc';
 
@@ -33,26 +33,13 @@ const providers: Provider[] = [
 
       const { id, password } = credentials;
 
-      const { data } = await post<
+      const { data } = await post(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/user/login`,
         {
-          id: string;
-          password: string;
-        },
-        ServerResponse<{
-          access_token: string;
-          refresh_token: string;
-          exp: number;
-          newUser: boolean;
-          user: {
-            id: string;
-            name: string;
-            email: string;
-          };
-        }>
-      >(`${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/user/login`, {
-        id,
-        password,
-      });
+          id,
+          password,
+        }
+      );
 
       if (data)
         return {
@@ -125,6 +112,32 @@ const providers: Provider[] = [
         response_type: 'code',
       },
     },
+    token: {
+      url: `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/user/login/google`,
+      request: async (ctx) => {
+        const { code } = ctx.params;
+        console.log('google oauth ctx params: ', ctx.params);
+
+        if (!code)
+          throw new HttpError({
+            message: '인가코드가 존재하지 않습니다.',
+            statusCode: 500,
+          });
+
+        const client = await signInOAuth({ code }, 'google').catch((error) =>
+          console.error('google oauth error:', error)
+        );
+
+        console.log('google oauth client', client);
+        return {
+          tokens: {},
+        };
+      },
+    },
+    userinfo: {},
+    profile: () => {
+      return {};
+    },
   }),
   /*
     |--------------------------------------------------------------------------
@@ -132,22 +145,31 @@ const providers: Provider[] = [
     |--------------------------------------------------------------------------
     */
   KakaoProvider({
-    clientId: process.env.NEXT_PUBLIC_KAKAO_ID,
-    clientSecret: process.env.NEXT_PUBLIC_KAKAO_SECRET,
-    profile(profile) {
-      return {
-        id: profile.id,
-        sub: profile.id,
-        provider: 'kakao',
-        accessToken: '',
-        refreshToken: '',
-        expire: 0,
-        nickname: profile.kakao_account.profile.nickname,
-        picture: profile.kakao_account.profile.profile_image_url,
-        email: profile.kakao_account.has_email
-          ? profile.kakao_account.email
-          : null,
-      };
+    token: {
+      url: `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/user/login/google`,
+      request: async (ctx) => {
+        const { code } = ctx.params;
+        console.log('kakao oauth ctx params: ', ctx.params);
+
+        if (!code)
+          throw new HttpError({
+            message: '인가코드가 존재하지 않습니다.',
+            statusCode: 500,
+          });
+
+        const client = await signInOAuth({ code }, 'kakao').catch((error) =>
+          console.error('kakao oauth error:', error)
+        );
+
+        console.log('kakao oauth client', client);
+        return {
+          tokens: {},
+        };
+      },
+    },
+    userinfo: {},
+    profile: () => {
+      return {};
     },
   }),
 ];
