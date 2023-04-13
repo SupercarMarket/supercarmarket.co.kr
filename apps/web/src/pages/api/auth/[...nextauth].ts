@@ -125,7 +125,14 @@ const providers: Provider[] = [
             statusCode: 500,
           });
 
-        const tokens = await signInOAuth({ code, code_verifier }, 'google');
+        const tokens = await signInOAuth(
+          {
+            code,
+            code_verifier,
+            redirect_url: `${process.env.NEXT_PUBLIC_URL}/api/auth/callback/google`,
+          },
+          'google'
+        );
 
         return {
           tokens: tokens.data,
@@ -133,6 +140,7 @@ const providers: Provider[] = [
       },
     },
     userinfo: {
+      url: `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/user/login/google`,
       request: async (ctx) => {
         const { tokens } = ctx;
 
@@ -180,7 +188,13 @@ const providers: Provider[] = [
             statusCode: 500,
           });
 
-        const tokens = await signInOAuth({ code }, 'kakao');
+        const tokens = await signInOAuth(
+          {
+            code,
+            redirect_url: `${process.env.NEXT_PUBLIC_URL}/api/auth/callback/kakao`,
+          },
+          'kakao'
+        );
 
         return {
           tokens: tokens.data,
@@ -188,6 +202,7 @@ const providers: Provider[] = [
       },
     },
     userinfo: {
+      url: `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/user/login/kakao`,
       request: async (ctx) => {
         const { tokens } = ctx;
 
@@ -283,7 +298,6 @@ const callbacks: Partial<CallbacksOptions<Profile, Account>> | undefined = {
 };
 
 const nextAuthOptions: NextAuthOptions = {
-  debug: true,
   providers,
   callbacks,
   pages: {
