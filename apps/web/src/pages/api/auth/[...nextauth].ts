@@ -136,7 +136,17 @@ const providers: Provider[] = [
     },
     userinfo: {},
     profile: () => {
-      return {};
+      return {
+        id: '',
+        sub: '',
+        provider: 'google',
+        accessToken: '',
+        refreshToken: '',
+        expire: 0,
+        nickname: '',
+        picture: '',
+        email: '',
+      };
     },
   }),
   /*
@@ -145,6 +155,8 @@ const providers: Provider[] = [
     |--------------------------------------------------------------------------
     */
   KakaoProvider({
+    clientId: process.env.NEXT_PUBLIC_KAKAO_ID,
+    clientSecret: process.env.NEXT_PUBLIC_KAKAO_SECRET,
     token: {
       url: `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/user/login/google`,
       request: async (ctx) => {
@@ -169,7 +181,17 @@ const providers: Provider[] = [
     },
     userinfo: {},
     profile: () => {
-      return {};
+      return {
+        id: '',
+        sub: '',
+        provider: 'kakao',
+        accessToken: '',
+        refreshToken: '',
+        expire: 0,
+        nickname: '',
+        picture: '',
+        email: '',
+      };
     },
   }),
 ];
