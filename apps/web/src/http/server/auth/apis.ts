@@ -31,15 +31,16 @@ export const createAccount = async (data: Signup) => {
 export const signInOAuth = async (
   data: {
     code: string;
+    redirect_url: string;
     code_verifier?: string;
   },
   provider: 'google' | 'kakao' | 'local'
 ) => {
-  const { code, code_verifier } = data;
+  const { code, code_verifier, redirect_url } = data;
   const query =
     provider === 'google'
-      ? { code, code_verifier, oauthName: provider }
-      : { code, oauthName: provider };
+      ? { code, redirect_url, code_verifier, oauthName: provider }
+      : { code, redirect_url, oauthName: provider };
   return post(
     `${process.env.NEXT_PUBLIC_SERVER_URL}/supercar/v1/user/login`,
     undefined,
