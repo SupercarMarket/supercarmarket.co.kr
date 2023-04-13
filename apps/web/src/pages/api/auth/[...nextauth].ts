@@ -10,7 +10,7 @@ import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
 import KakaoProvider from 'next-auth/providers/kakao';
-import { HttpError, get, post } from '@supercarmarket/lib';
+import { HttpError, post } from '@supercarmarket/lib';
 import { refreshToken, signInOAuth } from 'http/server/auth/apis';
 import { isExpire } from 'utils/misc';
 
@@ -283,6 +283,7 @@ const callbacks: Partial<CallbacksOptions<Profile, Account>> | undefined = {
 };
 
 const nextAuthOptions: NextAuthOptions = {
+  debug: true,
   providers,
   callbacks,
   pages: {
