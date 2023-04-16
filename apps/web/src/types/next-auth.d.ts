@@ -14,16 +14,17 @@ declare module 'next-auth' {
     picture?: string;
   }
   interface User {
-    id: string;
     sub: string;
     accessToken: string;
     refreshToken: string;
     expire: number;
     provider: 'local' | 'kakao' | 'google';
-    newUser?: boolean;
     nickname: string;
     email?: string;
     picture?: string;
+    id: string;
+    newUser?: boolean;
+    uuid?: string;
   }
 }
 
