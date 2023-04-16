@@ -1,15 +1,11 @@
+import * as React from 'react';
 import { CommunityCard } from 'components/community';
 import { CardSkeleton } from 'components/fallback/loading';
 import InquiryCard from 'components/inquiry/inquiryCard';
 import MagazineCard from 'components/magazine/magazineCard';
 import MarketCard from 'components/market/marketCard';
 import { useSession } from 'next-auth/react';
-import * as React from 'react';
 import { css } from 'styled-components';
-import type { CommunityDto } from '@supercarmarket/types/community';
-import type { InquiryDto } from '@supercarmarket/types/inquiry';
-import type { MagazineDto } from '@supercarmarket/types/magazine';
-import type { MarketDto } from '@supercarmarket/types/market';
 import {
   Alert,
   applyMediaQuery,
@@ -26,8 +22,8 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useRemoveCommunityPost } from 'http/server/community';
 import { QUERY_KEYS, useAccountCategory } from 'http/server/account';
 import { useDebounce } from '@supercarmarket/hooks';
+import { type Market } from 'types/market';
 import { type AccountCategory } from 'constants/link/account';
-import { type Profile } from '@supercarmarket/types/account';
 import {
   useDeleteMarketPost,
   useUpdateMarketSellStatus,
@@ -38,7 +34,7 @@ interface AccountCategoryProps {
   tab: AccountCategory;
   isMyAccountPage: boolean;
   accountRoutes: CategoryProps['links'];
-  profile: Profile;
+  profile: Account.ProfileDto;
 }
 
 type AccountCategoryItemWrapperProps = React.PropsWithChildren & {
@@ -315,7 +311,7 @@ const AccountCategoryList = React.memo(function AccountCategory({
                 gap: 6px;
               `}
             >
-              {data.data.map((d: MarketDto) => (
+              {data.data.map((d: Market.MarketDto) => (
                 <AccountCategoryItemWrapper
                   key={d.id}
                   id={d.id}
@@ -334,7 +330,7 @@ const AccountCategoryList = React.memo(function AccountCategory({
                 gap: 6px;
               `}
             >
-              {data.data.map((d: MarketDto) => (
+              {data.data.map((d: Market.MarketDto) => (
                 <AccountCategoryItemWrapper
                   key={d.id}
                   id={d.id}
@@ -361,7 +357,7 @@ const AccountCategoryList = React.memo(function AccountCategory({
                 }
               `}
             >
-              {data.data.map((d: MagazineDto) => (
+              {data.data.map((d: Magazine.MagazineDto) => (
                 <AccountCategoryItemWrapper
                   key={d.id}
                   id={d.id}
@@ -379,7 +375,7 @@ const AccountCategoryList = React.memo(function AccountCategory({
                 width: 100%;
               `}
             >
-              {data.data.map((d: CommunityDto) => (
+              {data.data.map((d: Community.CommunityDto) => (
                 <AccountCategoryItemWrapper
                   key={d.id}
                   id={d.id}
@@ -390,7 +386,7 @@ const AccountCategoryList = React.memo(function AccountCategory({
               ))}
             </Wrapper>
           ),
-          community: data.data.map((d: CommunityDto) => (
+          community: data.data.map((d: Community.CommunityDto) => (
             <AccountCategoryItemWrapper
               key={d.id}
               id={d.id}
@@ -413,7 +409,7 @@ const AccountCategoryList = React.memo(function AccountCategory({
                 }
               `}
             >
-              {data.data.map((d: InquiryDto) => (
+              {data.data.map((d: Inquiry.InquiryDto) => (
                 <AccountCategoryItemWrapper
                   key={d.id}
                   id={d.id}

@@ -33,7 +33,7 @@ export const useAccountCategory = (
 };
 
 export const useAccountUpdateInfo = (id: string, options = {}) => {
-  return useQuery<ServerResponse<UpdateInfo>>({
+  return useQuery<Common.Response<Account.UpdateInfoDto>>({
     queryKey: QUERY_KEYS.info(id),
     queryFn: () => getAccountUpdateInfo(),
     useErrorBoundary: true,

@@ -11,7 +11,7 @@ import { usePathname } from 'next/navigation';
 
 const Advertisements = (props: PageProps) => {
   const { $ua } = props;
-  const { hints } = $ua;
+  const isMobile = $ua?.isMobile ?? false;
   const pathname = usePathname() || '/';
 
   const code = supercarmarketCodeFormatter(pathname.split('/')[1]);
@@ -34,7 +34,7 @@ const Advertisements = (props: PageProps) => {
                       onReset={reset}
                       fallbackRender={(props) => <ErrorFallback {...props} />}
                     >
-                      <Banner isMobile={hints?.isMobile} />
+                      <Banner isMobile={isMobile} />
                     </ErrorBoundary>
                   </Wrapper.Item>
                 )}
@@ -48,7 +48,7 @@ const Advertisements = (props: PageProps) => {
                     fallbackRender={(props) => <ErrorFallback {...props} />}
                   >
                     <Advertisement
-                      isMobile={hints?.isMobile}
+                      isMobile={isMobile}
                       code={code}
                       hidden={code === 'SM001'}
                     />

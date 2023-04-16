@@ -8,7 +8,12 @@ import { Modal } from 'components/common/modal';
 import { form as findPasswordForm } from 'constants/form/findPassword';
 import { form as resultPasswordForm } from 'constants/form/resultPassword';
 import { useQueryClient } from '@tanstack/react-query';
-import { QUERY_KEYS, useResetPassword } from 'http/server/auth';
+import {
+  QUERY_KEYS,
+  useResetPassword,
+  useSendCode,
+  useSendPhone,
+} from 'http/server/auth';
 import { ModalContext } from 'feature/ModalProvider';
 
 interface FindForms {
@@ -44,6 +49,8 @@ const FindPasswordForm = () => {
   const [error, setError] = React.useState<string | null>(null);
   const { onOpen, onClose } = React.useContext(ModalContext);
   const { replace } = useRouter();
+  const sendPhoneMutation = useSendPhone();
+  const sendCodeMutation = useSendCode();
 
   const handleRequire = async (data: FormsState) => {
     const { phone, authentication, password, passwordConfirm } = data;
@@ -135,7 +142,11 @@ const FindPasswordForm = () => {
       >
         {forms[process].map((form) => (
           <FormLabel key={form.htmlFor} name={form.htmlFor} label={form.label}>
-            <AuthFormItem {...form} />
+            <AuthFormItem
+              {...form}
+              sendCodeMutation={sendCodeMutation}
+              sendPhoneMutation={sendPhoneMutation}
+            />
           </FormLabel>
         ))}
         {error && <Alert title={error} severity="error" />}

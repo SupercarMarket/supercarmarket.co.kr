@@ -1,29 +1,16 @@
-import React, { ChangeEvent, useContext, useEffect, useState } from 'react';
+import * as React from 'react';
 import { useRouter } from 'next/router';
 import { OpenVidu, Session } from 'openvidu-browser';
-
-import axios from 'axios';
 import { Button } from '@supercarmarket/ui';
-
 import SubscriberIcon from 'public/images/live/icons/SubscriberIcon.svg';
 import VolumeIcon from 'public/images/live/icons/VolumeIcon.svg';
+import { getOpenViduSessionToken } from 'http/server/live';
 
 interface Props {
   sessionId: string;
-  data: channelResType;
+  data: Live.LiveRoomDto;
   setIsBroad: (broad: boolean) => void;
   isBroad: boolean;
-}
-
-interface channelResType {
-  broadCastSeq: number;
-  isMine: boolean;
-  sessionId: string;
-  tags: string[];
-  title: string;
-  userCount: number;
-  userName: string;
-  userSeq: number;
 }
 
 function Subscriber(props: Props) {
@@ -31,12 +18,12 @@ function Subscriber(props: Props) {
   const newOV = new OpenVidu();
   newOV.enableProdMode();
   const { sessionId, data } = props;
-  const [volume, setVolume] = useState<number>(80);
-  const [session, setSession] = useState<Session>(newOV.initSession());
+  const [volume, setVolume] = React.useState<number>(80);
+  const [session, setSession] = React.useState<Session>(newOV.initSession());
 
   const router = useRouter();
 
-  const volumeChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+  const volumeChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setVolume(Number(event.currentTarget.value));
   };
 
@@ -51,7 +38,7 @@ function Subscriber(props: Props) {
   const joinSession = () => {
     var video = document.getElementById('Streaming') as HTMLVideoElement;
     const connection = () => {
-      getToken().then((token: any) => {
+      getOpenViduSessionToken(sessionId).then((token: any) => {
         session.on('streamCreated', async (event) => {
           session.subscribe(event.stream, undefined);
           event.stream.streamManager.addVideoElement(video);
@@ -65,31 +52,14 @@ function Subscriber(props: Props) {
     connection();
   };
 
-  const getToken = async () => {
-    const resData = await axios.post(
-      `${process.env.NEXT_PUBLIC_OPENVIDU_API_URL}/openvidu/api/sessions/${sessionId}/connection`,
-      {},
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Basic ${Buffer.from(
-            process.env.NEXT_PUBLIC_OPENVIDU_SECRET as string,
-            'utf8'
-          ).toString('base64')}`,
-        },
-      }
-    );
-    return resData.data.token;
-  };
-
-  useEffect(() => {
+  React.useEffect(() => {
     if (sessionId) joinSession();
     return () => {
       session.disconnect();
     };
   }, []);
 
-  useEffect(() => {
+  React.useEffect(() => {
     var video = document.getElementById('Streaming') as HTMLVideoElement;
     video.volume = volume / 100;
   }, [volume]);

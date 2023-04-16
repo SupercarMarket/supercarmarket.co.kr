@@ -1,30 +1,20 @@
 import { Button } from '@supercarmarket/ui';
-import axios from 'axios';
-import { authRequest } from 'http/core';
 import { useRouter } from 'next/router';
 import { OpenVidu, Publisher as Publishers, Session } from 'openvidu-browser';
-import React, { ChangeEvent, useContext, useEffect, useState } from 'react';
-
+import * as React from 'react';
 import SubscriberIcon from 'public/images/live/icons/SubscriberIcon.svg';
 import VolumeIcon from 'public/images/live/icons/VolumeIcon.svg';
 import CameraCloseIcon from 'public/images/live/icons/CameraCloseIcon.svg';
+import { getOpenViduSessionToken } from 'http/server/live';
+import { useDeleteBroadCastRoom } from 'http/server/live/mutaitons';
+import { useQueryClient } from '@tanstack/react-query';
+import { QUERY_KEYS } from 'http/server/live/keys';
 
 interface Props {
   sessionId: string;
-  data: channelResType;
+  data: Live.LiveRoomDto;
   setIsBroad: (broad: boolean) => void;
   isBroad: boolean;
-}
-
-interface channelResType {
-  broadCastSeq: number;
-  isMine: boolean;
-  sessionId: string;
-  tags: string[];
-  title: string;
-  userCount: number;
-  userName: string;
-  userSeq: number;
 }
 
 function Publisher(props: Props) {
@@ -32,22 +22,28 @@ function Publisher(props: Props) {
   const newOV = new OpenVidu();
   newOV.enableProdMode();
   const { sessionId, data } = props;
-  const [volume, setVolume] = useState<number>(80);
-  const [isCamera, setIsCamera] = useState(true);
+  const [volume, setVolume] = React.useState<number>(80);
+  const [isCamera, setIsCamera] = React.useState(true);
+  const [session, setSession] = React.useState<Session>(newOV.initSession());
+  const [publisher, setPublisher] = React.useState<Publishers>();
 
-  const [session, setSession] = useState<Session>(newOV.initSession());
-  const [publisher, setPublisher] = useState<Publishers>();
+  const queryClient = useQueryClient();
+  const deleteBroadCastRoomMutation = useDeleteBroadCastRoom();
 
   const router = useRouter();
 
-  const volumeChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+  const volumeChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setVolume(Number(event.currentTarget.value));
   };
 
   const deleteBroadCastHandler = () => {
-    deleteBroadcast(data.broadCastSeq);
-    session.disconnect();
-    router.replace('/live');
+    deleteBroadCastRoomMutation.mutate(data.broadCastSeq, {
+      onSuccess: () => {
+        queryClient.refetchQueries({ queryKey: QUERY_KEYS.live() });
+        session.disconnect();
+        router.replace('/live');
+      },
+    });
   };
 
   const cameraOnOffHandler = async () => {
@@ -64,7 +60,7 @@ function Publisher(props: Props) {
 
   const joinSession = () => {
     const connection = () => {
-      getToken().then((token: any) => {
+      getOpenViduSessionToken(sessionId).then((token: any) => {
         session
           .connect(token, {
             id: `test_${Math.random()}`,
@@ -95,31 +91,14 @@ function Publisher(props: Props) {
     connection();
   };
 
-  const getToken = async () => {
-    const resData = await axios.post(
-      `${process.env.NEXT_PUBLIC_OPENVIDU_API_URL}/openvidu/api/sessions/${sessionId}/connection`,
-      {},
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Basic ${Buffer.from(
-            process.env.NEXT_PUBLIC_OPENVIDU_SECRET as string,
-            'utf8'
-          ).toString('base64')}`,
-        },
-      }
-    );
-    return resData.data.token;
-  };
-
-  useEffect(() => {
+  React.useEffect(() => {
     if (sessionId) joinSession();
     return () => {
       session.disconnect();
     };
   }, []);
 
-  useEffect(() => {
+  React.useEffect(() => {
     var video = document.getElementById('Streaming') as HTMLVideoElement;
     video.volume = volume / 100;
   }, [volume]);
@@ -190,7 +169,12 @@ function Publisher(props: Props) {
               카메라 {isCamera ? '끄기' : '켜기'}
               <CameraCloseIcon />
             </Button>
-            <Button variant="Primary" onClick={deleteBroadCastHandler}>
+            <Button
+              variant="Primary"
+              type="button"
+              disabled={deleteBroadCastRoomMutation.isLoading}
+              onClick={deleteBroadCastHandler}
+            >
               방송 종료하기
             </Button>
           </div>
@@ -201,11 +185,6 @@ function Publisher(props: Props) {
 }
 
 export default Publisher;
-
-const deleteBroadcast = async (seq: number) => {
-  const data = await authRequest.delete(`/live`, { data: { seq: seq } });
-  return data;
-};
 
 const publisherStyle = {
   fontSize: '16px',

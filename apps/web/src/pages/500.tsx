@@ -9,10 +9,12 @@ import {
 import Image from 'next/image';
 import { css } from 'styled-components';
 import Link from 'next/link';
-import { useDevice } from 'hooks/useDevice';
+import { type PageProps } from './_app';
 
-const ServerError = () => {
-  const { isMobile } = useDevice();
+const ServerError = (props: PageProps) => {
+  const {
+    $ua: { isMobile = false },
+  } = props;
 
   return (
     <Container>

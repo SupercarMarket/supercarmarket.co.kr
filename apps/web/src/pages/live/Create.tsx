@@ -1,51 +1,50 @@
 /* eslint-disable turbo/no-undeclared-env-vars */
 /* eslint-disable prettier/prettier */
-import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
-
-import { Button, Container, Input, Title, Wrapper } from '@supercarmarket/ui';
+import * as React from 'react';
+import {
+  Button,
+  Container,
+  Form,
+  FormAttachment,
+  FormInput,
+  FormLabel,
+  FormMessage,
+  FormRadio,
+  FormRadioGroup,
+  Title,
+  Wrapper,
+  applyMediaQuery,
+} from '@supercarmarket/ui';
 import Layout from 'components/layout';
 import { css } from 'styled-components';
-import { authRequest } from 'http/core';
 import { useRouter } from 'next/router';
 import TagCloseBtn from 'public/images/live/icons/TagCloseBtn.svg';
-
-interface Props {}
+import { getOpenViduSessionId } from 'http/server/live';
+import { useCreateBroadCastRoom } from 'http/server/live/mutaitons';
+import { useQueryClient } from '@tanstack/react-query';
+import { QUERY_KEYS } from 'http/server/live/keys';
+import { type NextPageWithLayout } from '@supercarmarket/types/base';
+import { useForm } from 'react-hook-form';
+import { FormState } from 'constants/form/live';
 
 interface broadcastDataType {
-  title: string;
   tags: string[];
-  isPrivate: boolean;
-  password?: string;
 }
 
-const Create = (props: Props) => {
-  const [broadcastData, setBroadcastData] = useState<broadcastDataType>({
-    title: '',
+const Create: NextPageWithLayout = () => {
+  const [broadcastData, setBroadcastData] = React.useState<broadcastDataType>({
     tags: [],
-    isPrivate: true,
   });
-  const [filePath, setfilePath] = useState<string | null>(null);
 
-  const passwordRef = useRef<HTMLInputElement | null>(null);
-  const tagsRef = useRef<HTMLInputElement | null>(null);
-  const imageFileRef = useRef<HTMLInputElement | null>(null);
+  const tagsRef = React.useRef<HTMLInputElement | null>(null);
   const router = useRouter();
+  const methods = useForm<FormState>();
+  const show = methods.watch('show');
 
-  const broadcastStateChangeHandler = (
-    target: 'title' | 'isPrivate' | 'password',
-    value: string | string[] | boolean
-  ) => {
-    setBroadcastData((prevState) => {
-      return {
-        ...prevState,
-        [target]: value,
-      };
-    });
-  };
+  const queryClient = useQueryClient();
+  const createBroadCastRoomMutation = useCreateBroadCastRoom();
 
   const addTagsHandler = (tag: string) => {
-    console.log(broadcastData.tags.length);
     if (broadcastData.tags.length < 0) {
       alert('태그란이 비어있습니다.');
     }
@@ -74,29 +73,31 @@ const Create = (props: Props) => {
     });
   };
 
-  const fileuploadButtonHandler = () => {
-    imageFileRef.current?.click();
-  };
+  const createBroadCastRoom = async (data: FormState) => {
+    const { title, file, show, password } = data;
 
-  const fileChangeHandler = () => {
-    const target = URL.createObjectURL(
-      (
-        (document.getElementById('thumbnail') as HTMLInputElement)
-          .files as FileList
-      )[0]
-    );
-    setfilePath(target);
-  };
-
-  const createBroadCastRoom = async () => {
-    if (broadcastData.isPrivate && !broadcastData.password) {
-      alert('비밀번호를 설정해주세요');
+    if (!show) {
+      alert('공개 여부를 설정해주세요');
+      return;
     }
-    const sessionId = await getSessionId();
-    console.log(sessionId);
+
+    if (show === '비공개' && !password) {
+      alert('비밀번호를 설정해주세요');
+      return;
+    }
+
+    if (!file.length) {
+      alert('썸네일을 추가해주세요');
+      return;
+    }
+
+    const sessionId = await getOpenViduSessionId();
 
     const params = {
       ...broadcastData,
+      title,
+      isPrivate: show === '공개' ? false : true,
+      password,
       sessionId: sessionId,
     };
 
@@ -106,189 +107,208 @@ const Create = (props: Props) => {
       'addBroadCastDto',
       new Blob([JSON.stringify(params)], { type: 'application/json' })
     );
-    formData.append(
-      'file',
-      (
-        (document.getElementById('thumbnail') as HTMLInputElement)
-          .files as FileList
-      )[0]
-    );
 
-    const data = await authRequest.post(`/live`, formData);
+    file.forEach((f) => formData.append('file', f));
 
-    router.push(`${data.data.bcSeq}`);
+    createBroadCastRoomMutation.mutate(formData, {
+      onSuccess: (result) => {
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.live() });
+        router.push(`${result.data.bcSeq}`);
+      },
+    });
   };
 
-  useEffect(() => {
-    if (broadcastData.isPrivate) {
-      (passwordRef.current as HTMLInputElement).style.display = 'block';
-    } else {
-      (passwordRef.current as HTMLInputElement).style.display = 'none';
-    }
-  }, [broadcastData]);
+  React.useEffect(() => {
+    methods.setValue('password', '');
+  }, [show]);
 
   return (
     <Container>
-      <Wrapper
-        css={css`
-          padding-bottom: 40px;
-        `}
+      <Form
+        encType="multipart/form-data"
+        onSubmit={methods.handleSubmit((data) => {
+          createBroadCastRoom(data);
+        })}
       >
-        <div style={{ display: 'flex', marginTop: '40px' }}>
+        <div
+          style={{ display: 'flex', marginTop: '40px', marginBottom: '40px' }}
+        >
           <Title>라이브 시작하기</Title>
         </div>
-        <div style={{ padding: '10px' }}>
-          <div
-            style={{
-              display: 'flex',
-              marginBottom: '10px',
-              alignItems: 'center',
-              height: '45px',
-            }}
-          >
-            <div>제목&nbsp;&nbsp;</div>
-            <div>
-              <Input
-                onChange={(event) => {
-                  broadcastStateChangeHandler(
-                    'title',
-                    event.currentTarget.value
-                  );
-                }}
+        <Wrapper
+          css={css`
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+          `}
+        >
+          <FormLabel name="title" label="제목" bold>
+            <Wrapper.Item
+              css={css`
+                width: 400px;
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                ${applyMediaQuery('mobile')} {
+                  width: 328px;
+                }
+              `}
+            >
+              <FormInput
+                id="title"
+                type="text"
+                {...methods.register('title', { required: true })}
               />
-            </div>
-          </div>
-          <div
-            style={{
-              display: 'flex',
-              marginBottom: '10px',
-              alignItems: 'center',
-              height: '45px',
-            }}
-          >
-            <div>태그&nbsp;&nbsp;</div>
-            <div>
-              <Input ref={tagsRef} />
-            </div>
-            <div style={{ marginLeft: '8px' }}>
-              <Button
-                onClick={() => {
+              <FormMessage tooltip="제목은 최대 20자까지 입력 가능합니다." />
+            </Wrapper.Item>
+          </FormLabel>
+          <FormLabel name="tags" label="태그" bold>
+            <Wrapper.Item
+              css={css`
+                display: flex;
+                width: 400px;
+                flex-direction: column;
+                gap: 8px;
+                button > span {
+                  color: black !important;
+                }
+                ${applyMediaQuery('mobile')} {
+                  width: 328px;
+                }
+              `}
+            >
+              <FormInput
+                ref={tagsRef}
+                type="text"
+                button
+                buttonWidth={72}
+                buttonVariant="Line"
+                buttonText="추가"
+                buttonCallback={() => {
                   addTagsHandler(tagsRef.current?.value as string);
                 }}
-              >
-                추가
-              </Button>
-            </div>
-          </div>
-          {broadcastData.tags.length > 0 && (
-            <div
-              style={{
-                display: 'flex',
-                marginBottom: '10px',
-                alignItems: 'center',
-                height: '45px',
-              }}
+              />
+              <FormMessage tooltip="태그는 최대 6자, 3개까지만 등록이 가능합니다." />
+              {broadcastData.tags.length > 0 && (
+                <div
+                  style={{
+                    display: 'flex',
+                    marginBottom: '10px',
+                    alignItems: 'center',
+                    height: '45px',
+                  }}
+                >
+                  {broadcastData.tags.map((data, idx) => {
+                    return (
+                      <Tags
+                        tags={data}
+                        index={idx}
+                        deleteTagsHandler={deleteTagsHandler}
+                        key={`tag_${idx}`}
+                      />
+                    );
+                  })}
+                </div>
+              )}
+            </Wrapper.Item>
+          </FormLabel>
+          <FormLabel name="show" label="공개여부" bold>
+            <Wrapper.Item
+              css={css`
+                width: 550px;
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                ${applyMediaQuery('mobile')} {
+                  width: 328px;
+                  flex-direction: column;
+                  align-items: unset;
+                }
+              `}
             >
-              {broadcastData.tags.map((data, idx) => {
-                return (
-                  <Tags
-                    tags={data}
-                    index={idx}
-                    deleteTagsHandler={deleteTagsHandler}
-                    key={`tag_${idx}`}
+              <FormRadioGroup
+                name="show"
+                options={['공개', '비공개']}
+                callback={(value) => methods.setValue('show', value)}
+              >
+                {({ name, options, handleChange }) =>
+                  options ? (
+                    <Wrapper
+                      css={css`
+                        display: flex;
+                        align-items: center;
+                        gap: 16px;
+                        ${applyMediaQuery('mobile')} {
+                          flex-direction: column;
+                          align-items: unset;
+                        }
+                      `}
+                    >
+                      {options.map((value) => (
+                        <FormRadio
+                          name={name}
+                          key={value}
+                          id={value}
+                          value={value}
+                          onChange={handleChange}
+                          content={value}
+                        />
+                      ))}
+                    </Wrapper>
+                  ) : (
+                    <></>
+                  )
+                }
+              </FormRadioGroup>
+              {show === '비공개' && (
+                <Wrapper
+                  css={css`
+                    flex: 1;
+                  `}
+                >
+                  <FormInput
+                    id="password"
+                    type="text"
+                    placeholder="비밀번호를 입력해주세요"
+                    {...methods.register('password')}
                   />
-                );
-              })}
-            </div>
-          )}
-          <div
-            style={{
-              display: 'flex',
-              marginBottom: '10px',
-              alignItems: 'center',
-              height: '45px',
-            }}
+                </Wrapper>
+              )}
+            </Wrapper.Item>
+          </FormLabel>
+          <FormLabel name="file" label="썸네일" bold>
+            <FormAttachment
+              size={1}
+              id="file"
+              name="file"
+              accept="image/jpg, image/png, image/jpeg"
+              title="사진추가"
+              description=".jpeg .png 확장자만 업로드가 가능합니다."
+              callback={(file) =>
+                methods.setValue(
+                  'file',
+                  file.map((f) => f.file)
+                )
+              }
+            />
+          </FormLabel>
+          <Wrapper.Item
+            css={css`
+              display: flex;
+              justify-content: flex-end;
+            `}
           >
-            <div>공개여부&nbsp;&nbsp;</div>
-            <div>
-              <input
-                type="radio"
-                id="public"
-                name="publicType"
-                onChange={(event) => {
-                  broadcastStateChangeHandler('isPrivate', false);
-                }}
-                checked={!broadcastData.isPrivate}
-              />
-              <label htmlFor="public">공개</label>
-              <input
-                type="radio"
-                id="private"
-                name="publicType"
-                onChange={(event) => {
-                  broadcastStateChangeHandler('isPrivate', true);
-                }}
-                checked={broadcastData.isPrivate}
-              />
-              <label htmlFor="private">비공개</label>
-            </div>
-            <div style={{ marginLeft: '5px' }}>
-              <Input
-                id="broadcastPassword"
-                placeholder="비밀번호를 입력해주세요"
-                onChange={(event) => {
-                  broadcastStateChangeHandler(
-                    'password',
-                    event.currentTarget.value
-                  );
-                }}
-                ref={passwordRef}
-              />
-            </div>
-          </div>
-          <div
-            style={{
-              display: 'flex',
-              marginBottom: '10px',
-              alignItems: 'center',
-            }}
-          >
-            <div>썸네일&nbsp;&nbsp;</div>
-            <div>
-              <Button onClick={fileuploadButtonHandler}>사진 추가</Button>
-              <input
-                type="file"
-                id="thumbnail"
-                style={{ display: 'none' }}
-                ref={imageFileRef}
-                onChange={fileChangeHandler}
-              />
-            </div>
-          </div>
-          <div
-            style={{
-              display: 'flex',
-              marginBottom: '10px',
-              alignItems: 'center',
-            }}
-          >
-            <img src={filePath ?? ''} alt="" />
-          </div>
-        </div>
-
-        <Button
-          variant="Line"
-          style={{
-            width: '145px',
-            height: '44px',
-            color: '#B79F7B',
-            border: '1px solid #B79F7B',
-          }}
-          onClick={createBroadCastRoom}
-        >
-          시작하기
-        </Button>
-      </Wrapper>
+            <Button
+              width="fit-content"
+              variant="Primary"
+              type="submit"
+              disabled={createBroadCastRoomMutation.isLoading}
+            >
+              시작하기
+            </Button>
+          </Wrapper.Item>
+        </Wrapper>
+      </Form>
     </Container>
   );
 };
@@ -296,23 +316,6 @@ const Create = (props: Props) => {
 Create.Layout = Layout;
 
 export default Create;
-
-const getSessionId = async () => {
-  const data = await axios.post(
-    `${process.env.NEXT_PUBLIC_OPENVIDU_API_URL}/openvidu/api/sessions`,
-    {},
-    {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Basic ${Buffer.from(
-          process.env.NEXT_PUBLIC_OPENVIDU_SECRET as string,
-          'utf8'
-        ).toString('base64')}`,
-      },
-    }
-  );
-  return data.data.id;
-};
 
 const Tags = ({
   tags,

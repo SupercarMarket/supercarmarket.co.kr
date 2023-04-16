@@ -21,13 +21,13 @@ const setRequest = async (
 ) => {
   const session = await getSession();
 
-  if (!session?.accessToken) throw 'require logged in';
+  if (!session?.accessToken)
+    throw new HttpError({ message: '로그인이 필요합니다.', statusCode: 401 });
 
   if (config && config.headers)
     config.headers = {
       ACCESS_TOKEN: `${session.accessToken}`,
-      'Content-Type':
-        config.data instanceof FormData ? 'multipart/form-data' : contentType,
+      ContentType: contentType,
     };
 
   return config;
@@ -41,6 +41,9 @@ const setResponse = async (response: AxiosResponse) => {
 authRequest.interceptors.request.use(setRequest);
 authRequest.interceptors.response.use(setResponse, (error) => {
   const { request, response } = error;
+
+  if (!response) throw error;
+
   const errorJson = response.data;
 
   const customErr = HttpError.fromRequest(request, {

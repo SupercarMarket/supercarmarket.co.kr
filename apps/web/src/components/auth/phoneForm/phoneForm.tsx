@@ -7,7 +7,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import AuthFormItem from '../authFormItem/authFormItem';
 import * as style from '../signupForm/signupForm.styled';
 import { form, type FormState } from 'constants/form/findId';
-import { QUERY_KEYS } from 'http/server/auth';
+import { QUERY_KEYS, useSendCode, useSendPhone } from 'http/server/auth';
 import { useQueryClient } from '@tanstack/react-query';
 
 interface PhoneFormProps {
@@ -20,6 +20,8 @@ const PhoneForm = ({ uuid }: PhoneFormProps) => {
   const [error, setError] = React.useState<string | null>(null);
   const { replace } = useRouter();
   const queryClient = useQueryClient();
+  const sendPhoneMutation = useSendPhone();
+  const sendCodeMutation = useSendCode();
 
   const handleRequire = async (data: FormState) => {
     setError(null);
@@ -81,7 +83,11 @@ const PhoneForm = ({ uuid }: PhoneFormProps) => {
       <Form css={style.form} onSubmit={onSubmit}>
         {form.map((form) => (
           <FormLabel key={form.htmlFor} name={form.htmlFor} label={form.label}>
-            <AuthFormItem {...form} />
+            <AuthFormItem
+              {...form}
+              sendCodeMutation={sendCodeMutation}
+              sendPhoneMutation={sendPhoneMutation}
+            />
           </FormLabel>
         ))}
         {error && <Alert title={error} severity="error" />}

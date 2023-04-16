@@ -1,10 +1,5 @@
 import { createExternalLink } from '@supercarmarket/lib';
-import {
-  applyMediaQuery,
-  Container,
-  Typography,
-  Wrapper,
-} from '@supercarmarket/ui';
+import { applyMediaQuery, Container, Wrapper } from '@supercarmarket/ui';
 import { useAdvertisement } from 'http/server/home';
 import Image from 'next/image';
 import Skeleton from 'react-loading-skeleton';

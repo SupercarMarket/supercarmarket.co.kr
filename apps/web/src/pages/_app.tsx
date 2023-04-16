@@ -15,16 +15,12 @@ import { DefaultSeo } from 'next-seo';
 import { seoConfig } from 'utils/next-seo.config';
 import { Inter } from '@next/font/google';
 import localFont from '@next/font/local';
-import { DeviceProvider } from 'feature/DeviceProvider';
 import Head from 'next/head';
+import { isMobile } from 'utils/misc';
 
 export interface PageProps {
   $ua: {
-    pathname: string;
-    userAgent?: string;
-    hints?: {
-      isMobile: boolean;
-    };
+    isMobile?: boolean;
   };
 }
 
@@ -82,32 +78,30 @@ function MyApp({
     <ThemeProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
         <Hydrate state={dehydratedState}>
-          <DeviceProvider $ua={pageProps.$ua}>
-            <SessionProvider session={session}>
-              <Head>
-                <meta
-                  name="viewport"
-                  content="width=device-width,initial-scale=1.0,maximum-scale=2.0"
-                />
-              </Head>
-              <DefaultSeo
-                openGraph={{
-                  ...seoConfig.headSeo,
-                }}
-                {...seoConfig.defaultNextSeo}
+          <SessionProvider session={session}>
+            <Head>
+              <meta
+                name="viewport"
+                content="width=device-width,initial-scale=1.0,maximum-scale=2.0"
               />
-              <GlobalStyle />
-              <Layout {...pageProps}>
-                <Component {...pageProps} />
-              </Layout>
-              <style jsx global>{`
-                :root {
-                  --font-inter: ${inter.style.fontFamily};
-                  --font-pretendard: ${pretendard.style.fontFamily};
-                }
-              `}</style>
-            </SessionProvider>
-          </DeviceProvider>
+            </Head>
+            <DefaultSeo
+              openGraph={{
+                ...seoConfig.headSeo,
+              }}
+              {...seoConfig.defaultNextSeo}
+            />
+            <GlobalStyle />
+            <Layout {...pageProps}>
+              <Component {...pageProps} />
+            </Layout>
+            <style jsx global>{`
+              :root {
+                --font-inter: ${inter.style.fontFamily};
+                --font-pretendard: ${pretendard.style.fontFamily};
+              }
+            `}</style>
+          </SessionProvider>
         </Hydrate>
       </QueryClientProvider>
     </ThemeProvider>
@@ -117,16 +111,11 @@ function MyApp({
 MyApp.getInitialProps = async (appContext: AppContext) => {
   const appProps = await NextAppBase.getInitialProps(appContext);
   const headers = appContext.ctx.req?.headers;
-  const pathname = appContext.router.pathname;
   const prevPageProps = (appProps.pageProps as PageProps) ?? {};
   const nextPageProps = {
     ...prevPageProps,
     $ua: {
-      pathname,
-      userAgent: headers?.['user-agent'],
-      hints: {
-        isMobile: headers?.['sec-ch-ua-mobile']?.includes('1'),
-      },
+      isMobile: isMobile(headers?.['user-agent']),
     },
   };
 

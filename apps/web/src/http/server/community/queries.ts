@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { getCommunity, getCommunityPost } from './apis';
+import { getCommunity, getCommunityPost, getTemporaryStorage } from './apis';
 import { QUERY_KEYS } from './keys';
 
 export const useCommunity = (
@@ -39,6 +39,14 @@ export const useCommunityPost = (
       },
     ],
     () => getCommunityPost({ category, id, token }),
+    { ...options, useErrorBoundary: true }
+  );
+};
+
+export const useTemporaryStorage = (id: string, options = {}) => {
+  return useQuery<Common.Response<Community.CommunityTemporaryStorageDto>>(
+    QUERY_KEYS.temporaryStorage(id),
+    () => getTemporaryStorage(),
     { ...options, useErrorBoundary: true }
   );
 };
