@@ -19,7 +19,7 @@ import Layout from 'components/layout';
 import { css } from 'styled-components';
 import { useRouter } from 'next/router';
 import TagCloseBtn from 'public/images/live/icons/TagCloseBtn.svg';
-import { getOpenViduSessionId } from 'http/server/live';
+import { checkIsMakeRoom, getOpenViduSessionId } from 'http/server/live';
 import { useCreateBroadCastRoom } from 'http/server/live/mutaitons';
 import { useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEYS } from 'http/server/live/keys';

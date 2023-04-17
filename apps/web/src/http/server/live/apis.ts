@@ -65,3 +65,14 @@ export const createBroadCastRoom = async (formData: FormData) => {
 export const deleteBroadCastRoom = async (id: number) => {
   return authRequest.delete(`/live`, { data: { seq: id } });
 };
+
+export const checkPasswordRoom = async (id: number, pass: string) => {
+  return authRequest.post(`/live/password`, {
+    seq: id,
+    password: pass,
+  });
+};
+
+export const checkIsMakeRoom = async () => {
+  return authRequest.get(`/live/check`);
+};

@@ -19,13 +19,36 @@ const Modal = ({ open, children }: I_modalProps) => {
     const el = document.body;
     return ReactDOM.createPortal(
       <div
-        className="modalWrap"
+        style={{
+          position: 'fixed',
+          top: '0',
+        }}
         onClick={(event) => {
           event.stopPropagation();
         }}
       >
-        <div className="modalLayout">{children}</div>
-        <span className="dim" />
+        <div
+          style={{
+            top: '50%',
+            zIndex: '1000',
+            position: 'fixed',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+          }}
+        >
+          {children}
+        </div>
+        <span
+          style={{
+            opacity: '0.6',
+            position: 'fixed',
+            height: '100vh',
+            width: '100vw',
+            backgroundColor: '#000000',
+            zIndex: '100',
+            top: '0',
+          }}
+        />
       </div>,
       el
     );

@@ -11,17 +11,23 @@ interface Props {
   data: Live.LiveRoomDto;
   setIsBroad: (broad: boolean) => void;
   isBroad: boolean;
+  broadContext: React.Context<broadContextProps>;
+}
+
+interface broadContextProps {
+  liveViewCount: number | undefined;
+  setLiveViewCount: React.Dispatch<React.SetStateAction<number | undefined>>;
 }
 
 function Subscriber(props: Props) {
-  const { isBroad, setIsBroad } = props;
   const newOV = new OpenVidu();
   newOV.enableProdMode();
-  const { sessionId, data } = props;
+  const { isBroad, setIsBroad, sessionId, data, broadContext } = props;
   const [volume, setVolume] = React.useState<number>(80);
   const [session, setSession] = React.useState<Session>(newOV.initSession());
 
   const router = useRouter();
+  const broadContext_ = React.useContext(broadContext);
 
   const volumeChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setVolume(Number(event.currentTarget.value));
@@ -90,7 +96,7 @@ function Subscriber(props: Props) {
           <p style={publisherStyle}>{data?.userName}</p>
           <div style={{ color: '#725B30', display: 'flex' }}>
             <SubscriberIcon />
-            <p style={subscriberStyle}>{data?.userCount || 0}</p>
+            <p style={subscriberStyle}>{broadContext_.liveViewCount || 0}</p>
           </div>
         </div>
         <div>

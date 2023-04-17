@@ -2,11 +2,17 @@ import * as React from 'react';
 import liveCss from 'public/css/live.module.css';
 import { Client, StompSubscription } from '@stomp/stompjs';
 import { Button } from '@supercarmarket/ui';
-import { getSession } from 'next-auth/react';
+import { getSession, useSession } from 'next-auth/react';
 
 interface Props {
   data: Live.LiveRoomDto | null | undefined;
   isBroad: boolean;
+  broadContext: React.Context<broadContextProps>;
+}
+
+interface broadContextProps {
+  liveViewCount: number | undefined;
+  setLiveViewCount: React.Dispatch<React.SetStateAction<number | undefined>>;
 }
 
 interface messageType {
@@ -17,21 +23,21 @@ interface messageType {
 }
 
 function ChatInfo(props: Props) {
-  const { isBroad } = props;
+  const { isBroad, broadContext } = props;
   const [chats, setChats] = React.useState<messageType[]>([]);
   const [stomp, setStomp] = React.useState<Client>();
   const [subscribes, setSubscribes] = React.useState<StompSubscription>();
-  const [testName, setTestName] = React.useState(`test_${Math.random()}`);
+  const [userName, setUserName] = React.useState('');
 
   const textAreaRef = React.useRef<HTMLTextAreaElement>(null);
   const chatWrapRef = React.useRef<HTMLDivElement>(null);
 
+  const broadContext_ = React.useContext(broadContext);
   const joinChat = async () => {
     const session = await getSession();
 
     if (!session?.accessToken) throw 'require logged in';
-
-    setTestName(session.nickname);
+    setUserName(session.nickname);
 
     const client = new Client({
       brokerURL: `wss://back.doyup.shop/ws`,
@@ -50,9 +56,15 @@ function ChatInfo(props: Props) {
         `/sub/${props.data?.sessionId}`,
         (frame) => {
           const getMessage = JSON.parse(frame.body);
-          setChats((prevState: messageType[]) => {
-            return prevState.concat([getMessage]);
-          });
+          if (getMessage.type === 'COUNT') {
+            broadContext_.setLiveViewCount((privState) => {
+              return parseInt(getMessage.participantNumber);
+            });
+          } else {
+            setChats((prevState: messageType[]) => {
+              return prevState.concat([getMessage]);
+            });
+          }
           setTimeout(() => {
             if (chatWrapRef.current) {
               chatWrapRef.current.scrollTop = chatWrapRef.current.scrollHeight;
@@ -67,9 +79,9 @@ function ChatInfo(props: Props) {
         destination: `/sub/${props.data?.sessionId}`,
         body: `{
           "type": "ENTER",
-          "sender": "${testName}",
+          "sender": "${session.nickname}",
           "channelid": "${props.data?.sessionId}",
-          "data": "'${testName}' 님이 접속하셨습니다."
+          "data": "'${session.nickname}' 님이 접속하셨습니다."
         }`,
       });
     };
@@ -88,7 +100,7 @@ function ChatInfo(props: Props) {
         destination: `/sub/${props.data?.sessionId}`,
         body: `{
         "type": "TALK",
-        "sender": "${testName}",
+        "sender": "${userName}",
         "channelid": "${props.data?.sessionId}",
         "data": "${
           textAreaRef.current?.value.replaceAll(/(\n|\r\n)/g, '<br>') ?? ''
@@ -113,9 +125,9 @@ function ChatInfo(props: Props) {
         destination: `/sub/${props.data?.sessionId}`,
         body: `{
             "type": "EXIT",
-            "sender": "${testName}",
+            "sender": "${userName}",
             "channelid": "${props.data?.sessionId}",
-            "data": "'${testName}' 님이 종료하셨습니다."
+            "data": "'${userName}' 님이 종료하셨습니다."
           }`,
       });
     }
@@ -183,7 +195,7 @@ function ChatInfo(props: Props) {
               <InitUserChat chat={data.data} key={`InitUserChat_${idx}`} />
             );
           }
-          if (data.sender === testName) {
+          if (data.sender === userName) {
             return <MyChat chat={data.data} key={`MyChat_${idx}`} />;
           }
           return (

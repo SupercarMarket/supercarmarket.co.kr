@@ -11,31 +11,51 @@ import {
 } from 'next';
 import { type NextPageWithLayout } from '@supercarmarket/types/base';
 
+export interface broadContextParm {
+  liveViewCount: number;
+  setLiveViewCount: React.SetStateAction<number>;
+}
+
 const Channel: NextPageWithLayout = ({
   Channel,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const [isBroad, setIsBroad] = React.useState(true);
   const {
     data: broadCastRoom,
     isLoading,
     isFetching,
   } = useBroadCastRoom(Channel);
 
+  const [isBroad, setIsBroad] = React.useState(true);
+  const [liveViewCount, setLiveViewCount] = React.useState(
+    broadCastRoom?.data.userCount
+  );
   if (isLoading || isFetching || !broadCastRoom) return <div>loading..</div>;
+
+  const broadContext = React.createContext({
+    liveViewCount,
+    setLiveViewCount,
+  });
 
   return (
     <Container>
       <div style={{ display: 'flex', marginTop: '10px' }}>
-        {broadCastRoom.data && (
-          <>
-            <LiveInfo
-              data={broadCastRoom.data}
-              setIsBroad={setIsBroad}
-              isBroad={isBroad}
-            />
-            <ChatInfo data={broadCastRoom.data} isBroad={isBroad} />
-          </>
-        )}
+        <broadContext.Provider value={{ liveViewCount, setLiveViewCount }}>
+          {broadCastRoom.data && (
+            <>
+              <LiveInfo
+                data={broadCastRoom.data}
+                setIsBroad={setIsBroad}
+                isBroad={isBroad}
+                broadContext={broadContext}
+              />
+              <ChatInfo
+                data={broadCastRoom.data}
+                isBroad={isBroad}
+                broadContext={broadContext}
+              />
+            </>
+          )}
+        </broadContext.Provider>
       </div>
     </Container>
   );
@@ -59,9 +79,12 @@ interface LiveInfo {
   data: Live.LiveRoomDto | null | undefined;
   setIsBroad: (broad: boolean) => void;
   isBroad: boolean;
+  broadContext: React.Context<any>;
 }
+
 const LiveInfo = (props: LiveInfo) => {
-  const { data, isBroad, setIsBroad } = props;
+  const { data, isBroad, setIsBroad, broadContext } = props;
+
   return (
     <div style={{ width: '880px' }}>
       {data ? (
@@ -71,6 +94,7 @@ const LiveInfo = (props: LiveInfo) => {
             data={data}
             setIsBroad={setIsBroad}
             isBroad={isBroad}
+            broadContext={broadContext}
           />
         ) : (
           <Subscriber
@@ -78,6 +102,7 @@ const LiveInfo = (props: LiveInfo) => {
             data={data}
             setIsBroad={setIsBroad}
             isBroad={isBroad}
+            broadContext={broadContext}
           />
         )
       ) : (
