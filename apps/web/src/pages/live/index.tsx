@@ -135,35 +135,39 @@ const LiveItem = ({ data }: { data: LiveItem }) => {
             style={{ width: '100%', height: '100%' }}
             alt={`${data.title}`}
           />
-          <Wrapper.Item
-            css={css`
-              position: absolute;
-              width: 100%;
-              height: 100%;
-              top: 0;
-              background: linear-gradient(
-                  180.34deg,
-                  rgba(0, 0, 0, 0.2) 0.29%,
-                  rgba(0, 0, 0, 0.1) 29.42%,
-                  rgba(0, 0, 0, 0) 74.86%
-                ),
-                #eaeaec;
-              opacity: 0.7;
-            `}
-          />
-          <Wrapper.Item
-            css={css`
-              position: absolute;
-              right: 5%;
-              top: 4.17%;
-              bottom: 8.33%;
-              width: 16px;
-              height: 21px;
-              opacity: 1;
-            `}
-          >
-            <LockerIcon />
-          </Wrapper.Item>
+          {data.isPrivate && (
+            <>
+              <Wrapper.Item
+                css={css`
+                  position: absolute;
+                  width: 100%;
+                  height: 100%;
+                  top: 0;
+                  background: linear-gradient(
+                      180.34deg,
+                      rgba(0, 0, 0, 0.2) 0.29%,
+                      rgba(0, 0, 0, 0.1) 29.42%,
+                      rgba(0, 0, 0, 0) 74.86%
+                    ),
+                    #eaeaec;
+                  opacity: 0.7;
+                `}
+              />
+              <Wrapper.Item
+                css={css`
+                  position: absolute;
+                  right: 5%;
+                  top: 4.17%;
+                  bottom: 8.33%;
+                  width: 16px;
+                  height: 21px;
+                  opacity: 1;
+                `}
+              >
+                <LockerIcon />
+              </Wrapper.Item>
+            </>
+          )}
         </Wrapper.Item>
         <Wrapper.Item
           css={css`

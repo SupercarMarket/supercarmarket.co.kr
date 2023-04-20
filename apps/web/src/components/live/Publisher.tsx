@@ -9,6 +9,7 @@ import { getOpenViduSessionToken } from 'http/server/live';
 import { useDeleteBroadCastRoom } from 'http/server/live/mutaitons';
 import { useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEYS } from 'http/server/live/keys';
+import { getSession } from 'next-auth/react';
 
 interface Props {
   sessionId: string;
@@ -65,40 +66,33 @@ function Publisher(props: Props) {
   };
 
   const joinSession = () => {
-    const connection = () => {
-      getOpenViduSessionToken(sessionId).then((token: any) => {
-        session
-          .connect(token, {
-            id: `test_${Math.random()}`,
-          })
-          .then(async () => {
-            var devices = await newOV.getDevices();
-            var videoDevices = devices.filter(
-              (device) => device.kind === 'videoinput'
-            );
-            var video = document.getElementById(
-              'Streaming'
-            ) as HTMLVideoElement;
-            const publich = newOV.initPublisher(undefined, {
-              insertMode: 'APPEND',
-              resolution: '880x495',
-              frameRate: 10000000,
-              videoSource: videoDevices[0].deviceId,
-            });
+    getOpenViduSessionToken(sessionId).then((token: any) => {
+      session.connect(token).then(async () => {
+        var devices = await newOV.getDevices();
+        var videoDevices = devices.filter(
+          (device) => device.kind === 'videoinput'
+        );
+        var video = document.getElementById('Streaming') as HTMLVideoElement;
+        const publich = newOV.initPublisher(undefined, {
+          insertMode: 'APPEND',
+          resolution: '880x495',
+          frameRate: 10000000,
+          videoSource: videoDevices[0].deviceId,
+        });
 
-            session.publish(publich);
-            setPublisher(publich);
-            setIsBroad(true);
-            publich.stream.streamManager.addVideoElement(video);
-            video.style.transform = 'rotate(0)';
-          });
+        session.publish(publich);
+        setPublisher(publich);
+        setIsBroad(true);
+        publich.stream.streamManager.addVideoElement(video);
+        video.style.transform = 'rotate(0)';
       });
-    };
-    connection();
+    });
   };
 
   React.useEffect(() => {
-    if (sessionId) joinSession();
+    if (publisher === undefined) {
+      joinSession();
+    }
     return () => {
       session.disconnect();
     };

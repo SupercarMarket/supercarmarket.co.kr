@@ -1,8 +1,9 @@
 import * as React from 'react';
 import liveCss from 'public/css/live.module.css';
 import { Client, StompSubscription } from '@stomp/stompjs';
-import { Button } from '@supercarmarket/ui';
+import { Button, Wrapper } from '@supercarmarket/ui';
 import { getSession, useSession } from 'next-auth/react';
+import { css } from 'styled-components';
 
 interface Props {
   data: Live.LiveRoomDto | null | undefined;
@@ -18,7 +19,7 @@ interface broadContextProps {
 interface messageType {
   type: string;
   sender: string;
-  channelid: string;
+  channelId: string;
   data: string;
 }
 
@@ -76,11 +77,11 @@ function ChatInfo(props: Props) {
       setSubscribes(subscribe);
 
       client.publish({
-        destination: `/sub/${props.data?.sessionId}`,
+        destination: `/pub/chat/${props.data?.sessionId}`,
         body: `{
           "type": "ENTER",
           "sender": "${session.nickname}",
-          "channelid": "${props.data?.sessionId}",
+          "channelId": "${props.data?.sessionId}",
           "data": "'${session.nickname}' 님이 접속하셨습니다."
         }`,
       });
@@ -97,11 +98,11 @@ function ChatInfo(props: Props) {
   const sendChat = () => {
     if (stomp && textAreaRef.current && textAreaRef.current.value.length > 0) {
       stomp.publish({
-        destination: `/sub/${props.data?.sessionId}`,
+        destination: `/pub/chat/${props.data?.sessionId}`,
         body: `{
         "type": "TALK",
         "sender": "${userName}",
-        "channelid": "${props.data?.sessionId}",
+        "channelId": "${props.data?.sessionId}",
         "data": "${
           textAreaRef.current?.value.replaceAll(/(\n|\r\n)/g, '<br>') ?? ''
         }"
@@ -122,11 +123,11 @@ function ChatInfo(props: Props) {
   const exitChat = () => {
     if (stomp) {
       stomp.publish({
-        destination: `/sub/${props.data?.sessionId}`,
+        destination: `/pub/chat/${props.data?.sessionId}`,
         body: `{
             "type": "EXIT",
             "sender": "${userName}",
-            "channelid": "${props.data?.sessionId}",
+            "channelId": "${props.data?.sessionId}",
             "data": "'${userName}' 님이 종료하셨습니다."
           }`,
       });
@@ -139,19 +140,8 @@ function ChatInfo(props: Props) {
     }, 100);
   };
 
-  const test = async () => {
-    const session = await getSession();
-    console.log(session);
-  };
-
   React.useEffect(() => {
     joinChat();
-    test();
-    return () => {
-      if (stomp) {
-        stomp.deactivate();
-      }
-    };
   }, []);
 
   React.useEffect(() => {
@@ -176,11 +166,11 @@ function ChatInfo(props: Props) {
     };
   }, [stomp]);
   return (
-    <div
-      style={{
-        marginLeft: '16px',
-        width: '304px',
-      }}
+    <Wrapper.Item
+      css={css`
+        margin-left: 16px;
+        width: 304px;
+      `}
     >
       <div
         style={{
@@ -207,15 +197,17 @@ function ChatInfo(props: Props) {
           );
         })}
       </div>
-      <div
-        style={{
-          padding: '12px 16px',
-          border: '1px solid #C3C3C7',
-          display: 'flex',
-          borderRadius: '4px',
-          height: '97px',
-          alignItems: 'flex-end',
-        }}
+      <Wrapper.Item
+        css={css`
+           {
+            padding: 12px 16px;
+            border: 1px solid #c3c3c7;
+            display: flex;
+            border-radius: 4px;
+            height: 97px;
+            align-items: flex-end;
+          }
+        `}
       >
         <textarea
           placeholder="채팅을 남겨보세요"
@@ -232,8 +224,8 @@ function ChatInfo(props: Props) {
         >
           등록
         </Button>
-      </div>
-    </div>
+      </Wrapper.Item>
+    </Wrapper.Item>
   );
 }
 

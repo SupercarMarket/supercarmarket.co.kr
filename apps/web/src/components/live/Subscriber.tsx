@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useRouter } from 'next/router';
-import { OpenVidu, Session } from 'openvidu-browser';
+import { OpenVidu, Session, Subscriber } from 'openvidu-browser';
 import { Button } from '@supercarmarket/ui';
 import SubscriberIcon from 'public/images/live/icons/SubscriberIcon.svg';
 import VolumeIcon from 'public/images/live/icons/VolumeIcon.svg';
@@ -19,12 +19,13 @@ interface broadContextProps {
   setLiveViewCount: React.Dispatch<React.SetStateAction<number | undefined>>;
 }
 
-function Subscriber(props: Props) {
+function Subscribers(props: Props) {
   const newOV = new OpenVidu();
   newOV.enableProdMode();
   const { isBroad, setIsBroad, sessionId, data, broadContext } = props;
   const [volume, setVolume] = React.useState<number>(80);
   const [session, setSession] = React.useState<Session>(newOV.initSession());
+  const [subscrive, setSubscrive] = React.useState<Subscriber>();
 
   const router = useRouter();
   const broadContext_ = React.useContext(broadContext);
@@ -34,7 +35,7 @@ function Subscriber(props: Props) {
   };
 
   const deleteBroadCastHandler = () => {
-    session.disconnect();
+    // if (subscrive) session.unsubscribe(subscrive);
     setIsBroad(false);
     setTimeout(() => {
       router.replace('/live');
@@ -46,7 +47,8 @@ function Subscriber(props: Props) {
     const connection = () => {
       getOpenViduSessionToken(sessionId).then((token: any) => {
         session.on('streamCreated', async (event) => {
-          session.subscribe(event.stream, undefined);
+          const newSub = session.subscribe(event.stream, undefined);
+          setSubscrive(newSub);
           event.stream.streamManager.addVideoElement(video);
         });
 
@@ -60,9 +62,6 @@ function Subscriber(props: Props) {
 
   React.useEffect(() => {
     if (sessionId) joinSession();
-    return () => {
-      session.disconnect();
-    };
   }, []);
 
   React.useEffect(() => {
@@ -146,7 +145,7 @@ function Subscriber(props: Props) {
   );
 }
 
-export default Subscriber;
+export default Subscribers;
 
 const publisherStyle = {
   fontSize: '16px',
