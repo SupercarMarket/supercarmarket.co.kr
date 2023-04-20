@@ -35,8 +35,10 @@ function Subscribers(props: Props) {
   };
 
   const deleteBroadCastHandler = () => {
-    // if (subscrive) session.unsubscribe(subscrive);
-    setIsBroad(false);
+    if (subscrive) {
+      session.unsubscribe(subscrive);
+      session.disconnect();
+    }
     setTimeout(() => {
       router.replace('/live');
     }, 100);
@@ -52,16 +54,15 @@ function Subscribers(props: Props) {
           event.stream.streamManager.addVideoElement(video);
         });
 
-        session.connect(token, {
-          id: `test_${Math.random()}`,
-        });
+        session.connect(token);
       });
     };
     connection();
   };
 
   React.useEffect(() => {
-    if (sessionId) joinSession();
+    console.log('Subscribers useEffect');
+    if (!subscrive) joinSession();
   }, []);
 
   React.useEffect(() => {
@@ -69,9 +70,6 @@ function Subscribers(props: Props) {
     video.volume = volume / 100;
   }, [volume]);
 
-  if (!sessionId) {
-    return <></>;
-  }
   return (
     <div>
       <div style={{ width: '880px' }}>
