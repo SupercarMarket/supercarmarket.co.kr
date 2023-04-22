@@ -57,7 +57,7 @@ const MarketNew = ({ isMobile }: MarketProps) => {
       </Wrapper>
       <RouterButton href="/market">
         <Typography fontSize="header-16" fontWeight="bold" color="black">
-          최신매물 더보기
+          최신매물
         </Typography>
       </RouterButton>
     </Container>

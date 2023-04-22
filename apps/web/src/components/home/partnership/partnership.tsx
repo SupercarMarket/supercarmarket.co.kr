@@ -174,7 +174,7 @@ const Partnership = ({ isMobile }: PartnershipProps) => {
       </Wrapper>
       <RouterButton href="/partnership">
         <Typography fontSize="header-16" fontWeight="bold" color="black">
-          제휴업체 더보기
+          제휴업체
         </Typography>
       </RouterButton>
     </Container>
