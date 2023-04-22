@@ -62,7 +62,7 @@ const Magazine = ({ isMobile }: MagazineProps) => {
               }
             `}
           >
-            {magazine.data.slice(1, 4).map((list) => (
+            {magazine.data.slice(1, 5).map((list) => (
               <MagazineCard key={list.id} type="small" {...list} />
             ))}
           </Wrapper>
