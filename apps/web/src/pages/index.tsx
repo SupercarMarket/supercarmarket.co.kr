@@ -10,7 +10,6 @@ import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import * as React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import HeadSeo from 'components/common/headSeo';
-import { APP_NAME } from 'constants/core';
 import { isMobile } from 'utils/misc';
 import Partnership from 'components/home/partnership';
 
@@ -22,7 +21,7 @@ const Home: NextPageWithLayout = ({
 
   return (
     <>
-      <HeadSeo title={APP_NAME} description="안녕하세요 슈퍼카마켓입니다." />
+      <HeadSeo title="슈퍼카마켓" description="안녕하세요 슈퍼카마켓입니다." />
       <Container>
         <QueryErrorResetBoundary>
           {({ reset }) => (

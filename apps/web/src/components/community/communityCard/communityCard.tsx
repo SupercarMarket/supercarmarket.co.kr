@@ -281,7 +281,7 @@ const CommunityCardRow = (props: CommunityCardChildrenProps) => {
             `}
           >
             <Typography
-              fontSize="body-14"
+              fontSize="body-16"
               fontWeight="regular"
               color="greyScale-6"
               lineHeight="150%"
@@ -299,7 +299,7 @@ const CommunityCardRow = (props: CommunityCardChildrenProps) => {
             `}
           >
             <Typography
-              fontSize="body-12"
+              fontSize="body-14"
               fontWeight="regular"
               color="greyScale-5"
               lineHeight="150%"
@@ -307,7 +307,7 @@ const CommunityCardRow = (props: CommunityCardChildrenProps) => {
               {nickname}
             </Typography>
             <Typography
-              fontSize="body-12"
+              fontSize="body-14"
               fontWeight="regular"
               color="greyScale-5"
               lineHeight="150%"
@@ -328,7 +328,7 @@ const CommunityCardRow = (props: CommunityCardChildrenProps) => {
             >
               <ViewIcon />
               <Typography
-                fontSize="body-12"
+                fontSize="body-14"
                 fontWeight="regular"
                 color="greyScale-5"
                 lineHeight="150%"
@@ -350,7 +350,7 @@ const CommunityCardRow = (props: CommunityCardChildrenProps) => {
             >
               <LikeIcon />
               <Typography
-                fontSize="body-12"
+                fontSize="body-14"
                 fontWeight="regular"
                 color="greyScale-5"
                 lineHeight="150%"

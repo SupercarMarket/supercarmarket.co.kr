@@ -80,7 +80,6 @@ const Searchbar = forwardRef(function Searchbar(
             },
             className
           )}
-          type="search"
           inputMode="search"
           autoComplete="off"
           autoCorrect="off"
