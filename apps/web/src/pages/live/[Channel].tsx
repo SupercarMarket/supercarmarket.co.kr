@@ -26,36 +26,27 @@ const Channel: NextPageWithLayout = ({
   } = useBroadCastRoom(Channel);
 
   const [isBroad, setIsBroad] = React.useState(true);
-  const [liveViewCount, setLiveViewCount] = React.useState(
-    broadCastRoom?.data.userCount
-  );
+  const [liveViewCount, setLiveViewCount] = React.useState(0);
   if (isLoading || isFetching || !broadCastRoom) return <div>loading..</div>;
-
-  const broadContext = React.createContext({
-    liveViewCount,
-    setLiveViewCount,
-  });
 
   return (
     <Container>
       <div style={{ display: 'flex', marginTop: '10px' }}>
-        <broadContext.Provider value={{ liveViewCount, setLiveViewCount }}>
-          {broadCastRoom.data && (
-            <>
-              <LiveInfo
-                data={broadCastRoom.data}
-                setIsBroad={setIsBroad}
-                isBroad={isBroad}
-                broadContext={broadContext}
-              />
-              <ChatInfo
-                data={broadCastRoom.data}
-                isBroad={isBroad}
-                broadContext={broadContext}
-              />
-            </>
-          )}
-        </broadContext.Provider>
+        {broadCastRoom.data && (
+          <>
+            <LiveInfo
+              data={broadCastRoom.data}
+              setIsBroad={setIsBroad}
+              isBroad={isBroad}
+              liveViewCount={liveViewCount}
+            />
+            <ChatInfo
+              data={broadCastRoom.data}
+              isBroad={isBroad}
+              setLiveViewCount={setLiveViewCount}
+            />
+          </>
+        )}
       </div>
     </Container>
   );
@@ -79,11 +70,11 @@ interface LiveInfo {
   data: Live.LiveRoomDto | null | undefined;
   setIsBroad: (broad: boolean) => void;
   isBroad: boolean;
-  broadContext: React.Context<any>;
+  liveViewCount: number;
 }
 
 const LiveInfo = (props: LiveInfo) => {
-  const { data, isBroad, setIsBroad, broadContext } = props;
+  const { data, isBroad, setIsBroad, liveViewCount } = props;
 
   return (
     <div style={{ width: '880px' }}>
@@ -94,7 +85,7 @@ const LiveInfo = (props: LiveInfo) => {
             data={data}
             setIsBroad={setIsBroad}
             isBroad={isBroad}
-            broadContext={broadContext}
+            liveViewCount={liveViewCount}
           />
         ) : (
           <Subscriber
@@ -102,7 +93,7 @@ const LiveInfo = (props: LiveInfo) => {
             data={data}
             setIsBroad={setIsBroad}
             isBroad={isBroad}
-            broadContext={broadContext}
+            liveViewCount={liveViewCount}
           />
         )
       ) : (

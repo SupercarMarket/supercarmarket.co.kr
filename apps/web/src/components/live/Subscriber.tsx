@@ -5,63 +5,56 @@ import { Button } from '@supercarmarket/ui';
 import SubscriberIcon from 'public/images/live/icons/SubscriberIcon.svg';
 import VolumeIcon from 'public/images/live/icons/VolumeIcon.svg';
 import { getOpenViduSessionToken } from 'http/server/live';
+import { getSession } from 'next-auth/react';
 
 interface Props {
   sessionId: string;
   data: Live.LiveRoomDto;
   setIsBroad: (broad: boolean) => void;
   isBroad: boolean;
-  broadContext: React.Context<broadContextProps>;
-}
-
-interface broadContextProps {
   liveViewCount: number | undefined;
-  setLiveViewCount: React.Dispatch<React.SetStateAction<number | undefined>>;
 }
 
 function Subscribers(props: Props) {
+  const { isBroad, setIsBroad, sessionId, data, liveViewCount } = props;
   const newOV = new OpenVidu();
-  newOV.enableProdMode();
-  const { isBroad, setIsBroad, sessionId, data, broadContext } = props;
   const [volume, setVolume] = React.useState<number>(80);
   const [session, setSession] = React.useState<Session>(newOV.initSession());
   const [subscrive, setSubscrive] = React.useState<Subscriber>();
 
+  newOV.enableProdMode();
   const router = useRouter();
-  const broadContext_ = React.useContext(broadContext);
 
   const volumeChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setVolume(Number(event.currentTarget.value));
   };
 
-  const deleteBroadCastHandler = () => {
+  const deleteBroadCastHandler = async () => {
     if (subscrive) {
-      session.unsubscribe(subscrive);
-      session.disconnect();
+      await session.unsubscribe(subscrive);
+      setTimeout(() => {
+        router.replace('/live').then(router.reload);
+      }, 100);
     }
-    setTimeout(() => {
-      router.replace('/live');
-    }, 100);
   };
 
-  const joinSession = () => {
+  const joinSession = async () => {
+    const userSession = await getSession();
     var video = document.getElementById('Streaming') as HTMLVideoElement;
-    const connection = () => {
-      getOpenViduSessionToken(sessionId).then((token: any) => {
-        session.on('streamCreated', async (event) => {
-          const newSub = session.subscribe(event.stream, undefined);
-          setSubscrive(newSub);
-          event.stream.streamManager.addVideoElement(video);
-        });
-
-        session.connect(token);
+    getOpenViduSessionToken(sessionId).then((token: any) => {
+      session.on('streamCreated', async (event) => {
+        const newSub = session.subscribe(event.stream, undefined);
+        setSubscrive(newSub);
+        event.stream.streamManager.addVideoElement(video);
       });
-    };
-    connection();
+
+      session.connect(token, {
+        userId: `${userSession?.nickname}`,
+      });
+    });
   };
 
   React.useEffect(() => {
-    console.log('Subscribers useEffect');
     if (!subscrive) joinSession();
   }, []);
 
@@ -93,7 +86,7 @@ function Subscribers(props: Props) {
           <p style={publisherStyle}>{data?.userName}</p>
           <div style={{ color: '#725B30', display: 'flex' }}>
             <SubscriberIcon />
-            <p style={subscriberStyle}>{broadContext_.liveViewCount || 0}</p>
+            <p style={subscriberStyle}>{liveViewCount || 0}</p>
           </div>
         </div>
         <div>

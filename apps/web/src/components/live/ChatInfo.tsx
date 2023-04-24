@@ -8,12 +8,7 @@ import { css } from 'styled-components';
 interface Props {
   data: Live.LiveRoomDto | null | undefined;
   isBroad: boolean;
-  broadContext: React.Context<broadContextProps>;
-}
-
-interface broadContextProps {
-  liveViewCount: number | undefined;
-  setLiveViewCount: React.Dispatch<React.SetStateAction<number | undefined>>;
+  setLiveViewCount: (broad: number) => void;
 }
 
 interface messageType {
@@ -24,7 +19,6 @@ interface messageType {
 }
 
 function ChatInfo(props: Props) {
-  const { isBroad, broadContext } = props;
   const [chats, setChats] = React.useState<messageType[]>([]);
   const [stomp, setStomp] = React.useState<Client>();
   const [subscribes, setSubscribes] = React.useState<StompSubscription>();
@@ -33,7 +27,6 @@ function ChatInfo(props: Props) {
   const textAreaRef = React.useRef<HTMLTextAreaElement>(null);
   const chatWrapRef = React.useRef<HTMLDivElement>(null);
 
-  const broadContext_ = React.useContext(broadContext);
   const joinChat = async () => {
     const session = await getSession();
 
@@ -57,20 +50,20 @@ function ChatInfo(props: Props) {
         `/sub/${props.data?.sessionId}`,
         (frame) => {
           const getMessage = JSON.parse(frame.body);
-          if (getMessage.type === 'COUNT') {
-            broadContext_.setLiveViewCount((privState) => {
-              return parseInt(getMessage.participantNumber);
-            });
-          } else {
+          if (getMessage.participantNumber) {
+            props.setLiveViewCount(parseInt(getMessage.participantNumber));
+          }
+          if (getMessage.sender !== 'server') {
             setChats((prevState: messageType[]) => {
               return prevState.concat([getMessage]);
             });
+            setTimeout(() => {
+              if (chatWrapRef.current) {
+                chatWrapRef.current.scrollTop =
+                  chatWrapRef.current.scrollHeight;
+              }
+            }, 100);
           }
-          setTimeout(() => {
-            if (chatWrapRef.current) {
-              chatWrapRef.current.scrollTop = chatWrapRef.current.scrollHeight;
-            }
-          }, 100);
         }
       );
 
@@ -113,11 +106,6 @@ function ChatInfo(props: Props) {
       });
     }
     if (textAreaRef.current) textAreaRef.current.value = '';
-    setTimeout(() => {
-      if (chatWrapRef.current) {
-        chatWrapRef.current.scrollTop = chatWrapRef.current.scrollHeight;
-      }
-    }, 100);
   };
 
   const exitChat = () => {
@@ -145,12 +133,6 @@ function ChatInfo(props: Props) {
   }, []);
 
   React.useEffect(() => {
-    if (!isBroad) {
-      exitChat();
-    }
-  }, [isBroad]);
-
-  React.useEffect(() => {
     if (stomp) {
       textAreaRef.current?.addEventListener('keypress', (event) => {
         if (event.key === 'Enter' && !event.shiftKey) {
@@ -160,11 +142,10 @@ function ChatInfo(props: Props) {
       });
     }
     return () => {
-      if (stomp) {
-        stomp.deactivate();
-      }
+      exitChat();
     };
   }, [stomp]);
+
   return (
     <Wrapper.Item
       css={css`

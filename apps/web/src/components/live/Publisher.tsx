@@ -16,18 +16,12 @@ interface Props {
   data: Live.LiveRoomDto;
   setIsBroad: (broad: boolean) => void;
   isBroad: boolean;
-  broadContext: React.Context<broadContextProps>;
-}
-
-interface broadContextProps {
   liveViewCount: number | undefined;
-  setLiveViewCount: React.Dispatch<React.SetStateAction<number | undefined>>;
 }
 
 function Publisher(props: Props) {
+  const { isBroad, setIsBroad, sessionId, data } = props;
   const newOV = new OpenVidu();
-  newOV.enableProdMode();
-  const { isBroad, setIsBroad, sessionId, data, broadContext } = props;
   const [volume, setVolume] = React.useState<number>(80);
   const [isCamera, setIsCamera] = React.useState(true);
   const [session, setSession] = React.useState<Session>(newOV.initSession());
@@ -35,8 +29,8 @@ function Publisher(props: Props) {
 
   const queryClient = useQueryClient();
   const deleteBroadCastRoomMutation = useDeleteBroadCastRoom();
-  const broadContext_ = React.useContext(broadContext);
 
+  newOV.enableProdMode();
   const router = useRouter();
 
   const volumeChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -65,27 +59,32 @@ function Publisher(props: Props) {
     }
   };
 
-  const joinSession = () => {
+  const joinSession = async () => {
+    const userSession = await getSession();
     getOpenViduSessionToken(sessionId).then((token: any) => {
-      session.connect(token).then(async () => {
-        var devices = await newOV.getDevices();
-        var videoDevices = devices.filter(
-          (device) => device.kind === 'videoinput'
-        );
-        var video = document.getElementById('Streaming') as HTMLVideoElement;
-        const publich = newOV.initPublisher(undefined, {
-          insertMode: 'APPEND',
-          resolution: '880x495',
-          frameRate: 10000000,
-          videoSource: videoDevices[0].deviceId,
-        });
+      session
+        .connect(token, {
+          userId: `${userSession?.nickname}`,
+        })
+        .then(async () => {
+          var devices = await newOV.getDevices();
+          var videoDevices = devices.filter(
+            (device) => device.kind === 'videoinput'
+          );
+          var video = document.getElementById('Streaming') as HTMLVideoElement;
+          const publich = newOV.initPublisher(undefined, {
+            insertMode: 'APPEND',
+            resolution: '880x495',
+            frameRate: 10000000,
+            videoSource: videoDevices[0].deviceId,
+          });
 
-        session.publish(publich);
-        setPublisher(publich);
-        setIsBroad(true);
-        publich.stream.streamManager.addVideoElement(video);
-        video.style.transform = 'rotate(0)';
-      });
+          session.publish(publich);
+          setPublisher(publich);
+          setIsBroad(true);
+          publich.stream.streamManager.addVideoElement(video);
+          video.style.transform = 'rotate(0)';
+        });
     });
   };
 
@@ -125,7 +124,7 @@ function Publisher(props: Props) {
           <p style={publisherStyle}>{data?.userName}</p>
           <div style={{ color: '#725B30', display: 'flex' }}>
             <SubscriberIcon />
-            <p style={subscriberStyle}>{broadContext_.liveViewCount || 0}</p>
+            <p style={subscriberStyle}>{props.liveViewCount || 0}</p>
           </div>
         </div>
         <div>
