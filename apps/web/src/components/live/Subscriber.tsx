@@ -20,7 +20,8 @@ function Subscribers(props: Props) {
   const newOV = new OpenVidu();
   const [volume, setVolume] = React.useState<number>(80);
   const [session, setSession] = React.useState<Session>(newOV.initSession());
-  const [subscrive, setSubscrive] = React.useState<Subscriber>();
+  const [subscribe, setSubscribe] = React.useState<Subscriber>();
+  const [exits, setExits] = React.useState<boolean>();
 
   newOV.enableProdMode();
   const router = useRouter();
@@ -30,8 +31,8 @@ function Subscribers(props: Props) {
   };
 
   const deleteBroadCastHandler = async () => {
-    if (subscrive) {
-      await session.unsubscribe(subscrive);
+    if (subscribe) {
+      await session.unsubscribe(subscribe);
       setTimeout(() => {
         router.replace('/live').then(router.reload);
       }, 100);
@@ -44,7 +45,7 @@ function Subscribers(props: Props) {
     getOpenViduSessionToken(sessionId).then((token: any) => {
       session.on('streamCreated', async (event) => {
         const newSub = session.subscribe(event.stream, undefined);
-        setSubscrive(newSub);
+        setSubscribe(newSub);
         event.stream.streamManager.addVideoElement(video);
       });
 
@@ -55,7 +56,7 @@ function Subscribers(props: Props) {
   };
 
   React.useEffect(() => {
-    if (!subscrive) joinSession();
+    if (!subscribe) joinSession();
   }, []);
 
   React.useEffect(() => {
