@@ -15,6 +15,7 @@ import { css } from 'styled-components';
 import useBase64 from 'hooks/queries/useBase64';
 import Skeleton from 'react-loading-skeleton';
 import { truncateOnWord } from '@supercarmarket/lib';
+import dayjs from 'dayjs';
 
 interface MagazineCardProps extends WithBlurredImage<MagazineDto> {
   type?: 'small' | 'normal';
@@ -102,6 +103,8 @@ const MagazineCard = memo(function MagazineCard({
         </Wrapper.Item>
         <Wrapper.Item
           css={css`
+            display: flex;
+            flex-direction: column;
             ${applyMediaQuery('mobile')} {
               p {
                 display: none !important;
@@ -161,7 +164,7 @@ const MagazineCard = memo(function MagazineCard({
               lineHeight: '19.36px',
             }}
           >
-            {created}
+            {dayjs(created).format('YYYY.MM.DD')}
           </Typography>
         </Wrapper.Item>
       </Container>
