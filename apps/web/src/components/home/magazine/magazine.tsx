@@ -62,7 +62,7 @@ const Magazine = ({ isMobile }: MagazineProps) => {
               }
             `}
           >
-            {magazine.data.slice(1, 4).map((list) => (
+            {magazine.data.slice(1, 5).map((list) => (
               <MagazineCard key={list.id} type="small" {...list} />
             ))}
           </Wrapper>
@@ -70,7 +70,7 @@ const Magazine = ({ isMobile }: MagazineProps) => {
       )}
       <RouterButton href="/magazine">
         <Typography fontSize="header-16" fontWeight="bold" color="black">
-          슈마 매거진 더보기
+          슈마 매거진
         </Typography>
       </RouterButton>
     </Container>

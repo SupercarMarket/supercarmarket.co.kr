@@ -56,7 +56,7 @@ const Community = ({ isMobile }: CommunityProps) => {
       </Wrapper>
       <RouterButton href="/community/paparazzi?category=report">
         <Typography fontSize="header-16" fontWeight="bold" color="black">
-          커뮤니티 더보기
+          커뮤니티
         </Typography>
       </RouterButton>
     </Container>
