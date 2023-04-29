@@ -13,8 +13,8 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
-    "dotenv-cli": "^7.0.0",
     "@supercarmarket/config": "workspace:*",
+    "dotenv-cli": "^7.0.0",
     "prettier": "latest",
     "turbo": "latest"
   },

@@ -8,6 +8,7 @@ import { Typography } from '../components/typography';
 import { Wrapper } from '../components/wrapper';
 import * as style from './form.styled';
 import { Input, Label } from './form.styled';
+import { applyMediaQuery } from '../styles';
 
 type FormImagesState = Array<{ file: File; thumbnail: string }>;
 
@@ -42,6 +43,7 @@ const FormImageThumbnail = React.memo(function FormImageThumbnail({
         height={180}
         style={{
           width: '100%',
+          objectFit: 'cover',
         }}
       />
     </Container>
@@ -198,6 +200,10 @@ const FormAttachment = React.forwardRef(function FormAttachment(
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
             gap: 20px;
+            ${applyMediaQuery('mobile')} {
+              width: 100%;
+              ${size === 1 && ' grid-template-columns: 1fr;'}
+            }
           `}
         >
           {files.map((file, index) => (
