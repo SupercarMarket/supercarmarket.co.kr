@@ -17,6 +17,7 @@ import { Inter } from '@next/font/google';
 import localFont from '@next/font/local';
 import Head from 'next/head';
 import { isMobile } from 'utils/misc';
+import { RecoilRoot } from 'recoil';
 
 export interface PageProps {
   $ua: {
@@ -75,36 +76,38 @@ function MyApp({
   const Layout = (Component as any).Layout || Nope;
 
   return (
-    <ThemeProvider theme={theme}>
-      <QueryClientProvider client={queryClient}>
-        <Hydrate state={dehydratedState}>
-          <SessionProvider session={session}>
-            <Head>
-              <meta
-                name="viewport"
-                content="width=device-width,initial-scale=1.0,maximum-scale=2.0"
+    <RecoilRoot>
+      <ThemeProvider theme={theme}>
+        <QueryClientProvider client={queryClient}>
+          <Hydrate state={dehydratedState}>
+            <SessionProvider session={session}>
+              <Head>
+                <meta
+                  name="viewport"
+                  content="width=device-width,initial-scale=1.0,maximum-scale=2.0"
+                />
+              </Head>
+              <DefaultSeo
+                openGraph={{
+                  ...seoConfig.headSeo,
+                }}
+                {...seoConfig.defaultNextSeo}
               />
-            </Head>
-            <DefaultSeo
-              openGraph={{
-                ...seoConfig.headSeo,
-              }}
-              {...seoConfig.defaultNextSeo}
-            />
-            <GlobalStyle />
-            <Layout {...pageProps}>
-              <Component {...pageProps} />
-            </Layout>
-            <style jsx global>{`
-              :root {
-                --font-inter: ${inter.style.fontFamily};
-                --font-pretendard: ${pretendard.style.fontFamily};
-              }
-            `}</style>
-          </SessionProvider>
-        </Hydrate>
-      </QueryClientProvider>
-    </ThemeProvider>
+              <GlobalStyle />
+              <Layout {...pageProps}>
+                <Component {...pageProps} />
+              </Layout>
+              <style jsx global>{`
+                :root {
+                  --font-inter: ${inter.style.fontFamily};
+                  --font-pretendard: ${pretendard.style.fontFamily};
+                }
+              `}</style>
+            </SessionProvider>
+          </Hydrate>
+        </QueryClientProvider>
+      </ThemeProvider>
+    </RecoilRoot>
   );
 }
 

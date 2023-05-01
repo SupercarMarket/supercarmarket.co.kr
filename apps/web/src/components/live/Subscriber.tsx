@@ -1,11 +1,18 @@
 import * as React from 'react';
 import { useRouter } from 'next/router';
 import { OpenVidu, Session, Subscriber } from 'openvidu-browser';
-import { Button } from '@supercarmarket/ui';
+import {
+  Button,
+  Wrapper,
+  applyMediaQuery,
+  deviceQuery,
+} from '@supercarmarket/ui';
 import SubscriberIcon from 'public/images/live/icons/SubscriberIcon.svg';
 import VolumeIcon from 'public/images/live/icons/VolumeIcon.svg';
 import { getOpenViduSessionToken } from 'http/server/live';
 import { getSession } from 'next-auth/react';
+import { useMedia } from '@supercarmarket/hooks';
+import { css } from 'styled-components';
 
 interface Props {
   sessionId: string;
@@ -21,7 +28,8 @@ function Subscribers(props: Props) {
   const [volume, setVolume] = React.useState<number>(80);
   const [session, setSession] = React.useState<Session>(newOV.initSession());
   const [subscribe, setSubscribe] = React.useState<Subscriber>();
-  const [exits, setExits] = React.useState<boolean>();
+
+  const { isMobile } = useMedia({ deviceQuery });
 
   newOV.enableProdMode();
   const router = useRouter();
@@ -47,6 +55,7 @@ function Subscribers(props: Props) {
         const newSub = session.subscribe(event.stream, undefined);
         setSubscribe(newSub);
         event.stream.streamManager.addVideoElement(video);
+        video.style.width = '100%';
       });
 
       session.connect(token, {
@@ -65,17 +74,38 @@ function Subscribers(props: Props) {
   }, [volume]);
 
   return (
-    <div>
-      <div style={{ width: '880px' }}>
-        <div style={{ backgroundColor: '#000000', height: '495px' }}>
+    <Wrapper.Item>
+      <Wrapper.Item
+        css={css`
+          width: 880px;
+          ${applyMediaQuery('mobile')} {
+            grid-template-columns: 1fr 1fr;
+            column-gap: 8px;
+            row-gap: 16px;
+            width: 100%;
+          }
+        `}
+      >
+        <Wrapper.Item
+          css={css`
+            background-color: #000000;
+            height: 495px;
+            ${applyMediaQuery('mobile')} {
+              grid-template-columns: 1fr 1fr;
+              column-gap: 8px;
+              row-gap: 16px;
+              height: auto;
+            }
+          `}
+        >
           <video
             autoPlay
             id="Streaming"
             style={{ width: '100%', height: '100%' }}
             controls
           />
-        </div>
-      </div>
+        </Wrapper.Item>
+      </Wrapper.Item>
       <div>
         <div
           style={{
@@ -99,32 +129,37 @@ function Subscribers(props: Props) {
         <div
           style={{
             display: 'flex',
+            flexWrap: 'wrap',
             justifyContent: 'space-between',
+            gap: '10px',
           }}
         >
-          <div
-            style={{
-              marginTop: '15px',
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
-            <VolumeIcon />
-            <div>
-              <input
-                type="range"
-                min={0}
-                max={100}
-                value={volume}
-                onChange={volumeChangeHandler}
-              />
+          {!isMobile && (
+            <div
+              style={{
+                marginTop: '15px',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <VolumeIcon />
+              <div>
+                <input
+                  type="range"
+                  min={0}
+                  max={100}
+                  value={volume}
+                  onChange={volumeChangeHandler}
+                />
+              </div>
             </div>
-          </div>
+          )}
           <div
             style={{
               display: 'flex',
               justifyContent: 'space-between',
               gap: '16px',
+              marginLeft: 'auto',
             }}
           >
             <Button variant="Primary" onClick={deleteBroadCastHandler}>
@@ -133,7 +168,7 @@ function Subscribers(props: Props) {
           </div>
         </div>
       </div>
-    </div>
+    </Wrapper.Item>
   );
 }
 

@@ -1,4 +1,9 @@
-import { Button } from '@supercarmarket/ui';
+import {
+  Button,
+  Wrapper,
+  applyMediaQuery,
+  deviceQuery,
+} from '@supercarmarket/ui';
 import { useRouter } from 'next/router';
 import { OpenVidu, Publisher as Publishers, Session } from 'openvidu-browser';
 import * as React from 'react';
@@ -10,6 +15,8 @@ import { useDeleteBroadCastRoom } from 'http/server/live/mutaitons';
 import { useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEYS } from 'http/server/live/keys';
 import { getSession } from 'next-auth/react';
+import { css } from 'styled-components';
+import { useMedia } from '@supercarmarket/hooks';
 
 interface Props {
   sessionId: string;
@@ -26,6 +33,8 @@ function Publisher(props: Props) {
   const [isCamera, setIsCamera] = React.useState(true);
   const [session, setSession] = React.useState<Session>(newOV.initSession());
   const [publisher, setPublisher] = React.useState<Publishers>();
+
+  const { isMobile } = useMedia({ deviceQuery });
 
   const queryClient = useQueryClient();
   const deleteBroadCastRoomMutation = useDeleteBroadCastRoom();
@@ -84,6 +93,7 @@ function Publisher(props: Props) {
           setIsBroad(true);
           publich.stream.streamManager.addVideoElement(video);
           video.style.transform = 'rotate(0)';
+          video.style.width = '100%';
         });
     });
   };
@@ -106,12 +116,33 @@ function Publisher(props: Props) {
     return <></>;
   }
   return (
-    <div>
-      <div style={{ width: '880px' }}>
-        <div style={{ backgroundColor: '#000000', height: '495px' }}>
+    <Wrapper.Item>
+      <Wrapper.Item
+        css={css`
+          width: 880px;
+          ${applyMediaQuery('mobile')} {
+            grid-template-columns: 1fr 1fr;
+            column-gap: 8px;
+            row-gap: 16px;
+            width: 100%;
+          }
+        `}
+      >
+        <Wrapper.Item
+          css={css`
+            background-color: #000000;
+            height: 495px;
+            ${applyMediaQuery('mobile')} {
+              grid-template-columns: 1fr 1fr;
+              column-gap: 8px;
+              row-gap: 16px;
+              height: auto;
+            }
+          `}
+        >
           <video autoPlay id="Streaming" />
-        </div>
-      </div>
+        </Wrapper.Item>
+      </Wrapper.Item>
 
       <div>
         <div
@@ -136,32 +167,37 @@ function Publisher(props: Props) {
         <div
           style={{
             display: 'flex',
+            flexWrap: 'wrap',
             justifyContent: 'space-between',
+            gap: '10px',
           }}
         >
-          <div
-            style={{
-              marginTop: '15px',
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
-            <VolumeIcon />
-            <div>
-              <input
-                type="range"
-                min={0}
-                max={100}
-                value={volume}
-                onChange={volumeChangeHandler}
-              />
+          {!isMobile && (
+            <div
+              style={{
+                marginTop: '15px',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <VolumeIcon />
+              <div>
+                <input
+                  type="range"
+                  min={0}
+                  max={100}
+                  value={volume}
+                  onChange={volumeChangeHandler}
+                />
+              </div>
             </div>
-          </div>
+          )}
           <div
             style={{
               display: 'flex',
               justifyContent: 'space-between',
               gap: '16px',
+              marginLeft: 'auto',
             }}
           >
             <Button variant="Primary-Line" onClick={cameraOnOffHandler}>
@@ -179,7 +215,7 @@ function Publisher(props: Props) {
           </div>
         </div>
       </div>
-    </div>
+    </Wrapper.Item>
   );
 }
 

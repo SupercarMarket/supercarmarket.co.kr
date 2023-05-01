@@ -1,7 +1,7 @@
 import * as React from 'react';
 import liveCss from 'public/css/live.module.css';
 import { Client, StompSubscription } from '@stomp/stompjs';
-import { Button, Wrapper } from '@supercarmarket/ui';
+import { Button, Wrapper, applyMediaQuery } from '@supercarmarket/ui';
 import { getSession, useSession } from 'next-auth/react';
 import { css } from 'styled-components';
 
@@ -151,42 +151,56 @@ function ChatInfo(props: Props) {
       css={css`
         margin-left: 16px;
         width: 304px;
+        ${applyMediaQuery('mobile')} {
+        }
       `}
     >
-      <div
-        style={{
-          height: '500px',
-          overflowY: 'auto',
-        }}
-        ref={chatWrapRef}
-      >
-        {chats.map((data, idx) => {
-          if (data.type === 'ENTER' || data.type === 'EXIT') {
-            return (
-              <InitUserChat chat={data.data} key={`InitUserChat_${idx}`} />
-            );
-          }
-          if (data.sender === userName) {
-            return <MyChat chat={data.data} key={`MyChat_${idx}`} />;
-          }
-          return (
-            <UserChat
-              nickname={data.sender}
-              chat={data.data}
-              key={`UserChat_${idx}`}
-            />
-          );
-        })}
-      </div>
       <Wrapper.Item
         css={css`
-           {
-            padding: 12px 16px;
-            border: 1px solid #c3c3c7;
-            display: flex;
-            border-radius: 4px;
-            height: 97px;
-            align-items: flex-end;
+          height: 500px;
+          ${applyMediaQuery('mobile')} {
+            margin-top: 16px;
+            height: 250px;
+            margin-bottom: 16px;
+          }
+        `}
+      >
+        <div
+          style={{
+            height: '100%',
+            overflowY: 'auto',
+          }}
+          ref={chatWrapRef}
+        >
+          {chats.map((data, idx) => {
+            if (data.type === 'ENTER' || data.type === 'EXIT') {
+              return (
+                <InitUserChat chat={data.data} key={`InitUserChat_${idx}`} />
+              );
+            }
+            if (data.sender === userName) {
+              return <MyChat chat={data.data} key={`MyChat_${idx}`} />;
+            }
+            return (
+              <UserChat
+                nickname={data.sender}
+                chat={data.data}
+                key={`UserChat_${idx}`}
+              />
+            );
+          })}
+        </div>
+      </Wrapper.Item>
+      <Wrapper.Item
+        css={css`
+          padding: 12px 16px;
+          border: 1px solid #c3c3c7;
+          display: flex;
+          border-radius: 4px;
+          height: 97px;
+          align-items: flex-end;
+          ${applyMediaQuery('mobile')} {
+            height: auto;
           }
         `}
       >
