@@ -1,4 +1,9 @@
-import { Button, Wrapper, applyMediaQuery } from '@supercarmarket/ui';
+import {
+  Button,
+  Wrapper,
+  applyMediaQuery,
+  deviceQuery,
+} from '@supercarmarket/ui';
 import { useRouter } from 'next/router';
 import { OpenVidu, Publisher as Publishers, Session } from 'openvidu-browser';
 import * as React from 'react';
@@ -11,6 +16,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEYS } from 'http/server/live/keys';
 import { getSession } from 'next-auth/react';
 import { css } from 'styled-components';
+import { useMedia } from '@supercarmarket/hooks';
 
 interface Props {
   sessionId: string;
@@ -27,6 +33,8 @@ function Publisher(props: Props) {
   const [isCamera, setIsCamera] = React.useState(true);
   const [session, setSession] = React.useState<Session>(newOV.initSession());
   const [publisher, setPublisher] = React.useState<Publishers>();
+
+  const { isMobile } = useMedia({ deviceQuery });
 
   const queryClient = useQueryClient();
   const deleteBroadCastRoomMutation = useDeleteBroadCastRoom();
@@ -164,25 +172,26 @@ function Publisher(props: Props) {
             gap: '10px',
           }}
         >
-          <div
-            style={{
-              marginTop: '15px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '10px',
-            }}
-          >
-            <VolumeIcon />
-            <div>
-              <input
-                type="range"
-                min={0}
-                max={100}
-                value={volume}
-                onChange={volumeChangeHandler}
-              />
+          {!isMobile && (
+            <div
+              style={{
+                marginTop: '15px',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <VolumeIcon />
+              <div>
+                <input
+                  type="range"
+                  min={0}
+                  max={100}
+                  value={volume}
+                  onChange={volumeChangeHandler}
+                />
+              </div>
             </div>
-          </div>
+          )}
           <div
             style={{
               display: 'flex',
