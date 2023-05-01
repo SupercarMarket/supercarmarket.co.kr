@@ -20,7 +20,7 @@ const Layout = ({ children, ...rest }: LayoutProps) => {
         <Header />
         <Navbar />
         <main role="main">
-          <Advertisements {...rest} />
+          {layoutRecoil.isFooter && <Advertisements {...rest} />}
           {children}
         </main>
       </Styled.Container>
