@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { useRouter } from 'next/router';
 import { OpenVidu, Session, Subscriber } from 'openvidu-browser';
-import { Button } from '@supercarmarket/ui';
+import { Button, deviceQuery } from '@supercarmarket/ui';
 import SubscriberIcon from 'public/images/live/icons/SubscriberIcon.svg';
 import VolumeIcon from 'public/images/live/icons/VolumeIcon.svg';
 import { getOpenViduSessionToken } from 'http/server/live';
 import { getSession } from 'next-auth/react';
+import { useMedia } from '@supercarmarket/hooks';
 
 interface Props {
   sessionId: string;
@@ -21,7 +22,8 @@ function Subscribers(props: Props) {
   const [volume, setVolume] = React.useState<number>(80);
   const [session, setSession] = React.useState<Session>(newOV.initSession());
   const [subscribe, setSubscribe] = React.useState<Subscriber>();
-  const [exits, setExits] = React.useState<boolean>();
+
+  const { isMobile } = useMedia({ deviceQuery });
 
   newOV.enableProdMode();
   const router = useRouter();
@@ -102,24 +104,26 @@ function Subscribers(props: Props) {
             justifyContent: 'space-between',
           }}
         >
-          <div
-            style={{
-              marginTop: '15px',
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
-            <VolumeIcon />
-            <div>
-              <input
-                type="range"
-                min={0}
-                max={100}
-                value={volume}
-                onChange={volumeChangeHandler}
-              />
+          {!isMobile && (
+            <div
+              style={{
+                marginTop: '15px',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <VolumeIcon />
+              <div>
+                <input
+                  type="range"
+                  min={0}
+                  max={100}
+                  value={volume}
+                  onChange={volumeChangeHandler}
+                />
+              </div>
             </div>
-          </div>
+          )}
           <div
             style={{
               display: 'flex',

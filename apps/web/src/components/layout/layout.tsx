@@ -5,12 +5,15 @@ import * as Styled from './layout.styled';
 import Navbar from './navbar';
 import Toggle from './toggle';
 import Advertisements from 'components/common/advertisements';
+import { useRecoilState } from 'recoil';
+import { layoutPropsRecoil } from 'src/recoil/atom';
 
 interface LayoutProps extends PageProps {
   children?: React.ReactNode;
 }
 
 const Layout = ({ children, ...rest }: LayoutProps) => {
+  const [layoutRecoil] = useRecoilState(layoutPropsRecoil);
   return (
     <>
       <Styled.Container>
@@ -21,8 +24,8 @@ const Layout = ({ children, ...rest }: LayoutProps) => {
           {children}
         </main>
       </Styled.Container>
-      <Footer />
-      <Toggle />
+      {layoutRecoil.isFooter && <Footer />}
+      {layoutRecoil.isFooter && <Toggle />}
     </>
   );
 };
