@@ -85,6 +85,7 @@ function Publisher(props: Props) {
           setIsBroad(true);
           publich.stream.streamManager.addVideoElement(video);
           video.style.transform = 'rotate(0)';
+          video.style.width = '100%';
         });
     });
   };

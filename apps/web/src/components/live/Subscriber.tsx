@@ -49,6 +49,7 @@ function Subscribers(props: Props) {
         const newSub = session.subscribe(event.stream, undefined);
         setSubscribe(newSub);
         event.stream.streamManager.addVideoElement(video);
+        video.style.width = '100%';
       });
 
       session.connect(token, {
