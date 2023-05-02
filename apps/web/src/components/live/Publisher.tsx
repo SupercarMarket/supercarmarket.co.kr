@@ -5,11 +5,19 @@ import {
   deviceQuery,
 } from '@supercarmarket/ui';
 import { useRouter } from 'next/router';
-import { OpenVidu, Publisher as Publishers, Session } from 'openvidu-browser';
+import {
+  Device,
+  OpenVidu,
+  Publisher as Publishers,
+  Session,
+} from 'openvidu-browser';
 import * as React from 'react';
 import SubscriberIcon from 'public/images/live/icons/SubscriberIcon.svg';
-import VolumeIcon from 'public/images/live/icons/VolumeIcon.svg';
+import MicIcon from 'public/images/live/icons/MicIcon.svg';
+import DisMicIcon from 'public/images/live/icons/DisMicIcon.svg';
 import CameraCloseIcon from 'public/images/live/icons/CameraCloseIcon.svg';
+import CameraOnIcon from 'public/images/live/icons/CameraOnIcon.svg';
+import CameraChangeIcon from 'public/images/live/icons/CameraChangeIcon.svg';
 import { getOpenViduSessionToken } from 'http/server/live';
 import { useDeleteBroadCastRoom } from 'http/server/live/mutaitons';
 import { useQueryClient } from '@tanstack/react-query';
@@ -29,10 +37,11 @@ interface Props {
 function Publisher(props: Props) {
   const { isBroad, setIsBroad, sessionId, data } = props;
   const newOV = new OpenVidu();
-  const [volume, setVolume] = React.useState<number>(80);
-  const [isCamera, setIsCamera] = React.useState(true);
+  const [isCamera, setIsCamera] = React.useState<boolean>(true);
+  const [isMic, setIsMic] = React.useState<boolean>(true);
   const [session, setSession] = React.useState<Session>(newOV.initSession());
   const [publisher, setPublisher] = React.useState<Publishers>();
+  const [mobileCamChange, setMobileCamChange] = React.useState<boolean>(false);
 
   const { isMobile } = useMedia({ deviceQuery });
 
@@ -41,10 +50,6 @@ function Publisher(props: Props) {
 
   newOV.enableProdMode();
   const router = useRouter();
-
-  const volumeChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setVolume(Number(event.currentTarget.value));
-  };
 
   const deleteBroadCastHandler = () => {
     deleteBroadCastRoomMutation.mutate(data.broadCastSeq, {
@@ -68,6 +73,38 @@ function Publisher(props: Props) {
     }
   };
 
+  const micOnOffHandler = async () => {
+    if (session && publisher) {
+      if (isMic) {
+        publisher.publishAudio(false);
+        setIsMic(false);
+      } else {
+        publisher.publishAudio(true);
+        setIsMic(true);
+      }
+    }
+  };
+
+  const mobileCamChangeHandler = async () => {
+    if (session && publisher) {
+      const devices = await newOV.getDevices();
+      const videoDevices = devices.filter(
+        (device) => device.kind === 'videoinput'
+      );
+      const mediaStream = await newOV.getUserMedia(publisher.stream);
+      console.log(mediaStream.getVideoTracks());
+      if (mobileCamChange) {
+        const myTrack = mediaStream.getVideoTracks()[0];
+        publisher.replaceTrack(myTrack);
+        setMobileCamChange(false);
+      } else {
+        const myTrack = mediaStream.getVideoTracks()[1];
+        publisher.replaceTrack(myTrack);
+        setMobileCamChange(true);
+      }
+    }
+  };
+
   const joinSession = async () => {
     const userSession = await getSession();
     getOpenViduSessionToken(sessionId).then((token: any) => {
@@ -76,16 +113,20 @@ function Publisher(props: Props) {
           userId: `${userSession?.nickname}`,
         })
         .then(async () => {
-          var devices = await newOV.getDevices();
-          var videoDevices = devices.filter(
+          const devices = await newOV.getDevices();
+          const videoDevices = devices.filter(
             (device) => device.kind === 'videoinput'
           );
-          var video = document.getElementById('Streaming') as HTMLVideoElement;
+          const mic = devices.filter((device) => device.kind === 'audioinput');
+          const video = document.getElementById(
+            'Streaming'
+          ) as HTMLVideoElement;
           const publich = newOV.initPublisher(undefined, {
             insertMode: 'APPEND',
             resolution: '880x495',
             frameRate: 10000000,
             videoSource: videoDevices[0].deviceId,
+            audioSource: mic[0].deviceId,
           });
 
           session.publish(publich);
@@ -106,11 +147,6 @@ function Publisher(props: Props) {
       session.disconnect();
     };
   }, []);
-
-  React.useEffect(() => {
-    var video = document.getElementById('Streaming') as HTMLVideoElement;
-    video.volume = volume / 100;
-  }, [volume]);
 
   if (!sessionId) {
     return <></>;
@@ -172,26 +208,18 @@ function Publisher(props: Props) {
             gap: '10px',
           }}
         >
-          {!isMobile && (
-            <div
-              style={{
-                marginTop: '15px',
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
-              <VolumeIcon />
-              <div>
-                <input
-                  type="range"
-                  min={0}
-                  max={100}
-                  value={volume}
-                  onChange={volumeChangeHandler}
-                />
-              </div>
-            </div>
-          )}
+          <div
+            style={{
+              marginTop: '15px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px',
+              cursor: 'pointer',
+            }}
+            onClick={micOnOffHandler}
+          >
+            {isMic ? <MicIcon /> : <DisMicIcon />}
+          </div>
           <div
             style={{
               display: 'flex',
@@ -200,17 +228,21 @@ function Publisher(props: Props) {
               marginLeft: 'auto',
             }}
           >
+            {isMobile && (
+              <Button variant="Primary-Line" onClick={mobileCamChangeHandler}>
+                <CameraChangeIcon />
+              </Button>
+            )}
             <Button variant="Primary-Line" onClick={cameraOnOffHandler}>
-              카메라 {isCamera ? '끄기' : '켜기'}
-              <CameraCloseIcon />
+              {!isMobile && `카메라 ${isCamera ? '끄기' : '켜기'}`}
+              {isCamera ? <CameraCloseIcon /> : <CameraOnIcon />}
             </Button>
             <Button
               variant="Primary"
-              type="button"
               disabled={deleteBroadCastRoomMutation.isLoading}
               onClick={deleteBroadCastHandler}
             >
-              방송 종료하기
+              {isMobile ? '종료' : '방송 종료하기'}
             </Button>
           </div>
         </div>

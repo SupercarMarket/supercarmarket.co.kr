@@ -19,7 +19,7 @@ const Container = styled.div`
   min-height: calc(100vh - 17.5rem);
   padding-bottom: 85px;
   ${applyMediaQuery('mobile')} {
-    padding-bottom: 0;
+    padding-bottom: 10px;
     & > .navbar {
       display: none !important;
     }

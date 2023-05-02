@@ -36,17 +36,17 @@ const Index: NextPageWithLayout = () => {
   const checkUserAuth = async () => {
     let isMakeRoom = false;
 
-    await checkIsMakeRoom()
-      .then((response) => {
-        isMakeRoom = true;
-      })
-      .catch((error) => {
-        alert(error);
-      });
+    // await checkIsMakeRoom()
+    //   .then((response) => {
+    //     isMakeRoom = true;
+    //   })
+    //   .catch((error) => {
+    //     alert(error);
+    //   });
 
-    if (!isMakeRoom) {
-      return;
-    }
+    // if (!isMakeRoom) {
+    //   return;
+    // }
     router.push('/live/Create');
   };
 

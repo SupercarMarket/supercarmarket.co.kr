@@ -129,10 +129,6 @@ function ChatInfo(props: Props) {
   };
 
   React.useEffect(() => {
-    joinChat();
-  }, []);
-
-  React.useEffect(() => {
     if (stomp) {
       textAreaRef.current?.addEventListener('keypress', (event) => {
         if (event.key === 'Enter' && !event.shiftKey) {
@@ -140,6 +136,8 @@ function ChatInfo(props: Props) {
           sendChat();
         }
       });
+    } else {
+      joinChat();
     }
     return () => {
       exitChat();
@@ -152,6 +150,8 @@ function ChatInfo(props: Props) {
         margin-left: 16px;
         width: 304px;
         ${applyMediaQuery('mobile')} {
+          margin: auto;
+          width: 100%;
         }
       `}
     >
@@ -160,7 +160,7 @@ function ChatInfo(props: Props) {
           height: 500px;
           ${applyMediaQuery('mobile')} {
             margin-top: 16px;
-            height: 250px;
+            height: 230px;
             margin-bottom: 16px;
           }
         `}
