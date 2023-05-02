@@ -9,6 +9,7 @@ import {
 } from '@supercarmarket/ui';
 import SubscriberIcon from 'public/images/live/icons/SubscriberIcon.svg';
 import VolumeIcon from 'public/images/live/icons/VolumeIcon.svg';
+import DisVolumeIcon from 'public/images/live/icons/DisVolumeIcon.svg';
 import { getOpenViduSessionToken } from 'http/server/live';
 import { getSession } from 'next-auth/react';
 import { useMedia } from '@supercarmarket/hooks';
@@ -38,6 +39,10 @@ function Subscribers(props: Props) {
     setVolume(Number(event.currentTarget.value));
   };
 
+  const volumeIconClickHandler = () => {
+    volume > 0 ? setVolume(0) : setVolume(50);
+  };
+
   const deleteBroadCastHandler = async () => {
     if (subscribe) {
       await session.unsubscribe(subscribe);
@@ -56,6 +61,11 @@ function Subscribers(props: Props) {
         setSubscribe(newSub);
         event.stream.streamManager.addVideoElement(video);
         video.style.width = '100%';
+      });
+
+      session.on('streamDestroyed', async (event) => {
+        alert('방송이 종료되었습니다.');
+        router.replace('/live');
       });
 
       session.connect(token, {
@@ -140,9 +150,15 @@ function Subscribers(props: Props) {
                 marginTop: '15px',
                 display: 'flex',
                 alignItems: 'center',
+                gap: '10px',
               }}
             >
-              <VolumeIcon />
+              <div
+                onClick={volumeIconClickHandler}
+                style={{ cursor: 'pointer' }}
+              >
+                {volume > 0 ? <VolumeIcon /> : <DisVolumeIcon />}
+              </div>
               <div>
                 <input
                   type="range"
