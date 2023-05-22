@@ -142,16 +142,20 @@ function Publisher(props: Props) {
           userId: `${userSession?.nickname}`,
         })
         .then(async () => {
-          const devices = await newOV.getUserMedia({
-            audioSource: false,
-            videoSource: undefined,
-            resolution: '1280x720',
-            frameRate: 60,
-          });
-          const videoDevices = devices.getVideoTracks()[0];
-          setCurrentVideo(videoDevices.id);
+          // const devices = await newOV.getUserMedia({
+          //   audioSource: false,
+          //   videoSource: undefined,
+          //   resolution: '1280x720',
+          //   frameRate: 60,
+          // });
+          const devices = await newOV.getDevices();
+          const videoDevices = devices.filter(
+            (device) => device.kind === 'videoinput'
+          );
+          // const videoDevices = devices.getVideoTracks()[0];
+          // setCurrentVideo(videoDevices.id);
 
-          const mic = devices.getAudioTracks()[0];
+          // const mic = devices.getAudioTracks()[0];
           const video = document.getElementById(
             'Streaming'
           ) as HTMLVideoElement;
@@ -159,8 +163,10 @@ function Publisher(props: Props) {
             insertMode: 'APPEND',
             resolution: '880x495',
             frameRate: 60,
-            videoSource: videoDevices,
-            audioSource: mic,
+            videoSource: isMobile
+              ? videoDevices[0].deviceId
+              : videoDevices[1].deviceId,
+            audioSource: undefined,
           });
 
           session.publish(publich);
