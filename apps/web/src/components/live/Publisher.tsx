@@ -42,6 +42,7 @@ function Publisher(props: Props) {
   const [session, setSession] = React.useState<Session>(newOV.initSession());
   const [publisher, setPublisher] = React.useState<Publishers>();
   const [mobileCamChange, setMobileCamChange] = React.useState<boolean>(false);
+  const [currentVideo, setCurrentVideo] = React.useState<string>();
 
   const { isMobile } = useMedia({ deviceQuery });
 
@@ -92,25 +93,39 @@ function Publisher(props: Props) {
       const videoDevices = devices.filter(
         (device) => device.kind === 'videoinput'
       );
-      const mediaStream = await newOV.getUserMedia({
-        audioSource: false,
-        videoSource: videoDevices[1].deviceId,
-        resolution: '1280x720',
-        frameRate: 60,
-      });
-      console.log(101);
-      mediaStream.getVideoTracks().map((d) => console.log(d.label));
+      if (videoDevices && videoDevices.length > 1) {
+        const newVideoDevice = videoDevices.filter(
+          (device) => device.deviceId !== currentVideo
+        );
+        if (newVideoDevice.length > 0) {
+          var newPublisher = await newOV.initPublisher(undefined, {
+            videoSource: newVideoDevice[0].deviceId,
+            publishAudio: true,
+            publishVideo: true,
+            mirror: true,
+          });
+          // const mediaStream = await newOV.getUserMedia({
+          //   audioSource: false,
+          //   videoSource: videoDevices[1].deviceId,
+          //   resolution: '1280x720',
+          //   frameRate: 60,
+          // });
+          console.log(101);
+          // mediaStream.getVideoTracks().map((d) => console.log(d.label));
+          await session.unpublish(publisher);
+          await session.publish(newPublisher);
 
-      if (mobileCamChange) {
-        const myTrack = mediaStream.getVideoTracks()[0];
-        publisher.replaceTrack(myTrack);
-        setMobileCamChange(false);
-        console.log(true);
-      } else {
-        const myTrack = mediaStream.getVideoTracks()[1];
-        publisher.replaceTrack(myTrack);
-        setMobileCamChange(true);
-        console.log(false);
+          // if (mobileCamChange) {
+          //   const myTrack = mediaStream.getVideoTracks()[0];
+          //   publisher.replaceTrack(myTrack);
+          setMobileCamChange(false);
+          // console.log(true);
+          // } else {
+          //   const myTrack = mediaStream.getVideoTracks()[1];
+          //   publisher.replaceTrack(myTrack);
+          //   setMobileCamChange(true);
+          //   console.log(false);
+        }
       }
     }
   };
@@ -130,6 +145,7 @@ function Publisher(props: Props) {
             frameRate: 60,
           });
           const videoDevices = devices.getVideoTracks()[0];
+          setCurrentVideo(videoDevices.id);
 
           const mic = devices.getAudioTracks()[0];
           const video = document.getElementById(
