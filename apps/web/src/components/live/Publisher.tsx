@@ -106,7 +106,7 @@ function Publisher(props: Props) {
             audio: undefined,
             video: isMobile
               ? { facingMode: { exact: 'environment' } }
-              : { width: { max: 880 }, height: { max: 495 } },
+              : { width: 880, height: 495 },
           };
           const devices = await navigator.mediaDevices.getUserMedia(
             constraints
