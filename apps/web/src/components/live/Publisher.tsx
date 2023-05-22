@@ -159,12 +159,20 @@ function Publisher(props: Props) {
           const video = document.getElementById(
             'Streaming'
           ) as HTMLVideoElement;
+          const constraints = {
+            audio: undefined,
+            video: { facingMode: { exact: 'environment' } },
+          };
+          const stream = await navigator.mediaDevices.getUserMedia(constraints);
+          const videoa = document.getElementById('video') as HTMLVideoElement;
           videoDevices.forEach((d) => console.log(d.deviceId));
           const publich = newOV.initPublisher(undefined, {
             insertMode: 'APPEND',
             resolution: '880x495',
             frameRate: 60,
-            videoSource: videoDevices[0].deviceId,
+            videoSource: isMobile
+              ? stream.getVideoTracks()[0]
+              : videoDevices[0].deviceId,
             audioSource: undefined,
           });
 
