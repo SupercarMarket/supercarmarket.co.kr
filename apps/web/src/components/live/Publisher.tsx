@@ -88,11 +88,17 @@ function Publisher(props: Props) {
   const mobileCamChangeHandler = async () => {
     if (session && publisher) {
       const devices = await newOV.getDevices();
+
       const videoDevices = devices.filter(
         (device) => device.kind === 'videoinput'
       );
-      const mediaStream = await newOV.getUserMedia(publisher.stream);
-      console.log(mediaStream.getVideoTracks());
+      videoDevices.map((d) => console.log(d.label));
+      const mediaStream = await newOV.getUserMedia({
+        audioSource: false,
+        videoSource: undefined,
+        resolution: '1280x720',
+        frameRate: 60,
+      });
       if (mobileCamChange) {
         const myTrack = mediaStream.getVideoTracks()[0];
         publisher.replaceTrack(myTrack);
@@ -113,20 +119,24 @@ function Publisher(props: Props) {
           userId: `${userSession?.nickname}`,
         })
         .then(async () => {
-          const devices = await newOV.getDevices();
-          const videoDevices = devices.filter(
-            (device) => device.kind === 'videoinput'
-          );
-          const mic = devices.filter((device) => device.kind === 'audioinput');
+          const devices = await newOV.getUserMedia({
+            audioSource: false,
+            videoSource: undefined,
+            resolution: '1280x720',
+            frameRate: 60,
+          });
+          const videoDevices = devices.getVideoTracks()[0];
+
+          const mic = devices.getAudioTracks()[0];
           const video = document.getElementById(
             'Streaming'
           ) as HTMLVideoElement;
           const publich = newOV.initPublisher(undefined, {
             insertMode: 'APPEND',
             resolution: '880x495',
-            frameRate: 10000000,
-            videoSource: videoDevices[0].deviceId,
-            audioSource: mic[0].deviceId,
+            frameRate: 60,
+            videoSource: videoDevices,
+            audioSource: mic,
           });
 
           session.publish(publich);
