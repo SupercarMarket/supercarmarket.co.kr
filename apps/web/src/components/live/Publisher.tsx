@@ -92,13 +92,14 @@ function Publisher(props: Props) {
       const videoDevices = devices.filter(
         (device) => device.kind === 'videoinput'
       );
-      videoDevices.map((d) => console.log(d.label));
       const mediaStream = await newOV.getUserMedia({
         audioSource: false,
         videoSource: undefined,
         resolution: '1280x720',
         frameRate: 60,
       });
+      console.log(101);
+      mediaStream.getVideoTracks().map((d) => console.log(d.label));
       if (mobileCamChange) {
         const myTrack = mediaStream.getVideoTracks()[0];
         publisher.replaceTrack(myTrack);
