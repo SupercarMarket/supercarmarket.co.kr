@@ -98,11 +98,14 @@ function Publisher(props: Props) {
           (device) => device.deviceId !== currentVideo
         );
         if (newVideoDevice.length > 0) {
-          var newPublisher = await newOV.initPublisher(undefined, {
+          const newPublisher = await newOV.initPublisher(undefined, {
+            insertMode: 'APPEND',
+            resolution: '880x495',
+            frameRate: 60,
             videoSource: newVideoDevice[0].deviceId,
+            audioSource: undefined,
             publishAudio: true,
             publishVideo: true,
-            mirror: true,
           });
           // const mediaStream = await newOV.getUserMedia({
           //   audioSource: false,
