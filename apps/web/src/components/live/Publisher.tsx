@@ -104,14 +104,11 @@ function Publisher(props: Props) {
         .then(async () => {
           const constraints = {
             audio: undefined,
-            video: isMobile
-              ? { facingMode: { exact: 'environment' } }
-              : undefined,
+            video: isMobile ? { facingMode: { exact: 'environment' } } : true,
           };
           const devices = await navigator.mediaDevices.getUserMedia(
             constraints
           );
-          const videoDevices = devices;
           const video = document.getElementById(
             'Streaming'
           ) as HTMLVideoElement;
