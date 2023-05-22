@@ -154,6 +154,7 @@ function Publisher(props: Props) {
       <Wrapper.Item
         css={css`
           width: 880px;
+
           ${applyMediaQuery('mobile')} {
             grid-template-columns: 1fr 1fr;
             column-gap: 8px;
@@ -166,6 +167,7 @@ function Publisher(props: Props) {
           css={css`
             background-color: #000000;
             height: 495px;
+
             ${applyMediaQuery('mobile')} {
               grid-template-columns: 1fr 1fr;
               column-gap: 8px;
