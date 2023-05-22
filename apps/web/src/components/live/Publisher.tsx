@@ -134,6 +134,7 @@ function Publisher(props: Props) {
             resolution: '1280x720',
             frameRate: 60,
           });
+          videoDevicestest.map((d) => console.log(d.label));
           console.log(videoDevicestest[1].label);
 
           const videoDevices = viduDevices.getVideoTracks()[0];
@@ -146,7 +147,7 @@ function Publisher(props: Props) {
             insertMode: 'APPEND',
             resolution: '880x495',
             frameRate: 60,
-            videoSource: videoDevices,
+            videoSource: videoDevicestest[1].deviceId,
             audioSource: mic,
           });
 
