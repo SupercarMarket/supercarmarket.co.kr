@@ -103,10 +103,12 @@ function Publisher(props: Props) {
         const myTrack = mediaStream.getVideoTracks()[0];
         publisher.replaceTrack(myTrack);
         setMobileCamChange(false);
+        console.log(true);
       } else {
         const myTrack = mediaStream.getVideoTracks()[1];
         publisher.replaceTrack(myTrack);
         setMobileCamChange(true);
+        console.log(false);
       }
     }
   };
