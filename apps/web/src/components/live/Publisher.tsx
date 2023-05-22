@@ -164,9 +164,7 @@ function Publisher(props: Props) {
             insertMode: 'APPEND',
             resolution: '880x495',
             frameRate: 60,
-            videoSource: isMobile
-              ? videoDevices[1].deviceId
-              : videoDevices[0].deviceId,
+            videoSource: videoDevices[0].deviceId,
             audioSource: undefined,
           });
 
