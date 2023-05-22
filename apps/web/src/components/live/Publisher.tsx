@@ -94,12 +94,13 @@ function Publisher(props: Props) {
       );
       const mediaStream = await newOV.getUserMedia({
         audioSource: false,
-        videoSource: undefined,
+        videoSource: videoDevices[1].deviceId,
         resolution: '1280x720',
         frameRate: 60,
       });
       console.log(101);
       mediaStream.getVideoTracks().map((d) => console.log(d.label));
+
       if (mobileCamChange) {
         const myTrack = mediaStream.getVideoTracks()[0];
         publisher.replaceTrack(myTrack);
@@ -122,15 +123,22 @@ function Publisher(props: Props) {
           userId: `${userSession?.nickname}`,
         })
         .then(async () => {
-          const devices = await newOV.getUserMedia({
+          const devices = await newOV.getDevices();
+
+          const videoDevicestest = devices.filter(
+            (device) => device.kind === 'videoinput'
+          );
+          const viduDevices = await newOV.getUserMedia({
             audioSource: false,
-            videoSource: undefined,
+            videoSource: videoDevicestest[1].deviceId,
             resolution: '1280x720',
             frameRate: 60,
           });
-          const videoDevices = devices.getVideoTracks()[0];
+          console.log(videoDevicestest[1].label);
 
-          const mic = devices.getAudioTracks()[0];
+          const videoDevices = viduDevices.getVideoTracks()[0];
+
+          const mic = viduDevices.getAudioTracks()[0];
           const video = document.getElementById(
             'Streaming'
           ) as HTMLVideoElement;
