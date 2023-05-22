@@ -42,7 +42,6 @@ function Publisher(props: Props) {
   const [session, setSession] = React.useState<Session>(newOV.initSession());
   const [publisher, setPublisher] = React.useState<Publishers>();
   const [mobileCamChange, setMobileCamChange] = React.useState<boolean>(false);
-  const [currentVideo, setCurrentVideo] = React.useState<string>();
 
   const { isMobile } = useMedia({ deviceQuery });
 
@@ -89,47 +88,19 @@ function Publisher(props: Props) {
   const mobileCamChangeHandler = async () => {
     if (session && publisher) {
       const devices = await newOV.getDevices();
-
       const videoDevices = devices.filter(
         (device) => device.kind === 'videoinput'
       );
-      if (videoDevices && videoDevices.length > 1) {
-        const newVideoDevice = videoDevices.filter(
-          (device) => device.deviceId !== currentVideo
-        );
-        if (newVideoDevice.length > 0) {
-          const newPublisher = await newOV.initPublisher(undefined, {
-            insertMode: 'APPEND',
-            resolution: '880x495',
-            frameRate: 60,
-            videoSource: newVideoDevice[0].deviceId,
-            audioSource: undefined,
-            publishAudio: true,
-            publishVideo: true,
-          });
-          // const mediaStream = await newOV.getUserMedia({
-          //   audioSource: false,
-          //   videoSource: videoDevices[1].deviceId,
-          //   resolution: '1280x720',
-          //   frameRate: 60,
-          // });
-          console.log(101);
-          // mediaStream.getVideoTracks().map((d) => console.log(d.label));
-          await session.unpublish(publisher).then(() => {
-            setPublisher(newPublisher);
-            session.publish(newPublisher);
-          });
-          // if (mobileCamChange) {
-          //   const myTrack = mediaStream.getVideoTracks()[0];
-          //   publisher.replaceTrack(myTrack);
-          setMobileCamChange(false);
-          // console.log(true);
-          // } else {
-          //   const myTrack = mediaStream.getVideoTracks()[1];
-          //   publisher.replaceTrack(myTrack);
-          //   setMobileCamChange(true);
-          //   console.log(false);
-        }
+      const mediaStream = await newOV.getUserMedia(publisher.stream);
+      console.log(mediaStream.getVideoTracks());
+      if (mobileCamChange) {
+        const myTrack = mediaStream.getVideoTracks()[0];
+        publisher.replaceTrack(myTrack);
+        setMobileCamChange(false);
+      } else {
+        const myTrack = mediaStream.getVideoTracks()[1];
+        publisher.replaceTrack(myTrack);
+        setMobileCamChange(true);
       }
     }
   };
@@ -142,38 +113,20 @@ function Publisher(props: Props) {
           userId: `${userSession?.nickname}`,
         })
         .then(async () => {
-          // const devices = await newOV.getUserMedia({
-          //   audioSource: false,
-          //   videoSource: undefined,
-          //   resolution: '1280x720',
-          //   frameRate: 60,
-          // });
           const devices = await newOV.getDevices();
           const videoDevices = devices.filter(
             (device) => device.kind === 'videoinput'
           );
-          // const videoDevices = devices.getVideoTracks()[0];
-          // setCurrentVideo(videoDevices.id);
-
-          // const mic = devices.getAudioTracks()[0];
+          const mic = devices.filter((device) => device.kind === 'audioinput');
           const video = document.getElementById(
             'Streaming'
           ) as HTMLVideoElement;
-          const constraints = {
-            audio: undefined,
-            video: { facingMode: { exact: 'environment' } },
-          };
-          const stream = await navigator.mediaDevices.getUserMedia(constraints);
-          const videoa = document.getElementById('video') as HTMLVideoElement;
-          videoDevices.forEach((d) => console.log(d.deviceId));
           const publich = newOV.initPublisher(undefined, {
             insertMode: 'APPEND',
             resolution: '880x495',
-            frameRate: 60,
-            videoSource: isMobile
-              ? stream.getVideoTracks()[0]
-              : videoDevices[0].deviceId,
-            audioSource: undefined,
+            frameRate: 10000000,
+            videoSource: videoDevices[0].deviceId,
+            audioSource: mic[0].deviceId,
           });
 
           session.publish(publich);
