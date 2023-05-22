@@ -94,7 +94,7 @@ function Publisher(props: Props) {
       );
       const mediaStream = await newOV.getUserMedia({
         audioSource: false,
-        videoSource: true,
+        videoSource: videoDevices[1].deviceId,
         resolution: '1280x720',
         frameRate: 60,
       });
@@ -123,22 +123,15 @@ function Publisher(props: Props) {
           userId: `${userSession?.nickname}`,
         })
         .then(async () => {
-          // const devices = await newOV.getUserMedia({
-          //   audioSource: false,
-          //   videoSource: undefined,
-          //   resolution: '1280x720',
-          //   frameRate: 60,
-          // });
-          const devices = await newOV.getDevices();
-          const videoDevicest = devices.filter(
-            (device) => device.kind === 'videoinput'
-          );
-          const audios = devices.filter(
-            (device) => device.kind === 'audioinput'
-          );
-          // const videoDevices = devices.getVideoTracks()[0];
+          const devices = await newOV.getUserMedia({
+            audioSource: false,
+            videoSource: undefined,
+            resolution: '1280x720',
+            frameRate: 60,
+          });
+          const videoDevices = devices.getVideoTracks()[0];
 
-          // const mic = devices.getAudioTracks()[0];
+          const mic = devices.getAudioTracks()[0];
           const video = document.getElementById(
             'Streaming'
           ) as HTMLVideoElement;
@@ -146,8 +139,8 @@ function Publisher(props: Props) {
             insertMode: 'APPEND',
             resolution: '880x495',
             frameRate: 60,
-            videoSource: videoDevicest[0].deviceId,
-            audioSource: audios[0].deviceId,
+            videoSource: videoDevices,
+            audioSource: mic,
           });
 
           session.publish(publich);
