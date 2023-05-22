@@ -117,7 +117,7 @@ function Publisher(props: Props) {
           const publich = newOV.initPublisher(undefined, {
             insertMode: 'APPEND',
             resolution: '880x495',
-            frameRate: 10000000,
+            frameRate: 70,
             videoSource: devices.getVideoTracks()[0],
             audioSource: undefined,
           });
