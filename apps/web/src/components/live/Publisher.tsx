@@ -115,9 +115,10 @@ function Publisher(props: Props) {
           // });
           console.log(101);
           // mediaStream.getVideoTracks().map((d) => console.log(d.label));
-          await session.unpublish(publisher);
-          await session.publish(newPublisher);
-
+          await session.unpublish(publisher).then(() => {
+            setPublisher(newPublisher);
+            session.publish(newPublisher);
+          });
           // if (mobileCamChange) {
           //   const myTrack = mediaStream.getVideoTracks()[0];
           //   publisher.replaceTrack(myTrack);
