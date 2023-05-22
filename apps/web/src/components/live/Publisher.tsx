@@ -159,7 +159,7 @@ function Publisher(props: Props) {
           const video = document.getElementById(
             'Streaming'
           ) as HTMLVideoElement;
-          videoDevices.map((d) => console.log(d.deviceId));
+          videoDevices.forEach((d) => console.log(d.deviceId));
           const publich = newOV.initPublisher(undefined, {
             insertMode: 'APPEND',
             resolution: '880x495',
