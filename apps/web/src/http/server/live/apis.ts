@@ -1,4 +1,4 @@
-import { post } from '@supercarmarket/lib';
+import { get, post } from '@supercarmarket/lib';
 import { authRequest } from 'http/core';
 
 export const getBroadCast = async (
@@ -10,9 +10,8 @@ export const getBroadCast = async (
     pageSize: 16,
   }
 ) => {
-  return authRequest('/live', {
-    method: 'GET',
-    params: query,
+  return get('/server/supercar/v1/live', {
+    query,
   }).then((result) => {
     return result as unknown as Common.PaginationResponse<Live.LiveDto[]>;
   });
