@@ -115,7 +115,7 @@ const MagazineBanner = ({
                 lineHeight="150%"
                 className={clsx('mb-contents-heading')}
               >
-                {initialData.title}
+                {truncateOnWord(initialData.title, 50)}
               </Typography>
               <Typography
                 as="p"
@@ -127,7 +127,7 @@ const MagazineBanner = ({
                   [`mb-button`]: button,
                 })}
               >
-                {truncateOnWord(initialData.contents, 100)}
+                {truncateOnWord(initialData.contents, 80)}
               </Typography>
               {button && (
                 <Link href={`/magazine/${initialData.id}`}>
