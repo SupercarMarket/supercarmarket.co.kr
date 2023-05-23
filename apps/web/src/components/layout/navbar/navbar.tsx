@@ -33,7 +33,7 @@ const NavLink = memo(function NavLink({
             fontSize="header-16"
             fontWeight="bold"
             lineHeight="120%"
-            color="black"
+            color={href === 'live' ? 'system-1' : 'black'}
           >
             {title}
           </Typography>

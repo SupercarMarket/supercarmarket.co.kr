@@ -5,12 +5,12 @@ export const truncate = (text: string, maxLength: number, ellipsis = true) => {
 
 export const truncateOnWord = (
   text: string,
-  maxLength: number,
+  maxLength: number = 148,
   ellipsis = true
 ) => {
   if (text.length <= maxLength) return text;
 
-  let truncatedText = text.substring(0, 148);
+  let truncatedText = text.substring(0, maxLength);
 
   truncatedText = truncatedText.substring(
     0,
