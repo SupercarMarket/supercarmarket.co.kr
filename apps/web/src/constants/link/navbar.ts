@@ -71,4 +71,8 @@ export const links = [
       },
     ],
   },
+  {
+    title: '라이브',
+    href: 'live',
+  },
 ] as Links[];
