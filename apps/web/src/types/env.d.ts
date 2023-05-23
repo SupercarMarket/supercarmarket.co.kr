@@ -9,5 +9,7 @@ namespace NodeJS {
     NEXT_PUBLIC_KAKAO_ID: string;
     NEXT_PUBLIC_KAKAO_SECRET: string;
     NEXT_PUBLIC_GOOGLE_ANALYTICS: string;
+    NEXT_PUBLIC_OPENVIDU_API_URL: string;
+    NEXT_PUBLIC_OPENVIDU_SECRET: string;
   }
 }
