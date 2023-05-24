@@ -25,6 +25,7 @@ import { QUERY_KEYS } from 'http/server/live/keys';
 import { getSession } from 'next-auth/react';
 import { css } from 'styled-components';
 import { useMedia } from '@supercarmarket/hooks';
+import Loader from './modal/Loader';
 
 interface Props {
   sessionId: string;
@@ -42,6 +43,7 @@ function Publisher(props: Props) {
   const [session, setSession] = React.useState<Session>(newOV.initSession());
   const [publisher, setPublisher] = React.useState<Publishers>();
   const [mobileCamChange, setMobileCamChange] = React.useState<boolean>(false);
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
   const { isMobile } = useMedia({ deviceQuery });
 
@@ -106,6 +108,7 @@ function Publisher(props: Props) {
   };
 
   const joinSession = async () => {
+    setIsLoading(true);
     const userSession = await getSession();
     getOpenViduSessionToken(sessionId).then((token: any) => {
       session
@@ -117,7 +120,8 @@ function Publisher(props: Props) {
           const videoDevices = devices.filter(
             (device) => device.kind === 'videoinput'
           );
-          const mic = devices.filter((device) => device.kind === 'audioinput');
+          console.log(videoDevices);
+          // const mic = devices.filter((device) => device.kind === 'audioinput');
           const video = document.getElementById(
             'Streaming'
           ) as HTMLVideoElement;
@@ -126,7 +130,7 @@ function Publisher(props: Props) {
             resolution: '880x495',
             frameRate: 10000000,
             videoSource: videoDevices[0].deviceId,
-            audioSource: mic[0].deviceId,
+            // audioSource: mic[0].deviceId,
           });
 
           session.publish(publich);
@@ -135,6 +139,8 @@ function Publisher(props: Props) {
           publich.stream.streamManager.addVideoElement(video);
           video.style.transform = 'rotate(0)';
           video.style.width = '100%';
+          video.controls = true;
+          setIsLoading(false);
         });
     });
   };
@@ -247,6 +253,7 @@ function Publisher(props: Props) {
           </div>
         </div>
       </div>
+      <Loader isOpen={isLoading} />
     </Wrapper.Item>
   );
 }
