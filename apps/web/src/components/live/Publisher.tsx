@@ -1,16 +1,11 @@
 import {
-  Button,
-  Wrapper,
   applyMediaQuery,
+  Button,
   deviceQuery,
+  Wrapper,
 } from '@supercarmarket/ui';
 import { useRouter } from 'next/router';
-import {
-  Device,
-  OpenVidu,
-  Publisher as Publishers,
-  Session,
-} from 'openvidu-browser';
+import { OpenVidu, Publisher as Publishers, Session } from 'openvidu-browser';
 import * as React from 'react';
 import SubscriberIcon from 'public/images/live/icons/SubscriberIcon.svg';
 import MicIcon from 'public/images/live/icons/MicIcon.svg';
@@ -42,8 +37,8 @@ function Publisher(props: Props) {
   const [isMic, setIsMic] = React.useState<boolean>(true);
   const [session, setSession] = React.useState<Session>(newOV.initSession());
   const [publisher, setPublisher] = React.useState<Publishers>();
-  const [mobileCamChange, setMobileCamChange] = React.useState<boolean>(false);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const [mobileCamDevice, setMobileCamDevice] = React.useState<string>();
 
   const { isMobile } = useMedia({ deviceQuery });
 
@@ -88,22 +83,16 @@ function Publisher(props: Props) {
   };
 
   const mobileCamChangeHandler = async () => {
+    const face = mobileCamDevice === 'environment' ? 'user' : 'environment';
     if (session && publisher) {
-      const devices = await newOV.getDevices();
-      const videoDevices = devices.filter(
-        (device) => device.kind === 'videoinput'
-      );
-      const mediaStream = await newOV.getUserMedia(publisher.stream);
-      console.log(mediaStream.getVideoTracks());
-      if (mobileCamChange) {
-        const myTrack = mediaStream.getVideoTracks()[0];
-        publisher.replaceTrack(myTrack);
-        setMobileCamChange(false);
-      } else {
-        const myTrack = mediaStream.getVideoTracks()[1];
-        publisher.replaceTrack(myTrack);
-        setMobileCamChange(true);
-      }
+      const constraints = {
+        audio: true,
+        video: { facingMode: { exact: face } },
+      };
+
+      const devices = await navigator.mediaDevices.getUserMedia(constraints);
+      setMobileCamDevice(face);
+      await publisher.replaceTrack(devices.getVideoTracks()[0]);
     }
   };
 
@@ -116,25 +105,29 @@ function Publisher(props: Props) {
           userId: `${userSession?.nickname}`,
         })
         .then(async () => {
-          const devices = await newOV.getDevices();
-          const videoDevices = devices.filter(
-            (device) => device.kind === 'videoinput'
+          const constraints = {
+            audio: undefined,
+            video: isMobile
+              ? { facingMode: { exact: 'environment' } }
+              : { width: 880, height: 495 },
+          };
+          const devices = await navigator.mediaDevices.getUserMedia(
+            constraints
           );
-          console.log(videoDevices);
-          // const mic = devices.filter((device) => device.kind === 'audioinput');
           const video = document.getElementById(
             'Streaming'
           ) as HTMLVideoElement;
           const publich = newOV.initPublisher(undefined, {
             insertMode: 'APPEND',
             resolution: '880x495',
-            frameRate: 10000000,
-            videoSource: videoDevices[0].deviceId,
-            // audioSource: mic[0].deviceId,
+            frameRate: 70,
+            videoSource: devices.getVideoTracks()[0],
+            audioSource: undefined,
           });
 
           session.publish(publich);
           setPublisher(publich);
+          setMobileCamDevice('environment');
           setIsBroad(true);
           publich.stream.streamManager.addVideoElement(video);
           video.style.transform = 'rotate(0)';
@@ -162,6 +155,7 @@ function Publisher(props: Props) {
       <Wrapper.Item
         css={css`
           width: 880px;
+
           ${applyMediaQuery('mobile')} {
             grid-template-columns: 1fr 1fr;
             column-gap: 8px;
@@ -174,6 +168,7 @@ function Publisher(props: Props) {
           css={css`
             background-color: #000000;
             height: 495px;
+
             ${applyMediaQuery('mobile')} {
               grid-template-columns: 1fr 1fr;
               column-gap: 8px;
