@@ -17,7 +17,6 @@ import { css } from 'styled-components';
 
 import Loader from './modal/Loader';
 
-
 interface Props {
   sessionId: string;
   data: Live.LiveRoomDto;
@@ -34,7 +33,6 @@ function Subscribers(props: Props) {
   const [subscribe, setSubscribe] = React.useState<Subscriber>();
 
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
-
 
   const { isMobile } = useMedia({ deviceQuery });
 
@@ -70,14 +68,12 @@ function Subscribers(props: Props) {
         video.style.width = '100%';
 
         video.controls = true;
-
       });
 
       session.on('streamDestroyed', async (event) => {
         alert('방송이 종료되었습니다.');
         router.replace('/live');
       });
-
 
       session
         .connect(token, {
@@ -86,7 +82,6 @@ function Subscribers(props: Props) {
         .then(() => {
           setIsLoading(false);
         });
-
     });
   };
 
