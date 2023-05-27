@@ -1,11 +1,16 @@
 import {
-  applyMediaQuery,
   Button,
-  deviceQuery,
   Wrapper,
+  applyMediaQuery,
+  deviceQuery,
 } from '@supercarmarket/ui';
 import { useRouter } from 'next/router';
-import { OpenVidu, Publisher as Publishers, Session } from 'openvidu-browser';
+import {
+  Device,
+  OpenVidu,
+  Publisher as Publishers,
+  Session,
+} from 'openvidu-browser';
 import * as React from 'react';
 import SubscriberIcon from 'public/images/live/icons/SubscriberIcon.svg';
 import MicIcon from 'public/images/live/icons/MicIcon.svg';
@@ -22,6 +27,7 @@ import { css } from 'styled-components';
 import { useMedia } from '@supercarmarket/hooks';
 import Loader from './modal/Loader';
 
+
 interface Props {
   sessionId: string;
   data: Live.LiveRoomDto;
@@ -37,8 +43,12 @@ function Publisher(props: Props) {
   const [isMic, setIsMic] = React.useState<boolean>(true);
   const [session, setSession] = React.useState<Session>(newOV.initSession());
   const [publisher, setPublisher] = React.useState<Publishers>();
+
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [mobileCamDevice, setMobileCamDevice] = React.useState<string>();
+
+  const [mobileCamChange, setMobileCamChange] = React.useState<boolean>(false);
+
 
   const { isMobile } = useMedia({ deviceQuery });
 
@@ -83,6 +93,7 @@ function Publisher(props: Props) {
   };
 
   const mobileCamChangeHandler = async () => {
+
     const face = mobileCamDevice === 'environment' ? 'user' : 'environment';
     if (session && publisher) {
       const constraints = {
@@ -93,11 +104,14 @@ function Publisher(props: Props) {
       const devices = await navigator.mediaDevices.getUserMedia(constraints);
       setMobileCamDevice(face);
       await publisher.replaceTrack(devices.getVideoTracks()[0]);
+
     }
   };
 
   const joinSession = async () => {
+
     setIsLoading(true);
+
     const userSession = await getSession();
     getOpenViduSessionToken(sessionId).then((token: any) => {
       session
@@ -105,6 +119,7 @@ function Publisher(props: Props) {
           userId: `${userSession?.nickname}`,
         })
         .then(async () => {
+
           const constraints = {
             audio: undefined,
             video: isMobile
@@ -114,15 +129,18 @@ function Publisher(props: Props) {
           const devices = await navigator.mediaDevices.getUserMedia(
             constraints
           );
+
           const video = document.getElementById(
             'Streaming'
           ) as HTMLVideoElement;
           const publich = newOV.initPublisher(undefined, {
             insertMode: 'APPEND',
             resolution: '880x495',
+
             frameRate: 70,
             videoSource: devices.getVideoTracks()[0],
             audioSource: undefined,
+
           });
 
           session.publish(publich);
@@ -132,8 +150,10 @@ function Publisher(props: Props) {
           publich.stream.streamManager.addVideoElement(video);
           video.style.transform = 'rotate(0)';
           video.style.width = '100%';
+
           video.controls = true;
           setIsLoading(false);
+
         });
     });
   };
@@ -155,7 +175,6 @@ function Publisher(props: Props) {
       <Wrapper.Item
         css={css`
           width: 880px;
-
           ${applyMediaQuery('mobile')} {
             grid-template-columns: 1fr 1fr;
             column-gap: 8px;
@@ -168,7 +187,6 @@ function Publisher(props: Props) {
           css={css`
             background-color: #000000;
             height: 495px;
-
             ${applyMediaQuery('mobile')} {
               grid-template-columns: 1fr 1fr;
               column-gap: 8px;

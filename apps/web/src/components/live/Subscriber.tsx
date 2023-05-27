@@ -14,7 +14,9 @@ import { getOpenViduSessionToken } from 'http/server/live';
 import { getSession } from 'next-auth/react';
 import { useMedia } from '@supercarmarket/hooks';
 import { css } from 'styled-components';
+
 import Loader from './modal/Loader';
+
 
 interface Props {
   sessionId: string;
@@ -30,7 +32,9 @@ function Subscribers(props: Props) {
   const [volume, setVolume] = React.useState<number>(80);
   const [session, setSession] = React.useState<Session>(newOV.initSession());
   const [subscribe, setSubscribe] = React.useState<Subscriber>();
+
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
+
 
   const { isMobile } = useMedia({ deviceQuery });
 
@@ -64,13 +68,16 @@ function Subscribers(props: Props) {
         setSubscribe(newSub);
         event.stream.streamManager.addVideoElement(video);
         video.style.width = '100%';
+
         video.controls = true;
+
       });
 
       session.on('streamDestroyed', async (event) => {
         alert('방송이 종료되었습니다.');
         router.replace('/live');
       });
+
 
       session
         .connect(token, {
@@ -79,6 +86,7 @@ function Subscribers(props: Props) {
         .then(() => {
           setIsLoading(false);
         });
+
     });
   };
 

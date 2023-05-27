@@ -15,9 +15,9 @@
       only for Supercar.
     </span>
     <br />
-    <a href="https://supercar-market.vercel.app/">Slack</a>
+    <a href="https://doyup.shop/">Slack</a>
     ·
-    <a href="https://supercar-market.vercel.app/">Website</a>
+    <a href="https://doyup.shop/">Website</a>
     ·
     <a href="https://github.com/SupercarMarket/supercarmarket.com/issues">Issues</a>
   </p>
@@ -77,7 +77,7 @@ npm run dev
 
 ### Roadmap
 
-See the [roadmap project](https://github.com/calcom/cal.com/milestones) for a list of proposed features (and known issues). You can change the view to see planned tagged releases.
+See the [roadmap project](https://github.com/SupercarMarket/supercarmarket.co.kr/milestones) for a list of proposed features (and known issues). You can change the view to see planned tagged releases.
 
 ### Flow on project
 
