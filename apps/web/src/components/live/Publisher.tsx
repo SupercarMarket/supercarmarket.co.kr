@@ -20,6 +20,7 @@ import { QUERY_KEYS } from 'http/server/live/keys';
 import { getSession } from 'next-auth/react';
 import { css } from 'styled-components';
 import { useMedia } from '@supercarmarket/hooks';
+import Loader from './modal/Loader';
 
 interface Props {
   sessionId: string;
@@ -36,6 +37,7 @@ function Publisher(props: Props) {
   const [isMic, setIsMic] = React.useState<boolean>(true);
   const [session, setSession] = React.useState<Session>(newOV.initSession());
   const [publisher, setPublisher] = React.useState<Publishers>();
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [mobileCamDevice, setMobileCamDevice] = React.useState<string>();
 
   const { isMobile } = useMedia({ deviceQuery });
@@ -95,6 +97,7 @@ function Publisher(props: Props) {
   };
 
   const joinSession = async () => {
+    setIsLoading(true);
     const userSession = await getSession();
     getOpenViduSessionToken(sessionId).then((token: any) => {
       session
@@ -129,6 +132,8 @@ function Publisher(props: Props) {
           publich.stream.streamManager.addVideoElement(video);
           video.style.transform = 'rotate(0)';
           video.style.width = '100%';
+          video.controls = true;
+          setIsLoading(false);
         });
     });
   };
@@ -243,6 +248,7 @@ function Publisher(props: Props) {
           </div>
         </div>
       </div>
+      <Loader isOpen={isLoading} />
     </Wrapper.Item>
   );
 }
