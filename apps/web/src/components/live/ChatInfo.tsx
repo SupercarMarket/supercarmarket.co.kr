@@ -34,7 +34,7 @@ function ChatInfo(props: Props) {
     setUserName(session.nickname);
 
     const client = new Client({
-      brokerURL: `wss://back.doyup.shop/ws`,
+      brokerURL: `wss://back.supercarmarket.co.kr/ws`,
       connectHeaders: {
         ACCESS_TOKEN: `${session.accessToken}`,
       },

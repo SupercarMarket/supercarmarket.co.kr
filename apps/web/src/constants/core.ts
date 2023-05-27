@@ -2,7 +2,7 @@ export const NEXT_PUBLIC_BASE_URL = process.env.NEXT_PUBLIC_URL
   ? `https://${process.env.NEXT_PUBLIC_URL}`
   : '';
 
-export const PRODUCT_URL = 'https://doyup.shop';
+export const PRODUCT_URL = 'https://supercarmarket.co.kr';
 
 export const APP_NAME = 'Supercarmarket.co.kr';
 export const LOGO = '/images/logo/favicon.ico';
