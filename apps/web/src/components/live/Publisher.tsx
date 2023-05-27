@@ -5,12 +5,7 @@ import {
   deviceQuery,
 } from '@supercarmarket/ui';
 import { useRouter } from 'next/router';
-import {
-  Device,
-  OpenVidu,
-  Publisher as Publishers,
-  Session,
-} from 'openvidu-browser';
+import { OpenVidu, Publisher as Publishers, Session } from 'openvidu-browser';
 import * as React from 'react';
 import SubscriberIcon from 'public/images/live/icons/SubscriberIcon.svg';
 import MicIcon from 'public/images/live/icons/MicIcon.svg';
@@ -26,7 +21,6 @@ import { getSession } from 'next-auth/react';
 import { css } from 'styled-components';
 import { useMedia } from '@supercarmarket/hooks';
 import Loader from './modal/Loader';
-
 
 interface Props {
   sessionId: string;
@@ -48,7 +42,6 @@ function Publisher(props: Props) {
   const [mobileCamDevice, setMobileCamDevice] = React.useState<string>();
 
   const [mobileCamChange, setMobileCamChange] = React.useState<boolean>(false);
-
 
   const { isMobile } = useMedia({ deviceQuery });
 
@@ -93,7 +86,6 @@ function Publisher(props: Props) {
   };
 
   const mobileCamChangeHandler = async () => {
-
     const face = mobileCamDevice === 'environment' ? 'user' : 'environment';
     if (session && publisher) {
       const constraints = {
@@ -104,12 +96,10 @@ function Publisher(props: Props) {
       const devices = await navigator.mediaDevices.getUserMedia(constraints);
       setMobileCamDevice(face);
       await publisher.replaceTrack(devices.getVideoTracks()[0]);
-
     }
   };
 
   const joinSession = async () => {
-
     setIsLoading(true);
 
     const userSession = await getSession();
@@ -119,7 +109,6 @@ function Publisher(props: Props) {
           userId: `${userSession?.nickname}`,
         })
         .then(async () => {
-
           const constraints = {
             audio: undefined,
             video: isMobile
@@ -140,7 +129,6 @@ function Publisher(props: Props) {
             frameRate: 70,
             videoSource: devices.getVideoTracks()[0],
             audioSource: undefined,
-
           });
 
           session.publish(publich);
@@ -153,7 +141,6 @@ function Publisher(props: Props) {
 
           video.controls = true;
           setIsLoading(false);
-
         });
     });
   };
