@@ -15,6 +15,8 @@ import { getSession } from 'next-auth/react';
 import { useMedia } from '@supercarmarket/hooks';
 import { css } from 'styled-components';
 
+import Loader from './modal/Loader';
+
 interface Props {
   sessionId: string;
   data: Live.LiveRoomDto;
@@ -29,6 +31,8 @@ function Subscribers(props: Props) {
   const [volume, setVolume] = React.useState<number>(80);
   const [session, setSession] = React.useState<Session>(newOV.initSession());
   const [subscribe, setSubscribe] = React.useState<Subscriber>();
+
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
   const { isMobile } = useMedia({ deviceQuery });
 
@@ -53,14 +57,17 @@ function Subscribers(props: Props) {
   };
 
   const joinSession = async () => {
+    setIsLoading(true);
     const userSession = await getSession();
-    var video = document.getElementById('Streaming') as HTMLVideoElement;
+    const video = document.getElementById('Streaming') as HTMLVideoElement;
     getOpenViduSessionToken(sessionId).then((token: any) => {
       session.on('streamCreated', async (event) => {
         const newSub = session.subscribe(event.stream, undefined);
         setSubscribe(newSub);
         event.stream.streamManager.addVideoElement(video);
         video.style.width = '100%';
+
+        video.controls = true;
       });
 
       session.on('streamDestroyed', async (event) => {
@@ -68,9 +75,13 @@ function Subscribers(props: Props) {
         router.replace('/live');
       });
 
-      session.connect(token, {
-        userId: `${userSession?.nickname}`,
-      });
+      session
+        .connect(token, {
+          userId: `${userSession?.nickname}`,
+        })
+        .then(() => {
+          setIsLoading(false);
+        });
     });
   };
 
