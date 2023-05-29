@@ -89,13 +89,20 @@ function Publisher(props: Props) {
     console.log(mobileCamDevice);
     const face = mobileCamDevice === 'environment' ? 'user' : 'environment';
     if (session && publisher) {
-      const constraints = {
-        audio: true,
-        video: { facingMode: { exact: 'user' } },
-      };
-
+      let constraints;
+      if (face === 'user') {
+        constraints = {
+          audio: true,
+          video: { facingMode: 'user' },
+        };
+      } else {
+        constraints = {
+          audio: true,
+          video: { facingMode: { exact: 'environment' } },
+        };
+      }
       const devices = await navigator.mediaDevices.getUserMedia(constraints);
-      setMobileCamDevice('user');
+      setMobileCamDevice(face);
       await publisher.replaceTrack(devices.getVideoTracks()[0]);
     }
   };
