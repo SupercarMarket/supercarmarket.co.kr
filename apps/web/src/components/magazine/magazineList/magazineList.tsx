@@ -60,9 +60,12 @@ const MagazineList = () => {
               }
             `}
           >
-            {magazine.data.map((m) => (
-              <MagazineCard key={m.id} {...m} />
-            ))}
+            {magazine.data.map((m, idx) => {
+              if (idx === 0) {
+                return null;
+              }
+              return <MagazineCard key={m.id} {...m} />;
+            })}
           </Wrapper>
           <Pagination
             pageSize={magazine.pageSize}
