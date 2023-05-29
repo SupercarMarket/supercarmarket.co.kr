@@ -86,15 +86,24 @@ function Publisher(props: Props) {
   };
 
   const mobileCamChangeHandler = async () => {
+    console.log(1);
+    console.log(mobileCamDevice);
     const face = mobileCamDevice === 'environment' ? 'user' : 'environment';
     if (session && publisher) {
-      const constraints = {
-        audio: true,
-        video: { facingMode: { exact: face } },
-      };
-
-      const devices = await navigator.mediaDevices.getUserMedia(constraints);
-      console.log(devices.getVideoTracks().map((d) => d.id));
+      let devices;
+      if (face === 'environment') {
+        const constraints = {
+          audio: true,
+          video: { facingMode: { exact: 'user' } },
+        };
+        devices = await navigator.mediaDevices.getUserMedia(constraints);
+      } else {
+        const constraints = {
+          audio: true,
+          video: { facingMode: { exact: 'environment' } },
+        };
+        devices = await navigator.mediaDevices.getUserMedia(constraints);
+      }
       setMobileCamDevice(face);
       await publisher.replaceTrack(devices.getVideoTracks()[0]);
     }
@@ -113,7 +122,7 @@ function Publisher(props: Props) {
           const constraints = {
             audio: undefined,
             video: isMobile
-              ? { facingMode: { exact: 'user' } }
+              ? { facingMode: { exact: 'environment' } }
               : { width: 880, height: 495 },
           };
           const devices = await navigator.mediaDevices.getUserMedia(
@@ -134,7 +143,7 @@ function Publisher(props: Props) {
 
           session.publish(publich);
           setPublisher(publich);
-          setMobileCamDevice('user');
+          setMobileCamDevice('environment');
           setIsBroad(true);
           publich.stream.streamManager.addVideoElement(video);
           video.style.transform = 'rotate(0)';
