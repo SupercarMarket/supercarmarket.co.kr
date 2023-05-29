@@ -94,6 +94,7 @@ function Publisher(props: Props) {
       };
 
       const devices = await navigator.mediaDevices.getUserMedia(constraints);
+      console.log(devices.getVideoTracks().map((d) => d.id));
       setMobileCamDevice(face);
       await publisher.replaceTrack(devices.getVideoTracks()[0]);
     }
