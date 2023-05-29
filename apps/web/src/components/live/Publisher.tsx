@@ -88,20 +88,26 @@ function Publisher(props: Props) {
   const mobileCamChangeHandler = async () => {
     console.log(mobileCamDevice);
     const face = mobileCamDevice === 'environment' ? 'user' : 'environment';
+    console.log(2);
     if (session && publisher) {
+      console.log(3);
       let constraints;
       if (face === 'user') {
+        console.log(4);
         constraints = {
           // audio: true,
           video: { facingMode: 'user' },
         };
       } else {
+        console.log(5);
         constraints = {
           // audio: true,
           video: { facingMode: 'environment' },
         };
       }
+      console.log(6);
       const devices = await navigator.mediaDevices.getUserMedia(constraints);
+      console.log(7);
       let userMedia = await newOV.getUserMedia({
         insertMode: 'APPEND',
         resolution: '880x495',
@@ -109,6 +115,7 @@ function Publisher(props: Props) {
         videoSource: devices.getVideoTracks()[0],
         audioSource: undefined,
       });
+      console.log(8);
       // const devices = await navigator.mediaDevices.getUserMedia(constraints);
       console.log(devices.getVideoTracks());
       setMobileCamDevice(face);
