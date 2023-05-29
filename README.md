@@ -4,7 +4,7 @@
    <img src="https://user-images.githubusercontent.com/66871265/222452055-2dab6a81-a856-418d-9508-c06bd52a4edc.png" alt="Logo">
   </a>
 
-  <h3 align="center">Supercarmarket.com</h3>
+  <h3 align="center">Supercarmarket.co.kr</h3>
 
   <p align="center">
     <span>
@@ -15,9 +15,9 @@
       only for Supercar.
     </span>
     <br />
-    <a href="https://doyup.shop/">Slack</a>
+    <a href="https://supercarmarket.co.kr/">Slack</a>
     ·
-    <a href="https://doyup.shop/">Website</a>
+    <a href="https://supercarmarket.co.kr/">Website</a>
     ·
     <a href="https://github.com/SupercarMarket/supercarmarket.com/issues">Issues</a>
   </p>
