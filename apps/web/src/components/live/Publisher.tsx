@@ -104,7 +104,7 @@ function Publisher(props: Props) {
           video: { facingMode: { exact: 'environment' } },
         };
         devices = await navigator.mediaDevices.getUserMedia(constraints);
-        setMobileCamDevice('user');
+        setMobileCamDevice('environment');
       }
       await publisher.replaceTrack(devices.getVideoTracks()[0]);
     }
