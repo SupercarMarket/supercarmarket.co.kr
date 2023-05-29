@@ -92,13 +92,13 @@ function Publisher(props: Props) {
       let constraints;
       if (face === 'user') {
         constraints = {
-          audio: true,
+          // audio: true,
           video: { facingMode: 'user' },
         };
       } else {
         constraints = {
-          audio: true,
-          video: { facingMode: { exact: 'environment' } },
+          // audio: true,
+          video: { facingMode: 'environment' },
         };
       }
       const devices = await navigator.mediaDevices.getUserMedia(constraints);
