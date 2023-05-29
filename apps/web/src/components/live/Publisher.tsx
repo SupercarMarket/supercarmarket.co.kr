@@ -86,26 +86,16 @@ function Publisher(props: Props) {
   };
 
   const mobileCamChangeHandler = async () => {
-    console.log(1);
     console.log(mobileCamDevice);
     const face = mobileCamDevice === 'environment' ? 'user' : 'environment';
     if (session && publisher) {
-      let devices;
-      if (face === 'environment') {
-        const constraints = {
-          audio: true,
-          video: { facingMode: { exact: 'user' } },
-        };
-        devices = await navigator.mediaDevices.getUserMedia(constraints);
-        setMobileCamDevice('user');
-      } else {
-        const constraints = {
-          audio: true,
-          video: { facingMode: { exact: 'environment' } },
-        };
-        devices = await navigator.mediaDevices.getUserMedia(constraints);
-        setMobileCamDevice('environment');
-      }
+      const constraints = {
+        audio: true,
+        video: { facingMode: { exact: 'user' } },
+      };
+
+      const devices = await navigator.mediaDevices.getUserMedia(constraints);
+      setMobileCamDevice('user');
       await publisher.replaceTrack(devices.getVideoTracks()[0]);
     }
   };
