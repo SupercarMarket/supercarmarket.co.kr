@@ -102,9 +102,17 @@ function Publisher(props: Props) {
         };
       }
       const devices = await navigator.mediaDevices.getUserMedia(constraints);
+      let userMedia = await newOV.getUserMedia({
+        insertMode: 'APPEND',
+        resolution: '880x495',
+        frameRate: 70,
+        videoSource: devices.getVideoTracks()[0],
+        audioSource: undefined,
+      });
+      // const devices = await navigator.mediaDevices.getUserMedia(constraints);
       console.log(devices.getVideoTracks());
       setMobileCamDevice(face);
-      await publisher.replaceTrack(devices.getVideoTracks()[0]);
+      await publisher.replaceTrack(userMedia.getVideoTracks()[0]);
     }
   };
 
