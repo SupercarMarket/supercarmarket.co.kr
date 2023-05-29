@@ -102,6 +102,7 @@ function Publisher(props: Props) {
         };
       }
       const devices = await navigator.mediaDevices.getUserMedia(constraints);
+      console.log(devices.getVideoTracks());
       setMobileCamDevice(face);
       await publisher.replaceTrack(devices.getVideoTracks()[0]);
     }
