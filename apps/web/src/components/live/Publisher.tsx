@@ -112,7 +112,7 @@ function Publisher(props: Props) {
           const constraints = {
             audio: undefined,
             video: isMobile
-              ? { facingMode: { exact: 'environment' } }
+              ? { facingMode: { exact: 'user' } }
               : { width: 880, height: 495 },
           };
           const devices = await navigator.mediaDevices.getUserMedia(
@@ -133,7 +133,7 @@ function Publisher(props: Props) {
 
           session.publish(publich);
           setPublisher(publich);
-          setMobileCamDevice('environment');
+          setMobileCamDevice('user');
           setIsBroad(true);
           publich.stream.streamManager.addVideoElement(video);
           video.style.transform = 'rotate(0)';
