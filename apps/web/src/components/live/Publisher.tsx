@@ -1,8 +1,8 @@
 import {
-  Button,
-  Wrapper,
   applyMediaQuery,
+  Button,
   deviceQuery,
+  Wrapper,
 } from '@supercarmarket/ui';
 import { useRouter } from 'next/router';
 import { OpenVidu, Publisher as Publishers, Session } from 'openvidu-browser';
@@ -40,9 +40,7 @@ function Publisher(props: Props) {
 
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [mobileCamDevice, setMobileCamDevice] = React.useState<string>();
-
-  const [mobileCamChange, setMobileCamChange] = React.useState<boolean>(false);
-
+  const [videoTrack, setVideoTrack] = React.useState<MediaStreamTrack>();
   const { isMobile } = useMedia({ deviceQuery });
 
   const queryClient = useQueryClient();
@@ -86,46 +84,30 @@ function Publisher(props: Props) {
   };
 
   const mobileCamChangeHandler = async () => {
-    console.log(mobileCamDevice);
     const face = mobileCamDevice === 'environment' ? 'user' : 'environment';
-    console.log(2);
+    videoTrack?.stop();
     if (session && publisher) {
-      console.log(3);
       let constraints;
       if (face === 'user') {
-        console.log(4);
         constraints = {
-          // audio: true,
-          video: { facingMode: 'user' },
+          audio: undefined,
+          video: { facingMode: { exact: 'user' } },
         };
       } else {
-        console.log(5);
         constraints = {
-          // audio: true,
-          video: { facingMode: 'environment' },
+          audio: undefined,
+          video: { facingMode: { exact: 'environment' } },
         };
       }
-      console.log(6);
       const devices = await navigator.mediaDevices.getUserMedia(constraints);
-      console.log(7);
-      let userMedia = await newOV.getUserMedia({
-        insertMode: 'APPEND',
-        resolution: '880x495',
-        frameRate: 70,
-        videoSource: devices.getVideoTracks()[0],
-        audioSource: undefined,
-      });
-      console.log(8);
-      // const devices = await navigator.mediaDevices.getUserMedia(constraints);
-      console.log(devices.getVideoTracks());
       setMobileCamDevice(face);
-      await publisher.replaceTrack(userMedia.getVideoTracks()[0]);
+      setVideoTrack(devices.getVideoTracks()[0]);
+      await publisher.replaceTrack(devices.getVideoTracks()[0]);
     }
   };
 
   const joinSession = async () => {
     setIsLoading(true);
-
     const userSession = await getSession();
     getOpenViduSessionToken(sessionId).then((token: any) => {
       session
@@ -163,6 +145,7 @@ function Publisher(props: Props) {
           video.style.transform = 'rotate(0)';
           video.style.width = '100%';
 
+          setVideoTrack(devices.getVideoTracks()[0]);
           video.controls = true;
           setIsLoading(false);
         });
