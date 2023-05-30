@@ -157,7 +157,13 @@ function Publisher(props: Props) {
       joinSession();
     }
     return () => {
-      session.disconnect();
+      deleteBroadCastRoomMutation.mutate(data.broadCastSeq, {
+        onSuccess: () => {
+          queryClient.refetchQueries({ queryKey: QUERY_KEYS.live() });
+          session.disconnect();
+          router.replace('/live');
+        },
+      });
     };
   }, []);
 
