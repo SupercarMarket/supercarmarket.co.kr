@@ -6,6 +6,7 @@ declare module Community {
     view: number;
     comments: number;
     created: string;
+    date: string;
   }
 
   interface CommunityDto extends Community.Common {
