@@ -65,9 +65,7 @@ const SearchAll = ({ keyword, data }: SearchAllProps) => {
             style={{
               paddingTop: '34px',
             }}
-          >
-            더보기
-          </RouterButton>
+          />
         )}
       </Wrapper>
       <Title marginTop="80px">슈마매거진</Title>
@@ -107,9 +105,7 @@ const SearchAll = ({ keyword, data }: SearchAllProps) => {
             style={{
               paddingTop: '34px',
             }}
-          >
-            더보기
-          </RouterButton>
+          />
         )}
       </Wrapper>
       <Title marginTop="80px" marginBottom="20px">
@@ -145,9 +141,7 @@ const SearchAll = ({ keyword, data }: SearchAllProps) => {
             style={{
               paddingTop: '34px',
             }}
-          >
-            더보기
-          </RouterButton>
+          />
         )}
       </Wrapper>
       <Title marginTop="80px" marginBottom="20px">
@@ -187,9 +181,7 @@ const SearchAll = ({ keyword, data }: SearchAllProps) => {
             style={{
               paddingTop: '34px',
             }}
-          >
-            더보기
-          </RouterButton>
+          />
         )}
       </Wrapper>
     </Container>
