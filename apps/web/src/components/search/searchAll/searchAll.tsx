@@ -13,6 +13,7 @@ import MarketCard from 'components/market/marketCard';
 import PartnershipCard from 'components/partnership/partnershipCard';
 import { css } from 'styled-components';
 import { SearchNotify } from '..';
+import { partnershipFormatter } from '@supercarmarket/lib';
 
 interface SearchAllProps {
   data: SearchAllType;
@@ -170,7 +171,11 @@ const SearchAll = ({ keyword, data }: SearchAllProps) => {
             `}
           >
             {partnership.map((p) => (
-              <PartnershipCard key={p.brdSeq} {...p} />
+              <PartnershipCard
+                {...p}
+                key={p.brdSeq}
+                category={partnershipFormatter(p.category, { reverse: true })}
+              />
             ))}
           </Wrapper.Item>
         ) : (
