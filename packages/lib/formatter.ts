@@ -15,7 +15,21 @@ export const marketFormatter = (category: string) => {
   return 'all';
 };
 
-export const partnershipFormatter = (category: string) => {
+export const partnershipFormatter = (
+  category: string,
+  options?: {
+    reverse?: boolean;
+  }
+) => {
+  if (options?.reverse) {
+    if (category === 'ALL') return '전체';
+    if (category === 'DEALER_SHOP') return '자동차매장';
+    if (category === 'CAR_CENTER') return '공업사';
+    if (category === 'PAINTING') return '도색';
+    if (category === 'DETAILING') return '디테일링';
+    return '기타';
+  }
+
   if (category === '전체') return 'ALL';
   if (category === '자동차매장') return 'DEALER_SHOP';
   if (category === '공업사') return 'CAR_CENTER';

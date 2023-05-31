@@ -43,7 +43,7 @@ export const useAdvertisement = (
 ) => {
   const { code } = query;
 
-  return useQuery<ServerResponse<ADs.AdDto[]>>({
+  return useQuery<ServerResponse<ADs.AdDto>>({
     queryKey: [...QUERY_KEYS.advertisement(), code],
     queryFn: () => getAdvertisement(query),
     keepPreviousData: true,
