@@ -13,6 +13,7 @@ import MarketCard from 'components/market/marketCard';
 import PartnershipCard from 'components/partnership/partnershipCard';
 import { css } from 'styled-components';
 import { SearchNotify } from '..';
+import { partnershipFormatter } from '@supercarmarket/lib';
 
 interface SearchAllProps {
   data: SearchAllType;
@@ -64,9 +65,7 @@ const SearchAll = ({ keyword, data }: SearchAllProps) => {
             style={{
               paddingTop: '34px',
             }}
-          >
-            더보기
-          </RouterButton>
+          />
         )}
       </Wrapper>
       <Title marginTop="80px">슈마매거진</Title>
@@ -106,9 +105,7 @@ const SearchAll = ({ keyword, data }: SearchAllProps) => {
             style={{
               paddingTop: '34px',
             }}
-          >
-            더보기
-          </RouterButton>
+          />
         )}
       </Wrapper>
       <Title marginTop="80px" marginBottom="20px">
@@ -144,9 +141,7 @@ const SearchAll = ({ keyword, data }: SearchAllProps) => {
             style={{
               paddingTop: '34px',
             }}
-          >
-            더보기
-          </RouterButton>
+          />
         )}
       </Wrapper>
       <Title marginTop="80px" marginBottom="20px">
@@ -170,7 +165,11 @@ const SearchAll = ({ keyword, data }: SearchAllProps) => {
             `}
           >
             {partnership.map((p) => (
-              <PartnershipCard key={p.brdSeq} {...p} />
+              <PartnershipCard
+                {...p}
+                key={p.brdSeq}
+                category={partnershipFormatter(p.category, { reverse: true })}
+              />
             ))}
           </Wrapper.Item>
         ) : (
@@ -182,9 +181,7 @@ const SearchAll = ({ keyword, data }: SearchAllProps) => {
             style={{
               paddingTop: '34px',
             }}
-          >
-            더보기
-          </RouterButton>
+          />
         )}
       </Wrapper>
     </Container>

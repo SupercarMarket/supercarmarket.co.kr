@@ -1,3 +1,4 @@
+import { partnershipFormatter } from '@supercarmarket/lib';
 import { type PaginationResponse } from '@supercarmarket/types/base';
 import { PartnershipDto } from '@supercarmarket/types/partnership';
 import {
@@ -31,7 +32,13 @@ const SearchPartnership = ({
       >
         <Table tab="partnership" hidden={false} />
         {isPartnership ? (
-          data.map((p) => <PartnershipCard key={p.brdSeq} {...p} />)
+          data.map((p) => (
+            <PartnershipCard
+              {...p}
+              key={p.brdSeq}
+              category={partnershipFormatter(p.category, { reverse: true })}
+            />
+          ))
         ) : (
           <Alert severity="info" title="검색 결과가 존재하지 않습니다." />
         )}

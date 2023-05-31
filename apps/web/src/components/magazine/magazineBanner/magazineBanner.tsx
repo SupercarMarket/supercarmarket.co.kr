@@ -115,7 +115,7 @@ const MagazineBanner = ({
                 lineHeight="150%"
                 className={clsx('mb-contents-heading')}
               >
-                {truncateOnWord(initialData.title, 50)}
+                {truncateOnWord(initialData.title, 40)}
               </Typography>
               <Typography
                 as="p"

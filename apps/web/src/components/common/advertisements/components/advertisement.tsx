@@ -67,15 +67,15 @@ const Advertisement = (props: AdvertisementProps) => {
         >
           {isFetching || isLoading ? (
             <Skeleton />
-          ) : ad ? (
+          ) : ad?.data.middle ? (
             <a
-              href={createExternalLink(ad.data[0].url)}
+              href={createExternalLink(ad.data.middle.url)}
               target="_blank"
               rel="noopener noreferrer"
             >
               <div>
                 <Image
-                  src={ad.data[0].imageUrl}
+                  src={ad.data.middle.imageUrl}
                   alt="ad_m"
                   fill
                   style={{
@@ -119,15 +119,15 @@ const Advertisement = (props: AdvertisementProps) => {
         >
           {isFetching || isLoading ? (
             <Skeleton />
-          ) : ad ? (
+          ) : ad?.data.left ? (
             <a
-              href={createExternalLink(ad.data[2].url)}
+              href={createExternalLink(ad.data.left.url)}
               target="_blank"
               rel="noopener noreferrer"
             >
               <div>
                 <Image
-                  src={ad.data[2].imageUrl}
+                  src={ad.data.left.imageUrl}
                   alt="ad_l"
                   fill
                   style={{
@@ -171,15 +171,15 @@ const Advertisement = (props: AdvertisementProps) => {
         >
           {isFetching || isLoading ? (
             <Skeleton />
-          ) : ad ? (
+          ) : ad?.data.right ? (
             <a
-              href={createExternalLink(ad.data[1].url)}
+              href={createExternalLink(ad.data.right.url)}
               target="_blank"
               rel="noopener noreferrer"
             >
               <div>
                 <Image
-                  src={ad.data[1].imageUrl}
+                  src={ad.data.right.imageUrl}
                   alt="ad_r"
                   fill
                   style={{
