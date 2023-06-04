@@ -299,6 +299,11 @@ const PasswordModal = ({
         background: #ffffff;
         border-radius: 4px;
         position: relative;
+        ${applyMediaQuery('mobile')} {
+          display: flex;
+          column-gap: 8px;
+          row-gap: 16px;
+        }
       `}
     >
       <Typography
@@ -319,15 +324,30 @@ const PasswordModal = ({
           gap: 10px;
         `}
       >
-        <Typography>비밀번호</Typography>
-        <Input
-          ref={passwordInputRef}
+        <Typography
           style={{
-            width: '360px',
-            marginLeft: 'auto',
+            whiteSpace: 'nowrap',
           }}
-          placeholder="비밀번호를 입력하세요"
-        />
+        >
+          비밀번호
+        </Typography>
+        <Wrapper.Item
+          css={css`
+            width: 360px;
+            margin-left: auto;
+            ${applyMediaQuery('mobile')} {
+              width: auto;
+            }
+          `}
+        >
+          <Input
+            ref={passwordInputRef}
+            style={{
+              width: '100%',
+            }}
+            placeholder="비밀번호를 입력하세요"
+          />
+        </Wrapper.Item>
       </Wrapper.Item>
       <Wrapper.Item
         css={css`
@@ -337,6 +357,11 @@ const PasswordModal = ({
           align-items: flex-end;
           width: 100%;
           gap: 4px;
+          ${applyMediaQuery('mobile')} {
+            display: flex;
+            column-gap: 8px;
+            row-gap: 16px;
+          }
         `}
       >
         <Button variant="Primary-Line" width="120px" onClick={cancelClick}>
