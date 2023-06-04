@@ -130,7 +130,6 @@ const LiveItem = ({
   const [isLoginCheckModalOpen, setIsLoginCheckModalOpen] =
     React.useState(false);
   const clickItem = () => {
-    console.log(status);
     if (status === 'authenticated') {
       if (data.isPrivate) {
         setIsPasswordModalOpen(true);
