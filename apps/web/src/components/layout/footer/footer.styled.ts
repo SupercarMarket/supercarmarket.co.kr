@@ -43,6 +43,7 @@ const footerLeftItem = css`
 const footerRight = css`
   display: flex;
   justify-content: flex-end;
+  align-items: flex-start;
   gap: 17px;
   ${applyMediaQuery('mobile')} {
     justify-content: flex-start;
