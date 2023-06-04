@@ -19,7 +19,11 @@ import Layout from 'components/layout';
 import { css } from 'styled-components';
 import { useRouter } from 'next/router';
 import TagCloseBtn from 'public/images/live/icons/TagCloseBtn.svg';
-import { checkIsMakeRoom, getOpenViduSessionId } from 'http/server/live';
+import {
+  checkIsMakeRoom,
+  createBroadCastRoom,
+  getOpenViduSessionId,
+} from 'http/server/live';
 import { useCreateBroadCastRoom } from 'http/server/live/mutaitons';
 import { useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEYS } from 'http/server/live/keys';
@@ -73,7 +77,7 @@ const Create: NextPageWithLayout = () => {
     });
   };
 
-  const createBroadCastRoom = async (data: FormState) => {
+  const createBroadCastRoomHandler = async (data: FormState) => {
     const { title, file, show, password } = data;
 
     if (!show) {
@@ -113,16 +117,41 @@ const Create: NextPageWithLayout = () => {
 
         file.forEach((f) => formData.append('file', f));
 
-        createBroadCastRoomMutation.mutate(formData, {
-          onSuccess: (result) => {
+        createBroadCastRoom(formData)
+          .then((response) => {
             queryClient.invalidateQueries({ queryKey: QUERY_KEYS.live() });
-            router.push(`${result.data.bcSeq}`);
-          },
-        });
+            router.push(`${response.data.bcSeq}`);
+          })
+          .catch((error) => {
+            alert(error.message);
+            router.back();
+          });
+
+        // createBroadCastRoomMutation.mutate(formData, {
+        //   onSuccess: (result) => {
+        //     queryClient.invalidateQueries({ queryKey: QUERY_KEYS.live() });
+        //     router.push(`${result.data.bcSeq}`);
+        //   },
+        //   onError: () => {
+        //     router.back();
+        //   },
+        // });
       })
       .catch((error) => {
-        if (error.response.status === 426) {
+        // 이미 해당 아이디로 생성된 방송이 있음
+        if (error.response.status !== 419) {
           alert(error.response.data.message);
+          router.back();
+        }
+        // 방송이 최대 개수를 넘음
+        else if (error.response.status !== 426) {
+          alert(error.response.data.message);
+          router.back();
+        }
+        // 딜러가 아닌경우
+        else if (error.response.status !== 460) {
+          alert(error.response.data.message);
+          router.back();
         }
       });
   };
@@ -136,7 +165,7 @@ const Create: NextPageWithLayout = () => {
       <Form
         encType="multipart/form-data"
         onSubmit={methods.handleSubmit((data) => {
-          createBroadCastRoom(data);
+          createBroadCastRoomHandler(data);
         })}
       >
         <div
