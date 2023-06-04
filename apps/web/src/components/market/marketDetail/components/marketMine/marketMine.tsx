@@ -43,15 +43,29 @@ const MarketMine = ({ id, brdSeq }: MarketMineProps) => {
   });
 
   const changeStatus = React.useCallback(() => {
-    changeSellStatus({
-      data: { brdSeq },
-    });
+    changeSellStatus(
+      {
+        data: { brdSeq },
+      },
+      {
+        onSuccess: () => {
+          onClose();
+        },
+      }
+    );
   }, [brdSeq, changeSellStatus]);
 
   const deleteMarket = React.useCallback(() => {
-    deleteMarketById({
-      data: [{ id }],
-    });
+    deleteMarketById(
+      {
+        data: [{ id }],
+      },
+      {
+        onSuccess: () => {
+          onClose();
+        },
+      }
+    );
   }, [id, deleteMarketById]);
 
   const handleStatusModal = React.useCallback(() => {

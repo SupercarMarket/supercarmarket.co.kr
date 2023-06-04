@@ -86,6 +86,9 @@ const FindIdForm = () => {
 
   React.useEffect(() => {
     queryClient.resetQueries(QUERY_KEYS.all);
+    return () => {
+      queryClient.resetQueries(QUERY_KEYS.all);
+    };
   }, []);
 
   return (
