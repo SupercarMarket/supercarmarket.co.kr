@@ -41,13 +41,12 @@ const Index: NextPageWithLayout = () => {
     if (status === 'authenticated') {
       checkIsMakeRoom()
         .then((response) => {
-          console.log(response);
           setIsDeller(true);
         })
         .catch((error) => {
           if (error.response) {
-            if (error.response.status === 460) {
-              alert(error.response.data.message);
+            if (error.response.status !== 460) {
+              setIsDeller(true);
             }
           }
         });
@@ -57,7 +56,19 @@ const Index: NextPageWithLayout = () => {
   if (isLoading || isFetching || !broadCast) return <div>loading..</div>;
 
   const createBoradHandler = () => {
-    router.push('/live/Create');
+    checkIsMakeRoom()
+      .then((response) => {
+        router.push('/live/Create');
+      })
+      .catch((error) => {
+        if (error.response) {
+          if (error.response.status === 426) {
+            alert(error.response.data.message);
+          } else {
+            router.push('/live/Create');
+          }
+        }
+      });
   };
 
   return (
