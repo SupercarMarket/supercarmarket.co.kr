@@ -105,7 +105,10 @@ function ChatInfo(props: Props) {
         },
       });
     }
-    if (textAreaRef.current) textAreaRef.current.value = '';
+    if (textAreaRef.current) {
+      textAreaRef.current.value = '';
+      textAreaRef.current.blur();
+    }
   };
 
   const exitChat = () => {
