@@ -30,7 +30,7 @@ const nextConfig = {
     deviceSizes: [767, 1199, 1200],
     imageSizes: [178, 285, 387],
     domains: [
-      'doyup.shop',
+      'supercarmarket.co.kr',
       'www.polamfe.com',
       'user-images.githubusercontent.com',
       'supercarmarket-bucket.s3.ap-northeast-2.amazonaws.com',

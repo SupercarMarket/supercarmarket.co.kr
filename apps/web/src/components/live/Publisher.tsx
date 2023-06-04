@@ -37,9 +37,10 @@ function Publisher(props: Props) {
   const [isMic, setIsMic] = React.useState<boolean>(true);
   const [session, setSession] = React.useState<Session>(newOV.initSession());
   const [publisher, setPublisher] = React.useState<Publishers>();
+
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [mobileCamDevice, setMobileCamDevice] = React.useState<string>();
-
+  const [videoTrack, setVideoTrack] = React.useState<MediaStreamTrack>();
   const { isMobile } = useMedia({ deviceQuery });
 
   const queryClient = useQueryClient();
@@ -84,14 +85,23 @@ function Publisher(props: Props) {
 
   const mobileCamChangeHandler = async () => {
     const face = mobileCamDevice === 'environment' ? 'user' : 'environment';
+    videoTrack?.stop();
     if (session && publisher) {
-      const constraints = {
-        audio: true,
-        video: { facingMode: { exact: face } },
-      };
-
+      let constraints;
+      if (face === 'user') {
+        constraints = {
+          audio: undefined,
+          video: { facingMode: { exact: 'user' } },
+        };
+      } else {
+        constraints = {
+          audio: undefined,
+          video: { facingMode: { exact: 'environment' } },
+        };
+      }
       const devices = await navigator.mediaDevices.getUserMedia(constraints);
       setMobileCamDevice(face);
+      setVideoTrack(devices.getVideoTracks()[0]);
       await publisher.replaceTrack(devices.getVideoTracks()[0]);
     }
   };
@@ -114,12 +124,14 @@ function Publisher(props: Props) {
           const devices = await navigator.mediaDevices.getUserMedia(
             constraints
           );
+
           const video = document.getElementById(
             'Streaming'
           ) as HTMLVideoElement;
           const publich = newOV.initPublisher(undefined, {
             insertMode: 'APPEND',
             resolution: '880x495',
+
             frameRate: 70,
             videoSource: devices.getVideoTracks()[0],
             audioSource: undefined,
@@ -132,6 +144,8 @@ function Publisher(props: Props) {
           publich.stream.streamManager.addVideoElement(video);
           video.style.transform = 'rotate(0)';
           video.style.width = '100%';
+
+          setVideoTrack(devices.getVideoTracks()[0]);
           video.controls = true;
           setIsLoading(false);
         });
@@ -146,7 +160,13 @@ function Publisher(props: Props) {
       session.disconnect();
     });
     return () => {
-      session.disconnect();
+      deleteBroadCastRoomMutation.mutate(data.broadCastSeq, {
+        onSuccess: () => {
+          queryClient.refetchQueries({ queryKey: QUERY_KEYS.live() });
+          session.disconnect();
+          router.replace('/live');
+        },
+      });
     };
   }, []);
 
@@ -158,7 +178,6 @@ function Publisher(props: Props) {
       <Wrapper.Item
         css={css`
           width: 880px;
-
           ${applyMediaQuery('mobile')} {
             grid-template-columns: 1fr 1fr;
             column-gap: 8px;
@@ -171,7 +190,6 @@ function Publisher(props: Props) {
           css={css`
             background-color: #000000;
             height: 495px;
-
             ${applyMediaQuery('mobile')} {
               grid-template-columns: 1fr 1fr;
               column-gap: 8px;

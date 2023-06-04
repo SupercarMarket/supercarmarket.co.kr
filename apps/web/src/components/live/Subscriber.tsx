@@ -14,6 +14,7 @@ import { getOpenViduSessionToken } from 'http/server/live';
 import { getSession } from 'next-auth/react';
 import { useMedia } from '@supercarmarket/hooks';
 import { css } from 'styled-components';
+
 import Loader from './modal/Loader';
 
 interface Props {
@@ -30,6 +31,7 @@ function Subscribers(props: Props) {
   const [volume, setVolume] = React.useState<number>(80);
   const [session, setSession] = React.useState<Session>(newOV.initSession());
   const [subscribe, setSubscribe] = React.useState<Subscriber>();
+
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
   const { isMobile } = useMedia({ deviceQuery });
@@ -64,6 +66,7 @@ function Subscribers(props: Props) {
         setSubscribe(newSub);
         event.stream.streamManager.addVideoElement(video);
         video.style.width = '100%';
+
         video.controls = true;
       });
 

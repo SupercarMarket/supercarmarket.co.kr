@@ -1,8 +1,10 @@
 import React from 'react';
+
 import ReactDOM from 'react-dom';
 
 interface I_modalProps {
   open: boolean;
+
   children?: React.ReactNode;
 }
 
