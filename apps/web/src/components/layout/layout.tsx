@@ -7,6 +7,7 @@ import Toggle from './toggle';
 import Advertisements from 'components/common/advertisements';
 import { useRecoilState } from 'recoil';
 import { layoutPropsRecoil } from 'src/recoil/atom';
+import { ModalProvider } from 'feature/ModalProvider';
 
 interface LayoutProps extends PageProps {
   children?: React.ReactNode;
@@ -24,7 +25,11 @@ const Layout = ({ children, ...rest }: LayoutProps) => {
           {children}
         </main>
       </Styled.Container>
-      {layoutRecoil.isFooter && <Footer />}
+      {layoutRecoil.isFooter && (
+        <ModalProvider>
+          <Footer />
+        </ModalProvider>
+      )}
       {layoutRecoil.isFooter && <Toggle />}
     </>
   );

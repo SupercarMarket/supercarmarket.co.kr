@@ -1,9 +1,29 @@
-import { Container, Typography, Wrapper } from '@supercarmarket/ui';
+import * as React from 'react';
+import { Button, Container, Typography, Wrapper } from '@supercarmarket/ui';
 import Link from 'next/link';
-
 import * as style from './footer.styled';
+import { ModalContext } from 'feature/ModalProvider';
+import TermModal from 'components/common/modal/termModal';
 
 const Footer = () => {
+  const { onOpen, onClose } = React.useContext(ModalContext);
+
+  const handleServiceModal = React.useCallback(() => {
+    console.log('hello');
+    onOpen(
+      <TermModal title="이용약관" htmlFor="service" onClose={() => onClose()} />
+    );
+  }, [onClose, onOpen]);
+
+  const handlePrivacyModal = React.useCallback(() => {
+    onOpen(
+      <TermModal
+        title="개인정보처리방침"
+        htmlFor="privacy"
+        onClose={() => onClose()}
+      />
+    );
+  }, [onClose, onOpen]);
   return (
     <Container as="footer" role="contentinfo" background="#F7F7F8">
       <Wrapper css={style.footer}>
@@ -104,22 +124,32 @@ const Footer = () => {
           </Wrapper.Item>
         </Wrapper.Left>
         <Wrapper.Right css={style.footerRight}>
-          <Typography
-            fontSize="body-14"
-            fontWeight="regular"
-            lineHeight="150%"
-            color="greyScale-6"
-          >
-            이용약관
-          </Typography>
-          <Typography
-            fontSize="body-14"
-            fontWeight="regular"
-            lineHeight="150%"
-            color="greyScale-6"
-          >
-            개인정보처리방침
-          </Typography>
+          <Button type="button" variant="Init" onClick={handleServiceModal}>
+            <Typography
+              fontSize="body-14"
+              fontWeight="regular"
+              lineHeight="150%"
+              color="greyScale-6"
+              style={{
+                cursor: 'pointer',
+              }}
+            >
+              이용약관
+            </Typography>
+          </Button>
+          <Button type="button" variant="Init" onClick={handlePrivacyModal}>
+            <Typography
+              fontSize="body-14"
+              fontWeight="regular"
+              lineHeight="150%"
+              color="greyScale-6"
+              style={{
+                cursor: 'pointer',
+              }}
+            >
+              개인정보처리방침
+            </Typography>
+          </Button>
         </Wrapper.Right>
       </Wrapper>
     </Container>
