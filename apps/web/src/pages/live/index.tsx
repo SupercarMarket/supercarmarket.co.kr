@@ -18,6 +18,7 @@ import Modal from 'components/live/modal';
 import { checkIsMakeRoom, checkPasswordRoom } from 'http/server/live';
 
 import LockerIcon from 'public/images/live/icons/LockerIcon.svg';
+import { useSession } from 'next-auth/react';
 
 const Index: NextPageWithLayout = () => {
   const {
@@ -29,25 +30,45 @@ const Index: NextPageWithLayout = () => {
     pageSize: 16,
   });
 
+  const [isDeller, setIsDeller] = React.useState(false);
+
+  const { status, data: session } = useSession();
+
   const router = useRouter();
+
+  React.useEffect(() => {
+    console.log(status);
+    if (status === 'authenticated') {
+      checkIsMakeRoom()
+        .then((response) => {
+          setIsDeller(true);
+        })
+        .catch((error) => {
+          if (error.response) {
+            if (error.response.status !== 460) {
+              setIsDeller(true);
+            }
+          }
+        });
+    }
+  }, [status]);
 
   if (isLoading || isFetching || !broadCast) return <div>loading..</div>;
 
-  const checkUserAuth = async () => {
-    let isMakeRoom = false;
-
-    // await checkIsMakeRoom()
-    //   .then((response) => {
-    //     isMakeRoom = true;
-    //   })
-    //   .catch((error) => {
-    //     alert(error);
-    //   });
-
-    // if (!isMakeRoom) {
-    //   return;
-    // }
-    router.push('/live/Create');
+  const createBoradHandler = () => {
+    checkIsMakeRoom()
+      .then((response) => {
+        router.push('/live/Create');
+      })
+      .catch((error) => {
+        if (error.response) {
+          if (error.response.status === 426) {
+            alert(error.response.data.message);
+          } else {
+            router.push('/live/Create');
+          }
+        }
+      });
   };
 
   return (
@@ -63,9 +84,15 @@ const Index: NextPageWithLayout = () => {
           `}
         >
           <Title>라이브</Title>
-          <Button variant="Primary-Line" type="button" onClick={checkUserAuth}>
-            라이브 시작하기
-          </Button>
+          {isDeller && (
+            <Button
+              variant="Primary-Line"
+              type="button"
+              onClick={createBoradHandler}
+            >
+              라이브 시작하기
+            </Button>
+          )}
         </Wrapper.Item>
         {broadCast && (
           <Wrapper.Item
@@ -83,7 +110,9 @@ const Index: NextPageWithLayout = () => {
             `}
           >
             {broadCast.data?.map((data, idx) => {
-              return <LiveItem key={`LiveItem_${idx}`} data={data} />;
+              return (
+                <LiveItem key={`LiveItem_${idx}`} data={data} status={status} />
+              );
             })}
           </Wrapper.Item>
         )}
@@ -106,13 +135,25 @@ interface LiveItem {
   name: string;
 }
 
-const LiveItem = ({ data }: { data: LiveItem }) => {
+const LiveItem = ({
+  data,
+  status,
+}: {
+  data: LiveItem;
+  status: 'authenticated' | 'loading' | 'unauthenticated';
+}) => {
   const router = useRouter();
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [isPasswordModalOpen, setIsPasswordModalOpen] = React.useState(false);
+  const [isLoginCheckModalOpen, setIsLoginCheckModalOpen] =
+    React.useState(false);
   const clickItem = () => {
-    if (data.isPrivate) {
-      setIsOpen(true);
-    } else router.push(`live/${data.id}`);
+    if (status === 'authenticated') {
+      if (data.isPrivate) {
+        setIsPasswordModalOpen(true);
+      } else router.push(`live/${data.id}`);
+    } else {
+      setIsLoginCheckModalOpen(true);
+    }
   };
   return (
     <div onClick={clickItem}>
@@ -210,8 +251,11 @@ const LiveItem = ({ data }: { data: LiveItem }) => {
           </Wrapper.Item>
         </Wrapper.Item>
       </Container>
-      <Modal open={isOpen}>
-        <PasswordModal roomData={data} setIsOpen={setIsOpen} />
+      <Modal open={isPasswordModalOpen}>
+        <PasswordModal roomData={data} setIsOpen={setIsPasswordModalOpen} />
+      </Modal>
+      <Modal open={isLoginCheckModalOpen}>
+        <NeedLoginModal setIsOpen={setIsLoginCheckModalOpen} />
       </Modal>
     </div>
   );
@@ -254,6 +298,12 @@ const PasswordModal = ({
         gap: 24px;
         background: #ffffff;
         border-radius: 4px;
+        position: relative;
+        ${applyMediaQuery('mobile')} {
+          display: flex;
+          column-gap: 8px;
+          row-gap: 16px;
+        }
       `}
     >
       <Typography
@@ -274,23 +324,100 @@ const PasswordModal = ({
           gap: 10px;
         `}
       >
-        <Typography>비밀번호</Typography>
-        <Input
-          ref={passwordInputRef}
+        <Typography
           style={{
-            width: '360px',
-            marginLeft: 'auto',
+            whiteSpace: 'nowrap',
           }}
-          placeholder="비밀번호를 입력하세요"
-        />
+        >
+          비밀번호
+        </Typography>
+        <Wrapper.Item
+          css={css`
+            width: 360px;
+            margin-left: auto;
+            ${applyMediaQuery('mobile')} {
+              width: auto;
+            }
+          `}
+        >
+          <Input
+            ref={passwordInputRef}
+            style={{
+              width: '100%',
+            }}
+            placeholder="비밀번호를 입력하세요"
+          />
+        </Wrapper.Item>
       </Wrapper.Item>
       <Wrapper.Item
         css={css`
           display: flex;
           flex-direction: row;
-          justify-content: center;
-          align-items: center;
-          padding: 0px 22px;
+          justify-content: flex-end;
+          align-items: flex-end;
+          width: 100%;
+          gap: 4px;
+          ${applyMediaQuery('mobile')} {
+            display: flex;
+            column-gap: 8px;
+            row-gap: 16px;
+          }
+        `}
+      >
+        <Button variant="Primary-Line" width="120px" onClick={cancelClick}>
+          취소
+        </Button>
+        <Button variant="Primary" width="120px" onClick={confirmClick}>
+          확인
+        </Button>
+      </Wrapper.Item>
+    </Wrapper.Item>
+  );
+};
+
+const NeedLoginModal = ({
+  setIsOpen,
+}: {
+  setIsOpen: (prev: boolean) => void;
+}) => {
+  const router = useRouter();
+
+  const cancelClick = () => {
+    setIsOpen(false);
+  };
+
+  const confirmClick = async () => {
+    router.push('/auth/signin');
+  };
+  return (
+    <Wrapper.Item
+      css={css`
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 24px;
+        gap: 24px;
+        background: #ffffff;
+        border-radius: 4px;
+        position: relative;
+      `}
+    >
+      <Typography
+        style={{
+          fontSize: '24px',
+          lineHeight: '120%',
+          fontWeight: '700',
+        }}
+      >
+        로그인 후 이용 가능합니다.
+      </Typography>
+      <Wrapper.Item
+        css={css`
+          display: flex;
+          flex-direction: row;
+          justify-content: flex-end;
+          align-items: flex-end;
+          width: 100%;
           gap: 4px;
         `}
       >
