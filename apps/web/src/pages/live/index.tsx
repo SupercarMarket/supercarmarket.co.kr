@@ -130,11 +130,13 @@ const LiveItem = ({
   const [isLoginCheckModalOpen, setIsLoginCheckModalOpen] =
     React.useState(false);
   const clickItem = () => {
-    if ((status = 'authenticated')) {
+    console.log(status);
+    if (status === 'authenticated') {
       if (data.isPrivate) {
         setIsPasswordModalOpen(true);
       } else router.push(`live/${data.id}`);
     } else {
+      setIsLoginCheckModalOpen(true);
     }
   };
   return (
