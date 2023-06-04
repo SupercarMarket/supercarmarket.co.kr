@@ -142,6 +142,9 @@ function Publisher(props: Props) {
     if (publisher === undefined) {
       joinSession();
     }
+    window.addEventListener('beforeunload', () => {
+      session.disconnect();
+    });
     return () => {
       session.disconnect();
     };

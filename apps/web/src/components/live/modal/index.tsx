@@ -39,16 +39,16 @@ const Modal = ({ open, children }: I_modalProps) => {
     const el = document.body;
     return ReactDOM.createPortal(
       <div
-        className="modalWrap"
+        style={modalWrapStyle}
         onClick={(event) => {
           event.stopPropagation();
         }}
         ref={ref}
       >
-        <div className="modalLayout" onWheel={whellEvent}>
+        <div style={modalLayoutStyle} onWheel={whellEvent}>
           {children}
         </div>
-        <span className="dim" />
+        <span style={dimStyle} />
       </div>,
       el
     );
@@ -56,3 +56,33 @@ const Modal = ({ open, children }: I_modalProps) => {
 };
 
 export default Modal;
+
+const modalWrapStyle: React.CSSProperties = {
+  position: 'fixed',
+  top: 0,
+  bottom: 0,
+  right: 0,
+  left: 0,
+  zIndex: 999,
+};
+
+const modalLayoutStyle: React.CSSProperties = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  zIndex: '1000',
+  transform: 'translate(-50%, -50%)',
+  borderRadius: '6px',
+  maxHeight: '95%',
+  msOverflowStyle: 'none',
+  scrollbarWidth: 'none',
+};
+
+const dimStyle: React.CSSProperties = {
+  position: 'fixed',
+  top: '0',
+  bottom: '0',
+  right: '0',
+  left: '0',
+  backgroundColor: 'rgba(0, 0, 0, 0.4)',
+};

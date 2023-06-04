@@ -1,5 +1,6 @@
 import Modal from './index';
 import React from 'react';
+import liveCss from 'public/css/live.module.css';
 
 /**
  *
@@ -12,19 +13,8 @@ interface I_loader {
 const Loader = (props: I_loader) => {
   return (
     <Modal open={props.isOpen}>
-      <span style={loaderStyle} />
+      <span className={liveCss.loader} />
     </Modal>
   );
 };
 export default Loader;
-
-const loaderStyle: React.CSSProperties = {
-  width: '48px',
-  height: '48px',
-  border: '5px solid #FFF',
-  borderBottomColor: 'transparent',
-  borderRadius: '50%',
-  display: 'inline-block',
-  boxSizing: 'border-box',
-  animation: 'rotation 1s linear infinite',
-};
