@@ -42,6 +42,11 @@ function Publisher(props: Props) {
   const [mobileCamDevice, setMobileCamDevice] = React.useState<string>();
 
   const [mobileCamChange, setMobileCamChange] = React.useState<boolean>(false);
+
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const [mobileCamDevice, setMobileCamDevice] = React.useState<string>();
+
+  const [mobileCamChange, setMobileCamChange] = React.useState<boolean>(false);
   const [videoTrack, setVideoTrack] = React.useState<MediaStreamTrack>();
   const { isMobile } = useMedia({ deviceQuery });
 
