@@ -38,7 +38,7 @@ function Publisher(props: Props) {
   const [session, setSession] = React.useState<Session>(newOV.initSession());
   const [publisher, setPublisher] = React.useState<Publishers>();
 
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const [liveLoading, setLiveLoading] = React.useState<boolean>(false);
   const [mobileCamDevice, setMobileCamDevice] = React.useState<string>();
 
   const [mobileCamChange, setMobileCamChange] = React.useState<boolean>(false);
@@ -109,7 +109,7 @@ function Publisher(props: Props) {
   };
 
   const joinSession = async () => {
-    setIsLoading(true);
+    setLiveLoading(true);
 
     const userSession = await getSession();
     getOpenViduSessionToken(sessionId).then((token: any) => {
@@ -150,7 +150,7 @@ function Publisher(props: Props) {
 
           setVideoTrack(devices.getVideoTracks()[0]);
           video.controls = true;
-          setIsLoading(false);
+          setLiveLoading(false);
         });
     });
   };
@@ -272,7 +272,7 @@ function Publisher(props: Props) {
           </div>
         </div>
       </div>
-      <Loader isOpen={isLoading} />
+      <Loader isOpen={liveLoading} />
     </Wrapper.Item>
   );
 }
