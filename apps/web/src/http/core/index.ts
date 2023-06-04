@@ -50,7 +50,7 @@ authRequest.interceptors.response.use(setResponse, (error) => {
     ...response,
     statusText: errorJson.message || response.statusText,
   });
-  throw error;
+  throw customErr;
 });
 
 export { authRequest };

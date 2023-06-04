@@ -1,5 +1,7 @@
-import { get, post } from '@supercarmarket/lib';
+import { HttpError, get, post } from '@supercarmarket/lib';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { authRequest } from 'http/core';
+import { getSession } from 'next-auth/react';
 
 export const getBroadCast = async (
   query: {
@@ -73,5 +75,32 @@ export const checkPasswordRoom = async (id: number, pass: string) => {
 };
 
 export const checkIsMakeRoom = async () => {
-  return authRequest.get(`/live/check`);
+  const checkIsMakeRoomAxios = axios.create({
+    baseURL: `/server/supercar/v1`,
+  });
+  const setRequest = async (
+    config: AxiosRequestConfig,
+    contentType = 'application/json'
+  ) => {
+    const session = await getSession();
+
+    if (!session?.accessToken)
+      throw new HttpError({ message: '로그인이 필요합니다.', statusCode: 401 });
+
+    if (config && config.headers)
+      config.headers = {
+        ACCESS_TOKEN: `${session.accessToken}`,
+        ContentType: contentType,
+      };
+
+    return config;
+  };
+  const setResponse = async (response: AxiosResponse) => {
+    return response.data;
+  };
+
+  checkIsMakeRoomAxios.interceptors.request.use(setRequest);
+  checkIsMakeRoomAxios.interceptors.response.use(setResponse);
+
+  return checkIsMakeRoomAxios.get(`/live/check`);
 };
