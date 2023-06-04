@@ -214,7 +214,6 @@ const CommentCard = ({
               </Wrapper>
               <Button
                 variant="Init"
-                disabled={isLiked}
                 onClick={handleLike}
                 style={{
                   cursor: 'pointer',

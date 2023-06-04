@@ -132,7 +132,7 @@ const MagazineCard = memo(function MagazineCard({
               marginBottom: '10px',
             }}
           >
-            {title}
+            {truncateOnWord(title, 45)}
             {` `}
             <Typography
               as="b"

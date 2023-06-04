@@ -7,7 +7,6 @@ import {
   Typography,
   Wrapper,
 } from '@supercarmarket/ui';
-import type { CommunityDto } from '@supercarmarket/types/community';
 import type { WithBlurredImage } from '@supercarmarket/types/magazine';
 import dayjs from 'dayjs';
 import Image from 'next/image';
@@ -21,7 +20,7 @@ import Skeleton from 'react-loading-skeleton';
 import { truncateOnWord } from '@supercarmarket/lib';
 import { isToday } from 'utils/misc';
 
-interface CommunityCardProps extends WithBlurredImage<CommunityDto> {
+interface CommunityCardProps extends WithBlurredImage<Community.CommunityDto> {
   variant: string;
 }
 
@@ -91,11 +90,12 @@ const CommunityCardRow = (props: CommunityCardChildrenProps) => {
     view,
     created,
     rate,
+    date,
     base64,
   } = props;
   const { isMobile } = useMedia({ deviceQuery });
-
-  const today = isToday(created);
+  const time = date ?? created;
+  const today = isToday(time);
 
   return (
     <Link
@@ -252,8 +252,8 @@ const CommunityCardRow = (props: CommunityCardChildrenProps) => {
               lineHeight="150%"
             >
               {today
-                ? dayjs(created).format('HH:mm')
-                : dayjs(created).format('YYYY-MM-DD')}
+                ? dayjs(time).format('HH:mm')
+                : dayjs(time).format('YYYY-MM-DD')}
             </Typography>
             <Typography
               fontSize="body-14"
@@ -376,11 +376,13 @@ const CommunityCardColumn = (props: CommunityCardChildrenProps) => {
     title,
     rate,
     comments,
-    created,
+    date,
     view,
     like,
+    created,
   } = props;
-  const today = isToday(created);
+  const time = date ?? created;
+  const today = isToday(time);
 
   return (
     <Link
@@ -503,8 +505,8 @@ const CommunityCardColumn = (props: CommunityCardChildrenProps) => {
             color="greyScale-5"
           >
             {today
-              ? dayjs(created).format('HH:mm')
-              : dayjs(created).format('YYYY-MM-DD')}
+              ? dayjs(time).format('HH:mm')
+              : dayjs(time).format('YYYY-MM-DD')}
           </Typography>
           <Wrapper.Item
             css={css`

@@ -40,6 +40,8 @@ function Publisher(props: Props) {
 
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [mobileCamDevice, setMobileCamDevice] = React.useState<string>();
+
+  const [mobileCamChange, setMobileCamChange] = React.useState<boolean>(false);
   const [videoTrack, setVideoTrack] = React.useState<MediaStreamTrack>();
   const { isMobile } = useMedia({ deviceQuery });
 
@@ -108,6 +110,7 @@ function Publisher(props: Props) {
 
   const joinSession = async () => {
     setIsLoading(true);
+
     const userSession = await getSession();
     getOpenViduSessionToken(sessionId).then((token: any) => {
       session

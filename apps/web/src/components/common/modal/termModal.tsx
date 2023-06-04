@@ -6,7 +6,8 @@ import {
   Wrapper,
 } from '@supercarmarket/ui';
 import { FormState } from 'constants/form/signup';
-import * as terms from 'constants/terms';
+import * as privateInfo from 'constants/termsPrivate';
+import * as terms from 'constants/termsService';
 import { css } from 'styled-components';
 
 const TermModal = ({
@@ -94,7 +95,8 @@ const TermModal = ({
         >
           <div
             dangerouslySetInnerHTML={{
-              __html: htmlFor === 'service' ? terms.service : terms.service,
+              __html:
+                htmlFor === 'service' ? terms.service : privateInfo.privateInfo,
             }}
           />
         </Wrapper.Item>

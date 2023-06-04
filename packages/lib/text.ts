@@ -12,10 +12,6 @@ export const truncateOnWord = (
 
   let truncatedText = text.substring(0, maxLength);
 
-  truncatedText = truncatedText.substring(
-    0,
-    Math.min(truncatedText.length, truncatedText.lastIndexOf(' '))
-  );
   if (ellipsis) truncatedText += '...';
 
   return truncatedText;
