@@ -91,31 +91,38 @@ const Create: NextPageWithLayout = () => {
       return;
     }
 
-    const sessionId = await getOpenViduSessionId();
+    // openvidu session 생성 전 방송 가능여부 확인
+    checkIsMakeRoom()
+      .then(async () => {
+        const sessionId = await getOpenViduSessionId();
 
-    const params = {
-      ...broadcastData,
-      title,
-      isPrivate: show === '공개' ? false : true,
-      password,
-      sessionId: sessionId,
-    };
+        const params = {
+          ...broadcastData,
+          title,
+          isPrivate: show === '공개' ? false : true,
+          password,
+          sessionId: sessionId,
+        };
 
-    const formData = new FormData();
+        const formData = new FormData();
 
-    formData.append(
-      'addBroadCastDto',
-      new Blob([JSON.stringify(params)], { type: 'application/json' })
-    );
+        formData.append(
+          'addBroadCastDto',
+          new Blob([JSON.stringify(params)], { type: 'application/json' })
+        );
 
-    file.forEach((f) => formData.append('file', f));
+        file.forEach((f) => formData.append('file', f));
 
-    createBroadCastRoomMutation.mutate(formData, {
-      onSuccess: (result) => {
-        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.live() });
-        router.push(`${result.data.bcSeq}`);
-      },
-    });
+        createBroadCastRoomMutation.mutate(formData, {
+          onSuccess: (result) => {
+            queryClient.invalidateQueries({ queryKey: QUERY_KEYS.live() });
+            router.push(`${result.data.bcSeq}`);
+          },
+        });
+      })
+      .catch(() => {
+        alert('최대 방송 가능한 방 개수 3개를 초과 하였습니다.');
+      });
   };
 
   React.useEffect(() => {
