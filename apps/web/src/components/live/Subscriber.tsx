@@ -32,7 +32,7 @@ function Subscribers(props: Props) {
   const [session, setSession] = React.useState<Session>(newOV.initSession());
   const [subscribe, setSubscribe] = React.useState<Subscriber>();
 
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const [liveLoading, setLiveLoading] = React.useState<boolean>(false);
 
   const { isMobile } = useMedia({ deviceQuery });
 
@@ -57,7 +57,7 @@ function Subscribers(props: Props) {
   };
 
   const joinSession = async () => {
-    setIsLoading(true);
+    setLiveLoading(true);
     const userSession = await getSession();
     const video = document.getElementById('Streaming') as HTMLVideoElement;
     getOpenViduSessionToken(sessionId).then((token: any) => {
@@ -80,7 +80,7 @@ function Subscribers(props: Props) {
           userId: `${userSession?.nickname}`,
         })
         .then(() => {
-          setIsLoading(false);
+          setLiveLoading(false);
         });
     });
   };
