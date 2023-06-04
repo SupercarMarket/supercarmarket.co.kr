@@ -1,8 +1,8 @@
 import {
-  Button,
-  Wrapper,
   applyMediaQuery,
+  Button,
   deviceQuery,
+  Wrapper,
 } from '@supercarmarket/ui';
 import { useRouter } from 'next/router';
 import { OpenVidu, Publisher as Publishers, Session } from 'openvidu-browser';
@@ -38,11 +38,11 @@ function Publisher(props: Props) {
   const [session, setSession] = React.useState<Session>(newOV.initSession());
   const [publisher, setPublisher] = React.useState<Publishers>();
 
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const [liveLoading, setLiveLoading] = React.useState<boolean>(false);
   const [mobileCamDevice, setMobileCamDevice] = React.useState<string>();
 
   const [mobileCamChange, setMobileCamChange] = React.useState<boolean>(false);
-
+  const [videoTrack, setVideoTrack] = React.useState<MediaStreamTrack>();
   const { isMobile } = useMedia({ deviceQuery });
 
   const queryClient = useQueryClient();
@@ -87,20 +87,29 @@ function Publisher(props: Props) {
 
   const mobileCamChangeHandler = async () => {
     const face = mobileCamDevice === 'environment' ? 'user' : 'environment';
+    videoTrack?.stop();
     if (session && publisher) {
-      const constraints = {
-        audio: true,
-        video: { facingMode: { exact: face } },
-      };
-
+      let constraints;
+      if (face === 'user') {
+        constraints = {
+          audio: undefined,
+          video: { facingMode: { exact: 'user' } },
+        };
+      } else {
+        constraints = {
+          audio: undefined,
+          video: { facingMode: { exact: 'environment' } },
+        };
+      }
       const devices = await navigator.mediaDevices.getUserMedia(constraints);
       setMobileCamDevice(face);
+      setVideoTrack(devices.getVideoTracks()[0]);
       await publisher.replaceTrack(devices.getVideoTracks()[0]);
     }
   };
 
   const joinSession = async () => {
-    setIsLoading(true);
+    setLiveLoading(true);
 
     const userSession = await getSession();
     getOpenViduSessionToken(sessionId).then((token: any) => {
@@ -139,8 +148,9 @@ function Publisher(props: Props) {
           video.style.transform = 'rotate(0)';
           video.style.width = '100%';
 
+          setVideoTrack(devices.getVideoTracks()[0]);
           video.controls = true;
-          setIsLoading(false);
+          setLiveLoading(false);
         });
     });
   };
@@ -149,8 +159,17 @@ function Publisher(props: Props) {
     if (publisher === undefined) {
       joinSession();
     }
-    return () => {
+    window.addEventListener('beforeunload', () => {
       session.disconnect();
+    });
+    return () => {
+      deleteBroadCastRoomMutation.mutate(data.broadCastSeq, {
+        onSuccess: () => {
+          queryClient.refetchQueries({ queryKey: QUERY_KEYS.live() });
+          session.disconnect();
+          router.replace('/live');
+        },
+      });
     };
   }, []);
 
@@ -253,7 +272,7 @@ function Publisher(props: Props) {
           </div>
         </div>
       </div>
-      <Loader isOpen={isLoading} />
+      <Loader isOpen={liveLoading} />
     </Wrapper.Item>
   );
 }
