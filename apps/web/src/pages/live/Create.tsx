@@ -120,8 +120,10 @@ const Create: NextPageWithLayout = () => {
           },
         });
       })
-      .catch(() => {
-        alert('최대 방송 가능한 방 개수 3개를 초과 하였습니다.');
+      .catch((error) => {
+        if (error.response.status === 426) {
+          alert(error.response.data.message);
+        }
       });
   };
 

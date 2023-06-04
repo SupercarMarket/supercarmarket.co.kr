@@ -37,16 +37,22 @@ const Index: NextPageWithLayout = () => {
   const router = useRouter();
 
   React.useEffect(() => {
+    console.log(status);
     if (status === 'authenticated') {
       checkIsMakeRoom()
         .then((response) => {
+          console.log(response);
           setIsDeller(true);
         })
         .catch((error) => {
-          alert(error);
+          if (error.response) {
+            if (error.response.status === 460) {
+              alert(error.response.data.message);
+            }
+          }
         });
     }
-  }, []);
+  }, [status]);
 
   if (isLoading || isFetching || !broadCast) return <div>loading..</div>;
 
