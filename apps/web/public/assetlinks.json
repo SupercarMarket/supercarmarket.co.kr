@@ -1,0 +1,6 @@
+[{
+        "relation": ["delegate_permission/common.handle_all_urls"],
+        "target" : { "namespace": "android_app", "package_name": "kr.co.supercarmarket.twa",
+                     "sha256_cert_fingerprints": ["6E:E5:D3:B9:AF:0E:63:11:E6:95:A0:20:43:AE:75:EB:18:52:0E:C4:B8:7D:F9:E8:D3:A3:0A:67:CF:00:2C:EF"] }
+      }
+]
