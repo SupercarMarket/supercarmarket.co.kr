@@ -68,12 +68,12 @@
     {
       "src": "/pwa/play-store-screen-shot-1.png",
       "sizes": "1125x2436",
-      "type": "image/jpg"
+      "type": "image/png"
     },
     {
       "src": "/pwa/play-store-screen-shot-2.png",
       "sizes": "2544x1228",
-      "type": "image/jpg"
+      "type": "image/png"
     }
   ]
 }
