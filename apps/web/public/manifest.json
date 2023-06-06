@@ -75,5 +75,21 @@
       "sizes": "2544x1228",
       "type": "image/png"
     }
-  ]
+  ],
+  "shortcuts": [
+    {
+      "name": "슈퍼카마켓",
+      "url": "https://supercarmarket.co.kr",
+      "description": "슈퍼카마켓"
+    }
+  ],
+  "categories": [
+    "magazines",
+    "news",
+    "photo",
+    "shopping",
+    "social"
+  ],
+  "iarc_rating_id": "12",
+  "prefer_related_applications": false
 }
