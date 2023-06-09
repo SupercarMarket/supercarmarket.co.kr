@@ -6,6 +6,7 @@ import {
   Searchbar,
   Wrapper,
 } from '@supercarmarket/ui';
+import Link from 'next/link';
 import { useUrlQuery } from '@supercarmarket/hooks';
 import { useRouter } from 'next/navigation';
 import MagazineCard from '../magazineCard';
@@ -22,7 +23,14 @@ const MagazineList = () => {
     <Container display="flex" flexDirection="column" alignItems="center">
       {magazine && magazine.data.length > 0 ? (
         <>
-          <MagazineBanner initialData={magazine.data[0]} />
+          <Link
+            href={`/magazine/${magazine.data[0].id}`}
+            style={{
+              cursor: 'pointer',
+            }}
+          >
+            <MagazineBanner initialData={magazine.data[0]} />
+          </Link>
           <Wrapper
             css={css`
               width: 880px;
