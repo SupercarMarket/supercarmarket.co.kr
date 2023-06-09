@@ -4,12 +4,15 @@ import Link from 'next/link';
 import * as style from './footer.styled';
 import { ModalContext } from 'feature/ModalProvider';
 import TermModal from 'components/common/modal/termModal';
+import appStoreSrc from '../../../../public/images/appstore.png';
+import playStoreSrc from '../../../../public/images/playstore.png';
+import Image from 'next/image';
+import AppStoreModal from 'components/common/modal/appStoreModal';
 
 const Footer = () => {
   const { onOpen, onClose } = React.useContext(ModalContext);
 
   const handleServiceModal = React.useCallback(() => {
-    console.log('hello');
     onOpen(
       <TermModal title="이용약관" htmlFor="service" onClose={() => onClose()} />
     );
@@ -23,6 +26,10 @@ const Footer = () => {
         onClose={() => onClose()}
       />
     );
+  }, [onClose, onOpen]);
+
+  const handleAppStoreModal = React.useCallback(() => {
+    onOpen(<AppStoreModal onClose={() => onClose()} />);
   }, [onClose, onOpen]);
   return (
     <Container as="footer" role="contentinfo" background="#F7F7F8">
@@ -124,32 +131,51 @@ const Footer = () => {
           </Wrapper.Item>
         </Wrapper.Left>
         <Wrapper.Right css={style.footerRight}>
-          <Button type="button" variant="Init" onClick={handleServiceModal}>
-            <Typography
-              fontSize="body-14"
-              fontWeight="regular"
-              lineHeight="150%"
-              color="greyScale-6"
+          <Wrapper.Item>
+            <Button type="button" variant="Init" onClick={handleServiceModal}>
+              <Typography
+                fontSize="body-14"
+                fontWeight="regular"
+                lineHeight="150%"
+                color="greyScale-6"
+                style={{
+                  cursor: 'pointer',
+                }}
+              >
+                이용약관
+              </Typography>
+            </Button>
+            <Button type="button" variant="Init" onClick={handlePrivacyModal}>
+              <Typography
+                fontSize="body-14"
+                fontWeight="regular"
+                lineHeight="150%"
+                color="greyScale-6"
+                style={{
+                  cursor: 'pointer',
+                }}
+              >
+                개인정보처리방침
+              </Typography>
+            </Button>
+          </Wrapper.Item>
+          <Wrapper.Item>
+            <Image
+              src={playStoreSrc}
+              alt="playstore"
               style={{
                 cursor: 'pointer',
               }}
-            >
-              이용약관
-            </Typography>
-          </Button>
-          <Button type="button" variant="Init" onClick={handlePrivacyModal}>
-            <Typography
-              fontSize="body-14"
-              fontWeight="regular"
-              lineHeight="150%"
-              color="greyScale-6"
+            />
+            <Image
+              src={appStoreSrc}
+              alt="appstore"
               style={{
                 cursor: 'pointer',
               }}
-            >
-              개인정보처리방침
-            </Typography>
-          </Button>
+              onClick={handleAppStoreModal}
+            />
+          </Wrapper.Item>
         </Wrapper.Right>
       </Wrapper>
     </Container>

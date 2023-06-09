@@ -22,6 +22,10 @@ const footer = css`
   padding: 62px 0;
   ${applyMediaQuery('mobile')} {
     padding: 32px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
   }
 `;
 
@@ -42,11 +46,17 @@ const footerLeftItem = css`
 
 const footerRight = css`
   display: flex;
-  justify-content: flex-end;
-  align-items: flex-start;
-  gap: 17px;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
   ${applyMediaQuery('mobile')} {
     justify-content: flex-start;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  & > div {
+    display: flex;
+    gap: 17px;
   }
 `;
 
