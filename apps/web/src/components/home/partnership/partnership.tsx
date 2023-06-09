@@ -123,7 +123,6 @@ const Partnership = ({ isMobile }: PartnershipProps) => {
                     <Wrapper.Item
                       css={css`
                         width: 285px;
-                        height: 180px;
                         flex: none;
                         display: flex;
                         flex-direction: column;
@@ -148,6 +147,7 @@ const Partnership = ({ isMobile }: PartnershipProps) => {
                           fill
                           style={{
                             borderRadius: '4px',
+                            minHeight: '180px',
                           }}
                           sizes={`${applyMediaQuery(
                             'desktop'
