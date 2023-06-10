@@ -1,3 +1,4 @@
+import * as React from 'react';
 import {
   Alert,
   applyMediaQuery,
@@ -18,19 +19,26 @@ const MagazineList = () => {
   const { page = 0, keyword } = useUrlQuery();
   const { data: magazine } = useMagazine({ page, keyword });
   const { push } = useRouter();
+  const isMagazine = magazine && magazine.data.length > 0;
+  const newMagainze = React.useMemo(() => {
+    if (isMagazine) return magazine.data[0];
+    return null;
+  }, []);
 
   return (
     <Container display="flex" flexDirection="column" alignItems="center">
-      {magazine && magazine.data.length > 0 ? (
+      {isMagazine ? (
         <>
-          <Link
-            href={`/magazine/${magazine.data[0].id}`}
-            style={{
-              cursor: 'pointer',
-            }}
-          >
-            <MagazineBanner initialData={magazine.data[0]} />
-          </Link>
+          {newMagainze && (
+            <Link
+              href={`/magazine/${magazine.data[0].id}`}
+              style={{
+                cursor: 'pointer',
+              }}
+            >
+              <MagazineBanner initialData={newMagainze} />
+            </Link>
+          )}
           <Wrapper
             css={css`
               width: 880px;
@@ -69,7 +77,7 @@ const MagazineList = () => {
             `}
           >
             {magazine.data.map((m, idx) => {
-              if (idx === 0) {
+              if (idx === 0 && typeof keyword === 'undefined') {
                 return null;
               }
               return <MagazineCard key={m.id} {...m} />;
