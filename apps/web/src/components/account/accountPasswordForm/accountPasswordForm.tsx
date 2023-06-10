@@ -44,13 +44,10 @@ const AccountPasswordForm = (props: AccountPasswordFormProps) => {
       handleRequire(data).then(async () => {
         setError(null);
 
-        const response = await authRequest(
-          `/server/supercar/v1/user/change-pw`,
-          {
-            method: 'POST',
-            data,
-          }
-        ).catch((error) => {
+        const response = await authRequest(`/user/change-pw`, {
+          method: 'POST',
+          data,
+        }).catch((error) => {
           setError(error.message);
         });
 

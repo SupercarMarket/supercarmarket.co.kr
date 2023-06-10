@@ -61,7 +61,7 @@ export const form = [
     htmlFor: 'guildName',
     label: '조합명',
     type: 'text',
-    placeholder: '조합명을 선택해주세요.',
+    placeholder: '조합명을 입력해주세요.',
     options: {
       required: true,
     },
