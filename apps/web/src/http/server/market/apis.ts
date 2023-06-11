@@ -59,7 +59,7 @@ export const likeMarketPost = async ({ id }: { id: string }) => {
 export const updateMarketSellStatus = async ({
   data,
 }: {
-  data: { seq: number };
+  data: { seq: string }[];
 }) => {
   return authRequest(`/shop`, {
     method: 'PUT',

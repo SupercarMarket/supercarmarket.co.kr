@@ -21,8 +21,8 @@ export const useLikeMarketPost = (id: string, options = {}) => {
 
 export const useUpdateMarketSellStatus = (options = {}) => {
   return useMutation({
-    mutationFn: ({ data }: { data: { brdSeq: number } }) =>
-      updateMarketSellStatus({ data: { seq: data.brdSeq } }),
+    mutationFn: ({ data }: { data: { seq: string }[] }) =>
+      updateMarketSellStatus({ data }),
     useErrorBoundary: true,
     ...options,
   });
