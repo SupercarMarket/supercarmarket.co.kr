@@ -21,7 +21,7 @@ import { useQueryClient } from '@tanstack/react-query';
 
 interface MarketMineProps {
   id: string;
-  brdSeq: number;
+  brdSeq: string;
 }
 
 const MarketMine = ({ id, brdSeq }: MarketMineProps) => {
@@ -45,7 +45,7 @@ const MarketMine = ({ id, brdSeq }: MarketMineProps) => {
   const changeStatus = React.useCallback(() => {
     changeSellStatus(
       {
-        data: { brdSeq },
+        data: [{ seq: brdSeq }],
       },
       {
         onSuccess: () => {
@@ -53,7 +53,7 @@ const MarketMine = ({ id, brdSeq }: MarketMineProps) => {
         },
       }
     );
-  }, [brdSeq, changeSellStatus]);
+  }, [brdSeq, changeSellStatus, onClose]);
 
   const deleteMarket = React.useCallback(() => {
     deleteMarketById(
@@ -66,7 +66,7 @@ const MarketMine = ({ id, brdSeq }: MarketMineProps) => {
         },
       }
     );
-  }, [id, deleteMarketById]);
+  }, [deleteMarketById, id, onClose]);
 
   const handleStatusModal = React.useCallback(() => {
     onOpen(

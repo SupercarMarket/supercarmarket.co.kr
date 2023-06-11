@@ -230,8 +230,7 @@ const AccountCategoryList = React.memo(function AccountCategory({
 
     if (!deleteList.length) return;
 
-    if (tab === 'community') {
-    }
+    updaeSaleMutation.mutate({ data: deleteList.map((l) => ({ seq: l.id })) });
 
     refetch();
   }, 300);
