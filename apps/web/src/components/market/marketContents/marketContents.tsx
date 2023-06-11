@@ -49,7 +49,10 @@ const MarketContents = (props: MarketContentsProps) => {
                 <MarketDetail data={market.data} id={id} />
               )}
               {market.data.isMine ? (
-                <MarketMine id={id} brdSeq={market.data.brdSeq} />
+                <MarketMine
+                  id={id}
+                  brdSeq={market.data.brdSeq as unknown as string}
+                />
               ) : (
                 <MarketLike id={id} isLike={market.data.isLike} />
               )}
