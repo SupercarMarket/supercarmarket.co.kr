@@ -18,6 +18,7 @@
     "@supercarmarket/ui": "workspace:*",
     "@tanstack/react-query": "^4.24.4",
     "@toast-ui/react-editor": "^3.2.2",
+    "antd-watermark": "^1.0.1",
     "axios": "1.2.0",
     "browser-image-compression": "^2.0.0",
     "clsx": "^1.2.1",
@@ -46,6 +47,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
+    "@stomp/stompjs": "^7.0.0",
     "@supercarmarket/config": "workspace:*",
     "@supercarmarket/tsconfig": "workspace:*",
     "@supercarmarket/types": "workspace:*",
@@ -55,16 +57,15 @@
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
     "@types/styled-components": "^5.1.26",
+    "axios": "^1.3.4",
     "babel-loader": "^9.1.2",
     "dotenv": "^16.0.3",
     "globby": "^13.1.3",
     "node-fetch-commonjs": "^3.2.4",
-    "prettier": "^2.8.4",
-    "typescript": "^4.9.5",
-    "webpack": "^5.75.0",
     "openvidu-browser": "^2.26.0",
-    "axios": "^1.3.4",
-    "@stomp/stompjs": "^7.0.0",
-    "recoil": "^0.7.7"
+    "prettier": "^2.8.4",
+    "recoil": "^0.7.7",
+    "typescript": "^4.9.5",
+    "webpack": "^5.75.0"
   }
 }

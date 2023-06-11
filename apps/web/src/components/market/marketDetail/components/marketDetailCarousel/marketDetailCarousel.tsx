@@ -10,6 +10,7 @@ import CheckIcon from '../../../../../assets/svg/check.svg';
 import * as Styled from './marketDetailCarousel.styled';
 import useBase64 from 'hooks/queries/useBase64';
 import Skeleton from 'react-loading-skeleton';
+import Watermark from 'antd-watermark';
 
 interface MarketDetailCarouselProps {
   id: string;
@@ -107,31 +108,38 @@ const MarketDetailCarousel = ({ imgSrc, id }: MarketDetailCarouselProps) => {
         }
       `}
     >
-      <Wrapper.Top css={Styled.top}>
-        {isFetching || isLoading ? (
-          <Wrapper
-            css={css`
-              width: 100%;
-              aspect-ratio: 4/3;
-
-              ${applyMediaQuery('mobile')} {
+      <Watermark
+        content="슈퍼카마켓"
+        font={{
+          fontSize: '32',
+        }}
+      >
+        <Wrapper.Top css={Styled.top}>
+          {isFetching || isLoading ? (
+            <Wrapper
+              css={css`
                 width: 100%;
-              }
-            `}
-          >
-            <Skeleton width="100%" height="100%" />
-          </Wrapper>
-        ) : (
-          <Image
-            alt="image"
-            placeholder="blur"
-            blurDataURL={data?.data.base64}
-            src={imgSrc[current]}
-            style={{ objectFit: 'contain' }}
-            fill
-          />
-        )}
-      </Wrapper.Top>
+                aspect-ratio: 4/3;
+
+                ${applyMediaQuery('mobile')} {
+                  width: 100%;
+                }
+              `}
+            >
+              <Skeleton width="100%" height="100%" />
+            </Wrapper>
+          ) : (
+            <Image
+              alt="image"
+              placeholder="blur"
+              blurDataURL={data?.data.base64}
+              src={imgSrc[current]}
+              style={{ objectFit: 'contain' }}
+              fill
+            />
+          )}
+        </Wrapper.Top>
+      </Watermark>
       <Wrapper.Bottom css={Styled.bottom}>
         <Styled.ArrowButton position="left" onClick={prev} disabled={isFirst}>
           <ArrowLeftIcon width="30px" height="30px" />
@@ -139,16 +147,24 @@ const MarketDetailCarousel = ({ imgSrc, id }: MarketDetailCarouselProps) => {
         <Styled.CarouselArea>
           <Styled.CarouselBox page={page}>
             {imgSrc.map((src, idx) => (
-              <MarketDetailCarouselItem
+              <Watermark
                 key={src}
-                imgSrc={src}
-                idx={idx}
-                current={current}
-                id={id}
-                handleClick={() => {
-                  selectImage(idx);
+                content="슈퍼카마켓"
+                gap={[10, 10]}
+                font={{
+                  fontSize: '6',
                 }}
-              />
+              >
+                <MarketDetailCarouselItem
+                  imgSrc={src}
+                  idx={idx}
+                  current={current}
+                  id={id}
+                  handleClick={() => {
+                    selectImage(idx);
+                  }}
+                />
+              </Watermark>
             ))}
           </Styled.CarouselBox>
         </Styled.CarouselArea>
