@@ -1,5 +1,4 @@
 import { applyMediaQuery } from '@supercarmarket/ui';
-('use client');
 
 import styled, { css } from 'styled-components';
 import { fadeIn, popping } from 'styles/keyframes';
