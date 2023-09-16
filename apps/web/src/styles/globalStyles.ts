@@ -31,6 +31,18 @@ const GlobalStyle = createGlobalStyle`
     all: unset;
     cursor: pointer;
   }
+  
+  .toastui-editor-contents p{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+  }
+
+  .toastui-editor-contents img{
+    border-radius: 1%;
+  }
 `;
 
 export default GlobalStyle;
