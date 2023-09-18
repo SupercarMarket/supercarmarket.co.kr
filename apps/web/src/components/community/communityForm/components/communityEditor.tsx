@@ -1,6 +1,5 @@
 import '@toast-ui/editor/dist/toastui-editor.css';
 import '@toast-ui/editor/dist/i18n/ko-kr';
-
 import { Editor } from '@toast-ui/react-editor';
 import type { EditorProps } from '@toast-ui/react-editor';
 import * as React from 'react';
@@ -14,6 +13,15 @@ interface CommunityEditorProps {
 const CommunityEditor = (props: CommunityEditorProps) => {
   const { editor, plugins, init } = props;
 
+  const toolbarItems = [
+    ['heading', 'bold', 'italic', 'strike'],
+    ['hr'],
+    ['ul', 'ol', 'task'],
+    ['table', 'link'],
+    ['image'],
+    ['code'],
+    ['scrollSync'],
+  ];
   React.useEffect(() => {
     if (init) init();
   }, []);
@@ -27,12 +35,7 @@ const CommunityEditor = (props: CommunityEditorProps) => {
       initialEditType="wysiwyg"
       initialValue=" "
       language="ko-KR"
-      toolbarItems={[
-        ['bold', 'strike'],
-        ['hr'],
-        ['image', 'link'],
-        ['code', 'codeblock'],
-      ]}
+      toolbarItems={toolbarItems}
       plugins={plugins}
       hideModeSwitch
     />
