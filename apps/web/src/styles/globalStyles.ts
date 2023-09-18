@@ -31,13 +31,11 @@ const GlobalStyle = createGlobalStyle`
     all: unset;
     cursor: pointer;
   }
-  
-  .toastui-editor-contents *{
+
+  .toastui-editor-contents {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    align-content: center;
   }
 
   .toastui-editor-contents img{
