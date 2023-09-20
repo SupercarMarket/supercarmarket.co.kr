@@ -192,7 +192,7 @@ const MarketColumn = (
         <Typography fontSize="body-14" fontWeight="bold" color="system-1">
           {price && price === 1
             ? '판매 완료'
-            : price !== 1
+            : price !== 0
             ? `${formatter(price * 10000)}원`
             : '상담'}
         </Typography>
