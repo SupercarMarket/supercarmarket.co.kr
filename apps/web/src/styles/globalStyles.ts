@@ -32,6 +32,7 @@ const GlobalStyle = createGlobalStyle`
     cursor: pointer;
   }
 
+
   .toastui-editor-contents div {
     display: flex;
     flex-direction: column;
