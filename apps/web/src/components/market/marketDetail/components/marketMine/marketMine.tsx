@@ -22,9 +22,10 @@ import { useQueryClient } from '@tanstack/react-query';
 interface MarketMineProps {
   id: string;
   brdSeq: string;
+  price: number;
 }
 
-const MarketMine = ({ id, brdSeq }: MarketMineProps) => {
+const MarketMine = ({ id, brdSeq, price }: MarketMineProps) => {
   const { push } = useRouter();
   const searchParams = useSearchParams();
   const queryClient = useQueryClient();
@@ -123,9 +124,13 @@ const MarketMine = ({ id, brdSeq }: MarketMineProps) => {
       <Button variant="Line" onClick={handleRemoveModal}>
         <Typography color="greyScale-6">삭제</Typography>
       </Button>
-      <Button variant="Line" onClick={handleStatusModal}>
-        <Typography color="greyScale-6">판매 완료</Typography>
-      </Button>
+      {price !== 1 ? (
+        <Button variant="Line" onClick={handleStatusModal}>
+          <Typography color="greyScale-6">판매 완료</Typography>
+        </Button>
+      ) : (
+        ''
+      )}
     </Wrapper>
   );
 };
