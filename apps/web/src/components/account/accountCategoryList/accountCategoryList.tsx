@@ -21,13 +21,14 @@ import {
 import { useQueryClient } from '@tanstack/react-query';
 import { useRemoveCommunityPost } from 'http/server/community';
 import { QUERY_KEYS, useAccountCategory } from 'http/server/account';
-import { useDebounce } from '@supercarmarket/hooks';
+import { useDebounce, useUrlQuery } from '@supercarmarket/hooks';
 import { type Market } from 'types/market';
 import { type AccountCategory } from 'constants/link/account';
 import {
   useDeleteMarketPost,
   useUpdateMarketSellStatus,
 } from 'http/server/market';
+import { useSearchParams } from 'next/navigation';
 
 interface AccountCategoryProps {
   sub: string;
@@ -145,11 +146,12 @@ const AccountCategoryList = React.memo(function AccountCategory({
     isMyAccountPage &&
     (tab === 'community' ||
       (profile.role === 'dealer' && tab === 'dealer-product'));
+  const page = useSearchParams().get('page');
   const { data, isLoading, isFetching, refetch } = useAccountCategory(
     sub,
     {
       category: tab,
-      page: 0,
+      page: Number(page),
       size: 20,
     },
     session.data?.accessToken,
