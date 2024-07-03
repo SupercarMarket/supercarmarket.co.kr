@@ -1,15 +1,9 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "tasks": {
+  "pipeline": {
     "build": {
-      "dependsOn": [
-        "^build",
-        "sitemap"
-      ],
-      "outputs": [
-        "dist/**",
-        ".next/**"
-      ]
+      "dependsOn": ["^build", "sitemap"],
+      "outputs": ["dist/**", ".next/**"]
     },
     "sitemap": {
       "outputs": []
@@ -22,19 +16,17 @@
     }
   },
   "globalDependencies": [
-    ".env.production"
-  ],
-  "globalEnv": [
-    "NEXT_PUBLIC_URL",
-    "NEXT_PUBLIC_SERVER_URL",
-    "NEXT_PUBLIC_API_MOCKING",
-    "NEXT_PUBLIC_AUTH_SECRET",
-    "NEXT_PUBLIC_GOOGLE_ID",
-    "NEXT_PUBLIC_GOOGLE_SECRET",
-    "NEXT_PUBLIC_KAKAO_ID",
-    "NEXT_PUBLIC_KAKAO_SECRET",
-    "NEXT_PUBLIC_OPENVIDU_SECRET",
-    "NEXT_PUBLIC_OPENVIDU_API_URL",
-    "NEXT_PUBLIC_GOOGLE_ANALYTICS"
+    ".env.production",
+    "$NEXT_PUBLIC_URL",
+    "$NEXT_PUBLIC_SERVER_URL",
+    "$NEXT_PUBLIC_API_MOCKING",
+    "$NEXT_PUBLIC_AUTH_SECRET",
+    "$NEXT_PUBLIC_GOOGLE_ID",
+    "$NEXT_PUBLIC_GOOGLE_SECRET",
+    "$NEXT_PUBLIC_KAKAO_ID",
+    "$NEXT_PUBLIC_KAKAO_SECRET",
+    "$NEXT_PUBLIC_OPENVIDU_SECRET",
+    "$NEXT_PUBLIC_OPENVIDU_API_URL",
+    "$NEXT_PUBLIC_GOOGLE_ANALYTICS"
   ]
 }

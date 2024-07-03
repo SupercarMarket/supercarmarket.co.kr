@@ -34,7 +34,6 @@ export const form = [
     placeholder: '새 비밀번호를 한번 더 입력해주세요.',
     options: {
       validate: password,
-      deps: ['newPassword'],
     },
   },
 ] as Form<
