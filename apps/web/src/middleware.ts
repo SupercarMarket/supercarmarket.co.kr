@@ -38,7 +38,8 @@ async function rateLimiter(req: NextRequest) {
     } else {
       return NextResponse.json(
         {
-          error: 'Your IP has been temporarily blocked due to excessive requests.',
+          error:
+          'Your IP has been temporarily blocked due to excessive requests.',
         },
         {
           status: 403,
