@@ -16,7 +16,7 @@
     "@supercarmarket/config": "workspace:*",
     "dotenv-cli": "^7.0.0",
     "prettier": "latest",
-    "turbo": "latest"
+    "turbo": "1.10.14"
   },
   "engines": {
     "node": ">=14.0.0"

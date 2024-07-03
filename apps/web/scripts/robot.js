@@ -2,7 +2,7 @@ const fs = require('fs');
 
 const generatedSitemap = `
 User-agent: *
-Disallow: /api*/
+Disallow: /
 `;
 
 fs.writeFileSync('../public/robots.txt', generatedSitemap, 'utf8');
